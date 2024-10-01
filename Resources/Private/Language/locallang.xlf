@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" product-name="includekrexx" date="2021-12-31T14:10:00+01:00">
+		<header/>
+		<body>
+
+			<trans-unit id="mlang_tabs_tab">
+				<source>kreXX Debugger</source>
+			</trans-unit>
+			<trans-unit id="mlang_labels_tabdescr">
+				<source>kreXX is a feature rich php debugger with a neatly arranged debug window, featuring backend access to logfiles, code generation to reach the displayed values and much more.</source>
+			</trans-unit>
+			<trans-unit id="mlang_labels_tablabel">
+				<source>kreXX Debugger</source>
+			</trans-unit>
+
+			<!-- General stuff for the configuration file -->
+			<trans-unit id="file">
+				<source>File</source>
+			</trans-unit>
+			<trans-unit id="browser">
+				<source>Browser shutdown phase</source>
+			</trans-unit>
+			<trans-unit id="browserImmediately">
+				<source>Browser immediately</source>
+			</trans-unit>
+			<trans-unit id="true">
+				<source>True</source>
+			</trans-unit>
+			<trans-unit id="false">
+				<source>False</source>
+			</trans-unit>
+			<trans-unit id="save">
+				<source>Save</source>
+			</trans-unit>
+			<trans-unit id="simple">
+				<source>Simple mode</source>
+			</trans-unit>
+			<trans-unit id="expert">
+				<source>Expert mode</source>
+			</trans-unit>
+			<trans-unit id="clear.cookies">
+				<source>Reset local cookie settings</source>
+			</trans-unit>
+			<trans-unit id="loglevel.debug">
+				<source>Debug</source>
+			</trans-unit>
+			<trans-unit id="loglevel.info">
+				<source>Info</source>
+			</trans-unit>
+			<trans-unit id="loglevel.notice">
+				<source>Notice</source>
+			</trans-unit>
+			<trans-unit id="loglevel.warning">
+				<source>Warning</source>
+			</trans-unit>
+			<trans-unit id="loglevel.error">
+				<source>Error</source>
+			</trans-unit>
+			<trans-unit id="loglevel.alert">
+				<source>Alert</source>
+			</trans-unit>
+			<trans-unit id="loglevel.critical">
+				<source>Critical</source>
+			</trans-unit>
+			<trans-unit id="loglevel.emergency">
+				<source>Emergency</source>
+			</trans-unit>
+
+			<!-- General stuff for the FE configuration -->
+			<trans-unit id="full">
+				<source>Full edit</source>
+			</trans-unit>
+			<trans-unit id="display">
+				<source>Display only</source>
+			</trans-unit>
+			<trans-unit id="none">
+				<source>Do not display</source>
+			</trans-unit>
+
+			<!-- Help texts -->
+			<trans-unit id="analyseProtected">
+				<source>Shall kreXX try to analyse the protected properties of a class? This may result in a lot of output.</source>
+			</trans-unit>
+			<trans-unit id="analysePrivate">
+				<source>Shall kreXX try to analyse the private properties of a class? This may result in a lot of output.</source>
+			</trans-unit>
+			<trans-unit id="analyseScalar">
+				<source>Shall kreXX do a deep analysis for scalar types? We are handling XML, JSON, callbacks and filepath.</source>
+			</trans-unit>
+			<trans-unit id="analyseTraversable">
+				<source>Shall kreXX try to analyse possible traversable data?</source>
+			</trans-unit>
+			<trans-unit id="debugMethods">
+				<source>Comma-separated list of used debug callback functions. A lot of frameworks offer these, toArray and toString being the most common. kreXX will try to call them, if they are available and display their provided data.</source>
+			</trans-unit>
+			<trans-unit id="level">
+				<source>Most frameworks have objects inside of objects inside of objects, and so on. Normally kreXX does not run in circles, but going to deep inside of an object tree can result in a lot of output.</source>
+			</trans-unit>
+			<trans-unit id="destination">
+				<source>'Browser shutdown phase' = Sending everything to the browser after TYPO3 is finished with everything. 'File' = Saving everything to the log folder. 'Browser immediately' = Sending everything to the browser right away.</source>
+			</trans-unit>
+			<trans-unit id="maxCall">
+				<source>kreXX has no problem with creating 1 GB of output, your browser can certainly not handle this much HTML. When using kreXX in a loop, it will create output every time the loop is executed. To limit this, you can configure the maximum call settings.</source>
+			</trans-unit>
+			<trans-unit id="disabled">
+				<source>Here you can disable kreXX without uninstalling the whole extension.</source>
+			</trans-unit>
+			<trans-unit id="maxfiles">
+				<source>How many logfiles do you want to store inside your logging folder? When there are more files than this number, the older files will get deleted.</source>
+			</trans-unit>
+			<trans-unit id="skin">
+				<source>Choose a skin here. We have provided kreXX with two skins: smoky-grey and hans.</source>
+			</trans-unit>
+			<trans-unit id="maxStepNumber">
+				<source>A backtrace tends to produce a lot of output, and browsers tend to have problems with more than 100MB output in HTML text. Normally it is not necessary to go back more than 10 steps, but if you need to, you can increase this number here.</source>
+			</trans-unit>
+			<trans-unit id="detectAjax">
+				<source>kreXX tries to detect whether a request is made via AJAX. When it is detected, it will not send any output to the browser at all, because an AJAX request hat most certainly no way of displaying the kreXX output. Logging is still possible of course. The AJAX detection can be disabled here.</source>
+			</trans-unit>
+			<trans-unit id="memoryLeft">
+				<source>kreXX checks regularly how much memory is left. Here you can adjust the amount where it will trigger an emergency break. Unit of measurement is MB.</source>
+			</trans-unit>
+			<trans-unit id="maxRuntime">
+				<source>kreXX checks during the analysis how much time has elapsed since start. Here you can adjust the amount where it will trigger an emergency break. Unit of measurement is seconds.</source>
+			</trans-unit>
+			<trans-unit id="analyseProtectedMethods">
+				<source>Here you can toggle if kreXX shall analyse the protected methods of a class.</source>
+			</trans-unit>
+			<trans-unit id="analysePrivateMethods">
+				<source>Here you can toggle if kreXX shall analyse the private methods of a class.</source>
+			</trans-unit>
+			<trans-unit id="iprange">
+				<source>List of IPs that can trigger kreXX. Wildcards can be used.</source>
+			</trans-unit>
+			<trans-unit id="analyseGetter">
+				<source>Shall kreXX try to determine the output of getter methods? These methods will not be called. kreXX will try to get the (possible) result from the class properties, which may lead to false results.</source>
+			</trans-unit>
+			<trans-unit id="arrayCountLimit">
+				<source>When encountering an array larger than this number, kreXX will resort to a simplified array analysis. This means that classes or other arrays in this large array will only get a rudimentary analysis to prevent an overkill output.</source>
+			</trans-unit>
+			<trans-unit id="activateT3FileWriter">
+				<source>Use kreXX as the TYPO3 log file writer?</source>
+			</trans-unit>
+			<trans-unit id="loglevelT3FileWriter">
+				<source>There are different log levels. Depending on the setting, you may get a lot of output.</source>
+			</trans-unit>
+			<trans-unit id="languageKey">
+				<source>The language key from the help file(s). It will fallback to 'text' which is english. We provide kreXX in two language english as a fall back, and german (de).</source>
+			</trans-unit>
+
+			<!-- Messages -->
+			<trans-unit id="file.not.writable">
+				<source>Configuration file %1$s is not writable!</source>
+			</trans-unit>
+			<trans-unit id="value.not.allowed">
+				<source>%1$s is not an allowed value!</source>
+			</trans-unit>
+			<trans-unit id="save.fail.title">
+				<source>The settings were NOT saved.</source>
+			</trans-unit>
+			<trans-unit id="save.success.title">
+				<source>The settings were saved.</source>
+			</trans-unit>
+			<trans-unit id="save.success.text">
+				<source>The settings were saved to: %1$s</source>
+			</trans-unit>
+			<trans-unit id="general.error.title">
+				<source>General error</source>
+			</trans-unit>
+			<trans-unit id="debugpreset.warning.title">
+				<source>Productive Debug Settings detected!</source>
+			</trans-unit>
+			<trans-unit id="debugpreset.warning.message">
+				<source>kreXX will function normally, but please do not debug a productive system.</source>
+			</trans-unit>
+			<trans-unit id="fileDeleted" xml:space="preserve">
+				<source>The file "%s" was successfully deleted.</source>
+			</trans-unit>
+			<trans-unit id="fileDeletedFail" xml:space="preserve">
+				<source>The file "%s" was NOT deleted.</source>
+			</trans-unit>
+			<trans-unit id="accessDenied">
+				<source>Access denied!</source>
+			</trans-unit>
+
+			<!--
+				Error messages from the krexx lib
+				@see Brainworxx\Krexx\Service\Config\Security->evaluateSetting( . . . )
+			-->
+			<trans-unit id="configErrorBool">
+				<source>Wrong configuration for: '%s => %s'! Expected boolean. The configured setting was not applied!</source>
+			</trans-unit>
+			<trans-unit id="configErrorInt">
+				<source>Wrong configuration for: '%s => %s'! Expected integer. The configured setting was not applied!</source>
+			</trans-unit>
+			<trans-unit id="configErrorDestination">
+				<source>Wrong configuration for: 'output => destination'! Expected 'browser', 'file' or 'browserImmediately'. The configured setting was not applied!</source>
+			</trans-unit>
+			<trans-unit id="configErrorSkin">
+				<source>Wrong configuration for: 'output => skin'! Skin not found. The configured setting was not applied!</source>
+			</trans-unit>
+			<trans-unit id="configErrorLocal">
+				<source>Could not read the Local Cookie configuration. Sorry :-/</source>
+			</trans-unit>
+			<trans-unit id="configErrorIprange">
+				<source>Wrong configuration for: 'output => iprange'! An empty IP list means that no one will be able to use kreXX. The configured setting was not applied!</source>
+			</trans-unit>
+			<trans-unit id="configErrorMaxRuntimeBig">
+				<source>Wrong configuration for: 'runtime => maxRuntime'! Maximum for this server is: %s. The configured setting was not applied!</source>
+			</trans-unit>
+			<trans-unit id="maxCallReached">
+				<source>Maximum call-level reached. This is the last analysis for this request. To increase this value, please edit: emergency => maxCall.</source>
+			</trans-unit>
+			<trans-unit id="configErrorDebugBlacklist">
+				<source>Wrong configuration for: '%s => %s'! The debugmethod '%s' is blacklisted. The configured setting was not applied!</source>
+			</trans-unit>
+			<trans-unit id="configErrorDebugInvalid">
+				<source>Wrong configuration for: '%s => %s'! '%s' is not a valid method. The configured setting was not applied!</source>
+			</trans-unit>
+			 <trans-unit id="configErrorLoglevelT3FileWriter">
+				<source>Wrong configuration for: 'TYPO3 => activateT3FileWriter'! '%s' is not a valid logging level. The configured setting was not applied!</source>
+			</trans-unit>
+			<trans-unit id="emergencyTimer">
+				<source>Emergency break due to extensive run time!</source>
+			</trans-unit>
+			<trans-unit id="emergencyMemory">
+				<source>Emergency break due to extensive memory usage!</source>
+			</trans-unit>
+			<trans-unit id="fileserviceDelete">
+				<source>Unable to delete file: %s</source>
+			</trans-unit>
+			<trans-unit id="fileserviceAccess">
+				<source>Could not access file: %s</source>
+			</trans-unit>
+			<trans-unit id="omittedBacktrace">
+				<source>Omitted backtrace steps %s until %s.</source>
+			</trans-unit>
+			<trans-unit id="chunksNotWritable">
+				<source>Chunksfolder %s is not writable! This will increase the memory usage of kreXX significantly!</source>
+			</trans-unit>
+			<trans-unit id="logNotWritable">
+				<source>Logfolder %s is not writable!</source>
+			</trans-unit>
+			<trans-unit id="fileinfoNotInstalled">
+				<source>The PHP extension 'fileinfo' is not installed. The mime type analysis is not available.</source>
+			</trans-unit>
+			<trans-unit id="mbstringNotInstalled">
+				<source>The php extension 'mb-string' is not installed. The string analysis may be unreliable.</source>
+			</trans-unit>
+			<trans-unit id="configErrorLangInvalid">
+				<source>Wrong configuration for: '%s => %s'! The language '%s' is not available. The configured setting was not applied!</source>
+			</trans-unit>
+
+			<!-- Tabs -->
+			<trans-unit id="layout.edit.config.file">
+				<source>Edit configuration file</source>
+			</trans-unit>
+			<trans-unit id="layout.edit.config.fe">
+				<source>Edit FE configuration</source>
+			</trans-unit>
+			<trans-unit id="layout.usage.help">
+				<source>Usage help</source>
+			</trans-unit>
+			<trans-unit id="layout.log.index">
+				<source>Logfiles access</source>
+			</trans-unit>
+
+			<!-- Headlines -->
+			<trans-unit id="subhead.output">
+				<source>Output</source>
+			</trans-unit>
+			<trans-unit id="subhead.behavior">
+				<source>Behavior</source>
+			</trans-unit>
+			<trans-unit id="subhead.properties">
+				<source>Properties</source>
+			</trans-unit>
+			<trans-unit id="subhead.methods">
+				<source>Methods</source>
+			</trans-unit>
+			<trans-unit id="subhead.pruneOutput">
+				<source>Prune output</source>
+			</trans-unit>
+			<trans-unit id="subhead.emergencystop">
+				<source>Emergency stop</source>
+			</trans-unit>
+			<trans-unit id="subhead.typo3">
+				<source>TYPO3 specific</source>
+			</trans-unit>
+			<trans-unit id="table.desc">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="table.value">
+				<source>Value</source>
+			</trans-unit>
+
+			<!-- Labels -->
+			<trans-unit id="label.skin">
+				<source>Skin:</source>
+			</trans-unit>
+			<trans-unit id="label.memoryLeft">
+				<source>Minimum amount of memory [MB]:</source>
+			</trans-unit>
+			<trans-unit id="label.maxRuntime">
+				<source>Maximum Runtime [Seconds]:</source>
+			</trans-unit>
+			<trans-unit id="label.maxfiles">
+				<source>Maximum files in the logfolder:</source>
+			</trans-unit>
+			<trans-unit id="label.destination">
+				<source>Destination:</source>
+			</trans-unit>
+			<trans-unit id="label.maxCall">
+				<source>Maximum amount of calls:</source>
+			</trans-unit>
+			<trans-unit id="label.disabled">
+				<source>Disable kreXX:</source>
+			</trans-unit>
+			<trans-unit id="label.detectAjax">
+				<source>Try to detect AJAX requests:</source>
+			</trans-unit>
+			<trans-unit id="label.analyseProtected">
+				<source>Analyse protected properties:</source>
+			</trans-unit>
+			<trans-unit id="label.analysePrivate">
+				<source>Analyse private properties:</source>
+			</trans-unit>
+			<trans-unit id="label.analyseScalar">
+				<source>Deep analysis for scalar types:</source>
+			</trans-unit>
+			<trans-unit id="label.analyseTraversable">
+				<source>Analyse traversable data:</source>
+			</trans-unit>
+			<trans-unit id="label.debugMethods">
+				<source>List of debug methods to poll for data:</source>
+			</trans-unit>
+			<trans-unit id="label.level">
+				<source>Maximum nesting level for objects and arrays:</source>
+			</trans-unit>
+			<trans-unit id="label.analyseProtectedMethods">
+				<source>Analyse protected methods:</source>
+			</trans-unit>
+			<trans-unit id="label.analysePrivateMethods">
+				<source>Analyse private methods:</source>
+			</trans-unit>
+			<trans-unit id="label.iprange">
+				<source>IP Range:</source>
+			</trans-unit>
+			<trans-unit id="label.analyseGetter">
+				<source>Analyse getter methods:</source>
+			</trans-unit>
+			<trans-unit id="label.maxStepNumber">
+				<source>Maximum steps in the backtrace:</source>
+			</trans-unit>
+			<trans-unit id="label.arrayCountLimit">
+				<source>Maximum array size before fallback to simplified analysis:</source>
+			</trans-unit>
+			<trans-unit id="label.activateT3FileWriter">
+				<source>Activate the TYPO3 FileWriter:</source>
+			</trans-unit>
+			<trans-unit id="label.loglevelT3FileWriter">
+				<source>Log level of the FileWriter:</source>
+			</trans-unit>
+			<trans-unit id="label.languageKey">
+				<source>Language</source>
+			</trans-unit>
+
+			<!-- Content stuff  Edit Frontend Settings -->
+			<trans-unit id="editfeconfig.help.headline">
+				<source>Here you can edit the frontend configuration form.</source>
+			</trans-unit>
+			<trans-unit id="full.help">
+				<source> = The value can be edited in the frontend.</source>
+			</trans-unit>
+			<trans-unit id="display.help">
+				<source> = The value will only be displayed. kreXX will not accept any value for it.</source>
+			</trans-unit>
+			<trans-unit id="none.help">
+				<source> = kreXX will not display the value or accept any values for it.</source>
+			</trans-unit>
+			<trans-unit id="logging.noteditable">
+				<source>This setting is not editable on the frontend.</source>
+			</trans-unit>
+
+			<!-- Usage help -->
+			<trans-unit id="usage.headline">
+				<source>Usage PHP</source>
+			</trans-unit>
+			<trans-unit id="usage.label.calling">
+				<source>kreXX will be called in the PHP source code:</source>
+			</trans-unit>
+			<trans-unit id="usage.features">
+				<source>Most of the time you will use this method. kreXX will analyse the $object and give you detailed information about it:</source>
+			</trans-unit>
+			<trans-unit id="usage.features.1">
+				<source>Public properties of the object</source>
+			</trans-unit>
+			<trans-unit id="usage.features.2">
+				<source>Protected properties of the object (can be toggled)</source>
+			</trans-unit>
+			<trans-unit id="usage.features.3">
+				<source>Private properties of the object (can be toggled)</source>
+			</trans-unit>
+			<trans-unit id="usage.features.4">
+				<source>Content of the traversable part of the object (can be toggled)</source>
+			</trans-unit>
+			<trans-unit id="usage.features.5">
+				<source>Result of all configured debugging methods (can be configured)</source>
+			</trans-unit>
+			<trans-unit id="usage.features.simple">
+				<source>In case the variable is not an object, it will simply display its content.</source>
+			</trans-unit>
+			<trans-unit id="usage.label.moment">
+				<source>Define a "moment" during a benchmark test. The $string should be something meaningful, like "Model invoice db call":</source>
+			</trans-unit>
+			<trans-unit id="usage.label.timerEnd">
+				<source>End the benchmark test and displays the result:</source>
+			</trans-unit>
+			<trans-unit id="usage.label.backtrace">
+				<source>Outputs backtrace with sourcecode. When kreXX finds objects inside the backtrace, it will analyse them:</source>
+			</trans-unit>
+			<trans-unit id="usage.links.headline">
+				<source>More datailed help</source>
+			</trans-unit>
+			<trans-unit id="usage.links.typo3">
+				<source>Documentation at TYPO3 Docs</source>
+			</trans-unit>
+			<trans-unit id="usage.links.github">
+				<source>Documentation at GitHub</source>
+			</trans-unit>
+			<trans-unit id="usage.headline.fluid">
+				<source>Usage Fluid</source>
+			</trans-unit>
+			<trans-unit id="usage.label.fluidnormal">
+				<source>Calling the ViewHelper is pretty much straight forward.</source>
+			</trans-unit>
+			<trans-unit id="usage.label.fluidvalue">
+				<source>Use this part if you don't want fluid to escape your string or if you are stitching together an array.</source>
+			</trans-unit>
+			<trans-unit id="usage.label.fluidmoment">
+				<source>kreXX measures the time between every call, and then outputs it as a benchmark.</source>
+			</trans-unit>
+			<trans-unit id="usage.code.fluidmoment">
+				<source>Take a moment</source>
+			</trans-unit>
+			<trans-unit id="usage.code.fluidmoment.1">
+				<source>Start rendering</source>
+			</trans-unit>
+			<trans-unit id="usage.code.fluidmoment.2">
+				<source>A lot more template code</source>
+			</trans-unit>
+			<trans-unit id="usage.code.fluidmoment.3">
+				<source>Take another moment</source>
+			</trans-unit>
+			<trans-unit id="usage.code.fluidmoment.4">
+				<source>Start menu rendering</source>
+			</trans-unit>
+			<trans-unit id="usage.code.fluidmoment.5">
+				<source>Even more template code</source>
+			</trans-unit>
+			<trans-unit id="usage.code.fluidmoment.6">
+				<source>Output the benchmark</source>
+			</trans-unit>
+
+			<!-- Logging -->
+			<trans-unit id="log.filename">
+				<source>Filename</source>
+			</trans-unit>
+			<trans-unit id="log.time">
+				<source>Last modified</source>
+			</trans-unit>
+			<trans-unit id="log.size">
+				<source>Size</source>
+			</trans-unit>
+			<trans-unit id="log.fileerror">
+				<source>Error reading logfile</source>
+			</trans-unit>
+			<trans-unit id="log.notreadable">
+				<source>File %1$s is not readable!</source>
+			</trans-unit>
+			<trans-unit id="log.meta">
+				<source>Metadata</source>
+			</trans-unit>
+			<trans-unit id="log.noresult">
+				<source>Sorry, there are currently no logfiles.</source>
+			</trans-unit>
+
+			<!-- AJAX feedback -->
+			<trans-unit id="ajax.delete.file">
+				<source>Delete this file?</source>
+			</trans-unit>
+			<trans-unit id="ajax.error">
+				<source>Error while parsing the server answer.</source>
+			</trans-unit>
+			<trans-unit id="ajax.in">
+				<source>in</source>
+			</trans-unit>
+			<trans-unit id="ajax.line">
+				<source>line</source>
+			</trans-unit>
+			<trans-unit id="ajax.updated.loglist">
+				<source>Updated the log-list!</source>
+			</trans-unit>
+			<trans-unit id="ajax.deleted.cookies">
+				<source>All cookie settings were removed!</source>
+			</trans-unit>
+
+		</body>
+	</file>
+</xliff>

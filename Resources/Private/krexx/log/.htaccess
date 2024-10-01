@@ -1,0 +1,7 @@
+order deny,allow
+deny from all
+
+RewriteEngine On
+<RequireAll>
+   Require all denied
+</RequireAll>

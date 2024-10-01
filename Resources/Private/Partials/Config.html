@@ -1,0 +1,162 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+
+
+/**
+ * Rendering of the Editform for the configuration file.
+ *
+ * @var array {_all}
+ *   Complete access to all variables.
+ */
+<f:section name="main">
+    <f:render section="table" arguments="{headline: 'subhead.output',        payload: 'output',        config: config, dropdown: dropdown}" />
+    <f:render section="table" arguments="{headline: 'subhead.behavior',      payload: 'behavior',      config: config, dropdown: dropdown}" />
+    <f:render section="table" arguments="{headline: 'subhead.pruneOutput',   payload: 'pruneOutput',   config: config, dropdown: dropdown}" />
+    <f:render section="table" arguments="{headline: 'subhead.properties',    payload: 'properties',    config: config, dropdown: dropdown}" />
+    <f:render section="table" arguments="{headline: 'subhead.methods',       payload: 'methods',       config: config, dropdown: dropdown}" />
+    <f:render section="table" arguments="{headline: 'subhead.emergencystop', payload: 'emergencystop', config: config, dropdown: dropdown}" />
+    <f:render section="table" arguments="{headline: 'subhead.typo3',         payload: 'TYPO3',         config: config, dropdown: dropdown}" />
+</f:section>
+
+
+/**
+ * Renders a configuration table.
+ *
+ * @var string {headline}
+ *   The headline aboce the table
+ * @var string {payload}
+ *   The section name with the payload for the table.
+ * @var array {config}
+ *   The configuration for the payload.
+ * @var array {dropdown}
+ *   The dropdown configuration.
+ */
+<f:section name="table">
+    <h3><f:translate key="{headline}" /></h3>
+    <div class="table-wrapper formtable">
+        <table border="0" class="krexx-config">
+            <thead>
+                <tr>
+                    <th class="description"><f:translate key="table.desc" /></th>
+                    <th class="value"><f:translate key="table.value" /></th>
+                    <th class="commands"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <f:render section="{payload}" arguments="{config: config, dropdown: dropdown}" />
+            </tbody>
+        </table>
+    </div>
+</f:section>
+
+/**
+ * Configuration payload for the table.
+ *
+ * @var array {config}
+ *   The configuration for the payload.
+ * @var array {dropdown}
+ *   The dropdown configuration.
+ */
+<f:section name="output">
+    <f:render section="dropdown" arguments="{config: config.disabled, options: dropdown.bool}" />
+    <f:render section="input"    arguments="{config: config.iprange}" />
+    <f:render section="dropdown" arguments="{config: config.detectAjax, options: dropdown.bool}" />
+</f:section>
+<f:section name="behavior">
+    <f:render section="dropdown" arguments="{config: config.skin, options: dropdown.skins}" />
+    <f:render section="dropdown" arguments="{config: config.destination, options: dropdown.destination}" />
+    <f:render section="input"    arguments="{config: config.maxfiles}" />
+    <f:render section="dropdown" arguments="{config: config.languageKey, options: dropdown.languages}" />
+</f:section>
+<f:section name="pruneOutput">
+    <f:render section="input"    arguments="{config: config.maxStepNumber}" />
+    <f:render section="input"    arguments="{config: config.arrayCountLimit}" />
+    <f:render section="input"    arguments="{config: config.level}" />
+</f:section>
+<f:section name="properties">
+    <f:render section="dropdown" arguments="{config: config.analyseProtected, options: dropdown.bool}" />
+    <f:render section="dropdown" arguments="{config: config.analysePrivate, options: dropdown.bool}" />
+    <f:render section="dropdown" arguments="{config: config.analyseScalar, options: dropdown.bool}" />
+    <f:render section="dropdown" arguments="{config: config.analyseTraversable, options: dropdown.bool}" />
+</f:section>
+<f:section name="methods">
+    <f:render section="dropdown" arguments="{config: config.analyseProtectedMethods, options: dropdown.bool}" />
+    <f:render section="dropdown" arguments="{config: config.analysePrivateMethods, options: dropdown.bool}" />
+    <f:render section="dropdown" arguments="{config: config.analyseGetter, options: dropdown.bool}" />
+    <f:render section="input"    arguments="{config: config.debugMethods}" />
+</f:section>
+<f:section name="emergencystop">
+    <f:render section="input"    arguments="{config: config.maxCall}" />
+    <f:render section="input"    arguments="{config: config.maxRuntime}" />
+    <f:render section="input"    arguments="{config: config.memoryLeft}" />
+</f:section>
+<f:section name="TYPO3">
+    <f:render section="dropdown" arguments="{config: config.activateT3FileWriter, options: dropdown.bool}" />
+    <f:render section="dropdown" arguments="{config: config.loglevelT3FileWriter, options: dropdown.loglevel}" />
+</f:section>
+
+
+/**
+ * Rendering of a dropdown field.
+ *
+ * @var string {config.name}
+ *   The name of the dropdown field.
+ * @var array {options}
+ *   The options for the dropdown.
+ * @var string {config.value}
+ *   The current value of the dropdown.
+ * @var boolean {config.useFactorySettings}
+ *   Are we using factory settings here?
+ */
+<f:section name="dropdown">
+    <tr class="{config.mode}">
+        <td class="description"><label for="{config.name}"><f:translate key="label.{config.name}" /></label></td>
+        <td class="value">
+            <div class="chevron"><f:form.select additionalAttributes="{autocomplete: 'off'}" id="{config.name}" property="{config.name}" options="{options}" value="{config.value}" /></div>
+            <div id="{config.name}-fallback" class="fallback">{config.fallback}</div>
+        </td>
+        <td class="commands">
+            <div class="button tooltip-hover">
+                <div class="toolwrapper">
+                    <div class="tooltip-text"><f:translate key="{config.name}" /></div>
+                </div>
+            </div>
+            <label class="button" for="factory.{config.name}">
+                <f:form.checkbox class="switch" additionalAttributes="{autocomplete: 'off'}" id="factory.{config.name}" property="factory" checked="{config.useFactorySettings}" value="1" />
+                <span class="switch" ></span>
+            </label>
+        </td>
+    </tr>
+</f:section>
+
+/**
+ * Rendering of an input field.
+ *
+ * @var string {config.name}
+ *   The name of the input field.
+ * @var string {config.value}
+ *   The current value of the dropdown.
+ * @var integer {config.useFactorySettings}
+ *   Are we using factory settings here?
+ */
+<f:section name="input">
+    <tr class="{config.mode}">
+        <td class="description"><label for="{config.name}"><f:translate key="label.{config.name}" /></label></td>
+        <td class="value">
+            <f:form.textfield additionalAttributes="{autocomplete: 'off'}" id="{config.name}" property="{config.name}"  value="{config.value}" />
+            <div id="{config.name}-fallback" class="fallback">{config.fallback}</div>
+        </td>
+        <td class="commands">
+            <div class="button tooltip-hover">
+                <div class="toolwrapper">
+                    <div class="tooltip-text"><f:translate key="{config.name}" /></div>
+                </div>
+            </div>
+            <label class="button" for="factory.{config.name}">
+                <f:form.checkbox class="switch" additionalAttributes="{autocomplete: 'off'}" id="factory.{config.name}" property="factory" checked="{config.useFactorySettings}" value="1" />
+                <span class="switch" ></span>
+            </label>
+        </td>
+    </tr>
+</f:section>
+
+</html>

@@ -1,0 +1,38 @@
+<div id="search-{KrexxId}" class="khidden search-wrapper" style="position: absolute;">
+    <div class="ksearch" style="position: relative;">
+        <span class="kname">{searchHeadline}</span>
+        <span>
+	        <input class="ksearchfield" type="text" autocomplete="off" value="" maxlength="50" size="30" name="Search">
+	        <span class="ksearch-state">0 / 0</span>
+	        <input data-instance="{KrexxId}" data-direction="back" class="ksearchnow" type="button" value="<<">
+	        <input data-instance="{KrexxId}" data-direction="forward" class="ksearchnow" type="button" value=">>">
+			<span class="koptions"></span>
+	        <span data-instance="{KrexxId}" class="kclose">&#10005;</span>
+	    </span>
+        <div class="koptionwrapper khidden">
+			<hr class="ksearchhr"/>
+			<label class="koptionleft">
+				<input data-instance="{KrexxId}" class="ksearchcase" type="checkbox" autocomplete="off" name="searchcase" value="searchcase">
+				{searchCaseSensitive}
+			</label>
+			<label class="koptionright">
+				<input data-instance="{KrexxId}" class="ksearchshort" type="checkbox" autocomplete="off" name="searchshort" value="searchshort" checked="checked">
+				{searchShortResults}
+			</label>
+			<br/>
+			<label class="koptionleft">
+				<input data-instance="{KrexxId}" class="ksearchkeys" type="checkbox" autocomplete="off" name="searchkeys" value="searchkeys" checked="checked">
+				{searchKeys}
+			</label>
+			<label class="koptionright">
+				<input data-instance="{KrexxId}" class="ksearchlong" type="checkbox" autocomplete="off" name="searchlong" value="searchlong" checked="checked">
+				{searchLongResults}
+			</label>
+			<br/>
+			<label class="koptionleft">
+				<input data-instance="{KrexxId}" class="ksearchwhole" type="checkbox" autocomplete="off" name="searchwhole" value="searchwhole">
+				{searchWholeValues}
+			</label>
+		</div>
+    </div>
+</div>

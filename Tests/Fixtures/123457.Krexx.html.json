@@ -1,0 +1,9 @@
+[
+  {
+    "file":"...\/some\/directory\/anotherFile.php",
+    "line":"987",
+    "varname":"$whatever",
+    "type":"absolutely",
+    "date":"01-01-2010 10:00:00"
+  }
+]
