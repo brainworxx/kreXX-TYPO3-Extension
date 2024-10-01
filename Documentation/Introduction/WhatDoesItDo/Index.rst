@@ -3,7 +3,7 @@
 What does it do?
 ================
 
-To put it simply: Includekrexx is a simple alternative for the fliud debugger :literal:``<f:debug/>`.
+To put it simply: Includekrexx is a simple alternative for the fliud debugger :literal:`<f:debug/>`.
 
 The problem with :literal:``<f:debug/>` is that is can be a little bit discrete when debugging objects.
 It only shows protected properties which may or may not be reachable it the template file.
@@ -29,4 +29,7 @@ You can also use it as a PHP debugger:
 
 .. code-block:: php
 
+    <!-- Normal frontend output -->
     krexx($myObject);
+    <!-- Force the logging into a file -->
+    krexxlog($myObject);
