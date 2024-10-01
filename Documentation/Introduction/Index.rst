@@ -13,5 +13,5 @@ Since it is based on the PHP debugger kreXX you can use it also as a PHP debugge
    :titlesonly:
 
    WhatDoesItDo/Index
-   Backend/Index
    Logging/Index
+   Backend/Index
