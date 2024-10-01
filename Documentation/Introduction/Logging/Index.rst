@@ -20,8 +20,8 @@ Each entry has a unique color to make new files better recognisable,
     :align: left
 	:alt: Logfiles backend menu
 
-	To make these logfiles easier accessible, we have provided a backend menu, where you can easily view them. The list gets updated automatically.
 
+To make these logfiles easier accessible, we have provided a backend menu, where you can easily view them. The list gets updated automatically.
 
 To prevent these files from clogging up your system, kreXX will only keep **10** files and automatically delete older ones. This value can also be changed the logging option **Maximum files in the logfolder** to any number bigger than **0**.
 
