@@ -19,11 +19,10 @@ Includekrexx gives you a good overview about the object and how to reach specifi
     <krexx:log>{_all}</krexx:log>
 
 
-.. figure:: Images/Fluid.png
+.. figure:: ../Images/Fluid.png
     :class: with-shadow d-inline-block
-    :width: 270px
     :align: left
-    :alt: kreXX logo
+    :alt: Fluid debugging with code snippet generation.
 
 
 You can also use it as a PHP debugger:
