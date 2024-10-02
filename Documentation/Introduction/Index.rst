@@ -4,7 +4,7 @@
 Introduction
 ============
 
-Includekrexx is a simple dropin replacement for the fliud debugger :literal:`<f:debug/>`.
+kreXX is a simple drop-in replacement for the fliud debugger :literal:`<f:debug/>`.
 
 Since it is based on the PHP debugger kreXX you can use it also as a PHP debugger.
 
@@ -15,3 +15,4 @@ Since it is based on the PHP debugger kreXX you can use it also as a PHP debugge
    WhatDoesItDo/Index
    Logging/Index
    Backend/Index
+   KrexxVsInludekrexx/Index

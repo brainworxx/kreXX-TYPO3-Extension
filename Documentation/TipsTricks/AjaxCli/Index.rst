@@ -5,8 +5,8 @@ Ajax and CLI
 
 Ajax
 ^^^^
-Includekrexx tries to detect Ajax calls. When using the standard settings, kreXX will be disabled. The reason for this is
-simple: The output of the analysis will most certainly destroy the JSON or XML that should be send to the browser,
+kreXX tries to detect Ajax calls. When using the standard settings, kreXX will be disabled. The reason for
+this is simple: The output of the analysis will most certainly destroy the JSON or XML that should be send to the browser,
 causing a JS error.
 
 But there are cases when you send already generated HTML code, instead. kreXX will (most likely) not destroy this one.

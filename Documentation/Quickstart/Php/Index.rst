@@ -4,7 +4,7 @@ Usage in PHP (with Aimeos)
 ==========================
 
 The shop framework Aimeos is extremely powerfull and flexible. But it works a lot with magical functions and decorators.
-This makes it hard to understand how to read the XDebug output and how to get certain values.
+This makes it hard to understand the XDebug output and how to access certain values, or methods.
 
 Includekrexx has special support for Aimeos. We have added special analyzers for the Aimeos classes and decorators.
 

@@ -3,7 +3,7 @@
 Logging
 =======
 
-To use Includekrexx as a logger simply use the looger ViewHelper:
+To use kreXX as a logger simply use the logger ViewHelper:
 
 .. code-block:: html
 

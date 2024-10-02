@@ -52,5 +52,5 @@ kreXX measures the time between every call, and then outputs it as a benchmark.
 
 .. warning::
     As seen in the example screenshot, the rendering order may not be what you expect. When using the benchmarking
-    viewhelpers accross different template files, make sure to call them in the correct order. Includekrexx will stop
+    viewhelpers accross different template files, make sure to call them in the correct order. kreXX will stop to
     measure the time when you call the end viewhelper :literal:`<krexx:timer.end/>`.

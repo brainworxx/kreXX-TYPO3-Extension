@@ -23,6 +23,6 @@ Headers already send
 ^^^^^^^^^^^^^^^^^^^^
 
 When debugging, you may encounter the error message :literal:`Headers already send`. This means that PHP has already sent
-some data to the browser, and includekrexx is trying to send some more, causing this.
+some data to the browser, and kreXX is trying to send some more, causing this.
 
 The solution is simple: Try other output methods, like logging.

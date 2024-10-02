@@ -4,7 +4,7 @@
 Quickstart
 ==========
 
-Here you will find a quick guide to get you started with Includekrexx.
+Here you will find a quick guide to get you started with kreXX.
 
 .. toctree::
    :maxdepth: 2

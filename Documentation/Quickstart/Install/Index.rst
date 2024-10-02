@@ -32,7 +32,7 @@ manager. Just remember to clear the cache afterwards.
 After the installation
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Includekrexx does not uys any database tables, so there is no need to update the database scheme.
+Includekrexx does not use any database tables, so there is no need to update the database scheme.
 
 After installing includekrexx, you should clear all caches. This will ensure that the new extension is properly loaded
 and that all caches are up to date.
