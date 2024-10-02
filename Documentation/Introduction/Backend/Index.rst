@@ -8,7 +8,7 @@ You do not have to configure kreXX. It works very well out of the box. There are
 1. Edit configuration file settings in the backend
 2. Edit local cookie settings in every debug output
 
-The editor for the configuration file can be found on the second tab of the backend module.
+The configuration editor can be found on the second tab of the backend module.
 
 .. figure:: ../../Images/Configuration.png
     :class: with-shadow d-inline-block
