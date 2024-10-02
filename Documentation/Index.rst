@@ -71,5 +71,5 @@ Fluid and PHP debugger with backend access to logfiles, code generation to reach
 
     Introduction/Index
     Quickstart/Index
-    TipsNTricks/Index
+    TipsTricks/Index
     Changelog/Index
