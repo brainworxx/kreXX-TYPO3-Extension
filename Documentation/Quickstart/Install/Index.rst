@@ -13,7 +13,9 @@ Installation via composer on DDEV
 
 You can install includekrexx on your local DDEV by simply adding includekrexx as a development requirement:
 
-:literal:`ddev composer require --dev brainworxx/includekrexx`
+.. code-block:: console
+    ddev composer require --dev brainworxx/includekrexx
+
 
 Your deployment script should only deploy the production dependencies, leaving out any development extension or libraries.
 

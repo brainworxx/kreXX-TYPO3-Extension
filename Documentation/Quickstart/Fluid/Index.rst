@@ -12,7 +12,8 @@ Using the viewhelper is pretty much straight forward:
 
     <!-- Normal frontend output -->
     <krexx:debug>{_all}</krexx:debug>
-    <!-- Use this part if you don't want fluid to escape your string or if you are stitching together an array. -->
+    <!-- Use this part if you don't want fluid to escape your string or if you are
+         stitching together an array. -->
     <krexx:debug value="{my: 'value', to: 'analyse'}" />
     <!-- Force the logging into a file -->
     <krexx:log>{_all}</krexx:log>
@@ -22,9 +23,7 @@ Using the viewhelper is pretty much straight forward:
 .. figure:: ../../Images/Fluid2.png
     :class: with-shadow d-inline-block
     :align: left
-	:alt: Screenshot of the fluid debugger output
-
-	Fluid debugger output with source generation for fluid.
+	:alt: Fluid debugger output with source generation for fluid.
 
 kreXX will then try to analyse everything inside the variable given to it.
 
