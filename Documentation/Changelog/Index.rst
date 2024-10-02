@@ -4,7 +4,14 @@
 Changelog
 =============================================================
 
+5.0.6
+-----
+    - [Feature] Updated to Aimeos 24.
+    - [Change] Updated the composer.json and the ex_em_conf.
+    - [Bugfix] Realigned the info popups in the backend.
+
 5.0.5
+-----
     - [Feature] Added formatting for float values for better readability.
     - [Feature] Added an event to the output of the inline js and css.
     - [Bugfix] Better CSP handling.
@@ -13,6 +20,7 @@ Changelog
     - [Bugfix] Fix the code generation for the VHS call viewhelper.
 
 5.0.4
+-----
     - [Feature] TYPO3 13.2 support.
     - [Change] Made implicitly nullable parameter declarations explicitly nullable.
     - [Bugfix] Catch a Throwable in the ProcessInteger.
@@ -23,6 +31,7 @@ Changelog
     - [Bugfix] Missing BOM encoding in the code generation.
 
 5.0.3
+-----
     - [Bugfix] Use the Krexx error callback in the LogFileList collector.
     - [Bugfix] Outdated link to the documentation license.
     - [Bugfix] Prevent reading a deleted meta data json file.
@@ -33,6 +42,7 @@ Changelog
     - [Bugfix] Do not use the $GLOBALS recursion marker in PHP 8.1 or higher.
 
 5.0.2
+-----
     - [Feature] Added the possibility for plugins to overwrite the factory settings.
     - [Feature] Use the immediate browser output for TYPO3 12 as a new standard setting.
     - [Change] Removed deprecated code.
@@ -48,12 +58,14 @@ Changelog
     - [Bugfix] Do not access debug class values before their initialization.
 
 5.0.1
+-----
     - [Feature] Updated to PHP 8.3
     - [Change] Updated the unit tests to 10.5
     - [Bugfix] Added a missing end-event in the ThroughGetter iterator.
     - [Bugfix] Removed a warning in the backend ajax module for high traffic sites. (Please, never debug a productive site. At least make sure that the logger can only get triggered by the dev.).
 
 5.0.0
+-----
     - [Feature] Added immediate browser output to the output choices.
     - [Feature] Added default value analysis to the additional info.
     - [Feature] Added the German translation.
@@ -100,12 +112,14 @@ Changelog
     - [Change] Set the nesting level to 10.
 
 4.1.10
+------
     - [Bugfix] Prevent a fatal in the scalar callback analysis.
     - [Bugfix] Class meta analysis thinks that interfaces are abstract.
     - [Bugfix] Removed a warning in the backend ajax module for high traffic sites. (Please, never debug a productive site. At least make sure that the logger can only get triggered by the dev.).
     - [Bugfix] Prevent a warning while parsing an XML string.
 
 4.1.9
+-----
     - [Feature] TYPO3 12.4 support.
     - [Feature] Added Support for the PHP 8 cUrl handle class.
     - [Bugfix] Fixed the indention in the changelog.
@@ -114,6 +128,7 @@ Changelog
     - [Bugfix] Fix an Error when the Aimeos debugger tries to access uninitialized properties.
 
 4.1.8
+-----
     - [Feature] TYPO3 12.1 support.
     - [Feature] PHP 8.2 support.
     - [Bugfix] Fixed the Aimeos settings in the ext_emconf.
@@ -124,6 +139,7 @@ Changelog
     - [Bugfix] Removed a warning in the backend ajax module for high traffic sites. (Please, never debug a productive site. At least make sure that the logger can only get triggered by the dev.).
 
 4.1.7
+-----
     - [Feature] TYPO3 12.0 support
     - [Bugfix] Removed a faulty 'use' doc comment.
     - [Bugfix] Use the correct method signature for the error handler callback.
@@ -135,12 +151,14 @@ Changelog
     - [Bugfix] Fix the handling of the 8.1 Enum as a default value in the source generation.
 
 4.1.6
+-----
     - [Bugfix] Link to the documentation of the debug preset does not work anymore in the documentation.
     - [Bugfix] Added the missing path filter to the EXT: path resolver.
     - [Bugfix] Use strict encoding detection for strings for more reliable results.
     - [Bugfix] Fetch traversable data as soon as possible, because we do not want other analysis methods fetch traversable results, that are only fetchable once. DB results are a good example for this.
 
 4.1.5
+-----
     - [Feature] Aimeos 2022 support
     - [Bugfix] Remove the use of the deprecated \TYPO3\CMS\Extbase\Mvc\View\ViewInterface.
     - [Bugfix] Give valid feedback, in case the DI fails during query debugging.
@@ -150,11 +168,13 @@ Changelog
     - [Bugfix] Do not basename() an unknown file path in the backend logging.
 
 4.1.4
+-----
     - [Feature] Added support for readonly properties
     - [Bugfix] Correctly identify uninitialized properties.
     - [Bugfix] Prevent unnecessary filesystem calls in the filepath analysis.
 
 4.1.3
+-----
     - [Feature] Added microtime analysis to the float routing.
     - [Feature] Added microtime analysis to the string scalar analysis.
     - [Feature] Added type hint to the additional data for the first element.
@@ -172,6 +192,7 @@ Changelog
     - [Bugfix] K-Type padding for the Hans skin is too small.
 
 4.1.2
+-----
     - [Feature] PHP 8.0 support
     - [Feature] Updated to TYPO3 11.5.
     - [Change] Migrate TYPO3 11.4 changes and/or deprecations.
@@ -184,6 +205,7 @@ Changelog
     - [Bugfix] Object recursions in the "$this protected" context can not generate source code.
 
 4.1.1
+-----
     - [Change] Remove the usage of the ObjectManager whenever possible.
     - [Change] Code cleanup.
     - [Change] Make use of the Symfony DI.
@@ -195,6 +217,7 @@ Changelog
     - [Bugfix] Minor styling fixes for the backend module.
 
 4.1.0
+-----
     - [Feature] Added a log model to use for a logger implementation.
     - [Feature] Added .min. support for css files.
     - [Feature] Added apostrophes around string array keys to the SmokyGrey skin for better readability.
@@ -212,6 +235,7 @@ Changelog
     - [Bugfix] Exception, when a mb_detect_encoding() could not determine the encoding of a string.
 
 4.0.0
+-----
     - [Feature] Added process resource analysis.
     - [Feature] Added better callback analysis.
     - [Feature] Added better string analysis (json, file path, callback, xml)
@@ -252,18 +276,23 @@ Changelog
     - [Bugfix] Added missing Aimeos debug method 'getAttributeItems'.
 
 3.3.6
+-----
     - [Bugfix] Removed the composer definition for the class alias loader and use an alternative implementation.
 
 3.3.5
+-----
     - [Bugfix] Added missing composer definition for the class alias loader.
 
 3.3.4
+-----
     - [Bugfix] Analysing of __PHP_Incomplete_Class does not throw errors anymore.
 
 3.3.3
+-----
     - [Bugfix] Fixed the composer dependencies.
 
 3.3.2
+-----
     - [Feature] TYPO3 10.4 support.
     - [Bugfix] Added missing closing li tag to the expandableChild template.
     - [Bugfix] The fe configuration does not update the render type.
@@ -272,6 +301,7 @@ Changelog
     - [Bugfix] Minimise interference with strange CSS styles.
 
 3.3.1
+-----
     - [Feature] Updated to PHP 7.4
     - [Bugfix] The process other routing is never called.
     - [Bugfix] The cookie editor needs to be "initialized" prior usage.
@@ -281,6 +311,7 @@ Changelog
     - [Bugfix] Environment check may fail
 
 3.3.0
+-----
     - [Feature] Introduce php-mock/php-mock-phpunit.
     - [Feature] TYPO3 10.1 support.
     - [Feature] Added event system to the process classes.
@@ -311,6 +342,7 @@ Changelog
     - [Bugfix] Wrong error handler restoration after deleting a file.
 
 3.2.0
+-----
     - [Feature] Use some real autoloading, with a fallback to manually including all files.
     - [Feature] Plugins can now register additional skins.
     - [Feature] kreXX debug calls will return the original analysis value.
@@ -345,6 +377,7 @@ Changelog
     - [Bugfix] Invalid php doc comments may trigger errors
 
 3.1.0
+-----
     - [Feature] Nearly complete rewrite of the backend module.
     - [Feature] Logfile access in the debugbar.
     - [Feature] Added classname to the declaration analysis of properties.
@@ -365,6 +398,7 @@ Changelog
     - [Bugfix] Fix the styles of the Hans skin.
 
 3.0.1
+-----
     - [Bugfix] Added the missing end event to the property analysis.
     - [Bugfix][Change] Configured debug methods are now checked on configuration loading.
     - [Bugfix] Preserve the line breaks from the string-extra.
@@ -378,6 +412,7 @@ Changelog
     - [Change] All singelton classes now add themself to the pool as soon as they are created.
 
 3.0.0
+-----
     - [Feature] Added 'is' and 'has' to the getter analysis.
     - [Feature] Added plugin support, to replace the half-asses overwrites.
     - [Feature] Added a event dispatcher.
@@ -429,6 +464,7 @@ Changelog
     - [Bugfix] The search of the Hans skin scrolls now more reliably.
 
 2.4.0
+-----
     - [Feature] Added the method analysis to the recursion detection, to prevent analysing the same methods over and over again.
     - [Feature] Added Javascript optimisation for very large output.
     - [Feature] Added mimetype analysis for strings.
@@ -454,11 +490,13 @@ Changelog
     - [Bugfix] Better cleanup for still open HTML tags.
 
 2.3.1
+-----
     - [Bugfix] Fixed shell detection.
     - [Bugfix] Fixed shell message feedback
     - [Bugfix] Fixed ajax detection
 
 2.3.0
+-----
     - [Feature] Added a Fluid specific caller finder for the fluid debugger
     - [Feature] Added a configuration for the backtrace, to limit the analysed steps.
     - [Feature] Added property comments to the analysis
@@ -511,6 +549,7 @@ Changelog
     - [Bugfix] Fixed the rendering color of the connector 2 in the Hans skin.
 
 2.2.0
+-----
     - [Feature] Added a fluid debugger viewhelper.
     - [Feature] Added more search pattern and source code parsing to the getter analysis.
     - [Feature] Added a metatag to both skins to have a little chance to prevent crawler from indexing a kreXX output. Remember kids: never debug a productive site. This will only lead to trouble.
@@ -526,10 +565,12 @@ Changelog
 
 
 2.1.2
+-----
     - [Bugfix] Fixed that annoying warning with PHP7.
     - [Change] :literal:`includekrexx` and :literal:`krexx` version numbers are out of sync (for now).
 
 2.1.1
+-----
     - [Feature] Added the info, if a property / method is inherited.
     - [Feature] Added a configuration for the scope analysis.
     - [Feature] Added the search option "Search whole value".
@@ -545,6 +586,7 @@ Changelog
     - [Bugfix] Removed the type-spam in the additional data.
 
 2.1.0
+-----
     - [Feature] Added getter method analysis for models.
     - [Feature] Added search options to both skins.
     - [Feature] Added the '=' to the Hans Skin for better readability.
@@ -560,6 +602,7 @@ Changelog
     - [Bugfix] Recursion resolving works now for closures.
 
 2.0.1
+-----
     - [Feature] Added a ip mask to whitelist ip's that can trigger kreXX.
     - [Feature] Added the method arguments to the method analysis in the smokygrey skin.
     - [Internals] Refactored the configuration and introduced models there.
@@ -571,6 +614,7 @@ Changelog
     - [Bugfix] Fixed a notice in the \Krexx::backtrace();
 
 2.0.0
+-----
     - [Feature] Added sourcecode to the closure analysis.
     - [Feature] Prettified the sourcecode display in the smokygrey skin.
     - [Internals] Refactored pretty much everything and introduced something that looks remotely like MVC. This results in a major increase in speed.
@@ -583,6 +627,7 @@ Changelog
     - [Bugfix] Added a check to the developer handle to prevent warnings.
 
 1.4.2
+-----
     - [Feature] Added analysis metadata to the file output.
     - [Feature] Added metadata to the backend logging
     - [Internals] Adopted PSR-2
@@ -598,6 +643,7 @@ Changelog
     - [Bugfix] Proper handling of broken html output from the hosting CMS.
 
 1.4.1
+-----
     - [Feature] Added class constants analysis.
     - [Feature] Added a new backend menu to access the log files
     - [Internals] Added the possibility to remove message keys from the message class
@@ -607,6 +653,7 @@ Changelog
     - [Bugfix] Removed hardcoded logfolder path in the bootstrap phase.
 
 1.4.0
+-----
     - [Feature] Added smoky-grey as the new standard skin.
     - [Feature] Updated to PHP7
     - [Internals] Added the SkinRender class to the skin directory, so every skin can do some special stuff.
@@ -625,6 +672,7 @@ Changelog
     - [Bugfix] A click on the generated php code does not bubble anymore.
 
 1.3.6
+-----
     - [Feature] Added scope analysis. Protected an private variables are treated as public in case they are reachable with the called scope.
     - [Feature] Class properties are now sorted alphabetically.
     - [Feature] Improved the automatic code generation for recursions.
@@ -636,11 +684,13 @@ Changelog
     - [Bugfix] Several JS fixes for IE9.
 
 1.3.5
+-----
     - [Feature] Added code analysis to determine the name of the variable we are analysing.
     - [Feature] Added warning to tell the user that we are not starting an other analysis, because we will reach output => maxCall.
     - [Bugfix] Recursion clicking does not produce double ids anymore.
 
 1.3.4
+-----
     - [Feature] Added closure analysis.
     - [Change] Removed the jQuery setting
     - [Bugfix] Hans skin tries to close some left-over html tag to get a proper display
@@ -649,6 +699,7 @@ Changelog
     - [Bugfix] The Collapse-Everything-Else function from the hans skin does not affect other debug output anymore.
 
 1.3.3
+-----
     - [Feature] kreXX will now work without a writable chunks folder, but this will require much more memory.
     - [Feature] Added a new backend menu to access local cookie settings.
     - [Internals] Refactored file handling (chunks and logfiles).
@@ -661,12 +712,14 @@ Changelog
     - [Change] Restructured the output, to make it (hopefully) better readable. The format is now much more similar to the actual code.
 
 1.3.2
+-----
     - [Internals] Added a small blacklist of classname/debugfunction combination which may cause problems during object analysis.
     - [Internals] Added composer.json
     - [Change] Removed the old and ugly schablon skin.
     - [Bugfix] Removed that annoying "Hidden internal properties" message.
 
 1.1.1
+-----
     - [Change] Removed the Debug Cookie in favor for the local open function
     - [Bugfix] Local open function is working again.
     - [Bugfix] Displaying the local configuration does not re-enable kreXX anymore.
@@ -676,6 +729,7 @@ Changelog
     - [Bugfix] Proper display of internal properties of predefined php classes.
 
 1.1.0
+-----
     - [Feature] Added search function to the Hans skin.
     - [Feature] Added collapse-everything-else to the Hans skin.
     - [Feature] Added better recursion handling in the Hans skin.
@@ -685,7 +739,9 @@ Changelog
     - [Bugfix] Possible jQuery errors when the host site is using the noConflict mode.
     - [Bugfix] Refactored css of the Hans skin for minimal interference with the host template. Most base64 images were replaced by unicode characters.
     - [Bugfix] Possible false string encoding.
+
 1.0.0
+-----
     - [Feature] Reduced overall memory usage.
     - [Feature] Added memory usage check during frontend rendering.
     - [Feature] Added check if log and chunk folders are writable.
