@@ -36,7 +36,7 @@ Benchmarking ViewHelpers
     <krexx:timer.moment value="Start rendering"/>
     <!-- A lot more template code -->
     . . . .
-    <!-- Take another  moment -->
+    <!-- Take another moment -->
     <krexx:timer.moment value="Start menu rendering"/>
     <!-- Even more template code -->
     . . . .

@@ -26,9 +26,9 @@ JavaScript.
 Headers already send
 ^^^^^^^^^^^^^^^^^^^^
 
-When debugging, you may encounter the error message :literal:`Headers already send`. This means that PHP has already sent
-some data to the browser, and kreXX is trying to send some more, causing this.
+When debugging, you may encounter the error message :literal:`Headers already send`. This means that kreXX has already
+sent some data to the browser, and TYPO3 is trying to send the header, causing this.
 
 The solution is simple: Try other output methods.
 
-You can change the output methods in the backend settings.
+You can change the output methods in the backend settings: :ref:`backend`

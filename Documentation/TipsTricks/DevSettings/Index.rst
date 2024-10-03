@@ -20,7 +20,7 @@ Typoscript
 
 .. code-block:: typoscript
 
-    # Activate the error handler to show on the frontend want is going on.
+    # Tell the error handler to show what is going on.
     config.contentObjectExceptionHandler = 0
     # Deactivate the frontend cache.
     config.no_cache = 1

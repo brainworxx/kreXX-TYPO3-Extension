@@ -35,7 +35,8 @@ kreXX Debugger
 
 ----
 
-Fluid and PHP debugger with backend access to logfiles, code generation to reach the displayed values and much more. We added some special stuff for Aimeos.
+Fluid (and PHP debugger) with backend access to logfiles, code generation to reach the displayed values and much more.
+We added some special stuff for Aimeos.
 
 ----
 

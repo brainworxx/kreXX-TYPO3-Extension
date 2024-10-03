@@ -4,9 +4,8 @@ Installation
 ============
 
 Includekrexx is a development tool for Fluid (and PHP). But deploying a development tool to a production system is not a
-good idea. This only encourages integrators to use it on a production system, which will only lead to problems. Therefore
-we recommend installing it via composer require-dev on your local DDEV.
-
+good idea. This only encourages integrators to use it there, which will only lead to problems. Therefore we recommend
+installing it via composer require-dev on your local DDEV.
 
 Installation via composer on DDEV
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -37,5 +36,5 @@ Includekrexx does not use any database tables, so there is no need to update the
 After installing includekrexx, you should clear all caches. This will ensure that the new extension is properly loaded
 and that all caches are up to date.
 
-Go to the :literal:`Admin Tooll --> Maintenance` and click on the :literal:`Flush TYPO3 Caches` button.
+Go to the :literal:`Admin Tool --> Maintenance` and click on the :literal:`Flush TYPO3 Caches` button.
 

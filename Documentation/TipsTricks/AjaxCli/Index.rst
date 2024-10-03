@@ -14,9 +14,9 @@ To disable AJAX detection, set output -> detectAjax to false.
 
 CLI
 ^^^
-CLI detection is somewhat similar. When using a shell, a kreXX output will be most useless. You do not want to use HTML
-code in your shell. Unless you specify the output destination to a file, kreXX will be disabled for CLI calls. The only
-thing that might be actually be displayed are the messages from the kreXX-bootstrap phase, telling the user about install
+CLI detection is somewhat similar. When using a shell, a kreXX output will be most useless. You do not want to see HTML
+code in your shell. Unless you change the output destination to a file, kreXX will be disabled for CLI calls. The only
+thing that might be actually be displayed are the messages from the kreXX bootstrap phase, informing you about install
 problems.
 
 Debugging Both
