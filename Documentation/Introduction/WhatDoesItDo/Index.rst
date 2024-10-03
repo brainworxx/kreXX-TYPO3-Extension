@@ -21,7 +21,6 @@ kreXX gives you a good overview about the object and how to reach specific value
 
 .. figure:: ../../Images/Fluid.png
     :class: with-shadow d-inline-block
-    :align: center
     :alt: Fluid debugging with code snippet generation.
 
     Fluid debugging with code snippet generation.

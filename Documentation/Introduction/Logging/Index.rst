@@ -18,7 +18,6 @@ Each entry has a unique colour to make new files better recognisable,
 
 .. figure:: ../../Images/Logging.png
     :class: with-shadow d-inline-block
-    :align: center
 	:alt: Logfiles backend menu
 
     Logfiles backend menu
@@ -35,7 +34,6 @@ A file can be access by simply clicking on the filename. The trashcan on the rig
 
 .. figure:: ../../Images/AdminPanel.png
     :class: with-shadow d-inline-block
-    :align: center
 	:alt: Logfiles in the Admin Panel
 
     Logfiles in the Admin Panel

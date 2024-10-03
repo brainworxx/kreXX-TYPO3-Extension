@@ -25,7 +25,6 @@ Main analytic function
 
 .. figure:: ../../Images/Aimeos1.png
     :class: with-shadow d-inline-block
-    :align: center
     :alt: Aimeos magical property analysis
 
     Analysis of a magical property from a shop item.
@@ -33,7 +32,6 @@ Main analytic function
 
 .. figure:: ../../Images/Aimeos2.png
     :class: with-shadow d-inline-block
-    :align: center
     :alt: Aimeos view factory analysis
 
     Analysis of a Aimeos view helper with source generation and comments from the source code.

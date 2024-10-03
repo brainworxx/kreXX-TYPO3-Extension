@@ -21,7 +21,6 @@ integrators.
 
 .. figure:: ../../Images/KrexxPlugins.png
     :class: with-shadow d-inline-block
-    :align: center
     :alt: Backend settings editor
 
     Backend settings editor

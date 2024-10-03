@@ -22,7 +22,6 @@ Using the ViewHelpers is pretty much straight forward:
 
 .. figure:: ../../Images/Fluid2.png
     :class: with-shadow d-inline-block
-    :align: center
     :alt: Fluid debugger output with source generation for fluid.
 
     Fluid debugger output with source generation for fluid.
@@ -49,7 +48,6 @@ kreXX measures the time between every call, and then outputs it as a benchmark.
 
 .. figure:: ../../Images/FluidBenchmark.png
     :class: with-shadow d-inline-block
-    :align: center
     :alt: Fluid debugger output with benchmarking.
 
     Fluid debugger output with benchmarking.

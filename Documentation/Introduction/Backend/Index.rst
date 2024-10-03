@@ -12,7 +12,6 @@ The configuration editor can be found on the second tab of the backend module.
 
 .. figure:: ../../Images/Configuration.png
     :class: with-shadow d-inline-block
-    :align: center
     :alt: Backend settings editor
 
     Backend settings editor
