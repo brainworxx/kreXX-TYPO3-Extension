@@ -21,7 +21,9 @@ integrators.
 
 .. figure:: ../../Images/KrexxPlugins.png
     :class: with-shadow d-inline-block
-    :align: left
+    :align: center
     :alt: Backend settings editor
+
+    Backend settings editor
 
 If you want to make full use of kreXX, we recommend using the TYPO3 extension includekrexx.

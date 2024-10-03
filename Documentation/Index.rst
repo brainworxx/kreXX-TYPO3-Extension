@@ -4,13 +4,6 @@
 kreXX Debugger
 ==============
 
-.. figure:: Images/krexx.png
-    :class: with-shadow d-inline-block
-    :width: 270px
-    :align: left
-    :alt: kreXX logo
-
-
 :Extension key:
    includekrexx
 
@@ -32,6 +25,13 @@ kreXX Debugger
 
 :Rendered:
    |today|
+
+
+.. figure:: Images/krexx.png
+    :class: with-shadow d-inline-block
+    :width: 270px
+    :align: left
+    :alt: kreXX logo
 
 ----
 

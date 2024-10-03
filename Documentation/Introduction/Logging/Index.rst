@@ -18,8 +18,10 @@ Each entry has a unique colour to make new files better recognisable,
 
 .. figure:: ../../Images/Logging.png
     :class: with-shadow d-inline-block
-    :align: left
+    :align: center
 	:alt: Logfiles backend menu
+
+    Logfiles backend menu
 
 
 To make these logfiles easier accessible, we have provided a backend menu, where you can easily view them. The list is
@@ -33,8 +35,10 @@ A file can be access by simply clicking on the filename. The trashcan on the rig
 
 .. figure:: ../../Images/AdminPanel.png
     :class: with-shadow d-inline-block
-    :align: left
+    :align: center
 	:alt: Logfiles in the Admin Panel
+
+    Logfiles in the Admin Panel
 
 
 Alternatively, you can access the logfiles by using the TYPO3 Admin Panel.

@@ -3,7 +3,7 @@
 What does it do?
 ================
 
-To put it simple: kreXX is a simple alternative for the fluid debugger :literal:`<f:debug/>`.
+To put it simple: kreXX is an alternative for the fluid debugger :literal:`<f:debug/>`.
 
 The problem with :literal:`<f:debug/>` is that is can be a little bit discrete when debugging objects.
 It only shows protected properties which may or may not be reachable in the template file.
@@ -21,8 +21,10 @@ kreXX gives you a good overview about the object and how to reach specific value
 
 .. figure:: ../../Images/Fluid.png
     :class: with-shadow d-inline-block
-    :align: left
+    :align: center
     :alt: Fluid debugging with code snippet generation.
+
+    Fluid debugging with code snippet generation.
 
 
 You can also use it as a PHP debugger:
