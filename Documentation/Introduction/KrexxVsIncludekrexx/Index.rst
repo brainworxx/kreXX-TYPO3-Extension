@@ -1,4 +1,4 @@
-.. _krexxvsincludekrexx:
+.. _krexxVsIncludekrexx:
 
 =====================
 kreXX vs includekrexx

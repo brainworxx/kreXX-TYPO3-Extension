@@ -15,4 +15,4 @@ Since it is based on the PHP debugger kreXX you can use it also as a PHP debugge
    WhatDoesItDo/Index
    Logging/Index
    Backend/Index
-   KrexxVsInludekrexx/Index
+   KrexxVsIncludekrexx/Index
