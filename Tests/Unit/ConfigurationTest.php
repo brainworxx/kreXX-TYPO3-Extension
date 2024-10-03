@@ -43,7 +43,6 @@ class ConfigurationTest extends AbstractHelper
      * version numbers, namely:
      *   - ext_emconf.php
      *   - changelog.rst
-     *   - settings.cfg
      *
      * All of them contain the same fu**ing data!
      */
@@ -54,21 +53,18 @@ class ConfigurationTest extends AbstractHelper
         $composerJsonPath = $dir . 'composer.json';
         $extEmConfPath = $dir . 'ext_emconf.php';
         $changelogPath = $dir . 'Documentation/Changelog/Index.rst';
-        $docSettingsPath = $dir . 'Documentation/Settings.cfg';
         $extLocalConfPath = $dir . 'ext_localconf.php';
 
         $this->assertFileExists($composerJsonPath);
         $this->assertFileExists($extEmConfPath);
         $this->assertFileExists($changelogPath);
-        $this->assertFileExists($docSettingsPath);
         $this->assertFileExists($extLocalConfPath);
 
         // The stuff from the configuration files.
         $composer = json_decode(file_get_contents($composerJsonPath));
         $_EXTKEY = 'includekrexx';
         include $extEmConfPath;
-        $docSettings = parse_ini_file($docSettingsPath);
-        $changelogContent = file($changelogPath)[14];
+        $changelogContent = file($changelogPath)[6];
 
         // Our expectations.
         $versionNumber = '5.0.6';
@@ -88,10 +84,6 @@ class ConfigurationTest extends AbstractHelper
             $this->assertEquals($t3ComposerConstraint, $composer->require->{'typo3/cms-core'});
             $this->assertEquals($phpComposerConstraint, $composer->require->php);
         }
-
-        // Test the doc settings.
-        $this->assertEquals($versionNumber, $docSettings['release']);
-        $this->assertEquals($versionNumber, $docSettings['version']);
 
         // Test the changelog.
         $this->assertStringContainsString($versionNumber, $changelogContent);
