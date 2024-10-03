@@ -27,23 +27,14 @@ kreXX Debugger
    |today|
 
 
-..  card-grid::
-    :columns: 1
-    :columns-md: 2
-    :gap: 4
+----
 
-    ..  card::
-        :class: shadow-none border-0
+.. figure:: Images/krexx.png
+    :class: with-shadow d-inline-block
+    :alt: kreXX logo
 
-        .. figure:: Images/krexx.png
-            :width: 270px
-            :alt: kreXX logo
-
-    ..  card::
-        :class: shadow-none border-0
-
-        Fluid (and PHP debugger) with backend access to logfiles, code generation to reach the displayed values and much more.
-        We added some special stuff for Aimeos.
+    Fluid (and PHP debugger) with backend access to logfiles, code generation to reach the displayed values and much more.
+    We added some special stuff for Aimeos.
 
 ----
 
