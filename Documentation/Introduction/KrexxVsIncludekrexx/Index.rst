@@ -12,7 +12,12 @@ There are two debuggers that you may call :literal:`kreXX`:
 And both are being developed by BRAINWORXX GmbH.
 
 - kreXX is a pure PHP debugger.
-- Includekrexx is a TYPO3 extension with special features for Fluid, TYPO3 and Aimeos.
+- Includekrexx
+
+kreXX is a pure PHP debugger.
+
+Includekrexx is extending kreXX with a lot of features that are especially useful for TYPO3 and Fluid developers and
+integrators.
 
 .. figure:: ../../Images/KrexxPlugins.png
     :class: with-shadow d-inline-block

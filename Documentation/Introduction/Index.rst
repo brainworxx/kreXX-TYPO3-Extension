@@ -4,7 +4,7 @@
 Introduction
 ============
 
-kreXX is a simple drop-in replacement for the fliud debugger :literal:`<f:debug/>`.
+kreXX is a simple drop-in replacement for the fluid debugger :literal:`<f:debug/>`.
 
 Since it is based on the PHP debugger kreXX you can use it also as a PHP debugger.
 

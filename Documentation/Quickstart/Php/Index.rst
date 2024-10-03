@@ -3,10 +3,10 @@
 Usage in PHP (with Aimeos)
 ==========================
 
-The shop framework Aimeos is extremely powerfull and flexible. But it works a lot with magical functions and decorators.
-This makes it hard to understand the XDebug output and how to access certain values, or methods.
+The shop framework Aimeos is extremely powerful and flexible. But it works a lot with Magic Methods and decorators.
+This makes it hard to understand the Xdebug output and how to access certain values, or methods.
 
-Includekrexx has special support for Aimeos. We have added special analyzers for the Aimeos classes and decorators.
+Includekrexx has support for Aimeos. We have added special analysers for the Aimeos classes and decorators.
 
 Main analytic function
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -25,13 +25,14 @@ Main analytic function
 
 .. figure:: ../../Images/Aimeos1.png
     :class: with-shadow d-inline-block
-	:alt: Aimeos magical property analysis
+    :alt: Aimeos magical property analysis
 
-	Analysis of a magical property from a shop item.
+    Analysis of a magical property from a shop item.
 
 
 .. figure:: ../../Images/Aimeos2.png
     :class: with-shadow d-inline-block
-	:alt: Aimeos view factory analysis
+    :alt: Aimeos view factory analysis
 
-	Analysis of a Aimeos view helper with source generation and comments from the source code.
+    Analysis of a Aimeos view helper with source generation and comments from the source code.
+

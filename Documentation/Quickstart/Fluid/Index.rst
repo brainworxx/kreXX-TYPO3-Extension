@@ -6,7 +6,7 @@ Usage in Fluid
 The debugging ViewHelpers
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Using the viewhelper is pretty much straight forward:
+Using the ViewHelpers is pretty much straight forward:
 
 .. code-block:: html
 
@@ -23,7 +23,7 @@ Using the viewhelper is pretty much straight forward:
 .. figure:: ../../Images/Fluid2.png
     :class: with-shadow d-inline-block
     :align: left
-	:alt: Fluid debugger output with source generation for fluid.
+    :alt: Fluid debugger output with source generation for fluid.
 
 kreXX will then try to analyse everything inside the variable given to it.
 
@@ -37,7 +37,7 @@ Benchmarking ViewHelpers
     <!-- A lot more template code -->
     . . . .
     <!-- Take another  moment -->
-    <krexx:timer.moment value="Start meue rendering"/>
+    <krexx:timer.moment value="Start menu rendering"/>
     <!-- Even more template code -->
     . . . .
     <!-- Output the benchmark -->
@@ -48,9 +48,9 @@ kreXX measures the time between every call, and then outputs it as a benchmark.
 .. figure:: ../../Images/FluidBenchmark.png
     :class: with-shadow d-inline-block
     :align: left
-	:alt: Fluid debugger output with benchmarking.
+    :alt: Fluid debugger output with benchmarking.
 
 .. warning::
     As seen in the example screenshot, the rendering order may not be what you expect. When using the benchmarking
-    viewhelpers accross different template files, make sure to call them in the correct order. kreXX will stop to
-    measure the time when you call the end viewhelper :literal:`<krexx:timer.end/>`.
+    ViewHelpers across different template files, make sure to call them in the correct order. kreXX will stop to
+    measure the time when you call the end ViewHelper :literal:`<krexx:timer.end/>`.
