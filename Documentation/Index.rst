@@ -1,74 +1,73 @@
-﻿.. ==================================================
-.. FOR YOUR INFORMATION
-.. --------------------------------------------------
-.. -*- coding: utf-8 -*- with BOM.
+﻿.. _start:
 
-.. include:: Includes.txt
-
-
-.. _start:
-
-=============================================================
+==============
 kreXX Debugger
-=============================================================
+==============
+
+:Extension key:
+   includekrexx
+
+:Package name:
+   brainworxx/includekrexx
+
+:Version:
+   |release|
+
+:Language:
+   en
+
+:Author:
+    `BRAINWORXX GmbH <https://www.brainworxx.de/>`__
+
+:License:
+   This document is published under the
+   `Open Publication License <https://www.opencontent.org/openpub/>`__.
+
+:Rendered:
+   |today|
+
+
+----
 
 .. figure:: Images/krexx.png
-	:width: 270px
-	:align: left
-	:alt: kreXX logo
+    :alt: kreXX logo
 
-.. only:: html
+    Fluid (and PHP debugger) with backend access to logfiles, code generation to reach the displayed values and much more.
+    We added some special stuff for Aimeos.
 
-	:Classification:
-		includekrexx
+----
 
-	:Version:
-		|release|
 
-	:Language:
-		en
+..  card-grid::
+    :columns: 1
+    :columns-md: 2
+    :gap: 4
+    :class: pb-4
+    :card-height: 100
 
-	:Description:
-		Fluid and PHP debugger with backend access to logfiles, code generation to reach the displayed values and much more. We added some special stuff for Aimeos.
+    ..  card:: :ref:`Introduction <Introduction>`
 
-	:Keywords:
-		debug, developer, log, development, aimeos, fluid
+        A quick introduction in how to use this extension.
 
-	:Copyright:
-		2014 - 2024
+    ..  card:: :ref:`Quick start <Quickstart>`
 
-	:Author:
-		BRAINWORXX GmbH
+        A quick start guide to get you up and running with this extension.
 
-	:Email:
-		info@brainworxx.de
+    ..  card:: :ref:`Tips and tricks <TipsNTricks>`
 
-	:License:
-		This document is published under the Open Content License
-		available from https://opencontent.org/openpub
+        A small list of tips and tricks
 
-	:Rendered:
-		|today|
+    ..  card:: :ref:`Changelog <Changelog>`
 
-	The content of this document is related to TYPO3,
-	a GNU/GPL CMS/Framework available from `www.typo3.org <https://typo3.org/>`_.
+        The changelog of this extension.
 
-|
-|
-
-**Table of Contents**
 
 .. toctree::
-	:maxdepth: 5
-	:titlesonly:
-	:glob:
+    :maxdepth: 2
+    :titlesonly:
+    :hidden:
 
-	WhatDoesItDo/Index
-	Installation/Index
-	UsagePhp/Index
-	UsageFluid/Index
-	AccessLogfiles/Index
-	Config/Index
-	Features/Index
-	TipsNTricks/Index
-	Changelog/Index
+    Introduction/Index
+    Quickstart/Index
+    TipsTricks/Index
+    Changelog/Index
