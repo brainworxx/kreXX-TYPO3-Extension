@@ -30,7 +30,6 @@ kreXX Debugger
 ----
 
 .. figure:: Images/krexx.png
-    :class: with-shadow d-inline-block
     :alt: kreXX logo
 
     Fluid (and PHP debugger) with backend access to logfiles, code generation to reach the displayed values and much more.
