@@ -1,13 +1,18 @@
-body {
+body, a {
   color: var(--black);
 }
 
-.module .module-docheader {
-  display: none;
-}
+.module {
+  background-color: var(--background-color);
 
-.module .module-body {
-  padding-top: 50px !important;
+  .module-docheader {
+    display: none;
+  }
+
+  .module-body {
+    padding-top: 50px !important;
+    background-color: var(--background-color);
+  }
 }
 
 .module-loading-indicator {
@@ -22,6 +27,7 @@ body {
 }
 
 .krexx-backend {
+  background-color: var(--background-color);
 
   /**
    * General stuff

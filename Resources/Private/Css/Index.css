@@ -10,6 +10,7 @@
   --grey-15: #c4c4c4;
   --grey-20: #a6a6a6;
   --grey-25: #808080;
+  --background-color: whitesmoke;
   --black: #333;
   --green-success-bg: #79a548;
   --green-success-icon: #94B76D;
@@ -40,7 +41,8 @@
     --grey-15: #404040;
     --grey-20: #5c5c5c;
     --grey-25: #6c6c6c;
-    --black: #fefefe;
+    --background-color: #171717;
+    --black: #dedede;
     --green-success-bg: #4e6b2e;
     --green-success-icon: #6b8a4a;
     --red-error-bg: #8a2a2a;
@@ -62,16 +64,19 @@
     --tooltip: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAMAAAD3n0w0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAMUExURcXFxcDAwMjIyAAAACrd/58AAAAEdFJOU////wBAKqn0AAAACXBIWXMAAA7BAAAOwQG4kWvtAAAAMklEQVQoU2NgxgJoK8jACGUQFEQC+AUZmLBoZ2BigrKQtVNfEGgPE9x+vIIogPqCzMwAglEE+n48IvAAAAAASUVORK5CYII=");
   }
 }
-body {
+body, a {
   color: var(--black);
 }
 
+.module {
+  background-color: var(--background-color);
+}
 .module .module-docheader {
   display: none;
 }
-
 .module .module-body {
   padding-top: 50px !important;
+  background-color: var(--background-color);
 }
 
 .module-loading-indicator {
@@ -86,6 +91,7 @@ body {
 }
 
 .krexx-backend {
+  background-color: var(--background-color);
   /**
    * General stuff
    */
@@ -116,6 +122,7 @@ body {
 
 .krexx-backend .tabpanel {
   max-width: 1200px;
+  box-shadow: 0 0 100px 0 var(--grey-05);
 }
 .krexx-backend .tabpanel .nav-tabs {
   border-radius: 2px 2px 0 0;
@@ -620,6 +627,7 @@ body {
   display: inline-block;
   font-size: 15px;
   max-width: 343px;
+  color: white;
 }
 .message-container-outer .ajax-msg.fade {
   transition: all 0.5s;
