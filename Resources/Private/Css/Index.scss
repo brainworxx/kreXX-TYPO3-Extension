@@ -1,27 +1,4 @@
-$white: #fefefe;
-$grey-05: #ededed;
-$grey-10: #dedede;
-$grey-15: #c4c4c4;
-$grey-20: #a6a6a6;
-$grey-25: #808080;
-$black: #333;
-
-$box-shadow: inset 0 1px 1px $grey-10;
-
-$green-success-bg: #79a548;
-$green-success-icon: #94B76D;
-$red-error-bg: #c83c3c;
-$red-error-icon: #d36363;
-
-$emergency: #A4276A;
-$alert: #D04038;
-$critical: #EE8433;
-$error: #FFCD09;
-$warning: #FFE896;
-$info: #6DAAE0;
-$notice: #1D588E;
-
-
+@import "Includes/themes";
 @import "Includes/general";
 @import "Includes/tabs";
 @import "Includes/tables";

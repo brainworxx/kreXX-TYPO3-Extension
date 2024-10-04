@@ -1,4 +1,4 @@
-.. _changelog:
+﻿.. _changelog:
 
 =============================================================
 Changelog
@@ -7,6 +7,7 @@ Changelog
 5.0.6
     - [Feature] Updated to Aimeos 24.
     - [Feature] Rewrote large parts of the documentation.
+    - [Feature] Added dark mode.
     - [Change] Updated the composer.json and the ex_em_conf.
     - [Bugfix] Realigned the info popups in the backend.
 

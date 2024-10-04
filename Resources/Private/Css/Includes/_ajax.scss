@@ -9,7 +9,7 @@
 
   .ajax-msg {
     float: right;
-    box-shadow: $box-shadow;
+    box-shadow: var(--box-shadow);
     border: 0;
     padding: 11px;
     margin-bottom: 18px;
@@ -57,11 +57,11 @@
     }
 
     &.success {
-      background-color: $green-success-bg;
-      color: $white;
+      background-color: var(--green-success-bg);
+      color: var(--white);
 
       .icon {
-        background-color: $green-success-icon;
+        background-color: var(--green-success-icon);
 
         &::after {
           content: "\2713";
@@ -70,11 +70,11 @@
     }
 
     &.error {
-      background-color: $red-error-bg;
-      color: $white;
+      background-color: var(--red-error-bg);
+      color: var(--white);
 
       .icon {
-        background-color: $red-error-icon;
+        background-color: var(--red-error-icon);
 
         &::after {
           content: "\2716";

@@ -1,5 +1,5 @@
 body {
-  color: $black;
+  color: var(--black);
 }
 
 .module .module-docheader {
@@ -41,13 +41,13 @@ body {
   }
 
   .codeblock pre {
-    border: 1px solid $grey-15;
+    border: 1px solid var(--grey-15);
     padding: 10px;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
-    background-color: $grey-05;
-    color: $black;
+    background-color: var(--grey-05);
+    color: var(--black);
     margin: 0;
     max-width: 750px;
   }
