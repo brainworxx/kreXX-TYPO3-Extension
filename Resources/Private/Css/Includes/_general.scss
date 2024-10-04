@@ -1,13 +1,18 @@
-body {
-  color: $black;
+body, a {
+  color: var(--black);
 }
 
-.module .module-docheader {
-  display: none;
-}
+.module {
+  background-color: var(--background-color);
 
-.module .module-body {
-  padding-top: 50px !important;
+  .module-docheader {
+    display: none;
+  }
+
+  .module-body {
+    padding-top: 50px !important;
+    background-color: var(--background-color);
+  }
 }
 
 .module-loading-indicator {
@@ -22,6 +27,7 @@ body {
 }
 
 .krexx-backend {
+  background-color: var(--background-color);
 
   /**
    * General stuff
@@ -41,13 +47,13 @@ body {
   }
 
   .codeblock pre {
-    border: 1px solid $grey-15;
+    border: 1px solid var(--grey-15);
     padding: 10px;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
-    background-color: $grey-05;
-    color: $black;
+    background-color: var(--grey-05);
+    color: var(--black);
     margin: 0;
     max-width: 750px;
   }

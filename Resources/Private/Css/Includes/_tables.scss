@@ -1,7 +1,7 @@
 .krexx-backend {
   .table-wrapper {
-    background-color: $white;
-    border: 1px solid $grey-15;
+    background-color: var(--white);
+    border: 1px solid var(--grey-15);
     border-radius: 2px;
 
     &.formtable {
@@ -19,7 +19,7 @@
       th {
         padding: 6px;
         margin-top: 15px;
-        border-bottom: 1px solid $grey-15;
+        border-bottom: 1px solid var(--grey-15);
         text-align: left;
 
         &.time {
@@ -40,22 +40,22 @@
       }
 
       thead tr {
-        background-color: $grey-05;
+        background-color: var(--grey-05);
       }
 
       tr {
-        border-bottom: 1px solid $grey-15;
+        border-bottom: 1px solid var(--grey-15);
 
         &:last-child {
           border-bottom: none;
         }
 
         &:nth-child(even) {
-          background-color: $white;
+          background-color: var(--white);
         }
 
         &:hover {
-          background-color: $grey-05;
+          background-color: var(--grey-05);
 
           td {
             background-color: rgba(256, 256, 256, 0.2);
@@ -64,7 +64,7 @@
       }
 
       &.krexx-logs tr {
-        border-bottom: 1px solid $grey-20;
+        border-bottom: 1px solid var(--grey-20);
       }
 
       .krexx-data {
