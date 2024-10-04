@@ -39,10 +39,12 @@ namespace Brainworxx\Includekrexx\Plugins\FluidDebugger;
 
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterWithoutGet;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\VhsMethods;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Getter as GetterFluid;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid as CallerFinderFluid;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen as FluidCodegen;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Connectors as FluidConnectors;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface as Typo3ConstInterface;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
@@ -91,7 +93,8 @@ class Configuration implements PluginConfigInterface, Typo3ConstInterface
         Registration::addRewrite(Codegen::class, FluidCodegen::class);
         // Special caller finder for Fluid.
         Registration::addRewrite(CallerFinder::class, CallerFinderFluid::class);
-
+        // Move the getter to the same level as the public properties.
+        Registration::addRewrite(Getter::class, GetterFluid::class);
 
         // The code generation class is a singleton.
         // We need to reset the pool.
