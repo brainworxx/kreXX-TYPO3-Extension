@@ -527,6 +527,7 @@ body, a {
   border-radius: 2px;
   width: 28px;
   height: 30px;
+  color: var(--black);
 }
 .krexx-backend .krexx-icon-wrapper .krexx-icon:last-child {
   margin-bottom: 0;
@@ -542,38 +543,38 @@ body, a {
 }
 .krexx-backend .krexx-icon-wrapper .krexx-icon.emergency {
   background-color: var(--emergency);
-  color: var(--white);
+  color: white;
 }
 .krexx-backend .krexx-icon-wrapper .krexx-icon.alert {
   background-color: var(--alert);
-  color: var(--white);
+  color: white;
 }
 .krexx-backend .krexx-icon-wrapper .krexx-icon.critical {
   background-color: var(--critical);
-  color: var(--white);
 }
 .krexx-backend .krexx-icon-wrapper .krexx-icon.error {
   background-color: var(--error);
+  color: black;
 }
 .krexx-backend .krexx-icon-wrapper .krexx-icon.warning {
   background-color: var(--warning);
+  color: black;
 }
 .krexx-backend .krexx-icon-wrapper .krexx-icon.info {
   background-color: var(--info);
 }
 .krexx-backend .krexx-icon-wrapper .krexx-icon.info::after {
   font-size: 20px;
-  color: var(--white);
   content: "i";
   left: 11px;
   top: 0;
 }
 .krexx-backend .krexx-icon-wrapper .krexx-icon.notice {
   background-color: var(--notice);
+  color: white;
 }
 .krexx-backend .krexx-icon-wrapper .krexx-icon.notice::after {
   content: "n";
-  color: white;
   left: 6px;
 }
 .krexx-backend .krexx-icon-wrapper .krexx-icon.debug::after {
@@ -598,7 +599,7 @@ body, a {
   height: 20px;
   width: 20px;
   content: "";
-  background: var(----timer) no-repeat;
+  background: var(--timer) no-repeat;
 }
 
 .message-container-outer {

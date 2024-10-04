@@ -13,7 +13,7 @@
       border-radius: 2px;
       width: 28px;
       height: 30px;
-
+      color: var(--black);
 
       &:last-child {
         margin-bottom: 0;
@@ -31,25 +31,26 @@
 
       &.emergency {
         background-color: var(--emergency);
-        color: var(--white);
+        color: white;
       }
 
       &.alert {
         background-color: var(--alert);
-        color: var(--white);
+        color: white;
       }
 
       &.critical {
         background-color: var(--critical);
-        color: var(--white);
       }
 
       &.error {
         background-color: var(--error);
+        color: black;
       }
 
       &.warning {
         background-color: var(--warning);
+        color: black;
       }
 
       &.info {
@@ -57,7 +58,6 @@
 
         &::after {
           font-size: 20px;
-          color: var(--white);
           content: 'i';
           left: 11px;
           top: 0;
@@ -66,10 +66,9 @@
 
       &.notice {
         background-color: var(--notice);
-
+        color: white;
         &::after {
           content: 'n';
-          color: white;
           left: 6px;
         }
       }
@@ -103,7 +102,7 @@
           height: 20px;
           width: 20px;
           content: '';
-          background: var(----timer) no-repeat;
+          background: var(--timer) no-repeat;
         }
       }
     }
