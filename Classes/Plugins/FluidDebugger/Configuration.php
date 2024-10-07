@@ -84,11 +84,7 @@ class Configuration implements PluginConfigInterface, Typo3ConstInterface
     public function exec(): void
     {
         // Registering the fluid connector class.
-        Registration::addRewrite(
-            Connectors::class,
-            FluidConnectors::class
-        );
-
+        Registration::addRewrite(Connectors::class, FluidConnectors::class);
         // Registering the special source generation for methods.
         Registration::addRewrite(Codegen::class, FluidCodegen::class);
         // Special caller finder for Fluid.

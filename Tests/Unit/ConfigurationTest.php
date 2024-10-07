@@ -70,7 +70,7 @@ class ConfigurationTest extends AbstractHelper
         $versionNumber = '5.0.6';
         $t3EmConstraint = '10.4.0-13.4.99';
         $phpEmConstraint = '7.2.0-8.3.99';
-        $t3ComposerConstraint = '^10.4 || ^11 || ^12 || ^13.3';
+        $t3ComposerConstraint = '^10.4 || ^11 || ^12 || ^13';
         $phpComposerConstraint = '^7.2 || ^7.3 || ^7.4 || ^8.0 || ^8.1 || ^8.2 || ^8.3';
 
         // Test the EM configuration.
