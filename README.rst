@@ -14,9 +14,12 @@
    :target: https://get.typo3.org/version/11
 .. |t312| image:: https://img.shields.io/badge/TYPO3-12-orange.svg
    :target: https://get.typo3.org/version/12
+.. |t313| image:: https://img.shields.io/badge/TYPO3-13-orange.svg
+   :target: https://get.typo3.org/version/13
 
-|build| |maintainability| |coverage| |stable| |license| |t310| |t311| |t312|
+|stable| |t310| |t311| |t312| |t313|
 
+|build| |maintainability| |coverage|  |license|
 
 ========================================
 kreXX Debugger - TYPO3 Backend Extension
@@ -28,11 +31,11 @@ kreXX Debugger - TYPO3 Backend Extension
    :alt: kreXX logo
 
 
-This is a TYPO3 extension, providing backend configuration masks for kreXX.
+Fluid and PHP debugger with backend access to logfiles, code generation to reach the displayed values and much more. We added some special stuff for Aimeos.
 
 | kreXX mainlibrary: https://github.com/brainworxx/kreXX
 | TYPO3 TER: https://extensions.typo3.org/extension/includekrexx/
-| Documentation: https://docs.typo3.org/p/brainworxx/includekrexx/master/en-us/
+| Documentation: https://docs.typo3.org/p/brainworxx/includekrexx/main/en-us/
 |
 |
 
