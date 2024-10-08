@@ -112,12 +112,13 @@ abstract class AbstractCollector implements ControllerConstInterface, ConfigCons
      */
     protected $expertOnly = [
         self::SETTING_DETECT_AJAX,
-        self::SETTING_MAX_STEP_NUMBER,
         self::SETTING_ARRAY_COUNT_LIMIT,
         self::SETTING_DEBUG_METHODS,
         self::SETTING_MAX_RUNTIME,
         self::SETTING_MEMORY_LEFT,
-        self::SETTING_MAX_FILES
+        self::SETTING_ANALYSE_SCALAR,
+        self::SETTING_ANALYSE_TRAVERSABLE,
+        self::SETTING_ANALYSE_GETTER,
     ];
 
     /**

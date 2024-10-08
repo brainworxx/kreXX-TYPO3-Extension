@@ -10,6 +10,7 @@ Changelog
     - [Feature] Added dark mode.
     - [Feature] Moved the fluid getter display to the same level as the public object properties for better readability
     - [Change] Updated the composer.json and the ex_em_conf.
+    - [Change] Rearranged the expert/simple settings in the backend module.
     - [Bugfix] Realigned the info popups in the backend.
 
 5.0.5
