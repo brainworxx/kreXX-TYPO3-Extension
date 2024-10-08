@@ -67,7 +67,7 @@ class ConfigurationTest extends AbstractHelper
         $changelogContent = file($changelogPath)[6];
 
         // Our expectations.
-        $versionNumber = '5.0.6';
+        $versionNumber = '5.1.0';
         $t3EmConstraint = '10.4.0-13.4.99';
         $phpEmConstraint = '7.2.0-8.3.99';
         $t3ComposerConstraint = '^10.4 || ^11 || ^12 || ^13';

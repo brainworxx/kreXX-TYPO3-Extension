@@ -4,10 +4,11 @@
 Changelog
 =============================================================
 
-5.0.6
+5.1.0
     - [Feature] Updated to Aimeos 24.
     - [Feature] Rewrote large parts of the documentation.
     - [Feature] Added dark mode.
+    - [Feature] Moved the fluid getter display to the same level as the public object properties for better readability
     - [Change] Updated the composer.json and the ex_em_conf.
     - [Bugfix] Realigned the info popups in the backend.
 
