@@ -16,6 +16,8 @@ Changelog
     * [Change] Rearranged the expert/simple settings in the backend module.
     * [Bugfix] Realigned the info popups in the backend.
 
+-----
+
 -
     :Version: 5.0.5
     :Date: 2024-09-17
@@ -26,6 +28,8 @@ Changelog
     * [Bugfix] Make sure that the JS only executes once.
     * [Bugfix] Added missing fluid documentation in the backend module.
     * [Bugfix] Fix the code generation for the VHS call ViewHelper.
+
+-----
 
 -
     :Version: 5.0.4
@@ -40,6 +44,8 @@ Changelog
     * [Bugfix] The translations are located in a div in the header.
     * [Bugfix] Missing BOM encoding in the code generation.
 
+-----
+
 -
     :Version: 5.0.3
     :Date: 2024-07-02
@@ -52,6 +58,8 @@ Changelog
     * [Bugfix] Possible warning in file reader.
     * [Bugfix] Possible fatals in the file reader.
     * [Bugfix] Do not use the $GLOBALS recursion marker in PHP 8.1 or higher.
+
+-----
 
 -
     :Version: 5.0.2
@@ -71,6 +79,8 @@ Changelog
     * [Bugfix] Made the feedback clearer when the Ext: resolver could not find a resolved file or directory.
     * [Bugfix] Do not access debug class values before their initialization.
 
+-----
+
 -
     :Version: 5.0.1
     :Date: 2024-01-13
@@ -79,6 +89,8 @@ Changelog
     * [Change] Updated the unit tests to 10.5
     * [Bugfix] Added a missing end-event in the ThroughGetter iterator.
     * [Bugfix] Removed a warning in the backend ajax module for high traffic sites. (Please, never debug a productive site. At least make sure that the logger can only get triggered by the dev.).
+
+-----
 
 -
     :Version: 5.0.0
@@ -129,6 +141,8 @@ Changelog
     * [Change] Refactored the template file loading.
     * [Change] Set the nesting level to 10.
 
+-----
+
 -
     :Version: 4.1.10
     :Date: 2023-07-22
@@ -137,6 +151,8 @@ Changelog
     * [Bugfix] Class meta-analysis thinks that interfaces are abstract.
     * [Bugfix] Removed a warning in the backend ajax module for high traffic sites. (Please, never debug a productive site. At least make sure that the logger can only get triggered by the dev.).
     * [Bugfix] Prevent a warning while parsing an XML string.
+
+-----
 
 -
     :Version: 4.1.9
@@ -148,6 +164,8 @@ Changelog
     * [Bugfix] Removed a warning in the backend ajax module for high traffic sites. (Please, never debug a productive site. At least make sure that the logger can only get triggered by the dev.).
     * [Bugfix] Is'er and has'er analysis will not accidentally return the value itself.
     * [Bugfix] Fix an Error when the Aimeos debugger tries to access uninitialized properties.
+
+-----
 
 -
     :Version: 4.1.8
@@ -161,6 +179,8 @@ Changelog
     * [Bugfix] Reworked the backend module registering according to the updated documentation.
     * [Bugfix] Fix the JS initializing in TYPO3 12.
     * [Bugfix] Removed a warning in the backend ajax module for high traffic sites. (Please, never debug a productive site. At least make sure that the logger can only get triggered by the dev.).
+
+-----
 
 -
     :Version: 4.1.7
@@ -176,6 +196,8 @@ Changelog
     * [Bugfix] Add the missing file path filter to the backtrace analysis.
     * [Bugfix] Fix the handling of the 8.1 Enum as a default value in the source generation.
 
+-----
+
 -
     :Version: 4.1.6
     :Date: 2022-09-03
@@ -184,6 +206,8 @@ Changelog
     * [Bugfix] Added the missing path filter to the EXT: path resolver.
     * [Bugfix] Use strict encoding detection for strings for more reliable results.
     * [Bugfix] Fetch traversable data as soon as possible, because we do not want other analysis methods fetch traversable results, that are only fetchable once. DB results are a good example for this.
+
+-----
 
 -
     :Version: 4.1.5
@@ -197,6 +221,8 @@ Changelog
     * [Bugfix] Register the scalar translation analyser.
     * [Bugfix] Do not basename() an unknown file path in the backend logging.
 
+-----
+
 -
     :Version: 4.1.4
     :Date: 2022-04-19
@@ -204,6 +230,8 @@ Changelog
     * [Feature] Added support for read only properties
     * [Bugfix] Correctly identify uninitialized properties.
     * [Bugfix] Prevent unnecessary filesystem calls in the file path analysis.
+
+-----
 
 -
     :Version: 4.1.3
@@ -225,6 +253,8 @@ Changelog
     * [Bugfix] Mime type string and file do not overwrite each other’s anymore.
     * [Bugfix] K-Type padding for the Hans skin is too small.
 
+-----
+
 -
     :Version: 4.1.2
     :Date: 2021-10-09
@@ -240,6 +270,8 @@ Changelog
     * [Bugfix] Fixed / updated the doc comments.
     * [Bugfix] Object recursions in the "$this protected" context cannot generate source code.
 
+-----
+
 -
     :Version: 4.1.1
     :Date: 2021-06-28
@@ -253,6 +285,8 @@ Changelog
     * [Bugfix] Consolidate PHP 8.0 compatibility.
     * [Bugfix] Make use of the :literal:`Oops an error occurred!` analysis when the error got renamed.
     * [Bugfix] Minor styling fixes for the backend module.
+
+-----
 
 -
     :Version: 4.1.0
@@ -273,6 +307,8 @@ Changelog
     * [Bugfix] Exception when using one PHP statement and a krexx call in the same line.
     * [Bugfix] Prevent long analysis meta data from breaking the BE layout.
     * [Bugfix] Exception, when a mb_detect_encoding() could not determine the encoding of a string.
+
+-----
 
 -
     :Version: 4.0.0
@@ -317,11 +353,15 @@ Changelog
     * [Bugfix] The Aimeos decorator analysis works now as it should.
     * [Bugfix] Added missing Aimeos debug method 'getAttributeItems'.
 
+-----
+
 -
     :Version: 3.3.6
     :Date: 2020-06-25
     :Changes:
     * [Bugfix] Removed the composer definition for the class alias loader and use an alternative implementation.
+
+-----
 
 -
     :Version: 3.3.5
@@ -329,17 +369,23 @@ Changelog
     :Changes:
     * [Bugfix] Added missing composer definition for the class alias loader.
 
+-----
+
 -
     :Version: 3.3.4
     :Date: 2020-06-15
     :Changes:
     * [Bugfix] Analysing of __PHP_Incomplete_Class does not throw errors anymore.
 
+-----
+
 -
     :Version: 3.3.3
     :Date: 2020-04-29
     :Changes:
     * [Bugfix] Fixed the composer dependencies.
+
+-----
 
 -
     :Version: 3.3.2
@@ -352,6 +398,8 @@ Changelog
     * [Bugfix] Remove a possible warning when cleaning up old log files.
     * [Bugfix] Minimise interference with strange CSS styles.
 
+-----
+
 -
     :Version: 3.3.1
     :Date: 2020-02-01
@@ -363,6 +411,8 @@ Changelog
     * [Bugfix] Missing CSS definitions for label.
     * [Bugfix] Unwanted re-enabling of the source generation.
     * [Bugfix] Environment check may fail
+
+-----
 
 -
     :Version: 3.3.0
@@ -396,6 +446,8 @@ Changelog
     * [Bugfix] Wrong variable name retrieval when used inline.
     * [Bugfix] Wrong return value from the developer handle.
     * [Bugfix] Wrong error handler restoration after deleting a file.
+
+-----
 
 -
     :Version: 3.2.0
@@ -434,6 +486,8 @@ Changelog
     * [Bugfix] Missing translation keys.
     * [Bugfix] Invalid PHP doc comments may trigger errors
 
+-----
+
 -
     :Version: 3.1.0
     :Date: 2019-02-23
@@ -457,6 +511,8 @@ Changelog
     * [Bugfix] The fatal error handler backtrace is broken.
     * [Bugfix] Fix the styles of the Hans skin.
 
+-----
+
 -
     :Version: 3.0.1
     :Date: 2019-02-14
@@ -472,6 +528,8 @@ Changelog
     * [Bugfix] PHP5.x pars error in class ViewFactory
     * [Bugfix] Double escaped path value in the config-help page
     * [Change] All singleton classes now add themself to the pool as soon as they are created.
+
+-----
 
 -
     :Version: 3.0.0
@@ -527,6 +585,8 @@ Changelog
     * [Bugfix] Fixed a fatal, when the mb-string extension is not installed.
     * [Bugfix] The search of the Hans skin scrolls now more reliably.
 
+-----
+
 -
     :Version: 2.4.0
     :Date: 2018-02-01
@@ -555,6 +615,8 @@ Changelog
     * [Bugfix] Source generation for closures now work as expected.
     * [Bugfix] Better cleanup for still open HTML tags.
 
+-----
+
 -
     :Version: 2.3.1
     :Date: 2017-09-09
@@ -562,6 +624,8 @@ Changelog
     * [Bugfix] Fixed shell detection.
     * [Bugfix] Fixed shell message feedback
     * [Bugfix] Fixed ajax detection
+
+-----
 
 -
     :Version: 2.3.0
@@ -618,6 +682,8 @@ Changelog
     * [Bugfix] Fixed a possible JS error in the search, in case we are searching through no payload.
     * [Bugfix] Fixed the rendering colour of the connector 2 in the Hans skin.
 
+-----
+
 -
     :Version: 2.2.0
     :Date: 2017-04-06
@@ -642,6 +708,8 @@ Changelog
     :Changes:
     * [Change] :literal:`includekrexx` and :literal:`krexx` version numbers are out of sync (for now).
     * [Bugfix] Fixed that annoying warning with PHP7.
+
+-----
 
 -
     :Version: 2.1.1
@@ -679,6 +747,8 @@ Changelog
     * [Bugfix] The search count is not zero-based anymore.
     * [Bugfix] Recursion resolving works now for closures.
 
+-----
+
 -
     :Version: 2.0.1
     :Date: 2016-10-22
@@ -692,6 +762,8 @@ Changelog
     * [Bugfix] Source code generation for traversable classes should work now for none ArrayAccess classes.
     * [Bugfix] A string with the value of '0' will get displayed again.
     * [Bugfix] Fixed a notice in the \Krexx::backtrace();
+
+-----
 
 -
     :Version: 2.0.0
@@ -707,6 +779,8 @@ Changelog
     * [Bugfix] Code generation for class constants now works properly.
     * [Bugfix] Removed a  warning with the glob() function which may occur on some systems.
     * [Bugfix] Added a check to the developer handle to prevent warnings.
+
+-----
 
 -
     :Version: 1.4.2
@@ -726,6 +800,8 @@ Changelog
     * [Bugfix] The debug output might jump around, in some special CSS environments.
     * [Bugfix] Proper handling of broken html output from the hosting CMS.
 
+-----
+
 -
     :Version: 1.4.1
     :Date: 2016-05-04
@@ -737,6 +813,8 @@ Changelog
     * [Change] Search is now case-insensitive. This should make searching much easier.
     * [Change] Output destination cannot be changed anymore via the cookie editor by default. This should prevent people from locking themselves out.
     * [Bugfix] Removed hardcoded log folder path in the bootstrap phase.
+
+-----
 
 -
     :Version: 1.4.0
@@ -759,6 +837,8 @@ Changelog
     * [Bugfix] Fixed an issue with the benchmarking, when the dev has forgotten to start the timer.
     * [Bugfix] A click on the generated PHP code does not bubble anymore.
 
+-----
+
 -
     :Version: 1.3.6
     :Date: 2015-11-10
@@ -773,6 +853,8 @@ Changelog
     * [Bugfix] Code generation now works in IE and Edge.
     * [Bugfix] Several JS fixes for IE9.
 
+-----
+
 -
     :Version: 1.3.5
     :Date: 2015-10-03
@@ -780,6 +862,8 @@ Changelog
     * [Feature] Added code analysis to determine the name of the variable we are analysing.
     * [Feature] Added warning to tell the user that we are not starting another analysis, because we will reach output => maxCall.
     * [Bugfix] Recursion clicking does not produce double ids anymore.
+
+-----
 
 -
     :Version: 1.3.4
@@ -791,6 +875,8 @@ Changelog
     * [Bugfix] The display of the settings in the footer doesn't do a callable analysis anymore, which may be a little bit confusing.
     * [Bugfix] Fixed a small display issue with the search in the Hans skin
     * [Bugfix] The Collapse-Everything-Else function from the Hans skin does not affect other debug output anymore.
+
+-----
 
 -
     :Version: 1.3.3
@@ -807,6 +893,8 @@ Changelog
     * [Bugfix] CLI detection now respects file output configuration.
     * [Bugfix] X-Browser Adjustments for the Hans skin.
 
+-----
+
 -
     :Version: 1.3.2
     :Date: 2015-04-29
@@ -815,6 +903,8 @@ Changelog
     * [Feature] Added composer.json
     * [Change] Removed the old and ugly schablon skin.
     * [Bugfix] Removed that annoying "Hidden internal properties" message.
+
+-----
 
 -
     :Version: 1.1.1
@@ -827,6 +917,8 @@ Changelog
     * [Bugfix] Display of wrong values in the settings, in case those settings are not editable and there are some leftover values in the settings cookie.
     * [Bugfix] Proper display of static values in objects.
     * [Bugfix] Proper display of internal properties of predefined PHP classes.
+
+-----
 
 -
     :Version: 1.1.0
@@ -841,6 +933,8 @@ Changelog
     * [Bugfix] Possible jQuery errors when the host site is using the noConflict mode.
     * [Bugfix] Refactored CSS of the Hans skin for minimal interference with the host template. Most base64 images were replaced by Unicode characters.
     * [Bugfix] Possible false string encoding.
+
+-----
 
 -
     :Version: 1.0.0
