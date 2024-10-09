@@ -4,14 +4,17 @@
 Changelog
 =============================================================
 
-5.1.0
-    - [Feature] Updated to Aimeos 24.
-    - [Feature] Rewrote large parts of the documentation.
-    - [Feature] Added dark mode.
-    - [Feature] Moved the fluid getter display to the same level as the public object properties for better readability
-    - [Change] Updated the composer.json and the ex_em_conf.
-    - [Change] Rearranged the expert/simple settings in the backend module.
-    - [Bugfix] Realigned the info popups in the backend.
+-
+    :Version: 5.1.0
+    :Date: tbd
+    :Changes:
+    * [Feature] Updated to Aimeos 24.
+    * [Feature] Rewrote large parts of the documentation.
+    * [Feature] Added dark mode.
+    * [Feature] Moved the fluid getter display to the same level as the public object properties for better readability
+    * [Change] Updated the composer.json and the ex_em_conf.
+    * [Change] Rearranged the expert/simple settings in the backend module.
+    * [Bugfix] Realigned the info popups in the backend.
 
 5.0.5
     - [Feature] Added formatting for float values for better readability.

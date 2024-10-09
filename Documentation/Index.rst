@@ -29,25 +29,6 @@ kreXX Debugger
 
 ----
 
-.. image:: https://github.com/brainworxx/kreXX-TYPO3-Extension/actions/workflows/php.yml/badge.svg?branch=main
-   :target: https://github.com/brainworxx/kreXX-TYPO3-Extension/actions/workflows/php.yml
-.. image:: https://api.codeclimate.com/v1/badges/43c23b7d829742003dab/maintainability
-   :target: https://codeclimate.com/github/brainworxx/kreXX-TYPO3-Extension/maintainability
-.. image:: https://api.codeclimate.com/v1/badges/43c23b7d829742003dab/test_coverage
-   :target: https://codeclimate.com/github/brainworxx/kreXX-TYPO3-Extension/test_coverage
-.. image:: https://poser.pugx.org/brainworxx/includekrexx/v/stable
-   :target: https://packagist.org/packages/brainworxx/includekrexx
-.. image:: https://poser.pugx.org/brainworxx/includekrexx/license
-   :target: https://packagist.org/packages/brainworxx/includekrexx
-.. image:: https://img.shields.io/badge/TYPO3-10-orange.svg
-   :target: https://get.typo3.org/version/10
-.. image:: https://img.shields.io/badge/TYPO3-11-orange.svg
-   :target: https://get.typo3.org/version/11
-.. image:: https://img.shields.io/badge/TYPO3-12-orange.svg
-   :target: https://get.typo3.org/version/12
-.. image:: https://img.shields.io/badge/TYPO3-13-orange.svg
-   :target: https://get.typo3.org/version/13
-
 .. figure:: Images/krexx.png
     :alt: kreXX logo
 
