@@ -4,7 +4,6 @@
 Changelog
 =============================================================
 
--
     :Version: 5.1.0
     :Date: tbd
     :Changes:
@@ -18,7 +17,6 @@ Changelog
 
 -----
 
--
     :Version: 5.0.5
     :Date: 2024-09-17
     :Changes:
@@ -31,7 +29,6 @@ Changelog
 
 -----
 
--
     :Version: 5.0.4
     :Date: 2024-08-26
     :Changes:
@@ -46,7 +43,6 @@ Changelog
 
 -----
 
--
     :Version: 5.0.3
     :Date: 2024-07-02
     :Changes:
@@ -61,7 +57,6 @@ Changelog
 
 -----
 
--
     :Version: 5.0.2
     :Date: 2024-03-01
     :Changes:
@@ -81,7 +76,6 @@ Changelog
 
 -----
 
--
     :Version: 5.0.1
     :Date: 2024-01-13
     :Changes:
@@ -92,7 +86,6 @@ Changelog
 
 -----
 
--
     :Version: 5.0.0
     :Date: 2023-09-23
     :Changes:
@@ -143,7 +136,6 @@ Changelog
 
 -----
 
--
     :Version: 4.1.10
     :Date: 2023-07-22
     :Changes:
@@ -154,7 +146,6 @@ Changelog
 
 -----
 
--
     :Version: 4.1.9
     :Date: 2023-04-29
     :Changes:
@@ -167,7 +158,6 @@ Changelog
 
 -----
 
--
     :Version: 4.1.8
     :Date: 2023-01-14
     :Changes:
@@ -182,7 +172,6 @@ Changelog
 
 -----
 
--
     :Version: 4.1.7
     :Date: 2022-11-19
     :Changes:
@@ -198,7 +187,6 @@ Changelog
 
 -----
 
--
     :Version: 4.1.6
     :Date: 2022-09-03
     :Changes:
@@ -209,7 +197,6 @@ Changelog
 
 -----
 
--
     :Version: 4.1.5
     :Date: 2022-05-30
     :Changes:
@@ -223,7 +210,6 @@ Changelog
 
 -----
 
--
     :Version: 4.1.4
     :Date: 2022-04-19
     :Changes:
@@ -233,7 +219,6 @@ Changelog
 
 -----
 
--
     :Version: 4.1.3
     :Date: 2022-01-10
     :Changes:
@@ -255,7 +240,6 @@ Changelog
 
 -----
 
--
     :Version: 4.1.2
     :Date: 2021-10-09
     :Changes:
@@ -272,7 +256,6 @@ Changelog
 
 -----
 
--
     :Version: 4.1.1
     :Date: 2021-06-28
     :Changes:
@@ -288,7 +271,6 @@ Changelog
 
 -----
 
--
     :Version: 4.1.0
     :Date: 2021-04-23
     :Changes:
@@ -310,7 +292,6 @@ Changelog
 
 -----
 
--
     :Version: 4.0.0
     :Date: 2020-10-28
     :Changes:
@@ -355,7 +336,6 @@ Changelog
 
 -----
 
--
     :Version: 3.3.6
     :Date: 2020-06-25
     :Changes:
@@ -363,7 +343,6 @@ Changelog
 
 -----
 
--
     :Version: 3.3.5
     :Date: 2020-06-20
     :Changes:
@@ -371,7 +350,6 @@ Changelog
 
 -----
 
--
     :Version: 3.3.4
     :Date: 2020-06-15
     :Changes:
@@ -379,7 +357,6 @@ Changelog
 
 -----
 
--
     :Version: 3.3.3
     :Date: 2020-04-29
     :Changes:
@@ -387,7 +364,6 @@ Changelog
 
 -----
 
--
     :Version: 3.3.2
     :Date: 2020-04-28
     :Changes:
@@ -400,7 +376,6 @@ Changelog
 
 -----
 
--
     :Version: 3.3.1
     :Date: 2020-02-01
     :Changes:
@@ -414,7 +389,6 @@ Changelog
 
 -----
 
--
     :Version: 3.3.0
     :Date:  2019-11-19
     :Changes:
@@ -449,7 +423,6 @@ Changelog
 
 -----
 
--
     :Version: 3.2.0
     :Date: 2019-07-30
     :Changes:
@@ -488,7 +461,6 @@ Changelog
 
 -----
 
--
     :Version: 3.1.0
     :Date: 2019-02-23
     :Changes:
@@ -513,7 +485,6 @@ Changelog
 
 -----
 
--
     :Version: 3.0.1
     :Date: 2019-02-14
     :Changes:
@@ -531,7 +502,6 @@ Changelog
 
 -----
 
--
     :Version: 3.0.0
     :Date: 2018-10-02
     :Changes:
@@ -587,7 +557,6 @@ Changelog
 
 -----
 
--
     :Version: 2.4.0
     :Date: 2018-02-01
     :Changes:
@@ -617,7 +586,6 @@ Changelog
 
 -----
 
--
     :Version: 2.3.1
     :Date: 2017-09-09
     :Changes:
@@ -627,7 +595,6 @@ Changelog
 
 -----
 
--
     :Version: 2.3.0
     :Date: 2017-08-26
     :Changes:
@@ -684,7 +651,6 @@ Changelog
 
 -----
 
--
     :Version: 2.2.0
     :Date: 2017-04-06
     :Changes:
@@ -701,8 +667,8 @@ Changelog
     * [Bugfix] Removed a warnings and some notices in case the $_SERVER variable was messed with.
     * [Bugfix] Prevent a thrown error, in case a class implements some sort of debugger trap by explicitly throwing errors when trying to get the traversable data.
 
+-----
 
--
     :Version: 2.1.2
     :Date: 2017-02-18
     :Changes:
@@ -711,7 +677,6 @@ Changelog
 
 -----
 
--
     :Version: 2.1.1
     :Date: 2017-02-17
     :Changes:
@@ -729,7 +694,8 @@ Changelog
     * [Bugfix] Getter analysis is now respecting the scope analysis result.
     * [Bugfix] Removed the type-spam in the additional data.
 
--
+-----
+
     :Version: 2.1.0
     :Date: 2016-12-21
     :Changes:
@@ -749,7 +715,6 @@ Changelog
 
 -----
 
--
     :Version: 2.0.1
     :Date: 2016-10-22
     :Changes:
@@ -765,7 +730,6 @@ Changelog
 
 -----
 
--
     :Version: 2.0.0
     :Date: 2016-08-30
     :Changes:
@@ -782,7 +746,6 @@ Changelog
 
 -----
 
--
     :Version: 1.4.2
     :Date: 2016-07-07
     :Changes:
@@ -802,7 +765,6 @@ Changelog
 
 -----
 
--
     :Version: 1.4.1
     :Date: 2016-05-04
     :Changes:
@@ -816,7 +778,6 @@ Changelog
 
 -----
 
--
     :Version: 1.4.0
     :Date: 2016-03-24
     :Changes:
@@ -839,7 +800,6 @@ Changelog
 
 -----
 
--
     :Version: 1.3.6
     :Date: 2015-11-10
     :Changes:
@@ -855,7 +815,6 @@ Changelog
 
 -----
 
--
     :Version: 1.3.5
     :Date: 2015-10-03
     :Changes:
@@ -865,7 +824,6 @@ Changelog
 
 -----
 
--
     :Version: 1.3.4
     :Date: 2015-08-08
     :Changes:
@@ -878,7 +836,6 @@ Changelog
 
 -----
 
--
     :Version: 1.3.3
     :Date: 2015-06-19
     :Changes:
@@ -895,7 +852,6 @@ Changelog
 
 -----
 
--
     :Version: 1.3.2
     :Date: 2015-04-29
     :Changes:
@@ -906,7 +862,6 @@ Changelog
 
 -----
 
--
     :Version: 1.1.1
     :Date: 2015-02-25
     :Changes:
@@ -920,7 +875,6 @@ Changelog
 
 -----
 
--
     :Version: 1.1.0
     :Date: 2015-02-02
     :Changes:
@@ -936,7 +890,6 @@ Changelog
 
 -----
 
--
     :Version: 1.0.0
     :Date: 2014-12-02
     :Changes:
