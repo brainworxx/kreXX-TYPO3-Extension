@@ -179,11 +179,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
         }
 
         $pos = count($renderingStack) - 1;
-        if (
-            isset($renderingStack[$pos]) &&
-            isset($renderingStack[$pos]['parsedTemplate']) &&
-            isset($renderingStack[$pos]['type'])
-        ) {
+        if (isset($renderingStack[$pos]['parsedTemplate'], $renderingStack[$pos]['type'])) {
             $this->parsedTemplate = $renderingStack[$pos]['parsedTemplate'];
             $this->renderingType = $renderingStack[$pos]['type'];
             return;

@@ -43,6 +43,7 @@ use Aimeos\MW\Tree\Node\Iface as NodeIface;
 use Aimeos\MW\View\Iface as ViewIface;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
@@ -164,7 +165,7 @@ class Properties extends AbstractEventHandler implements
         foreach ($array as $key => $value) {
             // Could be anything.
             // We need to route it though the analysis hub.
-            if ($this->pool->encodingService->isPropertyNameNormal($key)) {
+            if ($this->pool->createClass(ThroughProperties::class)->isPropertyNameNormal($key)) {
                 $connectorType = static::CONNECTOR_NORMAL_PROPERTY;
             } else {
                 $connectorType = static::CONNECTOR_SPECIAL_CHARS_PROP;

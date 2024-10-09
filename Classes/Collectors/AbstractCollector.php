@@ -42,7 +42,6 @@ use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 
 /**
  * General stuff for all data collectors.

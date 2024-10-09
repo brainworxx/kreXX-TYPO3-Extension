@@ -42,7 +42,6 @@ use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\From\File;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use Psr\Log\LogLevel;
-use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 
 /**
  * Collect the current configuration for the backend module.
