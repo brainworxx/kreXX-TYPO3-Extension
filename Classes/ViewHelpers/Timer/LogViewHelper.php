@@ -37,21 +37,12 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\ViewHelpers\Timer;
 
-use Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper;
-
-/**
- *
- * Our fluid wrapper for \Krexx::timerMoment('Render the menue');
- *
- * @usage
- *   <krexx:timer.end value="Render the menue" />
- */
-class EndViewHelper extends DebugViewHelper
+class LogViewHelper extends EndViewHelper
 {
     /**
      * The name of the analysis methods in the kreXX class.
      *
      * @var string
      */
-    protected $analysisType = 'timerEnd';
+    protected $analysisType = 'logTimerEnd';
 }
