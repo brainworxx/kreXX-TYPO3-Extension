@@ -4,9 +4,10 @@
 Changelog
 =============================================================
 
-    :Version: 5.1.0
-    :Date: tbd
-    :Changes:
+:Version: 5.1.0
+:Date: tbd
+:Changes:
+
     * [Feature] Updated to Aimeos 24.
     * [Feature] Rewrote large parts of the documentation.
     * [Feature] Added dark mode.
@@ -17,9 +18,10 @@ Changelog
 
 -----
 
-    :Version: 5.0.5
-    :Date: 2024-09-17
-    :Changes:
+:Version: 5.0.5
+:Date: 2024-09-17
+:Changes:
+
     * [Feature] Added formatting for float values for better readability.
     * [Feature] Added an event to the output of the inline JS and CSS.
     * [Bugfix] Better CSP handling.
@@ -29,9 +31,10 @@ Changelog
 
 -----
 
-    :Version: 5.0.4
-    :Date: 2024-08-26
-    :Changes:
+:Version: 5.0.4
+:Date: 2024-08-26
+:Changes:
+
     * [Feature] TYPO3 13.2 support.
     * [Change] Made implicitly nullable parameter declarations explicitly nullable.
     * [Bugfix] Catch a Throwable in the ProcessInteger.
@@ -43,9 +46,10 @@ Changelog
 
 -----
 
-    :Version: 5.0.3
-    :Date: 2024-07-02
-    :Changes:
+:Version: 5.0.3
+:Date: 2024-07-02
+:Changes:
+
     * [Bugfix] Use the Krexx error callback in the LogFileList collector.
     * [Bugfix] Outdated link to the documentation license.
     * [Bugfix] Prevent reading a deleted meta data Json file.
@@ -57,9 +61,10 @@ Changelog
 
 -----
 
-    :Version: 5.0.2
-    :Date: 2024-03-01
-    :Changes:
+:Version: 5.0.2
+:Date: 2024-03-01
+:Changes:
+
     * [Feature] Added the possibility for plugins to overwrite the factory settings.
     * [Feature] Use the immediate browser output for TYPO3 12 as a new standard setting.
     * [Change] Removed deprecated code.
@@ -76,9 +81,10 @@ Changelog
 
 -----
 
-    :Version: 5.0.1
-    :Date: 2024-01-13
-    :Changes:
+:Version: 5.0.1
+:Date: 2024-01-13
+:Changes:
+
     * [Feature] Updated to PHP 8.3
     * [Change] Updated the unit tests to 10.5
     * [Bugfix] Added a missing end-event in the ThroughGetter iterator.
@@ -86,9 +92,10 @@ Changelog
 
 -----
 
-    :Version: 5.0.0
-    :Date: 2023-09-23
-    :Changes:
+:Version: 5.0.0
+:Date: 2023-09-23
+:Changes:
+
     * [Feature] Added immediate browser output to the output choices.
     * [Feature] Added default value analysis to the additional info.
     * [Feature] Added the German translation.
@@ -136,9 +143,10 @@ Changelog
 
 -----
 
-    :Version: 4.1.10
-    :Date: 2023-07-22
-    :Changes:
+:Version: 4.1.10
+:Date: 2023-07-22
+:Changes:
+
     * [Bugfix] Prevent a fatal in the scalar callback analysis.
     * [Bugfix] Class meta-analysis thinks that interfaces are abstract.
     * [Bugfix] Removed a warning in the backend ajax module for high traffic sites. (Please, never debug a productive site. At least make sure that the logger can only get triggered by the dev.).
@@ -146,9 +154,10 @@ Changelog
 
 -----
 
-    :Version: 4.1.9
-    :Date: 2023-04-29
-    :Changes:
+:Version: 4.1.9
+:Date: 2023-04-29
+:Changes:
+
     * [Feature] TYPO3 12.4 support.
     * [Feature] Added Support for the PHP 8 cUrl handle class.
     * [Bugfix] Fixed the indention in the changelog.
@@ -158,9 +167,10 @@ Changelog
 
 -----
 
-    :Version: 4.1.8
-    :Date: 2023-01-14
-    :Changes:
+:Version: 4.1.8
+:Date: 2023-01-14
+:Changes:
+
     * [Feature] TYPO3 12.1 support.
     * [Feature] PHP 8.2 support.
     * [Bugfix] Fixed the Aimeos settings in the ext_emconf.
@@ -172,9 +182,10 @@ Changelog
 
 -----
 
-    :Version: 4.1.7
-    :Date: 2022-11-19
-    :Changes:
+:Version: 4.1.7
+:Date: 2022-11-19
+:Changes:
+
     * [Feature] TYPO3 12.0 support
     * [Bugfix] Removed a faulty 'use' doc comment.
     * [Bugfix] Use the correct method signature for the error handler callback.
@@ -187,9 +198,10 @@ Changelog
 
 -----
 
-    :Version: 4.1.6
-    :Date: 2022-09-03
-    :Changes:
+:Version: 4.1.6
+:Date: 2022-09-03
+:Changes:
+
     * [Bugfix] Link to the documentation of the debug preset does not work anymore in the documentation.
     * [Bugfix] Added the missing path filter to the EXT: path resolver.
     * [Bugfix] Use strict encoding detection for strings for more reliable results.
@@ -197,9 +209,10 @@ Changelog
 
 -----
 
-    :Version: 4.1.5
-    :Date: 2022-05-30
-    :Changes:
+:Version: 4.1.5
+:Date: 2022-05-30
+:Changes:
+
     * [Feature] Aimeos 2022 support
     * [Bugfix] Remove the use of the deprecated \TYPO3\CMS\Extbase\Mvc\View\ViewInterface.
     * [Bugfix] Give valid feedback, in case the DI fails during query debugging.
@@ -210,18 +223,20 @@ Changelog
 
 -----
 
-    :Version: 4.1.4
-    :Date: 2022-04-19
-    :Changes:
+:Version: 4.1.4
+:Date: 2022-04-19
+:Changes:
+
     * [Feature] Added support for read only properties
     * [Bugfix] Correctly identify uninitialized properties.
     * [Bugfix] Prevent unnecessary filesystem calls in the file path analysis.
 
 -----
 
-    :Version: 4.1.3
-    :Date: 2022-01-10
-    :Changes:
+:Version: 4.1.3
+:Date: 2022-01-10
+:Changes:
+
     * [Feature] Added microtime analysis to the float routing.
     * [Feature] Added microtime analysis to the string scalar analysis.
     * [Feature] Added type hint to the additional data for the first element.
@@ -240,9 +255,10 @@ Changelog
 
 -----
 
-    :Version: 4.1.2
-    :Date: 2021-10-09
-    :Changes:
+:Version: 4.1.2
+:Date: 2021-10-09
+:Changes:
+
     * [Feature] PHP 8.0 support
     * [Feature] Updated to TYPO3 11.5.
     * [Change] Migrate TYPO3 11.4 changes and/or deprecations.
@@ -256,9 +272,10 @@ Changelog
 
 -----
 
-    :Version: 4.1.1
-    :Date: 2021-06-28
-    :Changes:
+:Version: 4.1.1
+:Date: 2021-06-28
+:Changes:
+
     * [Change] Remove the usage of the ObjectManager whenever possible.
     * [Change] Code cleanup.
     * [Change] Make use of the Symfony DI.
@@ -271,9 +288,10 @@ Changelog
 
 -----
 
-    :Version: 4.1.0
-    :Date: 2021-04-23
-    :Changes:
+:Version: 4.1.0
+:Date: 2021-04-23
+:Changes:
+
     * [Feature] Added a log model to use for a logger implementation.
     * [Feature] Added .min. support for CSS files.
     * [Feature] Added apostrophes around string array keys to the Smokygrey skin for better readability.
@@ -292,9 +310,10 @@ Changelog
 
 -----
 
-    :Version: 4.0.0
-    :Date: 2020-10-28
-    :Changes:
+:Version: 4.0.0
+:Date: 2020-10-28
+:Changes:
+
     * [Feature] Added process resource analysis.
     * [Feature] Added better callback analysis.
     * [Feature] Added better string analysis (Json, file path, callback, xml)
@@ -336,37 +355,42 @@ Changelog
 
 -----
 
-    :Version: 3.3.6
-    :Date: 2020-06-25
-    :Changes:
+:Version: 3.3.6
+:Date: 2020-06-25
+:Changes:
+
     * [Bugfix] Removed the composer definition for the class alias loader and use an alternative implementation.
 
 -----
 
-    :Version: 3.3.5
-    :Date: 2020-06-20
-    :Changes:
+:Version: 3.3.5
+:Date: 2020-06-20
+:Changes:
+
     * [Bugfix] Added missing composer definition for the class alias loader.
 
 -----
 
-    :Version: 3.3.4
-    :Date: 2020-06-15
-    :Changes:
+:Version: 3.3.4
+:Date: 2020-06-15
+:Changes:
+
     * [Bugfix] Analysing of __PHP_Incomplete_Class does not throw errors anymore.
 
 -----
 
-    :Version: 3.3.3
-    :Date: 2020-04-29
-    :Changes:
+:Version: 3.3.3
+:Date: 2020-04-29
+:Changes:
+
     * [Bugfix] Fixed the composer dependencies.
 
 -----
 
-    :Version: 3.3.2
-    :Date: 2020-04-28
-    :Changes:
+:Version: 3.3.2
+:Date: 2020-04-28
+:Changes:
+
     * [Feature] TYPO3 10.4 support.
     * [Bugfix] Added missing closing li tag to the expandableChild template.
     * [Bugfix] The FE configuration does not update the render type.
@@ -376,9 +400,10 @@ Changelog
 
 -----
 
-    :Version: 3.3.1
-    :Date: 2020-02-01
-    :Changes:
+:Version: 3.3.1
+:Date: 2020-02-01
+:Changes:
+
     * [Feature] Updated to PHP 7.4
     * [Bugfix] The process other routing is never called.
     * [Bugfix] The cookie editor needs to be "initialized" prior usage.
@@ -389,9 +414,10 @@ Changelog
 
 -----
 
-    :Version: 3.3.0
-    :Date:  2019-11-19
-    :Changes:
+:Version: 3.3.0
+:Date:  2019-11-19
+:Changes:
+
     * [Feature] Introduce php-mock/php-mock-phpunit.
     * [Feature] TYPO3 10.1 support.
     * [Feature] Added event system to the process classes.
@@ -423,9 +449,10 @@ Changelog
 
 -----
 
-    :Version: 3.2.0
-    :Date: 2019-07-30
-    :Changes:
+:Version: 3.2.0
+:Date: 2019-07-30
+:Changes:
+
     * [Feature] Use some real autoloading, with a fallback to manually including all files.
     * [Feature] Plugins can now register additional skins.
     * [Feature] kreXX debug calls will return the original analysis value.
@@ -461,9 +488,10 @@ Changelog
 
 -----
 
-    :Version: 3.1.0
-    :Date: 2019-02-23
-    :Changes:
+:Version: 3.1.0
+:Date: 2019-02-23
+:Changes:
+
     * [Feature] Nearly complete rewrite of the backend module.
     * [Feature] Logfile access in the Admin Panel.
     * [Feature] Added class name to the declaration analysis of properties.
@@ -485,9 +513,10 @@ Changelog
 
 -----
 
-    :Version: 3.0.1
-    :Date: 2019-02-14
-    :Changes:
+:Version: 3.0.1
+:Date: 2019-02-14
+:Changes:
+
     * [Bugfix] Added the missing end event to the property analysis.
     * [Bugfix][Change] Configured debug methods are now checked on configuration loading.
     * [Bugfix] Preserve the line breaks from the string-extra.
@@ -502,9 +531,10 @@ Changelog
 
 -----
 
-    :Version: 3.0.0
-    :Date: 2018-10-02
-    :Changes:
+:Version: 3.0.0
+:Date: 2018-10-02
+:Changes:
+
     * [Feature] Added 'is' and 'has' to the getter analysis.
     * [Feature] Added plugin support, to replace the half-asses overwrites.
     * [Feature] Added a event dispatcher.
@@ -557,9 +587,10 @@ Changelog
 
 -----
 
-    :Version: 2.4.0
-    :Date: 2018-02-01
-    :Changes:
+:Version: 2.4.0
+:Date: 2018-02-01
+:Changes:
+
     * [Feature] Added the method analysis to the recursion detection, to prevent analysing the same methods over and over again.
     * [Feature] Added JS optimisation for very large output.
     * [Feature] Added mime type analysis for strings.
@@ -586,18 +617,20 @@ Changelog
 
 -----
 
-    :Version: 2.3.1
-    :Date: 2017-09-09
-    :Changes:
+:Version: 2.3.1
+:Date: 2017-09-09
+:Changes:
+
     * [Bugfix] Fixed shell detection.
     * [Bugfix] Fixed shell message feedback
     * [Bugfix] Fixed ajax detection
 
 -----
 
-    :Version: 2.3.0
-    :Date: 2017-08-26
-    :Changes:
+:Version: 2.3.0
+:Date: 2017-08-26
+:Changes:
+
     * [Feature] Added a Fluid specific caller finder for the fluid debugger
     * [Feature] Added a configuration for the backtrace, to limit the analysed steps.
     * [Feature] Added property comments to the analysis
@@ -651,9 +684,10 @@ Changelog
 
 -----
 
-    :Version: 2.2.0
-    :Date: 2017-04-06
-    :Changes:
+:Version: 2.2.0
+:Date: 2017-04-06
+:Changes:
+
     * [Feature] Added a fluid debugger ViewHelper.
     * [Feature] Added more search pattern and source code parsing to the getter analysis.
     * [Feature] Added a metatag to both skins to have a little chance to prevent crawler from indexing a kreXX output. Remember kids: never debug a productive site. This will only lead to trouble.
@@ -669,17 +703,19 @@ Changelog
 
 -----
 
-    :Version: 2.1.2
-    :Date: 2017-02-18
-    :Changes:
+:Version: 2.1.2
+:Date: 2017-02-18
+:Changes:
+
     * [Change] :literal:`includekrexx` and :literal:`krexx` version numbers are out of sync (for now).
     * [Bugfix] Fixed that annoying warning with PHP7.
 
 -----
 
-    :Version: 2.1.1
-    :Date: 2017-02-17
-    :Changes:
+:Version: 2.1.1
+:Date: 2017-02-17
+:Changes:
+
     * [Feature] Added the info, if a property / method is inherited.
     * [Feature] Added a configuration for the scope analysis.
     * [Feature] Added the search option "Search whole value".
@@ -696,9 +732,10 @@ Changelog
 
 -----
 
-    :Version: 2.1.0
-    :Date: 2016-12-21
-    :Changes:
+:Version: 2.1.0
+:Date: 2016-12-21
+:Changes:
+
     * [Feature] Added getter method analysis for models.
     * [Feature] Added search options to both skins.
     * [Feature] Added the '=' to the Hans Skin for better readability.
@@ -715,9 +752,10 @@ Changelog
 
 -----
 
-    :Version: 2.0.1
-    :Date: 2016-10-22
-    :Changes:
+:Version: 2.0.1
+:Date: 2016-10-22
+:Changes:
+
     * [Feature] Added a ip mask to whitelist ip's that can trigger kreXX.
     * [Feature] Added the method arguments to the method analysis in the Smokygrey skin.
     * [Change] Refactored the configuration and introduced models there.
@@ -730,9 +768,10 @@ Changelog
 
 -----
 
-    :Version: 2.0.0
-    :Date: 2016-08-30
-    :Changes:
+:Version: 2.0.0
+:Date: 2016-08-30
+:Changes:
+
     * [Feature] Added source code to the closure analysis.
     * [Feature] Prettified the source code display in the Smokygrey skin.
     * [Change] Refactored pretty much everything and introduced something that looks remotely like MVC. This results in a major increase in speed.
@@ -746,9 +785,10 @@ Changelog
 
 -----
 
-    :Version: 1.4.2
-    :Date: 2016-07-07
-    :Changes:
+:Version: 1.4.2
+:Date: 2016-07-07
+:Changes:
+
     * [Feature] Added analysis metadata to the file output.
     * [Feature] Added metadata to the backend logging
     * [Change] Adopted PSR-2
@@ -765,9 +805,10 @@ Changelog
 
 -----
 
-    :Version: 1.4.1
-    :Date: 2016-05-04
-    :Changes:
+:Version: 1.4.1
+:Date: 2016-05-04
+:Changes:
+
     * [Feature] Added class constants analysis.
     * [Feature] Added a new backend menu to access the log files
     * [Feature] Added the possibility to remove message keys from the message class
@@ -778,9 +819,10 @@ Changelog
 
 -----
 
-    :Version: 1.4.0
-    :Date: 2016-03-24
-    :Changes:
+:Version: 1.4.0
+:Date: 2016-03-24
+:Changes:
+
     * [Feature] Added smoky-grey as the new standard skin.
     * [Feature] Updated to PHP7
     * [Feature] Added the SkinRender class to the skin directory, so every skin can do some special stuff.
@@ -800,9 +842,10 @@ Changelog
 
 -----
 
-    :Version: 1.3.6
-    :Date: 2015-11-10
-    :Changes:
+:Version: 1.3.6
+:Date: 2015-11-10
+:Changes:
+
     * [Feature] Added scope analysis. Protected a private variables are treated as public in case they are reachable with the called scope.
     * [Feature] Class properties are now sorted alphabetically.
     * [Feature] Improved the automatic code generation for recursions.
@@ -815,18 +858,20 @@ Changelog
 
 -----
 
-    :Version: 1.3.5
-    :Date: 2015-10-03
-    :Changes:
+:Version: 1.3.5
+:Date: 2015-10-03
+:Changes:
+
     * [Feature] Added code analysis to determine the name of the variable we are analysing.
     * [Feature] Added warning to tell the user that we are not starting another analysis, because we will reach output => maxCall.
     * [Bugfix] Recursion clicking does not produce double ids anymore.
 
 -----
 
-    :Version: 1.3.4
-    :Date: 2015-08-08
-    :Changes:
+:Version: 1.3.4
+:Date: 2015-08-08
+:Changes:
+
     * [Feature] Added closure analysis.
     * [Change] Removed the jQuery setting
     * [Bugfix] Hans skin tries to close some left-over html tag to get a proper display
@@ -836,9 +881,10 @@ Changelog
 
 -----
 
-    :Version: 1.3.3
-    :Date: 2015-06-19
-    :Changes:
+:Version: 1.3.3
+:Date: 2015-06-19
+:Changes:
+
     * [Feature] kreXX will now work without a writable chunks folder, but this will require much more memory.
     * [Feature] Added a new backend menu to access local cookie settings.
     * [Change] Refactored file handling (chunks and logfiles).
@@ -852,9 +898,10 @@ Changelog
 
 -----
 
-    :Version: 1.3.2
-    :Date: 2015-04-29
-    :Changes:
+:Version: 1.3.2
+:Date: 2015-04-29
+:Changes:
+
     * [Feature] Added a small blacklist of classname/debugfunction combination which may cause problems during object analysis.
     * [Feature] Added composer.json
     * [Change] Removed the old and ugly schablon skin.
@@ -862,9 +909,10 @@ Changelog
 
 -----
 
-    :Version: 1.1.1
-    :Date: 2015-02-25
-    :Changes:
+:Version: 1.1.1
+:Date: 2015-02-25
+:Changes:
+
     * [Change] Removed the Debug Cookie in favour for the local open function
     * [Bugfix] Local open function is working again.
     * [Bugfix] Displaying the local configuration does not re-enable kreXX anymore.
@@ -875,9 +923,10 @@ Changelog
 
 -----
 
-    :Version: 1.1.0
-    :Date: 2015-02-02
-    :Changes:
+:Version: 1.1.0
+:Date: 2015-02-02
+:Changes:
+
     * [Feature] Added search function to the Hans skin.
     * [Feature] Added collapse-everything-else to the Hans skin.
     * [Feature] Added better recursion handling in the Hans skin.
@@ -890,9 +939,10 @@ Changelog
 
 -----
 
-    :Version: 1.0.0
-    :Date: 2014-12-02
-    :Changes:
+:Version: 1.0.0
+:Date: 2014-12-02
+:Changes:
+
     * [Feature] Reduced overall memory usage.
     * [Feature] Added memory usage check during frontend rendering.
     * [Feature] Added check if log and chunk folders are writable.
