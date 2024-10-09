@@ -26,7 +26,12 @@ Using the ViewHelpers is pretty much straight forward:
 
     Fluid debugger output with source generation for fluid.
 
-kreXX will then try to analyse everything inside the variable given to it.
+kreXX will then try to analyse everything inside the variable given to it. All reachable properties will be shown in the
+debugger output.
+
+From a Fluid template point of view, array, object getters and object public methods are handeld in the same way. kreXX
+will do the same when displaying them.
+
 
 Benchmarking ViewHelpers
 ^^^^^^^^^^^^^^^^^^^^^^^^
