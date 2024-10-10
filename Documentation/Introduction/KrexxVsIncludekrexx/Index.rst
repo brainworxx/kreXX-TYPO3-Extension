@@ -22,4 +22,7 @@ integrators.
 
     kreXX and includekrexx version numbers
 
+As shown in the image above, the version numbers of kreXX and includekrexx are not the same. This is because includekrexx
+and kreXX are two different products. Includekrexx is based on kreXX, and both versions can differ.
+
 If you want to make full use of :literal:`kreXX`, we recommend using the TYPO3 extension :literal:`includekrexx`.
