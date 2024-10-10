@@ -64,7 +64,8 @@ class FluidTest extends AbstractHelper
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolvePath
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid::getTemplatePath
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::getType
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveVarname
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveLineAndVarName
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::retrieveNameLine
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::checkForComplicatedStuff
      */
     public function testFindCallerTemplate()
@@ -103,6 +104,7 @@ class FluidTest extends AbstractHelper
         $this->assertStringContainsString('FluidTemplate1.html', $result['file']);
         $this->assertEquals('_all', $result[static::VARMANE]);
         $this->assertEquals('Fluid analysis of _all, stdClass', $result['type']);
+        $this->assertEquals(2, $result['line']);
         $this->assertNotEmpty($result['date']);
     }
 
@@ -113,7 +115,8 @@ class FluidTest extends AbstractHelper
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolvePath
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid::getLayoutPath
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::getType
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveVarname
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveLineAndVarName
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::retrieveNameLine
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::checkForComplicatedStuff
      */
     public function testFindCallerLayout()
@@ -146,6 +149,7 @@ class FluidTest extends AbstractHelper
         $this->assertStringContainsString('FluidTemplate2.html', $result['file']);
         $this->assertEquals('text', $result[static::VARMANE]);
         $this->assertEquals('Fluid analysis of text, string', $result['type']);
+        $this->assertEquals(2, $result['line']);
         $this->assertNotEmpty($result['date']);
     }
 
@@ -157,7 +161,8 @@ class FluidTest extends AbstractHelper
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid::getPartialPath
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid::resolveTemplateName
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::getType
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveVarname
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveLineAndVarName
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::retrieveNameLine
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::checkForComplicatedStuff
      */
     public function testFindCallerPartial()
@@ -195,6 +200,7 @@ class FluidTest extends AbstractHelper
         $this->assertStringContainsString('FluidTemplate3.html', $result['file']);
         $this->assertEquals('fluidvar', $result[static::VARMANE]);
         $this->assertEquals('Fluid analysis of fluidvar, array', $result['type']);
+        $this->assertEquals(4, $result['line']);
         $this->assertNotEmpty($result['date']);
 
         $this->assertEquals(
@@ -217,8 +223,58 @@ class FluidTest extends AbstractHelper
 
         $result = $fluid->findCaller('bla', 'blub');
         $this->assertEquals('n/a', $result['file']);
+        $this->assertEquals('n/a', $result['line']);
         $this->assertEquals('fluidvar', $result[static::VARMANE]);
         $this->assertEquals('Fluid analysis of fluidvar, string', $result['type']);
+        $this->assertNotEmpty($result['date']);
+    }
+
+    /**
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::findCaller
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolvePath
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid::getPartialPath
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid::resolveTemplateName
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::getType
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveLineAndVarName
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::retrieveNameLine
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::checkForComplicatedStuff
+     */
+    public function testFindCallerDoubelCall()
+    {
+        $templatePath = realpath(__DIR__ . '/../../../../../Fixtures/FluidTemplate4.html');
+        $parsedTemplateMock = $this->createMock(ParsedTemplateInterface::class);
+        $renderingStack = [[AbstractCallerFinderTest::PARSED_TEMPLATE => $parsedTemplateMock, 'type' => 2]];
+        $fluid = $this->createInstance($renderingStack, Fluid::class);
+
+        $parsedTemplateMock->expects($this->once())
+            ->method('getIdentifier')
+            ->will($this->returnValue('qwer_asdf_23409809afg'));
+
+        $resolvedIdentifiers = [];
+        $resolvedIdentifiers['partials']['qwer/asdf'] = 'qwer/asdf_23409809afg';
+        $templatePathMock = $this->createMock(TemplatePaths::class);
+        $this->setValueByReflection('resolvedIdentifiers', $resolvedIdentifiers, $templatePathMock);
+        $templatePathMock->expects($this->once())
+            ->method('getPartialPathAndFilename')
+            ->with('qwer/asdf')
+            ->will($this->returnValue($templatePath));
+        /** @var \PHPUnit\Framework\MockObject\MockObject $contextMock */
+        $contextMock = Krexx::$pool->registry->get(static::RENDERING_CONTEXT);
+        $contextMock->expects($this->once())
+            ->method(static::GET_TEMPLATE_PATHS)
+            ->will($this->returnValue($templatePathMock));
+
+        // We are going into the complicated stuff here.
+        Krexx::$pool->codegenHandler = new Codegen(Krexx::$pool);
+
+        $headline = 'H1';
+        $data =  [5];
+        $result = $fluid->findCaller($headline, $data);
+
+        $this->assertStringContainsString('FluidTemplate4.html', $result['file'], 'Filename contains the fimename');
+        $this->assertEquals('fluidvar', $result[static::VARMANE], 'Variable name is not unresolvable');
+        $this->assertEquals('Fluid analysis of fluidvar, array', $result['type']);
+        $this->assertEquals('n/a', $result['line'], 'Line in the template is unresolvable');
         $this->assertNotEmpty($result['date']);
     }
 }

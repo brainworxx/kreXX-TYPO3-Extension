@@ -212,7 +212,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
 
         // Trying to resolve the line as well as the variable name, if possible.
         $this->resolvePath();
-        $this->resolveVarname();
+        $this->resolveLineAndVarName();
 
         return [
             static::TRACE_FILE => $this->pool->fileService->filterFilePath($this->path),
@@ -222,6 +222,50 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
             static::TRACE_DATE => date('d-m-Y H:i:s', time()),
             static::TRACE_URL => $this->getCurrentUrl(),
         ];
+    }
+
+    /**
+     * Resolve the line in the template with the debug statement.
+     *
+     * @return void
+     */
+    protected function resolveLineAndVarName(): void
+    {
+        $template = $this->pool->fileService->getFileContents($this->path, false);
+        $counter = 0;
+        // Split the contents of the file into lines, disregarding the used
+        // line endings.
+        foreach (preg_split("/((\r?\n)|(\r\n?))/", $template) as $line => $content) {
+            foreach ($this->callPattern as $funcname) {
+                $name = [];
+                preg_match_all('/\s*' . $funcname[0] . '(.*)' . $funcname[1] . '\s*/u', $content, $name);
+                $this->retrieveNameLine($name, $line, $counter);
+            }
+        }
+    }
+
+    /**
+     * Retrieve the name and Line from, the regex result.
+     */
+    protected function retrieveNameLine($name, $line, &$counter)
+    {
+        if ($counter > 1) {
+            $this->varname =  self::FLUID_VARIABLE;
+            $this->line = self::FLUID_NOT_AVAILABLE;
+            return;
+        }
+
+        if (isset($name[1][0])) {
+            // Plus 1, because we start at 0.
+            $this->line = $line + 1;
+        }
+
+        if (count($name[1]) === 1) {
+            ++$counter;
+            $this->varname = $this->checkForComplicatedStuff(
+                $this->pool->encodingService->encodeString(trim($name[1][0], ' {}'))
+            );
+        }
     }
 
     /**
@@ -271,6 +315,12 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
     /**
      * Resolve the variable name and the line number of the
      * debug call from fluid.
+     *
+     * @deprecated
+     *   Since 5.1.0. The functionality was moved to resolveLineAndVarName()
+     *   Will be removed.
+     * @codeCoverageIgnore
+     *   We will not test deprecated functions.
      */
     protected function resolveVarname(): void
     {
