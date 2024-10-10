@@ -51,8 +51,6 @@ class Getter extends OriginalGetter
      */
     public function callMe(): string
     {
-        $output = $this->dispatchStartEvent();
-
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $this->parameters[static::PARAM_REF];
 
@@ -60,20 +58,18 @@ class Getter extends OriginalGetter
         $this->retrieveMethodList($ref);
         if (empty($this->normalGetter + $this->isGetter + $this->hasGetter)) {
             // There are no getter methods in here.
-            return $output;
+            return '';
         }
 
-        return $output . $this->dispatchEventWithModel(
-            static::EVENT_MARKER_ANALYSES_END,
-            $this->pool->createClass(Model::class)
-                ->setName($this->pool->messages->getHelp('getter'))
-                ->setType(static::TYPE_INTERNALS)
-                ->setHelpid('getterHelpInfo')
-                ->addParameter(static::PARAM_REF, $ref)
-                ->addParameter(static::PARAM_NORMAL_GETTER, $this->normalGetter)
-                ->addParameter(static::PARAM_IS_GETTER, $this->isGetter)
-                ->addParameter(static::PARAM_HAS_GETTER, $this->hasGetter)
-                ->injectCallback($this->pool->createClass(ThroughGetter::class))
-        )->renderMe() . $this->pool->render->renderSingeChildHr();
+        return $this->pool->createClass(Model::class)
+            ->injectCallback($this->pool->createClass(ThroughGetter::class))
+            ->setName($this->pool->messages->getHelp('getter'))
+            ->setHelpid('getterHelpInfo')
+            ->setType(static::TYPE_INTERNALS)
+            ->addParameter(static::PARAM_IS_GETTER, $this->isGetter)
+            ->addParameter(static::PARAM_REF, $ref)
+            ->addParameter(static::PARAM_NORMAL_GETTER, $this->normalGetter)
+            ->addParameter(static::PARAM_HAS_GETTER, $this->hasGetter)
+            ->renderMe() . $this->pool->render->renderSingeChildHr();
     }
 }

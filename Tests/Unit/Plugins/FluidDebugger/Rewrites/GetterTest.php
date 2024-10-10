@@ -23,9 +23,6 @@ class GetterTest extends AbstractHelper implements CallbackConstInterface
     public function testCallMeEmpty()
     {
         $getter = new Getter(\Krexx::$pool);
-        $this->mockEventService(
-            ['Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Rewrites\\Getter::callMe::start', $getter]
-        );
         $fixture = [static::PARAM_REF => new ReflectionClass(ConstantsFixture71::class)];
         $getter->setParameters($fixture);
 
@@ -36,13 +33,9 @@ class GetterTest extends AbstractHelper implements CallbackConstInterface
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Getter::callMe
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Getter::retrieveMethodList
      */
-    public function testCllMe()
+    public function testCallMe()
     {
         $getter = new Getter(\Krexx::$pool);
-        $this->mockEventService(
-            ['Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Rewrites\\Getter::callMe::start', $getter],
-            ['Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Rewrites\\Getter::analysisEnd', $getter]
-        );
         $ref = new ReflectionClass(GetterFixture::class);
         $fixture = [static::PARAM_REF => $ref];
         $getter->setParameters($fixture);
