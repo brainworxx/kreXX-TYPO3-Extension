@@ -10,8 +10,11 @@ Changelog
 Changes:
     * [Feature] Updated to Aimeos 24.
     * [Feature] Rewrote large parts of the documentation.
-    * [Feature] Added dark mode.
+    * [Feature] Added dark mode for the backend module.
     * [Feature] Moved the fluid getter display to the same level as the public object properties for better readability
+    * [Feature] Added a log ViewHelper for the benchmarking of the fluid rendering.
+    * [Feature] TYPO3 13.4 support.
+    * [Feature] Added line number resolver to the fluid CallerFinder.
     * [Change] Updated the composer.json and the ex_em_conf.
     * [Change] Rearranged the expert/simple settings in the backend module.
     * [Bugfix] Realigned the info popups in the backend.

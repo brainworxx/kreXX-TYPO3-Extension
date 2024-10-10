@@ -48,6 +48,8 @@ Benchmarking ViewHelpers
     . . . .
     <!-- Output the benchmark -->
     <krexx:timer.end/>
+    <!-- Log the benchmark -->
+    <krexx:timer.log/>
 
 kreXX measures the time between every call, and then outputs it as a benchmark.
 
