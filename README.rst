@@ -4,22 +4,22 @@
    :target: https://codeclimate.com/github/brainworxx/kreXX-TYPO3-Extension/maintainability
 .. |coverage| image:: https://api.codeclimate.com/v1/badges/43c23b7d829742003dab/test_coverage
    :target: https://codeclimate.com/github/brainworxx/kreXX-TYPO3-Extension/test_coverage
-.. |stable| image:: https://poser.pugx.org/brainworxx/includekrexx/v/stable
+.. |stable| image:: https://poser.pugx.org/brainworxx/includekrexx/v/stable?style=flat-square
    :target: https://packagist.org/packages/brainworxx/includekrexx
-.. |license| image:: https://poser.pugx.org/brainworxx/includekrexx/license
+.. |license| image:: https://poser.pugx.org/brainworxx/includekrexx/license?style=flat-square
    :target: https://packagist.org/packages/brainworxx/includekrexx
-.. |t310| image:: https://img.shields.io/badge/TYPO3-10-orange.svg
+.. |t310| image:: https://img.shields.io/badge/TYPO3-10-orange.svg?style=flat-square
    :target: https://get.typo3.org/version/10
-.. |t311| image:: https://img.shields.io/badge/TYPO3-11-orange.svg
+.. |t311| image:: https://img.shields.io/badge/TYPO3-11-orange.svg?style=flat-square
    :target: https://get.typo3.org/version/11
-.. |t312| image:: https://img.shields.io/badge/TYPO3-12-orange.svg
+.. |t312| image:: https://img.shields.io/badge/TYPO3-12-orange.svg?style=flat-square
    :target: https://get.typo3.org/version/12
-.. |t313| image:: https://img.shields.io/badge/TYPO3-13-orange.svg
+.. |t313| image:: https://img.shields.io/badge/TYPO3-13-orange.svg?style=flat-square
    :target: https://get.typo3.org/version/13
 
-|stable| |t310| |t311| |t312| |t313|
+|build| |maintainability| |coverage|
 
-|build| |maintainability| |coverage|  |license|
+|stable| |t310| |t311| |t312| |t313| |license|
 
 ========================================
 kreXX Debugger - TYPO3 Backend Extension
