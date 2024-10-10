@@ -24,8 +24,9 @@
     .text {
       display: inline-block;
       font-size: 15px;
-      max-width: 343px;
-      color: white;
+      max-width: 335px;
+      color: var(--ajax-font-color);
+      vertical-align: -6px;
     }
 
     &.fade {
@@ -42,10 +43,14 @@
     .icon {
       border-radius: 20px;
       display: inline-block;
-      height: 25px;
-      width: 25px;
+      height: 30px;
+      width: 30px;
       margin-right: 10px;
       vertical-align: top;
+
+      .icon-markup {
+        padding: 5px;
+      }
 
       &::after {
         color: white;
@@ -63,10 +68,6 @@
 
       .icon {
         background-color: var(--green-success-icon);
-
-        &::after {
-          content: "\2713";
-        }
       }
     }
 
@@ -76,10 +77,6 @@
 
       .icon {
         background-color: var(--red-error-icon);
-
-        &::after {
-          content: "\2716";
-        }
       }
     }
   }

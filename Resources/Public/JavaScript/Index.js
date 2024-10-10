@@ -45,9 +45,9 @@
      * @event DOMContentLoaded
      */
     tabs.onDocumentReady = function () {
-        var elements = document.querySelectorAll('.nav-tabs li');
+        let elements = document.querySelectorAll('.nav-tabs li');
 
-        for (var i = 0; i < elements.length; i++) {
+        for (let i = 0; i < elements.length; i++) {
             elements[i].addEventListener('click', tabs.toggle);
         }
     };
@@ -59,8 +59,8 @@
      * @param {Event} event
      */
     tabs.toggle = function (event) {
-        var activeTab = document.querySelector('.nav-tabs li.active');
-        var activeContent = document.querySelector('.tab-content .tab-pane.active');
+        let activeTab = document.querySelector('.nav-tabs li.active');
+        let activeContent = document.querySelector('.tab-content .tab-pane.active');
 
         if (activeTab !== null) {
             activeTab.classList.remove('active');
@@ -70,7 +70,7 @@
             activeContent.classList.remove('active');
         }
 
-        var li = event.target.parentNode;
+        let li = event.target.parentNode;
 
         if (li !== null) {
             li.classList.add('active');
@@ -89,9 +89,9 @@
      * @event DOMContentLoaded
      */
     formSupport.onDocumentReady = function () {
-        var checkboxes = document.querySelectorAll('[id^="factory."]');
+        let checkboxes = document.querySelectorAll('[id^="factory."]');
 
-        for (var i = 0, n = checkboxes.length; i < n; i++) {
+        for (let i = 0, n = checkboxes.length; i < n; i++) {
             formSupport.toggle(checkboxes[i]);
             checkboxes[i].addEventListener('click', function () {
                 formSupport.toggle(this);
@@ -100,8 +100,8 @@
 
 
         document.getElementById('main-save').addEventListener('click', function () {
-            var form = document.getElementById('save-form');
-            if (typeof form === 'object' && form !== 'undefined' && form != null) {
+            let form = document.getElementById('save-form');
+            if (typeof form === 'object' && form != null) {
                 form.submit();
             }
         }, true);
@@ -111,12 +111,12 @@
         document.getElementById('clear-cookies').addEventListener('click', function () {
             // We do not delete the cookie, we simply remove all settings in it.
             /** @type {Object} */
-            var settings = {};
+            let settings = {};
             /** @type {Date} */
-            var date = new Date();
+            let date = new Date();
             date.setTime(date.getTime() + (99 * 24 * 60 * 60 * 1000));
             /** @type {string} */
-            var expires = 'expires=' + date.toUTCString();
+            let expires = 'expires=' + date.toUTCString();
             document.cookie = 'KrexxDebugSettings=' + JSON.stringify(settings) + '; ' + expires + '; path=/';
 
             ajaxRefresh.message({
@@ -134,13 +134,11 @@
      */
     formSupport.toggle = function (checkbox) {
         // Find the corresponding element.
-        var id = checkbox.id.split('.');
-        if (typeof id[1] !== 'undefined') {
-            var element = document.getElementById(id[1]);
-            var fallback = document.getElementById(id[1] + '-fallback');
-        }
+        let id = checkbox.id.split('.');
+        let element = document.getElementById(id[1]);
+        let fallback = document.getElementById(id[1] + '-fallback');
 
-        if (typeof element === 'object' && typeof element !== 'undefined' && element != null) {
+        if (typeof element === 'object') {
             if (checkbox.checked) {
                 element.disabled = true;
                 element.parentNode.classList.remove('active');
@@ -159,8 +157,8 @@
      * @param {Event} event
      */
     formSupport.changeMode = function (event) {
-        var modeSwitch = document.getElementById('mode-switch');
-        var value = modeSwitch.options[modeSwitch.selectedIndex].value;
+        let modeSwitch = document.getElementById('mode-switch');
+        let value = modeSwitch.options[modeSwitch.selectedIndex].value;
 
         if (value === 'expert') {
             document.getElementById('tabpanel').classList.add('expert-mode');
@@ -223,12 +221,12 @@
      * Refresh the logfile list.
      */
     ajaxRefresh.call = function () {
-        var request = new XMLHttpRequest();
+        let request = new XMLHttpRequest();
         request.open("GET", TYPO3.settings.ajaxUrls['includekrexx_refresh'], true);
 
-        var table = document.querySelector('table.krexx-logs tbody');
+        let table = document.querySelector('table.krexx-logs tbody');
         request.onload = function (event) {
-            var result = JSON.parse(request.responseText);
+            let result = JSON.parse(request.responseText);
 
             // Are there any logiles, at all?
             if (result.length === 0) {
@@ -241,7 +239,7 @@
             document.querySelector('#tab-1 .table-wrapper').classList.remove('display-none');
             document.querySelector('#tab-1 .noresult').classList.add('display-none');
 
-            var html = ajaxRefresh.generateHtml(result);
+            let html = ajaxRefresh.generateHtml(result);
 
             if (ajaxRefresh.lastAnswer !== html) {
                 table.innerHTML = html;
@@ -265,15 +263,15 @@
      * @return {string}
      */
     ajaxRefresh.generateHtml = function (result) {
-        var html = '';
-        var i;
+        let html = '';
+        let i;
 
-        for (var key in result) {
+        for (let key in result) {
             if (!result.hasOwnProperty(key)) {
                 continue;
             }
 
-            var file = result[key];
+            let file = result[key];
             html += '<tr ' + ajaxRefresh.generateBackgroundStyle(file.name) + '>';
             html += '<td><a target="_blank" href="' + file.dispatcher + '">  ' + file.name + '</a></td><td class="meta">';
             for (i = 0; i < file.meta.length; i++) {
@@ -303,7 +301,7 @@
      *   style=" background-color: rgba(255, 0, 0, 0.1);"
      */
     ajaxRefresh.generateBackgroundStyle = function (string) {
-        var chr, hash, i, values;
+        let chr, hash, i, values;
 
         for (i = 0; i < string.length; i++) {
             chr   = string.charCodeAt(i);
@@ -323,8 +321,8 @@
      * @param event
      */
     ajaxRefresh.deleteHandling = function (event) {
-        var target = event.target;
-        var id;
+        let target = event.target;
+        let id;
 
         // Retrieve the id.
         if (target.hasAttribute('data-id')) {
@@ -339,13 +337,13 @@
             return;
         }
 
-        var confirmed = confirm(ajaxRefresh.ajaxTranslate.deletefile);
+        let confirmed = confirm(ajaxRefresh.ajaxTranslate.deletefile);
 
         if (confirmed === false) {
             return;
         }
 
-        var request = new XMLHttpRequest();
+        let request = new XMLHttpRequest();
         request.open("GET", TYPO3.settings.ajaxUrls['includekrexx_delete'] + '&fileid=' + id, true);
 
         request.onload = function (event) {
@@ -369,12 +367,13 @@
      * @param {{}} json
      */
     ajaxRefresh.message = function (json) {
-        var messagebox = document.querySelector('.message-container-outer');
-        var message = document.createElement("div");
+        let messagebox = document.querySelector('.message-container-outer');
+        let message = document.createElement("div");
 
         message.classList.add('ajax-msg');
         message.classList.add(json.class);
-        message.innerHTML = '<div class="icon"></div><div class="text">' + json.text + '</div>';
+        message.innerHTML = ajaxRefresh.generateIcon(json.class) + '<div class="text">' + json.text + '</div>';
+        console.log(json);
         messagebox.appendChild(message);
 
         setTimeout(function () {
@@ -386,6 +385,22 @@
                 }, 600);
             }, 600);
         }, 4000);
+    }
+
+    ajaxRefresh.generateIcon = function (level) {
+        if (level === 'success') {
+            return '<span class="icon icon-size-small icon-state-default"><span class="icon-markup">' +
+                '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><g fill="var(--ajax-font-color)"><path d="m13.3 4.8-.7-.7c-.2-.2-.5-.2-.7 0L6.5 9.5 4 6.9c-.2-.2-.5-.2-.7 0l-.6.7c-.2.2-.2.5 0 .7l3.6 3.6c.2.2.5.2.7 0l6.4-6.4c.1-.2.1-.5-.1-.7z"/></g></svg>' +
+                '</span></span>';
+        }
+
+        if (level === 'error') {
+            return '<span class="icon icon-size-small icon-state-default"><span class="icon-markup">' +
+                '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><g fill="var(--ajax-font-color)"><path d="M11.9 5.5 9.4 8l2.5 2.5c.2.2.2.5 0 .7l-.7.7c-.2.2-.5.2-.7 0L8 9.4l-2.5 2.5c-.2.2-.5.2-.7 0l-.7-.7c-.2-.2-.2-.5 0-.7L6.6 8 4.1 5.5c-.2-.2-.2-.5 0-.7l.7-.7c.2-.2.5-.2.7 0L8 6.6l2.5-2.5c.2-.2.5-.2.7 0l.7.7c.2.2.2.5 0 .7z"/></g></svg>' +
+                '</span></span>'
+        }
+
+        return '';
     }
 
     if (document.readyState !== 'loading') {
