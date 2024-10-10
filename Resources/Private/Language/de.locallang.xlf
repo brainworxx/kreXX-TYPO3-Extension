@@ -235,8 +235,8 @@
 				<target>Zugang verweigert!</target>
 			</trans-unit>
 			<trans-unit id="languageKey">
-				<source>The language key from the help file(s). It will fallback to 'text' which is english. We provide kreXX in two language english as a fall back, and german (de).</source>
-				<target>Der Sprachschlüssel für die Hilfedatei(en). Als Fallback wird 'text' genutzt, welcher englische Werte enthällt. kreXX wird in zwei Sprachen ausgeliefert, Englisch und  Deutsch (de).</target>
+				<source>The language key from the help file(s). We provide kreXX in two language english as a fall back, and german (de).</source>
+				<target>Der Sprachschlüssel für die Hilfedatei(en). kreXX wird in zwei Sprachen ausgeliefert, Englisch und  Deutsch (de).</target>
 			</trans-unit>
 
 			<!--

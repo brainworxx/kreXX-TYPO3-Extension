@@ -146,7 +146,7 @@
 				<source>There are different log levels. Depending on the setting, you may get a lot of output.</source>
 			</trans-unit>
 			<trans-unit id="languageKey">
-				<source>The language key from the help file(s). It will fallback to 'text' which is english. We provide kreXX in two language english as a fall back, and german (de).</source>
+				<source>The language key from the help file(s). We provide kreXX in two language english as a fallback, and german.</source>
 			</trans-unit>
 
 			<!-- Messages -->

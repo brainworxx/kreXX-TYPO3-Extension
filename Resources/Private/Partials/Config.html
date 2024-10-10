@@ -112,7 +112,13 @@
         <td class="description"><label for="{config.name}"><f:translate key="label.{config.name}" /></label></td>
         <td class="value">
             <div class="chevron"><f:form.select additionalAttributes="{autocomplete: 'off'}" id="{config.name}" property="{config.name}" options="{options}" value="{config.value}" /></div>
-            <div id="{config.name}-fallback" class="fallback">{config.fallback}</div>
+            <f:variable value="{config.fallback}" name="fallback"/>
+            <f:for each="{options}" key="value" as="translation">
+                <f:if condition="{value}=={config.fallback}">
+                    <f:variable value="{translation}" name="fallback"/>
+                </f:if>
+            </f:for>
+            <div id="{config.name}-fallback" class="fallback">{fallback}</div>
         </td>
         <td class="commands">
             <div class="button tooltip-hover">

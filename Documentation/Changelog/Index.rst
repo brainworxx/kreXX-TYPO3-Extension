@@ -15,6 +15,7 @@ Changes:
     * [Feature] Added a log ViewHelper for the benchmarking of the fluid rendering.
     * [Feature] TYPO3 13.4 support.
     * [Feature] Added line number resolver to the fluid CallerFinder.
+    * [Feature] Display the translated fallback value in the backend module for dropdown fields.
     * [Change] Updated the composer.json and the ex_em_conf.
     * [Change] Rearranged the expert/simple settings in the backend module.
     * [Bugfix] Realigned the info popups in the backend.
