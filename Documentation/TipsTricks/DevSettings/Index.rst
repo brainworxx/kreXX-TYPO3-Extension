@@ -1,5 +1,6 @@
 .. _devsettings:
 
+==========================
 TYPO3 Development Settings
 ==========================
 

@@ -12,7 +12,7 @@ though. Most values you will come across are protected, and there is most likely
 A click on the <fluid> or <php> symbol will generate the snippet.
 
 
-.. figure:: ../../Images/Fluid.png
+.. figure:: ../../Images/CodeGeneration.png
 	:alt: Snippet generation
 
 	Output of the generated snippet.

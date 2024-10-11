@@ -1,10 +1,17 @@
 .. _limitations:
 
+===========
 Limitations
 ===========
 
 Content Security Policy
 ^^^^^^^^^^^^^^^^^^^^^^^
+
+.. warning::
+	If you have such a Content Security Policy in place: Do **NOT** remove it.
+
+.. tip::
+	Instead simply switch to logging.
 
 kreXX is very reliant on JavaScript. Without it, it would not be able to do its job. The JavaScript itself is outputted
 inline via :literal:`<script>` tags. And that may be a problem.
@@ -16,12 +23,6 @@ On the downside it also prevents kreXX on the frontend.
 We have done all we could to make kreXX work with such a policy in place, but it is not always possible. A good example
 is the Aimeos Backend. The CSP policy is hardcoded in the template files, leaving no way to inject the needed
 JavaScript.
-
-.. warning::
-	If you have such a Content Security Policy in place: Do **NOT** remove it.
-
-.. tip::
-	Instead simply switch to logging.
 
 Headers already send
 ^^^^^^^^^^^^^^^^^^^^
