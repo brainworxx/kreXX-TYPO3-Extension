@@ -11,5 +11,6 @@ A small list of tips and tricks.
    :titlesonly:
 
     DevSettings/Index
-    AjaxCli/Index
     Limitations/Index
+    Recursions/Index
+    CodeGeneration/Index
