@@ -286,8 +286,8 @@ class NewSetting implements ConfigConstInterface
         return [
             static::VALUE => $this->defaultValue,
             static::RENDER => [
-                self::RENDER_TYPE => $this->renderType,
-                self::RENDER_EDITABLE => $this->isEditable ? self::VALUE_TRUE : self::VALUE_FALSE,
+                static::RENDER_TYPE => $this->renderType,
+                static::RENDER_EDITABLE => $this->isEditable ? static::VALUE_TRUE : static::VALUE_FALSE,
             ],
             static::EVALUATE => $this->validation,
             static::SECTION => $this->section

@@ -229,7 +229,7 @@ class DeepGetterFixture
         if ($this->false) {
             return $this->analysisTrap;
         }
-        return $this->my_property_seven;
+        return (float)$this->my_property_seven;
     }
 
     /**
@@ -240,7 +240,7 @@ class DeepGetterFixture
         if ($this->false) {
             return $this->analysisTrap;
         }
-        return $this->_my_property_eight;
+        return (int) $this->_my_property_eight;
     }
 
     /**
@@ -260,7 +260,7 @@ class DeepGetterFixture
      */
     public function _getMyPropertyTen(): string
     {
-        return $this->myPropertyTen;
+        return (string) $this->myPropertyTen;
     }
 
     /**
@@ -288,7 +288,7 @@ class DeepGetterFixture
      *
      * @return string
      */
-    public function getAnotherGetter():string
+    public function getAnotherGetter(): string
     {
         return $this->getMyPropertyEight();
     }
@@ -307,7 +307,7 @@ class DeepGetterFixture
      */
     public function isMyPropertyTwelve(): bool
     {
-        return $this->myPropertyTwelve;
+        return (bool) $this->myPropertyTwelve;
     }
 
     /**

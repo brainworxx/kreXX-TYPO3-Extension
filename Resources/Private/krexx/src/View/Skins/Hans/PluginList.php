@@ -64,7 +64,7 @@ trait PluginList
         $result = '';
         $messages = $this->pool->messages;
         foreach (SettingsGetter::getPlugins() as $plugin) {
-            if ($plugin[self::IS_ACTIVE]) {
+            if ($plugin[static::IS_ACTIVE]) {
                 $activeClass = 'kisactive';
                 $activeText = $messages->getHelp('pluginActive');
             } else {
@@ -72,7 +72,7 @@ trait PluginList
                 $activeText = $messages->getHelp('pluginInactive');
             }
 
-            $configClass = $plugin[self::CONFIG_CLASS];
+            $configClass = $plugin[static::CONFIG_CLASS];
             $result .= str_replace(
                 $this->markerSinglePlugin,
                 [

@@ -49,7 +49,7 @@ class SettingsGetter extends Registration
      */
     public static function getNewFallbackValues(): array
     {
-        return self::$newFallbackValues;
+        return static::$newFallbackValues;
     }
 
     /**
@@ -206,6 +206,6 @@ class SettingsGetter extends Registration
      */
     public static function getAdditionalLanguages(): array
     {
-        return self::$additionalLanguages;
+        return static::$additionalLanguages;
     }
 }

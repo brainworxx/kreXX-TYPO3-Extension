@@ -43,7 +43,7 @@ class OpaqueRessource extends AbstractCallback implements CallbackConstInterface
         }
 
         $this->pool->codegenHandler->setCodegenAllowed(false);
-        $data = $this->parameters[self::PARAM_DATA];
+        $data = $this->parameters[static::PARAM_DATA];
 
         // We iterate through the class list.
         // When we get the right instance, we trigger the analysis callback.
