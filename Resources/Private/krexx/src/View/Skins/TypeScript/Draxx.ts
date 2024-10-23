@@ -171,7 +171,7 @@ class Draxx
                 // We need to look for another offset.
                 // Now we need to get all elements above the current kreXX element and
                 // get their margins (top and button)
-                let prev:Element = elContent.previousElementSibling;
+                let prev:Element = elContent.previousElementSibling ?? elContent.parentElement;
                 do {
                     relOffsetY = parseInt(getComputedStyle(prev).marginTop, 10);
                     prev = prev.previousElementSibling;
