@@ -39,7 +39,6 @@ use Aimeos\MShop\Product\Item\Standard as StandardProduct;
 
 class Aimeos20Item extends StandardProduct
 {
-
     /**
      * Short circuiting the original method, because I'm to lazy to really fill
      * it the fixture with "meaningfull" stuff for the tests.

@@ -37,6 +37,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\EventHandler
 use Aimeos\Map;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods;
 use Brainworxx\Includekrexx\Tests\Fixtures\Aimeos20Item;
+use Brainworxx\Includekrexx\Tests\Fixtures\Aimeos24Item;
 use Brainworxx\Includekrexx\Tests\Fixtures\AimeosItem;
 use Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\AimeosTestTrait;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
@@ -49,6 +50,7 @@ use Brainworxx\Krexx\Tests\Fixtures\DebugMethodFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods as AnalyseDebugMethods;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
+use Aimeos\MShop\Product\Item\Standard as StandardProduct;
 
 class DebugMethodsTest extends AbstractHelper implements CallbackConstInterface
 {
@@ -131,8 +133,12 @@ class DebugMethodsTest extends AbstractHelper implements CallbackConstInterface
 
         // Create the calling class in a fixture.
         $analyseDebugMethods = new AnalyseDebugMethods(\Krexx::$pool);
-        if (class_exists(Map::class)) {
-            $object = new Aimeos20Item('product.');
+        $itemReflection = new ReflectionClass(StandardProduct::class);
+        $parameters = $itemReflection->getMethod('__construct')->getParameters();
+        if (count($parameters) === 2) {
+            $object = new Aimeos24Item();
+        } elseif (class_exists(Map::class)) {
+            $object = new Aimeos20Item();
         } else {
             $object = new AimeosItem();
         }
