@@ -129,10 +129,10 @@ class DebugMethodsTest extends AbstractHelper implements CallbackConstInterface
         // Short circuit the rendering process.
         Krexx::$pool->render = new RenderNothing(Krexx::$pool);
 
-        // Create the calling class an a fixture.
+        // Create the calling class in a fixture.
         $analyseDebugMethods = new AnalyseDebugMethods(\Krexx::$pool);
         if (class_exists(Map::class)) {
-            $object = new Aimeos20Item();
+            $object = new Aimeos20Item('product.');
         } else {
             $object = new AimeosItem();
         }

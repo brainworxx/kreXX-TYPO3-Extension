@@ -9,6 +9,7 @@ Changelog
 
 Changes:
     * [Feature] Added the handling of type casting to the regex getter analysis.
+    * [Feature] Updated to Aimeos 24.10.
     * [Bugfix] Removed some self:: references.
     * [Bugfix] Better looking exclamation mark for the SmokyGrey skin.
     * [Bugfix] The dragging of the kreXX output window may not work under certain circumstances.
