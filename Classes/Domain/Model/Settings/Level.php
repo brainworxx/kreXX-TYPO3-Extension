@@ -42,12 +42,12 @@ trait Level
     /**
      * @var string
      */
-    protected $level;
+    protected string $level;
 
     /**
      * @var string
      */
-    protected $formlevel;
+    protected string $formlevel;
 
     /**
      * @param string $level

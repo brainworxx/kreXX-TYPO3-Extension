@@ -61,7 +61,7 @@ class DirtyModels implements EventHandlerInterface
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * {@inheritdoc}

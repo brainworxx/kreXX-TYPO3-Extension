@@ -42,12 +42,12 @@ trait DetectAjax
     /**
      * @var string
      */
-    protected $detectAjax;
+    protected string $detectAjax;
 
     /**
      * @var string
      */
-    protected $formdetectAjax;
+    protected string $formdetectAjax;
 
     /**
      * @param string $detectAjax

@@ -42,12 +42,12 @@ trait Disabled
     /**
      * @var string
      */
-    protected $disabled;
+    protected string $disabled;
 
     /**
      * @var string
      */
-    protected $formdisabled;
+    protected string $formdisabled;
 
     /**
      * @param string $disabled

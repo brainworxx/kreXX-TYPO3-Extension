@@ -42,12 +42,12 @@ trait MemoryLeft
     /**
      * @var string
      */
-    protected $memoryLeft;
+    protected string $memoryLeft;
 
     /**
      * @var string
      */
-    protected $formmemoryLeft;
+    protected string $formmemoryLeft;
 
     /**
      * @param string $memoryLeft

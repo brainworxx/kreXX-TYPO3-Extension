@@ -51,7 +51,7 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
     /**
      * @var File
      */
-    protected $fileReader;
+    protected File $fileReader;
 
     /**
      * Assigning the form configuration to the view.

@@ -47,5 +47,5 @@ class LogViewHelper extends DebugViewHelper
      *
      * @var string
      */
-    protected $analysisType = 'log';
+    protected string $analysisType = 'log';
 }

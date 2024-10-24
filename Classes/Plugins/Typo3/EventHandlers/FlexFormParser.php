@@ -58,7 +58,7 @@ class FlexFormParser implements EventHandlerInterface, CallbackConstInterface
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * {@inheritdoc}

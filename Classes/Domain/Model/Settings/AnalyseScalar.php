@@ -42,12 +42,12 @@ trait AnalyseScalar
     /**
      * @var string
      */
-    protected $analyseScalar;
+    protected string $analyseScalar;
 
     /**
      * @var string
      */
-    protected $formanalyseScalar;
+    protected string $formanalyseScalar;
 
     /**
      * @param string $analyseScalar

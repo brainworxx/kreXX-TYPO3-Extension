@@ -42,12 +42,12 @@ trait AnalyseProtected
     /**
      * @var string
      */
-    protected $analyseProtected;
+    protected string $analyseProtected;
 
     /**
      * @var string
      */
-    protected $formanalyseProtected;
+    protected string $formanalyseProtected;
 
     /**
      * @param string $analyseProtected

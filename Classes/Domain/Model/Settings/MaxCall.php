@@ -42,12 +42,12 @@ trait MaxCall
     /**
      * @var string
      */
-    protected $maxCall;
+    protected string $maxCall;
 
     /**
      * @var string
      */
-    protected $formmaxCall;
+    protected string $formmaxCall;
 
     /**
      * @param string $maxCall

@@ -95,7 +95,7 @@ class DebugViewHelper extends AbstractViewHelper
      *
      * @var string
      */
-    protected $analysisType = 'open';
+    protected string $analysisType = 'open';
 
     /**
      * {@inheritdoc}

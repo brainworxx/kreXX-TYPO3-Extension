@@ -40,6 +40,7 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContext;
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 
 class AbstractCallerFinderTest extends AbstractHelper
 {
@@ -112,7 +113,7 @@ class AbstractCallerFinderTest extends AbstractHelper
     public function testConstructError()
     {
         $viewMock = 'do not look at me';
-        $contextMock = 'taken out of context';
+        $contextMock = $this->createMock(RenderingContextInterface::class);
         $reflectionMock = $this->createMock(\ReflectionClass::class);
         $reflectionMock->expects($this->once())
             ->method(static::HAS_PROPERTY)

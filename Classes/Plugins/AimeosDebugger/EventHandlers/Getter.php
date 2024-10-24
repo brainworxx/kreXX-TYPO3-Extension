@@ -76,14 +76,14 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface
      *
      * @var \Brainworxx\Krexx\Service\Factory\Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * The names of the internal storages if Aimeos items.
      *
      * @var string[]
      */
-    protected $aimeosDataStorages = [
+    protected array $aimeosDataStorages = [
         AimeosConstInterface::AIMEOS_B_DATA,
         AimeosConstInterface::AIMEOS_DATA,
         AimeosConstInterface::AIMEOS_VALUES

@@ -42,12 +42,12 @@ trait LanguageKey
     /**
      * @var string
      */
-    protected $languageKey;
+    protected string $languageKey;
 
     /**
      * @var string
      */
-    protected $formlanguageKey;
+    protected string $formlanguageKey;
 
     /**
      * @param string $key

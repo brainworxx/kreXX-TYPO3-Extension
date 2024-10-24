@@ -42,12 +42,12 @@ trait DebugMethods
     /**
      * @var string
      */
-    protected $debugMethods;
+    protected string $debugMethods;
 
     /**
      * @var string
      */
-    protected $formdebugMethods;
+    protected string $formdebugMethods;
 
     /**
      * @param string $debugMethods

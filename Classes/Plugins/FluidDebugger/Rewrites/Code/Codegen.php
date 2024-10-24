@@ -52,21 +52,21 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
      *
      * @var string
      */
-    protected $wrapperLeft = '{';
+    protected string $wrapperLeft = '{';
 
     /**
      * We wrap this one around the fluid code generation, on the right.
      *
      * @var string
      */
-    protected $wrapperRight = '}';
+    protected string $wrapperRight = '}';
 
     /**
      * Are we analysing the dreaded {_all}?
      *
      * @var bool
      */
-    protected $isAll = false;
+    protected bool $isAll = false;
 
     /**
      * We are only handling the VHS Call ViewHelper generation here.

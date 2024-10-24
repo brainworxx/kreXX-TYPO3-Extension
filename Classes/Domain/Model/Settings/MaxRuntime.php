@@ -42,12 +42,12 @@ trait MaxRuntime
     /**
      * @var string
      */
-    protected $maxRuntime;
+    protected string $maxRuntime;
 
     /**
      * @var string
      */
-    protected $formmaxRuntime;
+    protected string $formmaxRuntime;
 
     /**
      * @param string $maxRuntime

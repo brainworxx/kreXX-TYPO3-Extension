@@ -53,5 +53,5 @@ class EndViewHelper extends DebugViewHelper
      *
      * @var string
      */
-    protected $analysisType = 'timerEnd';
+    protected string $analysisType = 'timerEnd';
 }

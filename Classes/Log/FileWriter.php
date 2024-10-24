@@ -47,7 +47,6 @@ use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Throwable;
 use TYPO3\CMS\Core\Log\Logger;
-use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Log\LogRecord;
 use TYPO3\CMS\Core\Log\Writer\WriterInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -74,7 +73,7 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
      *
      * @var array
      */
-    protected $localConfig = [];
+    protected array $localConfig = [];
 
     /**
      * Constructs this log writer
@@ -273,32 +272,6 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
         }
 
         return $logModel;
-    }
-
-    /**
-     * Depending on the TYPO3 version, the log level is either a string or
-     * an integer
-     *
-     * @param \TYPO3\CMS\Core\Log\LogRecord $record
-     *   The log record.
-     *
-     * @return string
-     *   The readable string.
-     *
-     * @deprecated
-     *   Since 5.0.0. Will be removed.
-     *
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     */
-    protected function retrieveLogLevel(LogRecord $record): string
-    {
-        $level = $record->getLevel();
-        if (is_integer($level)) {
-            $level = LogLevel::getName($level);
-        }
-
-        return strtolower($level);
     }
 
     /**

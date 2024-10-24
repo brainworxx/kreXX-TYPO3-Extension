@@ -57,7 +57,7 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
      *
      * @var string[]
      */
-    protected $internalObjectNames = [
+    protected array $internalObjectNames = [
         'controller' => '$this->controller,',
         'manager' => '$this->manager,',
         'object' => '$this->object,',
@@ -69,7 +69,7 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
     /**
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Inject the pool.

@@ -52,7 +52,7 @@ class LllString extends AbstractScalarAnalysis
      *
      * @var LocalizationUtility
      */
-    protected $localisationUtility;
+    protected LocalizationUtility $localisationUtility;
 
     /**
      * Inject the pool.

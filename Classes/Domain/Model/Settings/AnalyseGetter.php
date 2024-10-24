@@ -42,12 +42,12 @@ trait AnalyseGetter
     /**
      * @var string
      */
-    protected $analyseGetter;
+    protected string $analyseGetter;
 
     /**
      * @var string
      */
-    protected $formanalyseGetter;
+    protected string $formanalyseGetter;
 
     /**
      * @param string $analyseGetter

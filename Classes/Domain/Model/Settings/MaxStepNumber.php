@@ -42,12 +42,12 @@ trait MaxStepNumber
     /**
      * @var string
      */
-    protected $maxStepNumber;
+    protected string $maxStepNumber;
 
     /**
      * @var string
      */
-    protected $formmaxStepNumber;
+    protected string $formmaxStepNumber;
 
     /**
      * @param string $maxStepNumber

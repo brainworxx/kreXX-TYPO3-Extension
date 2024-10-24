@@ -52,7 +52,7 @@ class InlineJsCssDispatcher implements EventHandlerInterface, ConfigConstInterfa
      *
      * @var \Brainworxx\Krexx\Service\Factory\Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     public function __construct(Pool $pool)
     {

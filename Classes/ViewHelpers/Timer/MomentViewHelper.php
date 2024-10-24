@@ -53,5 +53,5 @@ class MomentViewHelper extends DebugViewHelper
      *
      * @var string
      */
-    protected $analysisType = 'timerMoment';
+    protected string $analysisType = 'timerMoment';
 }

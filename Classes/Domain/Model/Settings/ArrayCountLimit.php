@@ -42,12 +42,12 @@ trait ArrayCountLimit
     /**
      * @var string
      */
-    protected $arrayCountLimit;
+    protected string $arrayCountLimit;
 
     /**
      * @var string
      */
-    protected $formarrayCountLimit;
+    protected string $formarrayCountLimit;
 
     /**
      * @param string $arrayCountLimit

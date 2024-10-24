@@ -41,8 +41,6 @@ use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\Registration;
-use TYPO3\CMS\Lang\LanguageService;
-use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
 
 class LllStringTest extends AbstractHelper
 {

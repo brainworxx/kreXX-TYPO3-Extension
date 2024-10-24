@@ -54,7 +54,7 @@ class ThroughMethods extends AbstractEventHandler
      *
      * @var \Brainworxx\Krexx\Service\Factory\Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Inject the pool.
