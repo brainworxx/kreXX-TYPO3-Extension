@@ -55,6 +55,7 @@ use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\View\ResponsableViewInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Response as MvcResponse;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
@@ -117,7 +118,7 @@ abstract class AbstractController extends ActionController implements ConstInter
     /**
      * @var \TYPO3\CMS\Backend\Template\ModuleTemplate
      */
-    protected ModuleTemplate $moduleTemplate;
+    protected ResponsableViewInterface $moduleTemplate;
 
     /**
      * @var \TYPO3\CMS\Core\Page\PageRenderer

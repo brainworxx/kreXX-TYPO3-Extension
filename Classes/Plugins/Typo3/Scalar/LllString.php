@@ -41,6 +41,8 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use Throwable;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility as UnitLocalizationUtility;
+use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility12 as UnitLocalizationUtility12;
 
 /**
  * LLL string parser.
@@ -144,10 +146,10 @@ class LllString extends AbstractScalarAnalysis
      * @codeCoverageIgnore
      *   Who tests the tests?
      *
-     * @param \Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility $object
+     * @param UnitLocalizationUtility|UnitLocalizationUtility12 $object
      *   The name of the localisation utility.
      */
-    public function setLocalisationUtility(\Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility $object): void
+    public function setLocalisationUtility($object): void
     {
         $this->localisationUtility = $object;
     }

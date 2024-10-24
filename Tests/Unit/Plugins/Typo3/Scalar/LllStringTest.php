@@ -38,9 +38,11 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3\Scalar;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility;
+use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility12;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\Registration;
+use TYPO3\CMS\Core\Information\Typo3Version;
 
 class LllStringTest extends AbstractHelper
 {
@@ -105,8 +107,18 @@ class LllStringTest extends AbstractHelper
         $payload = 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:mlang_tabs_tab';
         $model = new Model(\Krexx::$pool);
         $lllString = new LllString(\Krexx::$pool);
-        $lllString->setLocalisationUtility(new LocalizationUtility());
-        LocalizationUtility::$values[$payload] = static::KREXX_DEBUGGER;
+
+        $typo3Version = new Typo3Version();
+        if ($typo3Version->getMajorVersion() > 11) {
+            $lllString->setLocalisationUtility(new LocalizationUtility12());
+            LocalizationUtility12::$values[$payload] = static::KREXX_DEBUGGER;
+        } else {
+            $lllString->setLocalisationUtility(new LocalizationUtility());
+            LocalizationUtility::$values[$payload] = static::KREXX_DEBUGGER;
+        }
+
+
+
         $this->simulatePackage('includekrexx', 'some path');
 
         $lllString->canHandle($payload, $model);

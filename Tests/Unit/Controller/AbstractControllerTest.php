@@ -39,14 +39,16 @@ use Brainworxx\Includekrexx\Collectors\FormConfiguration;
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
+use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplateFactory as ModuleTemplateFactoryUnit;
 use Brainworxx\Krexx\Krexx;
-use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
+use stdClass;
 
 class AbstractControllerTest extends AbstractHelper
 {
@@ -99,7 +101,7 @@ class AbstractControllerTest extends AbstractHelper
         } else {
             // TYPO3 12 style.
             // We are using the ModuleTemplateFactory.
-            $mtFactoryMock = $this->createMock(ModuleTemplateFactory::class);
+            $mtFactoryMock = $this->createMock(ModuleTemplateFactoryUnit::class);
             $mtFactoryMock->expects($this->once())
                 ->method('create')
                 ->will($this->returnValue($mtMock));
