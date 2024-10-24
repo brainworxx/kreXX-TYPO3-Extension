@@ -51,7 +51,7 @@ class AjaxControllerTest extends AbstractHelper
         $logfileListMock = $this->createMock(LogfileList::class);
         $logfileListMock->expects($this->once())
             ->method('retrieveFileList')
-            ->will($this->returnValue(['file', 'list']));
+            ->willReturn(['file', 'list']);
 
         $this->injectIntoGeneralUtility(LogfileList::class, $logfileListMock);
 
@@ -95,14 +95,14 @@ class AjaxControllerTest extends AbstractHelper
         $serverRequest = $this->createMock(ServerRequest::class);
         $serverRequest->expects($this->once())
             ->method('getQueryParams')
-            ->will($this->returnValue(['fileid' => '123456']));
+            ->willReturn(['fileid' => '123456']);
 
         $fileExistsMock = $this->getFunctionMock($controllerNamespace, 'file_exists');
         $fileExistsMock->expects($this->exactly(2))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $isWritableMock = $this->getFunctionMock($controllerNamespace, 'is_writable');
         $isWritableMock->expects($this->exactly(2))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $unlinkMock = $this->getFunctionMock($controllerNamespace, 'unlink');
         $unlinkMock->expects($this->exactly(2));
 
@@ -127,7 +127,7 @@ class AjaxControllerTest extends AbstractHelper
         $serverRequest = $this->createMock(ServerRequest::class);
         $serverRequest->expects($this->once())
             ->method('getQueryParams')
-            ->will($this->returnValue(['fileid' => '987654']));
+            ->willReturn(['fileid' => '987654']);
 
         $controller = new AjaxController();
 

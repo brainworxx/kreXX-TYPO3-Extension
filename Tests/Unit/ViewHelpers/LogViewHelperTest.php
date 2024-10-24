@@ -59,11 +59,11 @@ class LogViewHelperTest extends AbstractHelper
         $variableContainer = $this->createMock(ViewHelperVariableContainer::class);
         $variableContainer->expects($this->once())
             ->method('getView')
-            ->will($this->returnValue($view));
+            ->willReturn($view);
         $renderingContext = $this->createMock(RenderingContextInterface::class);
         $renderingContext->expects($this->once())
             ->method('getViewHelperVariableContainer')
-            ->will($this->returnValue($variableContainer));
+            ->willReturn($variableContainer);
         $logViewHelper->setRenderingContext($renderingContext);
 
         // Inject the children closure.
@@ -79,7 +79,7 @@ class LogViewHelperTest extends AbstractHelper
         $configMock = $this->createMock(Config::class);
         $configMock->expects($this->exactly(1))
             ->method('getSetting')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->config = $configMock;
 
         // Make sure we are actually trying to log.
@@ -87,7 +87,7 @@ class LogViewHelperTest extends AbstractHelper
         $settingsDestination->expects($this->once())
             ->method('setSource')
             ->with('Forced logging')
-            ->will($this->returnValue($settingsDestination));
+            ->willReturn($settingsDestination);
         $settingsDestination->expects($this->once())
             ->method('setValue')
             ->with(Fallback::VALUE_FILE);
@@ -95,7 +95,7 @@ class LogViewHelperTest extends AbstractHelper
         $settingsAjax->expects($this->once())
             ->method('setSource')
             ->with('Forced logging')
-            ->will($this->returnValue($settingsAjax));
+            ->willReturn($settingsAjax);
         $settingsAjax->expects($this->once())
             ->method('setValue')
             ->with(false);

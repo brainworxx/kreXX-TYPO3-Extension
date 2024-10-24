@@ -67,7 +67,7 @@ class InlineJsCssDispatcherTest extends AbstractHelper implements ConfigConstInt
         $configMock->expects($this->once())
             ->method('getSetting')
             ->with(static::SETTING_DESTINATION)
-            ->will($this->returnValue(static::VALUE_FILE));
+            ->willReturn(static::VALUE_FILE);
         $pool = \Krexx::$pool;
         $pool->config = $configMock;
 
@@ -94,7 +94,7 @@ class InlineJsCssDispatcherTest extends AbstractHelper implements ConfigConstInt
         $configMock->expects($this->once())
             ->method('getSetting')
             ->with(static::SETTING_DESTINATION)
-            ->will($this->returnValue(static::VALUE_BROWSER));
+            ->willReturn(static::VALUE_BROWSER);
         $pool = \Krexx::$pool;
         $pool->config = $configMock;
 
@@ -122,7 +122,7 @@ class InlineJsCssDispatcherTest extends AbstractHelper implements ConfigConstInt
         $configMock->expects($this->once())
             ->method('getSetting')
             ->with(static::SETTING_DESTINATION)
-            ->will($this->returnValue(static::VALUE_BROWSER));
+            ->willReturn(static::VALUE_BROWSER);
         $pool = \Krexx::$pool;
         $pool->config = $configMock;
 

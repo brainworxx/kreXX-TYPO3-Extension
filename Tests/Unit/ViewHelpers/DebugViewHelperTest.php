@@ -74,11 +74,11 @@ class DebugViewHelperTest extends AbstractHelper
         $variableContainer = $this->createMock(ViewHelperVariableContainer::class);
         $variableContainer->expects($this->once())
             ->method('getView')
-            ->will($this->returnValue($view));
+            ->willReturn($view);
         $renderingContext = $this->createMock(RenderingContextInterface::class);
         $renderingContext->expects($this->once())
             ->method('getViewHelperVariableContainer')
-            ->will($this->returnValue($variableContainer));
+            ->willReturn($variableContainer);
         $debugViewHelper->setRenderingContext($renderingContext);
 
         // Inject the children closure.
@@ -94,7 +94,7 @@ class DebugViewHelperTest extends AbstractHelper
         $configMock = $this->createMock(Config::class);
         $configMock->expects($this->exactly(2))
             ->method('getSetting')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->config = $configMock;
 
         $debugViewHelper->render();

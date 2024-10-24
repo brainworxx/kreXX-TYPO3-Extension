@@ -116,7 +116,7 @@ class LogTest extends AbstractHelper
         $logfileListMock = $this->createMock(LogfileList::class);
         $logfileListMock->expects($this->once())
             ->method('retrieveFileList')
-            ->will($this->returnValue($fileList));
+            ->willReturn($fileList);
         $this->injectIntoGeneralUtility(LogfileList::class, $logfileListMock);
 
         $request = new ServerRequest();
@@ -145,7 +145,7 @@ class LogTest extends AbstractHelper
             ]);
         $viewMock->expects($this->once())
             ->method(static::RENDER)
-            ->will($this->returnValue('Rendered Messages'));
+            ->willReturn('Rendered Messages');
 
         $moduleData = new ModuleData();
         $this->assertEquals('Rendered Messages', $this->log->getContent($moduleData));
@@ -189,7 +189,7 @@ class LogTest extends AbstractHelper
             ));
         $viewMock->expects($this->exactly(2))
             ->method(static::RENDER)
-            ->will($this->returnValue('rendering'));
+            ->willReturn('rendering');
 
         $this->assertEquals('renderingrendering', $this->log->getContent($moduleData));
     }
@@ -217,7 +217,7 @@ class LogTest extends AbstractHelper
             ->with($fileList);
         $viewMock->expects($this->once())
             ->method(static::RENDER)
-            ->will($this->returnValue($expectations));
+            ->willReturn($expectations);
 
          $this->assertEquals($expectations, $this->log->getContent($moduleData));
     }

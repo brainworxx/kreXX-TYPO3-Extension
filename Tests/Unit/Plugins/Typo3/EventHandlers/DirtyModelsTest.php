@@ -96,10 +96,10 @@ class DirtyModelsTest extends AbstractHelper
             ->will($this->throwException(new TooDirtyException()));
         $modelMock->expects($this->once())
             ->method('_isClone')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $modelMock->expects($this->once())
             ->method('_isNew')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $model = new Model(Krexx::$pool);
         $model->setData($modelMock);

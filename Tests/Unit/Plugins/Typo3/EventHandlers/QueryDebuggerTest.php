@@ -170,13 +170,13 @@ class QueryDebuggerTest extends AbstractHelper implements CallbackConstInterface
         $queryParserMock->expects($this->once())
             ->method('convertQueryToDoctrineQueryBuilder')
             ->with($queryMock)
-            ->will($this->returnValue($this->createQueryBuilderMock()));
+            ->willReturn($this->createQueryBuilderMock());
         $this->injectIntoGeneralUtility(Typo3DbQueryParser::class, $queryParserMock);
 
         $this->mockStrLen()
             ->expects($this->once())
             ->with(str_replace('&#039;', '\'', $this->expectation))
-            ->will($this->returnValue(500));
+            ->willReturn(500);
 
         $objectAnalyser = new Objects(Krexx::$pool);
         $objectAnalyser->setParameters($fixture)->callMe();
@@ -196,10 +196,10 @@ class QueryDebuggerTest extends AbstractHelper implements CallbackConstInterface
         $queryBuilderMock = $this->createMock(QueryBuilder::class);
         $queryBuilderMock->expects($this->once())
             ->method('getSQL')
-            ->will($this->returnValue('SELECT * FROM whatever WHERE uid=:stuff'));
+            ->willReturn('SELECT * FROM whatever WHERE uid=:stuff');
         $queryBuilderMock->expects($this->once())
             ->method('getParameters')
-            ->will($this->returnValue(['stuff' => 'nothing']));
+            ->willReturn(['stuff' => 'nothing']);
 
         return $queryBuilderMock;
     }

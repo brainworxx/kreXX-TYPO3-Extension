@@ -84,12 +84,12 @@ class Typo3DbQueryParserTest extends AbstractHelper
             $originalParserMock->expects($this->once())
                 ->method('convertQueryToDoctrineQueryBuilder')
                 ->with($fixture)
-                ->will($this->returnValue('some sql'));
+                ->willReturn('some sql');
             $objectManagerMock = $this->createMock(ObjectManager::class);
             $objectManagerMock->expects($this->once())
                 ->method('get')
                 ->with(OriginalParser::class)
-                ->will($this->returnValue($originalParserMock));
+                ->willReturn($originalParserMock);
             GeneralUtility::setSingletonInstance(ObjectManager::class, $objectManagerMock);
         } else {
             $this->expectException(\Exception::class);
@@ -115,12 +115,12 @@ class Typo3DbQueryParserTest extends AbstractHelper
         );
         $methodExistsMock->expects($this->once())
             ->with(ObjectManager::class, 'get')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $messageMock = $this->createMock(Messages::class);
         $messageMock->expects($this->once())
             ->method('getHelp')
             ->with('TYPO3DiNotReady')
-            ->will($this->returnValue('text'));
+            ->willReturn('text');
         Krexx::$pool->messages = $messageMock;
 
         $parser = new Typo3DbQueryParser();

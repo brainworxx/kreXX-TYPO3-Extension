@@ -97,7 +97,7 @@ class AbstractControllerTest extends AbstractHelper
             $objectManagerMock->expects($this->once())
                 ->method('get')
                 ->with(ModuleTemplate::class)
-                ->will($this->returnValue($mtMock));
+                ->willReturn($mtMock);
             $this->setValueByReflection('objectManager', $objectManagerMock, $indexController);
         } else {
             // TYPO3 12 style.
@@ -105,7 +105,7 @@ class AbstractControllerTest extends AbstractHelper
             $mtFactoryMock = $this->createMock(ModuleTemplateFactoryUnit::class);
             $mtFactoryMock->expects($this->once())
                 ->method('create')
-                ->will($this->returnValue($mtMock));
+                ->willReturn($mtMock);
             $this->injectIntoGeneralUtility(ModuleTemplateFactory::class, $mtFactoryMock);
             $requestMock = $this->createMock(RequestInterface::class);
             $this->setValueByReflection('request', $requestMock, $indexController);
