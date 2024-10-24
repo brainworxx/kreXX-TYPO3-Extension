@@ -4,6 +4,15 @@
 Changelog
 =============================================================
 
+:Version: 6.0.0
+:Date: tbd
+
+Changes:
+    * [Change] Dropped PHP 7.2 and PHP 7.3 support.
+    * [Change] Dropped UnitTest 8.5 support.
+
+-----
+
 :Version: 5.1.1
 :Date: tbd
 
