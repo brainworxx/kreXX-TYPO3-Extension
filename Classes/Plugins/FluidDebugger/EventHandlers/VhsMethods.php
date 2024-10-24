@@ -56,7 +56,7 @@ class VhsMethods implements EventHandlerInterface, CallbackConstInterface, Fluid
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * {@inheritdoc}

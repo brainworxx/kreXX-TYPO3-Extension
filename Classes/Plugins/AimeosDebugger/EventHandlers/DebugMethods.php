@@ -61,7 +61,7 @@ class DebugMethods extends AbstractEventHandler implements
      *
      * @var string[][]
      */
-    protected $methods = [
+    protected array $methods = [
             'getRefItems' => [
                 // Aimeos 2019 & 2020
                 \Aimeos\MShop\Common\Item\ListRef\Iface::class,
@@ -98,7 +98,7 @@ class DebugMethods extends AbstractEventHandler implements
      *
      * @var \Brainworxx\Krexx\Service\Factory\Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Inject the pool.

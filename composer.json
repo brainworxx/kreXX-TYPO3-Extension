@@ -14,12 +14,12 @@
   ],
   "require": {
     "typo3/cms-core": "^10.4 || ^11 || ^12 || ^13",
-    "php": "^7.2 || ^7.3 || ^7.4 || ^8.0 || ^8.1 || ^8.2 || ^8.3",
+    "php": "^7.4 || ^8.0 || ^8.1 || ^8.2 || ^8.3",
     "ext-json": "*"
   },
   "require-dev": {
     "typo3/cms-base-distribution": "^10.4 || ^11 || ^12 || ^13",
-    "phpunit/phpunit": "^8.5 || ^9.5 || ^10.5",
+    "phpunit/phpunit": "^9.5 || ^10.5",
     "php-mock/php-mock-phpunit": "^2",
     "typo3/cms-adminpanel": "^10.4 || ^11 || ^12 || ^13"
   },

@@ -59,17 +59,17 @@ abstract class AbstractHelper extends AbstractKrexxTest
             ->with(true);
         $renderingStackRefMock->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue($renderingStack));
+            ->willReturn($renderingStack);
         // Mock the reflection of the view
         $viewReflection = $this->createMock(\ReflectionClass::class);
         $viewReflection->expects($this->once())
             ->method('hasProperty')
             ->with('renderingStack')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $viewReflection->expects($this->once())
             ->method('getProperty')
             ->with('renderingStack')
-            ->will($this->returnValue($renderingStackRefMock));
+            ->willReturn($renderingStackRefMock);
 
         // Mock the rendering context
         $renderingContext = $this->createMock(RenderingContext::class);

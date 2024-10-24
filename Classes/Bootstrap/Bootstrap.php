@@ -42,9 +42,6 @@ use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfigur
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
-use Throwable;
-use TYPO3\CMS\Core\Cache\CacheManager;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -60,16 +57,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class Bootstrap implements ConstInterface
 {
     /**
-     * The TYPO3 version.
-     *
-     * @deprecated
-     *   Since 5.0.0. Will be removed.
-     *
-     * @var string
-     */
-    protected static $typo3Version;
-
-    /**
      * Batch for the bootstrapping.
      */
     public function run(): void
@@ -79,9 +66,6 @@ class Bootstrap implements ConstInterface
             // There is no point in continuing here.
             return;
         }
-
-        static::$typo3Version = GeneralUtility::makeInstance(Typo3Version::class)
-            ->getVersion();
 
         // Register and activate the TYPO3 plugin.
         /** @var T3configuration $t3configuration */
@@ -111,37 +95,6 @@ class Bootstrap implements ConstInterface
     }
 
     /**
-     * Clear the cache, if the version number in the ext_localconf is different
-     * from the version number of the includekrexx version.
-     *
-     * @param string $version
-     *   The version number from the ext_localconf.
-     *
-     * @deprecated
-     *   Since 5.0.0. Will be removed.
-     * @codeCoverageIgnore
-     *   We do not test deprecated methods.
-     *
-     * @return $this
-     *   Return $this, for chaining.
-     */
-    public function checkVersionNumber(string $version): Bootstrap
-    {
-        try {
-            if ($version !== ExtensionManagementUtility::getExtensionVersion(static::EXT_KEY)) {
-                GeneralUtility::makeInstance(CacheManager::class)
-                    ->flushCachesInGroup('system');
-            }
-        } catch (Throwable $exception) {
-            // Do nothing.
-            // Flushing the cache just failed. There are deeper issues at work
-            // here. The only thing to do now is trying not to brick the system.
-        }
-
-        return $this;
-    }
-
-    /**
      * "Autoloading" for the kreXX library.
      *
      * @return bool
@@ -168,40 +121,5 @@ class Bootstrap implements ConstInterface
         // More likely, the "autoloading" managed to bite us in the rear end.
         // No need to continue at this point.
         return false;
-    }
-
-    /**
-     * Since the global constants TYPO3_version got himself deprecated, we must
-     * use other means to get it.
-     *
-     * Wrapper around either
-     *   - TYPO3_version
-     *   - TYPO3\CMS\Core\Information\Typo3Version
-     *
-     * @deprecated
-     *   Since 5.0.0. Will be removed.
-     *
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     */
-    protected function retrieveTypo3Version(): void
-    {
-        static::$typo3Version = GeneralUtility::makeInstance(Typo3Version::class)
-            ->getVersion();
-    }
-
-    /**
-     * Getter for the TYPO3 version.
-     *
-     * @deprecated
-     *   Since 5.0.0. Will be removed.
-     * @codeCoverageIgnore
-     *   We do not test deprecated methods.
-     *
-     * @return string
-     */
-    public static function getTypo3Version(): string
-    {
-        return static::$typo3Version;
     }
 }

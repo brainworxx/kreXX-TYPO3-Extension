@@ -40,7 +40,7 @@ namespace Brainworxx\Includekrexx\Tests\Helpers;
  *
  * @package Brainworxx\Includekrexx\Tests\Helpers
  */
-class LocalizationUtility
+class LocalizationUtility extends \TYPO3\CMS\Extbase\Utility\LocalizationUtility
 {
     /**
      * @var array
@@ -51,10 +51,19 @@ class LocalizationUtility
      * Mock the translations.
      *
      * @param string $key
+     * @param string|null $extensionName
+     * @param array|null $arguments
+     * @param string|null $languageKey
+     * @param array|null $alternativeLanguageKeys
      * @return mixed|null
      */
-    public static function translate(string $key)
-    {
+    public static function translate(
+        string $key,
+        ?string $extensionName = null,
+        ?array $arguments = null,
+        ?string $languageKey = null,
+        ?array $alternativeLanguageKeys = null
+    ): ?string {
         if (isset(static::$values[$key])) {
             return static::$values[$key];
         }

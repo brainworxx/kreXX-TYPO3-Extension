@@ -166,7 +166,7 @@ class FileWriterTest extends AbstractHelper implements BacktraceConstInterface, 
         $configModelMock->expects($this->once())
             ->method('setValue')
             ->with($config[Fallback::SETTING_ANALYSE_SCALAR])
-            ->will($this->returnValue($configModelMock));
+            ->willReturn($configModelMock);
         $configModelMock->expects(($this->once()))
             ->method('setSource')
             ->with('kreXX log writer');
@@ -236,7 +236,7 @@ class FileWriterTest extends AbstractHelper implements BacktraceConstInterface, 
         $backtrace[2][static::TRACE_OBJECT] = new  stdClass();
         $debugBacktraceMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Log\\', 'debug_backtrace');
         $debugBacktraceMock->expects($this->once())
-            ->will($this->returnValue($backtrace));
+            ->willReturn($backtrace);
 
         // Create the fixture.
         $fixture = new LogRecord(

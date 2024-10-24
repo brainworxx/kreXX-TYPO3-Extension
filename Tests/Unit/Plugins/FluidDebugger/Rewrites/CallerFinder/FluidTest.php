@@ -78,24 +78,24 @@ class FluidTest extends AbstractHelper
         $templatePathMock = $this->createMock(TemplatePaths::class);
         $templatePathMock->expects($this->once())
             ->method('getFormat')
-            ->will($this->returnValue('formatZeh'));
+            ->willReturn('formatZeh');
         $templatePathMock->expects($this->once())
             ->method('resolveTemplateFileForControllerAndActionAndFormat')
             ->with('SomeController', 'andAction', 'formatZeh')
-            ->will($this->returnValue($templatePath));
+            ->willReturn($templatePath);
 
         // Adding stuff to the rednering context mock.
         /** @var \PHPUnit\Framework\MockObject\MockObject $contextMock */
         $contextMock = Krexx::$pool->registry->get(static::RENDERING_CONTEXT);
         $contextMock->expects($this->once())
             ->method('getControllerName')
-            ->will($this->returnValue('SomeController'));
+            ->willReturn('SomeController');
         $contextMock->expects($this->once())
             ->method('getControllerAction')
-            ->will($this->returnValue('andAction'));
+            ->willReturn('andAction');
         $contextMock->expects($this->exactly(2))
             ->method(static::GET_TEMPLATE_PATHS)
-            ->will($this->returnValue($templatePathMock));
+            ->willReturn($templatePathMock);
 
         $headline = 'Breaking News!';
         $data = new \StdClass();
@@ -129,18 +129,18 @@ class FluidTest extends AbstractHelper
         $parsedTemplateMock->expects($this->once())
             ->method('getLayoutName')
             ->with(Krexx::$pool->registry->get(static::RENDERING_CONTEXT))
-            ->will($this->returnValue('some filename'));
+            ->willReturn('some filename');
 
         $templatePathMock = $this->createMock(TemplatePaths::class);
         $templatePathMock->expects($this->once())
             ->method('getLayoutPathAndFilename')
-            ->will($this->returnValue($templatePath));
+            ->willReturn($templatePath);
 
         /** @var \PHPUnit\Framework\MockObject\MockObject $contextMock */
         $contextMock = Krexx::$pool->registry->get(static::RENDERING_CONTEXT);
         $contextMock->expects($this->once())
             ->method(static::GET_TEMPLATE_PATHS)
-            ->will($this->returnValue($templatePathMock));
+            ->willReturn($templatePathMock);
 
         $headline = 'H1';
         $data = 'text';
@@ -174,7 +174,7 @@ class FluidTest extends AbstractHelper
 
         $parsedTemplateMock->expects($this->once())
             ->method('getIdentifier')
-            ->will($this->returnValue('qwer_asdf_23409809afg'));
+            ->willReturn('qwer_asdf_23409809afg');
 
         $resolvedIdentifiers = [];
         $resolvedIdentifiers['partials']['qwer/asdf'] = 'qwer/asdf_23409809afg';
@@ -183,12 +183,12 @@ class FluidTest extends AbstractHelper
         $templatePathMock->expects($this->once())
             ->method('getPartialPathAndFilename')
             ->with('qwer/asdf')
-            ->will($this->returnValue($templatePath));
+            ->willReturn($templatePath);
         /** @var \PHPUnit\Framework\MockObject\MockObject $contextMock */
         $contextMock = Krexx::$pool->registry->get(static::RENDERING_CONTEXT);
         $contextMock->expects($this->once())
             ->method(static::GET_TEMPLATE_PATHS)
-            ->will($this->returnValue($templatePathMock));
+            ->willReturn($templatePathMock);
 
         // We are going into the complicated stuff here.
         Krexx::$pool->codegenHandler = new Codegen(Krexx::$pool);
@@ -248,7 +248,7 @@ class FluidTest extends AbstractHelper
 
         $parsedTemplateMock->expects($this->once())
             ->method('getIdentifier')
-            ->will($this->returnValue('qwer_asdf_23409809afg'));
+            ->willReturn('qwer_asdf_23409809afg');
 
         $resolvedIdentifiers = [];
         $resolvedIdentifiers['partials']['qwer/asdf'] = 'qwer/asdf_23409809afg';
@@ -257,12 +257,12 @@ class FluidTest extends AbstractHelper
         $templatePathMock->expects($this->once())
             ->method('getPartialPathAndFilename')
             ->with('qwer/asdf')
-            ->will($this->returnValue($templatePath));
+            ->willReturn($templatePath);
         /** @var \PHPUnit\Framework\MockObject\MockObject $contextMock */
         $contextMock = Krexx::$pool->registry->get(static::RENDERING_CONTEXT);
         $contextMock->expects($this->once())
             ->method(static::GET_TEMPLATE_PATHS)
-            ->will($this->returnValue($templatePathMock));
+            ->willReturn($templatePathMock);
 
         // We are going into the complicated stuff here.
         Krexx::$pool->codegenHandler = new Codegen(Krexx::$pool);

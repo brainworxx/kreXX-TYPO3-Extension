@@ -44,5 +44,5 @@ class LogViewHelper extends EndViewHelper
      *
      * @var string
      */
-    protected $analysisType = 'logTimerEnd';
+    protected string $analysisType = 'logTimerEnd';
 }

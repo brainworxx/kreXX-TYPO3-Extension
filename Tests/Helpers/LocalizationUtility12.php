@@ -33,35 +33,41 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-declare(strict_types=1);
+namespace Brainworxx\Includekrexx\Tests\Helpers;
 
-namespace Brainworxx\Includekrexx\Domain\Model\Settings;
-
-trait MaxRuntime
+/**
+ * The things you do to unit tests static stuff.
+ *
+ * @package Brainworxx\Includekrexx\Tests\Helpers
+ */
+class LocalizationUtility12 extends \TYPO3\CMS\Extbase\Utility\LocalizationUtility
 {
     /**
-     * @var string
+     * @var array
      */
-    protected string $maxRuntime;
+    public static $values = [];
 
     /**
-     * @var string
+     * Mock the translations.
+     *
+     * @param string $key
+     * @param string|null $extensionName
+     * @param array|null $arguments
+     * @param string|null $languageKey
+     * @param array|null $alternativeLanguageKeys
+     * @return mixed|null
      */
-    protected string $formmaxRuntime;
+    public static function translate(
+        string $key,
+        ?string $extensionName = null,
+        ?array $arguments = null,
+        string|\TYPO3\CMS\Core\Localization\Locale|null $languageKey = null,
+        ?array $alternativeLanguageKeys = null
+    ): ?string {
+        if (isset(static::$values[$key])) {
+            return static::$values[$key];
+        }
 
-    /**
-     * @param string $maxRuntime
-     */
-    public function setMaxRuntime(string $maxRuntime): void
-    {
-        $this->maxRuntime = $maxRuntime;
-    }
-
-    /**
-     * @param string $formmaxRuntime
-     */
-    public function setFormmaxRuntime(string $formmaxRuntime): void
-    {
-        $this->formmaxRuntime = $formmaxRuntime;
+        return null;
     }
 }

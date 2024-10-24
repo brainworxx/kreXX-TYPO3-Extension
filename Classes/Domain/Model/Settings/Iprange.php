@@ -42,12 +42,12 @@ trait Iprange
     /**
      * @var string
      */
-    protected $iprange;
+    protected string $iprange;
 
     /**
      * @var string
      */
-    protected $formiprange;
+    protected string $formiprange;
 
     /**
      * @param string $formiprange

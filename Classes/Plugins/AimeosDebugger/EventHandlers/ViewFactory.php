@@ -91,14 +91,14 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
      *
      * @var \Brainworxx\Krexx\Service\Factory\Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * List of all retrieved helper classes from the view.
      *
      * @var object[]
      */
-    protected $helpers = [];
+    protected array $helpers = [];
 
     /**
      * Inject the pool.

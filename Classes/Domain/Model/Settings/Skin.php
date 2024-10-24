@@ -42,12 +42,12 @@ trait Skin
     /**
      * @var string
      */
-    protected $skin;
+    protected string $skin;
 
     /**
      * @var string
      */
-    protected $formskin;
+    protected string $formskin;
 
     /**
      * @param string $skin

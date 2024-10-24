@@ -42,12 +42,12 @@ trait AnalyseTraversable
     /**
      * @var string
      */
-    protected $analyseTraversable;
+    protected string $analyseTraversable;
 
     /**
      * @var string
      */
-    protected $formanalyseTraversable;
+    protected string $formanalyseTraversable;
 
     /**
      * @param string $value

@@ -83,7 +83,7 @@ class LogfileListTest extends AbstractHelper
         $beUriBuilderMock = $this->createMock(UriBuilder::class);
         $beUriBuilderMock->expects($this->exactly(3))
             ->method('buildUriFromRoute')
-            ->will($this->returnValue($someBeUrl));
+            ->willReturn($someBeUrl);
 
         $this->injectIntoGeneralUtility(UriBuilder::class, $beUriBuilderMock);
 

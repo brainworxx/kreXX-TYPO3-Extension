@@ -96,7 +96,7 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
     /**
      * @var string
      */
-    protected $factory;
+    protected string $factory;
 
     /**
      * @param string $factory

@@ -40,6 +40,7 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContext;
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 
 class AbstractCallerFinderTest extends AbstractHelper
 {
@@ -69,17 +70,17 @@ class AbstractCallerFinderTest extends AbstractHelper
             ->with(true);
         $renderingStackRefMock->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue($renderingStack));
+            ->willReturn($renderingStack);
         // Mock the reflection of the view
         $reflectionMock = $this->createMock(\ReflectionClass::class);
         $reflectionMock->expects($this->once())
             ->method(static::HAS_PROPERTY)
             ->with(static::RENDERING_STACK)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $reflectionMock->expects($this->once())
             ->method('getProperty')
             ->with(static::RENDERING_STACK)
-            ->will($this->returnValue($renderingStackRefMock));
+            ->willReturn($renderingStackRefMock);
 
         // Mock the rendering context
         $contextMock = $this->createMock(RenderingContext::class);
@@ -112,12 +113,12 @@ class AbstractCallerFinderTest extends AbstractHelper
     public function testConstructError()
     {
         $viewMock = 'do not look at me';
-        $contextMock = 'taken out of context';
+        $contextMock = $this->createMock(RenderingContextInterface::class);
         $reflectionMock = $this->createMock(\ReflectionClass::class);
         $reflectionMock->expects($this->once())
             ->method(static::HAS_PROPERTY)
             ->with(static::RENDERING_STACK)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $reflectionMock->expects($this->once())
             ->method('getProperty')
             ->with(static::RENDERING_STACK)
@@ -135,7 +136,7 @@ class AbstractCallerFinderTest extends AbstractHelper
         $reflectionMock->expects($this->once())
             ->method(static::HAS_PROPERTY)
             ->with(static::RENDERING_STACK)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         Krexx::$pool->registry->set(static::VIEW_REFLECTION, $reflectionMock);
 
         $newFluid = new Fluid(Krexx::$pool);

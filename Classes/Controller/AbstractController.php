@@ -49,12 +49,12 @@ use stdClass;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Http\HtmlResponse;
-use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\View\ResponsableViewInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Response as MvcResponse;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
@@ -92,37 +92,39 @@ abstract class AbstractController extends ActionController implements ConstInter
      *
      * @var \Brainworxx\Krexx\Service\Factory\Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
      /**
      * @var \Brainworxx\Includekrexx\Collectors\Configuration
      */
-    protected $configuration;
+    protected Configuration $configuration;
 
     /**
      * @var \Brainworxx\Includekrexx\Collectors\FormConfiguration
      */
-    protected $formConfiguration;
+    protected FormConfiguration $formConfiguration;
 
     /**
      * @var \Brainworxx\Includekrexx\Domain\Model\Settings
      */
-    protected $settingsModel;
+    protected Settings $settingsModel;
 
     /**
      * @var LivePreset
      */
-    protected $livePreset;
+    protected LivePreset $livePreset;
 
     /**
      * @var \TYPO3\CMS\Backend\Template\ModuleTemplate
+     *
+     * Add typing as soon as we drop TYPO3 11 compatibility.
      */
     protected $moduleTemplate;
 
     /**
      * @var \TYPO3\CMS\Core\Page\PageRenderer
      */
-    protected $pageRenderer;
+    protected PageRenderer $pageRenderer;
 
     /**
      * @var int|\TYPO3\CMS\Core\Type\ContextualFeedbackSeverity
@@ -144,7 +146,7 @@ abstract class AbstractController extends ActionController implements ConstInter
      *
      * @var int
      */
-    protected $typo3Version;
+    protected int $typo3Version;
 
 
     /**
@@ -273,26 +275,6 @@ abstract class AbstractController extends ActionController implements ConstInter
     {
         return isset($GLOBALS[static::BE_USER]) &&
             $GLOBALS[static::BE_USER]->check(static::BE_MODULES, AbstractCollector::PLUGIN_NAME);
-    }
-
-    /**
-     * Create the response, depending on the calling context.
-     *
-     * @deprecated
-     *   Since 5.0.0. Will be removed.
-     *
-     * @codeCoverageIgnore
-     *   We will not test deprecated functions.
-     *
-     * @return MvcResponse|NullResponse
-     */
-    protected function createResponse()
-    {
-        if (class_exists(NullResponse::class)) {
-            return GeneralUtility::makeInstance(NullResponse::class);
-        }
-
-        return GeneralUtility::makeInstance(MvcResponse::class);
     }
 
     /**

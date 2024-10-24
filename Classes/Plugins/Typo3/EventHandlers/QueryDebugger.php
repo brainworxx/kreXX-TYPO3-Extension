@@ -61,7 +61,7 @@ class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, Pr
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * {@inheritdoc}

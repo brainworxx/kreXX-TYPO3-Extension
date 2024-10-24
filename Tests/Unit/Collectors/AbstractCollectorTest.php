@@ -60,7 +60,7 @@ class AbstractCollectorTest extends AbstractHelper
         $userMock->expects($this->once())
             ->method('check')
             ->with('modules', 'tools_IncludekrexxKrexxConfiguration')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $GLOBALS['BE_USER'] = $userMock;
         $collector = new Configuration();
         $this->assertFalse(
@@ -77,7 +77,7 @@ class AbstractCollectorTest extends AbstractHelper
         $userMock->expects($this->once())
             ->method('check')
             ->with('modules', 'tools_IncludekrexxKrexxConfiguration')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $userMock->uc = $uc;
         $GLOBALS['BE_USER'] = $userMock;
         $collector = new Configuration();

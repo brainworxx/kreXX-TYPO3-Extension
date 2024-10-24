@@ -95,21 +95,21 @@ abstract class AbstractCollector implements ControllerConstInterface, ConfigCons
      *
      * @var \Brainworxx\Krexx\Service\Factory\Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * The current backend user
      *
      * @var array
      */
-    protected $userUc = [];
+    protected array $userUc = [];
 
     /**
      * List of options, that are 'expert' only.
      *
      * @var string[]
      */
-    protected $expertOnly = [
+    protected array $expertOnly = [
         self::SETTING_DETECT_AJAX,
         self::SETTING_ARRAY_COUNT_LIMIT,
         self::SETTING_DEBUG_METHODS,
@@ -125,7 +125,7 @@ abstract class AbstractCollector implements ControllerConstInterface, ConfigCons
      *
      * @var bool
      */
-    protected $hasAccess = false;
+    protected bool $hasAccess = false;
 
     /**
      * Inject the pool.

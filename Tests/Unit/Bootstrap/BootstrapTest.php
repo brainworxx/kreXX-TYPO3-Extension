@@ -68,13 +68,13 @@ class BootstrapTest extends AbstractHelper
         $definedMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, static::DEFINED);
         $definedMock->expects($this->once())
             ->with('KREXX_DIR')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         // And the kreXX bootstrap script is not available.
         $fileExistsMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, 'file_exists');
         $fileExistsMock->expects($this->once())
             ->with($this->anything())
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         // Should lead to an early return.
         // Retrieving a standard class here would cause the test to fail.
@@ -92,7 +92,7 @@ class BootstrapTest extends AbstractHelper
     {
         $definedMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, static::DEFINED);
         $definedMock->expects($this->once())
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $t3ConfigMock = $this->createMock(T3configuration::class);
         $fluidConfigMock = $this->createMock(FluidConfiguration::class);

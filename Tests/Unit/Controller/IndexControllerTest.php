@@ -120,7 +120,7 @@ class IndexControllerTest extends AbstractHelper
 
         $fileGetContents =  $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_get_contents');
         $fileGetContents->expects($this->any())
-            ->will($this->returnValue($jsCssFileContent));
+            ->willReturn($jsCssFileContent);
 
         // Prepare a BE user.
         $this->mockBeUser();
@@ -129,7 +129,7 @@ class IndexControllerTest extends AbstractHelper
         $presetMock = $this->createMock(LivePreset::class);
         $presetMock->expects($this->once())
             ->method('isActive')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         // Prepare a message from kreXX.
         $messageFromKrexx = 'some key';
@@ -146,7 +146,7 @@ class IndexControllerTest extends AbstractHelper
                 ->with(['settings' => $settingsModel]);
             $viewMock->expects($this->once())
                 ->method('render')
-                ->will($this->returnValue($templateContent));
+                ->willReturn($templateContent);
         }
 
         $moduleTemplateMock = $this->createMock(ModuleTemplate::class);
@@ -164,7 +164,7 @@ class IndexControllerTest extends AbstractHelper
                 ->with($templateContent);
             $moduleTemplateMock->expects($this->once())
                 ->method('renderContent')
-                ->will($this->returnValue($templateContent));
+                ->willReturn($templateContent);
         }
 
         // Prepare the collectors
@@ -286,17 +286,17 @@ class IndexControllerTest extends AbstractHelper
         $settingsMock = $this->createMock(Settings::class);
         $settingsMock->expects($this->once())
             ->method('generateContent')
-            ->will($this->returnValue($iniContent));
+            ->willReturn($iniContent);
         $settingsMock->expects($this->once())
             ->method('prepareFileName')
-            ->will($this->returnValue($configFilePath));
+            ->willReturn($configFilePath);
 
 
 
         $filePutContentsMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_put_contents');
         $filePutContentsMock->expects($this->once())
             ->with($configFilePath, $iniContent)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         try {
             $exceptionWasThrown = !empty($this->indexController->saveAction($settingsMock));
@@ -338,15 +338,15 @@ class IndexControllerTest extends AbstractHelper
         $settingsMock = $this->createMock(Settings::class);
         $settingsMock->expects($this->once())
             ->method('generateContent')
-            ->will($this->returnValue($iniContent));
+            ->willReturn($iniContent);
         $settingsMock->expects($this->once())
             ->method('prepareFileName')
-            ->will($this->returnValue($configFilePath));
+            ->willReturn($configFilePath);
 
         $filePutContentsMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_put_contents');
         $filePutContentsMock->expects($this->once())
             ->with(Krexx::$pool->config->getPathToConfigFile(), $iniContent)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         try {
             $exceptionWasThrown = !empty($this->indexController->saveAction($settingsMock));
@@ -418,7 +418,7 @@ class IndexControllerTest extends AbstractHelper
         ];
         $serverRequestMock->expects($this->once())
             ->method('getQueryParams')
-            ->will($this->returnValue($request));
+            ->willReturn($request);
 
         $this->indexController->dispatchAction($serverRequestMock);
     }

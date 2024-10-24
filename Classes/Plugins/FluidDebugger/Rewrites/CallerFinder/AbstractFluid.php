@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
 use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionException;
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 
 /**
  * Contains all methods, that are used by the fluid caller finder classes.
@@ -79,21 +80,21 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
      *
      * @var integer
      */
-    protected $renderingType;
+    protected int $renderingType;
 
     /**
      * Have we encountered an error during our initialization phase?
      *
      * @var bool
      */
-    protected $error = false;
+    protected bool $error = false;
 
     /**
      * The rendering context of the template.
      *
      * @var \TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface
      */
-    protected $renderingContext;
+    protected RenderingContextInterface $renderingContext;
 
     /**
      * @var mixed
@@ -103,7 +104,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
     /**
      * The line in the template file. that we were able to resolve.
      *
-     * @var string
+     * @var string|int
      */
     protected $line = self::FLUID_NOT_AVAILABLE;
 
@@ -112,14 +113,14 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
      *
      * @var string
      */
-    protected $varname;
+    protected string $varname;
 
     /**
      * The absolute path to the template file.
      *
      * @var string
      */
-    protected $path = self::FLUID_NOT_AVAILABLE;
+    protected string $path = self::FLUID_NOT_AVAILABLE;
 
     /**
      * The regex should look something like this:
@@ -310,45 +311,6 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
             $type = gettype($data);
         }
         return $headline . $this->pool->messages->getHelp('fluidAnalysisOf') . $varname . ', ' . $type;
-    }
-
-    /**
-     * Resolve the variable name and the line number of the
-     * debug call from fluid.
-     *
-     * @deprecated
-     *   Since 5.1.0. The functionality was moved to resolveLineAndVarName()
-     *   Will be removed.
-     * @codeCoverageIgnore
-     *   We will not test deprecated functions.
-     */
-    protected function resolveVarname(): void
-    {
-        // Retrieve the call from the sourcecode file.
-        if (!$this->pool->fileService->fileIsReadable($this->path)) {
-            // File is not readable. We can not do this.
-            // Fallback to the standard values in the class header.
-            return ;
-        }
-
-        // Define the fallback.
-        $this->varname = static::FLUID_VARIABLE;
-
-        $fileContent = $this->pool->fileService->getFileContents($this->path, false);
-        foreach ($this->callPattern as $funcname) {
-            // This little baby tries to resolve everything inside the
-            // brackets of the kreXX call.
-            preg_match_all('/\s*' . $funcname[0] . '(.*)' . $funcname[1] . '\s*/u', $fileContent, $name);
-
-            // Found something!
-            // Check if we already have more than one.
-            if (isset($name[1][0]) && count($name[1]) === 1) {
-                $this->varname = $this->checkForComplicatedStuff(
-                    $this->pool->encodingService->encodeString(trim($name[1][0], ' {}'))
-                );
-                return;
-            }
-        }
     }
 
     /**

@@ -42,12 +42,12 @@ trait Destination
     /**
      * @var string
      */
-    protected $destination;
+    protected string $destination;
 
     /**
      * @var string
      */
-    protected $formdestination;
+    protected string $formdestination;
 
     /**
      * @param string $destination

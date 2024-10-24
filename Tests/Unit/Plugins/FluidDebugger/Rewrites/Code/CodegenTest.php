@@ -128,7 +128,7 @@ class CodegenTest extends AbstractHelper
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
             ->method('getNestingLevel')
-            ->will($this->returnValue(2));
+            ->willReturn(2);
         Krexx::$pool->emergencyHandler = $emergencyMock;
         $this->assertEquals('child', $codeGen->generateSource($model));
 

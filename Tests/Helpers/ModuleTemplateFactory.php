@@ -37,7 +37,7 @@ namespace Brainworxx\Includekrexx\Tests\Helpers;
 
 class ModuleTemplateFactory
 {
-    public function create($whatever)
+    public function create()
     {
     }
 }

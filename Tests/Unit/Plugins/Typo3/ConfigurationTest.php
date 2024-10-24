@@ -137,11 +137,11 @@ class ConfigurationTest extends AbstractHelper implements ConstInterface
         $metaData = $this->createMock(MetaData::class);
         $metaData->expects($this->once())
             ->method('getVersion')
-            ->will($this->returnValue(AbstractHelper::TYPO3_VERSION));
+            ->willReturn(AbstractHelper::TYPO3_VERSION);
         $packageMock = $this->simulatePackage(Bootstrap::EXT_KEY, 'whatever');
         $packageMock->expects($this->once())
             ->method('getPackageMetaData')
-            ->will($this->returnValue($metaData));
+            ->willReturn($metaData);
 
         $this->assertEquals(AbstractHelper::TYPO3_VERSION, $this->configuration->getVersion());
     }
@@ -181,7 +181,7 @@ class ConfigurationTest extends AbstractHelper implements ConstInterface
                 [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . $log],
                 [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'chunks'],
                 [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'config']
-            ))->will($this->returnValue(true));
+            ))->willReturn(true);
 
         // Simulating the package
         $this->simulatePackage(Bootstrap::EXT_KEY, 'what/ever/');

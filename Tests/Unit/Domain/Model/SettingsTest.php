@@ -88,17 +88,17 @@ class SettingsTest extends AbstractHelper implements ConstInterface
                 [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'log'],
                 [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'chunks'],
                 [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'config']
-            ))->will($this->returnValue(true));
+            ))->willReturn(true);
 
         // Simulating the package
         $metaData = $this->createMock(MetaData::class);
         $metaData->expects($this->once())
             ->method('getVersion')
-            ->will($this->returnValue(AbstractHelper::TYPO3_VERSION));
+            ->willReturn(AbstractHelper::TYPO3_VERSION);
         $this->simulatePackage(Bootstrap::EXT_KEY, 'what/ever/')
             ->expects($this->once())
             ->method('getPackageMetaData')
-            ->will($this->returnValue($metaData));
+            ->willReturn($metaData);
     }
 
     /**
@@ -172,7 +172,7 @@ class SettingsTest extends AbstractHelper implements ConstInterface
         $validationMock = $this->createMock(Validation::class);
         $validationMock->expects($this->exactly(23))
             ->method('evaluateSetting')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->config->validation = $validationMock;
 
         $this->mockBeUser();
@@ -284,7 +284,7 @@ class SettingsTest extends AbstractHelper implements ConstInterface
         $fileExistsMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Domain\\Model', 'file_exists');
         $fileExistsMock->expects($this->once())
             ->with($path . '.ini')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $unLinkMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Domain\\Model', 'unlink');
         $unLinkMock->expects($this->once())
             ->with($path . '.ini');

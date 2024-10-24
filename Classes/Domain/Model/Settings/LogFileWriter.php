@@ -40,12 +40,12 @@ trait LogFileWriter
     /**
      * @var string
      */
-    protected $activateT3FileWriter;
+    protected string $activateT3FileWriter;
 
     /**
      * @var string
      */
-    protected $loglevelT3FileWriter;
+    protected string $loglevelT3FileWriter;
 
 
     /**

@@ -35,26 +35,34 @@
 
 namespace Brainworxx\Includekrexx\Tests\Helpers;
 
+use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Core\Http\Response;
+
+/**
+ * The things you do, because some classes are final.
+ */
 class ModuleTemplate
 {
-    public function setModuleName($whatever)
+    public function setModuleName(string $moduleName)
+    {
+        return $this;
+    }
+
+    public function renderResponse(string $templateFileName = ''): ResponseInterface
+    {
+        return new Response();
+    }
+
+    public function assignMultiple(array $stuff)
     {
     }
 
-    public function setContent($whatever)
+    public function setContent()
     {
     }
 
     public function renderContent()
     {
-        return 'stuff';
-    }
 
-    public function assignMultiple($values)
-    {
-    }
-
-    public function renderResponse()
-    {
     }
 }

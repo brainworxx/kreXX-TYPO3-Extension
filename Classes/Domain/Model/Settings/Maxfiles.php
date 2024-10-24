@@ -42,12 +42,12 @@ trait Maxfiles
     /**
      * @var string
      */
-    protected $maxfiles;
+    protected string $maxfiles;
 
     /**
      * @var string
      */
-    protected $formmaxfiles;
+    protected string $formmaxfiles;
 
     /**
      * @param string $maxfiles

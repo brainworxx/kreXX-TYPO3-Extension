@@ -99,7 +99,7 @@ class FlexFormParserTest extends AbstractHelper
         $flexFormServiceMock->expects($this->once())
             ->method('convertFlexFormContentToArray')
             ->with($fixture)
-            ->will($this->returnValue($expectation));
+            ->willReturn($expectation);
         $this->injectIntoGeneralUtility(FlexFromServiceCore::class, $flexFormServiceMock);
 
         // Run the test.

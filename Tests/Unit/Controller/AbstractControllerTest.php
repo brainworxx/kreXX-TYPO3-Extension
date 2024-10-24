@@ -39,14 +39,17 @@ use Brainworxx\Includekrexx\Collectors\FormConfiguration;
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
-use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplateFactory;
-use Brainworxx\Krexx\Krexx;
+use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate as ModuleTemplateUnit;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplateFactory as ModuleTemplateFactoryUnit;
+use Brainworxx\Krexx\Krexx;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
+
 
 class AbstractControllerTest extends AbstractHelper
 {
@@ -87,23 +90,23 @@ class AbstractControllerTest extends AbstractHelper
 
         $indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer, $typo3Version);
 
-        $mtMock = $this->createMock(\stdClass::class);
+        $mtMock = $this->createMock(ModuleTemplateUnit::class);
         if (method_exists($indexController, 'injectObjectManager')) {
             // TYPO3 11 style
             $objectManagerMock = $this->createMock(ObjectManager::class);
             $objectManagerMock->expects($this->once())
                 ->method('get')
                 ->with(ModuleTemplate::class)
-                ->will($this->returnValue($mtMock));
+                ->willReturn($mtMock);
             $this->setValueByReflection('objectManager', $objectManagerMock, $indexController);
         } else {
             // TYPO3 12 style.
             // We are using the ModuleTemplateFactory.
-            $mtFactoryMock = $this->createMock(ModuleTemplateFactory::class);
+            $mtFactoryMock = $this->createMock(ModuleTemplateFactoryUnit::class);
             $mtFactoryMock->expects($this->once())
                 ->method('create')
-                ->will($this->returnValue($mtMock));
-            $this->injectIntoGeneralUtility(\TYPO3\CMS\Backend\Template\ModuleTemplateFactory::class , $mtFactoryMock);
+                ->willReturn($mtMock);
+            $this->injectIntoGeneralUtility(ModuleTemplateFactory::class, $mtFactoryMock);
             $requestMock = $this->createMock(RequestInterface::class);
             $this->setValueByReflection('request', $requestMock, $indexController);
         }
