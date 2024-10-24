@@ -39,6 +39,7 @@ namespace Brainworxx\Krexx\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Scalar\String\Base64;
 use Brainworxx\Krexx\Analyse\Scalar\String\Callback;
+use Brainworxx\Krexx\Analyse\Scalar\String\ClassName;
 use Brainworxx\Krexx\Analyse\Scalar\String\FilePath;
 use Brainworxx\Krexx\Analyse\Scalar\String\Json;
 use Brainworxx\Krexx\Analyse\Scalar\String\Serialized;
@@ -62,9 +63,9 @@ class ScalarString extends AbstractScalar
     /**
      * The list of analysis classes, that we use.
      *
-     * @var string[]
+     * @var \Brainworxx\Krexx\Analyse\Scalar\String\AbstractScalarAnalysis[]
      */
-    protected $classList = [];
+    protected array $classList = [];
 
     /**
      * Get the additional analysis classes from the plugins.
@@ -80,14 +81,15 @@ class ScalarString extends AbstractScalar
             Xml::class,
             TimeStamp::class,
             Serialized::class,
-            Base64::class
+            Base64::class,
+            ClassName::class
         ];
 
-        $classList = array_merge($classList, SettingsGetter::getAdditionalScalarString());
+        $classList = [...$classList, ...SettingsGetter::getAdditionalScalarString()];
 
         foreach ($classList as $className) {
             if ($className::isActive()) {
-                $this->classList[] = $className;
+                $this->classList[$className] = $pool->createClass($className);
             }
         }
 
@@ -108,12 +110,9 @@ class ScalarString extends AbstractScalar
      */
     public function handle(Model $model, string $originalData): Model
     {
-        foreach ($this->classList as $className) {
-            /** @var \Brainworxx\Krexx\Analyse\Scalar\String\AbstractScalarAnalysis $scalarHandler */
-            $scalarHandler = $this->pool->createClass($className);
-
-            if ($scalarHandler->canHandle($originalData, $model)) {
-                return $model->injectCallback($scalarHandler)
+        foreach ($this->classList as $className => $analyser) {
+            if ($analyser->canHandle($originalData, $model)) {
+                return $model->injectCallback($analyser)
                     ->setDomid($this->generateDomId($originalData, $className));
             }
         }

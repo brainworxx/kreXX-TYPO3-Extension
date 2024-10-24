@@ -58,9 +58,10 @@ class RenderSmokyGrey extends RenderHans
     use Button;
     use Header;
     use Footer;
-    use FatalMain;
     use ConnectorRight;
     use Help;
+
+    use FatalMain;
 
     /**
      * Data attribute for the help display.

@@ -60,6 +60,8 @@ class GetterWithoutGetTest extends AbstractHelper implements CallbackConstInterf
 
     /**
      * Test the removal of 'get' from the methodnames in fluid mode.
+     *
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterWithoutGet::handle
      */
     public function testHandle()
     {

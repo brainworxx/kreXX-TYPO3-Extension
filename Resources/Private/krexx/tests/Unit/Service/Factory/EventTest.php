@@ -46,8 +46,8 @@ use Brainworxx\Krexx\Tests\Helpers\EventHandler;
 
 class EventTest extends AbstractHelper
 {
-    const EVENT_ONE = 'some event';
-    const EVENT_TWO = 'another event';
+    public const  EVENT_ONE = 'some event';
+    public const  EVENT_TWO = 'another event';
 
 
     /**

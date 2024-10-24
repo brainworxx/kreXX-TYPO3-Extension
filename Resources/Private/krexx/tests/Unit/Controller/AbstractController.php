@@ -87,7 +87,7 @@ abstract class AbstractController extends AbstractHelper
         $callerFinderMock = $this->createMock(CallerFinder::class);
         $callerFinderMock->expects($this->once())
             ->method('findCaller')
-            ->will($this->returnValue($this->callerFinderResult));
+            ->willReturn($this->callerFinderResult);
         $this->setValueByReflection('callerFinder', $callerFinderMock, $controller);
 
         $chunksMock = $this->createMock(Chunks::class);
@@ -102,7 +102,7 @@ abstract class AbstractController extends AbstractHelper
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
             ->method('checkMaxCall')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $poolMock->emergencyHandler = $emergencyMock;
 
         $renderNothing = new RenderNothing(Krexx::$pool);
@@ -127,10 +127,10 @@ abstract class AbstractController extends AbstractHelper
         $configMock = $this->createMock(Config::class);
         $configMock->expects($this->once())
             ->method('getPathToConfigFile')
-            ->will($this->returnValue($pathToIni));
+            ->willReturn($pathToIni);
         $configMock->expects($this->once())
             ->method('getSkinDirectory')
-            ->will($this->returnValue($pathToSkin));
+            ->willReturn($pathToSkin);
         $poolMock->config = $configMock;
 
         $fileServiceMock = $this->createMock(File::class);
@@ -140,42 +140,38 @@ abstract class AbstractController extends AbstractHelper
                 [$pathToIni],
                 [KREXX_DIR . $pathToKdt],
                 [$pathToSkin . $skinCss]
-            ))->will($this->returnValueMap(
+            ))->willReturnMap(
                 [
                     [$pathToIni, true],
                     [KREXX_DIR . $pathToKdt, true],
                     [$pathToSkin . $skinCss, true]
                 ]
-            ));
-        $fileServiceMock->expects($this->once())
-            ->method('filterFilePath')
-            ->with($pathToIni)
-            ->will($this->returnValue('filtered path'));
+            );
         $fileServiceMock->expects($this->exactly(3))
             ->method('getFileContents')
             ->with(...$this->withConsecutive(
                 [KREXX_DIR . $pathToKdt],
                 [$pathToSkin . $skinJs],
                 [$pathToSkin . $skinCss]
-            ))->will($this->returnValueMap(
+            ))->willReturnMap(
                 [
                     [KREXX_DIR . $pathToKdt, true, 'some js'],
                     [$pathToSkin . $skinCss, true, 'some styles'],
                     [$pathToSkin . $skinJs, true, 'more js']
                 ]
-            ));
+            );
         $poolMock->fileService = $fileServiceMock;
 
         $messageMock = $this->createMock(Messages::class);
         $messageMock->expects($this->any())
             ->method('getHelp')
             ->with($this->anything())
-            ->will($this->returnValue('some helpful description'));
+            ->willReturn('some helpful description');
 
 
         $messageMock->expects($this->any())
             ->method('outputMessages')
-            ->will($this->returnValue(''));
+            ->willReturn('');
         $poolMock->messages = $messageMock;
     }
 }

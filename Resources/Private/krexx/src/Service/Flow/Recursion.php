@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Flow;
 
-use __PHP_Incomplete_Class;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use SplObjectStorage;
 
@@ -55,7 +54,7 @@ class Recursion
      *
      * @var \SplObjectStorage
      */
-    protected $recursionHive;
+    protected SplObjectStorage $recursionHive;
 
     /**
      * The recursion marker for the hive.
@@ -65,21 +64,21 @@ class Recursion
      *
      * @var string
      */
-    protected $recursionMarker;
+    protected string $recursionMarker;
 
     /**
      * Collection of dom ID's of object meta analytic stuff.
      *
      * @var bool[]
      */
-    protected $metaRecursionHive = [];
+    protected array $metaRecursionHive = [];
 
     /**
      * Here we store, if we have rendered the $GLOBALS array so far.
      *
      * @var bool
      */
-    protected $globalsWereRendered = false;
+    protected bool $globalsWereRendered = false;
 
     /**
      * Generate the recursion marker during class construction.
@@ -103,11 +102,16 @@ class Recursion
      *
      * @deprecated
      *   Will be removed as soon as we drop PHP 8.0 support.
+     * @codeCoverageIgnore
+     *   We do not test deprecated code.
+     *
      */
     public function __destruct()
     {
         // Remove our mark from the $GLOBALS.
-        unset($GLOBALS[$this->recursionMarker]);
+        if (isset($this->recursionMarker)) {
+            unset($GLOBALS[$this->recursionMarker]);
+        }
     }
 
     /**

@@ -46,6 +46,13 @@ use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 class ProcessBoolean extends AbstractRouting implements ProcessInterface, ProcessConstInterface
 {
     /**
+     * The model we are currently working on.
+     *
+     * @var Model
+     */
+    protected Model $model;
+
+    /**
      * Is this one a boolean?
      *
      * @param Model $model
@@ -56,24 +63,22 @@ class ProcessBoolean extends AbstractRouting implements ProcessInterface, Proces
      */
     public function canHandle(Model $model): bool
     {
+        $this->model = $model;
         return is_bool($model->getData());
     }
 
     /**
      * Render a dump for a boolean value.
      *
-     * @param Model $model
-     *   The data we are analysing.
-     *
      * @return string
      *   The rendered markup.
      */
-    public function handle(Model $model): string
+    public function handle(): string
     {
-        $data = $model->getData() ? 'TRUE' : 'FALSE';
+        $data = $this->model->getData() ? 'TRUE' : 'FALSE';
         return $this->pool->render->renderExpandableChild(
             $this->dispatchProcessEvent(
-                $model->setData($data)
+                $this->model->setData($data)
                     ->setNormal($data)
                     ->setType(static::TYPE_BOOL)
             )

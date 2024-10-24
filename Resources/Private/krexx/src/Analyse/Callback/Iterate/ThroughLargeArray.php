@@ -137,10 +137,10 @@ class ThroughLargeArray extends AbstractCallback implements
      */
     protected function handleValue($value, Model $model): string
     {
+        $messages = $this->pool->messages;
         if (is_object($value)) {
             // We will not go too deep here, and say only what it is.
-            $model->setType(static::TYPE_SIMPLE_CLASS)
-                ->setNormal(get_class($value));
+            $model->setType($messages->getHelp('simpleClassType'))->setNormal(get_class($value));
 
             return $this->pool->render->renderExpandableChild($model);
         }
@@ -148,8 +148,8 @@ class ThroughLargeArray extends AbstractCallback implements
         if (is_array($value)) {
             // Adding another array to the output may be as bad as a
             // complete object analysis.
-            $model->setType(static::TYPE_SIMPLE_ARRAY)
-                ->setNormal($this->pool->messages->getHelp('count') . count($value));
+            $model->setType($messages->getHelp('simpleArrayType'))
+                ->setNormal($messages->getHelp('count') . count($value));
 
                 return $this->pool->render->renderExpandableChild($model);
         }

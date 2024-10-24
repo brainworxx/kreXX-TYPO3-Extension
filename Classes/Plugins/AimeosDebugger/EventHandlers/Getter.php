@@ -102,7 +102,7 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface
     /**
      * Some special resolving of Aimeos getter
      *
-     * @param AbstractCallback $callback
+     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback|null $callback
      *   The calling class.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.
@@ -110,7 +110,7 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface
      * @return string
      *   The generated markup.
      */
-    public function handle(AbstractCallback $callback, ?Model $model = null): string
+    public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
     {
         // We will only act, if we have no value so far.
         // Also, we only do this for Aimeos items.

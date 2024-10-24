@@ -122,27 +122,6 @@ abstract class Fallback implements ConfigConstInterface
     protected const EVAL_LANG = 'evalLanguage';
 
     /**
-     * Name of the chunks' folder.
-     *
-     * @var string
-     */
-    public const CHUNKS_FOLDER = 'chunks';
-
-    /**
-     * Name of the log folder.
-     *
-     * @var string
-     */
-    public const LOG_FOLDER = 'log';
-
-    /**
-     * Name of the config folder.
-     *
-     * @var string
-     */
-    public const CONFIG_FOLDER = 'config';
-
-    /**
      * Name of the smokygrey skin.
      *
      * @var string
@@ -252,28 +231,28 @@ abstract class Fallback implements ConfigConstInterface
      *
      * @var string[][]
      */
-    public $configFallback = [];
+    public array $configFallback = [];
 
     /**
      * Values, rendering settings and the actual fallback value.
      *
      * @var string[][]|\Closure[][]
      */
-    public $feConfigFallback = [];
+    public array $feConfigFallback = [];
 
     /**
      * The skin configuration.
      *
      * @var string[][]
      */
-    protected $skinConfiguration = [];
+    protected array $skinConfiguration = [];
 
     /**
      * Here we store all relevant data.
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Injects the pool and initialize the fallback configuration, get the skins.
@@ -450,7 +429,7 @@ abstract class Fallback implements ConfigConstInterface
     protected function returnLanguages(): array
     {
         return [
-            static::VALUE => 'text',
+            static::VALUE => 'en',
             static::RENDER => static::EDITABLE_SELECT,
              static::EVALUATE => static::EVAL_LANG,
             static::SECTION => static::SECTION_BEHAVIOR,
@@ -531,7 +510,7 @@ abstract class Fallback implements ConfigConstInterface
     {
         return [
             // IP range for calling kreXX.
-            // kreXX is disabled for everyone who dies not fit into this range.
+            // kreXX is disabled for everyone who does not fit into this range.
             static::VALUE => '*',
             static::RENDER => static::DISPLAY_NOTHING,
             static::EVALUATE => static::EVAL_IP_RANGE,
@@ -560,5 +539,5 @@ abstract class Fallback implements ConfigConstInterface
      *
      * @var string
      */
-    public $version = '5.0.5';
+    public string $version = '6.0.0';
 }

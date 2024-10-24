@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Analyse\Model;
 use ReflectionException;
 use ReflectionFunction;
 use TypeError;
+use Throwable;
 
 /**
  * The stuff we are doing here is very similar to the method analysis. The
@@ -80,7 +81,7 @@ class Callback extends AbstractScalarAnalysis
                 $this->handledValue = $string;
                 return true;
             }
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             // Do nothing.
             // The autoload just failed.
         }
@@ -113,26 +114,6 @@ class Callback extends AbstractScalarAnalysis
         $this->insertParameters($reflectionFunction, $meta);
 
         return $meta;
-    }
-
-    /**
-     * Retrieve the declaration place, if possible.
-     *
-     * @param \ReflectionFunction $reflectionFunction
-     *   The reflection function.
-     *
-     * @deprecated Since 5.0.0
-     *   Will be removed use the FunctionDeclaration class instead.
-     * @codeCoverageIgnore
-     *   We do not test deprecated methods.
-     *
-     * @return string
-     *   The declaration place.
-     */
-    protected function retrieveDeclarationPlace(ReflectionFunction $reflectionFunction): string
-    {
-        return $this->pool->createClass(FunctionDeclaration::class)
-            ->retrieveDeclaration($reflectionFunction);
     }
 
     /**

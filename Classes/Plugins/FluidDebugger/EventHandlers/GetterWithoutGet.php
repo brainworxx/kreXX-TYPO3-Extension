@@ -68,7 +68,7 @@ class GetterWithoutGet implements EventHandlerInterface
     /**
      * We simply remove the 'get' from the method name in the model.
      *
-     * @param AbstractCallback $callback
+     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback|null $callback
      *   The calling class.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model so far.
@@ -76,7 +76,7 @@ class GetterWithoutGet implements EventHandlerInterface
      * @return string
      *   Return an empty string.
      */
-    public function handle(AbstractCallback $callback, ?Model $model = null): string
+    public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
     {
         $params = $callback->getParameters();
         $methodName = lcfirst(substr($model->getName(), strlen($params[ThroughGetter::CURRENT_PREFIX])));

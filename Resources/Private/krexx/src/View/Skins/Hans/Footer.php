@@ -47,7 +47,7 @@ trait Footer
     /**
      * @var string[]
      */
-    private $markerFooter = [
+    private array $markerFooter = [
         '{configInfo}',
         '{caller}',
         '{pluginList}',
@@ -57,7 +57,7 @@ trait Footer
     /**
      * @var string[]
      */
-    private $markerCaller = [
+    private array $markerCaller = [
         '{calledFromTxt}',
         '{calledFromLine}',
         '{calledFromAt}',
@@ -93,7 +93,7 @@ trait Footer
     }
 
     /**
-     * Renders the footer part, where we display from where krexx was called.
+     * Renders the footer part, where we display from where kreXX was called.
      *
      * @param string[] $caller
      *

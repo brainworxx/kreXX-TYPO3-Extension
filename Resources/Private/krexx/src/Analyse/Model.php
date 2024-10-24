@@ -46,7 +46,6 @@ use Brainworxx\Krexx\Analyse\Model\Data;
 use Brainworxx\Krexx\Analyse\Model\DomId;
 use Brainworxx\Krexx\Analyse\Model\HasExtra;
 use Brainworxx\Krexx\Analyse\Model\Json;
-use Brainworxx\Krexx\Analyse\Model\KeyType;
 use Brainworxx\Krexx\Analyse\Model\Name;
 use Brainworxx\Krexx\Analyse\Model\Normal;
 
@@ -65,6 +64,4 @@ class Model implements CodegenConstInterface
     use DomId;
     use HasExtra;
     use CodeGenType;
-
-    use KeyType;
 }

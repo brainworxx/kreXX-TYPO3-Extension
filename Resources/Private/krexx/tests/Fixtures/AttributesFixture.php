@@ -33,19 +33,18 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-declare(strict_types=1);
+namespace Brainworxx\Krexx\Tests\Fixtures;
 
-namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
+use Brainworxx\Krexx\Analyse\Attributes\Attributes;
 
-use Brainworxx\Krexx\Analyse\Scalar\String\Callback as CallbackString;
-
-/**
- * @deprecated
- *   Since 5.0.0. Will be removed. Use the class that we extend here.
- *
- * @codeCoverageIgnore
- *   We are not testing the unit tests.
- */
-class Callback extends CallbackString
+#[\Attribute] #[Attributes('foo', 'bar', 5)]
+class AttributesFixture
 {
+    #[Property]
+    public $property;
+
+    #[AttributesFixture('stuff', 'bob')]
+    public function testGetAttributes()
+    {
+    }
 }

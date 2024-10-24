@@ -47,7 +47,7 @@ trait ExpandableChild
     /**
      * @var string[]
      */
-    private $markerExpandableChild = [
+    private array $markerExpandableChild = [
         '{name}',
         '{type}',
         '{ktype}',
@@ -64,7 +64,7 @@ trait ExpandableChild
     /**
      * @var string
      */
-    private $markerSourceButton = '{language}';
+    private string $markerSourceButton = '{language}';
 
     /**
      * {@inheritDoc}

@@ -200,12 +200,18 @@ interface CallbackConstInterface
     /**
      * Frontend literal.
      *
+     * @deprecated
+     *   Since 6.0.0. Will be removed.
+     *
      * @var string
      */
     public const TYPE_INTERNALS = 'class internals';
 
     /**
      * Frontend literal.
+     *
+     * @deprecated
+     *   Since 6.0.0. Will be removed.
      *
      * @var string
      */
@@ -228,6 +234,9 @@ interface CallbackConstInterface
     /**
      * Frontend literal.
      *
+     * @deprecated
+     *   Since 6.0.0. Will be removed.
+     *
      * @var string
      */
     public const TYPE_UNKNOWN = 'unknown';
@@ -235,12 +244,18 @@ interface CallbackConstInterface
     /**
      * Frontend literal.
      *
+     * @deprecated
+     *   Since 6.0.0. Will be removed.
+     *
      * @var string
      */
     public const TYPE_SIMPLE_CLASS = 'simplified class analysis';
 
     /**
      * Frontend literal.
+     *
+     * @deprecated
+     *   Since 6.0.0. Will be removed.
      *
      * @var string
      */
@@ -286,17 +301,6 @@ interface CallbackConstInterface
      * @var string
      */
     public const EVENT_MARKER_RECURSION = 'recursion';
-
-    /**
-     * Translation marker for a literal in the frontend.
-     * The declaration place of this method or property could not be resolved.
-     *
-     * @deprecated since 5.0.0
-     *   We do not use constants for translations anymore.
-     *
-     * @var string
-     */
-    public const UNKNOWN_DECLARATION = 'unknownDeclaration';
 
     /**
      * Literal for the frontend and the JavaScript

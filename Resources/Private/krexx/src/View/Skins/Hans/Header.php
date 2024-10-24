@@ -45,7 +45,7 @@ trait Header
     /**
      * @var string[]
      */
-    private $markerHeader = [
+    private array $markerHeader = [
         '{version}',
         '{KrexxCount}',
         '{headline}',

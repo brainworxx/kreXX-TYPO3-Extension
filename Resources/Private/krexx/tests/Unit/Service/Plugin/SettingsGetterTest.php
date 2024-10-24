@@ -44,8 +44,8 @@ use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
  */
 class SettingsGetterTest extends AbstractRegistration
 {
-    const TEST_THE_FALLBACK = 'Test the fallback value.';
-    const TEST_THE_NEW_VALUE = 'Test the new value.';
+    public const  TEST_THE_FALLBACK = 'Test the fallback value.';
+    public const  TEST_THE_NEW_VALUE = 'Test the new value.';
     /**
      * Test the getting of the getter for the configuration file, and it's fallback.
      *

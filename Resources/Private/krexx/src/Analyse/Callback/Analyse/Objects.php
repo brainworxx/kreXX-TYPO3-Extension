@@ -72,7 +72,7 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
      *
      * @var string[]
      */
-    protected $standardDumper = [
+    protected array $standardDumper = [
         OpaqueRessource::class,
         Meta::class,
         Constants::class,
@@ -145,7 +145,7 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
         // Dumping all the property related stuff.
         $this->addPropertyDumper($stuffToDump);
 
-        return array_merge($stuffToDump, $this->standardDumper);
+        return [...$stuffToDump, ...$this->standardDumper];
     }
 
     /**

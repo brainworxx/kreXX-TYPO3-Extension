@@ -39,13 +39,20 @@ namespace Brainworxx\Krexx\View\Skins\SmokyGrey;
 
 /**
  * Renders the main part of the fatal error handler.
+ *
+ * @deprecated
+ *   Since 6.0.0
+ *   Will be removed.
+ *   Has anybody used this one since PHP 7.0 anyway?
+ * @codeCoverageIgnore
+ *   We will not test deprecated code.
  */
 trait FatalMain
 {
     /**
      * @var string[]
      */
-    private $markerFatalMain = [
+    private array $markerFatalMain = [
         '{search}',
         '{KrexxId}',
         '{plugins}',

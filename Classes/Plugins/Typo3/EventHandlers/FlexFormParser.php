@@ -71,11 +71,11 @@ class FlexFormParser implements EventHandlerInterface, CallbackConstInterface
     /**
      * Using the TYPO3 flexform parser to get data out of the xml structure.
      *
-     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback $callback
+     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback|null $callback
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      * @return string
      */
-    public function handle(AbstractCallback $callback, ?Model $model = null): string
+    public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
     {
         $messages = $this->pool->messages;
         $parameters = $model->getParameters();

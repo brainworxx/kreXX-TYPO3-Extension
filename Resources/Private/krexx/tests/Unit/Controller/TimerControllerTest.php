@@ -39,13 +39,12 @@ use Brainworxx\Krexx\Controller\DumpController;
 use Brainworxx\Krexx\Controller\TimerController;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Brainworxx\Krexx\Service\Misc\Encoding;
 
 class TimerControllerTest extends AbstractController
 {
 
-    const COUNTER_CACHE = 'counterCache';
-    const TIME_KEEPING = 'timekeeping';
+    public const  COUNTER_CACHE = 'counterCache';
+    public const  TIME_KEEPING = 'timekeeping';
     /**
      * @var TimerController
      */
@@ -59,7 +58,7 @@ class TimerControllerTest extends AbstractController
         $this->controller = new TimerController(Krexx::$pool);
         $microtime = $this->getFunctionMock('\\Brainworxx\\Krexx\\Controller\\', 'microtime');
         $microtime->expects($this->any())
-            ->will($this->returnValue(3000));
+            ->willReturn(3000);
     }
 
     protected function krexxDown()
@@ -79,8 +78,15 @@ class TimerControllerTest extends AbstractController
     public function testConstruct()
     {
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $this->controller));
+
+        $exception = false;
         // The __construct from the abstract controller must not be called.
-        $this->assertEquals(null, $this->retrieveValueByReflection('callerFinder', $this->controller));
+        try {
+            $this->assertEquals(null, $this->retrieveValueByReflection('callerFinder', $this->controller));
+        } catch (\Throwable $exception) {
+            $exception = true;
+        }
+        $this->assertTrue($exception, 'The __construct from the abstract controller must not be called.');
     }
 
     /**
@@ -133,7 +139,7 @@ class TimerControllerTest extends AbstractController
                     $this->assertEquals('kreXX timer', $headline);
                     $this->assertEquals(
                         [
-                            'Total time' => 2000000.0,
+                            'Total time' => '2000000ms',
                             'first->second' => '50%',
                             'second->End' => '50%'
                         ],
@@ -147,7 +153,7 @@ class TimerControllerTest extends AbstractController
         $poolMock->expects($this->once())
             ->method('createClass')
             ->with(DumpController::class)
-            ->will($this->returnValue($dumpMock));
+            ->willReturn($dumpMock);
         $poolMock->messages = \Krexx::$pool->messages;
 
         $this->setValueByReflection('pool', $poolMock, $this->controller);

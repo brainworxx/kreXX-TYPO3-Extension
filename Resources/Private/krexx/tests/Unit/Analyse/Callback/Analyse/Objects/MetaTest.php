@@ -94,7 +94,7 @@ class MetaTest extends AbstractHelper
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
             ->method('getKrexxCount')
-            ->will($this->returnValue(42));
+            ->willReturn(42);
         Krexx::$pool->emergencyHandler = $emergencyMock;
 
         // Make sure that we are testing a recursion.
@@ -102,7 +102,7 @@ class MetaTest extends AbstractHelper
         $recursionMock->expects($this->once())
             ->method('isInMetaHive')
             ->with($expectedDomId)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->recursionHandler = $recursionMock;
 
         // Short circuit the rendering process.
@@ -122,7 +122,7 @@ class MetaTest extends AbstractHelper
         $this->assertEquals($expectedDomId, $model->getDomid());
         $this->assertEquals($metaName, $model->getName());
         $this->assertEquals($metaName, $model->getNormal());
-        $this->assertEquals($meta::TYPE_INTERNALS, $model->getType());
+        $this->assertEquals(Krexx::$pool->messages->getHelp('classInternals'), $model->getType());
     }
 
     /**
@@ -152,7 +152,7 @@ class MetaTest extends AbstractHelper
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
             ->method('getKrexxCount')
-            ->will($this->returnValue(42));
+            ->willReturn(42);
         Krexx::$pool->emergencyHandler = $emergencyMock;
 
         // Make sure that we are not testing a recursion.
@@ -160,7 +160,7 @@ class MetaTest extends AbstractHelper
         $recursionMock->expects($this->once())
             ->method('isInMetaHive')
             ->with($expectedDomId)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         Krexx::$pool->recursionHandler = $recursionMock;
 
         // Short circuit the rendering process.
@@ -177,7 +177,7 @@ class MetaTest extends AbstractHelper
         $model = $renderNothing->model['renderExpandableChild'][0];
         $this->assertEquals($expectedDomId, $model->getDomid());
         $this->assertEquals('Meta class data', $model->getName());
-        $this->assertEquals($meta::TYPE_INTERNALS, $model->getType());
+        $this->assertEquals(Krexx::$pool->messages->getHelp('classInternals'), $model->getType());
 
         // Retrieve the parameters and test them.
         $data = $model->getParameters()[$meta::PARAM_DATA];
@@ -216,7 +216,7 @@ class MetaTest extends AbstractHelper
         $recursionMock = $this->createMock(Recursion::class);
         $recursionMock->expects($this->any())
             ->method('isInMetaHive')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         Krexx::$pool->recursionHandler = $recursionMock;
 
         // Short circuit the rendering process.

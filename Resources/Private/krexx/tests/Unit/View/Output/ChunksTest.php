@@ -56,14 +56,14 @@ use StdClass;
  */
 class ChunksTest extends AbstractHelper
 {
-    const CHUNK_DIR = 'chunkDir';
-    const LOG_DIR = 'logDir';
-    const FILE_STAMP = 'fileStamp';
-    const PUT_FILE_CONTENTS = 'putFileContents';
-    const DELETE_FILE = 'deleteFile';
-    const LOGGING_IS_ALLOWED = 'loggingAllowed';
-    const OFFICIAL_ENCODING = 'officialEncoding';
-    const META_DATA = 'metadata';
+    public const  CHUNK_DIR = 'chunkDir';
+    public const  LOG_DIR = 'logDir';
+    public const  FILE_STAMP = 'fileStamp';
+    public const  PUT_FILE_CONTENTS = 'putFileContents';
+    public const  DELETE_FILE = 'deleteFile';
+    public const  LOGGING_IS_ALLOWED = 'loggingAllowed';
+    public const  OFFICIAL_ENCODING = 'officialEncoding';
+    public const  META_DATA = 'metadata';
 
     /**
      * Test the initialization of a new chunks class.
@@ -77,16 +77,16 @@ class ChunksTest extends AbstractHelper
         $configMock = $this->createMock(Config::class);
         $configMock->expects($this->once())
             ->method('getChunkDir')
-            ->will($this->returnValue(static::CHUNK_DIR));
+            ->willReturn(static::CHUNK_DIR);
         $configMock->expects($this->once())
             ->method('getLogDir')
-            ->will($this->returnValue(static::LOG_DIR));
+            ->willReturn(static::LOG_DIR);
         $pool->config = $configMock;
 
         // Mock the microtime.
         $microtime = $this->getFunctionMock('\\Brainworxx\\Krexx\\View\\Output\\', 'microtime');
         $microtime->expects($this->once())
-            ->will($this->returnValue('0.96136800 1565016056'));
+            ->willReturn('0.96136800 1565016056');
 
         $chunks = new Chunks($pool);
         // Setting of the pool.
@@ -143,7 +143,6 @@ class ChunksTest extends AbstractHelper
      * Test the adding of a large chunk string.
      *
      * @covers \Brainworxx\Krexx\View\Output\Chunks::chunkMe
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::genKey
      */
     public function testChunkMeLarge()
     {
@@ -262,8 +261,8 @@ class ChunksTest extends AbstractHelper
         $chunk3File = $chunkDir . '1236' . $fileEnding;
         $logFileName = $logDir . $fileStamp . '.Krexx.html';
         $metaFileName = $logFileName . '.json';
-        $metaData = new StdClass();
-        $metaData->whatever = 'some data';
+        $metaData = [];
+        $metaData['whatever'] = 'some data';
 
         // Simulate the actual files.
         $fileServiceMock = $this->createMock(File::class);
@@ -422,7 +421,7 @@ class ChunksTest extends AbstractHelper
 
         $globMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\View\\Output\\', 'glob');
         $globMock->expects($this->any())
-            ->will($this->returnValue($fileList));
+            ->willReturn($fileList);
 
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->exactly(count($fileList)))
@@ -453,7 +452,7 @@ class ChunksTest extends AbstractHelper
         $encodingMock = $this->createMock(Encoding::class);
         $encodingMock->expects($this->once())
            ->method('mbDetectEncoding')
-           ->will($this->returnValue($specialEncoding));
+           ->willReturn($specialEncoding);
         Krexx::$pool->encodingService = $encodingMock;
         $chunks->detectEncoding($string);
         $this->assertEquals($specialEncoding, $this->retrieveValueByReflection(static::OFFICIAL_ENCODING, $chunks));
@@ -461,7 +460,7 @@ class ChunksTest extends AbstractHelper
         $encodingMock = $this->createMock(Encoding::class);
         $encodingMock->expects($this->once())
            ->method('mbDetectEncoding')
-           ->will($this->returnValue(false));
+           ->willReturn(false);
         Krexx::$pool->encodingService = $encodingMock;
         $chunks->detectEncoding($string);
         $this->assertEquals($specialEncoding, $this->retrieveValueByReflection(static::OFFICIAL_ENCODING, $chunks));

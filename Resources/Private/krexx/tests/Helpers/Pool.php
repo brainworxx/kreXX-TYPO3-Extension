@@ -33,69 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-declare(strict_types=1);
+namespace Brainworxx\Krexx\Tests\Helpers;
 
-namespace Brainworxx\Krexx\Analyse\Model;
-
-use Brainworxx\Krexx\Analyse\Model;
-
-/**
- * Analysis model trait with output styling information.
- *
- * @deprecated since 5.0.0
- *   Will be removed
- *
- * @codeCoverageIgnore
- *   We do not test deprecated methods.
- */
-trait KeyType
+class Pool extends \Brainworxx\Krexx\Service\Factory\Pool
 {
-    /**
-     * The type of key that is used.
-     *
-     * @deprecated since 5.0.0
-     *   Will be removed
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated methods.
-     *
-     * @var string
-     */
-    protected $keyType = '';
-
-    /**
-     * Getter for the key type.
-     *
-     * @deprecated since 5.0.0
-     *   Will be removed
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated methods.
-     *
-     * @return string
-     */
-    public function getKeyType(): string
-    {
-        return $this->keyType;
-    }
-
-    /**
-     * Setter for the key type.
-     *
-     * @param string $keyType
-     *
-     * @deprecated since 5.0.0
-     *   Will be removed
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated methods.
-     *
-     * @return Model
-     *   For chaining.
-     */
-    public function setKeyType(string $keyType): Model
-    {
-        $this->keyType = $keyType;
-        return $this;
-    }
 }

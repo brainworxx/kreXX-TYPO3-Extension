@@ -65,7 +65,7 @@ class MethodDeclaration extends AbstractDeclaration
             return $messages->getHelp('metaPredeclared');
         }
 
-        $filename = $this->pool->fileService->filterFilePath((string)$reflection->getFileName());
+        $filename = (string)$reflection->getFileName();
         if (empty($filename)) {
             // Not sure, if this is possible.
             return $this->pool->messages->getHelp('unknownDeclaration');

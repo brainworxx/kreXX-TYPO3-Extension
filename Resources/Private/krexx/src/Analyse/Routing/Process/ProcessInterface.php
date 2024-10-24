@@ -58,11 +58,8 @@ interface ProcessInterface
     /**
      * Processes the model according to the type of the variable.
      *
-     * @param \Brainworxx\Krexx\Analyse\Model $model
-     *   The model, so far.
-     *
      * @return string
      *   The renders DOM.
      */
-    public function handle(Model $model): string;
+    public function handle(): string;
 }

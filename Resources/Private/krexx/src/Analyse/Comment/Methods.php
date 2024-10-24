@@ -51,7 +51,7 @@ class Methods extends AbstractComment
      *
      * @var string
      */
-    protected $methodName;
+    protected string $methodName;
 
     /**
      * Get the method comment and resolve the inheritdoc.

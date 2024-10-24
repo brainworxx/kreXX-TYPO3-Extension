@@ -57,7 +57,7 @@ class ClassesTest extends AbstractHelper
         $reflectionMock = $this->createMock(ReflectionClass::class);
         $reflectionMock->expects($this->once())
             ->method('getDocComment')
-            ->will($this->returnValue($cachedComment));
+            ->willReturn($cachedComment);
 
         $classComment = new Classes(Krexx::$pool);
         $this->assertEquals($prettifiedComment, $classComment->getComment($reflectionMock));

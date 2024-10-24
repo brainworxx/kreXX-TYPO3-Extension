@@ -50,14 +50,14 @@ class Cleanup implements ConfigConstInterface
      *
      * @var \Brainworxx\Krexx\Service\Factory\Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * We only do a chunks cleanup once.
      *
      * @var bool
      */
-    protected static $chunksDone = false;
+    protected static bool $chunksDone = false;
 
     /**
      * Assigning the pool.

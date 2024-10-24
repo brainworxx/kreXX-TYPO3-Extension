@@ -48,7 +48,7 @@ use ArrayObject;
 
 class TraversableTest extends AbstractHelper
 {
-    const CHECK_NESTING = 'checkNesting';
+    public const  CHECK_NESTING = 'checkNesting';
 
     /**
      * @var string
@@ -98,7 +98,7 @@ class TraversableTest extends AbstractHelper
         // Tell the emergency handler mock that we have a nesting level problem.
         Krexx::$pool->emergencyHandler->expects($this->once())
             ->method(static::CHECK_NESTING)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         // Listen for the start event.
         $this->mockEventService(
@@ -126,7 +126,7 @@ class TraversableTest extends AbstractHelper
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->any())
             ->method('checkEmergencyBreak')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         Krexx::$pool->emergencyHandler = $emergencyMock;
 
@@ -158,7 +158,7 @@ class TraversableTest extends AbstractHelper
         // Tell the emergency handler, that the nesting level is ok.
         Krexx::$pool->emergencyHandler->expects($this->once())
             ->method(static::CHECK_NESTING)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         // Listen for the start event.
         $this->mockEventService(
@@ -198,7 +198,7 @@ class TraversableTest extends AbstractHelper
         // Tell the emergency handler, that the nesting level is ok.
         Krexx::$pool->emergencyHandler->expects($this->any())
             ->method(static::CHECK_NESTING)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         // Listen for the start and end event.
         $this->mockEventService(
@@ -255,7 +255,7 @@ class TraversableTest extends AbstractHelper
         // Tell the emergency handler, that the nesting level is ok.
         Krexx::$pool->emergencyHandler->expects($this->any())
             ->method(static::CHECK_NESTING)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         // Listen for the start and end event.
         $this->mockEventService(

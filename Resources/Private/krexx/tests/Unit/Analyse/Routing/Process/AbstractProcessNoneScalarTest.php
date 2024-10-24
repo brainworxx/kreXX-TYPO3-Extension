@@ -64,7 +64,7 @@ class AbstractProcessNoneScalarTest extends AbstractHelper
         $emergencyHandlerMock = $this->createMock(Emergency::class);
         $emergencyHandlerMock->expects($this->once())
             ->method('checkNesting')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->emergencyHandler = $emergencyHandlerMock;
         $renderNothing = new RenderNothing(Krexx::$pool);
         Krexx::$pool->render = $renderNothing;
@@ -76,7 +76,8 @@ class AbstractProcessNoneScalarTest extends AbstractHelper
 
         // Run the test.
         $objectProcessor = new ProcessObject(Krexx::$pool);
-        $objectProcessor->handle($model);
+        $objectProcessor->canHandle($model);
+        $objectProcessor->handle();
 
         // Check the model.
         $this->assertEquals(
@@ -103,7 +104,7 @@ class AbstractProcessNoneScalarTest extends AbstractHelper
         $recursionMock = $this->createMock(Recursion::class);
         $recursionMock->expects($this->once())
             ->method('isInHive')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->recursionHandler = $recursionMock;
         $renderNothing = new RenderNothing(Krexx::$pool);
         Krexx::$pool->render = $renderNothing;
@@ -115,7 +116,8 @@ class AbstractProcessNoneScalarTest extends AbstractHelper
 
         // Run the test.
         $objectProcessor = new ProcessObject(Krexx::$pool);
-        $objectProcessor->handle($model);
+        $objectProcessor->canHandle($model);
+        $objectProcessor->handle();
 
         $this->assertEquals('\\' . stdClass::class, $model->getNormal());
         $this->assertEquals(
@@ -135,7 +137,7 @@ class AbstractProcessNoneScalarTest extends AbstractHelper
         $recursionMock = $this->createMock(Recursion::class);
         $recursionMock->expects($this->once())
             ->method('isInHive')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->recursionHandler = $recursionMock;
         $renderNothing = new RenderNothing(Krexx::$pool);
         Krexx::$pool->render = $renderNothing;
@@ -147,7 +149,8 @@ class AbstractProcessNoneScalarTest extends AbstractHelper
 
         // Run the test.
         $arrayProcessor = new ProcessArray(Krexx::$pool);
-        $arrayProcessor->handle($model);
+        $arrayProcessor->canHandle($model);
+        $arrayProcessor->handle();
 
         $this->assertEquals('$GLOBALS', $model->getNormal());
     }

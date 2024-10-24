@@ -49,14 +49,14 @@ abstract class AbstractComment
     /**
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Pattern for the finding of inherited comments.
      *
      * @var string[]
      */
-    protected $inheritdocPattern = [
+    protected array $inheritdocPattern = [
         '{@inheritDoc}',
         '{@inheritdoc}',
         '@inheritDoc',

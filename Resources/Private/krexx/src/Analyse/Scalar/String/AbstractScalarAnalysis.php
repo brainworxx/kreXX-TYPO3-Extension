@@ -52,14 +52,14 @@ abstract class AbstractScalarAnalysis extends AbstractCallback implements Callba
      *
      * @var string
      */
-    protected $codeGenType = '';
+    protected string $codeGenType = '';
 
     /**
      * Classname that renders the data.
      *
      * @var string
      */
-    protected $iteratorRenderer = ThroughMeta::class;
+    protected string $iteratorRenderer = ThroughMeta::class;
 
     /**
      * The value that we are handling. Must be set by the canHandle method.

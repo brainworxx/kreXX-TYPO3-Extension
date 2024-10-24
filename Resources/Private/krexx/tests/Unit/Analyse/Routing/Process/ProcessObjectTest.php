@@ -74,7 +74,8 @@ class ProcessObjectTest extends AbstractHelper
         $this->mockEventService(
             [ProcessObject::class . PluginConfigInterface::START_PROCESS, null, $model]
         );
-        $processor->handle($model);
+        $processor->canHandle($model);
+        $processor->handle();
 
         $this->assertEquals(ProcessObject::TYPE_CLASS, $model->getType());
         $this->assertEquals('\\' . SimpleFixture::class, $model->getNormal());

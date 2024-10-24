@@ -56,7 +56,7 @@ class FunctionDeclaration extends AbstractDeclaration
             return $this->pool->messages->getHelp('metaPredeclared');
         }
 
-        return $this->pool->fileService->filterFilePath($reflection->getFileName()) . "\n" .
+        return $reflection->getFileName() . "\n" .
             $this->pool->messages->getHelp('metaInLine') . $reflection->getStartLine();
     }
 }

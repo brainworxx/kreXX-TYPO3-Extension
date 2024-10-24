@@ -70,7 +70,7 @@ class ThroughArrayTest extends AbstractHelper
         $recursionHandler = $this->createMock(Recursion::class);
         $recursionHandler->expects($this->once())
             ->method('getMarker')
-            ->will($this->returnValue('recursion marker'));
+            ->willReturn('recursion marker');
         Krexx::$pool->recursionHandler = $recursionHandler;
 
 

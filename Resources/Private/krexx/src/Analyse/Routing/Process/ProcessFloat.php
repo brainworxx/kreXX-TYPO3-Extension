@@ -48,6 +48,13 @@ use Throwable;
 class ProcessFloat extends AbstractRouting implements ProcessInterface, ProcessConstInterface
 {
     /**
+     * The model we are currently working on.
+     *
+     * @var Model
+     */
+    protected Model $model;
+
+    /**
      * Is this one a float?
      *
      * @param Model $model
@@ -58,26 +65,24 @@ class ProcessFloat extends AbstractRouting implements ProcessInterface, ProcessC
      */
     public function canHandle(Model $model): bool
     {
+        $this->model = $model;
         return is_float($model->getData());
     }
 
     /**
      * Render a dump for a float value.
      *
-     * @param Model $model
-     *   The data we are analysing.
-     *
      * @return string
      *   The rendered markup.
      */
-    public function handle(Model $model): string
+    public function handle(): string
     {
         // Detect a micro timestamp. Everything bigger than 946681200000
         // is assumed to be a micro timestamp.
-        $float = $model->getData();
+        $float = $this->model->getData();
         if ($float > 946681200) {
             try {
-                $model->addToJson(
+                $this->model->addToJson(
                     $this->pool->messages->getHelp('metaTimestamp'),
                     (DateTime::createFromFormat('U.u', (string)$float))->format('d.M Y H:i:s.u')
                 );
@@ -88,7 +93,7 @@ class ProcessFloat extends AbstractRouting implements ProcessInterface, ProcessC
 
         return $this->pool->render->renderExpandableChild(
             $this->dispatchProcessEvent(
-                $model->setNormal($this->formatFloat($model))->setType(static::TYPE_FLOAT)
+                $this->model->setNormal($this->formatFloat($float))->setType(static::TYPE_FLOAT)
             )
         );
     }
@@ -96,14 +101,13 @@ class ProcessFloat extends AbstractRouting implements ProcessInterface, ProcessC
     /**
      * We format the float for better readability
      *
-     * @param Model $model
+     * @param float $float
      *   The float to format.
      * @return string
      *   The formatted float as a string.
      */
-    protected function formatFloat(Model $model): string
+    protected function formatFloat(float $float): string
     {
-        $float = $model->getData();
         $stringFloat = (string)$float;
 
         // We only care about negative formatted floats.
@@ -112,7 +116,7 @@ class ProcessFloat extends AbstractRouting implements ProcessInterface, ProcessC
         }
         list($beforeE, $afterE) = explode("E", $stringFloat);
 
-        $model->addToJson(
+        $this->model->addToJson(
             $this->pool->messages->getHelp('metaUnformattedFloat'),
             (string)$float
         );

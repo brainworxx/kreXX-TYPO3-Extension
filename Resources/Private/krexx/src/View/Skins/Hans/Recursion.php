@@ -47,7 +47,7 @@ trait Recursion
     /**
      * @var string[]
      */
-    private $markerRecursion = [
+    private array $markerRecursion = [
         '{name}',
         '{domId}',
         '{normal}',

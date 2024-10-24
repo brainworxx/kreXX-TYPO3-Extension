@@ -49,14 +49,14 @@ class TimerController extends AbstractController
      *
      * @var float[]
      */
-    protected static $timekeeping = [];
+    protected static array $timekeeping = [];
 
     /**
      * More timekeeping stuff.
      *
      * @var int[]
      */
-    protected static $counterCache = [];
+    protected static array $counterCache = [];
 
     /**
      * We simply set the pool. We will not register any shutdown stuff.
@@ -129,14 +129,14 @@ class TimerController extends AbstractController
     protected function miniBenchTo(array $timeKeeping): array
     {
         // Get the very first key.
-        $start = key($timeKeeping);
-        $totalTime = round((end($timeKeeping) - $timeKeeping[$start]) * 1000, 4);
-        $result[$this->pool->messages->getHelp('metaTotalTime')] = $totalTime;
-        $prevMomentName = $start;
-        $prevMomentStart = $timeKeeping[$start];
+        $momentName = key($timeKeeping);
+        $totalTime = round((end($timeKeeping) - $timeKeeping[$momentName]) * 1000, 4);
+        $result[$this->pool->messages->getHelp('metaTotalTime')] = $totalTime . 'ms';
+        $prevMomentName = $momentName;
+        $prevMomentStart = $timeKeeping[$momentName];
 
         foreach ($timeKeeping as $moment => $time) {
-            if ($moment !== $start) {
+            if ($moment !== $momentName) {
                 // Calculate the time.
                 $percentageTime = round(((round(($time - $prevMomentStart) * 1000, 4) / $totalTime) * 100), 1);
                 $result[$prevMomentName . '->' . $moment] = $percentageTime . '%';

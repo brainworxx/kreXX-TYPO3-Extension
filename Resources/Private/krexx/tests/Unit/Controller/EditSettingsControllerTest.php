@@ -56,7 +56,7 @@ class EditSettingsControllerTest extends AbstractController
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
             ->method('checkMaxCall')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $emergencyMock->expects($this->never())
             ->method('setDisable');
         Krexx::$pool->emergencyHandler = $emergencyMock;
@@ -99,12 +99,12 @@ class EditSettingsControllerTest extends AbstractController
                 [Model::class],
                 [ThroughConfig::class],
                 [Model::class]
-            ))->will($this->returnValueMap(
+            ))->willReturnMap(
                 [
                     [Model::class, new Model(Krexx::$pool)],
                     [ThroughConfig::class, new CallbackNothing(Krexx::$pool)]
                 ]
-            ));
+            );
 
         $this->assertEquals($controller, $controller->editSettingsAction());
     }

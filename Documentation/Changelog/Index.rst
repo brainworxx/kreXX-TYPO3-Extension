@@ -8,8 +8,27 @@ Changelog
 :Date: tbd
 
 Changes:
-    * [Change] Dropped PHP 7.2 and PHP 7.3 support.
-    * [Change] Dropped UnitTest 8.5 support.
+    * [Feature] Added class meta analysis for class names in strings.
+    * [Feature] Added a hint to the 'unknown' getter analysis result.
+    * [Feature] Added container handling to the getter analysis.
+    * [Feature] Added a unit of measurement to the benchmarking.
+    * [Feature] Added better readability to the exception analysis.
+    * [Feature] Added delegate handling to the getter analysis.
+    * [Feature] Added attribute handling to the meta analysis.
+    * [Change] The scalar analysis classes are now reused.
+    * [Change] Renamed the language fallback key from 'text' to 'en'.
+    * [Change] Dropped PHP 7.2 and 7.3 support.
+    * [Change] Removed deprecated code.
+    * [Change] Use json_validate() if available to determine if a string is a json string.
+    * [Change] Simplified the routing process.
+    * [Change] Removed some literals.
+    * [Change] Some deprecations.
+    * [Change] Only use byRef when absolutely necessary.
+    * [Change] We do not filter the file path anymore.
+    * [Change] Moved some frontend literals to the translations.
+    * [Change] Split the getter analysis into several smaller classes.
+    * [Change] Removed deprecations from the unit tests.
+    * [Change] Deprecated the exception handler.
 
 -----
 

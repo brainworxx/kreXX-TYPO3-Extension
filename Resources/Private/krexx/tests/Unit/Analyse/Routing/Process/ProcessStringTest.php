@@ -54,9 +54,9 @@ use finfo;
 class ProcessStringTest extends AbstractHelper
 {
 
-    const BUFFER_INFO = 'bufferInfo';
-    const ENCODING = 'some encoding';
-    const ENCODING_PREFIX = 'encoded ';
+    public const  BUFFER_INFO = 'bufferInfo';
+    public const  ENCODING = 'some encoding';
+    public const  ENCODING_PREFIX = 'encoded ';
 
     /**
      * @var ProcessString
@@ -81,7 +81,7 @@ class ProcessStringTest extends AbstractHelper
         // Mock the class_exists method, to return always false.
         $classExistMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'class_exists');
         $classExistMock->expects($this->once())
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $processor = new ProcessString(Krexx::$pool);
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $processor));
@@ -105,7 +105,7 @@ class ProcessStringTest extends AbstractHelper
         // Mock the class_exists method, to return always true.
         $classExistMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'class_exists');
         $classExistMock->expects($this->once())
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $processor = new ProcessString(Krexx::$pool);
         $this->assertInstanceOf(finfo::class, $this->retrieveValueByReflection(static::BUFFER_INFO, $processor));
@@ -280,12 +280,14 @@ class ProcessStringTest extends AbstractHelper
         // Normal.
         $model = new Model(Krexx::$pool);
         $model->setData($fixture);
-        $this->processString->handle($model);
+        $this->processString->canHandle($model);
+        $this->processString->handle();
 
         // And with a recursion.
         $model = new Model(Krexx::$pool);
         $model->setData($fixture);
-        $this->processString->handle($model);
+        $this->processString->canHandle($model);
+        $this->processString->handle();
 
         $this->assertCount(
             1,
@@ -316,11 +318,11 @@ class ProcessStringTest extends AbstractHelper
         $encodingMock->expects($this->once())
             ->method('mbDetectEncoding')
             ->with($fixture)
-            ->will($this->returnValue($encoding));
+            ->willReturn($encoding);
         $encodingMock->expects($this->once())
             ->method('mbStrLen')
             ->with($fixture)
-            ->will($this->returnValue($length));
+            ->willReturn($length);
         if ($length > 50 || strpos($fixture, PHP_EOL) !== false) {
             $cut = substr($fixture, 0, 50);
             $encodingMock->expects($this->exactly(2))
@@ -328,15 +330,15 @@ class ProcessStringTest extends AbstractHelper
                 ->with(...$this->withConsecutive(
                     [$cut],
                     [$fixture]
-                ))->will($this->returnValueMap([
+                ))->willReturnMap([
                     [$cut, false, static::ENCODING_PREFIX . $cut],
                     [$fixture, false, static::ENCODING_PREFIX . $fixture]
-                ]));
+                ]);
 
             $encodingMock->expects($this->once())
                 ->method('mbSubStr')
                 ->with($fixture, 0, 50)
-                ->will($this->returnValue($cut));
+                ->willReturn($cut);
         } else {
             $encodingMock->expects($this->never())
                 ->method('mbSubStr');
@@ -344,7 +346,7 @@ class ProcessStringTest extends AbstractHelper
             $encodingMock->expects($this->once())
                 ->method('encodeString')
                 ->with($fixture)
-                ->will($this->returnValue(static::ENCODING_PREFIX . $fixture));
+                ->willReturn(static::ENCODING_PREFIX . $fixture);
         }
         Krexx::$pool->encodingService = $encodingMock;
 
@@ -356,7 +358,7 @@ class ProcessStringTest extends AbstractHelper
              $fileinfoMock->expects($this->once())
                 ->method('buffer')
                 ->with($fixture)
-                ->will($this->returnValue($bufferOutput));
+                ->willReturn($bufferOutput);
         }
 
         $model = new Model(Krexx::$pool);
@@ -366,7 +368,8 @@ class ProcessStringTest extends AbstractHelper
         $this->mockEventService(
             [ProcessString::class . PluginConfigInterface::START_PROCESS, null, $model]
         );
-        $this->processString->handle($model);
+        $this->processString->canHandle($model);
+        $this->processString->handle();
 
         return $model;
     }

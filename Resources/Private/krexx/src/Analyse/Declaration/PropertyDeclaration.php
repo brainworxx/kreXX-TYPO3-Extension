@@ -71,7 +71,7 @@ class PropertyDeclaration extends AbstractDeclaration
         }
         $result = '';
         if ($reflectionClass !== null) {
-            $result = $this->pool->fileService->filterFilePath($reflectionClass->getFileName()) .
+            $result = $reflectionClass->getFileName() .
                 $this->pool->render->renderLinebreak() .
                 ($reflectionClass->isTrait() ? $messages->getHelp('metaInTrait') : $messages->getHelp('metaInClass')) .
                 $reflectionClass->name;

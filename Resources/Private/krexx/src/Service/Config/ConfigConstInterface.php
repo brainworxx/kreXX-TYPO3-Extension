@@ -246,16 +246,6 @@ interface ConfigConstInterface
     public const SETTING_MEMORY_LEFT = 'memoryLeft';
 
     /**
-     * Array key. Holds the value of useScopeAnalysis.
-     *
-     * @deprecated since 5.0.0 Will be removed
-     *   The setting for the scope analysis was removed.
-     *
-     * @var string
-     */
-    public const SETTING_USE_SCOPE_ANALYSIS = 'useScopeAnalysis';
-
-    /**
      * The language keys for the language file.
      *
      * @var string
@@ -416,4 +406,25 @@ interface ConfigConstInterface
      * @var string
      */
     public const SKIN_DIRECTORY = 'dir';
+
+    /**
+     * Name of the chunks' folder.
+     *
+     * @var string
+     */
+    public const CHUNKS_FOLDER = 'chunks';
+
+    /**
+     * Name of the log folder.
+     *
+     * @var string
+     */
+    public const LOG_FOLDER = 'log';
+
+    /**
+     * Name of the config folder.
+     *
+     * @var string
+     */
+    public const CONFIG_FOLDER = 'config';
 }

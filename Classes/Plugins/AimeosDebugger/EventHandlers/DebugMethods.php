@@ -113,17 +113,16 @@ class DebugMethods extends AbstractEventHandler implements
     /**
      * Resolving the possible methods from the decorator pattern.
      *
-     * @param AbstractCallback $callback
+     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback|null $callback
      *   The original callback.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.
      *
-     * @throws \ReflectionException
-     *
      * @return string
      *   The generated markup.
+     * @throws \ReflectionException
      */
-    public function handle(AbstractCallback $callback, ?Model $model = null): string
+    public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
     {
         $output = '';
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflection */
@@ -164,7 +163,7 @@ class DebugMethods extends AbstractEventHandler implements
             return $this->pool->render->renderExpandableChild(
                 $this->pool->createClass(Model::class)
                     ->setName($methodName)
-                    ->setType(static::TYPE_DEBUG_METHOD)
+                    ->setType($this->pool->messages->getHelp('debugMethod'))
                     ->setNormal(static::UNKNOWN_VALUE)
                     ->setHelpid($methodName)
                     ->setConnectorType(static::CONNECTOR_METHOD)

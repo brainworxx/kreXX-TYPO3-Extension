@@ -58,7 +58,14 @@ class ProcessArray extends AbstractProcessNoneScalar implements
      *
      * @var int
      */
-    protected $arrayCountLimit = 0;
+    protected int $arrayCountLimit = 0;
+
+    /**
+     * The model we are currently working on.
+     *
+     * @var Model
+     */
+    protected Model $model;
 
     /**
      * {@inheritDoc}
@@ -82,38 +89,36 @@ class ProcessArray extends AbstractProcessNoneScalar implements
      */
     public function canHandle(Model $model): bool
     {
+        $this->model = $model;
         return is_array($model->getData());
     }
 
     /**
      * Render a dump for an array.
      *
-     * @param Model $model
-     *   The data we are analysing.
-     *
      * @return string
      *   The rendered markup.
      */
-    protected function handleNoneScalar(Model $model): string
+    protected function handleNoneScalar(): string
     {
         $this->pool->emergencyHandler->upOneNestingLevel();
-        $count = count($model->getData());
+        $count = count($this->model->getData());
 
         if ($count > $this->arrayCountLimit) {
             // Budget array analysis.
-            $model->injectCallback($this->pool->createClass(ThroughLargeArray::class))
+            $this->model->injectCallback($this->pool->createClass(ThroughLargeArray::class))
                 ->setHelpid('simpleArray');
         } else {
             // Complete array analysis.
-            $model->injectCallback($this->pool->createClass(ThroughArray::class));
+            $this->model->injectCallback($this->pool->createClass(ThroughArray::class));
         }
 
         // Dumping all Properties.
         $result = $this->pool->render->renderExpandableChild(
             $this->dispatchProcessEvent(
-                $model->setType(static::TYPE_ARRAY)
+                $this->model->setType(static::TYPE_ARRAY)
                     ->setNormal($count . $this->pool->messages->getHelp('countElements'))
-                    ->addParameter(static::PARAM_DATA, $model->getData())
+                    ->addParameter(static::PARAM_DATA, $this->model->getData())
                     ->addParameter(static::PARAM_MULTILINE, false)
             )
         );

@@ -51,77 +51,77 @@ class Emergency implements ConfigConstInterface
      *
      * @var int
      */
-    protected $krexxCount = 0;
+    protected int $krexxCount = 0;
 
     /**
      * Unix timestamp, used to determine if we need to do an emergency break.
      *
      * @var int
      */
-    protected $timer = 0;
+    protected int $timer = 0;
 
     /**
      * Stores if the emergency break is enabled.
      *
      * @var bool
      */
-    protected $disabled = false;
+    protected bool $disabled = false;
 
     /**
      * Has this one failed before?
      *
      * @var bool
      */
-    protected $allIsOk = true;
+    protected bool $allIsOk = true;
 
     /**
      * Maximum runtime from the config, cached.
      *
      * @var int
      */
-    protected $maxRuntime = 0;
+    protected int $maxRuntime = 0;
 
     /**
      * The server memory limit, coming from the php.ini.
      *
      * @var int
      */
-    protected $serverMemoryLimit = 0;
+    protected int $serverMemoryLimit = 0;
 
     /**
      * Cached configuration of the minimum leftover memory (MB).
      *
      * @var int
      */
-    protected $minMemoryLeft = 0;
+    protected int $minMemoryLeft = 0;
 
     /**
      * The level inside the object/array hierarchy we are in.
      *
      * @var int
      */
-    protected $nestingLevel = 0;
+    protected int $nestingLevel = 0;
 
     /**
      * Caching the setting of the maximum nesting level.
      *
      * @var int
      */
-    protected $maxNestingLevel;
+    protected int $maxNestingLevel;
 
     /**
      * The pool, where we store the classes we need.
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Configured maximum amount of calls.
      *
      * @var int
      */
-    protected $maxCall = 0;
+    protected int $maxCall = 0;
 
     /**
      * Get some system and config data during construct.
@@ -293,7 +293,7 @@ class Emergency implements ConfigConstInterface
     }
 
     /**
-     * Finds out, if krexx was called too often, to prevent large output.
+     * Finds out, if kreXX was called too often, to prevent large output.
      *
      * @return bool
      *   Whether kreXX was called too often or not.

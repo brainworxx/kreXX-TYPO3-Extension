@@ -54,7 +54,6 @@ use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\View\ResponsableViewInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Response as MvcResponse;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;

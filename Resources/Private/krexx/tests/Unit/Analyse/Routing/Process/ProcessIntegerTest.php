@@ -60,7 +60,8 @@ class ProcessIntegerTest extends AbstractHelper
         $this->mockEventService(
             [ProcessInteger::class . PluginConfigInterface::START_PROCESS, null, $model]
         );
-        $processor->handle($model);
+        $processor->canHandle($model);
+        $processor->handle();
 
         $this->assertEquals($fixture, $model->getData());
         $this->assertEquals($fixture, $model->getNormal());
@@ -80,7 +81,8 @@ class ProcessIntegerTest extends AbstractHelper
         $model = new Model(Krexx::$pool);
         $model->setData($fixture);
         $processor = new ProcessInteger(Krexx::$pool);
-        $processor->handle($model);
+        $processor->canHandle($model);
+        $processor->handle();
 
         $this->assertStringStartsWith(
             '11.Mar 2020',

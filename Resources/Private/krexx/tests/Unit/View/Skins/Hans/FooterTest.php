@@ -65,10 +65,10 @@ class FooterTest extends AbstractRenderHans
         ];
         Krexx::$pool->fileService->expects($this->any())
             ->method('filterFilePath')
-            ->will($this->returnValue(''));
+            ->willReturn('');
         Krexx::$pool->fileService->expects($this->any())
             ->method('fileIsReadable')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         // Mock the model for the renderExpandableChild, which we will not test
         // here.
@@ -77,24 +77,24 @@ class FooterTest extends AbstractRenderHans
         $configMock1 = $this->createMock(PluginConfiguration::class);
         $configMock1->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue('Plugin 1'));
+            ->willReturn('Plugin 1');
         $configMock1->expects($this->once())
             ->method('getVersion')
-            ->will($this->returnValue('1.0.0.'));
+            ->willReturn('1.0.0.');
         $configMock2 = $this->createMock(PluginConfiguration::class);
         $configMock2->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue('Plugin 2'));
+            ->willReturn('Plugin 2');
         $configMock2->expects($this->once())
             ->method('getVersion')
-            ->will($this->returnValue('2.0.0.'));
+            ->willReturn('2.0.0.');
         $configMock3 = $this->createMock(PluginConfiguration::class);
         $configMock3->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue('Plugin 3'));
+            ->willReturn('Plugin 3');
         $configMock3->expects($this->once())
             ->method('getVersion')
-            ->will($this->returnValue('3.0.0.'));
+            ->willReturn('3.0.0.');
 
         // Mock the plugin list.
         $pluginList = [

@@ -44,7 +44,7 @@ use StdClass;
 class RecursionTest extends AbstractHelper
 {
 
-    const RECURSION_HIVE = 'recursionHive';
+    public const  RECURSION_HIVE = 'recursionHive';
     /**
      * @var \Brainworxx\Krexx\Service\Flow\Recursion
      */
@@ -92,8 +92,9 @@ class RecursionTest extends AbstractHelper
             $this->markTestSkipped('Wrong PHP version.');
         }
         $marker = $this->recursion->getMarker();
-        unset($this->recursion);
-        $this->assertTrue(isset($GLOBALS[$marker]));
+        $this->recursion->__destruct();
+        $this->assertFalse(isset($GLOBALS[$marker]));
+        $this->setValueByReflection('recursionMarker', $marker, $this->recursion);
     }
 
     /**
@@ -127,12 +128,11 @@ class RecursionTest extends AbstractHelper
         $hiveMock->expects($this->once())
             ->method('contains')
             ->with($fixture)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->setValueByReflection(static::RECURSION_HIVE, $hiveMock, $this->recursion);
 
         $this->assertTrue($this->recursion->isInHive($fixture));
         $this->assertFalse($this->recursion->isInHive(['some', 'array']));
-
         if (version_compare(phpversion(), '8.1.0', '<=')) {
             $this->assertFalse($this->recursion->isInHive($GLOBALS));
             $this->assertTrue($this->recursion->isInHive($GLOBALS), 'Render them a second time');

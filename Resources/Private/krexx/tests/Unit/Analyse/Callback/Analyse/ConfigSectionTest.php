@@ -109,7 +109,7 @@ class ConfigSectionTest extends AbstractHelper
                 ['metaHelp'],
                 ['renderNotEditableHelp'],
                 ['renderNotEditableReadable']
-            ))->will($this->returnValue('some help text'));
+            ))->willReturn('some help text');
         Krexx::$pool->messages = $messageMock;
 
         // Test if editable or not
@@ -117,11 +117,11 @@ class ConfigSectionTest extends AbstractHelper
         $renderMock->expects($this->once())
             ->method('renderSingleEditableChild')
             ->with($this->anything())
-            ->will($this->returnValue('some string'));
+            ->willReturn('some string');
         $renderMock->expects($this->once())
             ->method('renderExpandableChild')
             ->with($this->anything())
-            ->will($this->returnValue('some string'));
+            ->willReturn('some string');
         Krexx::$pool->render = $renderMock;
 
         // Run it!

@@ -47,6 +47,9 @@ class ConstantsFixture71
     protected const CONST_3 = 'string';
     private const CONST_4 = 21;
 
+    #[stuff('lorem'), more('ipsum')]
+    public const CONST_5 = 'Attributes!';
+
     /**
      * I'm supposed to do something with the CONST_4, to avoid a bad rating in
      * the TER-Sonarcube.

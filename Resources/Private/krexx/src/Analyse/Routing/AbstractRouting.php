@@ -51,7 +51,7 @@ abstract class AbstractRouting
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Injects the pool.

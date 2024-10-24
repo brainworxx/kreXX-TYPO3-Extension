@@ -60,42 +60,45 @@ abstract class AbstractController implements ConfigConstInterface
      *
      * @var bool
      */
-    public static $analysisInProgress = false;
+    public static bool $analysisInProgress = false;
 
     /**
      * Sends the output to the browser during shutdown phase.
      *
      * @var AbstractOutput
      */
-    protected $outputService;
+    protected AbstractOutput $outputService;
 
     /**
      * Have we already send the CSS and JS, depending on the destination?
      *
+     * The only reason for this to be a class variable is, that we need it for
+     * the unit tests.
+     *
      * @var bool[]
      */
-    protected static $jsCssSend = [];
+    protected static array $jsCssSend = [];
 
     /**
      * Our pool where we keep all relevant classes.
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Finds our caller.
      *
      * @var AbstractCaller
      */
-    protected $callerFinder;
+    protected AbstractCaller $callerFinder;
 
     /**
      * The configured output destination.
      *
      * @var string
      */
-    protected $destination;
+    protected string $destination;
 
     /**
      * Injects the pool.
@@ -156,7 +159,7 @@ abstract class AbstractController implements ConfigConstInterface
             $caller,
             $this->pool->createClass(Model::class)
                 ->setName($path)
-                ->setType($this->pool->fileService->filterFilePath($pathToConfig))
+                ->setType($pathToConfig)
                 ->setHelpid('currentSettings')
                 ->injectCallback(
                     $this->pool->createClass(ThroughConfig::class)

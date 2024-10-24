@@ -44,10 +44,10 @@ use Krexx;
 
 class XmlTest extends AbstractHelper
 {
-    const SCALAR_NAMESPACE = '\\Brainworxx\\Krexx\\Analyse\\Scalar\\String\\';
-    const TEXT_XML = 'text/xml;';
-    const ATTRIBUTES = 'attributes';
-    const CHILDREN = 'children';
+    public const  SCALAR_NAMESPACE = '\\Brainworxx\\Krexx\\Analyse\\Scalar\\String\\';
+    public const  TEXT_XML = 'text/xml;';
+    public const  ATTRIBUTES = 'attributes';
+    public const  CHILDREN = 'children';
 
     /**
      * Test the disabling of the XML analysis.
@@ -62,7 +62,7 @@ class XmlTest extends AbstractHelper
         );
         // The first false should prevent thge other tests from getting called.
         $functionExistsMock->expects($this->once())
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $classExistsMock = $this->getFunctionMock(
             static::SCALAR_NAMESPACE,
@@ -86,14 +86,14 @@ class XmlTest extends AbstractHelper
         );
         // The first false should prevent thge other tests from getting called.
         $functionExistsMock->expects($this->exactly(2))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $classExistsMock = $this->getFunctionMock(
             static::SCALAR_NAMESPACE,
             'class_exists'
         );
         $classExistsMock->expects($this->exactly(2))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertTrue(Xml::isActive());
     }
@@ -128,10 +128,6 @@ class XmlTest extends AbstractHelper
      * Test the actual handling of a XML string.
      *
      * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::handle
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::parseXml
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::tagOpen
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::tagClosed
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::tagData
      */
     public function testHandle()
     {

@@ -37,8 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Caller;
 
-
-
 /**
  * When used inline, may have some trailing ')' at the end.
  * Things may get really confusing, if we have a string with '(' somewhere
@@ -60,21 +58,21 @@ class CleanUpVarName
      *
      * @var int
      */
-    protected $level = -1;
+    protected int $level = -1;
 
     /**
      * What the variable name says.
      *
      * @var bool
      */
-    protected $singleQuoteInactive = true;
+    protected bool $singleQuoteInactive = true;
 
     /**
      * What the variable name says.
      *
      * @var bool
      */
-    protected $doubleQuoteInactive = true;
+    protected bool $doubleQuoteInactive = true;
 
     /**
      * Was the last char an escape character?
@@ -82,7 +80,7 @@ class CleanUpVarName
      *
      * @var bool
      */
-    protected $lastCharWasEscape = false;
+    protected bool $lastCharWasEscape = false;
 
     /**
      * What the method name says.

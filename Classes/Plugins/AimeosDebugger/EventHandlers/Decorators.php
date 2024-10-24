@@ -84,7 +84,7 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
     /**
      * Resolving the possible methods from the decorator pattern.
      *
-     * @param AbstractCallback $callback
+     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback|null $callback
      *   The original callback.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.
@@ -92,7 +92,7 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
      * @return string
      *   The generated markup.
      */
-    public function handle(AbstractCallback $callback, ?Model $model = null): string
+    public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
     {
         $result = '';
         $params = $callback->getParameters();

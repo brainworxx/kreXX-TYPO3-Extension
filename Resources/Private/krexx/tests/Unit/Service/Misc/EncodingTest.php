@@ -152,7 +152,7 @@ class EncodingTest extends AbstractHelper
             ->with(...$this->withConsecutive(
                 ['string'],
                 ['another string', 'some encoding']
-            ))->will($this->returnValue(42));
+            ))->willReturn(42);
 
         $this->assertEquals(42, $this->encoding->mbStrLen('string'));
         $this->assertEquals(42, $this->encoding->mbStrLen('another string', 'some encoding'));

@@ -49,7 +49,7 @@ trait SingleEditableChild
     /**
      * @var string[]
      */
-    private $markerSingleEditableChild = [
+    private array $markerSingleEditableChild = [
         '{name}',
         '{source}',
         '{normal}',
@@ -60,12 +60,12 @@ trait SingleEditableChild
     /**
      * @var string
      */
-    private $markerDropdownOptions = '{options}';
+    private string $markerDropdownOptions = '{options}';
 
     /**
      * @var string[]
      */
-    private $markerSelectOption = [
+    private array $markerSelectOption = [
         '{text}',
         '{value}',
         '{selected}'
@@ -74,7 +74,7 @@ trait SingleEditableChild
     /**
      * @var string[]
      */
-    private $markerSingleInput = [
+    private array $markerSingleInput = [
         '{id}',
         '{value}',
     ];

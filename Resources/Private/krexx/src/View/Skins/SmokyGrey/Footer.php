@@ -47,7 +47,7 @@ trait Footer
     /**
      * @var string[]
      */
-    private $markerFooter = [
+    private array $markerFooter = [
         '{kconfiguration-classes}',
         '{additionalData}',
         '{noDataAvailable}'

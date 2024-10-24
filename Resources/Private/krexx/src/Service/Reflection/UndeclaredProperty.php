@@ -44,7 +44,7 @@ use ReflectionClass;
  * The original \ReflectionProperty may throw an error when used with
  * dynamically declared properties.
  *
- * For some reasons, the \ReflectionProperty may claim that this property is
+ * For some reason, the \ReflectionProperty may claim that this property is
  * not there. We may have run into an interference of private properties in a
  * deeper class, __isset() which tries to dynamically resolve this, and some
  * public dynamically declared property with the same name as the private
@@ -63,7 +63,7 @@ class UndeclaredProperty extends ReflectionProperty
      *
      * @var bool
      */
-    public $isUndeclared = true;
+    public bool $isUndeclared = true;
 
     /**
      * The name of the property.
@@ -77,7 +77,7 @@ class UndeclaredProperty extends ReflectionProperty
      *
      * @var \ReflectionClass
      */
-    protected $declaringClass;
+    protected ReflectionClass $declaringClass;
 
     /**
      * Is this value actually reachable?
@@ -86,14 +86,14 @@ class UndeclaredProperty extends ReflectionProperty
      *
      * @var bool
      */
-    protected $isPublic = true;
+    protected bool $isPublic = true;
 
     /**
      * Is this property protected? Probably not.
      *
      * @var bool
      */
-    protected $isProtected = false;
+    protected bool $isProtected = false;
 
     /**
      * Setting the necessary property's constructor.

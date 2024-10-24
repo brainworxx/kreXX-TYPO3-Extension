@@ -54,7 +54,7 @@ class Model
      *
      * @var array
      */
-    protected $backtrace = [];
+    protected array $backtrace = [];
 
     /**
      * The message to log.
@@ -63,28 +63,28 @@ class Model
      *
      * @var string
      */
-    public $message = '';
+    public string $message = '';
 
     /**
      * The line, where the logging occurred.
      *
      * @var int
      */
-    protected $line = 0;
+    protected int $line = 0;
 
     /**
      * The file, where the logging occurred.
      *
      * @var string
      */
-    protected $file = '';
+    protected string $file = '';
 
     /**
      * The error code.
      *
      * @var string
      */
-    protected $code = '';
+    protected string $code = '';
 
     /**
      * Getter for the message.

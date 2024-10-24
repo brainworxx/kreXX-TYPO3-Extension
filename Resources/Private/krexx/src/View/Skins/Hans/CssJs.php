@@ -45,7 +45,7 @@ trait CssJs
     /**
      * @var string[]
      */
-    private $markerCssJs = [
+    private array $markerCssJs = [
         '{css}',
         '{js}',
         '{tsEnterText}',

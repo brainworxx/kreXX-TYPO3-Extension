@@ -43,7 +43,7 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
 class FileTest extends AbstractHelper
 {
-    const SETTINGS = 'settings';
+    public const  SETTINGS = 'settings';
 
     /**
      * Fixture for injection in the configuration class.
@@ -104,7 +104,7 @@ class FileTest extends AbstractHelper
         $fileServiceMock->expects($this->exactly(1))
             ->method('getFileContents')
             ->with($somePathIni, false)
-            ->will($this->returnValue($this->fixture));
+            ->willReturn($this->fixture);
 
         $fileServiceMock->expects($this->any())
             ->method('fileIsReadable')
@@ -157,12 +157,12 @@ class FileTest extends AbstractHelper
         $fileServiceMock->expects($this->exactly(2))
             ->method('fileIsReadable')
             ->with(...$this->withConsecutive([$somePathIni], [$somePathJson]))
-            ->will($this->returnValueMap([[$somePathIni, false], [$somePathJson, true]]));
+            ->willReturnMap([[$somePathIni, false], [$somePathJson, true]]);
 
         $fileServiceMock->expects($this->once())
             ->method('getFileContents')
             ->with($somePathJson)
-            ->will($this->returnValue($this->fixture));
+            ->willReturn($this->fixture);
 
 
         Krexx::$pool->fileService = $fileServiceMock;
@@ -235,10 +235,10 @@ class FileTest extends AbstractHelper
             ->with(...$this->withConsecutive(
                 [$anotherGroup, $knownSetting, $whatever],
                 [$groupy, $wrongSetting, $wrongValue]
-            ))->will($this->returnValueMap([
+            ))->willReturnMap([
                 [$anotherGroup, $knownSetting, $whatever, true],
                 [$groupy, $wrongSetting, $wrongValue, false]
-            ]));
+            ]);
         Krexx::$pool->config->validation = $validationMock;
 
         $this->fixture = [

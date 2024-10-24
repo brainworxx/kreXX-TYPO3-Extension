@@ -56,7 +56,6 @@ use Brainworxx\Krexx\Controller\ExceptionController;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
-use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\NewSetting;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
@@ -127,9 +126,9 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
         // See if we must create a temp directory for kreXX.
         $tempPaths = $this->generateTempPaths();
         // Register it!
-        Registration::setConfigFile($tempPaths[Fallback::CONFIG_FOLDER] . DIRECTORY_SEPARATOR . 'Krexx.');
-        Registration::setChunksFolder($tempPaths[Fallback::CHUNKS_FOLDER] . DIRECTORY_SEPARATOR);
-        Registration::setLogFolder($tempPaths[Fallback::LOG_FOLDER] . DIRECTORY_SEPARATOR);
+        Registration::setConfigFile($tempPaths[ConfigConstInterface::CONFIG_FOLDER] . DIRECTORY_SEPARATOR . 'Krexx.');
+        Registration::setChunksFolder($tempPaths[ConfigConstInterface::CHUNKS_FOLDER] . DIRECTORY_SEPARATOR);
+        Registration::setLogFolder($tempPaths[ConfigConstInterface::LOG_FOLDER] . DIRECTORY_SEPARATOR);
         $this->createWorkingDirectories($tempPaths);
 
         if (!class_exists(ObjectManager::class)) {
@@ -190,9 +189,12 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
         // See if we must create a temp directory for kreXX.
         return [
             'main' => $pathSite,
-            Fallback::LOG_FOLDER => $pathSite . DIRECTORY_SEPARATOR . Fallback::LOG_FOLDER,
-            Fallback::CHUNKS_FOLDER => $pathSite . DIRECTORY_SEPARATOR . Fallback::CHUNKS_FOLDER,
-            Fallback::CONFIG_FOLDER => $pathSite . DIRECTORY_SEPARATOR . Fallback::CONFIG_FOLDER,
+            ConfigConstInterface::LOG_FOLDER =>
+                $pathSite . DIRECTORY_SEPARATOR . ConfigConstInterface::LOG_FOLDER,
+            ConfigConstInterface::CHUNKS_FOLDER =>
+                $pathSite . DIRECTORY_SEPARATOR . ConfigConstInterface::CHUNKS_FOLDER,
+            ConfigConstInterface::CONFIG_FOLDER =>
+                $pathSite . DIRECTORY_SEPARATOR . ConfigConstInterface::CONFIG_FOLDER,
         ];
     }
 

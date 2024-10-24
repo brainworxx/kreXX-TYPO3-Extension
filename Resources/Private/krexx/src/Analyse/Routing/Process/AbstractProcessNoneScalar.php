@@ -49,38 +49,32 @@ abstract class AbstractProcessNoneScalar extends AbstractRouting implements Proc
     /**
      * Generate the output of the none scalar analysis.
      *
-     * @param \Brainworxx\Krexx\Analyse\Model $model
-     *   The model, filled with the suff we are analysing.
-     *
      * @return string
      *   The generated DOM
      */
-    public function handle(Model $model): string
+    public function handle(): string
     {
         // Check the nesting level.
         if ($this->pool->emergencyHandler->checkNesting()) {
-            return $this->handleNestedTooDeep($model);
+            return $this->handleNestedTooDeep($this->model);
         }
 
         // Render recursion.
-        if ($this->pool->recursionHandler->isInHive($model->getData())) {
-            return $this->handleRecursion($model);
+        if ($this->pool->recursionHandler->isInHive($this->model->getData())) {
+            return $this->handleRecursion($this->model);
         }
 
         // Render the none scalar stuff.
-        return $this->handleNoneScalar($model);
+        return $this->handleNoneScalar();
     }
 
     /**
      * doing the none scalar stuff.
      *
-     * @param Model $model
-     *   The model, so far.
-     *
      * @return string
      *   The generated DOM.
      */
-    abstract protected function handleNoneScalar(Model $model): string;
+    abstract protected function handleNoneScalar(): string;
 
     /**
      * This none simple type was analysed before.

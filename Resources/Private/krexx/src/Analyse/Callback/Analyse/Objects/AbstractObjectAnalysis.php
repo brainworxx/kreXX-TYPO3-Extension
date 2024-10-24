@@ -90,7 +90,7 @@ abstract class AbstractObjectAnalysis extends AbstractCallback implements Callba
                 $this->dispatchEventWithModel(
                     static::EVENT_MARKER_ANALYSES_END,
                     $model->setName($label)
-                        ->setType(static::TYPE_INTERNALS)
+                        ->setType($this->pool->messages->getHelp('classInternals'))
                 )
             );
         }

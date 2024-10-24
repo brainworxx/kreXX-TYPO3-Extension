@@ -45,7 +45,7 @@ trait Search
     /**
      * @var string[]
      */
-    private $markerSearch = [
+    private array $markerSearch = [
         '{KrexxId}',
         '{searchHeadline}',
         '{searchCaseSensitive}',

@@ -51,7 +51,7 @@ trait HasExtra
      *
      * @var bool
      */
-    protected $hasExtra = false;
+    protected bool $hasExtra = false;
 
     /**
      * Getter for the hasExtra property.

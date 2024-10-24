@@ -47,7 +47,7 @@ trait Help
     /**
      * @var string[]
      */
-    private $markerHelpRow = [
+    private array $markerHelpRow = [
         '{helptitle}',
         '{helptext}'
     ];
@@ -55,7 +55,7 @@ trait Help
     /**
      * @var string
      */
-    private $markerHelp = '{help}';
+    private string $markerHelp = '{help}';
 
      /**
      * Renders the helptext.

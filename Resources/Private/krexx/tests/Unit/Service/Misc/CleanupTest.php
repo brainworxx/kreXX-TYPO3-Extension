@@ -49,9 +49,9 @@ use Brainworxx\Krexx\View\Output\Chunks;
 
 class CleanupTest extends AbstractHelper
 {
-    const CHUNKS_DONE = 'chunksDone';
-    const MISC_NAMESPACE = '\\Brainworxx\\Krexx\\Service\\Misc\\';
-    const GET_LOGGING_IS_ALLOWED = 'isLoggingAllowed';
+    public const  CHUNKS_DONE = 'chunksDone';
+    public const  MISC_NAMESPACE = '\\Brainworxx\\Krexx\\Service\\Misc\\';
+    public const  GET_LOGGING_IS_ALLOWED = 'isLoggingAllowed';
 
     protected $cleanup;
 
@@ -96,7 +96,7 @@ class CleanupTest extends AbstractHelper
         $chunksMock = $this->createMock(Chunks::class);
         $chunksMock->expects($this->once())
             ->method(static::GET_LOGGING_IS_ALLOWED)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         Krexx::$pool->chunks = $chunksMock;
 
         // The log directory will not get globbed.
@@ -118,13 +118,13 @@ class CleanupTest extends AbstractHelper
         $chunksMock = $this->createMock(Chunks::class);
         $chunksMock->expects($this->once())
             ->method(static::GET_LOGGING_IS_ALLOWED)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->chunks = $chunksMock;
 
         // No logs stored.
         $this->mockGlob()->expects($this->once())
             ->with($logDir . '*.Krexx.html')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         // Nothing to sort, because of an early return.
         $configMock = $this->createMock(Config::class);
@@ -132,7 +132,7 @@ class CleanupTest extends AbstractHelper
             ->method('getSetting');
         $configMock->expects($this->once())
             ->method('getLogDir')
-            ->will($this->returnValue($logDir));
+            ->willReturn($logDir);
         Krexx::$pool->config = $configMock;
 
         $this->cleanup->cleanupOldLogs();
@@ -152,7 +152,7 @@ class CleanupTest extends AbstractHelper
 
         $this->mockGlob()->expects($this->once())
             ->with($logDir . '*.Krexx.html')
-            ->will($this->returnValue([$file1, $file2, $file3]));
+            ->willReturn([$file1, $file2, $file3]);
 
         // Prepare the configuration
         ConfigSupplier::$overwriteValues[Fallback::SETTING_MAX_FILES] = '1';
@@ -165,7 +165,7 @@ class CleanupTest extends AbstractHelper
         $chunksMock = $this->createMock(Chunks::class);
         $chunksMock->expects($this->once())
             ->method(static::GET_LOGGING_IS_ALLOWED)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->chunks = $chunksMock;
 
         // Test the retrieval of the file time.
@@ -214,7 +214,7 @@ class CleanupTest extends AbstractHelper
         $chunksMock = $this->createMock(Chunks::class);
         $chunksMock->expects($this->once())
             ->method('isChunkAllowed')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         Krexx::$pool->chunks = $chunksMock;
 
         $this->cleanup->cleanupOldChunks();
@@ -240,21 +240,21 @@ class CleanupTest extends AbstractHelper
         $chunksMock = $this->createMock(Chunks::class);
         $chunksMock->expects($this->once())
             ->method('isChunkAllowed')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->chunks = $chunksMock;
 
         $configMock = $this->createMock(Config::class);
         $configMock->expects($this->once())
             ->method('getChunkDir')
-            ->will($this->returnValue($chunkDir));
+            ->willReturn($chunkDir);
         Krexx::$pool->config = $configMock;
 
         $this->mockGlob()->expects($this->once())
             ->with($chunkDir . '*.Krexx.tmp')
-            ->will($this->returnValue([$file1, $file2, $file3]));
+            ->willReturn([$file1, $file2, $file3]);
         $time = $this->getFunctionMock(static::MISC_NAMESPACE, 'time');
         $time->expects($this->once())
-            ->will($this->returnValue(10000));
+            ->willReturn(10000);
 
         // Test the retrieval of the file time.
         $fileServiceMock = $this->createMock(File::class);

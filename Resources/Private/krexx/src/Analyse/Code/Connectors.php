@@ -47,7 +47,7 @@ class Connectors implements ConnectorsConstInterface
      *
      * @var string[][]
      */
-    protected $connectorArray  = [
+    protected array $connectorArray  = [
         self::CONNECTOR_NOTHING => ['', ''],
         self::CONNECTOR_METHOD => ['->', '()'],
         self::CONNECTOR_STATIC_METHOD => ['::', '()'],
@@ -65,7 +65,7 @@ class Connectors implements ConnectorsConstInterface
      *
      * @var string
      */
-    protected $language = 'php';
+    protected string $language = 'php';
 
     /**
      * Parameters, in case we are connecting a method or closure.
@@ -81,21 +81,21 @@ class Connectors implements ConnectorsConstInterface
      *
      * @var string
      */
-    protected $type = self::CONNECTOR_NOTHING;
+    protected string $type = self::CONNECTOR_NOTHING;
 
     /**
      * Special snowflake connectorLeft. will be uses in case it is set.
      *
-     * @var string
+     * @var null|string
      */
-    protected $customConnectorLeft;
+    protected ?string $customConnectorLeft = null;
 
     /**
      * The return type of the method. Not used for code generation.
      *
      * @var string
      */
-    protected $returnType = '';
+    protected string $returnType = '';
 
     /**
      * Setter for the $params. It is used in case we are connection a method or

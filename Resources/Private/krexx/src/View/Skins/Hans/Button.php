@@ -47,7 +47,7 @@ trait Button
     /**
      * @var string[]
      */
-    private $markerSingleButton = [
+    private array $markerSingleButton = [
         '{text}',
         '{class}',
         '{help}',

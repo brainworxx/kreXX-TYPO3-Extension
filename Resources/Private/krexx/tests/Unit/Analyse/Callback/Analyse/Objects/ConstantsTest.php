@@ -68,7 +68,7 @@ class ConstantsTest extends AbstractHelper
         $reflectionMock = $this->createMock(ReflectionClass::class);
         $reflectionMock->expects($this->once())
             ->method('getConstants')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $reflectionMock->expects($this->never())
             ->method('getName');
@@ -110,11 +110,7 @@ class ConstantsTest extends AbstractHelper
         $reflectionMock = $this->createMock(ReflectionClass::class);
         $reflectionMock->expects($this->once())
             ->method('getConstants')
-            ->will($this->returnValue($returnConstants));
-
-        $reflectionMock->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue('some classname'));
+            ->willReturn($returnConstants);
 
         $fixture = [
             'ref' => $reflectionMock

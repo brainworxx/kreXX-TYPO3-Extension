@@ -51,14 +51,14 @@ abstract class AbstractCallback
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * The parameters for the callback.
      *
      * @var array
      */
-    protected $parameters = [];
+    protected array $parameters = [];
 
     /**
      * The actual callback function for the renderer.
@@ -88,9 +88,9 @@ abstract class AbstractCallback
      * @return $this
      *   Return $this, for chaining.
      */
-    public function setParameters(array &$parameters): AbstractCallback
+    public function setParameters(array $parameters): AbstractCallback
     {
-        $this->parameters = &$parameters;
+        $this->parameters = $parameters;
         return $this;
     }
 

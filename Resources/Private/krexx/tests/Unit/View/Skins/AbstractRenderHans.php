@@ -44,17 +44,17 @@ use Brainworxx\Krexx\View\Skins\RenderHans;
 
 abstract class AbstractRenderHans extends AbstractHelper
 {
-    const PATH_TO_SKIN = '/some path/';
-    const GET_NAME = 'getName';
-    const GET_DOMID = 'getDomid';
-    const GET_NORMAL = 'getNormal';
-    const GET_CONNECTOR_LEFT = 'getConnectorLeft';
-    const GET_CONNECTOR_RIGHT = 'getConnectorRight';
-    const GET_JSON = 'getJson';
-    const GET_HAS_EXTRAS = 'hasExtra';
-    const GET_DATA = 'getData';
-    const GET_TYPE = 'getType';
-    const RENDER_ME = 'renderMe';
+    public const PATH_TO_SKIN = '/some path/';
+    public const GET_NAME = 'getName';
+    public const GET_DOMID = 'getDomid';
+    public const GET_NORMAL = 'getNormal';
+    public const GET_CONNECTOR_LEFT = 'getConnectorLeft';
+    public const GET_CONNECTOR_RIGHT = 'getConnectorRight';
+    public const GET_JSON = 'getJson';
+    public const GET_HAS_EXTRAS = 'hasExtra';
+    public const GET_DATA = 'getData';
+    public const GET_TYPE = 'getType';
+    public const RENDER_ME = 'renderMe';
 
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject
@@ -93,7 +93,7 @@ abstract class AbstractRenderHans extends AbstractHelper
         $pathToSkin = Krexx::$pool->config->getSkinDirectory();
         $this->fileServiceMock = $this->createMock(File::class);
         $this->fileServiceMock->expects($this->any())->method('getFileContents')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 // connectorLeft.html
                 [
                     $pathToSkin . 'connectorLeft' . $fileSuffix,
@@ -215,13 +215,23 @@ abstract class AbstractRenderHans extends AbstractHelper
                     true,
                     implode('', $hans->getMarkerSingleButton())
                 ],
-                // fatalMain.html
+                // fatalMain.html /**
+                /** @deprecated
+                  *   Since 6.0.0
+                  *   Will be removed.
+                  *   Has anybody used this one since PHP 7.0 anyway?
+                 **/
                 [
                     $pathToSkin . 'fatalMain' . $fileSuffix,
                     true,
                     implode('', $hans->getMarkerFatalMain())
                 ],
                 // fatalHeader.html
+                /** @deprecated
+                  *   Since 6.0.0
+                  *   Will be removed.
+                  *   Has anybody used this one since PHP 7.0 anyway?
+                 **/
                 [
                     $pathToSkin . 'fatalHeader' . $fileSuffix,
                     true,
@@ -251,7 +261,7 @@ abstract class AbstractRenderHans extends AbstractHelper
                     true,
                     'Breaking the line! Breaking the line!'
                 ]
-            ]));
+            ]);
 
         Krexx::$pool->fileService = $this->fileServiceMock;
     }
@@ -269,6 +279,6 @@ abstract class AbstractRenderHans extends AbstractHelper
         }
         $this->modelMock->expects($this->once())
             ->method($methodName)
-            ->will($this->returnValue($returnValue));
+            ->willReturn($returnValue);
     }
 }

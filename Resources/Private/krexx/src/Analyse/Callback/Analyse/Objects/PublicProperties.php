@@ -105,7 +105,7 @@ class PublicProperties extends AbstractObjectAnalysis
      * @param ReflectionProperty[] $refProps
      * @param mixed $data
      * @param ReflectionProperty[] $publicProps
-     * @param \ReflectionClass $ref
+     * @param ReflectionClass $ref
      */
     protected function handleUndeclaredProperties(
         array &$refProps,

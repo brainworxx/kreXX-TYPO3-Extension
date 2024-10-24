@@ -49,21 +49,21 @@ class NewSetting implements ConfigConstInterface
      *
      * @var string
      */
-    protected $name = '';
+    protected string $name = '';
 
     /**
      * The default value.
      *
      * @var string
      */
-    protected $defaultValue = '';
+    protected string $defaultValue = '';
 
     /**
      * The name of the section, where the setting will be stored.
      *
      * @var string
      */
-    protected $section = '';
+    protected string $section = '';
 
     /**
      * Method name of the validation class that is used to validate this setting.
@@ -77,21 +77,21 @@ class NewSetting implements ConfigConstInterface
      *
      * @var string
      */
-    protected $renderType = '';
+    protected string $renderType = '';
 
     /**
      * Is this setting editable?
      *
      * @var bool
      */
-    protected $isEditable = true;
+    protected bool $isEditable = true;
 
     /**
      * Is it protected on the frontend from changes?
      *
      * @var bool
      */
-    protected $isFeProtected = true;
+    protected bool $isFeProtected = true;
 
     /**
      * Can this setting ever get edited on the frontend?

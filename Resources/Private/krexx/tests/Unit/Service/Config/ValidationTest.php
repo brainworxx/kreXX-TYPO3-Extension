@@ -51,7 +51,7 @@ use SplObjectStorage;
 class ValidationTest extends AbstractHelper
 {
 
-    const WHATEVER = 'whatever';
+    public const  WHATEVER = 'whatever';
 
     /**
      * Testing the setting of the pool and the merging of the method blacklist
@@ -127,7 +127,7 @@ class ValidationTest extends AbstractHelper
         $iniGet = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Config\\', 'ini_get');
         $iniGet->expects($this->any())
             ->with('max_execution_time')
-            ->will($this->returnValue('123'));
+            ->willReturn('123');
 
         Registration::addMethodToDebugBlacklist('forbiddenclass', 'forbiddenOne');
         $validation = new Validation(Krexx::$pool);
@@ -195,7 +195,7 @@ class ValidationTest extends AbstractHelper
                 '99999' => false
             ],
             'evalLanguage' => [
-                'text' => true,
+                'en' => true,
                 'de' => true,
                 'fr' => false
             ]

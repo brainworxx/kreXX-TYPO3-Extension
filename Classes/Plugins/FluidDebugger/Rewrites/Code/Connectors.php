@@ -64,7 +64,7 @@ class Connectors extends OrgConnectors
     /**
      * {@inheritdoc}
      */
-    protected $language = 'fluid';
+    protected string $language = 'fluid';
 
     /**
      * Do nothing. There is no second connector in fluid.

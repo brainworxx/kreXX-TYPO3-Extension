@@ -52,7 +52,7 @@ trait DomId
      *
      * @var string
      */
-    protected $domid = '';
+    protected string $domid = '';
 
     /**
      * Setter for domid.

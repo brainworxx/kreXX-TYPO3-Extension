@@ -49,10 +49,10 @@ use CurlHandle;
 
 class ProcessResourceTest extends AbstractHelper
 {
-    const PROCESS_NAMESPACE = '\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\';
-    const GET_RESOURCE_TYPE = 'get_resource_type';
-    const CURL_GETINFO = 'curl_getinfo';
-    const GET_TYPE = 'gettype';
+    public const  PROCESS_NAMESPACE = '\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\';
+    public const  GET_RESOURCE_TYPE = 'get_resource_type';
+    public const  CURL_GETINFO = 'curl_getinfo';
+    public const  GET_TYPE = 'gettype';
 
     /**
      * Testing the processing of a stream resource.
@@ -71,10 +71,10 @@ class ProcessResourceTest extends AbstractHelper
         ];
         $getResourceType = $this->getFunctionMock(static::PROCESS_NAMESPACE, static::GET_RESOURCE_TYPE);
         $getResourceType->expects($this->once())
-            ->will($this->returnValue('stream'));
+            ->willReturn('stream');
         $streamGetMetsData = $this->getFunctionMock(static::PROCESS_NAMESPACE, 'stream_get_meta_data');
         $streamGetMetsData->expects($this->once())
-            ->will($this->returnValue($metaResults));
+            ->willReturn($metaResults);
 
         $this->runTheTest($resource, 1, 'Resource (stream)', null, $metaResults);
     }
@@ -96,10 +96,10 @@ class ProcessResourceTest extends AbstractHelper
         ];
         $getResourceType = $this->getFunctionMock(static::PROCESS_NAMESPACE, static::GET_RESOURCE_TYPE);
         $getResourceType->expects($this->once())
-            ->will($this->returnValue('curl'));
+            ->willReturn('curl');
         $getCurlInfo = $this->getFunctionMock(static::PROCESS_NAMESPACE, static::CURL_GETINFO);
         $getCurlInfo->expects($this->once())
-            ->will($this->returnValue($metaResults));
+            ->willReturn($metaResults);
 
         $this->runTheTest($resource, 1, 'Resource (curl)', null, $metaResults);
     }
@@ -119,10 +119,10 @@ class ProcessResourceTest extends AbstractHelper
         $resource = 'Letting a string look like a resource is easy.';
         $getResourceType = $this->getFunctionMock(static::PROCESS_NAMESPACE, static::GET_RESOURCE_TYPE);
         $getResourceType->expects($this->once())
-            ->will($this->returnValue('whatever'));
+            ->willReturn('whatever');
         $getType = $this->getFunctionMock(static::PROCESS_NAMESPACE, static::GET_TYPE);
         $getType->expects($this->once())
-            ->will($this->returnValue('Resource (whatever)'));
+            ->willReturn('Resource (whatever)');
 
         $this->runTheTest($resource, 0, 'Resource (whatever)', $resource);
     }
@@ -144,10 +144,10 @@ class ProcessResourceTest extends AbstractHelper
         ];
         $getResourceType = $this->getFunctionMock(static::PROCESS_NAMESPACE, static::GET_RESOURCE_TYPE);
         $getResourceType->expects($this->once())
-            ->will($this->returnValue('process'));
+            ->willReturn('process');
         $getResourceType = $this->getFunctionMock(static::PROCESS_NAMESPACE, 'proc_get_status');
         $getResourceType->expects($this->once())
-            ->will($this->returnValue($metaResults));
+            ->willReturn($metaResults);
 
         $this->runTheTest($resource, 1, 'Resource (process)', null, $metaResults);
     }
@@ -182,8 +182,9 @@ class ProcessResourceTest extends AbstractHelper
                 [ProcessResource::class . '::renderUnknownOrClosed', null, $model]
             );
         }
-
-        $processor->handle($model);
+        $processor->canHandle($model);
+        $this->setValueByReflection('model', $model, $processor);
+        $processor->handle();
 
         $this->assertEquals(ProcessConstInterface::TYPE_RESOURCE, $model->getType());
         $this->assertEquals($normalExpectation, $model->getNormal());
@@ -210,7 +211,7 @@ class ProcessResourceTest extends AbstractHelper
         $fixture = new stdClass();
         $getResourceType = $this->getFunctionMock(static::PROCESS_NAMESPACE, 'is_resource');
         $getResourceType->expects($this->once())
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertTrue($processor->canHandle($model->setData($fixture)));
     }

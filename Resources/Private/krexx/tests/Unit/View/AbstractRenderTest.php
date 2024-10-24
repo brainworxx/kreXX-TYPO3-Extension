@@ -53,13 +53,12 @@ class AbstractRenderTest extends AbstractHelper
         $configMock = $this->createMock(Config::class);
         $configMock->expects($this->once())
             ->method('getSkinDirectory')
-            ->will($this->returnValue($skinDirectory));
+            ->willReturn($skinDirectory);
         Krexx::$pool->config = $configMock;
 
         $render = new RenderHans(Krexx::$pool);
 
         $this->assertSame(Krexx::$pool->render, $render);
         $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $render));
-        $this->assertEquals($skinDirectory, $this->retrieveValueByReflection('skinPath', $render));
     }
 }

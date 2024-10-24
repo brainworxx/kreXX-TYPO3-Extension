@@ -49,6 +49,7 @@ $factory = '\\Brainworxx\\Krexx\\Service\\Factory';
 
 AbstractHelper::defineFunctionMock($analyseRoutingProcess, 'class_exists');
 AbstractHelper::defineFunctionMock($analyseRoutingProcess, 'is_object');
+AbstractHelper::defineFunctionMock($analyseRoutingProcess, 'is_resource');
 AbstractHelper::defineFunctionMock($serviceFlow, 'ini_get');
 AbstractHelper::defineFunctionMock($serviceFlow, 'time');
 AbstractHelper::defineFunctionMock($serviceFlow, 'memory_get_usage');

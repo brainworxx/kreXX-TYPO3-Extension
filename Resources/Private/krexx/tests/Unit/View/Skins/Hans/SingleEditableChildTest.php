@@ -58,7 +58,7 @@ class SingleEditableChildTest extends AbstractRenderHans
 
         $this->modelMock->expects($this->exactly(2))
             ->method(static::GET_TYPE)
-            ->will($this->returnValue('Input'));
+            ->willReturn('Input');
 
         // A single input field mus not ask for a skin list.
         $configMock = $this->createMock(Config::class);
@@ -90,21 +90,21 @@ class SingleEditableChildTest extends AbstractRenderHans
 
         $this->modelMock->expects($this->exactly(3))
             ->method(static::GET_NAME)
-            ->will($this->returnValue($selectedSkin));
+            ->willReturn($selectedSkin);
         $this->modelMock->expects($this->exactly(2))
             ->method(static::GET_DOMID)
-            ->will($this->returnValue(Fallback::SETTING_SKIN));
+            ->willReturn(Fallback::SETTING_SKIN);
         $this->modelMock->expects($this->exactly(2))
             ->method(static::GET_TYPE)
-            ->will($this->returnValue(Fallback::RENDER_TYPE_SELECT));
+            ->willReturn(Fallback::RENDER_TYPE_SELECT);
 
         $configMock = $this->createMock(Config::class);
         $configMock->expects($this->once())
             ->method('getSkinList')
-            ->will($this->returnValue([
+            ->willReturn([
                 $selectedSkin => $selectedSkin,
                 'Herbert' => 'Herbert'
-            ]));
+            ]);
         Krexx::$pool->config = $configMock;
 
         $result = $this->renderHans->renderSingleEditableChild($this->modelMock);
@@ -130,10 +130,10 @@ class SingleEditableChildTest extends AbstractRenderHans
         $this->mockModel(static::GET_NORMAL, 'totally normal');
         $this->modelMock->expects($this->exactly(3))
             ->method(static::GET_DOMID)
-            ->will($this->returnValue('barf!'));
+            ->willReturn('barf!');
         $this->modelMock->expects($this->exactly(2))
             ->method(static::GET_TYPE)
-            ->will($this->returnValue(Fallback::RENDER_TYPE_SELECT));
+            ->willReturn(Fallback::RENDER_TYPE_SELECT);
 
         $result = $this->renderHans->renderSingleEditableChild($this->modelMock);
         $this->assertStringContainsString('truetruefalsefalse', $result);
@@ -153,12 +153,12 @@ class SingleEditableChildTest extends AbstractRenderHans
         $this->mockModel(static::GET_NORMAL, 'totally normal');
         $this->modelMock->expects($this->exactly(3))
             ->method(static::GET_DOMID)
-            ->will($this->returnValue(Fallback::SETTING_LANGUAGE_KEY));
+            ->willReturn(Fallback::SETTING_LANGUAGE_KEY);
         $this->modelMock->expects($this->exactly(2))
             ->method(static::GET_TYPE)
-            ->will($this->returnValue(Fallback::RENDER_TYPE_SELECT));
+            ->willReturn(Fallback::RENDER_TYPE_SELECT);
 
         $result = $this->renderHans->renderSingleEditableChild($this->modelMock);
-        $this->assertStringContainsString('EnglishtextDeutschde', $result);
+        $this->assertStringContainsString('EnglishenDeutschde', $result);
     }
 }

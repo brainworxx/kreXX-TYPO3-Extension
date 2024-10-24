@@ -36,7 +36,6 @@
 namespace Brainworxx\Krexx\Tests\Unit;
 
 use Brainworxx\Krexx\Controller\AbstractController;
-use Brainworxx\Krexx\Controller\ExceptionController;
 use Brainworxx\Krexx\Controller\TimerController;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
@@ -50,11 +49,10 @@ use stdClass;
 
 class KrexxTest extends AbstractHelper
 {
-
-    const KREXX_COUNT = 'krexxCount';
-    const TIME_KEEPING = 'timekeeping';
-    const COUNTER_CACHE = 'counterCache';
-    const CONTROLLER_NAMESPACE = '\\Brainworxx\\Krexx\\Controller\\';
+    public const KREXX_COUNT = 'krexxCount';
+    public const TIME_KEEPING = 'timekeeping';
+    public const COUNTER_CACHE = 'counterCache';
+    public const CONTROLLER_NAMESPACE = '\\Brainworxx\\Krexx\\Controller\\';
 
     protected function getDirContents($dir, &$results = array())
     {
@@ -343,31 +341,31 @@ class KrexxTest extends AbstractHelper
         $settingsMockDest->expects($this->once())
             ->method('setSource')
             ->with($this->equalTo($forcedLogging))
-            ->will($this->returnValue($settingsMockDest));
+            ->willReturn($settingsMockDest);
         $settingsMockDest->expects($this->once())
             ->method('setValue')
             ->with($this->equalTo(Fallback::VALUE_FILE));
         $settingsMockDest->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(Fallback::VALUE_FILE));
+            ->willReturn(Fallback::VALUE_FILE);
         $settingsMockDest->expects($this->once())
             ->method('getSource')
-            ->will($this->returnValue($forcedLogging));
+            ->willReturn($forcedLogging);
 
         $settingsMockAjax = $this->createMock(Model::class);
         $settingsMockAjax->expects($this->once())
             ->method('setSource')
             ->with($this->equalTo($forcedLogging))
-            ->will($this->returnValue($settingsMockAjax));
+            ->willReturn($settingsMockAjax);
         $settingsMockAjax->expects($this->once())
             ->method('setValue')
             ->with($this->equalTo(false));
         $settingsMockAjax->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $settingsMockAjax->expects($this->once())
             ->method('getSource')
-            ->will($this->returnValue($forcedLogging));
+            ->willReturn($forcedLogging);
 
         // Inject the mock into the settings
         Krexx::$pool->config->settings[Fallback::SETTING_DESTINATION] = $settingsMockDest;
@@ -506,70 +504,5 @@ class KrexxTest extends AbstractHelper
         $config = new Config(Krexx::$pool);
         // Run the test
         $this->assertTrue($config::$disabledByPhp);
-    }
-
-    /**
-     * Test the registering of the exception handler, when kreXX is disabled.
-     *
-     * @covers \Brainworxx\Krexx\Krexx::registerExceptionHandler
-     */
-    public function testRegisterExceptionHandlerDisabled()
-    {
-        Config::$disabledByPhp = true;
-
-        $setExceptionHandlerMock = $this
-            ->getFunctionMock(static::CONTROLLER_NAMESPACE, 'set_exception_handler');
-        $setExceptionHandlerMock->expects($this->never());
-
-        Krexx::registerExceptionHandler();
-    }
-
-    /**
-     * Test the registering of the exception handler, when kreXX is enabled..
-     *
-     * @covers \Brainworxx\Krexx\Krexx::registerExceptionHandler
-     */
-    public function testRegisterExceptionHandler()
-    {
-        // Mock an already existing controller.
-        $stdClass = new stdClass();
-        $this->setValueByReflection('exceptionController', $stdClass, ExceptionController::class);
-
-        $setExceptionHandlerMock = $this
-            ->getFunctionMock(static::CONTROLLER_NAMESPACE, 'set_exception_handler');
-        $setExceptionHandlerMock->expects($this->once())
-            ->with([$stdClass, 'exceptionAction']);
-
-        Krexx::registerExceptionHandler();
-    }
-
-    /**
-     * Test the registering of the exception handler, when kreXX is disabled.
-     *
-     * @covers \Brainworxx\Krexx\Krexx::unregisterExceptionHandler
-     */
-    public function testUnRegisterExceptionHandlerDisabled()
-    {
-        Config::$disabledByPhp = true;
-
-        $restoreExceptionHandlerMock = $this
-            ->getFunctionMock(static::CONTROLLER_NAMESPACE, 'restore_exception_handler');
-        $restoreExceptionHandlerMock->expects($this->never());
-
-        Krexx::unregisterExceptionHandler();
-    }
-
-     /**
-     * Test the registering of the exception handler, when kreXX is enabled.
-     *
-     * @covers \Brainworxx\Krexx\Krexx::unregisterExceptionHandler
-     */
-    public function testUnRegisterExceptionHandler()
-    {
-        $restoreExceptionHandlerMock = $this
-            ->getFunctionMock(static::CONTROLLER_NAMESPACE, 'restore_exception_handler');
-        $restoreExceptionHandlerMock->expects($this->once());
-
-        Krexx::unregisterExceptionHandler();
     }
 }

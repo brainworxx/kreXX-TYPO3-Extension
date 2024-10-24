@@ -66,7 +66,7 @@ class DebugTest extends AbstractHelper
         $routingMock->expects($this->once())
             ->method('analysisHub')
             ->with($this->anything())
-            ->will($this->returnValue('some markup'));
+            ->willReturn('some markup');
         Krexx::$pool->routing = $routingMock;
 
         // Run the test.

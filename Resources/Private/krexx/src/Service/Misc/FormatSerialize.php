@@ -48,14 +48,14 @@ class FormatSerialize
      *
      * @var string
      */
-    protected $string;
+    protected string $string;
 
     /**
      * The current offset for parsing.
      *
      * @var int
      */
-    protected $offset = 0;
+    protected int $offset = 0;
 
     /**
      * Pretty print this serializes string.
@@ -229,9 +229,6 @@ class FormatSerialize
                 // Null handling.
                 $result .= $this->assert(';');
                 break;
-            case 'o':
-                // The 'o' was removed in PHP 7.4
-                // @deprecated.
             case 'O':
                 // Object handling.
                 $result .= $this->parseString() . $this->parseArrayOrObject($string);

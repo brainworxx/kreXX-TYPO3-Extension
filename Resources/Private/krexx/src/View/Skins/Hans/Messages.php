@@ -45,7 +45,7 @@ trait Messages
     /**
      * @var string
      */
-    private $markerMessages = '{message}';
+    private string $markerMessages = '{message}';
 
     /**
      * {@inheritdoc}

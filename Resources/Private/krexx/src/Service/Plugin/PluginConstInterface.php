@@ -55,24 +55,4 @@ interface PluginConstInterface
      * @var string
      */
     public const CONFIG_CLASS = 'configClass';
-
-    /**
-     * Name of the plugin.
-     *
-     * @deprecated since 5.0.0
-     *   Will be removed. Use the configuration class directly.
-     *
-     * @var string
-     */
-    public const PLUGIN_NAME = 'name';
-
-    /**
-     * Version of the plugin.
-     *
-     * @deprecated since 5.0.0
-     *   Will be removed. Use the configuration class directly.
-     *
-     * @var string
-     */
-    public const PLUGIN_VERSION = 'ver';
 }

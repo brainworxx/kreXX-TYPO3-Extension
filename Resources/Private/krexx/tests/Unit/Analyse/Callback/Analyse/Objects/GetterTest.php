@@ -48,7 +48,7 @@ use ReflectionMethod;
 
 class GetterTest extends AbstractHelper
 {
-    const TEST_STRING = 'some name';
+    public const  TEST_STRING = 'some name';
 
     /**
      * @var string

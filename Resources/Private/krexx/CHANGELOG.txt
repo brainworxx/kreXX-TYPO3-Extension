@@ -1,3 +1,27 @@
+6.0.0
+- Added class meta analysis for class names in strings.
+- Added a hint to the 'unknown' getter analysis result.
+- Added container handling to the getter analysis.
+- Added a unit of measurement to the benchmarking.
+- Added better readability to the exception analysis.
+- Added delegate handling to the getter analysis.
+- Added attribute handling to the meta analysis.
+- Change: The scalar analysis classes are now reused.
+- Change: Renamed the language fallback key from 'text' to 'en'.
+- Change: Dropped PHP 7.2 and 7.3 support.
+- Change: Removed deprecated code.
+- Change: Use json_validate() if available to determine if a
+  string is a json string.
+- Change: Simplified the routing process.
+- Change: Removed some literals.
+- Change: Some deprecations.
+- Change: Only use byRef when absolutely necessary.
+- Change: We do not filter the file path anymore.
+- Change: Moved some frontend literals to the translations.
+- Change: Split the getter analysis into several smaller classes.
+- Change: Removed deprecations from the unit tests.
+- Change: Deprecated the exception handler.
+
 5.0.6
 - Added the handling of type casting to the regex getter analysis.
 - Bugfix: Removed some self:: references.
@@ -11,7 +35,8 @@
 - Bugfix: Make sure that the JS only executes once.
 
 5.0.4
-- Change: Made implicitly nullable parameter declarations explicitly nullable.
+- Change: Made implicitly nullable parameter declarations
+  explicitly nullable.
 - Bugfix: Catch a Throwable in the ProcessInteger.
 - Bugfix: Better Base64 detection.
 - Bugfix: The error handler was not removed in the file reader.

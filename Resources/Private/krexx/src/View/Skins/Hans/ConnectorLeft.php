@@ -45,7 +45,7 @@ trait ConnectorLeft
     /**
      * @var string
      */
-    private $markerConnectorLeft = '{connector}';
+    private string $markerConnectorLeft = '{connector}';
 
     /**
      * Renders the left connector.

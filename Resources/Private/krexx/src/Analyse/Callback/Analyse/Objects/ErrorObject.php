@@ -40,6 +40,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
+use Throwable;
 
 /**
  * When we are handling an error object, get the backtrace and analyse as such.
@@ -59,15 +60,9 @@ class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterf
 
         /** @var \Throwable $data */
         $data = $this->parameters[static::PARAM_DATA];
+        $this->addExceptionMessage($data);
         $lineNo = $data->getLine() - 1;
-        $source = trim(
-            $this->pool->fileService->readSourcecode(
-                $data->getFile(),
-                $lineNo,
-                $lineNo - 5,
-                $lineNo + 5
-            )
-        );
+        $source = trim($this->pool->fileService->readSourcecode($data->getFile(), $lineNo, $lineNo - 5, $lineNo + 5));
         if (empty($source)) {
             $source = $this->pool->messages->getHelp('noSourceAvailable');
         }
@@ -83,6 +78,30 @@ class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterf
                     ->setType(static::TYPE_PHP)
             )
         );
+    }
+
+    /**
+     * Add a top message for better / faster readability.
+     *
+     * @param \Throwable $data
+     * @return void
+     */
+    protected function addExceptionMessage(Throwable $data): void
+    {
+        // Level 1 means, that is the first object we are looking at.
+        if ($this->pool->emergencyHandler->getNestingLevel() !== 1) {
+            return;
+        }
+        $message = $data->getMessage();
+
+        // Some messages are huge.
+        if (strlen($message) > 80) {
+            $message = substr($message, 0, 75) . ' ...';
+        }
+
+        // Escape it, there can be some bad stuff in there.
+        $message = $this->pool->encodingService->encodeString($message);
+        $this->pool->messages->addMessage('exceptionText', [get_class($data), $message], true);
     }
 
     /**
@@ -102,7 +121,7 @@ class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterf
                     static::TRACE_BACKTRACE,
                     $this->pool->createClass(Model::class)
                         ->setName($this->pool->messages->getHelp('backTrace'))
-                        ->setType(static::TYPE_INTERNALS)
+                        ->setType($this->pool->messages->getHelp('classInternals'))
                         ->addParameter(static::PARAM_DATA, $trace)
                         ->injectCallback(
                             $this->pool->createClass(ProcessBacktrace::class)

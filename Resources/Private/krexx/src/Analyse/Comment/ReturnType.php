@@ -139,25 +139,4 @@ class ReturnType extends AbstractComment
 
         return $result;
     }
-
-    /**
-     * Simply ask the reflection method for it's return value.
-     *
-     * @param \Reflector $refMethod
-     *   The reflection of the method we are analysing
-     *
-     * @deprecated since 5.0.0
-     *   Was moved to the MethodDeclaration class.
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated methods.
-     *
-     * @return string
-     *   The return type if possible, an empty string if not.
-     */
-    protected function retrieveTypeByReflection(Reflector $refMethod): string
-    {
-        return $this->pool->createClass(MethodDeclaration::class)
-            ->retrieveNamedType($refMethod);
-    }
 }

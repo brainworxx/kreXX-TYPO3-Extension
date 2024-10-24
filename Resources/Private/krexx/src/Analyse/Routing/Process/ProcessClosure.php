@@ -56,6 +56,13 @@ class ProcessClosure extends AbstractProcessNoneScalar implements
     ConnectorsConstInterface
 {
     /**
+     * The model we are currently working on.
+     *
+     * @var Model
+     */
+    protected Model $model;
+
+    /**
      * Is this one a boolean?
      *
      * @param Model $model
@@ -66,22 +73,20 @@ class ProcessClosure extends AbstractProcessNoneScalar implements
      */
     public function canHandle(Model $model): bool
     {
+        $this->model = $model;
         return $model->getData() instanceof Closure;
     }
 
     /**
      * Analyses a closure.
      *
-     * @param Model $model
-     *   The closure we want to analyse.
-     *
      * @return string
      *   The generated markup.
      */
-    protected function handleNoneScalar(Model $model): string
+    protected function handleNoneScalar(): string
     {
         /** @var Closure $data */
-        $data = $model->getData();
+        $data = $this->model->getData();
         // Remember that we've been here before.
         $this->pool->recursionHandler->addToHive($data);
 
@@ -94,7 +99,7 @@ class ProcessClosure extends AbstractProcessNoneScalar implements
 
         $result = $this->retrieveMetaData($ref);
         return $this->pool->render->renderExpandableChild($this->dispatchProcessEvent(
-            $model->setType(static::TYPE_CLOSURE)
+            $this->model->setType(static::TYPE_CLOSURE)
                 ->setNormal(static::UNKNOWN_VALUE)
                 ->setConnectorParameters($this->retrieveParameterList($ref, $result))
                 ->setDomid($this->generateDomIdFromObject($data))
@@ -127,8 +132,7 @@ class ProcessClosure extends AbstractProcessNoneScalar implements
         $result[$messages->getHelp('metaSource')] = $this->retrieveSourceCode($ref);
 
         // Adding the place where it was declared.
-        $result[$messages->getHelp('metaDeclaredIn')] =
-            $this->pool->fileService->filterFilePath($ref->getFileName()) . "\n";
+        $result[$messages->getHelp('metaDeclaredIn')] = $ref->getFileName() . "\n";
         $result[$messages->getHelp('metaDeclaredIn')] .= 'in line ' . $ref->getStartLine();
 
         // Adding the namespace, but only if we have one.

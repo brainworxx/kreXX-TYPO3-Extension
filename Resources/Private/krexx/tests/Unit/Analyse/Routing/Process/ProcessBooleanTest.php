@@ -58,7 +58,8 @@ class ProcessBooleanTest extends AbstractHelper
         $model = new Model(Krexx::$pool);
         $model->setData($fixture);
         $processor = new ProcessBoolean(Krexx::$pool);
-        $processor->handle($model);
+        $processor->canHandle($model);
+        $processor->handle();
 
         $fixture = false;
         $model = new Model(Krexx::$pool);
@@ -67,7 +68,8 @@ class ProcessBooleanTest extends AbstractHelper
         $this->mockEventService(
             [ProcessBoolean::class . PluginConfigInterface::START_PROCESS, null, $model]
         );
-        $processor->handle($model);
+        $processor->canHandle($model);
+        $processor->handle();
 
         $models = $renderNothing->model['renderExpandableChild'];
 

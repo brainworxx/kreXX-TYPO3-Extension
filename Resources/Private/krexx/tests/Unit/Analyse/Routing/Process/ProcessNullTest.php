@@ -60,7 +60,8 @@ class ProcessNullTest extends AbstractHelper
         $this->mockEventService(
             [ProcessNull::class . PluginConfigInterface::START_PROCESS, null, $model]
         );
-        $processor->handle($model);
+        $processor->canHandle($model);
+        $processor->handle();
 
         $this->assertEquals('NULL', $model->getData());
         $this->assertEquals('NULL', $model->getNormal());

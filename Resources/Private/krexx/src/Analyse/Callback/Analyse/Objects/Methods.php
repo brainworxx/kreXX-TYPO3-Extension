@@ -65,7 +65,7 @@ class Methods extends AbstractObjectAnalysis implements ConfigConstInterface
     {
         $output = $this->dispatchStartEvent();
 
-        /** @var \ReflectionClass $ref */
+        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $this->parameters[static::PARAM_REF];
 
         $doProtected = $this->pool->config->getSetting(static::SETTING_ANALYSE_PROTECTED_METHODS) ||
@@ -87,7 +87,7 @@ class Methods extends AbstractObjectAnalysis implements ConfigConstInterface
                             ->setDomid($domId)
                             ->setNormal($metaMethods)
                             ->setName($metaMethods)
-                            ->setType(static::TYPE_INTERNALS)
+                            ->setType($this->pool->messages->getHelp('classInternals'))
                     )
                 );
         }
@@ -98,7 +98,7 @@ class Methods extends AbstractObjectAnalysis implements ConfigConstInterface
     /**
      * Dumping all methods but only if we have any.
      *
-     * @param \ReflectionClass $ref
+     * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
      *   The reflection of the class we are analysing
      * @param string $domId
      *   The already generated dom id.
@@ -114,10 +114,10 @@ class Methods extends AbstractObjectAnalysis implements ConfigConstInterface
     {
         $methods = $ref->getMethods(ReflectionMethod::IS_PUBLIC);
         if ($doProtected) {
-            $methods = array_merge($methods, $ref->getMethods(ReflectionMethod::IS_PROTECTED));
+            $methods = [...$methods, ...$ref->getMethods(ReflectionMethod::IS_PROTECTED)];
         }
         if ($doPrivate) {
-            $methods = array_merge($methods, $ref->getMethods(ReflectionMethod::IS_PRIVATE));
+            $methods = [...$methods, ...$ref->getMethods(ReflectionMethod::IS_PRIVATE)];
         }
 
         // Is there anything to analyse?
@@ -136,7 +136,7 @@ class Methods extends AbstractObjectAnalysis implements ConfigConstInterface
                 static::EVENT_MARKER_ANALYSES_END,
                 $this->pool->createClass(Model::class)
                     ->setName($this->pool->messages->getHelp('metaMethods'))
-                    ->setType(static::TYPE_INTERNALS)
+                    ->setType($this->pool->messages->getHelp('classInternals'))
                     ->addParameter(static::PARAM_DATA, $methods)
                     ->addParameter(static::PARAM_REF, $ref)
                     ->setDomId($domId)

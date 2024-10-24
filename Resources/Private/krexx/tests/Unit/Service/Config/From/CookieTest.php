@@ -44,11 +44,11 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 class CookieTest extends AbstractHelper
 {
 
-    const SETTING_01 = 'setting01';
-    const SETTING_02 = 'setting02';
-    const VALUE_01 = 'value 1';
-    const VALUE_02 = 'value 2';
-    const SETTINGS = 'settings';
+    public const  SETTING_01 = 'setting01';
+    public const  SETTING_02 = 'setting02';
+    public const  VALUE_01 = 'value 1';
+    public const  VALUE_02 = 'value 2';
+    public const  SETTINGS = 'settings';
 
     /**
      * The test fixture.
@@ -80,9 +80,9 @@ class CookieTest extends AbstractHelper
         $poolMock->expects($this->once())
             ->method('getGlobals')
             ->with('_COOKIE')
-            ->will($this->returnValue([
+            ->willReturn([
                 'KrexxDebugSettings' => json_encode($this->fixture)
-            ]));
+            ]);
         $poolMock->config = Krexx::$pool->config;
 
         $cookies = new Cookie($poolMock);
@@ -94,9 +94,9 @@ class CookieTest extends AbstractHelper
         $poolMock->expects($this->once())
             ->method('getGlobals')
             ->with('_COOKIE')
-            ->will($this->returnValue([
+            ->willReturn([
                 'KrexxDebugSettings' => 'a none json string'
-            ]));
+            ]);
         $poolMock->config = Krexx::$pool->config;
 
         $cookies = new Cookie($poolMock);

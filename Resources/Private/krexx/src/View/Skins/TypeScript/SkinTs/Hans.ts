@@ -120,11 +120,11 @@ class Hans
         this.initDraxx();
 
         /**
-         * Register krexx close button function.
+         * Register kreXX close button function.
          *
          * @event click
          *   Displays a closing animation of the corresponding
-         *   krexx output "window" and then removes it from the markup.
+         *   kreXX output "window" and then removes it from the markup.
          */
         this.eventHandler.addEvent(this.selectors.close, 'click', this.close);
 
@@ -132,7 +132,7 @@ class Hans
          * Register toggling to the elements.
          *
          * @event click
-         *   Expands a krexx node when it is not expanded.
+         *   Expands a kreXX node when it is not expanded.
          *   When it is already expanded, it closes it.
          */
         this.eventHandler.addEvent(this.selectors.toggle, 'click', this.toggle);
@@ -141,7 +141,7 @@ class Hans
          * Register functions for the local dev-settings.
          *
          * @event change
-         *   Changes on the krexx html forms.
+         *   Changes on the kreXX html forms.
          *   All changes will automatically be written to the browser cookies.
          */
         this.eventHandler.addEvent(this.selectors.setSetting, 'change', this.kdt.setSetting);
@@ -159,7 +159,7 @@ class Hans
          * Register the recursions resolving.
          *
          * @event click
-         *   When a recursion is clicked, krexx tries to locate the
+         *   When a recursion is clicked, kreXX tries to locate the
          *   first output of the object and highlight it.
          */
         this.eventHandler.addEvent(this.selectors.copyFrom, 'click', this.kdt.copyFrom);
@@ -168,7 +168,7 @@ class Hans
          * Register the displaying of the search menu
          *
          * @event click
-         *   When the button is clicked, krexx will display the
+         *   When the button is clicked, kreXX will display the
          *   search menu associated this the same output window.
          */
         this.eventHandler.addEvent(this.selectors.displaySearch, 'click', this.displaySearch);
@@ -177,7 +177,7 @@ class Hans
          * Register the search event on the next button.
          *
          * @event click
-         *   When the button is clicked, krexx will start searching.
+         *   When the button is clicked, kreXX will start searching.
          */
         this.eventHandler.addEvent(this.selectors.performSearch, 'click', this.search.performSearch);
 
@@ -358,7 +358,7 @@ class Hans
     };
 
     /**
-     * Shows a "fast" closing animation and then removes the krexx window from the markup.
+     * Shows a "fast" closing animation and then removes the kreXX window from the markup.
      *
      * @event click
      * @param {Event} event
@@ -386,7 +386,7 @@ class Hans
     };
 
     /**
-     * Disables the editing functions, when a krexx output is loaded as a file.
+     * Disables the editing functions, when a kreXX output is loaded as a file.
      *
      * These local settings would actually do
      * nothing at all, because they would land inside a cookie

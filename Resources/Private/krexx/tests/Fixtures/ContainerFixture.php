@@ -33,32 +33,71 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Tests\Unit\View\Skins\Hans;
+namespace Brainworxx\Krexx\Tests\Fixtures;
 
-use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
-
-class FatalMainTest extends AbstractRenderHans
+class ContainerFixture
 {
-    /**
-     * Test the rendering of the main part of the error handler
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\FatalMain::renderFatalMain
-     */
-    public function testRenderFatalMain()
+    protected array $container = ['value' => 1, 'stuff' => 'more stuff', 'barf' => 'borf'];
+
+    protected string $nottaContaina;
+
+    public function getValue()
     {
-        $errorString = 'Dev oops error';
-        $inFile = 'deplyoment.php';
-        $line = 456;
+        return $this->container['value'];
+    }
 
-        $this->fileServiceMock->expects($this->once())
-            ->method('readSourcecode')
-            ->with($inFile, $line - 1, $line - 6, $line + 4)
-            ->will($this->returnValue('faulty code line'));
+    public function getSomething()
+    {
+        return $this->container['stuff'];
+    }
 
-        $result = $this->renderHans->renderFatalMain($errorString, $inFile, $line);
-        $this->assertStringContainsString($errorString, $result);
-        $this->assertStringContainsString($inFile, $result);
-        $this->assertStringContainsString((string)$line, $result);
-        $this->assertStringContainsString('faulty code line', $result);
+    /**
+     * @return string
+     */
+    public function getStatic()
+    {
+        return 'static noise';
+    }
+
+    public function getWrongContainer()
+    {
+        return $this->noTainer['stuff'];
+    }
+
+    /**
+     * It is terribly formatted!
+     *
+     * @return mixed
+     */
+    public function getBadFormatting()
+    {
+        return $this->container['barf'
+        ]->someValue;
+    }
+
+    public function getAnError(): string
+    {
+        return $this->nottaContaina['barf'];
+    }
+
+    public function getSomethingElse()
+    {
+        if (isset($this->container['nutting'])) {
+            return $this->container['something'];
+        }
+
+        return 'else';
+    }
+
+    /**
+     * The parser should fail with this one.
+     *
+     * Also known as the comment section in Social Media!
+     *
+     * @return mixed
+     */
+    public function getBadComments()
+    {
+        return $this->container['stuff']->substuff['Twitch prime is not a crime'];
     }
 }

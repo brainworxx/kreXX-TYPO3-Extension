@@ -49,30 +49,25 @@ use Krexx;
 class ReflectionClass extends \ReflectionClass
 {
     /**
-     * static caching, to speed things up.
-     *
-     * @deprecated
-     *   Since 5.0.0. Will be removed.
-     *
-     * @var array
-     */
-    protected static $cache = [];
-
-    /**
      * The object, cast into an array.
      *
      * @var array
      */
-    protected $objectArray = [];
+    protected array $objectArray = [];
 
     /**
      * The object we are currently analysing.
      *
-     * @var object
+     * @var object|string
      */
     protected $data;
 
-    protected $unsetPropertyStorage;
+    /**
+     * Storage for unset properties.
+     *
+     * @var \SplObjectStorage
+     */
+    protected SplObjectStorage $unsetPropertyStorage;
 
     /**
      * ReflectionClass constructor.

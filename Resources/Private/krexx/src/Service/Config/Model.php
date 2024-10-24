@@ -54,28 +54,28 @@ class Model implements ConfigConstInterface
      *
      * @var string
      */
-    protected $section;
+    protected string $section;
 
     /**
      * The type of this setting.
      *
      * @var string
      */
-    protected $type;
+    protected string $type;
 
     /**
      * Whether his setting is editable
      *
      * @var bool
      */
-    protected $editable;
+    protected bool $editable;
 
     /**
      * Source of this setting.
      *
      * @var string
      */
-    protected $source;
+    protected string $source;
 
     /**
      * Setter for the editable value.
@@ -123,22 +123,6 @@ class Model implements ConfigConstInterface
 
         $this->value = $value;
         return $this;
-    }
-
-    /**
-     * Getter for the editable value.
-     *
-     * @deprecated
-     *   Since 5.0.0. Use isEditable() instead.
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated methods.
-     *
-     * @return bool
-     */
-    public function getEditable(): bool
-    {
-        return $this->isEditable();
     }
 
     /**

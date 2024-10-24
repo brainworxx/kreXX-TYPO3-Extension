@@ -50,14 +50,14 @@ abstract class AbstractOutput
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Deleting old chunks and logfiles.
      *
      * @var \Brainworxx\Krexx\Service\Misc\Cleanup
      */
-    protected $cleanupService;
+    protected Cleanup $cleanupService;
 
     /**
      * [0] -> The chunkedup string, that we intend to send to
@@ -73,7 +73,7 @@ abstract class AbstractOutput
      *   - footer
      *   This means, that every output is split in 4 parts
      */
-    protected $chunkStrings = [];
+    protected array $chunkStrings = [];
 
     /**
      * Injects the pool and register the shutdown function.

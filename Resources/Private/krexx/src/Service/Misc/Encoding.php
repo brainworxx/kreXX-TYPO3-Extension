@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Misc;
 
-use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -50,7 +49,7 @@ class Encoding
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Injects the pool.
@@ -370,30 +369,5 @@ class Encoding
     protected function arrayMapCallbackNormal(int $charCode): string
     {
         return '&#' . $charCode . ';';
-    }
-
-    /**
-     * Check for special chars in properties.
-     *
-     * AFAIK this is only possible for dynamically declared properties
-     * or some magical stuff from __get()
-     *
-     * @deprecated Since 5.0.2
-     *   Use ThroughProperties->isPropertyNameNormal() instead.
-     * @codeCoverageIgnore
-     *   We do not test deprecated methods.
-     *
-     * @see https://stackoverflow.com/questions/29019484/validate-a-php-variable
-     * @author AbraCadaver
-     *
-     * @param string|int $propName
-     *   The property name we want to check.
-     * @return bool
-     *   Whether we have a special char in there, or not.
-     */
-    public function isPropertyNameNormal($propName): bool
-    {
-        return $this->pool->createClass(ThroughProperties::class)
-            ->isPropertyNameNormal($propName);
     }
 }

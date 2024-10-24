@@ -51,7 +51,7 @@ class ProcessNothing extends AbstractRouting implements ProcessInterface
         return true;
     }
 
-    public function handle(Model $model): string
+    public function handle(): string
     {
         // Do nothing.
         return '';

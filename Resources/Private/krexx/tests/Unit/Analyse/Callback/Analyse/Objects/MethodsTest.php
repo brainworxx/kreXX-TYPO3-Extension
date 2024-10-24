@@ -49,11 +49,11 @@ use ReflectionMethod;
 class MethodsTest extends AbstractHelper
 {
 
-    const PRIVATE_METHOD = 'privateMethod';
-    const PROTECTED_METHOD = 'protectedMethod';
-    const PUBLIC_METHOD = 'publicMethod';
-    const TROUBLESOME_METHOD = 'troublesomeMethod';
-    const CLASS_METHOD = 'classMethod';
+    public const  PRIVATE_METHOD = 'privateMethod';
+    public const  PROTECTED_METHOD = 'protectedMethod';
+    public const  PUBLIC_METHOD = 'publicMethod';
+    public const  TROUBLESOME_METHOD = 'troublesomeMethod';
+    public const  CLASS_METHOD = 'classMethod';
 
     /**
      * @var string
@@ -320,7 +320,7 @@ class MethodsTest extends AbstractHelper
         $recursionMock->expects($this->once())
             ->method('isInMetaHive')
             ->with($metaHiveKey . $this->md5Hash)
-            ->will($this->returnValue($isInHive));
+            ->willReturn($isInHive);
         // Inject it.
         Krexx::$pool->recursionHandler = $recursionMock;
 

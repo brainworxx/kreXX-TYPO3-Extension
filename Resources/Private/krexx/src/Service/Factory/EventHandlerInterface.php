@@ -55,7 +55,7 @@ interface EventHandlerInterface
     /**
      * Blueprint for the event handler.
      *
-     * @param AbstractCallback $callback
+     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback|null $callback
      *   The original callback. Or null, when coming from the processing.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.
@@ -64,5 +64,5 @@ interface EventHandlerInterface
      *   The generated markup.
      *   Only the markup from start events gets dispatched.
      */
-    public function handle(AbstractCallback $callback, ?Model $model = null): string;
+    public function handle(?AbstractCallback $callback = null, ?Model $model = null): string;
 }

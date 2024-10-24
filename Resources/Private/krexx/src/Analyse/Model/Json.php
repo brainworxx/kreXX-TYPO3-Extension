@@ -51,7 +51,7 @@ trait Json
      *
      * @var string[]
      */
-    protected $json = [];
+    protected array $json = [];
 
     /**
      * Setter for the $helpId.

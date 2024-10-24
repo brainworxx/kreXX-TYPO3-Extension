@@ -66,7 +66,7 @@ class ExceptionCallerFinder extends AbstractCaller implements BacktraceConstInte
             static::TRACE_VARNAME => ' ' . get_class($data),
             static::TRACE_LEVEL => 'error',
             static::TRACE_TYPE => $headline,
-            static::TRACE_DATE => date('d-m-Y H:i:s', time()),
+            static::TRACE_DATE => date(static::TIME_FORMAT, time()),
             static::TRACE_URL => $this->getCurrentUrl(),
         ];
     }

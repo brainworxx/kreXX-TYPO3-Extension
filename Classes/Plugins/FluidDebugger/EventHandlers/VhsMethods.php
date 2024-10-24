@@ -70,7 +70,7 @@ class VhsMethods implements EventHandlerInterface, CallbackConstInterface, Fluid
      * We set the multiline code generation to VHS, and we add the name of the
      * parameter for the VHS code generation into the 'paramArray'
      *
-     * @param AbstractCallback $callback
+     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback|null $callback
      *   The calling class.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model so far.
@@ -78,7 +78,7 @@ class VhsMethods implements EventHandlerInterface, CallbackConstInterface, Fluid
      * @return string
      *   Return an empty string.
      */
-    public function handle(AbstractCallback $callback, ?Model $model = null): string
+    public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
     {
         $params = $callback->getParameters();
         /** @var \ReflectionMethod $reflectionMethod */

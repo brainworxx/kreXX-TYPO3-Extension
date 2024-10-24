@@ -33,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Includekrexx\Plugins\Typo3\Scalar;
 
 use Brainworxx\Krexx\Analyse\Model;

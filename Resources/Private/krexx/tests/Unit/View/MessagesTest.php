@@ -46,8 +46,8 @@ use Brainworxx\Krexx\View\Skins\RenderHans;
 class MessagesTest extends AbstractHelper
 {
 
-    const KEY_VARIABLE_NAME = 'messages';
-    const PARAMS = 'params';
+    public const  KEY_VARIABLE_NAME = 'messages';
+    public const  PARAMS = 'params';
 
     /**
      * @var Messages
@@ -109,11 +109,11 @@ class MessagesTest extends AbstractHelper
         // Simulate a cli request. Actually, it already is a cli request, we
         // test the checking of it.
         $sapiMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\View', 'php_sapi_name');
-        $sapiMock->expects($this->once())->will($this->returnValue('cli'));
+        $sapiMock->expects($this->once())->willReturn('cli');
 
         // We pretend as if this is not a test.
         $definedMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\View', 'defined');
-        $definedMock->expects($this->once())->will($this->returnValue(false));
+        $definedMock->expects($this->once())->willReturn(false);
 
         $messages = [];
         $message = new Message(\Krexx::$pool);
@@ -130,7 +130,7 @@ class MessagesTest extends AbstractHelper
         $rendermock->expects($this->once())
             ->method('renderMessages')
             ->with($messages)
-            ->will($this->returnValue(''));
+            ->willReturn('');
         Krexx::$pool->render = $rendermock;
         $this->setValueByReflection('messages', $messages, $this->messagesClass);
 
@@ -194,14 +194,14 @@ class MessagesTest extends AbstractHelper
      */
     public function testReadHelpTexts()
     {
-        $iniContents = '[text]' . "\n" .
+        $iniContents = '[en]' . "\n" .
             'someKey = "a string"';
 
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->once())
             ->method('getFileContents')
             ->with(KREXX_DIR . 'resources/language/Help.ini')
-            ->will($this->returnValue($iniContents));
+            ->willReturn($iniContents);
         Krexx::$pool->fileService = $fileServiceMock;
 
         $this->messagesClass->readHelpTexts();

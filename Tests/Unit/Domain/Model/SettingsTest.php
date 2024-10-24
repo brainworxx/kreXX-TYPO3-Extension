@@ -92,11 +92,11 @@ class SettingsTest extends AbstractHelper implements ConstInterface
 
         // Simulating the package
         $metaData = $this->createMock(MetaData::class);
-        $metaData->expects($this->once())
+        $metaData->expects($this->any())
             ->method('getVersion')
             ->willReturn(AbstractHelper::TYPO3_VERSION);
         $this->simulatePackage(Bootstrap::EXT_KEY, 'what/ever/')
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getPackageMetaData')
             ->willReturn($metaData);
     }

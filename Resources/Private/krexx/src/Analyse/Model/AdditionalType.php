@@ -50,14 +50,14 @@ trait AdditionalType
      *
      * @var string
      */
-    protected $additional = '';
+    protected string $additional = '';
 
     /**
      * The type of the variable we are analysing, in a string.
      *
      * @var string
      */
-    protected $type = '';
+    protected string $type = '';
 
     /**
      * Setter for additional.

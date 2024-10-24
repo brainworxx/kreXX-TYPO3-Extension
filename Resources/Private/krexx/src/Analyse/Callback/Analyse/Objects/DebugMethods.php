@@ -89,7 +89,7 @@ class DebugMethods extends AbstractObjectAnalysis implements
                 $output .= $this->pool->render->renderExpandableChild(
                     $this->dispatchEventWithModel($funcName, $this->pool->createClass(Model::class)
                         ->setName($funcName)
-                        ->setType(static::TYPE_DEBUG_METHOD)
+                        ->setType($this->pool->messages->getHelp('debugMethod'))
                         ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
                         ->setNormal(static::UNKNOWN_VALUE)
                         ->setHelpid($funcName)

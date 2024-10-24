@@ -65,7 +65,7 @@ class Getter extends OriginalGetter
             ->injectCallback($this->pool->createClass(ThroughGetter::class))
             ->setName($this->pool->messages->getHelp('getter'))
             ->setHelpid('getterHelpInfo')
-            ->setType(static::TYPE_INTERNALS)
+            ->setType($this->pool->messages->getHelp('classInternals'))
             ->addParameter(static::PARAM_IS_GETTER, $this->isGetter)
             ->addParameter(static::PARAM_REF, $ref)
             ->addParameter(static::PARAM_NORMAL_GETTER, $this->normalGetter)

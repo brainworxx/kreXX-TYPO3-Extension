@@ -50,7 +50,10 @@ interface BacktraceConstInterface
     public const TRACE_FILE = 'file';
 
     /**
-     * Contains the original, unfilterd path to the TRACE_FILE.
+     * Contains the original, unfiltered path to the TRACE_FILE.
+     *
+     * @deprecated
+     *   Since 6.0.0, will be removed.
      *
      * @var string
      */
@@ -137,4 +140,11 @@ interface BacktraceConstInterface
      * @var string
      */
     public const TRACE_LEVEL = 'level';
+
+    /**
+     * The time format pattern.
+     *
+     * @var string
+     */
+    public const TIME_FORMAT = 'd-m-Y H:i:s';
 }

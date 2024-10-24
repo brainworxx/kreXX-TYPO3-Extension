@@ -49,7 +49,7 @@ trait CodeGenType
      *
      * @var string
      */
-    protected $codeGenType = '';
+    protected string $codeGenType = '';
 
     /**
      * Getter for the code generation type.

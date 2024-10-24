@@ -72,7 +72,7 @@ class PrivateProperties extends AbstractObjectAnalysis
         // We need to get all parent classes and then poll them for private
         // properties to get the whole picture.
         do {
-            $refProps = array_merge($refProps, $reflectionClass->getProperties(ReflectionProperty::IS_PRIVATE));
+            $refProps = [...$refProps, ...$reflectionClass->getProperties(ReflectionProperty::IS_PRIVATE)];
             // And now for the parent class.
             $reflectionClass = $reflectionClass->getParentClass();
         } while (is_object($reflectionClass));

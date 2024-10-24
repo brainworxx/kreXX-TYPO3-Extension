@@ -41,7 +41,7 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
 class ModelTest extends AbstractHelper
 {
-    const VALUE = 'some value';
+    public const  VALUE = 'some value';
 
     /**
      * @var \Brainworxx\Krexx\Service\Config\Model

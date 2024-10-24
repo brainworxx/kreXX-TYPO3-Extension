@@ -56,7 +56,29 @@ abstract class AbstractFactory
      *
      * @var string[]
      */
-    public $rewrite = [];
+    public array $rewrite = [];
+
+    /**
+     * @var Closure
+     */
+    protected Closure $errorCallback;
+
+    /**
+     * Set the error callback.
+     */
+    public function __construct()
+    {
+        $this->errorCallback = function (
+            int $errno,
+            string $errstr,
+            ?string $errfile = null,
+            ?int $errline = null,
+            ?array $errcontext = null
+        ): bool {
+            // Do nothing.
+            return true;
+        };
+    }
 
     /**
      * Create objects and returns them. Singletons are handled by the pool.
@@ -113,16 +135,7 @@ abstract class AbstractFactory
      */
     public function retrieveErrorCallback(): Closure
     {
-        return function (
-            int $errno,
-            string $errstr,
-            ?string $errfile = null,
-            ?int $errline = null,
-            ?array $errcontext = null
-        ): bool {
-            // Do nothing.
-            return true;
-        };
+        return $this->errorCallback;
     }
 
     /**
@@ -130,7 +143,7 @@ abstract class AbstractFactory
      */
     public static function createPool(): void
     {
-        if (Krexx::$pool !== null) {
+        if (isset(Krexx::$pool)) {
             // The pool is there, do nothing.
             return;
         }

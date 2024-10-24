@@ -65,7 +65,8 @@ class ProcessArrayTest extends AbstractHelper
             [ProcessArray::class . PluginConfigInterface::START_PROCESS, null, $model]
         );
 
-        $processArray->handle($model);
+        $processArray->canHandle($model);
+        $processArray->handle();
 
         $this->assertEquals(1, CallbackCounter::$counter);
         $this->assertFalse(CallbackCounter::$staticParameters[0][CallbackCounter::PARAM_MULTILINE]);

@@ -39,13 +39,20 @@ namespace Brainworxx\Krexx\View\Skins\Hans;
 
 /**
  * Renders the header of the fatal error handler.
+ *
+ * @deprecated
+ *   Since 6.0.0
+ *   Will be removed.
+ *   Has anybody used this one since PHP 7.0 anyway?
+ * @codeCoverageIgnore
+ *   We will not test deprecated code.
  */
 trait FatalHeader
 {
     /**
      * @var string[]
      */
-    private $markerFatalHeader = [
+    private array $markerFatalHeader = [
         '{cssJs}',
         '{version}',
         '{search}',

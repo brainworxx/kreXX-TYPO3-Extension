@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Config\From;
 
+use Brainworxx\Krexx\Service\Config\Validation;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -49,14 +50,14 @@ class Cookie
      *
      * @var \Brainworxx\Krexx\Service\Config\Validation
      */
-    protected $validation;
+    protected Validation $validation;
 
     /**
      * Here we cache our cookie settings.
      *
      * @var string[]
      */
-    public $settings = [];
+    public array $settings = [];
 
     /**
      * Inject the pool, and get a first impression of the cookies.

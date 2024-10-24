@@ -49,11 +49,11 @@ use ReflectionParameter;
 
 class CodegenTest extends AbstractHelper
 {
-    const FIRST_RUN = 'firstRun';
-    const DISABLE_COUNT = 'disableCount';
-    const GET_CONNECTOR_LEFT = 'getConnectorLeft';
-    const GET_CONNECTOR_RIGHT = 'getConnectorRight';
-    const CONCATENATED_CONNECTORS = 'getConnectorLeftnamegetConnectorRight';
+    public const  FIRST_RUN = 'firstRun';
+    public const  DISABLE_COUNT = 'disableCount';
+    public const  GET_CONNECTOR_LEFT = 'getConnectorLeft';
+    public const  GET_CONNECTOR_RIGHT = 'getConnectorRight';
+    public const  CONCATENATED_CONNECTORS = 'getConnectorLeftnamegetConnectorRight';
 
     /**
      * Our test subject
@@ -101,10 +101,10 @@ class CodegenTest extends AbstractHelper
     {
         $this->connectorMock->expects($this->exactly($left))
             ->method(static::GET_CONNECTOR_LEFT)
-            ->will($this->returnValue(static::GET_CONNECTOR_LEFT));
+            ->willReturn(static::GET_CONNECTOR_LEFT);
         $this->connectorMock->expects($this->exactly($right))
             ->method(static::GET_CONNECTOR_RIGHT)
-            ->will($this->returnValue(static::GET_CONNECTOR_RIGHT));
+            ->willReturn(static::GET_CONNECTOR_RIGHT);
     }
 
     /**
@@ -267,10 +267,10 @@ class CodegenTest extends AbstractHelper
     {
         $this->connectorMock->expects($this->exactly(1))
             ->method(static::GET_CONNECTOR_LEFT)
-            ->will($this->returnValue(''));
+            ->willReturn('');
         $this->connectorMock->expects($this->exactly(1))
             ->method(static::GET_CONNECTOR_RIGHT)
-            ->will($this->returnValue(''));
+            ->willReturn('');
 
         $this->assertEquals(
             '',
@@ -289,7 +289,7 @@ class CodegenTest extends AbstractHelper
     {
         $this->expectConnectorCalls(1, 1);
         $this->fixture
-            ->setType($this->codegenHandler::TYPE_DEBUG_METHOD)
+            ->setType('Debug method')
             ->setCodeGenType(Codegen::CODEGEN_TYPE_PUBLIC);
         $this->assertEquals(
             static::CONCATENATED_CONNECTORS,
@@ -360,7 +360,7 @@ class CodegenTest extends AbstractHelper
             ->with('0');
         $this->connectorMock->expects($this->once())
             ->method('getParameters')
-            ->will($this->returnValue('0'));
+            ->willReturn('0');
 
         $this->fixture
             ->setCodeGenType($this->codegenHandler::CODEGEN_TYPE_ARRAY_VALUES_ACCESS)
@@ -404,7 +404,7 @@ class CodegenTest extends AbstractHelper
         $scopeMock->expects($this->once())
             ->method('testModelForCodegen')
             ->with($this->fixture)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->scope = $scopeMock;
 
         $this->assertEquals(
@@ -428,7 +428,7 @@ class CodegenTest extends AbstractHelper
         $scopeMock->expects($this->once())
             ->method('testModelForCodegen')
             ->with($this->fixture)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         Krexx::$pool->scope = $scopeMock;
 
         $this->assertEquals('. . .', $this->codegenHandler->generateSource($this->fixture));
@@ -530,7 +530,6 @@ class CodegenTest extends AbstractHelper
      * Test the parameter analysis, with a special default value.
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::parameterToString
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::retrieveParameterType
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::translateDefaultValue
      */
     public function testParameterToStringWithQuotationMarks()
@@ -538,13 +537,13 @@ class CodegenTest extends AbstractHelper
         $refParamMock = $this->createMock(ReflectionParameter::class);
         $refParamMock->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue('greg'));
+            ->willReturn('greg');
         $refParamMock->expects($this->once())
             ->method('isDefaultValueAvailable')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $refParamMock->expects($this->once())
             ->method('getDefaultValue')
-            ->will($this->returnValue("some 'string'"));
+            ->willReturn("some 'string'");
 
         $this->assertEquals(
             '$greg = &#039;some \&#039;string\&#039;&#039;',
@@ -557,7 +556,6 @@ class CodegenTest extends AbstractHelper
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::parameterToString
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::translateDefaultValue
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::retrieveParameterType
      */
     public function testDefaultValueTranslation()
     {

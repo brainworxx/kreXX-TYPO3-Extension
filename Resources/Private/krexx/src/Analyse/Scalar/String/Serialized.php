@@ -47,7 +47,7 @@ class Serialized extends AbstractScalarAnalysis
      *
      * @var Model
      */
-    protected $model;
+    protected Model $model;
 
     /**
      * Works only when hte multibyte extension is installed.

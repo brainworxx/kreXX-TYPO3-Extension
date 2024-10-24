@@ -50,19 +50,22 @@ class File
      *
      * @var bool[]
      */
-    protected static $isReadableCache = [];
+    protected static array $isReadableCache = [];
 
     /**
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * The current docroot.
      *
+     * @deprecated
+     *   Since 6.0.0. Will be removed.
+     *
      * @var string
      */
-    protected $docRoot;
+    protected string $docRoot;
 
     /**
      * Injects the pool.
@@ -224,7 +227,7 @@ class File
         if (!$this->fileIsReadable($filePath)) {
             if ($showError) {
                 // This file was not readable! We need to tell the user!
-                $this->pool->messages->addMessage('fileserviceAccess', [$this->filterFilePath($filePath)], true);
+                $this->pool->messages->addMessage('fileserviceAccess', [$filePath], true);
             }
             // Return empty string.
             return '';
@@ -233,15 +236,14 @@ class File
         // Get the file contents.
         set_error_handler($this->pool->retrieveErrorCallback());
         $filePath = $this->realpath($filePath);
-        $size = filesize($filePath);
         $file = fopen($filePath, 'r');
         if ($file === false) {
             // File opening just failed!
-            $this->pool->messages->addMessage('fileserviceAccess', [$this->filterFilePath($filePath)], true);
+            $this->pool->messages->addMessage('fileserviceAccess', [$filePath], true);
             restore_error_handler();
             return '';
         }
-        $result = fread($file, $size);
+        $result = fread($file, filesize($filePath));
         fclose($file);
         restore_error_handler();
 
@@ -292,7 +294,7 @@ class File
             chmod($realpath, 0777);
             if (!unlink($realpath)) {
                 // We have a permission problem here!
-                $this->pool->messages->addMessage('fileserviceDelete', [$this->filterFilePath($realpath)]);
+                $this->pool->messages->addMessage('fileserviceDelete', [$realpath]);
             }
         }
 
@@ -304,6 +306,12 @@ class File
      * path of the calling file.
      * Return the original path, in case we can not determine the
      * $_SERVER['DOCUMENT_ROOT']
+     *
+     * @deprecated
+     *   Since 6.0.0. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
      *
      * @param string $filePath
      *   The path we want to filter

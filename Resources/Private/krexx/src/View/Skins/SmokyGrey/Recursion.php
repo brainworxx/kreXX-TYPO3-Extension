@@ -47,7 +47,7 @@ trait Recursion
     /**
      * @var string
      */
-    private $markerRecursion = '{addjson}';
+    private string $markerRecursion = '{addjson}';
 
     /**
      * {@inheritDoc}

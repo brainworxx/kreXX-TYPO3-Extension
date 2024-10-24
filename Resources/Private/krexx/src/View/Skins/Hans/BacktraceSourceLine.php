@@ -45,7 +45,7 @@ trait BacktraceSourceLine
     /**
      * @var string[]
      */
-    private $markerBacktraceSourceLine = [
+    private array $markerBacktraceSourceLine = [
         '{className}',
         '{lineNo}',
         '{sourceCode}',

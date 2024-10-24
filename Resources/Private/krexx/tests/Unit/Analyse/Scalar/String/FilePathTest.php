@@ -104,7 +104,7 @@ class FilePathTest extends AbstractHelper
         $finfoMock = $this->createMock(finfo::class);
         $finfoMock->expects($this->once())
             ->method('file')
-            ->will($this->returnValue($mimeInfo));
+            ->willReturn($mimeInfo);
         $filePath = new FilePath(Krexx::$pool);
         $this->setValueByReflection('bufferInfo', $finfoMock, $filePath);
 
@@ -150,7 +150,7 @@ class FilePathTest extends AbstractHelper
         $myPath = __DIR__ . '/XmlTest.php';
         $realpathMock->expects($this->once())
             ->with($myPath)
-            ->will($this->returnValue('theRealPath'));
+            ->willReturn('theRealPath');
         $model = new Model(Krexx::$pool);
         $filePath->canHandle($myPath, $model);
         $result = $model->getJson();

@@ -53,7 +53,7 @@ class ProcessBacktraceTest extends AbstractHelper
         $someFile = 'some file';
         $debugBacktrace = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'debug_backtrace');
         $debugBacktrace->expects($this->any())
-            ->will($this->returnValue(
+            ->willReturn(
                 [
                     [
                         BacktraceConstInterface::TRACE_FILE => KREXX_DIR . 'src' . DIRECTORY_SEPARATOR . 'blargh',
@@ -72,7 +72,7 @@ class ProcessBacktraceTest extends AbstractHelper
                         $data => 'Step 4',
                     ],
                 ]
-            ));
+            );
     }
 
     /**
@@ -158,7 +158,6 @@ class ProcessBacktraceTest extends AbstractHelper
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace::handle
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace::getBacktrace
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace::filterFilePath
      */
     public function testProcessEmpty()
     {
@@ -192,16 +191,14 @@ class ProcessBacktraceTest extends AbstractHelper
             $model = $renderNothing->model['renderExpandableChild'][$i];
 
             if ($i === 2) {
-                $someFile = '...' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'whatever';
                 $orgPath = KREXX_DIR . 'src' . DIRECTORY_SEPARATOR . 'whatever';
             }
 
             $result = $model->getParameters()[CallbackCounter::PARAM_DATA];
             $this->assertEquals(
                 [
-                    BacktraceConstInterface::TRACE_FILE => $someFile,
+                    BacktraceConstInterface::TRACE_FILE => $orgPath,
                     $data => 'Step ' . ($i + 2),
-                    BacktraceConstInterface::TRACE_ORG_FILE => $orgPath
                 ],
                 $result,
                 'Checking the steps, the first one should be omitted.'

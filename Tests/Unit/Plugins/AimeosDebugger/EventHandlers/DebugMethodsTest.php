@@ -178,7 +178,7 @@ class DebugMethodsTest extends AbstractHelper implements CallbackConstInterface
         // Testing the standard values.
         /** @var \Brainworxx\Krexx\Analyse\Model $model */
         foreach ($models as $key => $model) {
-            $this->assertEquals(static::TYPE_DEBUG_METHOD, $model->getType());
+            $this->assertEquals('Debug method', $model->getType());
             $this->assertEquals(static::UNKNOWN_VALUE, $model->getNormal());
             $this->assertEquals('->', $model->getConnectorLeft());
             $this->assertEquals($connectorRight[$key], $model->getConnectorRight(), 'Method: ' . $mapping[$key]);

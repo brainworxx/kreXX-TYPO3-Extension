@@ -63,7 +63,7 @@ class DumpControllerTest extends AbstractController
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
             ->method('checkMaxCall')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->emergencyHandler = $emergencyMock;
         $callerFinderMock = $this->createMock(CallerFinder::class);
         $callerFinderMock->expects($this->never())
@@ -91,7 +91,7 @@ class DumpControllerTest extends AbstractController
         $routingMock = $this->createMock(Routing::class);
         $routingMock->expects($this->once())
             ->method('analysisHub')
-            ->will($this->returnValue('generated HTML code'));
+            ->willReturn('generated HTML code');
         $poolMock->routing = $routingMock;
 
         $scopeMock = $this->createMock(Scope::class);
@@ -102,7 +102,7 @@ class DumpControllerTest extends AbstractController
 
         $poolMock->emergencyHandler->expects($this->once())
             ->method('checkEmergencyBreak')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $poolMock->eventService = $this->createMock(Event::class);
         $poolMock->eventService->expects($this->once())
@@ -122,12 +122,12 @@ class DumpControllerTest extends AbstractController
                 [Model::class],
                 [ThroughConfig::class],
                 [Model::class]
-            ))->will($this->returnValueMap(
+            ))->willReturnMap(
                 [
                     [Model::class, new Model(Krexx::$pool)],
                     [ThroughConfig::class, new CallbackNothing(Krexx::$pool)]
                 ]
-            ));
+            );
 
         $dumpController->dumpAction($fixture);
     }

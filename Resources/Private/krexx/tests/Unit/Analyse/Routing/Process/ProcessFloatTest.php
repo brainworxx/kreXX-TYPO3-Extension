@@ -60,7 +60,8 @@ class ProcessFloatTest extends AbstractHelper
         $this->mockEventService(
             [ProcessFloat::class . PluginConfigInterface::START_PROCESS, null, $model]
         );
-        $processor->handle($model);
+        $processor->canHandle($model);
+        $processor->handle();
 
         $this->assertEquals($fixture, $model->getData());
         $this->assertEquals($fixture, $model->getNormal());
@@ -70,6 +71,7 @@ class ProcessFloatTest extends AbstractHelper
      * Testing the float value processing, with a micro time
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat::handle
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat::formatFloat
      */
     public function testProcessWithMicrotime()
     {
@@ -78,8 +80,8 @@ class ProcessFloatTest extends AbstractHelper
         $model = new Model(Krexx::$pool);
         $model->setData($fixture);
         $processor = new ProcessFloat(Krexx::$pool);
-
-        $processor->handle($model);
+        $processor->canHandle($model);
+        $processor->handle();
 
         $result = $model->getJson();
         $this->assertArrayHasKey('Timestamp', $result);
@@ -115,7 +117,7 @@ class ProcessFloatTest extends AbstractHelper
         $fixture = 5.123456789E-10;
         $model->setData($fixture);
         $this->assertTrue($processor->canHandle($model));
-        $processor->handle($model);
+        $processor->handle();
         $this->assertEquals('0.000000000512345679', $model->getNormal());
         $this->assertEquals(['Unformatted float value' => '5.123456789E-10'], $model->getJson());
 
@@ -124,7 +126,7 @@ class ProcessFloatTest extends AbstractHelper
         $fixture = 5.123456789E+10;
         $model->setData($fixture);
         $this->assertTrue($processor->canHandle($model));
-        $processor->handle($model);
+        $processor->handle();
         $this->assertEquals('51234567890', $model->getNormal());
         $this->assertEquals([], $model->getJson());
 
@@ -133,7 +135,7 @@ class ProcessFloatTest extends AbstractHelper
         $fixture = 5.123456789E+40;
         $model->setData($fixture);
         $this->assertTrue($processor->canHandle($model));
-        $processor->handle($model);
+        $processor->handle();
         $this->assertEquals('5.123456789E+40', $model->getNormal());
         $this->assertEquals([], $model->getJson());
     }

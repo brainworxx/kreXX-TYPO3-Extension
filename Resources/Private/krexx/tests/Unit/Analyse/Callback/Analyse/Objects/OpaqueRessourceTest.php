@@ -22,7 +22,7 @@ class OpaqueRessourceTest extends AbstractHelper implements CallbackConstInterfa
             'version_compare'
         );
         $versionCompareMock->expects($this->once())
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         // We only expect the start event, nothing more.
         $opaque = new OpaqueRessource(Krexx::$pool);

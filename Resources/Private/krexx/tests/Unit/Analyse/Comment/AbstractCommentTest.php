@@ -41,7 +41,6 @@ use Brainworxx\Krexx\Krexx;
 
 class AbstractCommentTest extends AbstractHelper
 {
-
     /**
      * Testing the setting of the pool.
      *

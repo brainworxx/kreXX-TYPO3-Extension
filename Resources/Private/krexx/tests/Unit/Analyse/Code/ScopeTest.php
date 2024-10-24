@@ -45,8 +45,8 @@ use stdClass;
 
 class ScopeTest extends AbstractHelper
 {
-    const SCOPE_ATTRIBUTE_NAME = 'scope';
-    const TEST_STRING = 'some scope';
+    public const  SCOPE_ATTRIBUTE_NAME = 'scope';
+    public const  TEST_STRING = 'some scope';
 
     /**
      * @var Scope
@@ -172,7 +172,7 @@ class ScopeTest extends AbstractHelper
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
             ->method('getNestingLevel')
-            ->will($this->returnValue($level));
+            ->willReturn($level);
         Krexx::$pool->emergencyHandler = $emergencyMock;
     }
 }

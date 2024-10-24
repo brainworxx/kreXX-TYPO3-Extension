@@ -62,7 +62,7 @@ class ExpandableChildTest extends AbstractRenderHans
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
             ->method('checkEmergencyBreak')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         Krexx::$pool->emergencyHandler = $emergencyMock;
 
         $this->mockModel(static::GET_NAME, 'another name');
@@ -76,13 +76,13 @@ class ExpandableChildTest extends AbstractRenderHans
 
         $this->modelMock->expects($this->exactly(2))
             ->method(static::GET_TYPE)
-            ->will($this->returnValue('Stringh In-Tee-Ger'));
+            ->willReturn('Stringh In-Tee-Ger');
 
         $codegenMock = $this->createMock(Codegen::class);
         $codegenMock->expects($this->once())
             ->method('generateSource')
             ->with($this->modelMock)
-            ->will($this->returnValue('generated source'));
+            ->willReturn('generated source');
         Krexx::$pool->codegenHandler = $codegenMock;
 
         $chunkMock = $this->createMock(Chunks::class);

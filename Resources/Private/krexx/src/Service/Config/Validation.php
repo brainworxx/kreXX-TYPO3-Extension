@@ -106,7 +106,7 @@ class Validation extends Fallback
      *
      * @var string[]
      */
-    protected $feDoNotEdit = [];
+    protected array $feDoNotEdit = [];
 
     /**
      * Known Problems with debug functions, which will most likely cause a fatal.
@@ -116,7 +116,7 @@ class Validation extends Fallback
      *
      * @var string[][]
      */
-    protected $methodBlacklist = [];
+    protected array $methodBlacklist = [];
 
     /**
      * These classes will never be polled by debug methods, because that would
@@ -127,7 +127,7 @@ class Validation extends Fallback
      *
      * @var string[]
      */
-    protected $classBlacklist = [
+    protected array $classBlacklist = [
         // Fun with reflection classes. Not really.
         ReflectionType::class,
         ReflectionGenerator::class,
@@ -144,10 +144,10 @@ class Validation extends Fallback
         parent::__construct($pool);
 
         $this->methodBlacklist = SettingsGetter::getBlacklistDebugMethods();
-        $this->classBlacklist = array_merge(
-            $this->classBlacklist,
-            SettingsGetter::getBlacklistDebugClass()
-        );
+        $this->classBlacklist = [
+            ...$this->classBlacklist,
+            ...SettingsGetter::getBlacklistDebugClass()
+        ];
 
         // Load the settings for the do-not-edit config.
         $this->feDoNotEdit = static::FE_DO_NOT_EDIT;

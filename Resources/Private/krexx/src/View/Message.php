@@ -45,35 +45,35 @@ class Message
     /**
      * @var \Brainworxx\Krexx\Service\Factory\Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * The key under which this message is stored.
      *
      * @var string
      */
-    protected $key = '';
+    protected string $key = '';
 
     /**
      * The raw arguments.
      *
      * @var array
      */
-    protected $arguments = [];
+    protected array $arguments = [];
 
     /**
      * The text of this message.
      *
      * @var string
      */
-    protected $text = '';
+    protected string $text = '';
 
     /**
      * Will this message remove itself after its display?
      *
      * @var bool
      */
-    protected $isThrowAway = false;
+    protected bool $isThrowAway = false;
 
     /**
      * Inject the pool.

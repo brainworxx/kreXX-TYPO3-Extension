@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Analyse\Attributes\Attributes;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Comment\Classes;
 use Brainworxx\Krexx\Analyse\Model;
@@ -91,7 +92,7 @@ class Meta extends AbstractObjectAnalysis
                             ->setDomid($domId)
                             ->setNormal($name)
                             ->setName($name)
-                            ->setType(static::TYPE_INTERNALS)
+                            ->setType($this->pool->messages->getHelp('classInternals'))
                     )
                 );
         }
@@ -121,7 +122,7 @@ class Meta extends AbstractObjectAnalysis
             $this->pool->createClass(Model::class)
                 ->setName($name)
                 ->setDomid($domId)
-                ->setType(static::TYPE_INTERNALS)
+                ->setType($this->pool->messages->getHelp('classInternals'))
                 ->addParameter(static::PARAM_DATA, $this->generateMetaData($ref))
                 ->injectCallback($this->pool->createClass(ThroughMeta::class))
         ));
@@ -139,16 +140,19 @@ class Meta extends AbstractObjectAnalysis
     protected function generateMetaData(ReflectionClass $ref): array
     {
         $messages = $this->pool->messages;
-
         // Get the naming on the way.
         $data = [
             $messages->getHelp('metaClassName') => $this->generateName($ref),
             $messages->getHelp('metaComment') => $this->pool->createClass(Classes::class)->getComment($ref),
             $messages->getHelp('metaDeclaredIn') => $ref->isInternal() ?
                 $messages->getHelp('metaPredeclared') :
-                $this->pool->fileService->filterFilePath($ref->getFileName()) . ' ' .
-                $messages->getHelp('metaInLine') . $ref->getStartLine()
+                $ref->getFileName() . ' ' .
+                $messages->getHelp('metaInLine') . $ref->getStartLine(),
         ];
+        $attributes = $this->pool->createClass(Attributes::class)->getFlatAttributes($ref);
+        if (!empty($attributes)) {
+            $data[$messages->getHelp('metaAttributes')] = $attributes;
+        }
 
         // Now to collect the inheritance stuff.
         // Each of them will get analysed by the ThroughMeta callback.

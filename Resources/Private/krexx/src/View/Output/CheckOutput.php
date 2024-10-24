@@ -56,7 +56,7 @@ class CheckOutput
      *
      * @var \Brainworxx\Krexx\Service\Factory\Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Injects the pool.
@@ -89,7 +89,7 @@ class CheckOutput
      * Check for a cli request, simple wrapper around php_sapi_name.
      *
      * @return bool
-     *   Well? Is it an cli request?
+     *   Well? Is it a cli request?
      */
     public function isCli(): bool
     {

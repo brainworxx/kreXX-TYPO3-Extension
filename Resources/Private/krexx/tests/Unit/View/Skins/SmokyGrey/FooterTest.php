@@ -52,13 +52,13 @@ class FooterTest extends AbstractRenderSmokyGrey
         $model = $this->createMock(Model::class);
         $model->expects($this->exactly(2))
             ->method('getJson')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $model->expects($this->any())
             ->method('getType')
-            ->will($this->returnValue(''));
+            ->willReturn('');
         $model->expects($this->any())
             ->method('getConnectorRight')
-            ->will($this->returnValue(''));
+            ->willReturn('');
 
         $result = $this->renderSmokyGrey->renderFooter([], $model, true);
         $this->assertStringNotContainsString('khidden', $result);

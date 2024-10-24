@@ -45,11 +45,11 @@ use Brainworxx\Krexx\Krexx;
 
 class RoutingTest extends AbstractHelper
 {
-    const ROUTING_MOCK_RETURN_VALUE = 'routing mock success';
-    const IS_IN_HIVE = 'isInHive';
-    const ADD_TO_HIVE = 'addToHive';
-    const NO_ROUTE = 'no routing';
-    const PROCESSOR = 'processors';
+    public const  ROUTING_MOCK_RETURN_VALUE = 'routing mock success';
+    public const  IS_IN_HIVE = 'isInHive';
+    public const  ADD_TO_HIVE = 'addToHive';
+    public const  NO_ROUTE = 'no routing';
+    public const  PROCESSOR = 'processors';
 
     /**
      * @var \Brainworxx\Krexx\Analyse\Routing\Routing
@@ -84,18 +84,17 @@ class RoutingTest extends AbstractHelper
             if ($className === $allowedRoute) {
                 $mock->expects($this->once())
                     ->method('handle')
-                    ->with($model)
-                    ->will($this->returnValue(static::ROUTING_MOCK_RETURN_VALUE));
+                    ->willReturn(static::ROUTING_MOCK_RETURN_VALUE);
                 $mock->expects($this->once())
                     ->method('canHandle')
                     ->with($model)
-                    ->will($this->returnValue(true));
+                    ->willReturn(true);
             } else {
                 $mock->expects($this->never())
                     ->method('handle');
                 $mock->expects($this->any())
                     ->method('canHandle')
-                    ->will($this->returnValue(false));
+                    ->willReturn(false);
             }
             $processors[$className] = $mock;
         }
@@ -135,7 +134,7 @@ class RoutingTest extends AbstractHelper
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
             ->method('checkEmergencyBreak')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->emergencyHandler = $emergencyMock;
 
         $this->assertEquals('', $this->mockRouting('no route for you', $model));

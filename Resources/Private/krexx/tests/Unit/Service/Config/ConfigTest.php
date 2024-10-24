@@ -48,13 +48,13 @@ use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 class ConfigTest extends AbstractHelper
 {
 
-    const NOT_CLI = 'not cli';
-    const FILE_CONFIG = 'fileConfig';
-    const COOKIE_CONFIG = 'cookieConfig';
-    const GET_CONFIG_FROM_COOKIES = 'getConfigFromCookies';
-    const GET_CONFIG_FROM_FILE = 'getConfigFromFile';
-    const KREXX_CONFIG_SETTINGS = 'Configuration file settings';
-    const FALSE_STRING = 'false';
+    public const  NOT_CLI = 'not cli';
+    public const  FILE_CONFIG = 'fileConfig';
+    public const  COOKIE_CONFIG = 'cookieConfig';
+    public const  GET_CONFIG_FROM_COOKIES = 'getConfigFromCookies';
+    public const  GET_CONFIG_FROM_FILE = 'getConfigFromFile';
+    public const  KREXX_CONFIG_SETTINGS = 'Configuration file settings';
+    public const  FALSE_STRING = 'false';
 
     /**
      * @return \PHPUnit\Framework\MockObject\MockObject
@@ -108,7 +108,7 @@ class ConfigTest extends AbstractHelper
         // Simulate a normal call (not cli or ajax).
         $this->mockSapi()
             ->expects($this->exactly(2))
-            ->will($this->returnValue(static::NOT_CLI));
+            ->willReturn(static::NOT_CLI);
 
         // Create the test subject.
         $config = new Config(Krexx::$pool);
@@ -135,7 +135,7 @@ class ConfigTest extends AbstractHelper
         $this->assertEquals(false, $config->getSetting($config::SETTING_DISABLED));
 
         // Test the selected language. Should be the fallback,
-        $this->assertEquals('text', $config->getSetting($config::SETTING_LANGUAGE_KEY));
+        $this->assertEquals('en', $config->getSetting($config::SETTING_LANGUAGE_KEY));
     }
 
     /**
@@ -148,7 +148,7 @@ class ConfigTest extends AbstractHelper
     {
         $this->mockSapi()
             ->expects($this->exactly(2))
-            ->will($this->returnValue('cli'));
+            ->willReturn('cli');
         $config = new Config(Krexx::$pool);
         $this->assertEquals(
             true,
@@ -167,7 +167,7 @@ class ConfigTest extends AbstractHelper
     {
         $this->mockSapi()
             ->expects($this->exactly(1))
-            ->will($this->returnValue(static::NOT_CLI));
+            ->willReturn(static::NOT_CLI);
         $_SERVER['HTTP_X_REQUESTED_WITH'] = 'xmlhttprequest';
         $config = new Config(Krexx::$pool);
         $this->assertEquals(
@@ -187,7 +187,7 @@ class ConfigTest extends AbstractHelper
     {
         $this->mockSapi()
             ->expects($this->exactly(1))
-            ->will($this->returnValue('cli'));
+            ->willReturn('cli');
         ConfigSupplier::$overwriteValues = [
             Config::SETTING_DESTINATION => 'file'
         ];
@@ -214,7 +214,7 @@ class ConfigTest extends AbstractHelper
         Krexx::$pool->rewrite[File::class] = ConfigSupplier::class;
         $this->mockSapi()
             ->expects($this->exactly(4))
-            ->will($this->returnValue(static::NOT_CLI));
+            ->willReturn(static::NOT_CLI);
 
         // Testing coming from the wrong ip
         $_SERVER['REMOTE_ADDR'] = '5.4.3.2.1';
@@ -278,18 +278,18 @@ class ConfigTest extends AbstractHelper
         $iniMock->expects($this->once())
             ->method(static::GET_CONFIG_FROM_FILE)
             ->with($config::SECTION_METHODS, $config::SETTING_ANALYSE_GETTER)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         // No values from the ini file.
         $iniMock->expects($this->once())
             ->method('getFeConfigFromFile')
             ->with($config::SETTING_ANALYSE_GETTER)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $cookieMock = $this->createMock(Cookie::class);
         $cookieMock->expects($this->once())
             ->method(static::GET_CONFIG_FROM_COOKIES)
             ->with($config::SECTION_METHODS, $config::SETTING_ANALYSE_GETTER)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         // Inject them.
         $this->setValueByReflection(static::FILE_CONFIG, $iniMock, $config);
@@ -319,13 +319,13 @@ class ConfigTest extends AbstractHelper
         $iniMock->expects($this->exactly(2))
             ->method(static::GET_CONFIG_FROM_FILE)
             ->with($config::SECTION_METHODS, $config::SETTING_ANALYSE_GETTER)
-            ->will($this->returnValue($someMethods));
+            ->willReturn($someMethods);
 
         $cookieMock = $this->createMock(Cookie::class);
         $cookieMock->expects($this->once())
             ->method(static::GET_CONFIG_FROM_COOKIES)
             ->with($config::SECTION_METHODS, $config::SETTING_ANALYSE_GETTER)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         // Inject them.
         $this->setValueByReflection(static::FILE_CONFIG, $iniMock, $config);
@@ -359,7 +359,7 @@ class ConfigTest extends AbstractHelper
         $cookieMock->expects($this->once())
             ->method(static::GET_CONFIG_FROM_COOKIES)
             ->with($config::SECTION_METHODS, $config::SETTING_ANALYSE_GETTER)
-            ->will($this->returnValue(static::FALSE_STRING));
+            ->willReturn(static::FALSE_STRING);
 
         // Inject them.
         $this->setValueByReflection(static::FILE_CONFIG, $iniMock, $config);
@@ -389,12 +389,12 @@ class ConfigTest extends AbstractHelper
         $iniMock->expects($this->exactly(2))
             ->method(static::GET_CONFIG_FROM_FILE)
             ->with($config::SECTION_METHODS, $config::SETTING_DEBUG_METHODS)
-            ->will($this->returnValue($someMethods));
+            ->willReturn($someMethods);
 
         $cookieMock = $this->createMock(Cookie::class);
         $cookieMock->expects($this->exactly(1))
             ->method(static::GET_CONFIG_FROM_COOKIES)
-            ->will($this->returnValue('read mail, real fast'));
+            ->willReturn('read mail, real fast');
 
         // Inject them.
         $this->setValueByReflection(static::FILE_CONFIG, $iniMock, $config);
@@ -423,13 +423,13 @@ class ConfigTest extends AbstractHelper
         $iniMock->expects($this->exactly(2))
             ->method(static::GET_CONFIG_FROM_FILE)
             ->with($config::SECTION_OUTPUT, $config::SETTING_DISABLED)
-            ->will($this->returnValue('true'));
+            ->willReturn('true');
 
         $cookieMock = $this->createMock(Cookie::class);
         $cookieMock->expects($this->once())
             ->method(static::GET_CONFIG_FROM_COOKIES)
             ->with($config::SECTION_OUTPUT, $config::SETTING_DISABLED)
-            ->will($this->returnValue(static::FALSE_STRING));
+            ->willReturn(static::FALSE_STRING);
 
         // Inject them.
         $this->setValueByReflection(static::FILE_CONFIG, $iniMock, $config);
@@ -509,7 +509,7 @@ class ConfigTest extends AbstractHelper
     public function testGetLanguageList()
     {
         $expectations = [
-            'text' => 'English',
+            'en' => 'English',
             'de' => 'Deutsch'
         ];
         $config = new Config(Krexx::$pool);

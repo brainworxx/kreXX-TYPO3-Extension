@@ -53,54 +53,47 @@ class Config extends Fallback
      *
      * @var Model[]
      */
-    public $settings = [];
-
-    /**
-     * List of all configured debug methods.
-     *
-     * @var string[]
-     */
-    public $debugFuncList = [];
+    public array $settings = [];
 
     /**
      * Validating configuration settings.
      *
      * @var Validation
      */
-    public $validation;
+    public Validation $validation;
 
     /**
      * Our file configuration handler.
      *
      * @var File
      */
-    protected $fileConfig;
+    protected File $fileConfig;
 
     /**
      * Our cookie configuration handler.
      *
      * @var Cookie
      */
-    protected $cookieConfig;
+    protected Cookie $cookieConfig;
 
     /**
      * Here we store the paths to our files and directories.
      *
      * @var string[]
      */
-    protected $directories = [];
+    protected array $directories = [];
 
     /**
      * @var CheckOutput
      */
-    protected $checkOutput;
+    protected CheckOutput $checkOutput;
 
     /**
      * Has kreXX been disabled via php call \Krexx::disable()?
      *
      * @var bool
      */
-    public static $disabledByPhp = false;
+    public static bool $disabledByPhp = false;
 
     /**
      * Inject the pool and load the configuration.
@@ -135,7 +128,6 @@ class Config extends Fallback
         // We may need to change the disabling again, in case we are in cli
         // or ajax mode and have no file output.
         $this->checkOutput = $pool->createClass(CheckOutput::class);
-        $this->debugFuncList = explode(',', $this->getSetting(static::SETTING_DEBUG_METHODS));
         $this->pool->messages->setLanguageKey($this->getSetting(static::SETTING_LANGUAGE_KEY));
 
         $this->checkEnabledStatus();
@@ -344,7 +336,7 @@ class Config extends Fallback
     public function getLanguageList(): array
     {
         return array_merge(
-            ['text' => 'English', 'de' => 'Deutsch'],
+            ['en' => 'English', 'de' => 'Deutsch'],
             SettingsGetter::getAdditionalLanguages()
         );
     }

@@ -51,14 +51,14 @@ class Event
      *
      * @var array[]
      */
-    public $register = [];
+    public array $register = [];
 
     /**
      * The pool.
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Injects the pool. Retrieve the global event handlers from the overwrites.

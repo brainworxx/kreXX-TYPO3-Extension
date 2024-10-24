@@ -42,11 +42,11 @@ use Brainworxx\Krexx\Krexx;
 
 class ThroughResourceTest extends AbstractHelper
 {
-    const SOME_KEY = 'some_key';
-    const SOME_VALUE = 'some_value';
-    const ANOTHER_KEY = 'another key';
-    const ANOTHER_VALUE = 'another value';
-    const SOME_ARRAY = 'array';
+    public const  SOME_KEY = 'some_key';
+    public const  SOME_VALUE = 'some_value';
+    public const  ANOTHER_KEY = 'another key';
+    public const  ANOTHER_VALUE = 'another value';
+    public const  SOME_ARRAY = 'array';
 
 
     /**

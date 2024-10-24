@@ -69,7 +69,7 @@ class ThroughMethods extends AbstractEventHandler
     /**
      * Replace the method name when we have a factory name set.
      *
-     * @param AbstractCallback $callback
+     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback|null $callback
      *   The calling class.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.
@@ -77,7 +77,7 @@ class ThroughMethods extends AbstractEventHandler
      * @return string
      *   The generated markup.
      */
-    public function handle(AbstractCallback $callback, ?Model $model = null): string
+    public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
     {
         $params = $callback->getParameters();
 

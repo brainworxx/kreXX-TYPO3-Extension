@@ -70,7 +70,7 @@ class Chunks implements ConfigConstInterface
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Here we store the metadata from the call.
@@ -80,7 +80,7 @@ class Chunks implements ConfigConstInterface
      *
      * @var string[]
      */
-    protected $metadata = [];
+    protected array $metadata = [];
 
     /**
      * Is the chunks' folder write protected?
@@ -90,42 +90,42 @@ class Chunks implements ConfigConstInterface
      *
      * @var bool
      */
-    protected $chunkAllowed = true;
+    protected bool $chunkAllowed = true;
 
     /**
      * Is the log folder write protected?
      *
      * @var bool
      */
-    protected $loggingAllowed = true;
+    protected bool $loggingAllowed = true;
 
     /**
      * The logfolder.
      *
      * @var string
      */
-    protected $logDir;
+    protected string $logDir;
 
     /**
      * The folder for the output chunks.
      *
      * @var string
      */
-    protected $chunkDir;
+    protected string $chunkDir;
 
     /**
      * Microtime stamp for chunk operations.
      *
      * @var string
      */
-    protected $fileStamp;
+    protected string $fileStamp;
 
     /**
      * Here we save the encoding we are currently using.
      *
      * @var string
      */
-    protected $officialEncoding = 'utf8';
+    protected string $officialEncoding = 'utf8';
 
     /**
      * Injects the pool.
@@ -157,9 +157,11 @@ class Chunks implements ConfigConstInterface
      */
     public function chunkMe(string $string): string
     {
+        static $counter = 0;
+
         if ($this->chunkAllowed && strlen($string) > 10000) {
             // Get the key.
-            $key = $this->genKey();
+            $key = $this->fileStamp . '_' . ++$counter;
             // Detect the encoding in the chunk.
             $this->detectEncoding($string);
             // Write the key to the chunks' folder.
@@ -170,18 +172,6 @@ class Chunks implements ConfigConstInterface
 
         // Return the original, because it's too small.
         return $string;
-    }
-
-    /**
-     * Generates the chunk key.
-     *
-     * @return string
-     *   The generated key.
-     */
-    protected function genKey(): string
-    {
-        static $counter = 0;
-        return $this->fileStamp . '_' . ++$counter;
     }
 
     /**
@@ -298,26 +288,6 @@ class Chunks implements ConfigConstInterface
     }
 
     /**
-     * Setter for the $useChunks.
-     *
-     * When the chunks' folder is not writable, we will not use chunks.
-     * This will increase the memory usage significantly!
-     *
-     * @deprecated
-     *   Since 5.0.0. Use setChunkAllowed() instead.
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
-     * @param bool $bool
-     *   Are we using chunks?
-     */
-    public function setChunksAreAllowed(bool $bool): void
-    {
-        $this->setChunkAllowed($bool);
-    }
-
-    /**
      * Setter for the $chunkAllowed.
      *
      * When the chunks' folder is not writable, we will not use chunks.
@@ -329,23 +299,6 @@ class Chunks implements ConfigConstInterface
     public function setChunkAllowed(bool $bool): void
     {
         $this->chunkAllowed = $bool;
-    }
-
-    /**
-     * Getter for the useChunks value.
-     *
-     * @deprecated
-     *   Since 5.0.0. Use isChunkAllowed() instead.
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
-     * @return bool
-     *   Are we using chunks?
-     */
-    public function getChunksAreAllowed(): bool
-    {
-        return $this->isChunkAllowed();
     }
 
     /**
@@ -363,47 +316,12 @@ class Chunks implements ConfigConstInterface
      * Setter for the $useLogging. Here we determine, if the logfolder
      * is accessible.
      *
-     * @deprecated
-     *   Since 5.0.0. Use setLoggingAllowed() instead.
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
-     * @param bool $bool
-     *   Is the log folder accessible?
-     */
-    public function setLoggingIsAllowed(bool $bool): void
-    {
-        $this->setLoggingAllowed($bool);
-    }
-
-    /**
-     * Setter for the $useLogging. Here we determine, if the logfolder
-     * is accessible.
-     *
      * @param bool $bool
      *   Is the log folder accessible?
      */
     public function setLoggingAllowed(bool $bool): void
     {
         $this->loggingAllowed = $bool;
-    }
-
-    /**
-     * Getter for the useLogging.
-     *
-     * @deprecated
-     *   Since 5.0.0. Use isLoggingAllowed instead.
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
-     * @return bool
-     *   Is the log folder accessible?
-     */
-    public function getLoggingIsAllowed(): bool
-    {
-        return $this->isLoggingAllowed();
     }
 
     /**
@@ -435,6 +353,10 @@ class Chunks implements ConfigConstInterface
      */
     public function __destruct()
     {
+        if (!isset($this->chunkDir)) {
+            return;
+        }
+
         // Get a list of all chunk files from the run.
         $chunkList = glob($this->chunkDir . $this->fileStamp . '_*');
         if (empty($chunkList)) {
@@ -451,7 +373,7 @@ class Chunks implements ConfigConstInterface
      * Simple wrapper around mb_detect_encoding.
      *
      * We also try to track the encoding we need to add to the output, so
-     * people can use unicode function names.
+     * people can use Unicode function names.
      *
      * @see \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString
      *

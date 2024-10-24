@@ -81,7 +81,10 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
             return '';
         }
 
-        if ($model->getType() === static::TYPE_DEBUG_METHOD && $model->getName() === 'getProperties') {
+        if (
+            $model->getType() === $this->pool->messages->getHelp('debugMethod')
+            && $model->getName() === 'getProperties'
+        ) {
             // Doing special treatment for the getProperties debug method.
             // This one is directly callable in fluid.
             $model->setName('properties');
@@ -115,7 +118,7 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
         $name = $model->getName();
         return
             (is_string($name) &&  strpos($name, '.') !== false && $this->pool->scope->getScope() !== $name) ||
-            $model->getType() === static::TYPE_DEBUG_METHOD ||
+            $model->getType() === $this->pool->messages->getHelp('debugMethod') ||
             $model->getCodeGenType() === static::CODEGEN_TYPE_ITERATOR_TO_ARRAY ||
             $model->getCodeGenType() === static::CODEGEN_TYPE_JSON_DECODE;
     }

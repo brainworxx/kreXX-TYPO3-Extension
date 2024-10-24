@@ -170,6 +170,9 @@ class FileWriterTest extends AbstractHelper implements BacktraceConstInterface, 
         $configModelMock->expects(($this->once()))
             ->method('setSource')
             ->with('kreXX log writer');
+        $configModelMock->expects(($this->once()))
+            ->method('getValue')
+            ->willReturn(false);
         \Krexx::$pool->config->settings[Fallback::SETTING_ANALYSE_SCALAR] = $configModelMock;
 
         $fileWriter = new FileWriter($config);

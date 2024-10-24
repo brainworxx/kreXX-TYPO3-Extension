@@ -46,8 +46,8 @@ use ReflectionClass;
 
 class CallerFinderTest extends AbstractHelper
 {
-    const FUNCTION_TO_TRACE = 'krexx';
-    const HEADLINE_STRING = 'A headline';
+    public const  FUNCTION_TO_TRACE = 'krexx';
+    public const  HEADLINE_STRING = 'A headline';
 
     /**
      * @var \Brainworxx\Krexx\Analyse\Caller\CallerFinder
@@ -85,13 +85,13 @@ class CallerFinderTest extends AbstractHelper
         $poolMock = $this->createMock(Pool::class);
         $poolMock->expects($this->any())
             ->method('getServer')
-            ->will($this->returnValue([
+            ->willReturn([
                 'SERVER_PROTOCOL' => 'abcd/',
                 'SERVER_PORT' => 123,
                 'SERVER_NAME' => 'localhorst',
                 'HTTPS' => 'on',
                 'REQUEST_URI' => 'some/uri'
-            ]));
+            ]);
         $poolMock->fileService = Krexx::$pool->fileService;
         $poolMock->encodingService = Krexx::$pool->encodingService;
         $poolMock->config = Krexx::$pool->config;

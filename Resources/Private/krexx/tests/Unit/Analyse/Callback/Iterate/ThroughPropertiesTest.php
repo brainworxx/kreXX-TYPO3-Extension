@@ -39,6 +39,7 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
+use Brainworxx\Krexx\Tests\Fixtures\AttributesFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesInheritanceFixture;
 use Brainworxx\Krexx\Tests\Fixtures\PublicFixture;
@@ -50,22 +51,24 @@ use ReflectionProperty;
 
 class ThroughPropertiesTest extends AbstractHelper
 {
-    const PUBLIC_STRING_PROPERTY = 'publicStringProperty';
-    const PUBLIC_INT_PROPERTY = 'publicIntProperty';
-    const PUBLIC_FLOAT_PROPERTY = 'publicFloatProperty';
-    const UNSET_PROPERTY = 'unsetProperty';
-    const PROTECTED_PROPERTY = 'protectedProperty';
-    const MY_PROPERTY = 'myProperty';
-    const LONG_STRING = 'longString';
-    const PUBLIC_STATIC = 'publicStatic';
-    const INHERITED_PUBLIC = 'inheritedPublic';
-    const INHERITED_NULL = 'inheritedNull';
-    const TRAIT_PROPERTY = 'traitProperty';
-    const JSON_COMMENT_KEY = 'Comment';
-    const JSON_DECLARED_KEY = 'Declared in';
-    const JSON_DEFAULT_VALUE = 'Default value';
-    const PUBLIC_ARRAY_DEFAULT = 'array';
-    const READ_ONLY_STRING = 'readOnyString';
+    public const PUBLIC_STRING_PROPERTY = 'publicStringProperty';
+    public const PUBLIC_INT_PROPERTY = 'publicIntProperty';
+    public const PUBLIC_FLOAT_PROPERTY = 'publicFloatProperty';
+    public const UNSET_PROPERTY = 'unsetProperty';
+    public const PROTECTED_PROPERTY = 'protectedProperty';
+    public const MY_PROPERTY = 'myProperty';
+    public const LONG_STRING = 'longString';
+    public const PUBLIC_STATIC = 'publicStatic';
+    public const INHERITED_PUBLIC = 'inheritedPublic';
+    public const INHERITED_NULL = 'inheritedNull';
+    public const TRAIT_PROPERTY = 'traitProperty';
+    public const JSON_COMMENT_KEY = 'Comment';
+    public const JSON_DECLARED_KEY = 'Declared in';
+    public const JSON_DEFAULT_VALUE = 'Default value';
+    public const ATTRIBUTES_KEY = 'Attributes';
+    public const PUBLIC_ARRAY_DEFAULT = 'array';
+    public const READ_ONLY_STRING = 'readOnyString';
+    public const PROPERTY = 'property';
 
     /**
      * @var \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties
@@ -173,7 +176,7 @@ class ThroughPropertiesTest extends AbstractHelper
                 new ReflectionProperty(ComplexPropertiesFixture::class, static::TRAIT_PROPERTY),
                 new UndeclaredProperty(new ReflectionClass($subject), $undeclaredProp),
                 new ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_ARRAY_DEFAULT),
-                new ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_FLOAT_PROPERTY),
+                new ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_FLOAT_PROPERTY)
             ]
         ];
 
@@ -410,6 +413,71 @@ class ThroughPropertiesTest extends AbstractHelper
     }
 
     /**
+     * Normal test run for the property analysis.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::prepareModel
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveConnector
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrievePropertyName
+     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaration
+     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaringClassFromTraits
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::getAdditionalData
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveDefaultValue
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::formatDefaultValue
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveValueStatus
+     */
+    public function testCallMeAttributes()
+    {
+        // Test the events.
+        $this->mockEventService(
+            [$this->startEvent, $this->throughProperties],
+            [$this->endEvent, $this->throughProperties]
+        );
+
+        // Create a fixture.
+        $subject = new AttributesFixture();
+        $fixture = [
+            $this->throughProperties::PARAM_REF => new ReflectionClass($subject),
+            $this->throughProperties::PARAM_DATA => [
+                new ReflectionProperty(AttributesFixture::class, static::PROPERTY),
+            ]
+        ];
+
+        // Inject the nothing-router.
+        $routeNothing = new RoutingNothing(Krexx::$pool);
+        Krexx::$pool->routing = $routeNothing;
+        $this->mockEmergencyHandler();
+
+        // Run the test
+        $this->throughProperties
+            ->setParameters($fixture)
+            ->callMe();
+        // Retrieve the result models and assert them.
+        $models = $routeNothing->model;
+
+        // Looking at the attributes.
+        if (method_exists(ReflectionClass::class, 'getAttributes')) {
+            $json = [
+                static::JSON_DECLARED_KEY => AttributesFixture::class,
+                static::ATTRIBUTES_KEY => 'Brainworxx\Krexx\Tests\Fixtures\Property()'
+            ];
+        } else {
+            $json = [
+                static::JSON_DECLARED_KEY => AttributesFixture::class,
+            ];
+        }
+        $this->assertModelValues(
+            $models[0],
+            null,
+            static::PROPERTY,
+            $json,
+            '->',
+            '',
+            'Public '
+        );
+    }
+
+    /**
      * Special tests for PHP 8, actually with some 7.4'er stuff.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::callMe
@@ -512,7 +580,7 @@ class ThroughPropertiesTest extends AbstractHelper
     /**
      * Testing the property name analysis.
      *
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::isPropertyNameNormal
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::isPropertyNameNormal
      */
     public function testIsPropertyNameNormal()
     {

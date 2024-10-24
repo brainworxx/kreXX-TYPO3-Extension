@@ -37,17 +37,19 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
+use Brainworxx\Krexx\Analyse\Getter\AbstractGetter;
+use Brainworxx\Krexx\Analyse\Getter\ByMethodName;
+use Brainworxx\Krexx\Analyse\Getter\ByRegExContainer;
+use Brainworxx\Krexx\Analyse\Getter\ByRegExDelegate;
+use Brainworxx\Krexx\Analyse\Getter\ByRegExProperty;
+use Brainworxx\Krexx\Analyse\Model;
+use ReflectionMethod;
+use Brainworxx\Krexx\Analyse\Comment\Methods;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
-use Brainworxx\Krexx\Analyse\Comment\Methods;
-use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Factory\Pool;
-use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
-use ReflectionException;
-use ReflectionMethod;
-use ReflectionProperty;
 
 /**
  * Getter method analysis methods.
@@ -85,38 +87,25 @@ class ThroughGetter extends AbstractCallback implements
     public const CURRENT_PREFIX = 'currentPrefix';
 
     /**
-     * Stuff we need to escape in a regex.
-     *
-     * @deprecated
-     *   Since 5.0.0. Will be removed.
-     *
-     * @var string[]
-     */
-    protected $regexEscapeFind = ['.', '/', '(', ')', '<', '>', '$'];
-
-    /**
-     * Stuff the escaped regex stuff.
-     *
-     * @deprecated
-     *   Since 5.0.0. Will be removed.
-     *
-     * @var string[]
-     */
-    protected $regexEscapeReplace = ['\.', '\/', '\(', '\)', '\<', '\>', '\$'];
-
-    /**
      * Here we memorize how deep we are inside the current deep analysis.
      *
      * @var int
      */
-    protected $deep = 0;
+    protected int $deep = 0;
+
+    /**
+     * These analysers will take a look at the getter.
+     *
+     * @var \Brainworxx\Krexx\Analyse\Getter\AbstractGetter[]
+     */
+    protected array $getterAnalyser;
 
     /**
      * Class for the comment analysis.
      *
      * @var \Brainworxx\Krexx\Analyse\Comment\Methods
      */
-    protected $commentAnalysis;
+    protected Methods $commentAnalysis;
 
     /**
      * Injects the pool and initializes the comment analysis.
@@ -127,6 +116,12 @@ class ThroughGetter extends AbstractCallback implements
     {
         parent::__construct($pool);
         $this->commentAnalysis = $this->pool->createClass(Methods::class);
+        $this->getterAnalyser = [
+            $this->pool->createClass(ByMethodName::class),
+            $this->pool->createClass(ByRegExProperty::class),
+            $this->pool->createClass(ByRegExContainer::class),
+            $this->pool->createClass(ByRegExDelegate::class)
+        ];
     }
 
     /**
@@ -169,7 +164,6 @@ class ThroughGetter extends AbstractCallback implements
     protected function goThroughMethodList(array $methodList): string
     {
         $output = '';
-
         foreach ($methodList as $reflectionMethod) {
             // Back to level 0, we reset the deep counter.
             $this->deep = 0;
@@ -222,76 +216,50 @@ class ThroughGetter extends AbstractCallback implements
      */
     protected function retrievePropertyValue(ReflectionMethod $reflectionMethod, Model $model): string
     {
+        $this->resetParameters($reflectionMethod);
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflectionClass */
         $reflectionClass = $this->parameters[static::PARAM_REF];
-        try {
-            $refProp = $this->getReflectionProperty($reflectionClass, $reflectionMethod);
-        } catch (ReflectionException $e) {
-            // We ignore this one.
-            return '';
+        $currentPrefix = $this->parameters[static::CURRENT_PREFIX];
+        foreach ($this->getterAnalyser as $analyser) {
+            $value = $analyser->retrieveIt($reflectionMethod, $reflectionClass, $currentPrefix);
+            if ($analyser->hasResult()) {
+                $this->prepareParameters($value, $analyser, $reflectionMethod);
+                $this->prepareModel($model, $value);
+                break;
+            }
         }
 
-        $this->prepareResult($reflectionClass, $reflectionMethod, $refProp, $model);
         $this->dispatchEventWithModel(__FUNCTION__ . '::resolving', $model);
 
         if ($this->parameters[static::PARAM_ADDITIONAL][static::PARAM_NOTHING_FOUND]) {
+            $messages = $this->pool->messages;
             // Found nothing  :-(
             // We literally have no info. We need to tell the user.
             // We render this right away, without any routing.
-            return $this->pool->render->renderExpandableChild(
-                $this->dispatchEventWithModel(
-                    __FUNCTION__ . static::EVENT_MARKER_END,
-                    $model->setType(static::TYPE_UNKNOWN)->setNormal(static::TYPE_UNKNOWN)
-                )
-            );
+            return $this->pool->render->renderExpandableChild($this->dispatchEventWithModel(
+                __FUNCTION__ . static::EVENT_MARKER_END,
+                $model->setType($messages->getHelp('getterValueUnknown'))
+                    ->setNormal($messages->getHelp('getterValueUnknown'))
+                    ->addToJson($messages->getHelp('metaHint'), $messages->getHelp('getterUnknown'))
+            ));
         }
 
         return $this->pool->routing->analysisHub(
-            $this->dispatchEventWithModel(
-                __FUNCTION__ . static::EVENT_MARKER_END,
-                $model
-            )
+            $this->dispatchEventWithModel(__FUNCTION__ . static::EVENT_MARKER_END, $model)
         );
     }
 
     /**
-     * Prepare the retrieved result for output.
+     * Prepare the model with the retrieved value.
      *
-     * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflectionClass
-     *   The reflection class of the object we are analysing.
-     * @param \ReflectionMethod $reflectionMethod
-     *   The reflection of the getter where we want to retrieve the return value
-     * @param \ReflectionProperty|null $refProp
-     *   The reflection of the property that it may return.
      * @param \Brainworxx\Krexx\Analyse\Model $model
-     *   The model so far.
+     *   The model, so far.
+     * @param mixed $value
+     *   The retrieved possible value. Can be anything.
      */
-    protected function prepareResult(
-        ReflectionClass $reflectionClass,
-        ReflectionMethod $reflectionMethod,
-        ?ReflectionProperty $refProp,
-        Model $model
-    ): void {
-        $this->parameters[static::PARAM_ADDITIONAL] = [
-            static::PARAM_NOTHING_FOUND => true,
-            static::PARAM_VALUE => null,
-            static::PARAM_REFLECTION_PROPERTY => null,
-            static::PARAM_REFLECTION_METHOD => $reflectionMethod
-        ];
-
-        if ($refProp === null) {
-            return;
-        }
-
-        // We've got ourselves a possible result.
-        $value = $reflectionClass->retrieveValue($refProp);
-        // If we are handling a getter, we retrieve the value itself
-        // If we are handling an is'er of has'er, we return a boolean.
-        if ($this->parameters[static::CURRENT_PREFIX] !== 'get' && !is_bool($value)) {
-            $value = $value !== null;
-        }
+    protected function prepareModel(Model $model, $value): void
+    {
         $model->setData($value);
-
         if ($value === null) {
             // A NULL value might mean that the values does not
             // exist, until the getter computes it.
@@ -300,273 +268,43 @@ class ThroughGetter extends AbstractCallback implements
                 $this->pool->messages->getHelp('getterNull')
             );
         }
-
-        // Give the plugins the opportunity to do something with the value, or
-        // try to resolve it, if nothing was found.
-        // We also add the stuff, that we were able to do so far.
-        $this->parameters[static::PARAM_ADDITIONAL][static::PARAM_NOTHING_FOUND] = false;
-        $this->parameters[static::PARAM_ADDITIONAL][static::PARAM_VALUE] = $value;
-        $this->parameters[static::PARAM_ADDITIONAL][static::PARAM_REFLECTION_PROPERTY] = $refProp;
     }
 
     /**
-     * We try to coax the reflection property from the current object.
-     *
-     * We try to guess the corresponding property in the class.
-     *
-     * @param ReflectionClass $classReflection
-     *   The reflection class oof the object we are analysing.
+     * @param mixed $value
+     *   The possible value that we retrieved.
+     * @param \Brainworxx\Krexx\Analyse\Getter\AbstractGetter $analyser
+     *   The analyser that we used.
      * @param \ReflectionMethod $reflectionMethod
-     *   The reflection ot the method of which we want to coax the result from
-     *   the class or sourcecode.
-     *
-     * @throws \ReflectionException
-     *
-     * @return \ReflectionProperty|null
-     *   Either the reflection of a possibly associated Property, or null to
-     *   indicate that we have found nothing.
+     *   Reflection of the method that we are analysing.
      */
-    protected function getReflectionProperty(
-        ReflectionClass $classReflection,
-        ReflectionMethod $reflectionMethod
-    ): ?ReflectionProperty {
-        // We may be facing different writing styles.
-        // The property we want from getMyProperty() should be named myProperty,
-        // but we can not rely on this.
-        // Old php 4 coders sometimes add an underscore before a protected
-        // property.
-
-        // We will check:
-        $names = [
-            // myProperty
-            $propertyName = $this->preparePropertyName($reflectionMethod),
-            // _myProperty
-            '_' . $propertyName,
-            // MyProperty
-            ucfirst($propertyName),
-            // _MyProperty
-            '_' . ucfirst($propertyName),
-            // myproperty
-            strtolower($propertyName),
-            // _myproperty
-            '_' . strtolower($propertyName),
-            // my_property
-            $this->convertToSnakeCase($propertyName),
-            // _my_property
-            '_' . $this->convertToSnakeCase($propertyName)
+    protected function prepareParameters($value, AbstractGetter $analyser, ReflectionMethod $reflectionMethod): void
+    {
+        $this->parameters[static::PARAM_ADDITIONAL] = [
+            static::PARAM_NOTHING_FOUND => false,
+            static::PARAM_VALUE => $value,
+            static::PARAM_REFLECTION_PROPERTY => $analyser->getReflectionProperty(),
+            static::PARAM_REFLECTION_METHOD => $reflectionMethod
         ];
-
-        foreach ($names as $name) {
-            if ($classReflection->hasProperty($name)) {
-                return $classReflection->getProperty($name);
-            }
-        }
-
-        // Time to do some deep stuff. We parse the sourcecode via regex!
-        return $reflectionMethod->isInternal() ? null :
-            $this->getReflectionPropertyDeep($classReflection, $reflectionMethod);
     }
 
     /**
-     * Get a first impression ot the possible property name for the getter.
+     * Reset the parameters for every getter.
+     *
+     * We do this for the eventsystem, so a listener can gete additional data
+     * from the current analysis process. Or the listener can inject stuff
+     * here.
      *
      * @param \ReflectionMethod $reflectionMethod
-     *   A reflection of the getter method we are analysing.
-     *
-     * @return string
-     *   The first impression of the property name.
+     * @return void
      */
-    protected function preparePropertyName(ReflectionMethod $reflectionMethod): string
+    protected function resetParameters(ReflectionMethod $reflectionMethod)
     {
-        $currentPrefix = $this->parameters[static::CURRENT_PREFIX];
-
-         // Get the name and remove the 'get' . . .
-        $getterName = $reflectionMethod->getName();
-        if (strpos($getterName, $currentPrefix) === 0) {
-            return lcfirst(substr($getterName, strlen($currentPrefix)));
-        }
-
-        // . . .  or the '_get'.
-        if (strpos($getterName, '_' . $currentPrefix) === 0) {
-            return lcfirst(substr($getterName, strlen($currentPrefix) + 1));
-        }
-
-        // Still here?!? At least make the first letter lowercase.
-        return lcfirst($getterName);
-    }
-
-    /**
-     * We try to coax the reflection property from the current object.
-     *
-     * This time we are analysing the source code itself!
-     *
-     * @param ReflectionClass $classReflection
-     *   The reflection class oof the object we are analysing.
-     * @param \ReflectionMethod $reflectionMethod
-     *   The reflection ot the method of which we want to coax the result from
-     *   the class or sourcecode.
-     *
-     * @throws \ReflectionException
-     *
-     * @return \ReflectionProperty|null
-     *   Either the reflection of a possibly associated Property, or null to
-     *   indicate that we have found nothing.
-     */
-    protected function getReflectionPropertyDeep(
-        ReflectionClass $classReflection,
-        ReflectionMethod $reflectionMethod
-    ): ?ReflectionProperty {
-        // Read the sourcecode into a string.
-        $sourcecode = $this->pool->fileService->readFile(
-            $reflectionMethod->getFileName(),
-            $reflectionMethod->getStartLine(),
-            $reflectionMethod->getEndLine()
-        );
-
-        // Execute our search pattern.
-        // Right now, we are trying to get to properties that way.
-        // Later on, we may also try to parse deeper for stuff.
-        $result = null;
-        foreach ($this->findIt(['return $this->', ';'], $sourcecode) as $propertyName) {
-            // Check if this is a property and return the first we find.
-            $result = $this->analyseRegexResult($propertyName, $classReflection);
-            if ($result !== null) {
-                break;
-            }
-        }
-
-        // Nothing?
-        return $result;
-    }
-
-    /**
-     * Analyse tone of the regex findings.
-     *
-     * @param string $propertyName
-     *   The name of the property.
-     * @param ReflectionClass $classReflection
-     *   The current class reflection
-     *
-     * @throws \ReflectionException
-     *
-     * @return \ReflectionProperty|null
-     *   The reflection of the property, or null if we found nothing.
-     */
-    protected function analyseRegexResult(string $propertyName, ReflectionClass $classReflection): ?ReflectionProperty
-    {
-        // Check if this is a property and return the first we find.
-        $result = $this->retrievePropertyByName($propertyName, $classReflection);
-        if ($result !== null) {
-            return $result;
-        }
-
-        // Check if this is a method and go deeper!
-        $methodName = rtrim($propertyName, '()');
-        if ($classReflection->hasMethod($methodName) && ++$this->deep < 3) {
-            // We need to be careful not to goo too deep, we might end up
-            // in a loop.
-            return $this->getReflectionProperty($classReflection, $classReflection->getMethod($methodName));
-        }
-
-        return null;
-    }
-
-    /**
-     * Retrieve the property by name from a reflection class.
-     *
-     * @param string $propertyName
-     *   The name of the property.
-     * @param \ReflectionClass $parentClass
-     *   The class where it may be located.
-     *
-     * @return \ReflectionProperty|null
-     *   The reflection property, if found.
-     */
-    protected function retrievePropertyByName(string $propertyName, \ReflectionClass $parentClass): ?ReflectionProperty
-    {
-        while ($parentClass !== false) {
-            // Check if it was declared somewhere deeper in the
-            // class structure.
-            if ($parentClass->hasProperty($propertyName)) {
-                return $parentClass->getProperty($propertyName);
-            }
-            $parentClass = $parentClass->getParentClass();
-        }
-
-        return null;
-    }
-
-    /**
-     * Converts a camel case string to snake case.
-     *
-     * @author Syone
-     * @see https://stackoverflow.com/questions/1993721/how-to-convert-camelcase-to-camel-case/35719689#35719689
-     *
-     * @param string $string
-     *   The string we want to transform into snake case
-     *
-     * @return string
-     *   The de-camelized string.
-     */
-    protected function convertToSnakeCase(string $string): string
-    {
-        return strtolower(preg_replace(['/([a-z\d])([A-Z])/', '/([^_])([A-Z][a-z])/'], '$1_$2', $string));
-    }
-
-    /**
-     * Searching for stuff via regex. Type casting inside the code will be ignored.
-     *
-     * @param string[] $searchArray
-     *   The search definition.
-     * @param string $haystack
-     *   The haystack, obviously.
-     *
-     * @return string[]|int[]
-     *   The findings.
-     */
-    protected function findIt(array $searchArray, string $haystack): array
-    {
-        // Some people cast their stuff before returning it.
-        // Remove it from the code before passing it to the regex.
-        $haystack = str_replace(['(int)', '(string)', '(float)', '(bool)'], '', $haystack);
-        $haystack = str_replace('  ', ' ', $haystack);
-
-        $findings = [];
-        preg_match_all(
-            str_replace(
-                ['###0###', '###1###'],
-                [preg_quote($searchArray[0]), preg_quote($searchArray[1])],
-                '/(?<=###0###).*?(?=###1###)/'
-            ),
-            $haystack,
-            $findings
-        );
-
-        // Return the file name as well as stuff from the path.
-        return $findings[0];
-    }
-
-    /**
-     * Escapes a string for regex usage.
-     *
-     * @param string $string
-     *   The string we want to escape.
-     *
-     * @deprecated
-     *   Since 5.0.0. Will be removed. Use preg_quote().
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated methods.
-     *
-     * @return string
-     *   The escaped string.
-     */
-    protected function regexEscaping(string $string): string
-    {
-        return str_replace(
-            $this->regexEscapeFind,
-            $this->regexEscapeReplace,
-            $string
-        );
+        $this->parameters[static::PARAM_ADDITIONAL] = [
+            static::PARAM_NOTHING_FOUND => true,
+            static::PARAM_VALUE => null,
+            static::PARAM_REFLECTION_PROPERTY => null,
+            static::PARAM_REFLECTION_METHOD => $reflectionMethod
+        ];
     }
 }

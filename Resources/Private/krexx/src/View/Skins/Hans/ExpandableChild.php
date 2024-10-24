@@ -47,7 +47,7 @@ trait ExpandableChild
     /**
      * @var string[]
      */
-    private $markerExpandableChild = [
+    private array $markerExpandableChild = [
         '{name}',
         '{type}',
         '{ktype}',
@@ -66,7 +66,7 @@ trait ExpandableChild
     /**
      * @var string[]
      */
-    private $markerNest = [
+    private array $markerNest = [
         '{style}',
         '{mainfunction}',
         '{domId}',
@@ -76,7 +76,7 @@ trait ExpandableChild
     /**
      * @var string
      */
-    private $markerSingleChildExtra = '{data}';
+    private string $markerSingleChildExtra = '{data}';
 
     /**
      * {@inheritdoc}
@@ -110,30 +110,6 @@ trait ExpandableChild
             ],
             $this->fileCache[static::FILE_EX_CHILD_NORMAL]
         );
-    }
-
-    /**
-     * Return 'kopened', if expanded.
-     *
-     * @param bool $isExpanded
-     *   Well? Is it?
-     *
-     * @deprecated since 5.0.0
-     *   Will be removed.
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated methods.
-     *
-     * @return string
-     *   The css class name.
-     */
-    protected function retrieveOpenedClass(bool $isExpanded): string
-    {
-        if ($isExpanded) {
-            return 'kopened';
-        }
-
-        return '';
     }
 
     /**

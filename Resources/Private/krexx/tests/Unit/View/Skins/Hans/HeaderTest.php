@@ -56,26 +56,26 @@ class HeaderTest extends AbstractRenderHans
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
             ->method('getKrexxCount')
-            ->will($this->returnValue(42));
+            ->willReturn(42);
         Krexx::$pool->emergencyHandler = $emergencyMock;
 
         $recursionMock = $this->createMock(Recursion::class);
         // Two times fro msearch and header itself.
         $recursionMock->expects($this->exactly(2))
             ->method('getMarker')
-            ->will($this->returnValue('recursion Marker'));
+            ->willReturn('recursion Marker');
         Krexx::$pool->recursionHandler = $recursionMock;
 
         $messageMock = $this->createMock(Messages::class);
         $messageMock->expects($this->once())
             ->method('outputMessages')
-            ->will($this->returnValue('mess ages'));
+            ->willReturn('mess ages');
         Krexx::$pool->messages = $messageMock;
 
         $chunkMock = $this->createMock(Chunks::class);
         $chunkMock->expects($this->once())
             ->method('getOfficialEncoding')
-            ->will($this->returnValue('encoding'));
+            ->willReturn('encoding');
         krexx::$pool->chunks = $chunkMock;
 
         // Run the test.

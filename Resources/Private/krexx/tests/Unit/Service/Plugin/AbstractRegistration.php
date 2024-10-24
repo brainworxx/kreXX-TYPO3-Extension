@@ -40,22 +40,22 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
 class AbstractRegistration extends AbstractHelper
 {
-    const PLUGINS = 'plugins';
-    const CHUNK_FOLDER = 'chunkFolder';
-    const LOG_FOLDER = 'logFolder';
-    const CONFIG_FILE = 'configFile';
-    const BLACK_LIST_METHODS = 'blacklistDebugMethods';
-    const BLACK_LIST_CLASS = 'blacklistDebugClass';
-    const ADD_HELP_FILES = 'additionalHelpFiles';
-    const REWRITE_LIST = 'rewriteList';
-    const EVENT_LIST = 'eventList';
-    const ADD_SKIN_LIST = 'additionalSkinList';
-    const ADD_SCALAR_STRING = 'additionalScalarString';
-    const NEW_SETTINGS = 'newSettings';
-    const ADD_LANGUAGES = 'additionalLanguages';
-    const NEW_FALLBACK_VALUE = 'newFallbackValues';
-    const ADDITIONAL_LANGUAGES = 'additionalLanguages';
-    const NEW_FALLBACK_VALUES = 'newFallbackValues';
+    public const PLUGINS = 'plugins';
+    public const CHUNK_FOLDER = 'chunkFolder';
+    public const LOG_FOLDER = 'logFolder';
+    public const CONFIG_FILE = 'configFile';
+    public const BLACK_LIST_METHODS = 'blacklistDebugMethods';
+    public const BLACK_LIST_CLASS = 'blacklistDebugClass';
+    public const ADD_HELP_FILES = 'additionalHelpFiles';
+    public const REWRITE_LIST = 'rewriteList';
+    public const EVENT_LIST = 'eventList';
+    public const ADD_SKIN_LIST = 'additionalSkinList';
+    public const ADD_SCALAR_STRING = 'additionalScalarString';
+    public const NEW_SETTINGS = 'newSettings';
+    public const ADD_LANGUAGES = 'additionalLanguages';
+    public const NEW_FALLBACK_VALUE = 'newFallbackValues';
+    public const ADDITIONAL_LANGUAGES = 'additionalLanguages';
+    public const NEW_FALLBACK_VALUES = 'newFallbackValues';
 
     /**
      * @var Registration

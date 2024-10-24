@@ -113,7 +113,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
     /**
      * Analysing the magical factory of the Aimeos view.
      *
-     * @param AbstractCallback $callback
+     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback|null $callback
      *   The calling class.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.
@@ -121,7 +121,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
      * @return string
      *   The generated markup.
      */
-    public function handle(AbstractCallback $callback, ?Model $model = null): string
+    public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
     {
         $params = $callback->getParameters();
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */

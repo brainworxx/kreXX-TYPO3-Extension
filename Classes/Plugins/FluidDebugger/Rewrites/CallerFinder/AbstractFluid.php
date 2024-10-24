@@ -131,7 +131,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
      *
      * @var string[][]
      */
-    protected $callPattern = [
+    protected array $callPattern = [
         ['<krexx:debug>{', '}<\/krexx:debug>'],
         ['<krexx:debug value="{', '}" \/>'],
         ['<krexx:debug value="{', '}"\/>'],

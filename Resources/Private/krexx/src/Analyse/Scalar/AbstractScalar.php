@@ -50,7 +50,7 @@ abstract class AbstractScalar
      *
      * @var \Brainworxx\Krexx\Service\Factory\Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Inject hte pool.

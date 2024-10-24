@@ -72,7 +72,6 @@ class ProcessClosureTest extends AbstractHelper
             return strlen($someVar);
         };
         $containingCode = 'just some source code';
-        $filePath = 'some file in a directory';
         $parameter = 'string $someVar';
         $model = new Model(Krexx::$pool);
         $model->setData($fixture);
@@ -81,10 +80,7 @@ class ProcessClosureTest extends AbstractHelper
         $fileserviceMock = $this->createMock(Fileservice::class);
         $fileserviceMock->expects($this->once())
             ->method('readSourcecode')
-            ->will($this->returnValue($containingCode));
-        $fileserviceMock->expects($this->once())
-            ->method('filterFilePath')
-            ->will($this->returnValue($filePath));
+            ->willReturn($containingCode);
         $renderNothing = new RenderNothing(Krexx::$pool);
         Krexx::$pool->fileService = $fileserviceMock;
         Krexx::$pool->render = $renderNothing;
@@ -94,7 +90,8 @@ class ProcessClosureTest extends AbstractHelper
         $this->mockEventService(
             [ProcessClosure::class . PluginConfigInterface::START_PROCESS, null, $model]
         );
-        $processClosure->handle($model);
+        $processClosure->canHandle($model);
+        $processClosure->handle();
 
         // Run the tests, model.
         $this->assertEquals(ProcessClosure::TYPE_CLOSURE, $model->getType());
@@ -115,7 +112,7 @@ class ProcessClosureTest extends AbstractHelper
         // Meta data inside the callback parameters
         $this->assertStringContainsString('Just another fixture.', $parameters['Comment']);
         $this->assertEquals($containingCode, $parameters['Source']);
-        $this->assertStringContainsString($filePath, $parameters['Declared in']);
+        $this->assertStringContainsString(__FILE__, $parameters['Declared in']);
         $this->assertEquals(__NAMESPACE__, $parameters['Namespace']);
         $this->assertEquals($parameter, $parameters['Parameter #1']);
     }

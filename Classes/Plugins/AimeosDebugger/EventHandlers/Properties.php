@@ -85,7 +85,7 @@ class Properties extends AbstractEventHandler implements
      * We add our magical properties right before the normal
      * public properties.
      *
-     * @param AbstractCallback $callback
+     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback|null $callback
      *   The calling class.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.
@@ -93,7 +93,7 @@ class Properties extends AbstractEventHandler implements
      * @return string
      *   The generated markup.
      */
-    public function handle(AbstractCallback $callback, ?Model $model = null): string
+    public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
     {
         $params = $callback->getParameters();
         $data = $params[static::PARAM_DATA];

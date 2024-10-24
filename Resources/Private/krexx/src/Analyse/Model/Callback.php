@@ -48,9 +48,9 @@ trait Callback
     /**
      * Callback for the renderMe() method.
      *
-     * @var \Brainworxx\Krexx\Analyse\Callback\AbstractCallback
+     * @var \Brainworxx\Krexx\Analyse\Callback\AbstractCallback|null
      */
-    protected $callback;
+    protected ?AbstractCallback $callback = null;
 
     /**
      * Parameters for the renderMe method.
@@ -59,7 +59,7 @@ trait Callback
      *
      * @var array
      */
-    protected $parameters = [];
+    protected array $parameters = [];
 
     /**
      * Inject the callback for the renderer

@@ -1,4 +1,4 @@
-.. image:: https://github.com/brainworxx/kreXX/actions/workflows/php.yml/badge.svg?branch=5.0
+.. image:: https://github.com/brainworxx/kreXX/actions/workflows/php.yml/badge.svg?branch=main
    :target: https://github.com/brainworxx/kreXX/actions/workflows/php.yml
 .. image:: https://api.codeclimate.com/v1/badges/c9d414a09928ede869c7/maintainability
    :target: https://codeclimate.com/github/brainworxx/kreXX/maintainability
@@ -41,7 +41,7 @@ Key features:
   :alt: Analysis of an extbase query result
 
   Analysis of an extbase query result
-
+  
 Installation
 ============
 
@@ -50,7 +50,7 @@ Manual installation
 
 1) Upload the whole kreXX directory to your webserver. Put it somewhere, where you are able to include it to your project.
 2) Include as early as possible the file bootstrap.php into your project. Normally this is the index.php.
-
+    
 Using composer
 ^^^^^^^^^^^^^^
 

@@ -48,6 +48,13 @@ use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 class ProcessOther extends AbstractRouting implements ProcessInterface
 {
     /**
+     * The model we are currently working on.
+     *
+     * @var Model
+     */
+    protected Model $model;
+
+    /**
      * Fall back to telling the dev to create a ticket, requesting an analysis
      * processor for this variable type.
      *
@@ -59,25 +66,23 @@ class ProcessOther extends AbstractRouting implements ProcessInterface
      */
     public function canHandle(Model $model): bool
     {
+        $this->model = $model;
         return true;
     }
 
     /**
      * Render a 'dump' for another type.
      *
-     * @param Model $model
-     *   The model with the data for the output.
-     *
      * @return string
      *   The rendered markup.
      */
-    public function handle(Model $model): string
+    public function handle(): string
     {
         // Unknown type, better encode it, just to be sure.
-        $type = $this->pool->encodingService->encodeString(gettype($model->getData()));
+        $type = $this->pool->encodingService->encodeString(gettype($this->model->getData()));
         return $this->pool->render->renderExpandableChild(
             $this->dispatchProcessEvent(
-                $model->setType($type)
+                $this->model->setType($type)
                     ->setNormal($this->pool->messages->getHelp('UnhandledType') . $type)
                     ->setHelpid('unhandedOtherHelp')
             )

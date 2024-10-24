@@ -68,7 +68,11 @@ class ScalarStringTest extends AbstractHelper
 
         $this->scalarString = new ScalarString(Krexx::$pool);
         // Inject the scalar helper, to track the processing.
-        $this->setValueByReflection('classList', [ScalarNothing::class], $this->scalarString);
+        $this->setValueByReflection(
+            'classList',
+            [ScalarNothing::class => new ScalarNothing(Krexx::$pool)],
+            $this->scalarString
+        );
     }
 
     /**
@@ -81,8 +85,17 @@ class ScalarStringTest extends AbstractHelper
         Registration::addScalarStringAnalyser(ScalarNothing::class);
         $this->scalarString = new ScalarString(Krexx::$pool);
 
+        $analyserList = $this->retrieveValueByReflection('classList', $this->scalarString);
         $this->assertTrue(
-            in_array(ScalarNothing::class, $this->retrieveValueByReflection('classList', $this->scalarString))
+            array_key_exists(
+                ScalarNothing::class,
+                $analyserList
+            )
+        );
+        $this->assertInstanceOf(
+            ScalarNothing::class,
+            $analyserList[ScalarNothing::class],
+            'The class was not instantiated correctly.'
         );
     }
 

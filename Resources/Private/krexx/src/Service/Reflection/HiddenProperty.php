@@ -196,7 +196,7 @@ class HiddenProperty extends UndeclaredProperty
      *
      * @var bool
      */
-    public $isUndeclared = false;
+    public bool $isUndeclared = false;
 
     /**
      * {@inheritDoc}

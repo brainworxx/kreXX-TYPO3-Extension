@@ -49,7 +49,7 @@ abstract class AbstractCaller
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Pattern that we are using to identify the caller.
@@ -58,7 +58,7 @@ abstract class AbstractCaller
      *
      * @var string
      */
-    protected $pattern;
+    protected string $pattern;
 
     /**
      * Here we store a more sophisticated list of calls.
@@ -67,7 +67,7 @@ abstract class AbstractCaller
      *
      * @var string[]
      */
-    protected $callPattern;
+    protected array $callPattern;
 
     /**
      * Injects the pool.

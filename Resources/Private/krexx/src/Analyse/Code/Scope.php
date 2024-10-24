@@ -62,7 +62,7 @@ class Scope implements CallbackConstInterface
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * The "scope" we are starting with. When it is $this in combination with a
@@ -71,7 +71,7 @@ class Scope implements CallbackConstInterface
      *
      * @var string
      */
-    protected $scope = '';
+    protected string $scope = '';
 
     /**
      * Initializes the code generation.

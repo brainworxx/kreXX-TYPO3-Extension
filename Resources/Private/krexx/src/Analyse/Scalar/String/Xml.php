@@ -49,41 +49,18 @@ use finfo;
 class Xml extends AbstractScalarAnalysis
 {
     /**
-     * @var string
-     */
-    protected const XML_CHILDREN = 'children';
-
-    /**
-     * @deprecated since 5.0.0
-     *   Will be removed
-     *
-     * @var array|bool
-     */
-    protected $decodedXml;
-
-    /**
      * The model, so far.
      *
      * @var Model
      */
-    protected $model;
-
-    /**
-     * Is there currently a node open?
-     *
-     * @deprecated since 5.0.0
-     *   Will be removed.
-     *
-     * @var bool
-     */
-    protected $tnodeOpen = false;
+    protected Model $model;
 
     /**
      * Was the decoding of the XML successful?
      *
      * @var bool
      */
-    protected $hasErrors = false;
+    protected bool $hasErrors = false;
 
     /**
      * {@inheritDoc}
@@ -160,102 +137,5 @@ class Xml extends AbstractScalarAnalysis
         $this->hasErrors = false;
 
         return $meta;
-    }
-
-    /**
-     * Parse an XML string into an array structure.
-     *
-     * @deprecated since 5.0.0
-     *   Will be removed
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
-     * @param string $strInputXML
-     *   The string we want to parse.
-     */
-    protected function parseXml(string $strInputXML): void
-    {
-        $resParser = xml_parser_create();
-        xml_set_object($resParser, $this);
-        xml_set_element_handler($resParser, "tagOpen", "tagClosed");
-        xml_set_character_data_handler($resParser, "tagData");
-        xml_parse($resParser, $strInputXML);
-        xml_parser_free($resParser);
-    }
-
-    /**
-     * Handle the opening of a tag.
-     *
-     * @deprecated since 5.0.0
-     *   Will be removed
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
-     * @param resource $parser
-     *   The parser resource.
-     * @param string $name
-     *   The name of the tag we are opening.
-     * @param array $attributes
-     *   The attributes of the tag we are opening.
-     */
-    protected function tagOpen($parser, string $name, array $attributes): void
-    {
-        $this->tnodeOpen = false;
-        if (empty($attributes)) {
-            $this->decodedXml[] = ["name" => $name];
-        } else {
-            $this->decodedXml[] = ["name" => $name, "attributes" => $attributes];
-        }
-    }
-
-    /**
-     * Retrieve the tag data.
-     *
-     * @deprecated since 5.0.0
-     *   Will be removed
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
-     * @param resource $parser
-     *   The parser resource.
-     * @param string $tagData
-     *   The tag data.
-     */
-    protected function tagData($parser, string $tagData): void
-    {
-        $count = count($this->decodedXml) - 1;
-        if ($this->tnodeOpen) {
-            $this->decodedXml[$count][static::XML_CHILDREN][] = array_pop(
-                $this->decodedXml[$count][static::XML_CHILDREN]
-            ) . $tagData;
-        } elseif (trim($tagData) !== '') {
-            $this->decodedXml[$count][static::XML_CHILDREN][] = $tagData;
-            $this->tnodeOpen = true;
-        }
-    }
-
-    /**
-     * Handle the closing of a tag.
-     *
-     * @deprecated since 5.0.0
-     *   Will be removed
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
-     * @param resource $parser
-     *   The parser resource.
-     * @param string $name
-     *   The name of the tag we are handling.
-     */
-    protected function tagClosed($parser, string $name): void
-    {
-        $count = count($this->decodedXml);
-        $this->tnodeOpen = false;
-        $this->decodedXml[$count - 2][static::XML_CHILDREN][] = $this->decodedXml[$count - 1];
-        array_pop($this->decodedXml);
     }
 }

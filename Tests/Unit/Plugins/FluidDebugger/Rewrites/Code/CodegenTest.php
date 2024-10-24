@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -64,8 +65,6 @@ class CodegenTest extends AbstractHelper
         $codeGen->setCodegenAllowed(true);
         $model = new Model(Krexx::$pool);
         $model->setName('dotty.dot');
-        $helpMock = $this->createMock(Messages::class);
-        Krexx::$pool->messages = $helpMock;
         $this->assertEquals($codeGen::UNKNOWN_VALUE, $codeGen->generateSource($model));
 
         // The configured debug method.
@@ -73,7 +72,7 @@ class CodegenTest extends AbstractHelper
         $codeGen->setCodegenAllowed(true);
         $model = new Model(Krexx::$pool);
         $model->setName('debugmethod');
-        $model->setType($codeGen::TYPE_DEBUG_METHOD);
+        $model->setType('Debug method');
         $this->assertEquals($codeGen::UNKNOWN_VALUE, $codeGen->generateSource($model));
 
         // The special debug method getProperties
@@ -81,7 +80,7 @@ class CodegenTest extends AbstractHelper
         $codeGen->setCodegenAllowed(true);
         $model = new Model(Krexx::$pool);
         $model->setName('getProperties');
-        $model->setType($codeGen::TYPE_DEBUG_METHOD);
+        $model->setType('Debug method');
         $this->assertEquals('properties', $codeGen->generateSource($model));
 
         // The VHS version.

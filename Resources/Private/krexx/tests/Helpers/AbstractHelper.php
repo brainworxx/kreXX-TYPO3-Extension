@@ -119,9 +119,6 @@ abstract class AbstractHelper extends TestCase
         $this->setValueByReflection('newFallbackValues', [], Registration::class);
         $this->setValueByReflection('additionalLanguages', [], Registration::class);
         $this->setValueByReflection('newSettings', [], Registration::class);
-
-        // Reset the cache in the ReflectionClass.
-        $this->setValueByReflection('cache', [], ReflectionClass::class);
     }
 
     /**

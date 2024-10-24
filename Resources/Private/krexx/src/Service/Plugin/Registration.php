@@ -53,98 +53,98 @@ class Registration implements ConfigConstInterface, PluginConstInterface
      *
      * @var \Brainworxx\Krexx\Service\Plugin\PluginConfigInterface[][]
      */
-    protected static $plugins = [];
+    protected static array $plugins = [];
 
     /**
      * The configured chunk folder from the plugin.
      *
      * @var string
      */
-    protected static $chunkFolder;
+    protected static string $chunkFolder;
 
     /**
      * The configures log folder from the plugin.
      *
      * @var string
      */
-    protected static $logFolder;
+    protected static string $logFolder;
 
     /**
      * The configured configuration file from the plugin.
      *
      * @var string
      */
-    protected static $configFile;
+    protected static string $configFile;
 
     /**
      * Blacklist of forbidden debug methods.
      *
      * @var string[][]
      */
-    protected static $blacklistDebugMethods = [];
+    protected static array $blacklistDebugMethods = [];
 
     /**
      * Blacklist of classes, that will never get debug-method-called.
      *
      * @var string[]
      */
-    protected static $blacklistDebugClass = [];
+    protected static array $blacklistDebugClass = [];
 
     /**
      * Additional help files with text for the debugger.
      *
      * @var string[]
      */
-    protected static $additionalHelpFiles = [];
+    protected static array $additionalHelpFiles = [];
 
     /**
      * List of all class rewrites for the factory.
      *
      * @var string[]
      */
-    protected static $rewriteList = [];
+    protected static array $rewriteList = [];
 
     /**
      * List of all registered events for the event handler.
      *
      * @var string[][]
      */
-    protected static $eventList = [];
+    protected static array $eventList = [];
 
     /**
      * List of all additionally registered skins with their configuration.
      *
      * @var string[][]
      */
-    protected static $additionalSkinList = [];
+    protected static array $additionalSkinList = [];
 
     /**
      * List of all additionally registered classes, that can do a string analysis.
      *
      * @var string[]
      */
-    protected static $additionalScalarString = [];
+    protected static array $additionalScalarString = [];
 
     /**
      * Additional configuration for the plugin.
      *
      * @var \Brainworxx\Krexx\Service\Plugin\NewSetting[]
      */
-    protected static $newSettings = [];
+    protected static array $newSettings = [];
 
     /**
      * Additional languages.
      *
      * @var string[][]
      */
-    protected static $additionalLanguages = [];
+    protected static array $additionalLanguages = [];
 
     /**
      * New fallback values for the settings.
      *
      * @var array
      */
-    protected static $newFallbackValues = [];
+    protected static array $newFallbackValues = [];
 
     /**
      * Add a new fallback standard value for a setting
@@ -353,16 +353,6 @@ class Registration implements ConfigConstInterface, PluginConstInterface
         static::$plugins[get_class($configClass)] = [
             static::CONFIG_CLASS => $configClass,
             static::IS_ACTIVE => false,
-            /**
-             * @deprecated since 5.0.0
-             *   Will be removed. Use the configuration class directly.
-             */
-            static::PLUGIN_NAME => $configClass->getName(),
-            /**
-             * @deprecated since 5.0.0
-             *   Will be removed. Use the configuration class directly.
-             */
-            static::PLUGIN_VERSION => $configClass->getVersion()
         ];
     }
 
@@ -404,16 +394,9 @@ class Registration implements ConfigConstInterface, PluginConstInterface
 
         // Purge all settings in the underlying registration class.
         static::$logFolder = static::$chunkFolder = static::$configFile = '';
-        static::$blacklistDebugMethods = [];
-        static::$blacklistDebugClass = [];
-        static::$additionalHelpFiles = [];
-        static::$eventList = [];
-        static::$rewriteList = [];
-        static::$additionalSkinList = [];
-        static::$additionalScalarString = [];
-        static::$newSettings = [];
-        static::$additionalLanguages = [];
-        static::$newFallbackValues = [];
+        static::$blacklistDebugMethods = static::$blacklistDebugClass = static::$additionalHelpFiles =
+        static::$eventList = static::$rewriteList = static::$additionalSkinList = static::$additionalScalarString =
+        static::$newSettings = static::$additionalLanguages = static::$newFallbackValues = [];
 
         // Go through the remaining plugins.
         static::$plugins[$configClass][static::IS_ACTIVE] = false;

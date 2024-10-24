@@ -156,6 +156,13 @@ interface RenderInterface
      *
      * @return string
      *   The template file, with all markers replaced.
+     *
+     * @deprecated
+     *   Since 6.0.0
+     *   Will be removed.
+     *   Has anybody used this one since PHP 7.0 anyway?
+     * @codeCoverageIgnore
+     *   We will not test deprecated code.
      */
     public function renderFatalMain(string $errstr, string $errfile, int $errline): string;
 
@@ -169,6 +176,13 @@ interface RenderInterface
      *
      * @return string
      *   The template file, with all markers replaced.
+     *
+     * @deprecated
+     *   Since 6.0.0
+     *   Will be removed.
+     *   Has anybody used this one since PHP 7.0 anyway?
+     * @codeCoverageIgnore
+     *   We will not test deprecated code.
      */
     public function renderFatalHeader(string $cssJs, string $errorType): string;
 

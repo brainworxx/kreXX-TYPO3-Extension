@@ -51,25 +51,32 @@ use UnitEnum;
 class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessConstInterface
 {
     /**
+     * The whitelist to decide if we are displaying type hints.
+     *
+     * @var string[]
+     */
+    protected const TYPE_HINT_WHITE_LIST = ['->', '::', '[', ']', '(', ')', '.'];
+
+    /**
      * Here we store all relevant data.
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Retrieves the declared method parameters from the declaration.
      *
      * @var \Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration
      */
-    protected $methodDeclaration;
+    protected MethodDeclaration $methodDeclaration;
 
     /**
      * Is the code generation allowed? We only allow it during a normal analysis.
      *
      * @var bool
      */
-    protected $codegenAllowed = false;
+    protected bool $codegenAllowed = false;
 
     /**
      * We treat the first run of the code generation different, because then we
@@ -77,7 +84,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
      *
      * @var bool
      */
-    protected $firstRun = true;
+    protected bool $firstRun = true;
 
     /**
      * Here we count haw often the code generation was disabled.
@@ -91,7 +98,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
      *
      * @var int
      */
-    protected $disableCount = 0;
+    protected int $disableCount = 0;
 
     /**
      * Initializes the code generation.
@@ -169,7 +176,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
         }
 
         $type = $model->getType() === static::TYPE_CLASS ? $model->getNormal() : $model->getType();
-        foreach (['->', '::', '[', ']', '(', ')', '.'] as $value) {
+        foreach (static::TYPE_HINT_WHITE_LIST as $value) {
             if (strpos($name, $value) !== false) {
                 // We are analysing something like:
                 // $this->getWhatever();
@@ -273,22 +280,6 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
     }
 
     /**
-     * Gets set, as soon as we have a scope to come from.
-     *
-     * @deprecated
-     *   Since 5.0.0. Use setCodegenAllowed() instead.
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
-     * @param bool $bool
-     */
-    public function setAllowCodegen(bool $bool): void
-    {
-        $this->setCodegenAllowed($bool);
-    }
-
-    /**
      * Set, if we are allowed to generate code to reach the stuff inside
      * the analysis.
      *
@@ -311,22 +302,6 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
         if ($this->disableCount < 0) {
             $this->disableCount = 0;
         }
-    }
-
-    /**
-     * Getter for the allowance of the code generation.
-     *
-     * @deprecated
-     *   Since 5.0.0. Use isCodegenAllowed() instead.
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
-     * @return bool
-     */
-    public function getAllowCodegen(): bool
-    {
-        return $this->isCodegenAllowed();
     }
 
     /**
@@ -367,28 +342,6 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
 
         // Escape it, just in case.
         return $this->pool->encodingService->encodeString($name);
-    }
-
-    /**
-     * Retrieve the parameter type.
-     *
-     * Depending on the available PHP version, we need to take different measures.
-     *
-     * @param \ReflectionParameter $reflectionParameter
-     *   The reflection parameter, what the variable name says.
-     *
-     * @deprecated since 5.0.0
-     *   Will be removed. Use $this->methodDeclaration->retrieveParameterType().
-     *
-     * @codeCoverageIgnore
-     *   We will not test deprecated code.
-     *
-     * @return string
-     *   The parameter type, if available.
-     */
-    protected function retrieveParameterType(ReflectionParameter $reflectionParameter): string
-    {
-        return $this->methodDeclaration->retrieveParameterType($reflectionParameter);
     }
 
     /**

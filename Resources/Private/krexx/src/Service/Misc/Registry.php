@@ -41,6 +41,11 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Registry class, to store stuff from the outside and inside.
+ *
+ * @deprecated
+ *   Since 3.0.0, will be removed.
+ * @codeCoverageIgnore
+ *   We don't test deprecated code.
  */
 class Registry
 {
@@ -49,7 +54,7 @@ class Registry
      *
      * @var array
      */
-    protected $data = [];
+    protected array $data = [];
 
     /**
      * Add itself to the pool.

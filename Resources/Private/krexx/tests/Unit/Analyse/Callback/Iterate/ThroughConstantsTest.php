@@ -44,9 +44,9 @@ use Brainworxx\Krexx\Krexx;
 
 class ThroughConstantsTest extends AbstractHelper
 {
-    const SKIPPED_REASON = 'Skipped due to wrong PHP version.';
-    const PUBLIC_CONSTANT = 'Public constant ';
-    const STATIC_COLON_COLON = 'static::';
+    public const  SKIPPED_REASON = 'Skipped due to wrong PHP version.';
+    public const  PUBLIC_CONSTANT = 'Public constant ';
+    public const  STATIC_COLON_COLON = 'static::';
 
     /**
      * Run the test with the provided class name.
@@ -99,7 +99,7 @@ class ThroughConstantsTest extends AbstractHelper
         // in scope.
         /** @var \Brainworxx\Krexx\Analyse\Model[] $models */
         $models = Krexx::$pool->routing->model;
-        $this->assertCount(2, $models);
+        $this->assertCount(3, $models);
         $this->assertEquals(ConstantsFixture71::CONST_1, $models[0]->getData());
         $this->assertEquals(ConstantsFixture71::CONST_2, $models[1]->getData());
         $this->assertEquals(static::PUBLIC_CONSTANT, $models[0]->getAdditional());
@@ -108,6 +108,15 @@ class ThroughConstantsTest extends AbstractHelper
         $this->assertEquals('CONST_2', $models[1]->getName());
         $this->assertEquals('\\' . ConstantsFixture71::class . '::', $models[0]->getConnectorLeft());
         $this->assertEquals('\\' . ConstantsFixture71::class . '::', $models[1]->getConnectorLeft());
+        $this->assertEquals([], $models[0]->getJson());
+        $this->assertEquals([], $models[1]->getJson());
+        $ref = new ReflectionClass(ConstantsFixture71::class);
+        if (method_exists($ref, 'getAttributes')) {
+            $this->assertEquals(
+                ['Attributes' => 'Brainworxx\\Krexx\\Tests\\Fixtures\\stuff(lorem)<br>Brainworxx\\Krexx\\Tests\\Fixtures\\more(ipsum)'],
+                $models[2]->getJson()
+            );
+        }
     }
 
     /**
@@ -126,7 +135,7 @@ class ThroughConstantsTest extends AbstractHelper
         // We are expecting an analysis of all of them because they are in scope.
         /** @var \Brainworxx\Krexx\Analyse\Model[] $models */
         $models = Krexx::$pool->routing->model;
-        $this->assertCount(4, $models);
+        $this->assertCount(5, $models);
         $this->assertEquals(ConstantsFixture71::CONST_1, $models[0]->getData());
         $this->assertEquals(ConstantsFixture71::CONST_2, $models[1]->getData());
         $this->assertEquals('string', $models[2]->getData());
@@ -143,5 +152,16 @@ class ThroughConstantsTest extends AbstractHelper
         $this->assertEquals(static::STATIC_COLON_COLON, $models[1]->getConnectorLeft());
         $this->assertEquals(static::STATIC_COLON_COLON, $models[2]->getConnectorLeft());
         $this->assertEquals(static::STATIC_COLON_COLON, $models[3]->getConnectorLeft());
+        $this->assertEquals([], $models[0]->getJson());
+        $this->assertEquals([], $models[1]->getJson());
+        $this->assertEquals([], $models[2]->getJson());
+        $this->assertEquals([], $models[3]->getJson());
+        $ref = new ReflectionClass(ConstantsFixture71::class);
+        if (method_exists($ref, 'getAttributes')) {
+            $this->assertEquals(
+                ['Attributes' => 'Brainworxx\\Krexx\\Tests\\Fixtures\\stuff(lorem)<br>Brainworxx\\Krexx\\Tests\\Fixtures\\more(ipsum)'],
+                $models[4]->getJson()
+            );
+        }
     }
 }

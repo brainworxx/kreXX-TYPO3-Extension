@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
+use Brainworxx\Krexx\Analyse\Attributes\Attributes;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
@@ -67,12 +68,28 @@ class ThroughMethods extends AbstractCallback implements
      *
      * @var \Brainworxx\Krexx\Analyse\Comment\Methods
      */
-    protected $commentAnalysis;
+    protected Methods $commentAnalysis;
 
     /**
+     * The method declaration retriever.
+     *
      * @var \Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration
      */
-    protected $methodDeclaration;
+    protected MethodDeclaration $methodDeclaration;
+
+    /**
+     * The return type comment retriever.
+     *
+     * @var \Brainworxx\Krexx\Analyse\Comment\ReturnType
+     */
+    protected ReturnType $returnType;
+
+    /**
+     * The method attributes retriever.
+     *
+     * @var \Brainworxx\Krexx\Analyse\Attributes\Attributes
+     */
+    protected Attributes $attributes;
 
     /**
      * Inject the pool and get the comment analysis online.
@@ -83,8 +100,10 @@ class ThroughMethods extends AbstractCallback implements
     {
         parent::__construct($pool);
 
-        $this->commentAnalysis = $this->pool->createClass(Methods::class);
-        $this->methodDeclaration = $this->pool->createClass(MethodDeclaration::class);
+        $this->commentAnalysis = $pool->createClass(Methods::class);
+        $this->methodDeclaration = $pool->createClass(MethodDeclaration::class);
+        $this->returnType = $pool->createClass(ReturnType::class);
+        $this->attributes = $pool->createClass(Attributes::class);
     }
 
     /**
@@ -144,23 +163,17 @@ class ThroughMethods extends AbstractCallback implements
         ReflectionMethod $refMethod,
         ReflectionClass $refClass
     ): array {
-        $methodData = [];
         $messages = $this->pool->messages;
-
-        // Get the comment from the class, it's parents, interfaces or traits.
-        $methodComment = $this->commentAnalysis->getComment($refMethod, $refClass);
-        if (!empty($methodComment)) {
-            $methodData[$messages->getHelp('metaComment')] = $methodComment;
-        }
-
-        // Get declaration place.
-        $methodData[$messages->getHelp('metaDeclaredIn')] = $this->methodDeclaration
-            ->retrieveDeclaration($refMethod);
-
-        // Get the return type.
-        /** @var ReturnType $returnType */
-        $returnType = $this->pool->createClass(ReturnType::class);
-        $methodData[$messages->getHelp('metaReturnType')] = $returnType->getComment($refMethod, $refClass);
+        $methodData = [
+            // Get the comment from the class, it's parents, interfaces or traits.
+            $messages->getHelp('metaComment') => $this->commentAnalysis->getComment($refMethod, $refClass),
+            // Get declaration place.
+            $messages->getHelp('metaDeclaredIn') => $this->methodDeclaration->retrieveDeclaration($refMethod),
+            // Get the return type.
+            $messages->getHelp('metaReturnType') => $this->returnType->getComment($refMethod, $refClass),
+            // Get the method attributes.
+            $messages->getHelp('metaAttributes') => $this->attributes->getFlatAttributes($refMethod),
+        ];
 
         return $methodData;
     }
@@ -190,7 +203,7 @@ class ThroughMethods extends AbstractCallback implements
      * @return string
      *   The human-readable parameter list.
      */
-    protected function retrieveParameters(ReflectionMethod $reflectionMethod, array &$methodData): string
+    protected function retrieveParameters(ReflectionMethod $reflectionMethod, array $methodData): string
     {
         $paramList = '';
         foreach ($reflectionMethod->getParameters() as $key => $reflectionParameter) {
@@ -204,27 +217,6 @@ class ThroughMethods extends AbstractCallback implements
         }
 
         return $paramList;
-    }
-
-    /**
-     * Get the declaration place of this method.
-     *
-     * @param \ReflectionMethod $reflectionMethod
-     *   Reflection of the method we are analysing.
-     * @param \ReflectionClass $declaringClass
-     *   Reflection of the class we are analysing
-     *
-     * @deprecated since 5.0.0
-     *   Will be removed. Use the MethodDeclaration instead.
-     * @codeCoverageIgnore
-     *   We do not test deprecated methods.
-     *
-     * @return string
-     *   The analysis result.
-     */
-    protected function getDeclarationPlace(ReflectionMethod $reflectionMethod, ReflectionClass $declaringClass): string
-    {
-        return $this->methodDeclaration->retrieveDeclaration($reflectionMethod);
     }
 
     /**

@@ -23,7 +23,7 @@ class OpaqueRessource extends AbstractCallback implements CallbackConstInterface
      *
      * @var string[]
      */
-    protected $analysesCallbacks  = [
+    protected array $analysesCallbacks  = [
         CurlHandle::class => 'curl_getinfo',
         OpenSSLCertificate::class => 'openssl_x509_parse',
         AddressInfo::class => 'socket_addrinfo_explain'
@@ -56,7 +56,7 @@ class OpaqueRessource extends AbstractCallback implements CallbackConstInterface
                             static::EVENT_MARKER_ANALYSES_END,
                             $this->pool->createClass(Model::class)
                                 ->setName($this->pool->messages->getHelp('metaRessourceAnalysis'))
-                                ->setType(static::TYPE_INTERNALS)
+                                ->setType($this->pool->messages->getHelp('classInternals'))
                                 ->addParameter(static::PARAM_DATA, (array)$callback($data))
                                 ->injectCallback($this->pool->createClass(ThroughMeta::class))
                         )

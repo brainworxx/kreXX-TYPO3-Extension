@@ -76,8 +76,6 @@ class RenderHans extends AbstractRender implements
     use ConnectorRight;
     use CssJs;
     use ExpandableChild;
-    use FatalHeader;
-    use FatalMain;
     use Footer;
     use Header;
     use Help;
@@ -88,6 +86,9 @@ class RenderHans extends AbstractRender implements
     use Search;
     use SingeChildHr;
     use SingleEditableChild;
+
+    use FatalHeader;
+    use FatalMain;
 
     /**
      * Template file name.

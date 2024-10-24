@@ -45,7 +45,7 @@ trait ConnectorRight
     /**
      * @var string[]
      */
-    private $markerConnectorRight = [
+    private array $markerConnectorRight = [
         '{connector}',
         '{returnType}',
     ];

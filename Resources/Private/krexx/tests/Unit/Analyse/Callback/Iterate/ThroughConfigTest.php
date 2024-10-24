@@ -59,26 +59,26 @@ class ThroughConfigTest extends AbstractHelper
         $settingOne = $this->createMock(Model::class);
         $settingOne->expects($this->once())
             ->method($methodName)
-            ->will($this->returnValue('section one'));
+            ->willReturn('section one');
         $settingTwo = $this->createMock(Model::class);
         $settingTwo->expects($this->once())
             ->method($methodName)
-            ->will($this->returnValue('section one'));
+            ->willReturn('section one');
         $settingThree = $this->createMock(Model::class);
         $settingThree->expects($this->once())
             ->method($methodName)
-            ->will($this->returnValue('section two'));
+            ->willReturn('section two');
         $settingFour = $this->createMock(Model::class);
         $settingFour->expects($this->once())
             ->method($methodName)
-            ->will($this->returnValue('section two'));
+            ->willReturn('section two');
         $settingFive = $this->createMock(Model::class);
         $settingFive->expects($this->once())
             ->method($methodName)
-            ->will($this->returnValue('section three'));
+            ->willReturn('section three');
         $settingFive->expects($this->once())
             ->method('getType')
-            ->will($this->returnValue(ConfigConstInterface::RENDER_TYPE_NONE));
+            ->willReturn(ConfigConstInterface::RENDER_TYPE_NONE);
 
         $fixture = [
             'settingOne' => $settingOne,

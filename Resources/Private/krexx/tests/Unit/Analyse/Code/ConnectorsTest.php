@@ -40,7 +40,7 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
 class ConnectorsTest extends AbstractHelper
 {
-    const TEST_STRING = 'test me';
+    public const  TEST_STRING = 'test me';
 
     protected function setUp(): void
     {

@@ -47,7 +47,7 @@ trait PluginList
     /**
      * @var string[]
      */
-    private $markerSinglePlugin = [
+    private array $markerSinglePlugin = [
         '{activeclass}',
         '{activetext}',
         '{plugintext}',

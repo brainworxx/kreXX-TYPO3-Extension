@@ -55,7 +55,7 @@ class ProcessOtherTest extends AbstractHelper
     {
         Krexx::$pool->render = new RenderNothing(Krexx::$pool);
         // How does one create a variable of the "unknown" kind?
-        // We use a simple sting instead.
+        // We use a simple string instead.
         $fixture = 'some string';
         $model = new Model(Krexx::$pool);
         $model->setData($fixture);
@@ -63,7 +63,8 @@ class ProcessOtherTest extends AbstractHelper
         $this->mockEventService(
             [ProcessOther::class . PluginConfigInterface::START_PROCESS, null, $model]
         );
-        $processor->handle($model);
+        $this->setValueByReflection('model', $model, $processor);
+        $processor->handle();
 
         $this->assertEquals('string', $model->getType());
         $this->assertEquals('Unhandled type: string', $model->getNormal());

@@ -41,7 +41,7 @@ use Brainworxx\Krexx\Krexx;
 
 class AbstractCallerTest extends AbstractHelper
 {
-    const TEST_PATTERN = 'some pattern';
+    public const TEST_PATTERN = 'some pattern';
 
     /**
      * Testing the setting of the pool

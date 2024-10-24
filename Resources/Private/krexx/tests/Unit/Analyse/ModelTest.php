@@ -47,9 +47,9 @@ use Brainworxx\Krexx\View\Messages;
 
 class ModelTest extends AbstractHelper
 {
-    const SOME_STRING_TO_PASS_THROUGH = 'some string to pass through';
-    const CONNECTOR_SERVICE = 'connectorService';
-    const SET_PARAMETERS = 'setParameters';
+    public const  SOME_STRING_TO_PASS_THROUGH = 'some string to pass through';
+    public const  CONNECTOR_SERVICE = 'connectorService';
+    public const  SET_PARAMETERS = 'setParameters';
 
     /**
      * A fresh instance of the model, redy to use.
@@ -97,12 +97,10 @@ class ModelTest extends AbstractHelper
         );
 
         $mockCallback->expects($this->never())
-            ->method('callMe')
-            ->will($this->returnValue(null));
+            ->method('callMe');
 
         $mockCallback->expects($this->never())
-            ->method(static::SET_PARAMETERS)
-            ->will($this->returnValue(null));
+            ->method(static::SET_PARAMETERS);
 
         $this->assertEquals($this->model, $this->model->injectCallback($mockCallback));
 
@@ -126,11 +124,11 @@ class ModelTest extends AbstractHelper
         // The callback should return the HTML result, which gets mocked here.
         $mockCallback->expects($this->once())
             ->method('callMe')
-            ->will($this->returnValue($htmlResult));
+            ->willReturn($htmlResult);
 
         $mockCallback->expects($this->once())
             ->method(static::SET_PARAMETERS)
-            ->will($this->returnValue($mockCallback));
+            ->willReturn($mockCallback);
 
         $this->assertEquals('', $this->model->renderMe(), 'No callback, no HTML.');
 
@@ -361,7 +359,7 @@ class ModelTest extends AbstractHelper
         $mockConnector = $this->createMock(Connectors::class);
         $mockConnector->expects($this->once())
             ->method('getConnectorLeft')
-            ->will($this->returnValue($data));
+            ->willReturn($data);
 
         $this->setValueByReflection(static::CONNECTOR_SERVICE, $mockConnector, $this->model);
         $this->assertEquals($data, $this->model->getConnectorLeft());
@@ -380,7 +378,7 @@ class ModelTest extends AbstractHelper
         $mockConnector = $this->createMock(Connectors::class);
         $mockConnector->expects($this->once())
             ->method('getConnectorRight')
-            ->will($this->returnValue($data))
+            ->willReturn($data)
             ->with($this->equalTo($cap));
 
         $this->setValueByReflection(static::CONNECTOR_SERVICE, $mockConnector, $this->model);
@@ -451,7 +449,6 @@ class ModelTest extends AbstractHelper
         $mockConnector = $this->createMock(Connectors::class);
         $mockConnector->expects($this->once())
             ->method(static::SET_PARAMETERS)
-            ->will($this->returnValue($data))
             ->with($this->equalTo($data));
 
         $this->setValueByReflection(static::CONNECTOR_SERVICE, $mockConnector, $this->model);
@@ -470,7 +467,7 @@ class ModelTest extends AbstractHelper
         $mockConnector = $this->createMock(Connectors::class);
         $mockConnector->expects($this->once())
             ->method('getParameters')
-            ->will($this->returnValue($data));
+            ->willReturn($data);
 
         $this->setValueByReflection(static::CONNECTOR_SERVICE, $mockConnector, $this->model);
         $this->assertEquals($data, $this->model->getConnectorParameters());
@@ -487,8 +484,7 @@ class ModelTest extends AbstractHelper
 
         $mockConnector = $this->createMock(Connectors::class);
         $mockConnector->expects($this->once())
-            ->method('setType')
-            ->will($this->returnValue($data));
+            ->method('setType');
 
         $this->setValueByReflection(static::CONNECTOR_SERVICE, $mockConnector, $this->model);
         $this->assertEquals($this->model, $this->model->setConnectorType($data));
@@ -505,8 +501,7 @@ class ModelTest extends AbstractHelper
 
         $mockConnector = $this->createMock(Connectors::class);
         $mockConnector->expects($this->once())
-            ->method('setCustomConnectorLeft')
-            ->will($this->returnValue($data));
+            ->method('setCustomConnectorLeft');
 
         $this->setValueByReflection(static::CONNECTOR_SERVICE, $mockConnector, $this->model);
         $this->assertEquals($this->model, $this->model->setCustomConnectorLeft($data));
@@ -524,7 +519,7 @@ class ModelTest extends AbstractHelper
         $mockConnector = $this->createMock(Connectors::class);
         $mockConnector->expects($this->once())
             ->method('getLanguage')
-            ->will($this->returnValue($data));
+            ->willReturn($data);
 
         $this->setValueByReflection(static::CONNECTOR_SERVICE, $mockConnector, $this->model);
         $this->assertEquals($data, $this->model->getConnectorLanguage());

@@ -42,10 +42,10 @@ use Brainworxx\Krexx\View\Output\CheckOutput;
 
 class CheckOutputTest extends AbstractHelper
 {
-    const HTTP_X_REQUESTED_WITH = 'HTTP_X_REQUESTED_WITH';
-    const OUTPUT_NAMESPACE = '\\Brainworxx\\Krexx\\View\\Output\\';
-    const PHP_SAPI_NAME = 'php_sapi_name';
-    const HEADERS_LIST = 'headers_list';
+    public const  HTTP_X_REQUESTED_WITH = 'HTTP_X_REQUESTED_WITH';
+    public const  OUTPUT_NAMESPACE = '\\Brainworxx\\Krexx\\View\\Output\\';
+    public const  PHP_SAPI_NAME = 'php_sapi_name';
+    public const  HEADERS_LIST = 'headers_list';
 
     /**
      * Prevent the mocking of a browser output.
@@ -104,7 +104,7 @@ class CheckOutputTest extends AbstractHelper
     {
         $sapiMock = $this->getFunctionMock(static::OUTPUT_NAMESPACE, static::PHP_SAPI_NAME);
         $sapiMock->expects($this->once())
-            ->will($this->returnValue('cli'));
+            ->willReturn('cli');
 
         $checkOutput = new CheckOutput(Krexx::$pool);
         $this->assertTrue($checkOutput->isCli());
@@ -119,7 +119,7 @@ class CheckOutputTest extends AbstractHelper
     {
         $sapiMock = $this->getFunctionMock(static::OUTPUT_NAMESPACE, static::PHP_SAPI_NAME);
         $sapiMock->expects($this->once())
-            ->will($this->returnValue('not cli'));
+            ->willReturn('not cli');
 
         $checkOutput = new CheckOutput(Krexx::$pool);
         $this->assertFalse($checkOutput->isCli());
@@ -134,7 +134,7 @@ class CheckOutputTest extends AbstractHelper
     {
         $headerMock = $this->getFunctionMock(static::OUTPUT_NAMESPACE, static::HEADERS_LIST);
         $headerMock->expects($this->once())
-            ->will($this->returnValue(['whatever: some header', 'content-type: html']));
+            ->willReturn(['whatever: some header', 'content-type: html']);
 
         $checkOutput = new CheckOutput(Krexx::$pool);
         $this->assertTrue($checkOutput->isOutputHtml());
@@ -149,7 +149,7 @@ class CheckOutputTest extends AbstractHelper
     {
         $headerMock = $this->getFunctionMock(static::OUTPUT_NAMESPACE, static::HEADERS_LIST);
         $headerMock->expects($this->once())
-            ->will($this->returnValue(['whatever: some header', 'Content-type:application/pdf']));
+            ->willReturn(['whatever: some header', 'Content-type:application/pdf']);
 
         $checkOutput = new CheckOutput(Krexx::$pool);
         $this->assertFalse($checkOutput->isOutputHtml());
@@ -166,7 +166,7 @@ class CheckOutputTest extends AbstractHelper
         // Disable CLI mode.
         $sapiMock = $this->getFunctionMock(static::OUTPUT_NAMESPACE, static::PHP_SAPI_NAME);
         $sapiMock->expects($this->any())
-            ->will($this->returnValue('browser'));
+            ->willReturn('browser');
         $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
         $checkOutput = new CheckOutput(Krexx::$pool);
 

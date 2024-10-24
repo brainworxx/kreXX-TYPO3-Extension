@@ -61,7 +61,7 @@ class Routing extends AbstractRouting
     /**
      * @var ProcessInterface[]
      */
-    protected $processors = [];
+    protected array $processors = [];
 
     /**
      * Inject the pool and create all the routing classes.
@@ -107,7 +107,7 @@ class Routing extends AbstractRouting
 
         foreach ($this->processors as $processor) {
             if ($processor->canHandle($model)) {
-                return $processor->handle($model);
+                return $processor->handle();
             }
         }
 

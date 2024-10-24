@@ -48,7 +48,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 class CallerFinder extends AbstractCaller implements BacktraceConstInterface, CallbackConstInterface
 {
     /**
-     * Pattern used to find the krexx call in the backtrace.
+     * Pattern used to find the kreXX call in the backtrace.
      *
      * Can be overwritten by extending classes.
      *
@@ -57,7 +57,7 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
     protected const CLASS_PATTERN = Krexx::class;
 
     /**
-     * Pattern used to find the krexx call in the backtrace.
+     * Pattern used to find the kreXX call in the backtrace.
      *
      * Can be overwritten by extending classes.
      *
@@ -96,7 +96,6 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
     {
         $backtrace = array_reverse(debug_backtrace(0, 5));
 
-        $caller = [];
         // Going from the first call of the first line, up through the first debug call.
         foreach ($backtrace as $caller) {
             if ($this->identifyCaller($caller)) {
@@ -111,11 +110,11 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
         // We will not keep the whole backtrace im memory. We only return what we
         // actually need.
         return [
-            static::TRACE_FILE => $this->pool->fileService->filterFilePath($caller[static::TRACE_FILE]),
+            static::TRACE_FILE => $caller[static::TRACE_FILE],
             static::TRACE_LINE => (int)$caller[static::TRACE_LINE],
             static::TRACE_VARNAME => $varname,
             static::TRACE_TYPE => $this->getType($headline, $varname, $data),
-            static::TRACE_DATE => date('d-m-Y H:i:s', time()),
+            static::TRACE_DATE => date(static::TIME_FORMAT, time()),
             static::TRACE_URL => $this->getCurrentUrl(),
         ];
     }
@@ -195,30 +194,5 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
         }
 
         return static::UNKNOWN_VALUE;
-    }
-
-    /**
-     * What the method name says.
-     *
-     * When used inline, may have some trailing ')' at the end.
-     * Things may get really confusing, if we have a string with '(' somewhere
-     * in there. Hence, we need to actually count them, and try to identify any
-     * string.
-     *
-     * @deprecated
-     *   Since 5.0.0. Will be removed. Use the CleanUpVarName class instead.
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated methods.
-     *
-     * @param string $name
-     *   The variable name, before the cleanup.
-     *
-     * @return string
-     *   The variable name, after the cleanup.
-     */
-    protected function cleanupVarName(string $name): string
-    {
-        return $this->pool->createClass(CleanUpVarName::class)->cleanup($name);
     }
 }

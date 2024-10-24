@@ -49,7 +49,7 @@ trait SingleEditableChild
     /**
      * @var string
      */
-    private $markerSingleEditableChild = '{addjson}';
+    private string $markerSingleEditableChild = '{addjson}';
 
     /**
      * {@inheritDoc}

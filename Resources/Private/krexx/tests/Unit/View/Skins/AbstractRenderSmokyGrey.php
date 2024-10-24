@@ -44,15 +44,15 @@ use Brainworxx\Krexx\View\Skins\RenderSmokyGrey;
 
 abstract class AbstractRenderSmokyGrey extends AbstractHelper
 {
-    const PATH_TO_SKIN = '/some path/';
-    const GET_NAME = 'getName';
-    const GET_DOMID = 'getDomid';
-    const GET_NORMAL = 'getNormal';
-    const GET_CONNECTOR_RIGHT = 'getConnectorRight';
-    const GET_JSON = 'getJson';
-    const GET_TYPE = 'getType';
-    const RENDER_ME = 'renderMe';
-    const GET_CONNECTOR_LANGUAGE = 'getConnectorLanguage';
+    public const PATH_TO_SKIN = '/some path/';
+    public const GET_NAME = 'getName';
+    public const GET_DOMID = 'getDomid';
+    public const GET_NORMAL = 'getNormal';
+    public const GET_CONNECTOR_RIGHT = 'getConnectorRight';
+    public const GET_JSON = 'getJson';
+    public const GET_TYPE = 'getType';
+    public const RENDER_ME = 'renderMe';
+    public const GET_CONNECTOR_LANGUAGE = 'getConnectorLanguage';
 
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject
@@ -91,7 +91,7 @@ abstract class AbstractRenderSmokyGrey extends AbstractHelper
         $pathToSkin = Krexx::$pool->config->getSkinDirectory();
         $this->fileServiceMock->expects($this->any())
             ->method('getFileContents')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 // sourceButton.html
                 [
                     $pathToSkin . 'sourcebutton' . $fileSuffix,
@@ -262,7 +262,7 @@ abstract class AbstractRenderSmokyGrey extends AbstractHelper
                     true,
                     'Unhelpful stuff.'
                 ],
-            ]));
+            ]);
 
         Krexx::$pool->fileService = $this->fileServiceMock;
     }
@@ -280,6 +280,6 @@ abstract class AbstractRenderSmokyGrey extends AbstractHelper
         }
         $this->modelMock->expects($this->once())
             ->method($methodName)
-            ->will($this->returnValue($returnValue));
+            ->willReturn($returnValue);
     }
 }
