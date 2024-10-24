@@ -37,9 +37,11 @@ namespace Brainworxx\Includekrexx\Tests\Helpers;
 
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Http\Response;
-use TYPO3\CMS\Core\View\ResponsableViewInterface;
 
-class ModuleTemplate implements ResponsableViewInterface
+/**
+ * The things you do, because some classes are final.
+ */
+class ModuleTemplate
 {
     public function setModuleName(string $moduleName)
     {
@@ -52,6 +54,14 @@ class ModuleTemplate implements ResponsableViewInterface
     }
 
     public function assignMultiple(array $stuff)
+    {
+    }
+
+    public function setContent()
+    {
+    }
+
+    public function renderContent()
     {
 
     }

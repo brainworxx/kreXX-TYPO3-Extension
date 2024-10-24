@@ -49,7 +49,6 @@ use stdClass;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Http\HtmlResponse;
-use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Page\PageRenderer;
@@ -117,8 +116,10 @@ abstract class AbstractController extends ActionController implements ConstInter
 
     /**
      * @var \TYPO3\CMS\Backend\Template\ModuleTemplate
+     *
+     * Add typing as soon as we drop TYPO3 11 compatibility.
      */
-    protected ResponsableViewInterface $moduleTemplate;
+    protected $moduleTemplate;
 
     /**
      * @var \TYPO3\CMS\Core\Page\PageRenderer
