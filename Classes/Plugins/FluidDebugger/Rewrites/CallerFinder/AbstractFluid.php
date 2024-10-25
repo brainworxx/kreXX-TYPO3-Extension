@@ -206,7 +206,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
                 static::TRACE_LINE => static::FLUID_NOT_AVAILABLE,
                 static::TRACE_VARNAME => static::FLUID_VARIABLE,
                 static::TRACE_TYPE => $this->getType($messages->getHelp($helpKey), static::FLUID_VARIABLE, $data),
-                static::TRACE_DATE => date('d-m-Y H:i:s', time()),
+                static::TRACE_DATE => date(static::TIME_FORMAT, time()),
                 static::TRACE_URL => $this->getCurrentUrl(),
             ];
         }
@@ -220,7 +220,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
             static::TRACE_LINE => $this->line,
             static::TRACE_VARNAME => $this->varname,
             static::TRACE_TYPE => $this->getType($messages->getHelp($helpKey), $this->varname, $data),
-            static::TRACE_DATE => date('d-m-Y H:i:s', time()),
+            static::TRACE_DATE => date(static::TIME_FORMAT, time()),
             static::TRACE_URL => $this->getCurrentUrl(),
         ];
     }
