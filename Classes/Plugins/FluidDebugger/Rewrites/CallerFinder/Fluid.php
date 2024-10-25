@@ -66,7 +66,7 @@ class Fluid extends AbstractFluid
         // Resolve the layout file without any hacks by the framework.
         $fileName = $this->parsedTemplate->getLayoutName($this->renderingContext);
         return $this->renderingContext->getTemplatePaths()
-            ->getLayoutPathAndFilename($fileName);
+            ->getLayoutPathAndFilename((string)$fileName);
     }
 
     /**

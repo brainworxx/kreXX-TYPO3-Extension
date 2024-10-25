@@ -33,7 +33,7 @@ Changes:
 -----
 
 :Version: 5.1.1
-:Date: tbd
+:Date: 2024-10-25
 
 Changes:
     * [Feature] Added the handling of type casting to the regex getter analysis.
@@ -41,6 +41,7 @@ Changes:
     * [Bugfix] Removed some self:: references.
     * [Bugfix] Better looking exclamation mark for the SmokyGrey skin.
     * [Bugfix] The dragging of the kreXX output window may not work under certain circumstances.
+    * [Bugfix] The fluid caller finder layout path resolver may return a stringable object instead of a string when the cache is empty.
 
 -----
 
