@@ -5,7 +5,7 @@ Changelog
 =============================================================
 
 :Version: 5.1.1
-:Date: tbd
+:Date: 2024-10-25
 
 Changes:
     * [Feature] Added the handling of type casting to the regex getter analysis.
