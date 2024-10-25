@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionException;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
+use ReflectionClass;
 
 /**
  * Contains all methods, that are used by the fluid caller finder classes.
@@ -69,7 +70,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
      *
      * @var \ReflectionClass
      */
-    protected $viewReflection;
+    protected ReflectionClass $viewReflection;
 
     /**
      * What we are currently rendering.

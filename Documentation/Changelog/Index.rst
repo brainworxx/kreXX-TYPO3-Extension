@@ -15,6 +15,7 @@ Changes:
     * [Feature] Added better readability to the exception analysis.
     * [Feature] Added delegate handling to the getter analysis.
     * [Feature] Added attribute handling to the meta analysis.
+    * [Feature] Refactored and extended the getter analysis, for better results.
     * [Change] The scalar analysis classes are now reused.
     * [Change] Renamed the language fallback key from 'text' to 'en'.
     * [Change] Dropped PHP 7.2 and 7.3 support.
@@ -26,7 +27,6 @@ Changes:
     * [Change] Only use byRef when absolutely necessary.
     * [Change] We do not filter the file path anymore.
     * [Change] Moved some frontend literals to the translations.
-    * [Change] Split the getter analysis into several smaller classes.
     * [Change] Removed deprecations from the unit tests.
     * [Change] Deprecated the exception handler.
 
