@@ -39,6 +39,7 @@ namespace Brainworxx\Includekrexx\Modules;
 
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Collectors\LogfileList;
+use Brainworxx\Includekrexx\Controller\AccessTrait;
 use Brainworxx\Includekrexx\Controller\ControllerConstInterface;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
@@ -67,6 +68,7 @@ class Log extends AbstractSubModule implements
     ControllerConstInterface
 {
     use LanguageTrait;
+    use AccessTrait;
 
     /**
      * @var string
@@ -180,18 +182,6 @@ class Log extends AbstractSubModule implements
     public function getJavaScriptFiles(): array
     {
         return [];
-    }
-
-    /**
-     * Additional check, if the current Backend user has access to the extension.
-     *
-     * @return bool
-     *   The result of the check.
-     */
-    protected function hasAccess(): bool
-    {
-        return isset($GLOBALS[static::BE_USER]) &&
-            $GLOBALS[static::BE_USER]->check(static::BE_MODULES, AbstractCollector::PLUGIN_NAME);
     }
 
     /**

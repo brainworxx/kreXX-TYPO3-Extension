@@ -64,6 +64,7 @@ use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 abstract class AbstractController extends ActionController implements ConstInterface, ControllerConstInterface
 {
     use LanguageTrait;
+    use AccessTrait;
 
     /**
      * @var string
@@ -264,18 +265,6 @@ abstract class AbstractController extends ActionController implements ConstInter
             }
             fclose($res);
         }
-    }
-
-    /**
-     * Additional check, if the current Backend user has access to the extension.
-     *
-     * @return bool
-     *   The result of the check.
-     */
-    protected function hasAccess(): bool
-    {
-        return isset($GLOBALS[static::BE_USER]) &&
-            $GLOBALS[static::BE_USER]->check(static::BE_MODULES, AbstractCollector::PLUGIN_NAME);
     }
 
     /**
