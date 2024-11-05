@@ -45,7 +45,6 @@ use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use stdClass;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Http\HtmlResponse;
@@ -179,7 +178,7 @@ abstract class AbstractController extends ActionController implements ConstInter
     }
 
     /**
-     * Trying to get the ModuleTemplate from TYPO3 7 to 12.
+     * Trying to get the ModuleTemplate from TYPO3 10 to 13.
      *
      * @return void
      */
@@ -214,7 +213,7 @@ abstract class AbstractController extends ActionController implements ConstInter
     protected function checkProductiveSetting(): void
     {
         if ($this->livePreset->isActive()) {
-            //Display a warning, if we are in Productive / Live settings.
+            // Display a warning, if we are in Productive / Live settings.
             $this->addFlashMessage(
                 static::translate('debugpreset.warning.message'),
                 static::translate('debugpreset.warning.title'),
@@ -243,6 +242,9 @@ abstract class AbstractController extends ActionController implements ConstInter
 
     /**
      * Dispatches a file, using output buffering.
+     *
+     * We can not (ab)use the TYPO3 for dispatching, because we have inline
+     * JS in that file.
      *
      * @param string $path
      *   The path of the file we want to dispatch to the browser.
@@ -323,13 +325,14 @@ abstract class AbstractController extends ActionController implements ConstInter
      */
     protected function generateAjaxTranslations(): string
     {
-        $translation = new stdClass();
-        $translation->deletefile = static::translate('ajax.delete.file');
-        $translation->error = static::translate('ajax.error');
-        $translation->in = static::translate('ajax.in');
-        $translation->line = static::translate('ajax.line');
-        $translation->updatedLoglist = static::translate('ajax.updated.loglist');
-        $translation->deletedCookies = static::translate('ajax.deleted.cookies');
+        $translation = [
+            'deletefile' => static::translate('ajax.delete.file'),
+            'error' => static::translate('ajax.error'),
+            'in' => static::translate('ajax.in'),
+            'line' => static::translate('ajax.line'),
+            'updatedLoglist' => static::translate('ajax.updated.loglist'),
+            'deletedCookies' => static::translate('ajax.deleted.cookies'),
+        ];
 
         return 'window.ajaxTranslate = ' .  json_encode($translation) . ';';
     }
