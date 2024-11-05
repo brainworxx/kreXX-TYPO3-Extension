@@ -142,7 +142,7 @@ class Xml extends AbstractScalarAnalysis
         $dom->preserveWhiteSpace = false;
         $dom->formatOutput = true;
 
-        set_error_handler($this->pool->retrieveErrorCallback());
+        set_error_handler([$this, 'errorCallback']);
         $dom->loadXML($this->handledValue);
         restore_error_handler();
 
@@ -160,6 +160,27 @@ class Xml extends AbstractScalarAnalysis
         $this->hasErrors = false;
 
         return $meta;
+    }
+
+    /**
+     * Error callback in case something is wrong when decoding the XML.
+     *
+     * @param int $errno
+     * @param string $errstr
+     * @param string|null $errfile
+     * @param int|null $errline
+     * @param array|null $errcontext
+     * @return bool
+     */
+    public function errorCallback(
+        int $errno,
+        string $errstr,
+        ?string $errfile = null,
+        ?int $errline = null,
+        ?array $errcontext = null
+    ): bool {
+        $this->hasErrors = true;
+        return true;
     }
 
     /**

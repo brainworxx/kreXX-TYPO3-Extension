@@ -103,7 +103,7 @@ abstract class AbstractScalarAnalysis extends AbstractCallback implements Callba
 
         if (empty($meta)) {
             // Nothing to render.
-            return '';
+            return $output;
         }
 
         // Prepare the rendering.

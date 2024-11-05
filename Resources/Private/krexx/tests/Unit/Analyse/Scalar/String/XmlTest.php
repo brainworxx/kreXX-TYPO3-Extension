@@ -128,6 +128,7 @@ class XmlTest extends AbstractHelper
      * Test the actual handling of a XML string.
      *
      * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::handle
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::errorCallback
      * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::parseXml
      * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::tagOpen
      * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::tagClosed
@@ -154,5 +155,28 @@ class XmlTest extends AbstractHelper
         $this->assertEquals(1, CallbackCounter::$counter);
         $result = CallbackCounter::$staticParameters[0][XML::PARAM_DATA];
         $this->assertEquals($prettyPrint, $result['Pretty print']);
+    }
+
+    /**
+     * Test with a broken XML structure.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::handle
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::errorCallback
+     */
+    public function testHandleBrokenXml()
+    {
+        Krexx::$pool->rewrite = [ThroughMeta::class => CallbackCounter::class];
+
+        $string = '<?xml version="1.0" encoding="utf-8"?><root><node>rogue text<yxcv qwer="asdf"><![CDATA[content]]></yxcv><yxcv qwer="yxcv" /></root>';
+        $model = new Model(Krexx::$pool);
+        $model->addToJson('Mimetype string', static::TEXT_XML);
+        $xml = new Xml(Krexx::$pool);
+        $xml->canHandle($string, $model);
+        $xml->callMe();
+
+        $this->assertEquals(
+            'Unable to decode the XML structure!',
+            CallbackCounter::$staticParameters[0]['data']['Decoded xml']
+        );
     }
 }

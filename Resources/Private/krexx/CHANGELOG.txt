@@ -1,3 +1,8 @@
+5.0.7
+- Bugfix: The XML analysis does not recognise a broken XML string.
+- Bugfix: The scalar analysis does not return the output from the
+  start event when there is no meta to display.
+
 5.0.6
 - Added the handling of type casting to the regex getter analysis.
 - Bugfix: Removed some self:: references.
