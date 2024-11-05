@@ -66,10 +66,9 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
         }
 
         $pathParts = pathinfo($this->pool->config->getPathToConfigFile());
-        $filePath = $pathParts[static::PATHINFO_DIRNAME] . DIRECTORY_SEPARATOR .
-            $pathParts[static::PATHINFO_FILENAME] . '.';
-
-        $this->fileReader = $this->pool->createClass(File::class)->loadFile($filePath);
+        $this->fileReader = $this->pool->createClass(File::class)
+            ->loadFile($pathParts[static::PATHINFO_DIRNAME] . DIRECTORY_SEPARATOR .
+                $pathParts[static::PATHINFO_FILENAME] . '.');
         $config = [];
         foreach ($this->pool->config->feConfigFallback as $settingsName => $fallback) {
             $this->generateSingleSetting($settingsName, $config, $this->generateDropdown($fallback));

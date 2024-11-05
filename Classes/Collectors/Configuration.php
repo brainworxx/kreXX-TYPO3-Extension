@@ -160,7 +160,6 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
         // Check if we have a value from the last time a user has saved
         // the settings.
         $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = true;
-
         $config[$settingsName][static::SETTINGS_VALUE] = $this->userUc[$settingsName] ??
             $fallback[static::SETTINGS_VALUE];
 
