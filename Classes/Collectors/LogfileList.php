@@ -69,11 +69,9 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
      */
     public function retrieveFileList(): array
     {
-        $fileList = [];
-
         if (!$this->hasAccess) {
             // No access.
-            return $fileList;
+            return [];
         }
 
         // Get the log files and sort them.
@@ -113,14 +111,16 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
         set_error_handler(\Krexx::$pool->retrieveErrorCallback());
         $fileList = [];
         foreach ($files as $file) {
-            $fileinfo = [];
             // Getting the basic info.
-            $fileinfo['name'] = basename($file);
-            $fileinfo['size'] = $this->fileSizeConvert((int)filesize($file));
-            $fileinfo['time'] = date("d.m.y H:i:s", (int)filemtime($file));
+            $fileinfo = [
+                'name' => basename($file),
+                'size' => $this->fileSizeConvert((int)filesize($file)),
+                'time' => date("d.m.y H:i:s", (int)filemtime($file)),
+                'meta' => $this->addMetaToFileInfo($file)
+            ];
+
             $fileinfo['id'] = str_replace('.Krexx.html', '', $fileinfo['name']);
             $fileinfo['dispatcher'] = $this->getRoute($fileinfo['id']);
-            $fileinfo['meta'] = $this->addMetaToFileInfo($file);
             $fileList[] = $fileinfo;
         }
         restore_error_handler();
@@ -191,21 +191,17 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
             [$unit => 'B', $value => 1],
         ];
 
-        $result = '';
         foreach ($arBytes as $aritem) {
             if ($bytes >= $aritem[$value]) {
-                $result = $bytes / $aritem[$value];
-                $result = str_replace('.', ',', strval(round($result, 2))) . ' ' . $aritem[$unit];
-                break;
+                return str_replace('.', ',', strval(round($bytes / $aritem[$value], 2))) . ' ' . $aritem[$unit];
             }
         }
 
-        return $result;
+        return '';
     }
 
     /**
-     * Depending on the TYPO3 version, we must use different classes to get a
-     * functioning link to the backend dispatcher.
+     * get the backend ajax routing.
      *
      * @param string $fileId
      *   The id of the file we want to get the url from.
