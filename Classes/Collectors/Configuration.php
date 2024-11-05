@@ -107,11 +107,10 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
     protected function retrieveConfiguration(): array
     {
         $pathParts = pathinfo($this->pool->config->getPathToConfigFile());
-        $filePath = $pathParts[static::PATHINFO_DIRNAME] . DIRECTORY_SEPARATOR .
-            $pathParts[static::PATHINFO_FILENAME] . '.';
-
         /** @var File $iniReader */
-        $iniReader = $this->pool->createClass(File::class)->loadFile($filePath);
+        $iniReader = $this->pool->createClass(File::class)
+            ->loadFile($pathParts[static::PATHINFO_DIRNAME] . DIRECTORY_SEPARATOR .
+            $pathParts[static::PATHINFO_FILENAME] . '.');
 
         $fallbackOverwrites = SettingsGetter::getNewFallbackValues();
 
@@ -123,12 +122,12 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
         foreach ($this->pool->config->feConfigFallback as $settingsName => $fallback) {
             // Stitch together the settings in the template.
             $group = $fallback[static::SECTION];
-            $config[$settingsName] = [];
-            $config[$settingsName][static::SETTINGS_NAME] = $settingsName;
-            $config[$settingsName][static::SETTINGS_VALUE] = $iniReader->getConfigFromFile($group, $settingsName);
-            $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = false;
-            $config[$settingsName][static::SETTINGS_FALLBACK] =
-                $fallbackOverwrites[$settingsName] ?? $fallback[static::SETTINGS_VALUE];
+            $config[$settingsName] = [
+                static::SETTINGS_NAME => $settingsName,
+                static::SETTINGS_VALUE => $iniReader->getConfigFromFile($group, $settingsName),
+                static::SETTINGS_USE_FACTORY_SETTINGS => false,
+                static::SETTINGS_FALLBACK => $fallbackOverwrites[$settingsName] ?? $fallback[static::SETTINGS_VALUE]
+            ];
             $this->applyFallbackToConfig($config, $settingsName, $fallback);
         }
 
