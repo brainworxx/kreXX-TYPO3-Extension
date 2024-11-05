@@ -73,32 +73,29 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
     protected function retrieveDropDowns(): array
     {
         // Adding the dropdown values.
-        $dropdown = ['skins' => []];
-        foreach ($this->pool->config->getSkinList() as $skin) {
-            $dropdown['skins'][$skin] = $skin;
-        }
-        $dropdown[static::SETTING_DESTINATION] = [
-            static::VALUE_BROWSER => static::translate(static::VALUE_BROWSER),
-            static::VALUE_FILE => static::translate(static::VALUE_FILE),
-            static::VALUE_BROWSER_IMMEDIATELY => static::translate(static::VALUE_BROWSER_IMMEDIATELY),
+        return [
+            'skins' => $this->pool->config->getSkinList(),
+            static::SETTING_DESTINATION => [
+                static::VALUE_BROWSER => static::translate(static::VALUE_BROWSER),
+                static::VALUE_FILE => static::translate(static::VALUE_FILE),
+                static::VALUE_BROWSER_IMMEDIATELY => static::translate(static::VALUE_BROWSER_IMMEDIATELY),
+            ],
+            'bool' => [
+                static::VALUE_TRUE => static::translate(static::VALUE_TRUE),
+                static::VALUE_FALSE => static::translate(static::VALUE_FALSE),
+            ],
+            'loglevel' => [
+                LogLevel::DEBUG => static::translate('loglevel.debug'),
+                LogLevel::INFO => static::translate('loglevel.info'),
+                LogLevel::NOTICE => static::translate('loglevel.notice'),
+                LogLevel::WARNING => static::translate('loglevel.warning'),
+                LogLevel::ERROR => static::translate('loglevel.error'),
+                LogLevel::CRITICAL => static::translate('loglevel.critical'),
+                LogLevel::ALERT => static::translate('loglevel.alert'),
+                LogLevel::EMERGENCY => static::translate('loglevel.emergency'),
+            ],
+            'languages' => $this->pool->config->getLanguageList()
         ];
-        $dropdown['bool'] = [
-            static::VALUE_TRUE => static::translate(static::VALUE_TRUE),
-            static::VALUE_FALSE => static::translate(static::VALUE_FALSE),
-        ];
-        $dropdown['loglevel'] = [
-            LogLevel::DEBUG => static::translate('loglevel.debug'),
-            LogLevel::INFO => static::translate('loglevel.info'),
-            LogLevel::NOTICE => static::translate('loglevel.notice'),
-            LogLevel::WARNING => static::translate('loglevel.warning'),
-            LogLevel::ERROR => static::translate('loglevel.error'),
-            LogLevel::CRITICAL => static::translate('loglevel.critical'),
-            LogLevel::ALERT => static::translate('loglevel.alert'),
-            LogLevel::EMERGENCY => static::translate('loglevel.emergency'),
-        ];
-        $dropdown['languages'] = $this->pool->config->getLanguageList();
-
-        return $dropdown;
     }
 
     /**
