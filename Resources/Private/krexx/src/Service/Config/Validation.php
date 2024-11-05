@@ -187,11 +187,6 @@ class Validation extends Fallback
                 in_array($value, static::FE_MINIMAL_SETTINGS, true);
         }
 
-        if (empty($this->feConfigFallback[$name][static::EVALUATE])) {
-            // No evaluation method was specified.
-            return true;
-        }
-
         // We simply call the configured evaluation method.
         $callback = $this->feConfigFallback[$name][static::EVALUATE];
         if ($callback instanceof Closure) {

@@ -6,6 +6,8 @@
 - Added better readability to the exception analysis.
 - Added delegate handling to the getter analysis.
 - Added attribute handling to the meta analysis.
+- Added the declaration place to the getter analysis.
+- Added error info when analysing an XML string.
 - Change: The scalar analysis classes are now reused.
 - Change: Renamed the language fallback key from 'text' to 'en'.
 - Change: Dropped PHP 7.2 and 7.3 support.
@@ -21,6 +23,11 @@
 - Change: Split the getter analysis into several smaller classes.
 - Change: Removed deprecations from the unit tests.
 - Change: Deprecated the exception handler.
+
+5.0.7
+- Bugfix: The XML analysis does not recognise a broken XML string.
+- Bugfix: The scalar analysis does not return the output from the
+  start event when there is no meta to display.
 
 5.0.6
 - Added the handling of type casting to the regex getter analysis.

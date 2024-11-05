@@ -413,6 +413,72 @@ class ThroughPropertiesTest extends AbstractHelper
     }
 
     /**
+     * Provoke an error when getting the default value.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::prepareModel
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveConnector
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrievePropertyName
+     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaration
+     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaringClassFromTraits
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::getAdditionalData
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveDefaultValue
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::formatDefaultValue
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveValueStatus
+     */
+    public function testCallMeError()
+    {
+        if (version_compare(phpversion(), '7.4.99', '<')) {
+            $this->markTestSkipped('Wrong PHP Version');
+        }
+
+        // Create a fixture.
+        $refPropertyMock = $this->createMock(ReflectionProperty::class);
+        $refPropertyMock->expects($this->any())
+            ->method('getDefaultValue')
+            ->willThrowException(new \Exception());
+        $refPropertyMock->expects($this->any())
+            ->method('getName')
+            ->willReturn('someValue');
+        $refPropertyMock->expects($this->any())
+            ->method('isStatic')
+            ->willReturn(false);
+        $refPropertyMock->expects($this->any())
+            ->method('isProtected')
+            ->willReturn(false);
+        $refPropertyMock->expects($this->any())
+            ->method('isPrivate')
+            ->willReturn(false);
+        $refPropertyMock->expects($this->any())
+            ->method('getDeclaringClass')
+            ->willReturn(new \ReflectionClass(PublicFixture::class));
+        $refPropertyMock->expects($this->any())
+            ->method('getDocComment')
+            ->willReturn('');
+
+
+        $subject = new ComplexPropertiesFixture();
+        $fixture = [
+            $this->throughProperties::PARAM_REF => new ReflectionClass($subject),
+            $this->throughProperties::PARAM_DATA => [$refPropertyMock]
+        ];
+
+        // Inject the nothing-router.
+        $routeNothing = new RoutingNothing(Krexx::$pool);
+        Krexx::$pool->routing = $routeNothing;
+        $this->mockEmergencyHandler();
+
+        // Run the test
+        $this->throughProperties
+            ->setParameters($fixture)
+            ->callMe();
+
+        $model = $routeNothing->model[0];
+
+        $this->assertSame('&#039;whatever&#039;', $model->getJson()['Default value']);
+    }
+
+    /**
      * Normal test run for the property analysis.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::callMe

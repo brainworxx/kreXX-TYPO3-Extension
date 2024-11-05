@@ -41,6 +41,7 @@ use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\Validation;
 use Brainworxx\Krexx\Service\Plugin\NewSetting;
 use Brainworxx\Krexx\Service\Plugin\Registration;
+use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use ReflectionType;
 use ReflectionGenerator;
@@ -251,8 +252,32 @@ class ValidationTest extends AbstractHelper
     }
 
     /**
+     * We evaluate the max runtime with a simulated eternal runtime setting.
+     *
+     * @covers \Brainworxx\Krexx\Service\Config\Validation::evaluateSetting
+     * @covers \Brainworxx\Krexx\Service\Config\Validation::evalMaxRuntime
+     */
+    public function testEvalMaxRuntime()
+    {
+        $iniGetMock = $this->getFunctionMock('Brainworxx\\Krexx\\Service\\Config\\', 'ini_get');
+        $iniGetMock->expects($this->once())
+            ->with('max_execution_time')
+            ->willReturn(0);
+
+        $validation = new Validation(Krexx::$pool);
+        $result = $validation->evaluateSetting(
+            'I don\'t need no group!',
+            $validation::SETTING_MAX_RUNTIME,
+            'an invalid string'
+        );
+
+        $this->assertTrue($result, 'We do not check the value when there is no maximal execution time set.');
+    }
+
+    /**
      * Crete a custom setting, and then evaluate it.
      *
+     * @covers \Brainworxx\Krexx\Service\Config\Validation::__construct
      * @covers \Brainworxx\Krexx\Service\Config\Validation::evaluateSetting
      */
     public function testEvaluateSettingCustom()

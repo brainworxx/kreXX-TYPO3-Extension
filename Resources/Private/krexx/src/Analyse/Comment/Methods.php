@@ -69,21 +69,12 @@ class Methods extends AbstractComment
      */
     public function getComment(Reflector $reflection, ?ReflectionClass $reflectionClass = null): string
     {
-        // Do some static caching. The comment will not change during a run.
-        static $cache = [];
         /** @var \ReflectionMethod $reflection */
         $this->methodName = $reflection->getName();
-        $cachingKey =  $reflection->getDeclaringClass()->name . '::' . $this->methodName;
 
-        if (isset($cache[$cachingKey])) {
-            return $cache[$cachingKey];
-        }
-
-        // Cache not found. We need to generate this one.
-        $cache[$cachingKey] = $this->pool->encodingService->encodeString(
+        return $this->pool->encodingService->encodeString(
             $this->getMethodComment($reflection, $reflectionClass)
         );
-        return $cache[$cachingKey];
     }
 
     /**
@@ -104,9 +95,7 @@ class Methods extends AbstractComment
         // Check for traits.
         $comment = $this->getTraitComment(
             $this->getInterfaceComment(
-                $this->prettifyComment(
-                    $reflectionMethod->getDocComment()
-                ),
+                $this->prettifyComment($reflectionMethod->getDocComment()),
                 $reflectionClass
             ),
             $reflectionClass

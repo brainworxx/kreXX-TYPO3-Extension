@@ -77,7 +77,7 @@ class ReturnType extends AbstractComment
     /**
      * Retrieve the return type from a method. Comment parsing as a fallback
      *
-     * @param \Reflector $reflection
+     * @param \ReflectionMethod $reflection
      *   The reflection of the method we are analysing.
      * @param \ReflectionClass|null $reflectionClass
      *   Reflection of the hosting class. A lot of return types are $this, so

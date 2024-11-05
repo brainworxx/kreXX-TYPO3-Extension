@@ -93,7 +93,7 @@ class MethodDeclaration extends AbstractDeclaration
     /**
      * Retrieve the return type by the reflection.
      *
-     * @param \Reflector $reflection
+     * @param \ReflectionMethod $reflection
      * @return string
      */
     public function retrieveReturnType(Reflector $reflection): string
@@ -132,7 +132,7 @@ class MethodDeclaration extends AbstractDeclaration
      * @param \ReflectionClass $declaringClass
      *   The original declaring class, the one with the traits.
      *
-     * @return bool|\ReflectionClass
+     * @return null|\ReflectionClass
      *   false = unable to retrieve something.
      *   Otherwise, return a reflection class.
      */

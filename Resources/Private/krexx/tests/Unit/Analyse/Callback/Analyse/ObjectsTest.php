@@ -48,8 +48,13 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\OpaqueRessource;
+use Brainworxx\Krexx\Analyse\Code\Scope;
 use Brainworxx\Krexx\Logging\Model;
+use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
+use Brainworxx\Krexx\Service\Factory\Event;
+use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
@@ -57,6 +62,8 @@ use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Tests\Fixtures\TraversableFixture;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Tests\Helpers\ProcessNothing;
+use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Exception;
 
 class ObjectsTest extends AbstractHelper
@@ -477,5 +484,75 @@ class ObjectsTest extends AbstractHelper
         $this->assertEquals(1, CallbackCounter::$counter);
         // All parameters set?
         $this->parametersTest(CallbackCounter::$staticParameters[0]);
+    }
+
+    /**
+     * Test the order of the in scope analysis.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
+     *
+     * @throws \ReflectionException
+     */
+    public function testCallMeInScope()
+    {
+        // Test analyse getter true
+        Krexx::$pool->rewrite[Getter::class] = CallbackCounter::class;
+        // This one is depending on settings.
+        $this->setConfigValue(Fallback::SETTING_ANALYSE_GETTER, true);
+        $scopeMock = $this->createMock(Scope::class);
+        $scopeMock->expects($this->once())
+            ->method('isInScope')
+            ->willReturn(true);
+
+        $poolMock = $this->createMock(Pool::class);
+        $poolMock->scope = $scopeMock;
+        $poolMock->render = new RenderNothing(Krexx::$pool);
+        $eventMock = $this->createMock(Event::class);
+        $eventMock->expects($this->once())
+            ->method('dispatch')
+            ->with(Objects::class . PluginConfigInterface::START_EVENT);
+        $poolMock->eventService = $eventMock;
+        $configMock = $this->createMock(Config::class);
+        $configMock->expects($this->exactly(2))
+            ->method('getSetting')
+            ->with(...$this->withConsecutive(
+                [Fallback::SETTING_ANALYSE_TRAVERSABLE],
+                [Fallback::SETTING_ANALYSE_GETTER]
+            ))->willReturnMap([
+                [Fallback::SETTING_ANALYSE_TRAVERSABLE, false],
+                [Fallback::SETTING_ANALYSE_GETTER, true]
+            ]);
+        $poolMock->config = $configMock;
+
+        $callbackNothing = new CallbackNothing(Krexx::$pool);
+
+        $poolMock->expects($this->exactly(9))
+            ->method('createClass')
+            ->with(...$this->withConsecutive(
+                [PublicProperties::class],
+                [ProtectedProperties::class],
+                [PrivateProperties::class],
+                [Getter::class],
+                [OpaqueRessource::class],
+                [Meta::class],
+                [Constants::class],
+                [Methods::class],
+                [DebugMethods::class],
+            ))->willReturnMap([
+                [PublicProperties::class, $callbackNothing],
+                [ProtectedProperties::class, $callbackNothing],
+                [PrivateProperties::class, $callbackNothing],
+                [Getter::class, $callbackNothing],
+                [OpaqueRessource::class, $callbackNothing],
+                [Meta::class, $callbackNothing],
+                [Constants::class, $callbackNothing],
+                [Methods::class, $callbackNothing],
+                [DebugMethods::class, $callbackNothing]
+            ]);
+
+        $this->objects = new Objects($poolMock);
+        $this->objects->setParameters($this->fixture)->callMe();
     }
 }

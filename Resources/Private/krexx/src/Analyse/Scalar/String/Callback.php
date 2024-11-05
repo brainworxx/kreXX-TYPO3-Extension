@@ -83,7 +83,7 @@ class Callback extends AbstractScalarAnalysis
             }
         } catch (Throwable $exception) {
             // Do nothing.
-            // The autoload just failed.
+            // The autoloading just failed.
         }
 
         return false;

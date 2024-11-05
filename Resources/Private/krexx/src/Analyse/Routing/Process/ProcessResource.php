@@ -78,7 +78,7 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
     public function handle(): string
     {
         $resource = $this->model->getData();
-        $typeString = $this->retrieveTypeString($resource);
+        $typeString = $this->pool->messages->getHelp('resource') . ' (' . get_resource_type($resource) . ')';
         $transRes = $this->pool->messages->getHelp('resource');
 
         switch ($typeString) {
@@ -117,6 +117,11 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
      * @param resource|object $resource
      *   The ressource
      *
+     * @deprecated
+     *   Since 6.0.0 will be removed.
+     * @codeCoverageIgnore
+     *   We will not test deprecated stuff.
+     *
      * @return string
      *   The type string.
      */
@@ -136,8 +141,6 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
      *   The model, so far.
      * @param resource $resource
      *   The resource, that we are analysing.
-     * @param string $typeString
-     *   Deprecated since 5.0.0. Will be removed.
      *
      * @return string
      *   The rendered HTML.

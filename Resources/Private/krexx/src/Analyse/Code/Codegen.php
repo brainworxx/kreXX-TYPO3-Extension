@@ -87,6 +87,17 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
     protected bool $firstRun = true;
 
     /**
+     * Code generation lookup table with a static instruction.
+     *
+     * @var array
+     */
+    protected array $codegenLookup = [
+        self::CODEGEN_TYPE_META_CONSTANTS => self::CODEGEN_STOP_BIT,
+        self::CODEGEN_TYPE_JSON_DECODE => 'json_decode(;firstMarker;)',
+        self::CODEGEN_TYPE_BASE64_DECODE => 'base64_decode(;firstMarker;)'
+    ];
+
+    /**
      * Here we count haw often the code generation was disabled.
      *
      * We ony enable it, when it is 0.
@@ -199,34 +210,22 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
      */
     protected function generateComplicatedStuff(Model $model): string
     {
+        $type = $model->getCodeGenType();
+        if (isset($this->codegenLookup[$type])) {
+            return $this->codegenLookup[$type];
+        }
+
         // Define a fallback value.
         $result = static::UNKNOWN_VALUE;
 
         // And now for the more serious stuff.
-        switch ($model->getCodeGenType()) {
-            case static::CODEGEN_TYPE_META_CONSTANTS:
-                // Test for constants.
-                // They have no connectors, but are marked as such.
-                // although this is meta stuff, we need to add the stop info here.
-                $result = static::CODEGEN_STOP_BIT;
-                break;
-
+        switch ($type) {
             case static::CODEGEN_TYPE_ITERATOR_TO_ARRAY:
                 $result = 'iterator_to_array(;firstMarker;)' . $this->concatenation($model);
                 break;
 
             case static::CODEGEN_TYPE_ARRAY_VALUES_ACCESS:
                 $result = 'array_values(;firstMarker;)[' . $model->getConnectorParameters() . ']';
-                break;
-
-            case static::CODEGEN_TYPE_JSON_DECODE:
-                // Meta json decoding.
-                $result = 'json_decode(;firstMarker;)';
-                break;
-
-            case static::CODEGEN_TYPE_BASE64_DECODE:
-                // Meta Base64 decoding
-                $result = 'base64_decode(;firstMarker;)';
                 break;
 
             default:

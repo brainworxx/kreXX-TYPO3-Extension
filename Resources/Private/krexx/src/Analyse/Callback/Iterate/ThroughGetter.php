@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
+use Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration;
 use Brainworxx\Krexx\Analyse\Getter\AbstractGetter;
 use Brainworxx\Krexx\Analyse\Getter\ByMethodName;
 use Brainworxx\Krexx\Analyse\Getter\ByRegExContainer;
@@ -108,6 +109,13 @@ class ThroughGetter extends AbstractCallback implements
     protected Methods $commentAnalysis;
 
     /**
+     * The method declaration retriever.
+     *
+     * @var \Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration
+     */
+    protected MethodDeclaration $methodDeclaration;
+
+    /**
      * Injects the pool and initializes the comment analysis.
      *
      * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
@@ -122,6 +130,7 @@ class ThroughGetter extends AbstractCallback implements
             $this->pool->createClass(ByRegExContainer::class),
             $this->pool->createClass(ByRegExDelegate::class)
         ];
+        $this->methodDeclaration = $this->pool->createClass(MethodDeclaration::class);
     }
 
     /**
@@ -172,16 +181,11 @@ class ThroughGetter extends AbstractCallback implements
             // 1.) We have an actual value
             // 2.) We got NULL as a value
             // 3.) We were unable to get any info at all.
-            $comments = nl2br($this->commentAnalysis->getComment(
-                $reflectionMethod,
-                $this->parameters[static::PARAM_REF]
-            ));
-
             /** @var Model $model */
             $model = $this->pool->createClass(Model::class)
                 ->setName($reflectionMethod->getName())
-                ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
-                ->addToJson($this->pool->messages->getHelp('metaMethodComment'), $comments);
+                ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC);
+            $this->assignMetaDataToJson($model, $reflectionMethod);
 
             // We need to decide if we are handling static getters.
             if ($reflectionMethod->isStatic()) {
@@ -201,6 +205,24 @@ class ThroughGetter extends AbstractCallback implements
         }
 
         return $output;
+    }
+
+    /**
+     * We assign the metadata (comments and declaration) to the model.
+     *
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     *   The model so far.
+     * @param \ReflectionMethod $reflectionMethod
+     *   Reflection of the method that we are analysing.
+     */
+    protected function assignMetaDataToJson(Model $model, ReflectionMethod $reflectionMethod): void
+    {
+        $comments = $this->commentAnalysis
+            ->getComment($reflectionMethod, $this->parameters[static::PARAM_REF]);
+        $declaration = nl2br($this->methodDeclaration->retrieveDeclaration($reflectionMethod));
+        $messages = $this->pool->messages;
+        $model->addToJson($messages->getHelp('metaMethodComment'), nl2br($comments))
+            ->addToJson($messages->getHelp('metaDeclaredIn'), $declaration);
     }
 
     /**

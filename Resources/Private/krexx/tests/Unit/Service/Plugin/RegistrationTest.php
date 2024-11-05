@@ -40,6 +40,7 @@ use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
+use Brainworxx\Krexx\Tests\Fixtures\PluginConfigFixture;
 use Brainworxx\Krexx\View\Messages;
 
 /**
@@ -309,6 +310,9 @@ class RegistrationTest extends AbstractRegistration
         Registration::register($pluginMock);
         $pluginMockClassName = get_class($pluginMock);
         Registration::activatePlugin($pluginMockClassName);
+        $pluginMock2 = new PluginConfigFixture();
+        Registration::register($pluginMock2);
+        Registration::activatePlugin(PluginConfigFixture::class);
 
         // Set some values and test if they got purged.
         $this->setValueByReflection(static::CHUNK_FOLDER, 'xxx', $this->registration);

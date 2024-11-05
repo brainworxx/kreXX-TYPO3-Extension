@@ -138,6 +138,11 @@ class EncodingTest extends AbstractHelper
                 $this->encoding->encodeStringForCodeGeneration($fixture . $original)
             );
         }
+
+        $this->assertSame(
+            42,
+            $this->encoding->encodeStringForCodeGeneration(42)
+        );
     }
 
     /**

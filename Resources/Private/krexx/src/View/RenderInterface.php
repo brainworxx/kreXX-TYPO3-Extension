@@ -46,14 +46,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 interface RenderInterface
 {
     /**
-     * Injects the pool and initialize the skin path.
-     *
-     * @param Pool $pool
-     *   The pool, where we store the classes we need.
-     */
-    public function __construct(Pool $pool);
-
-    /**
      * Render a block of a detected recursion.
      *
      * If the recursion is an object, a click should jump to the original

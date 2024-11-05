@@ -66,6 +66,12 @@ class MethodParameterFixture
      */
     public function nullDefault($parameter = null)
     {
+        // Do nothing.
+    }
 
+
+    public function byRef(string &$reference = '')
+    {
+        // Do nothing.
     }
 }

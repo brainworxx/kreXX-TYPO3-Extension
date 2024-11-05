@@ -164,7 +164,7 @@ class ThroughMethods extends AbstractCallback implements
         ReflectionClass $refClass
     ): array {
         $messages = $this->pool->messages;
-        $methodData = [
+        return [
             // Get the comment from the class, it's parents, interfaces or traits.
             $messages->getHelp('metaComment') => $this->commentAnalysis->getComment($refMethod, $refClass),
             // Get declaration place.
@@ -174,8 +174,6 @@ class ThroughMethods extends AbstractCallback implements
             // Get the method attributes.
             $messages->getHelp('metaAttributes') => $this->attributes->getFlatAttributes($refMethod),
         ];
-
-        return $methodData;
     }
 
     /**

@@ -193,8 +193,7 @@ class ThroughMeta extends AbstractCallback implements CallbackConstInterface
         }
 
         if ($key === $this->pool->messages->getHelp('metaReflection')) {
-            /** @var ThroughMeta $throughMeta */
-            return  $this->pool->createClass(Meta::class)
+            return $this->pool->createClass(Meta::class)
                 ->setParameters([static::PARAM_REF => $model->getNormal()])
                 ->callMe();
         }

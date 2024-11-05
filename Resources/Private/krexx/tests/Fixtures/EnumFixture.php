@@ -33,33 +33,11 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-declare(strict_types=1);
+namespace Brainworxx\Krexx\Tests\Fixtures;
 
-namespace Brainworxx\Krexx\Analyse\Comment;
-
-use ReflectionClass;
-use Reflector;
-
-/**
- * Getting the comment from functions.
- */
-class Functions extends AbstractComment
+class EnumFixture
 {
-    /**
-     * Get the prettified comment from a function.
-     *
-     * @param \ReflectionFunction $reflection
-     *   The reflection of the function with the comment.
-     * @param \ReflectionClass|null $reflectionClass
-     *   Nothing, null. We do not have a hosting class.
-     *
-     * @return string
-     *   The prettified comment.
-     */
-    public function getComment(Reflector $reflection, ?ReflectionClass $reflectionClass = null): string
+    public function useEnums(SuitEnumFixture $cardDeck = SuitEnumFixture::Hearts)
     {
-        return $this->pool->encodingService->encodeString(
-            $this->prettifyComment($reflection->getDocComment())
-        );
     }
 }

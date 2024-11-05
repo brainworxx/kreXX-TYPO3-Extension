@@ -39,6 +39,7 @@ use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Code\Scope;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Tests\Fixtures\EnumFixture;
 use Brainworxx\Krexx\Tests\Fixtures\MethodParameterFixture;
 use Brainworxx\Krexx\Tests\Fixtures\UnionTypeFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
@@ -588,6 +589,13 @@ class CodegenTest extends AbstractHelper
             $this->codegenHandler->parameterToString($reflectionParameter)
         );
 
+        $reflectionMethod = $reflection->getMethod('byRef');
+        $reflectionParameter = $reflectionMethod->getParameters()[0];
+        $this->assertEquals(
+            'string &amp;$reference = &#039;&#039;',
+            $this->codegenHandler->parameterToString($reflectionParameter)
+        );
+
         if (version_compare(phpversion(), '8.0.0', '>=')) {
             // Test for union types.
             $reflection = new \ReflectionClass(UnionTypeFixture::class);
@@ -598,5 +606,26 @@ class CodegenTest extends AbstractHelper
                 $this->codegenHandler->parameterToString($reflectionParameter)
             );
         }
+    }
+
+    /**
+     * Test stuff with a Enum parameter.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::parameterToString
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::translateDefaultValue
+     */
+    public function testDefaultValueEnum()
+    {
+        if (version_compare(phpversion(), '8.0.99', '<=')) {
+            $this->markTestSkipped('Wrong PHP version.');
+        }
+
+        $reflection = new \ReflectionClass(EnumFixture::class);
+        $reflectionMethod = $reflection->getMethod('useEnums');
+        $reflectionParameter = $reflectionMethod->getParameters()[0];
+        $this->assertEquals(
+            '\Brainworxx\Krexx\Tests\Fixtures\SuitEnumFixture $cardDeck = Brainworxx\Krexx\Tests\Fixtures\SuitEnumFixture::Hearts',
+            $this->codegenHandler->parameterToString($reflectionParameter)
+        );
     }
 }

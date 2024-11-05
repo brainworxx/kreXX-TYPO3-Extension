@@ -58,4 +58,22 @@ class ButtonTest extends AbstractRenderSmokyGrey
         $this->assertStringContainsString('buttonJson', $result);
         $this->assertStringContainsString('isFun', $result);
     }
+
+    /**
+     * Test the rendering of a button, buth without the json.
+     *
+     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Button::renderButton
+     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Help::renderHelp
+     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
+     */
+    public function testRenderButtonWithoutJson()
+    {
+        $this->mockModel(static::GET_JSON, []);
+        $this->modelMock->expects($this->exactly(2))
+            ->method(static::GET_NAME)
+            ->willReturn('sayMyName');
+
+        $result = $this->renderSmokyGrey->renderButton($this->modelMock);
+        $this->assertStringContainsString('sayMyName', $result);
+    }
 }

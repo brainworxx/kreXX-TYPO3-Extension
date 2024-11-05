@@ -66,6 +66,7 @@ class ThroughGetterTest extends AbstractHelper
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::goThroughMethodList
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::assignMetaDataToJson
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::retrievePropertyValue
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::resetParameters
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::prepareModel
@@ -235,13 +236,18 @@ class ThroughGetterTest extends AbstractHelper
         ];
         // The last one is missing.
         foreach ($expectations as $key => $result) {
-            $this->assertEquals($result, $models[$key]->getData(), 'Count: ' . $key);
+            $json = $models[$key]->getJson();
+            $message = 'Count: ' . $key;
+            $this->assertEquals($result, $models[$key]->getData(), $message);
+            $this->assertArrayHasKey('Declared in', $json, $message);
+            $this->assertArrayHasKey('Method comment', $json, $message);
         }
     }
 
     /**
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::goThroughMethodList
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::assignMetaDataToJson
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::retrievePropertyValue
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::resetParameters
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::prepareModel
@@ -347,6 +353,7 @@ class ThroughGetterTest extends AbstractHelper
     /**
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::goThroughMethodList
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::assignMetaDataToJson
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::retrievePropertyValue
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::resetParameters
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::prepareModel

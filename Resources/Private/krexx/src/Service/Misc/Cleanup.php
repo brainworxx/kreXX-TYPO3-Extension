@@ -124,13 +124,8 @@ class Cleanup implements ConfigConstInterface
 
         static::$chunksDone = true;
         // Clean up leftover files.
-        $chunkList = glob($this->pool->config->getChunkDir() . '*.Krexx.tmp');
-        if (empty($chunkList)) {
-            return $this;
-        }
-
         $now = time();
-        foreach ($chunkList as $file) {
+        foreach ((array)glob($this->pool->config->getChunkDir() . '*.Krexx.tmp') as $file) {
             // We delete everything that is older than 15 minutes.
             if (($this->pool->fileService->filetime($file) + 900) < $now) {
                 $this->pool->fileService->deleteFile($file);

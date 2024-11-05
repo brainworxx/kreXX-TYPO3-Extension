@@ -45,10 +45,10 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 use ReflectionMethod;
+use stdClass;
 
 class MethodsTest extends AbstractHelper
 {
-
     public const  PRIVATE_METHOD = 'privateMethod';
     public const  PROTECTED_METHOD = 'protectedMethod';
     public const  PUBLIC_METHOD = 'publicMethod';
@@ -304,6 +304,34 @@ class MethodsTest extends AbstractHelper
     }
 
     /**
+     * Testing the analysis with an empty stdClass
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::analyseMethods
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::generateDomIdFromClassname
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
+     *
+     * @throws \ReflectionException
+     */
+    public function testCallMePrivateEmpty()
+    {
+        // Set up the events
+        $this->mockEventService([$this->startEvent, $this->methods]);
+
+        $testClass = new stdClass();
+        $this->fixture = [
+            'data' => $testClass,
+            'name' => 'The "sdt" means "standard", and not what you think it does.',
+            'ref' => new ReflectionClass($testClass)
+        ];
+        $this->methods->setParameters($this->fixture);
+        $this->md5Hash = '09a15e9660c1ebc6f429d818825ce0c6';
+
+        // The is no result to be expected, whatsoever.
+        $this->runAndAssertResults('k1_m_', false, 0, []);
+    }
+
+    /**
      * @param string $metaHiveKey
      * @param bool $isInHive
      * @param int $counter
@@ -328,7 +356,7 @@ class MethodsTest extends AbstractHelper
         $this->methods->callMe();
 
         // Test the callback counter for it's parameters.
-        $this->assertEquals($counter, CallbackCounter::$counter);
+        $this->assertEquals($counter, CallbackCounter::$counter, 'Asserting counter');
         $this->assertEquals($expectation, CallbackCounter::$staticParameters);
     }
 }

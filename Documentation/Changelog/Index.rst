@@ -13,6 +13,8 @@ Changes:
     * [Feature] Added container handling to the getter analysis.
     * [Feature] Added a unit of measurement to the benchmarking.
     * [Feature] Added better readability to the exception analysis.
+    * [Feature] Added the declaration place to the getter analysis.
+    * [Feature] Added error info when analysing an XML string.
     * [Feature] Added delegate handling to the getter analysis.
     * [Feature] Added attribute handling to the meta analysis.
     * [Feature] Refactored and extended the getter analysis, for better results.

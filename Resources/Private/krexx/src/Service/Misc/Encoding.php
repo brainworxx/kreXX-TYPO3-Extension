@@ -318,14 +318,8 @@ class Encoding
      */
     public function encodeStringForCodeGeneration($name)
     {
-        static $cache = [];
-
         if (is_int($name)) {
             return $name;
-        }
-
-        if (isset($cache[$name])) {
-            return $cache[$name];
         }
 
         $result = str_replace(
@@ -335,7 +329,7 @@ class Encoding
         );
 
         // Clean it up a bit
-        return $cache[$name] = str_replace('" . \'\' . "', '', $result);
+        return str_replace('" . \'\' . "', '', $result);
     }
 
     /**

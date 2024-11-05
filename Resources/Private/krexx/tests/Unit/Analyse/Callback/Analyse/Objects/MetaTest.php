@@ -40,6 +40,7 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Tests\Fixtures\AbstractFixture;
+use Brainworxx\Krexx\Tests\Fixtures\AttributesFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\EmptyInterfaceFixture;
 use Brainworxx\Krexx\Tests\Fixtures\FinalFixture;
@@ -54,7 +55,6 @@ use DateTime;
 
 class MetaTest extends AbstractHelper
 {
-
     /**
      * @var string
      */
@@ -229,6 +229,7 @@ class MetaTest extends AbstractHelper
             MultitraitFixture::class => 'Trait ' . MultitraitFixture::class,
             AbstractFixture::class => 'Abstract Class ' . AbstractFixture::class,
             DateTime::class => 'Internal Class ' . DateTime::class,
+            AttributesFixture::class => 'Class ' . AttributesFixture::class
         ];
 
         $count = 0;
@@ -244,6 +245,16 @@ class MetaTest extends AbstractHelper
             $model = $renderNothing->model['renderExpandableChild'][$count++];
             $metaResult = $model->getParameters();
             $this->assertEquals($expectation, $metaResult['data']['Classname']);
+            if (
+                version_compare(phpversion(), '7.4.99', '>')
+                && $className === AttributesFixture::class
+            ) {
+                $this->assertEquals(
+                    'Attribute()<br>Brainworxx\Krexx\Analyse\Attributes\Attributes(foo, bar, 5)',
+                    $metaResult['data']['Attributes'],
+                    'Testing the attribute analysis in the meta.'
+                );
+            }
         }
     }
 }
