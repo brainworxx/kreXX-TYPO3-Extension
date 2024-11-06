@@ -248,6 +248,11 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
     /**
      * Retrieve all helper class reflections from a directory.
      *
+     * @deprecated
+     *   Since 6.0.0. Will be removed as soon as we drop Aimeos 2021 support.
+     * @codeCoverageIgnore
+     *   We will not test deprecated code.
+     *
      * @param string $directory
      *   The directory we re processing.
      *

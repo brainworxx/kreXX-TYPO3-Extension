@@ -51,6 +51,8 @@ use TYPO3\CMS\Extbase\Persistence\QueryInterface;
  *
  * @deprecated
  *   Will be removed as soon as we drop TYPO3 11 support.
+ * @codeCoverageIgnore
+ *   We will not test deprecated classes.
  */
 class Typo3DbQueryParser extends OriginalParser
 {
