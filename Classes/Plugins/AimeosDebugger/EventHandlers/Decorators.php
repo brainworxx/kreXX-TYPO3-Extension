@@ -283,9 +283,8 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
      */
     protected function retrievePublicMethods(ReflectionClass $ref): array
     {
-        $methods = $ref->getMethods(ReflectionMethod::IS_PUBLIC);
         $result = [];
-        foreach ($methods as $refMethod) {
+        foreach ($ref->getMethods(ReflectionMethod::IS_PUBLIC) as $refMethod) {
             $result[$refMethod->name] = $refMethod;
         }
 

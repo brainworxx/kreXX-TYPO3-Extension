@@ -139,8 +139,9 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
         $this->registerBlacklisting();
 
         // Add additional texts to the help.
-        $extPath = ExtensionManagementUtility::extPath(static::EXT_KEY);
-        Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/t3.kreXX.ini');
+        Registration::registerAdditionalHelpFile(
+            ExtensionManagementUtility::extPath(static::EXT_KEY) . 'Resources/Private/Language/t3.kreXX.ini'
+        );
 
         // Register the scalar analysis classes.
         Registration::addScalarStringAnalyser(ExtFilePath::class);
@@ -161,12 +162,11 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
         // $viewHelperNode might not be an object, and trying to render it might
         // cause a fatal error!
         $toString = '__toString';
-        $removeAll = 'removeAll';
         Registration::addMethodToDebugBlacklist(AbstractViewHelper::class, $toString);
 
         // Deleting all rows from the DB via typo3 repository is NOT a good
         // debug method!
-        Registration::addMethodToDebugBlacklist(RepositoryInterface::class, $removeAll);
+        Registration::addMethodToDebugBlacklist(RepositoryInterface::class, 'removeAll');
 
         // The lazy loading proxy may not have loaded the object at this time.
         Registration::addMethodToDebugBlacklist(LazyLoadingProxy::class, $toString);
@@ -183,8 +183,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
      */
     protected function generateTempPaths(): array
     {
-        $pathSite = Environment::getVarPath();
-        $pathSite .= DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX;
+        $pathSite = Environment::getVarPath() . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX;
 
         // See if we must create a temp directory for kreXX.
         return [
@@ -235,25 +234,23 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
     protected function registerFileWriterSettings(): void
     {
         // Register the two new settings for the TYPO3 log writer integration.
-        $activeT3FileWriter = GeneralUtility::makeInstance(NewSetting::class);
-        $activeT3FileWriter->setSection($this->getName())
+        Registration::addNewSettings(GeneralUtility::makeInstance(NewSetting::class)
+            ->setSection($this->getName())
             ->setIsFeProtected(true)
             ->setDefaultValue(static::VALUE_FALSE)
             ->setIsEditable(false)
             ->setRenderType(static::RENDER_TYPE_NONE)
             ->setValidation('evalBool')
-            ->setName(static::ACTIVATE_T3_FILE_WRITER);
-        Registration::addNewSettings($activeT3FileWriter);
+            ->setName(static::ACTIVATE_T3_FILE_WRITER));
 
-        $loglevelT3FileWriter = GeneralUtility::makeInstance(NewSetting::class);
-        $loglevelT3FileWriter->setSection($this->getName())
+        Registration::addNewSettings(GeneralUtility::makeInstance(NewSetting::class)
+            ->setSection($this->getName())
             ->setIsFeProtected(true)
             ->setDefaultValue(LogLevel::ERROR)
             ->setIsEditable(false)
             ->setRenderType(static::RENDER_TYPE_NONE)
             ->setValidation($this->createFileWriterValidator())
-            ->setName(static::LOG_LEVEL_T3_FILE_WRITER);
-        Registration::addNewSettings($loglevelT3FileWriter);
+            ->setName(static::LOG_LEVEL_T3_FILE_WRITER));
     }
 
     /**
@@ -325,8 +322,6 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
         $htAccess .= '	</RequireAll>' . chr(10);
         $htAccess .= '</IfModule>' . chr(10);
 
-        // Empty index.html in case the htaccess is not enough.
-        $indexHtml = '';
         // Create and protect the temporal folders.
         foreach ($tempPaths as $tempPath) {
             if (!is_dir($tempPath)) {
@@ -334,7 +329,8 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
                 GeneralUtility::mkdir($tempPath);
                 // Protect it!
                 GeneralUtility::writeFileToTypo3tempDir($tempPath . DIRECTORY_SEPARATOR . '.htaccess', $htAccess);
-                GeneralUtility::writeFileToTypo3tempDir($tempPath . DIRECTORY_SEPARATOR . 'index.html', $indexHtml);
+                // Empty index.html in case the htaccess is not enough.
+                GeneralUtility::writeFileToTypo3tempDir($tempPath . DIRECTORY_SEPARATOR . 'index.html', '');
             }
         }
     }

@@ -123,9 +123,8 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
      */
     public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
     {
-        $params = $callback->getParameters();
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
-        $ref = $params[static::PARAM_REF];
+        $ref = $callback->getParameters()[static::PARAM_REF];
         /** @var ViewInterface $data */
         $data = $ref->getData();
 
@@ -138,15 +137,13 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
 
         // Analyse the transform method of all possible view helpers.
         // Analyse the already existing view helpers.
-        $result = '';
         try {
-            $result = $this->retrieveHelpers($data, $ref);
-            $result .= $this->retrievePossibleOtherHelpers();
+            return $this->retrieveHelpers($data, $ref) . $this->retrievePossibleOtherHelpers();
         } catch (ReflectionException $e) {
             // Do nothing. We skip this step.
         }
 
-        return $result;
+        return '';
     }
 
     /**
@@ -163,7 +160,6 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
     protected function retrieveHelpers($data, ReflectionClass $ref): string
     {
         $result = '';
-
         if ($ref->hasProperty('helper')) {
             // Got our helpers right here.
             // Let's hope that other implementations use the same variable name.
@@ -175,7 +171,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
             if (is_array($this->helpers) && !empty($this->helpers)) {
                 // We got ourselves some classes to analyse.
                 $this->pool->codegenHandler->setCodegenAllowed(false);
-                $result .= $this->pool->render->renderExpandableChild(
+                $result = $this->pool->render->renderExpandableChild(
                     $this->pool->createClass(Model::class)
                         ->setName($this->pool->messages->getHelp('aimeosViewHelpers'))
                         ->setType('class internals magical factory')
@@ -220,7 +216,6 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
         } else {
             $ref = new ReflectionClass(BaseHelperBase::class);
         }
-
 
         // Scan the main view helpers, to get a first impression.
         $reflectionList = $this->retrieveHelperList(dirname($ref->getFileName()));

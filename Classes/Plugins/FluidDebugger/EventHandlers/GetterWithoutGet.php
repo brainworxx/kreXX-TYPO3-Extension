@@ -78,10 +78,11 @@ class GetterWithoutGet implements EventHandlerInterface
      */
     public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
     {
-        $params = $callback->getParameters();
-        $methodName = lcfirst(substr($model->getName(), strlen($params[ThroughGetter::CURRENT_PREFIX])));
         $model->addToJson($this->pool->messages->getHelp('fluidMethodName'), $model->getName() . '()')
-            ->setName($methodName);
+            ->setName(lcfirst(substr(
+                $model->getName(),
+                strlen($callback->getParameters()[ThroughGetter::CURRENT_PREFIX])
+            )));
 
         return '';
     }

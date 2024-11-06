@@ -51,11 +51,12 @@ class Fluid extends AbstractFluid
      */
     protected function getTemplatePath(): string
     {
-        $controllerName = $this->renderingContext->getControllerName();
-        $actionName = $this->renderingContext->getControllerAction();
-        $format = $this->renderingContext->getTemplatePaths()->getFormat();
         return $this->renderingContext->getTemplatePaths()
-            ->resolveTemplateFileForControllerAndActionAndFormat($controllerName, $actionName, $format);
+            ->resolveTemplateFileForControllerAndActionAndFormat(
+                $this->renderingContext->getControllerName(),
+                $this->renderingContext->getControllerAction(),
+                $this->renderingContext->getTemplatePaths()->getFormat()
+            );
     }
 
     /**
@@ -64,9 +65,8 @@ class Fluid extends AbstractFluid
     protected function getLayoutPath(): string
     {
         // Resolve the layout file without any hacks by the framework.
-        $fileName = $this->parsedTemplate->getLayoutName($this->renderingContext);
         return $this->renderingContext->getTemplatePaths()
-            ->getLayoutPathAndFilename((string)$fileName);
+            ->getLayoutPathAndFilename((string)$this->parsedTemplate->getLayoutName($this->renderingContext));
     }
 
     /**
@@ -87,7 +87,6 @@ class Fluid extends AbstractFluid
             // No hash, no filename!
             return $result;
         }
-        $hash = $identifier[count($identifier) - 1];
         $templatePath = $this->renderingContext->getTemplatePaths();
 
         try {
@@ -96,7 +95,11 @@ class Fluid extends AbstractFluid
                 $resolvedIdentifiersRef = $templatePathRef->getProperty('resolvedIdentifiers');
                 $resolvedIdentifiersRef->setAccessible(true);
                 $resolvedIdentifiers = $resolvedIdentifiersRef->getValue($templatePath);
-                $result = $this->resolveTemplateName($resolvedIdentifiers, $hash, $templatePath);
+                $result = $this->resolveTemplateName(
+                    $resolvedIdentifiers,
+                    $identifier[count($identifier) - 1],
+                    $templatePath
+                );
             }
         } catch (ReflectionException $e) {
             // Do nothing. We return the already existing empty result.

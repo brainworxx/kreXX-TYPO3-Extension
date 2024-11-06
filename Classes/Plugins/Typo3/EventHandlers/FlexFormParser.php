@@ -77,14 +77,13 @@ class FlexFormParser implements EventHandlerInterface, CallbackConstInterface
      */
     public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
     {
-        $messages = $this->pool->messages;
         $parameters = $model->getParameters();
 
         try {
-            $flexFormService = GeneralUtility::makeInstance(FlexFromServiceCore::class);
-            $result = $flexFormService->convertFlexFormContentToArray($parameters[static::PARAM_VALUE]);
             $meta = $parameters[static::PARAM_DATA];
-            $meta[$messages->getHelp('metaDecodedXml')] = $result;
+            $meta[$this->pool->messages->getHelp('metaDecodedXml')] =
+                GeneralUtility::makeInstance(FlexFromServiceCore::class)
+                    ->convertFlexFormContentToArray($parameters[static::PARAM_VALUE]);;
             $model->addParameter(static::PARAM_DATA, $meta);
         } catch (Throwable $exception) {
             // Do nothing.

@@ -192,10 +192,9 @@ class DebugMethods extends AbstractEventHandler implements
     {
         $paramList = '';
         foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
-            $paramList .= $this->pool->codegenHandler->parameterToString($reflectionParameter);
             // We add a comma to the parameter list, to separate them for a
             // better readability.
-            $paramList .= ', ';
+            $paramList .= $this->pool->codegenHandler->parameterToString($reflectionParameter) . ', ';
         }
 
         return trim($paramList, ', ');

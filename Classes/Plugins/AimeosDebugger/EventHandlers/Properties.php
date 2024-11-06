@@ -125,19 +125,17 @@ class Properties extends AbstractEventHandler implements
     protected function extractValues(string $name, array $params): string
     {
         $result = [];
-        $data = $params[static::PARAM_DATA];
-        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
-        $ref = $params[static::PARAM_REF];
 
         // The property is a private property somewhere deep withing the
         // object inheritance. We might need to go deep into the rabbit hole
         // to actually get it.
-        $parentReflection = $ref;
+        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $parentReflection */
+        $parentReflection = $params[static::PARAM_REF];
         while (
             $parentReflection !== false
             && empty($result)
         ) {
-            $result = $this->retrieveProperty($parentReflection, $name, $data);
+            $result = $this->retrieveProperty($parentReflection, $name, $params[static::PARAM_DATA]);
             $parentReflection = $parentReflection->getParentClass();
         }
 

@@ -117,10 +117,10 @@ class DebugViewHelper extends AbstractViewHelper
     {
         Pool::createPool();
         $view = $this->viewHelperVariableContainer->getView();
-        $pool = Krexx::$pool;
-        $pool->registry->set(static::REGISTRY_VIEW, $view);
-        $pool->registry->set(static::REGISTRY_VIEW_REFLECTION, new ReflectionClass($view));
-        $pool->registry->set(static::REGISTRY_RENDERING_CONTEXT, $this->renderingContext);
+        $registry = Krexx::$pool->registry;
+        $registry->set(static::REGISTRY_VIEW, $view);
+        $registry->set(static::REGISTRY_VIEW_REFLECTION, new ReflectionClass($view));
+        $registry->set(static::REGISTRY_RENDERING_CONTEXT, $this->renderingContext);
         Registration::activatePlugin(
             FluidConfiguration::class
         );
@@ -130,9 +130,9 @@ class DebugViewHelper extends AbstractViewHelper
         Registration::deactivatePlugin(
             FluidConfiguration::class
         );
-        $pool->registry->set(static::REGISTRY_VIEW, null);
-        $pool->registry->set(static::REGISTRY_VIEW_REFLECTION, null);
-        $pool->registry->set(static::REGISTRY_RENDERING_CONTEXT, null);
+        $registry->set(static::REGISTRY_VIEW, null);
+        $registry->set(static::REGISTRY_VIEW_REFLECTION, null);
+        $registry->set(static::REGISTRY_RENDERING_CONTEXT, null);
 
         return '';
     }

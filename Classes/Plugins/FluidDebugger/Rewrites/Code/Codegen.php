@@ -117,10 +117,10 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
     {
         $name = $model->getName();
         return
-            (is_string($name) &&  strpos($name, '.') !== false && $this->pool->scope->getScope() !== $name) ||
-            $model->getType() === $this->pool->messages->getHelp('debugMethod') ||
-            $model->getCodeGenType() === static::CODEGEN_TYPE_ITERATOR_TO_ARRAY ||
-            $model->getCodeGenType() === static::CODEGEN_TYPE_JSON_DECODE;
+            (is_string($name) &&  strpos($name, '.') !== false && $this->pool->scope->getScope() !== $name)
+            || $model->getType() === $this->pool->messages->getHelp('debugMethod')
+            || $model->getCodeGenType() === static::CODEGEN_TYPE_ITERATOR_TO_ARRAY
+            || $model->getCodeGenType() === static::CODEGEN_TYPE_JSON_DECODE;
     }
 
     /**
@@ -187,11 +187,8 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
         }
 
         $firstPart = ' -> v:call(method: \'';
-        $secondPart = '\', arguments: {';
-        $lastPart = '})';
-
         if (count($data[static::PARAM_ARRAY]) >= 1) {
-            return $firstPart . $model->getName() . $secondPart . rtrim($args, ', ') . $lastPart;
+            return $firstPart . $model->getName() . '\', arguments: {' . rtrim($args, ', ') . '})';
         }
 
         return $firstPart . $model->getName() . '\')';
