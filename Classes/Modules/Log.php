@@ -86,6 +86,26 @@ class Log extends AbstractSubModule implements
     protected const TRANSLATION_PREFIX = 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:';
 
     /**
+     * The main view for the admin panel display.
+     *
+     * @var \TYPO3\CMS\Fluid\View\StandaloneView
+     */
+    protected StandaloneView $mainView;
+
+    /**
+     * The message view for the admin panel display.
+     *
+     * @var \TYPO3\CMS\Fluid\View\StandaloneView
+     */
+    protected StandaloneView $messageView;
+
+    public function __construct(StandaloneView $mainView, StandaloneView $messageView)
+    {
+        $this->mainView = $mainView;
+        $this->messageView = $messageView;
+    }
+
+    /**
      * The identifier for the Admin Panel Module.
      *
      * @return string
@@ -151,16 +171,15 @@ class Log extends AbstractSubModule implements
             );
         }
 
-        $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setTemplatePathAndFilename(
+        $this->mainView->setTemplatePathAndFilename(
             GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Private/Templates/Modules/Log.html')
         );
-        $view->setPartialRootPaths(['EXT:includekrexx/Resources/Private/Partials']);
-        $view->setLayoutRootPaths(['EXT:includekrexx/Resources/Private/Layouts']);
-        $view->assignMultiple($filelist);
+        $this->mainView->setPartialRootPaths(['EXT:includekrexx/Resources/Private/Partials']);
+        $this->mainView->setLayoutRootPaths(['EXT:includekrexx/Resources/Private/Layouts']);
+        $this->mainView->assignMultiple($filelist);
 
 
-        return $this->retrieveKrexxMessages() . $view->render();
+        return $this->retrieveKrexxMessages() . $this->mainView->render();
     }
 
     /**
@@ -198,20 +217,14 @@ class Log extends AbstractSubModule implements
      */
     protected function renderMessage(string $text, string $severity): string
     {
-        $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setTemplatePathAndFilename(
+        $this->messageView->setTemplatePathAndFilename(
             GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Private/Templates/Modules/Message.html')
         );
-        $view->setPartialRootPaths(['EXT:includekrexx/Resources/Private/Partials']);
-        $view->setLayoutRootPaths(['EXT:includekrexx/Resources/Private/Layouts']);
-        $view->assignMultiple(
-            [
-                'text' => $text,
-                'severity' => $severity,
-            ]
-        );
+        $this->messageView->setPartialRootPaths(['EXT:includekrexx/Resources/Private/Partials']);
+        $this->messageView->setLayoutRootPaths(['EXT:includekrexx/Resources/Private/Layouts']);
+        $this->messageView->assignMultiple(['text' => $text, 'severity' => $severity]);
 
-        return $view->render();
+        return $this->messageView->render();
     }
 
     /**

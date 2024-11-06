@@ -19,3 +19,5 @@ services:
 # extbase.
   Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQueryParser:
     public: true
+  Brainworxx\Includekrexx\Modules\Log:
+    public: true

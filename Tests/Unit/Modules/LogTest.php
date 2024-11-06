@@ -58,17 +58,29 @@ class LogTest extends AbstractHelper
      */
     protected $log;
 
+    protected $mainView;
+
+    protected $messageView;
+
     /**
      * {@inheritDoc}
      */
     protected function setUp(): void
     {
-        if (class_exists(ModuleData::class) === false) {
-            return;
-        }
         parent::setUp();
         $this->simulatePackage('includekrexx', 'whatever');
-        $this->log = new Log();
+        $this->mainView = $this->mockView();
+        $this->messageView = $this->mockView();
+        $this->log = new Log($this->mainView, $this->messageView);
+    }
+
+    /**
+     * @covers \Brainworxx\Includekrexx\Modules\Log::__construct
+     */
+    public function testConstruct()
+    {
+        $this->assertSame($this->mainView, $this->retrieveValueByReflection('mainView', $this->log));
+        $this->assertSame($this->messageView, $this->retrieveValueByReflection('messageView', $this->log));
     }
 
     /**
@@ -78,9 +90,6 @@ class LogTest extends AbstractHelper
      */
     public function testGetIdentifier()
     {
-        if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped(static::WRONG_VERSION);
-        }
         $this->assertEquals(Bootstrap::KREXX, $this->log->getIdentifier());
     }
 
@@ -91,9 +100,6 @@ class LogTest extends AbstractHelper
      */
     public function testGetLabel()
     {
-        if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped(static::WRONG_VERSION);
-        }
         $this->assertEquals(
             'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:mlang_tabs_tab',
             $this->log->getLabel()
@@ -107,9 +113,6 @@ class LogTest extends AbstractHelper
      */
     public function testGetDataToStore()
     {
-        if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped(static::WRONG_VERSION);
-        }
         $fileList = ['file', 'list'];
         $expectations = new ModuleData([static::FILES => $fileList]);
 
@@ -132,18 +135,14 @@ class LogTest extends AbstractHelper
      */
     public function testGetContentNoAccess()
     {
-        if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped(static::WRONG_VERSION);
-        }
         // Prepare the view for the messages.
-        $viewMock = $this->mockView();
-        $viewMock->expects($this->once())
+        $this->messageView->expects($this->once())
             ->method(static::ASSIGN_MULTIPLE)
             ->with([
                 static::TEXT => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:accessDenied',
                 static::SEVERITY => 'error',
             ]);
-        $viewMock->expects($this->once())
+        $this->messageView->expects($this->once())
             ->method(static::RENDER)
             ->willReturn('Rendered Messages');
 
@@ -162,16 +161,12 @@ class LogTest extends AbstractHelper
      */
     public function testGetContentEmpty()
     {
-        if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped(static::WRONG_VERSION);
-        }
         $this->mockBeUser();
 
         Krexx::$pool->messages->addMessage('translationkey');
         $moduleData = new ModuleData([static::FILES => []]);
 
-        $viewMock = $this->mockView();
-        $viewMock->expects($this->exactly(2))
+        $this->messageView->expects($this->exactly(2))
             ->method(static::ASSIGN_MULTIPLE)
             ->with(...$this->withConsecutive(
                 [
@@ -187,9 +182,11 @@ class LogTest extends AbstractHelper
                     ]
                 ]
             ));
-        $viewMock->expects($this->exactly(2))
+        $this->messageView->expects($this->exactly(2))
             ->method(static::RENDER)
             ->willReturn('rendering');
+        $this->mainView->expects($this->never())
+            ->method(static::RENDER);
 
         $this->assertEquals('renderingrendering', $this->log->getContent($moduleData));
     }
@@ -203,19 +200,15 @@ class LogTest extends AbstractHelper
      */
     public function testGetContentNormal()
     {
-        if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped(static::WRONG_VERSION);
-        }
         $this->mockBeUser();
         $fileList = [static::FILES => ['just', 'some', 'files']];
         $expectations = 'list of files';
         $moduleData = new ModuleData($fileList);
 
-        $viewMock = $this->mockView();
-        $viewMock->expects($this->once())
+        $this->mainView->expects($this->once())
             ->method(static::ASSIGN_MULTIPLE)
             ->with($fileList);
-        $viewMock->expects($this->once())
+        $this->mainView->expects($this->once())
             ->method(static::RENDER)
             ->willReturn($expectations);
 
@@ -229,9 +222,6 @@ class LogTest extends AbstractHelper
      */
     public function testGetCssFiles()
     {
-        if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped(static::WRONG_VERSION);
-        }
         $this->assertEquals(
             ['EXT:includekrexx/Resources/Public/Css/Adminpanel.css'],
             $this->log->getCssFiles()
@@ -245,9 +235,6 @@ class LogTest extends AbstractHelper
      */
     public function testGetJavaScriptFiles()
     {
-        if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped(static::WRONG_VERSION);
-        }
         $this->assertEmpty($this->log->getJavaScriptFiles());
     }
 
@@ -266,7 +253,6 @@ class LogTest extends AbstractHelper
             ->method('setPartialRootPaths');
         $viewMock->expects($this->any())
             ->method('setLayoutRootPaths');
-        $this->injectIntoGeneralUtility(StandaloneView::class, $viewMock);
 
         return $viewMock;
     }
