@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,17 +33,14 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
+declare(strict_types=1);
 
-define('LF', chr(10));
-define('CR', chr(13));
-define('CRLF', CR . LF);
+namespace Brainworxx\Includekrexx\Tests\Helpers;
 
-AbstractHelper::defineFunctionMock('\\Brainworxx\\Includekrexx\\Log\\', 'debug_backtrace');
-AbstractHelper::defineFunctionMock(
-    '\\Brainworxx\\Includekrexx\\Plugins\\Typo3\\EventHandlers\\QueryParser',
-    'method_exists'
-);
-AbstractHelper::defineFunctionMock('\\Brainworxx\\Includekrexx\\Collectors\\', 'glob');
-
-include_once __DIR__ . '/../../Resources/Private/krexx/tests/Scripts/Bootstrap.php';
+class ErrorException extends \Exception
+{
+    public function getTitle(): string
+    {
+        return 'Hello there.';
+    }
+}

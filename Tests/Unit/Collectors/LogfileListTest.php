@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -141,5 +142,22 @@ class LogfileListTest extends AbstractHelper
             ->method($assign)
             ->with($fileList, $expectation);
         $logLister->assignData($viewMock);
+    }
+
+    /**
+     * Test the retrival of an empty file list.
+     *
+     * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::retrieveFileList
+     */
+    public function testRetrieveFileListEmpty()
+    {
+        // Normal access.
+        $logLister = new LogfileList();
+        $this->setValueByReflection('hasAccess', true, $logLister);
+        $globMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Collectors\\', 'glob');
+        $globMock->expects($this->once())
+            ->willReturn([]);
+
+        $this->assertSame([], $logLister->retrieveFileList(), 'There should be no files.');
     }
 }

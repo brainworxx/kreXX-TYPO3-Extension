@@ -69,6 +69,7 @@ class IndexController extends AbstractController implements ConstInterface
                 return $response;
             }
 
+            // TYPO3 v10 fallback.
             return '';
         }
 

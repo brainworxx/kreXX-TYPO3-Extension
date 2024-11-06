@@ -39,12 +39,14 @@ use Brainworxx\Includekrexx\Log\FileWriter;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\Tests\Helpers\ControllerNothing;
+use Brainworxx\Includekrexx\Tests\Helpers\ErrorException;
 use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Controller\DumpController;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\Model;
 use Brainworxx\Krexx\Logging\Model as LogModel;
+use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Log\LogRecord;
 use stdClass;
@@ -113,9 +115,17 @@ class FileWriterTest extends AbstractHelper implements BacktraceConstInterface, 
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveBacktrace
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::prepareLogModelNormal
+     * @covers \Brainworxx\Includekrexx\Log\FileWriter::prepareLogModelOops
      */
     public function testWriteLogNormal()
     {
+        $backtrace = debug_backtrace();
+        $backtrace[1][static::TRACE_OBJECT] = new Logger('Unit');
+        $backtrace[2][static::TRACE_OBJECT] = new Logger('Division');
+        $debugBacktraceMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Log\\', 'debug_backtrace');
+        $debugBacktraceMock->expects($this->once())
+            ->willReturn($backtrace);
+
         $fixture = $this->prepareFixture();
         $config = [];
 
@@ -229,11 +239,12 @@ class FileWriterTest extends AbstractHelper implements BacktraceConstInterface, 
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveBacktrace
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::prepareLogModelOops
+     * @covers \Brainworxx\Includekrexx\Log\FileWriter::isDisabled
      */
     public function testWriteLogOops()
     {
         // Inject the exception with a prepared backtrace.
-        $oopsException = new \Exception('Guru Meditation #010000C.000EF800', time());
+        $oopsException = new ErrorException('Guru Meditation #010000C.000EF800', time());
         $backtrace = debug_backtrace();
         $backtrace[1][static::TRACE_ARGS][1]['exception'] = $oopsException;
         $backtrace[2][static::TRACE_OBJECT] = new  stdClass();
@@ -255,7 +266,7 @@ class FileWriterTest extends AbstractHelper implements BacktraceConstInterface, 
         $this->assertEquals(1, ControllerNothing::$count);
         /** @var \Brainworxx\Krexx\Logging\Model $logModel */
         $logModel = ControllerNothing::$data[0];
-        $this->assertEquals($oopsException->getMessage(), $logModel->getMessage());
+        $this->assertEquals($oopsException->getTitle() . "\r\n" . $oopsException->getMessage(), $logModel->getMessage());
         $this->assertEquals($fixture->getComponent(), $logModel->getCode());
     }
 
