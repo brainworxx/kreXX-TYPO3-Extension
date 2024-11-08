@@ -110,6 +110,20 @@ abstract class AbstractHelper extends KrexxAbstractHelper
         ConfigSupplier::$overwriteValues = [];
 
         Config::$disabledByPhp = false;
+
+        // "Disable" Package simulation.
+        $packageManagerMock = $this->createMock(UnitTestPackageManager::class);
+        $exception = new \Exception('Package simulation is not active.');
+        $packageManagerMock->expects($this->any())
+            ->method('isPackageActive')
+            ->willThrowException($exception);
+        $packageManagerMock->expects($this->any())
+            ->method('resolvePackagePath')
+            ->willThrowException($exception);
+        $packageManagerMock->expects($this->any())
+            ->method('getPackage')
+            ->willThrowException($exception);
+        $this->setValueByReflection('packageManager', $packageManagerMock, ExtensionManagementUtility::class);
     }
 
     /**
