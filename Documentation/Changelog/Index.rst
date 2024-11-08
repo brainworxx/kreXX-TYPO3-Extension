@@ -34,6 +34,16 @@ Changes:
 
 -----
 
+:Version: 5.1.2
+:Date: tbd
+
+Changes:
+    * [Bugfix] The XML analysis does not recognise a broken XML string.
+    * [Bugfix] The scalar analysis does not return the output from the start event when there is no meta to display.
+    * [Bugfix] Better test for handling no analysis value in the fluid debugger.
+
+-----
+
 :Version: 5.1.1
 :Date: 2024-10-25
 
@@ -44,7 +54,6 @@ Changes:
     * [Bugfix] Better looking exclamation mark for the SmokyGrey skin.
     * [Bugfix] The dragging of the kreXX output window may not work under certain circumstances.
     * [Bugfix] The fluid caller finder layout path resolver may return a stringable object instead of a string when the cache is empty.
-    * [Bugfix] Better test for handling no analysis value in the fluid debugger.
 
 -----
 
