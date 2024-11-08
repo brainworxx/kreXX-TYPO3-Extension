@@ -10,6 +10,9 @@ Changelog
 Changes:
     * [Bugfix] The XML analysis does not recognise a broken XML string.
     * [Bugfix] The scalar analysis does not return the output from the start event when there is no meta to display.
+    * [Bugfix] Better test for handling no analysis value in the fluid debugger.
+
+-----
 
 :Version: 5.1.1
 :Date: 2024-10-25
