@@ -81,6 +81,7 @@ class IndexControllerTest extends AbstractHelper
      * @covers \Brainworxx\Includekrexx\Controller\IndexController::indexAction
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::hasAccess
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::moduleTemplateRender
+     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::moduleTemplateRenderOld
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::assignMultiple
      */
     public function testIndexActionNoAccess()
@@ -109,6 +110,7 @@ class IndexControllerTest extends AbstractHelper
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::assignCssJs
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::generateAjaxTranslations
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::moduleTemplateRender
+     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::moduleTemplateRenderOld
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::assignMultiple
      */
     public function testIndexActionNormal()

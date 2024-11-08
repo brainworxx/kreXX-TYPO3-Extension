@@ -58,6 +58,32 @@ class FlexFormParserTest extends AbstractHelper
     }
 
     /**
+     * Test the flex form parsing with a thrown error.
+     *
+     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\FlexFormParser::handle
+     */
+    public function testHandleError()
+    {
+        $flexFormParser = new FlexFormParser(Krexx::$pool);
+        $model = new Model(Krexx::$pool);
+        $meta = [];
+        $callback = new CallbackNothing(Krexx::$pool);
+        $fixture = '';
+        $model->addParameter(CallbackConstInterface::PARAM_VALUE, $fixture)
+            ->addParameter(CallbackConstInterface::PARAM_DATA, $meta);
+        $flexFormServiceMock = $this->createMock(FlexFromServiceCore::class);
+        $flexFormServiceMock->expects($this->once())
+            ->method('convertFlexFormContentToArray')
+            ->willThrowException(new \Exception());
+        $this->injectIntoGeneralUtility(FlexFromServiceCore::class, $flexFormServiceMock);
+        $this->assertEquals(
+            '',
+            $flexFormParser->handle($callback, $model),
+            'When throwing an error, we expect no results.'
+        );
+    }
+
+    /**
      * Test the flex form parsing.
      *
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\FlexFormParser::handle

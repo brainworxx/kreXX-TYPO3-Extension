@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Controller;
 
-use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
@@ -346,6 +345,21 @@ abstract class AbstractController extends ActionController implements ConstInter
             return $this->moduleTemplate->renderResponse();
         }
 
+        // 10'er and 11'er style.
+        return $this->moduleTemplateRenderOld();
+    }
+
+    /**
+     * Rendering the backend module 10'er and 11'er style.
+     *
+     * @codeCoverageIgnore
+     *   This is TYPO3 10 and 11 stuff.
+     *   We test it, but the report is not submitted to Codeclimate.
+     *
+     * @return \Psr\Http\Message\ResponseInterface|string
+     */
+    protected function moduleTemplateRenderOld()
+    {
         // 10'er and 11'er style.
         $this->configuration->assignData($this->view);
         $this->formConfiguration->assignData($this->view);

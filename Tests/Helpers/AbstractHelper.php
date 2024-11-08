@@ -117,9 +117,11 @@ abstract class AbstractHelper extends KrexxAbstractHelper
         $packageManagerMock->expects($this->any())
             ->method('isPackageActive')
             ->willThrowException($exception);
-        $packageManagerMock->expects($this->any())
-            ->method('resolvePackagePath')
-            ->willThrowException($exception);
+        if (method_exists(UnitTestPackageManager::class, 'resolvePackagePath')) {
+            $packageManagerMock->expects($this->any())
+                ->method('resolvePackagePath')
+                ->willThrowException($exception);
+        }
         $packageManagerMock->expects($this->any())
             ->method('getPackage')
             ->willThrowException($exception);
