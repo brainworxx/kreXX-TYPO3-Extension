@@ -44,6 +44,7 @@ Changes:
     * [Bugfix] Better looking exclamation mark for the SmokyGrey skin.
     * [Bugfix] The dragging of the kreXX output window may not work under certain circumstances.
     * [Bugfix] The fluid caller finder layout path resolver may return a stringable object instead of a string when the cache is empty.
+    * [Bugfix] Better test for handling no analysis value in the fluid debugger.
 
 -----
 

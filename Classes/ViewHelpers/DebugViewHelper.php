@@ -144,7 +144,7 @@ class DebugViewHelper extends AbstractViewHelper
     {
         $type = $this->analysisType;
         $found  = false;
-        if (!is_null($this->arguments[static::ARGUMENT_VALUE])) {
+        if (isset($this->arguments[static::ARGUMENT_VALUE])) {
             Krexx::$type($this->arguments[static::ARGUMENT_VALUE]);
             $found = true;
         }

@@ -39,6 +39,7 @@ use Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3Fluid\Fluid\Core\Parser\SyntaxTree\ViewHelperNode;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\ViewHelperVariableContainer;
 
@@ -96,6 +97,31 @@ class DebugViewHelperTest extends AbstractHelper
             ->method('getSetting')
             ->willReturn(true);
         Krexx::$pool->config = $configMock;
+
+        $debugViewHelper->render();
+
+        // Analyse nothing at all.
+        $configMock = $this->createMock(Config::class);
+        $configMock->expects($this->exactly(1))
+            ->method('getSetting')
+            ->willReturn(true);
+        Krexx::$pool->config = $configMock;
+        $debugViewHelper = new DebugViewHelper();
+        $view = $this->createMock(StandaloneView::class);
+        $variableContainer = $this->createMock(ViewHelperVariableContainer::class);
+        $variableContainer->expects($this->once())
+            ->method('getView')
+            ->willReturn($view);
+        $renderingContext = $this->createMock(RenderingContextInterface::class);
+        $renderingContext->expects($this->any())
+            ->method('getViewHelperVariableContainer')
+            ->willReturn($variableContainer);
+        $debugViewHelper->setRenderingContext($renderingContext);
+        $nodeMock = $this->createMock(ViewHelperNode::class);
+        $nodeMock->expects($this->once())
+            ->method('evaluateChildNodes')
+            ->willReturn(null);
+        $debugViewHelper->setViewHelperNode($nodeMock);
 
         $debugViewHelper->render();
     }
