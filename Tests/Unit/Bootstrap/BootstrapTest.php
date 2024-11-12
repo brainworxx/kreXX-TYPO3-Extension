@@ -101,7 +101,7 @@ class BootstrapTest extends AbstractHelper
         $packageMock = $this->createMock(Package::class);
         $packageMock->expects($this->any())
             ->method('getPackagePath')
-            ->willReturn('meh!');
+            ->willReturn(KREXX_DIR. '/../../../');
 
         $packageManagerMock->expects($this->any())
             ->method('getPackage')
