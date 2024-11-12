@@ -39,6 +39,9 @@ use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration as AimeosConfiguration;
+use TYPO3\CMS\Core\Package\Package;
+use TYPO3\CMS\Core\Package\UnitTestPackageManager;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 class BootstrapTest extends AbstractHelper
 {
@@ -54,6 +57,12 @@ class BootstrapTest extends AbstractHelper
     {
         parent::setUp();
         $this->bootstrap = new Bootstrap();
+    }
+
+    protected function tearDown(): void
+    {
+        unset($GLOBALS[$this->bootstrap::TYPO3_CONF_VARS][$this->bootstrap::SYS][$this->bootstrap::FLUID][$this->bootstrap::FLUID_NAMESPACE][$this->bootstrap::KREXX]);
+        parent::tearDown();
     }
 
     /**
@@ -74,6 +83,48 @@ class BootstrapTest extends AbstractHelper
         $fileExistsMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, 'file_exists');
         $fileExistsMock->expects($this->once())
             ->with($this->anything())
+            ->willReturn(true);
+
+        // Should lead to an early return.
+        // Retrieving a standard class here would cause the test to fail.
+        $t3ConfigMock = $this->createMock(T3configuration::class);
+        $this->injectIntoGeneralUtility(T3configuration::class, $t3ConfigMock);
+
+        // Since we as retrieving the extension path, we need to simulate the
+        // existing of the includekrexx package.
+        $packageManagerMock = $this->createMock(UnitTestPackageManager::class);
+        $packageManagerMock->expects($this->any())
+            ->method('isPackageActive')
+            ->willReturn(true);
+        $this->setValueByReflection('packageManager', $packageManagerMock, ExtensionManagementUtility::class);
+
+        $packageMock = $this->createMock(Package::class);
+        $packageMock->expects($this->any())
+            ->method('getPackagePath')
+            ->willReturn('meh!');
+
+        $packageManagerMock->expects($this->any())
+            ->method('getPackage')
+            ->willReturn($packageMock);
+
+        $this->bootstrap->run();
+    }
+
+    /**
+     * We test the historical inclusion of kreXX, which is now the autoloader
+     * provided by kreXX.
+     *
+     * We expect that there will be no exception when doing it.
+     *
+     * @covers \Brainworxx\Includekrexx\Bootstrap\Bootstrap::run
+     * @covers \Brainworxx\Includekrexx\Bootstrap\Bootstrap::loadKrexx
+     */
+    public function testRunInlcudeKrexx()
+    {
+        // The kreXX directory is not defined . . .
+        $definedMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, static::DEFINED);
+        $definedMock->expects($this->once())
+            ->with('KREXX_DIR')
             ->willReturn(false);
 
         // Should lead to an early return.

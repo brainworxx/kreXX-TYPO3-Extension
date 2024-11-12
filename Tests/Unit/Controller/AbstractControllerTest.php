@@ -57,6 +57,7 @@ class AbstractControllerTest extends AbstractHelper
      * Test the creation of the pool and its assigning to the class.
      *
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::__construct
+     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::prepare11Flashmessages
      */
     public function testConstruct()
     {

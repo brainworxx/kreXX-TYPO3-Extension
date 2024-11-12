@@ -171,10 +171,26 @@ abstract class AbstractController extends ActionController implements ConstInter
             $this->flashMessageOk = ContextualFeedbackSeverity::OK;
             $this->flashMessageWarning = ContextualFeedbackSeverity::WARNING;
         } else {
-            $this->flashMessageError = AbstractMessage::ERROR;
-            $this->flashMessageOk = AbstractMessage::OK;
-            $this->flashMessageWarning = AbstractMessage::WARNING;
+            $this->prepare11Flashmessages();
         }
+    }
+
+    /**
+     * Prepare the flash message severity for 11 and lower
+     *
+     * @deprecated
+     *   Will be removed as soon as we drop TYPO3 11 support
+     *
+     * @codeCoverageIgnore
+     *   We do not cover deprecated code.
+     *
+     * @return void
+     */
+    protected function prepare11Flashmessages(): void
+    {
+        $this->flashMessageError = AbstractMessage::ERROR;
+        $this->flashMessageOk = AbstractMessage::OK;
+        $this->flashMessageWarning = AbstractMessage::WARNING;
     }
 
     /**
@@ -294,14 +310,27 @@ abstract class AbstractController extends ActionController implements ConstInter
         } else {
             // @deprecated
             // Will be removed as soon as we drop TYPO3 11 support.
-            $jsPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/JavaScript/Index.js');
-            $this->pageRenderer->addJsInlineCode('krexxjs', file_get_contents($jsPath));
-            $this->pageRenderer->addJsInlineCode('krexxajaxtrans', $this->generateAjaxTranslations());
+            $this->assignCssJs11Style();
         }
 
         $cssPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Private/Css/Index.css');
         $this->pageRenderer->addCssInlineBlock('krexxcss', file_get_contents($cssPath));
         $this->moduleTemplate->setModuleName('tx_includekrexx');
+    }
+
+    /**
+     * Assign the css and js TYPO3 11 style.
+     * @deprecated
+     *   Will be removed as soon as we drop TYPO3 11 support
+     *
+     * @codeCoverageIgnore
+     *   We do not cover deprecated code.
+     */
+    protected function assignCssJs11Style(): void
+    {
+        $jsPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/JavaScript/Index.js');
+        $this->pageRenderer->addJsInlineCode('krexxjs', file_get_contents($jsPath));
+        $this->pageRenderer->addJsInlineCode('krexxajaxtrans', $this->generateAjaxTranslations());
     }
 
     /**

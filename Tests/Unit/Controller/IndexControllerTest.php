@@ -108,6 +108,7 @@ class IndexControllerTest extends AbstractHelper
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::checkProductiveSetting
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::retrieveKrexxMessages
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::assignCssJs
+     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::assignCssJs11Style
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::generateAjaxTranslations
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::moduleTemplateRender
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::moduleTemplateRenderOld
