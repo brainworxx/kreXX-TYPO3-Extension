@@ -239,7 +239,7 @@ class FluidTest extends AbstractHelper
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::retrieveNameLine
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::checkForComplicatedStuff
      */
-    public function testFindCallerDoubelCall()
+    public function testFindCallerDoubleCall()
     {
         $templatePath = realpath(__DIR__ . '/../../../../../Fixtures/FluidTemplate4.html');
         $parsedTemplateMock = $this->createMock(ParsedTemplateInterface::class);

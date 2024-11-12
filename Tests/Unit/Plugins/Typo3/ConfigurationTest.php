@@ -166,7 +166,7 @@ class ConfigurationTest extends AbstractHelper implements ConstInterface
         $pathSite = 'somePath';
         $this->setValueByReflection('varPath', $pathSite, Environment::class);
 
-        $typo3Namespace = '\Brainworxx\\Includekrexx\\Plugins\\Typo3\\';
+        $typo3Namespace = '\\Brainworxx\\Includekrexx\\Plugins\\Typo3\\';
 
         // Mock the is_dir method. We will not create any files.
         $isDirMock = $this->getFunctionMock($typo3Namespace, 'is_dir');
@@ -181,7 +181,12 @@ class ConfigurationTest extends AbstractHelper implements ConstInterface
                 [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . $log],
                 [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'chunks'],
                 [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'config']
-            ))->willReturn(true);
+            ))->willReturn(false);
+
+        $mkDir = $this->getFunctionMock('\\TYPO3\\CMS\\Core\\Utility\\', 'mkDir');
+        $mkDir->expects($this->any())->willReturn(false);
+        $pathinfo = $this->getFunctionMock('\\TYPO3\\CMS\\Core\\Utility\\', 'pathinfo');
+        $pathinfo->expects($this->any())->willReturn(['dirname' => '', 'basename' => false]);
 
         // Simulating the package
         $this->simulatePackage(Bootstrap::EXT_KEY, 'what/ever/');
