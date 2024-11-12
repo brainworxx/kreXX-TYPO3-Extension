@@ -150,7 +150,7 @@ class DebugViewHelper extends AbstractViewHelper
         }
 
         $children = $this->renderChildren();
-        if (!is_null($children)) {
+        if ($children !== null) {
             Krexx::$type($children);
             $found = true;
         }

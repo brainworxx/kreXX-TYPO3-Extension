@@ -102,7 +102,7 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
         // Check if we have a value. If not, we need to load the
         // factory settings. We also need to set the info, if we
         // are using the factory settings, at all.
-        if (is_null($config[$settingsName][static::SETTINGS_VALUE])) {
+        if ($config[$settingsName][static::SETTINGS_VALUE] === null) {
             $config[$settingsName][static::SETTINGS_VALUE] = $this->convertKrexxFeSetting(
                 $this->fileReader->feConfigFallback[$settingsName][$this->fileReader::RENDER]
             );

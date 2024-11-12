@@ -88,7 +88,7 @@ class IndexController extends AbstractController implements ConstInterface
      * @param \Brainworxx\Includekrexx\Domain\Model\Settings $settings
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      *
-     * @return void|\Psr\Http\Message\ResponseInterface
+     * @return null|\Psr\Http\Message\ResponseInterface
      */
     public function saveAction(Settings $settings)
     {

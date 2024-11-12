@@ -83,7 +83,7 @@ class FlexFormParser implements EventHandlerInterface, CallbackConstInterface
             $meta = $parameters[static::PARAM_DATA];
             $meta[$this->pool->messages->getHelp('metaDecodedXml')] =
                 GeneralUtility::makeInstance(FlexFromServiceCore::class)
-                    ->convertFlexFormContentToArray($parameters[static::PARAM_VALUE]);;
+                    ->convertFlexFormContentToArray($parameters[static::PARAM_VALUE]);
             $model->addParameter(static::PARAM_DATA, $meta);
         } catch (Throwable $exception) {
             // Do nothing.

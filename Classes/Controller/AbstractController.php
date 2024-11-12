@@ -92,7 +92,7 @@ abstract class AbstractController extends ActionController implements ConstInter
      */
     protected Pool $pool;
 
-     /**
+    /**
      * @var \Brainworxx\Includekrexx\Collectors\Configuration
      */
     protected Configuration $configuration;
