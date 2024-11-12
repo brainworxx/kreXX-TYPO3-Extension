@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 
 class GetterTest extends AbstractHelper
@@ -79,7 +80,38 @@ class GetterTest extends AbstractHelper
     }
 
     /**
-     * Test the analysis of an 'Aimeos item.
+     * Test the analysis of something else.
+     *
+     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter::handle
+     */
+    public function testHandleEmpty()
+    {
+        $this->skipIfAimeosIsNotInstalled();
+        $this->mockEmergencyHandler();
+        $params = [];
+
+        // We already have a result.
+        $params[Getter::PARAM_ADDITIONAL][Getter::PARAM_NOTHING_FOUND] = false;
+        $getter = new Getter(Krexx::$pool);
+        $callback = new CallbackNothing(Krexx::$pool);
+        $callback->setParameters($params);
+        $this->assertEquals('', $getter->handle($callback), 'We already have a result.');
+
+        // Test with an empty item.
+        // Create a simple log item.
+        $item = new \Aimeos\MAdmin\Log\Item\Standard([]);
+        $ref = new ReflectionClass($item);
+        $params[Getter::PARAM_ADDITIONAL][Getter::PARAM_NOTHING_FOUND] = true;
+        $params[ThroughGetter::CURRENT_PREFIX] = 'get';
+        $params[Getter::PARAM_REF] = $ref;
+        $params[Getter::PARAM_ADDITIONAL][Getter::PARAM_REFLECTION_METHOD] = new \ReflectionMethod($item, 'getFacility');
+        $callback = new CallbackNothing(Krexx::$pool);
+        $callback->setParameters($params);
+        $this->assertEquals('', $getter->handle($callback), 'This one sould be empty.');
+    }
+
+    /**
+     * Test the analysis of an Aimeos item.
      *
      * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter::handle
      * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter::assignResultsToModel

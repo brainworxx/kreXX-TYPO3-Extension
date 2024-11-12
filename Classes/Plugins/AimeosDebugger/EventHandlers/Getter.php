@@ -116,9 +116,9 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface
         // Also, we only do this for Aimeos items.
         $params = $callback->getParameters();
         if (
-            $params[static::PARAM_ADDITIONAL][static::PARAM_NOTHING_FOUND] === false ||
-            $params[ThroughGetter::CURRENT_PREFIX] !== 'get' ||
-            !($params[static::PARAM_REF]->getData() instanceof Iface)
+            $params[static::PARAM_ADDITIONAL][static::PARAM_NOTHING_FOUND] === false
+            || $params[ThroughGetter::CURRENT_PREFIX] !== 'get'
+            || !($params[static::PARAM_REF]->getData() instanceof Iface)
         ) {
             // Early return.
             return '';
