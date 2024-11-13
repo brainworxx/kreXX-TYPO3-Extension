@@ -40,6 +40,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
+use Brainworxx\Krexx\Logging\Model as LoggingModel;
 use Throwable;
 
 /**
@@ -83,10 +84,10 @@ class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterf
     /**
      * Add a top message for better / faster readability.
      *
-     * @param \Throwable $data
+     * @param Throwable|LoggingModel $data
      * @return void
      */
-    protected function addExceptionMessage(Throwable $data): void
+    protected function addExceptionMessage($data): void
     {
         // Level 1 means, that is the first object we are looking at.
         if ($this->pool->emergencyHandler->getNestingLevel() !== 1) {
