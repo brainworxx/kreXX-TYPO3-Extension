@@ -40,14 +40,14 @@ namespace Brainworxx\Includekrexx\Domain\Model\Settings;
 trait AnalyseGetter
 {
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $analyseGetter;
+    protected ?string $analyseGetter = null;
 
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $formanalyseGetter;
+    protected ?string $formanalyseGetter = null;
 
     /**
      * @param string $analyseGetter

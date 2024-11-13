@@ -40,14 +40,14 @@ namespace Brainworxx\Includekrexx\Domain\Model\Settings;
 trait MaxStepNumber
 {
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $maxStepNumber;
+    protected ?string $maxStepNumber = null;
 
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $formmaxStepNumber;
+    protected ?string $formmaxStepNumber = null;
 
     /**
      * @param string $maxStepNumber

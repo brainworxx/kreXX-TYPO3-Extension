@@ -40,14 +40,14 @@ namespace Brainworxx\Includekrexx\Domain\Model\Settings;
 trait MaxRuntime
 {
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $maxRuntime;
+    protected ?string $maxRuntime = null;
 
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $formmaxRuntime;
+    protected ?string $formmaxRuntime = null;
 
     /**
      * @param string $maxRuntime

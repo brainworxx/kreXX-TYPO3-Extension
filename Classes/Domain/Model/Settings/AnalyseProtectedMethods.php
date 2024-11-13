@@ -40,14 +40,14 @@ namespace Brainworxx\Includekrexx\Domain\Model\Settings;
 trait AnalyseProtectedMethods
 {
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $analyseProtectedMethods;
+    protected ?string $analyseProtectedMethods = null;
 
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $formanalyseProtectedMethods;
+    protected ?string $formanalyseProtectedMethods = null;
 
     /**
      * @param string $value

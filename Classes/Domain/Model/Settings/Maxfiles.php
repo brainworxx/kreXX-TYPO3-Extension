@@ -40,14 +40,14 @@ namespace Brainworxx\Includekrexx\Domain\Model\Settings;
 trait Maxfiles
 {
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $maxfiles;
+    protected ?string $maxfiles = null;
 
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $formmaxfiles;
+    protected ?string $formmaxfiles = null;
 
     /**
      * @param string $maxfiles

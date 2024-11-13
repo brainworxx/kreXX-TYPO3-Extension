@@ -40,14 +40,14 @@ namespace Brainworxx\Includekrexx\Domain\Model\Settings;
 trait ArrayCountLimit
 {
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $arrayCountLimit;
+    protected ?string $arrayCountLimit = null;
 
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $formarrayCountLimit;
+    protected ?string $formarrayCountLimit = null;
 
     /**
      * @param string $arrayCountLimit

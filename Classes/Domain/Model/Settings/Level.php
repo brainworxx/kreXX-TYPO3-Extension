@@ -40,14 +40,14 @@ namespace Brainworxx\Includekrexx\Domain\Model\Settings;
 trait Level
 {
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $level;
+    protected ?string $level = null;
 
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $formlevel;
+    protected ?string $formlevel = null;
 
     /**
      * @param string $level

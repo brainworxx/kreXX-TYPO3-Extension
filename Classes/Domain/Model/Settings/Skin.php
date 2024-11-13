@@ -40,14 +40,14 @@ namespace Brainworxx\Includekrexx\Domain\Model\Settings;
 trait Skin
 {
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $skin;
+    protected ?string $skin = null;
 
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $formskin;
+    protected ?string $formskin = null;
 
     /**
      * @param string $skin

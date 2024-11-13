@@ -40,14 +40,14 @@ namespace Brainworxx\Includekrexx\Domain\Model\Settings;
 trait DebugMethods
 {
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $debugMethods;
+    protected ?string $debugMethods = null;
 
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $formdebugMethods;
+    protected ?string $formdebugMethods = null;
 
     /**
      * @param string $debugMethods

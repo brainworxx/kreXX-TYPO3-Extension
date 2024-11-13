@@ -40,14 +40,14 @@ namespace Brainworxx\Includekrexx\Domain\Model\Settings;
 trait Destination
 {
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $destination;
+    protected ?string $destination = null;
 
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $formdestination;
+    protected ?string $formdestination = null;
 
     /**
      * @param string $destination

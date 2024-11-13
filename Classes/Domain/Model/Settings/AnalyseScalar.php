@@ -40,14 +40,14 @@ namespace Brainworxx\Includekrexx\Domain\Model\Settings;
 trait AnalyseScalar
 {
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $analyseScalar;
+    protected ?string $analyseScalar = null;
 
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $formanalyseScalar;
+    protected ?string $formanalyseScalar = null;
 
     /**
      * @param string $analyseScalar

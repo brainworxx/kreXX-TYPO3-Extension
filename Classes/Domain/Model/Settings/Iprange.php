@@ -40,14 +40,14 @@ namespace Brainworxx\Includekrexx\Domain\Model\Settings;
 trait Iprange
 {
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $iprange;
+    protected ?string $iprange = null;
 
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $formiprange;
+    protected ?string $formiprange = null;
 
     /**
      * @param string $formiprange

@@ -40,14 +40,14 @@ namespace Brainworxx\Includekrexx\Domain\Model\Settings;
 trait AnalyseTraversable
 {
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $analyseTraversable;
+    protected ?string $analyseTraversable = null;
 
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $formanalyseTraversable;
+    protected ?string $formanalyseTraversable = null;
 
     /**
      * @param string $value

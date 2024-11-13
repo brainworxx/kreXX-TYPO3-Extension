@@ -38,14 +38,14 @@ namespace Brainworxx\Includekrexx\Domain\Model\Settings;
 trait LogFileWriter
 {
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $activateT3FileWriter;
+    protected ?string $activateT3FileWriter = null;
 
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $loglevelT3FileWriter;
+    protected ?string $loglevelT3FileWriter = null;
 
 
     /**

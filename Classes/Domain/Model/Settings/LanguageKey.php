@@ -40,14 +40,14 @@ namespace Brainworxx\Includekrexx\Domain\Model\Settings;
 trait LanguageKey
 {
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $languageKey;
+    protected ?string $languageKey = null;
 
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $formlanguageKey;
+    protected ?string $formlanguageKey = null;
 
     /**
      * @param string $key

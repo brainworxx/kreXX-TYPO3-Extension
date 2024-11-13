@@ -40,14 +40,14 @@ namespace Brainworxx\Includekrexx\Domain\Model\Settings;
 trait MemoryLeft
 {
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $memoryLeft;
+    protected ?string $memoryLeft = null;
 
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $formmemoryLeft;
+    protected ?string $formmemoryLeft = null;
 
     /**
      * @param string $memoryLeft

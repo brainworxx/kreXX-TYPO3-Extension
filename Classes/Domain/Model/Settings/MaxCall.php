@@ -40,14 +40,14 @@ namespace Brainworxx\Includekrexx\Domain\Model\Settings;
 trait MaxCall
 {
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $maxCall;
+    protected ?string $maxCall = null;
 
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $formmaxCall;
+    protected ?string $formmaxCall = null;
 
     /**
      * @param string $maxCall

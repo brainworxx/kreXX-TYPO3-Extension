@@ -40,14 +40,14 @@ namespace Brainworxx\Includekrexx\Domain\Model\Settings;
 trait Disabled
 {
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $disabled;
+    protected ?string $disabled = null;
 
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $formdisabled;
+    protected ?string $formdisabled = null;
 
     /**
      * @param string $disabled

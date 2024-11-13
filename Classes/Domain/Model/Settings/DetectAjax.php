@@ -40,14 +40,14 @@ namespace Brainworxx\Includekrexx\Domain\Model\Settings;
 trait DetectAjax
 {
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $detectAjax;
+    protected ?string $detectAjax = null;
 
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $formdetectAjax;
+    protected ?string $formdetectAjax = null;
 
     /**
      * @param string $detectAjax

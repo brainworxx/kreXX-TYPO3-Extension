@@ -40,14 +40,14 @@ namespace Brainworxx\Includekrexx\Domain\Model\Settings;
 trait AnalysePrivate
 {
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $analysePrivate;
+    protected ?string $analysePrivate = null;
 
     /**
-     * @var string
+     * @var null|string
      */
-    protected string $formanalysePrivate;
+    protected ?string $formanalysePrivate = null;
 
     /**
      * @param string $analysePrivate
