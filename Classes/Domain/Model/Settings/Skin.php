@@ -50,17 +50,17 @@ trait Skin
     protected ?string $formskin = null;
 
     /**
-     * @param string $skin
+     * @param null|string $skin
      */
-    public function setSkin(string $skin): void
+    public function setSkin(?string $skin): void
     {
         $this->skin = $skin;
     }
 
     /**
-     * @param string $formskin
+     * @param null|string $formskin
      */
-    public function setFormskin(string $formskin): void
+    public function setFormskin(?string $formskin): void
     {
         $this->formskin = $formskin;
     }

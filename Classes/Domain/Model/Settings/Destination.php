@@ -50,17 +50,17 @@ trait Destination
     protected ?string $formdestination = null;
 
     /**
-     * @param string $destination
+     * @param null|string $destination
      */
-    public function setDestination(string $destination): void
+    public function setDestination(?string $destination): void
     {
         $this->destination = $destination;
     }
 
     /**
-     * @param string $formdestination
+     * @param null|string $formdestination
      */
-    public function setFormdestination(string $formdestination): void
+    public function setFormdestination(?string $formdestination): void
     {
         $this->formdestination = $formdestination;
     }

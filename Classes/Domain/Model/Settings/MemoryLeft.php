@@ -50,17 +50,17 @@ trait MemoryLeft
     protected ?string $formmemoryLeft = null;
 
     /**
-     * @param string $memoryLeft
+     * @param null|string $memoryLeft
      */
-    public function setMemoryLeft(string $memoryLeft): void
+    public function setMemoryLeft(?string $memoryLeft): void
     {
         $this->memoryLeft = $memoryLeft;
     }
 
     /**
-     * @param string $formmemoryLeft
+     * @param null|string $formmemoryLeft
      */
-    public function setFormmemoryLeft(string $formmemoryLeft): void
+    public function setFormmemoryLeft(?string $formmemoryLeft): void
     {
         $this->formmemoryLeft = $formmemoryLeft;
     }

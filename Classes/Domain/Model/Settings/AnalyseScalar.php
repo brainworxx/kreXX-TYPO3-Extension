@@ -50,17 +50,17 @@ trait AnalyseScalar
     protected ?string $formanalyseScalar = null;
 
     /**
-     * @param string $analyseScalar
+     * @param null|string $analyseScalar
      */
-    public function setAnalyseScalar(string $analyseScalar): void
+    public function setAnalyseScalar(?string $analyseScalar): void
     {
         $this->analyseScalar = $analyseScalar;
     }
 
     /**
-     * @param string $formanalyseScalar
+     * @param null|string $formanalyseScalar
      */
-    public function setFormanalyseScalar(string $formanalyseScalar): void
+    public function setFormanalyseScalar(?string $formanalyseScalar): void
     {
         $this->formanalyseScalar = $formanalyseScalar;
     }

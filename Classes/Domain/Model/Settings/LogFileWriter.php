@@ -49,17 +49,17 @@ trait LogFileWriter
 
 
     /**
-     * @param string $activateT3FileWriter
+     * @param null|string $activateT3FileWriter
      */
-    public function setActivateT3FileWriter(string $activateT3FileWriter): void
+    public function setActivateT3FileWriter(?string $activateT3FileWriter): void
     {
         $this->activateT3FileWriter = $activateT3FileWriter;
     }
 
     /**
-     * @param string $loglevelT3FileWriter
+     * @param null|string $loglevelT3FileWriter
      */
-    public function setLoglevelT3FileWriter(string $loglevelT3FileWriter): void
+    public function setLoglevelT3FileWriter(?string $loglevelT3FileWriter): void
     {
         $this->loglevelT3FileWriter = $loglevelT3FileWriter;
     }

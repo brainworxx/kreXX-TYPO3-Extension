@@ -50,17 +50,17 @@ trait Iprange
     protected ?string $formiprange = null;
 
     /**
-     * @param string $formiprange
+     * @param null|string $formiprange
      */
-    public function setFormiprange(string $formiprange): void
+    public function setFormiprange(?string $formiprange): void
     {
         $this->formiprange = $formiprange;
     }
 
     /**
-     * @param string $iprange
+     * @param null|string $iprange
      */
-    public function setIprange(string $iprange): void
+    public function setIprange(?string $iprange): void
     {
         $this->iprange = $iprange;
     }

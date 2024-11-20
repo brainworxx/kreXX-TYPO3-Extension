@@ -50,17 +50,17 @@ trait DetectAjax
     protected ?string $formdetectAjax = null;
 
     /**
-     * @param string $detectAjax
+     * @param null|string $detectAjax
      */
-    public function setDetectAjax(string $detectAjax): void
+    public function setDetectAjax(?string $detectAjax): void
     {
         $this->detectAjax = $detectAjax;
     }
 
     /**
-     * @param string $formdetectAjax
+     * @param null|string $formdetectAjax
      */
-    public function setFormdetectAjax(string $formdetectAjax): void
+    public function setFormdetectAjax(?string $formdetectAjax): void
     {
         $this->formdetectAjax = $formdetectAjax;
     }

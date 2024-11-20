@@ -50,17 +50,17 @@ trait DebugMethods
     protected ?string $formdebugMethods = null;
 
     /**
-     * @param string $debugMethods
+     * @param null|string $debugMethods
      */
-    public function setDebugMethods(string $debugMethods): void
+    public function setDebugMethods(?string $debugMethods): void
     {
         $this->debugMethods = $debugMethods;
     }
 
     /**
-     * @param string $formdebugMethods
+     * @param null|string $formdebugMethods
      */
-    public function setFormdebugMethods(string $formdebugMethods): void
+    public function setFormdebugMethods(?string $formdebugMethods): void
     {
         $this->formdebugMethods = $formdebugMethods;
     }

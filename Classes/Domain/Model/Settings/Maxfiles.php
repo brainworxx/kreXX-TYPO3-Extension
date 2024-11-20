@@ -50,17 +50,17 @@ trait Maxfiles
     protected ?string $formmaxfiles = null;
 
     /**
-     * @param string $maxfiles
+     * @param null|string $maxfiles
      */
-    public function setMaxfiles(string $maxfiles): void
+    public function setMaxfiles(?string $maxfiles): void
     {
         $this->maxfiles = $maxfiles;
     }
 
     /**
-     * @param string $formmaxfiles
+     * @param null|string $formmaxfiles
      */
-    public function setFormmaxfiles(string $formmaxfiles): void
+    public function setFormmaxfiles(?string $formmaxfiles): void
     {
         $this->formmaxfiles = $formmaxfiles;
     }

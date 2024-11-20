@@ -50,17 +50,17 @@ trait MaxRuntime
     protected ?string $formmaxRuntime = null;
 
     /**
-     * @param string $maxRuntime
+     * @param null|string $maxRuntime
      */
-    public function setMaxRuntime(string $maxRuntime): void
+    public function setMaxRuntime(?string $maxRuntime): void
     {
         $this->maxRuntime = $maxRuntime;
     }
 
     /**
-     * @param string $formmaxRuntime
+     * @param null|string $formmaxRuntime
      */
-    public function setFormmaxRuntime(string $formmaxRuntime): void
+    public function setFormmaxRuntime(?string $formmaxRuntime): void
     {
         $this->formmaxRuntime = $formmaxRuntime;
     }

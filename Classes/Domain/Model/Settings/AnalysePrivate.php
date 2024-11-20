@@ -50,17 +50,17 @@ trait AnalysePrivate
     protected ?string $formanalysePrivate = null;
 
     /**
-     * @param string $analysePrivate
+     * @param null|string $analysePrivate
      */
-    public function setAnalysePrivate(string $analysePrivate): void
+    public function setAnalysePrivate(?string $analysePrivate): void
     {
         $this->analysePrivate = $analysePrivate;
     }
 
     /**
-     * @param string $formanalysePrivate
+     * @param null|string $formanalysePrivate
      */
-    public function setFormanalysePrivate(string $formanalysePrivate): void
+    public function setFormanalysePrivate(?string $formanalysePrivate): void
     {
         $this->formanalysePrivate = $formanalysePrivate;
     }

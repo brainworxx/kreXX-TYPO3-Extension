@@ -50,17 +50,17 @@ trait AnalysePrivateMethods
     protected ?string $formanalysePrivateMethods = null;
 
     /**
-     * @param string $value
+     * @param null|string $value
      */
-    public function setAnalysePrivateMethods(string $value): void
+    public function setAnalysePrivateMethods(?string $value): void
     {
         $this->analysePrivateMethods = $value;
     }
 
     /**
-     * @param string $value
+     * @param null|string $value
      */
-    public function setFormanalysePrivateMethods(string $value): void
+    public function setFormanalysePrivateMethods(?string $value): void
     {
         $this->formanalysePrivateMethods = $value;
     }

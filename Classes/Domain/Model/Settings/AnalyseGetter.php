@@ -50,17 +50,17 @@ trait AnalyseGetter
     protected ?string $formanalyseGetter = null;
 
     /**
-     * @param string $analyseGetter
+     * @param null|string $analyseGetter
      */
-    public function setAnalyseGetter(string $analyseGetter): void
+    public function setAnalyseGetter(?string $analyseGetter): void
     {
         $this->analyseGetter = $analyseGetter;
     }
 
     /**
-     * @param string $formanalyseGetter
+     * @param null|string $formanalyseGetter
      */
-    public function setFormanalyseGetter(string $formanalyseGetter): void
+    public function setFormanalyseGetter(?string $formanalyseGetter): void
     {
         $this->formanalyseGetter = $formanalyseGetter;
     }

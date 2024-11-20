@@ -50,17 +50,17 @@ trait Level
     protected ?string $formlevel = null;
 
     /**
-     * @param string $level
+     * @param null|string $level
      */
-    public function setLevel(string $level): void
+    public function setLevel(?string $level): void
     {
         $this->level = $level;
     }
 
     /**
-     * @param string $formlevel
+     * @param null|string $formlevel
      */
-    public function setFormlevel(string $formlevel): void
+    public function setFormlevel(?string $formlevel): void
     {
         $this->formlevel = $formlevel;
     }

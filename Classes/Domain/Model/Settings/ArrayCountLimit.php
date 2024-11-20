@@ -50,17 +50,17 @@ trait ArrayCountLimit
     protected ?string $formarrayCountLimit = null;
 
     /**
-     * @param string $arrayCountLimit
+     * @param null|string $arrayCountLimit
      */
-    public function setArrayCountLimit(string $arrayCountLimit): void
+    public function setArrayCountLimit(?string $arrayCountLimit): void
     {
         $this->arrayCountLimit = $arrayCountLimit;
     }
 
     /**
-     * @param string $formarrayCountLimit
+     * @param null|string $formarrayCountLimit
      */
-    public function setFormarrayCountLimit(string $formarrayCountLimit): void
+    public function setFormarrayCountLimit(?string $formarrayCountLimit): void
     {
         $this->formarrayCountLimit = $formarrayCountLimit;
     }

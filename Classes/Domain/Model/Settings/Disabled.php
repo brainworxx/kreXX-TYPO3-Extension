@@ -50,17 +50,17 @@ trait Disabled
     protected ?string $formdisabled = null;
 
     /**
-     * @param string $disabled
+     * @param null|string $disabled
      */
-    public function setDisabled(string $disabled): void
+    public function setDisabled(?string $disabled): void
     {
         $this->disabled = $disabled;
     }
 
     /**
-     * @param string $formdisabled
+     * @param null|string $formdisabled
      */
-    public function setFormdisabled(string $formdisabled): void
+    public function setFormdisabled(?string $formdisabled): void
     {
         $this->formdisabled = $formdisabled;
     }

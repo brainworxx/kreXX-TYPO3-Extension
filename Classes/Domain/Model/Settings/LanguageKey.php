@@ -50,17 +50,17 @@ trait LanguageKey
     protected ?string $formlanguageKey = null;
 
     /**
-     * @param string $key
+     * @param null|string $key
      */
-    public function setLanguageKey(string $key): void
+    public function setLanguageKey(?string $key): void
     {
         $this->languageKey = $key;
     }
 
     /**
-     * @param string $formlanguageKey
+     * @param null|string $formlanguageKey
      */
-    public function setFormlanguageKey(string $formlanguageKey): void
+    public function setFormlanguageKey(?string $formlanguageKey): void
     {
         $this->formlanguageKey = $formlanguageKey;
     }

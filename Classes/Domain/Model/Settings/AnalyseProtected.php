@@ -50,17 +50,17 @@ trait AnalyseProtected
     protected ?string $formanalyseProtected = null;
 
     /**
-     * @param string $analyseProtected
+     * @param null|string $analyseProtected
      */
-    public function setAnalyseProtected(string $analyseProtected): void
+    public function setAnalyseProtected(?string $analyseProtected): void
     {
         $this->analyseProtected = $analyseProtected;
     }
 
     /**
-     * @param string $formanalyseProtected
+     * @param null|string $formanalyseProtected
      */
-    public function setFormanalyseProtected(string $formanalyseProtected): void
+    public function setFormanalyseProtected(?string $formanalyseProtected): void
     {
         $this->formanalyseProtected = $formanalyseProtected;
     }

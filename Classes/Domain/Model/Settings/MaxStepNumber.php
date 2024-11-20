@@ -50,17 +50,17 @@ trait MaxStepNumber
     protected ?string $formmaxStepNumber = null;
 
     /**
-     * @param string $maxStepNumber
+     * @param null|string $maxStepNumber
      */
-    public function setMaxStepNumber(string $maxStepNumber): void
+    public function setMaxStepNumber(?string $maxStepNumber): void
     {
         $this->maxStepNumber = $maxStepNumber;
     }
 
     /**
-     * @param string $formmaxStepNumber
+     * @param null|string $formmaxStepNumber
      */
-    public function setFormmaxStepNumber(string $formmaxStepNumber): void
+    public function setFormmaxStepNumber(?string $formmaxStepNumber): void
     {
         $this->formmaxStepNumber = $formmaxStepNumber;
     }

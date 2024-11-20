@@ -50,17 +50,17 @@ trait MaxCall
     protected ?string $formmaxCall = null;
 
     /**
-     * @param string $maxCall
+     * @param null|string $maxCall
      */
-    public function setMaxCall(string $maxCall): void
+    public function setMaxCall(?string $maxCall): void
     {
         $this->maxCall = $maxCall;
     }
 
     /**
-     * @param string $formmaxCall
+     * @param null|string $formmaxCall
      */
-    public function setFormmaxCall(string $formmaxCall): void
+    public function setFormmaxCall(?string $formmaxCall): void
     {
         $this->formmaxCall = $formmaxCall;
     }
