@@ -44,6 +44,7 @@ Changes:
     * [Bugfix] Better test for handling no analysis value in the fluid debugger.
     * [Bugfix] Possible TypeError in the AbstractController.
     * [Bugfix] Bugfix: The serialized string analysis was too strict to detect all possible candidates.
+    * [Bugfix] The fluid caller finder trims too much from the identifies variable name.
 
 -----
 

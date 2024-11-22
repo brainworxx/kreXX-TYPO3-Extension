@@ -265,7 +265,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
         if (count($name[1]) === 1) {
             ++$counter;
             $this->varname = $this->checkForComplicatedStuff(
-                $this->pool->encodingService->encodeString(trim($name[1][0], ' {}'))
+                $this->pool->encodingService->encodeString($name[1][0])
             );
         }
     }
@@ -332,7 +332,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
     {
         // We check for : and -> to see if we are facing some inline stuff
         if (strpos($varname, ':') !== false || strpos($varname, '->') !== false) {
-            $code = '<f:variable value="{' . $varname . '}" name="fluidvar" /> {';
+            $code = '<f:variable value="' . $varname . '" name="fluidvar" /> {';
             $this->pool->codegenHandler->setComplicatedWrapperLeft($code);
             $varname = static::FLUID_VARIABLE;
         }
