@@ -72,20 +72,9 @@ class Serialized extends AbstractScalarAnalysis
      */
     public function canHandle($string, Model $model): bool
     {
-        $jsonData = $model->getJson();
-        $jsonKey = $this->pool->messages->getHelp('metaMimeTypeString');
-        if (
-            !isset($jsonData[$jsonKey])
-            || strpos($jsonData[$jsonKey], 'binary') === false
-        ) {
-            // A serialised string is always binary.
-            // This should sort out 99% of our contestants.
-            return false;
-        }
-
         // We only handle objects and arrays.
         // Everything else is not really pretty print worthy.
-        if (in_array(substr($string, 0, 2), ['o:', 'O:','a:', 'C:'], true)) {
+        if (in_array(substr($string, 0, 2), ['o:', 'a:', 'C:'], true)) {
             $this->handledValue = $string;
             $this->model = $model;
             return true;
