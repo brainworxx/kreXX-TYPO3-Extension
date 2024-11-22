@@ -369,7 +369,11 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
     {
         // We check for : and -> to see if we are facing some inline stuff
         if (strpos($varname, ':') !== false || strpos($varname, '->') !== false) {
-            $code = '<f:variable value="' . $varname . '" name="fluidvar" /> {';
+            // Double escaping for the JS insert.
+            // The things you have to do.
+            $code = htmlspecialchars(htmlspecialchars('<f:variable value="{')) .
+                $varname .
+                htmlspecialchars(htmlspecialchars('}" name="fluidvar" /> {'));
             $this->pool->codegenHandler->setComplicatedWrapperLeft($code);
             $varname = static::FLUID_VARIABLE;
         }
