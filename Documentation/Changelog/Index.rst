@@ -38,6 +38,7 @@ Changes:
 :Date: tbd
 
 Changes:
+    * [Feature] Updated to PHP 8.4.
     * [Bugfix] The XML analysis does not recognise a broken XML string.
     * [Bugfix] The scalar analysis does not return the output from the start event when there is no meta to display.
     * [Bugfix] Better test for handling no analysis value in the fluid debugger.
