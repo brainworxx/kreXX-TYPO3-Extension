@@ -327,6 +327,15 @@
 				<source>Wrong configuration for: '%s => %s'! The language '%s' is not available. The configured setting was not applied!</source>
 				<target>Falsche Konfiguration für: '%s => %s'! Die Sprache '%s' steht nicht zur Verfügung. Dieses Setting wurde nicht angewendet!</target>
 			</trans-unit>
+			<trans-unit id="maximumLevelReached1">
+				<source>Maximale Verschachtelung erreicht..</source>
+				<target>Maximale Verschachtelungsebene für die Analyse erreicht. Ich werde nicht weiter gehen.</target>
+			</trans-unit>
+			<trans-unit id="maximumLevelReached2">
+				<source>To increase this value, change the Prune output => level setting."</source>
+				<target>Um diesen Wert zu erhöhen muss der Wert 'Ausgabe begrenzen => Maximale Verschachtelung' erhöht werden.</target>
+			</trans-unit>
+
 
 			<!-- Tabs -->
 			<trans-unit id="layout.edit.config.file">

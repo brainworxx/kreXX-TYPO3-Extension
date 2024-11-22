@@ -251,6 +251,13 @@
 			<trans-unit id="configErrorLangInvalid">
 				<source>Wrong configuration for: '%s => %s'! The language '%s' is not available. The configured setting was not applied!</source>
 			</trans-unit>
+			<trans-unit id="maximumLevelReached1">
+				<source>Maximum nesting level for the analysis was reached. I will not go any further.</source>
+			</trans-unit>
+			<trans-unit id="maximumLevelReached2">
+				<source>To increase this value, change the Prune output => level setting."</source>
+			</trans-unit>
+
 
 			<!-- Tabs -->
 			<trans-unit id="layout.edit.config.file">
