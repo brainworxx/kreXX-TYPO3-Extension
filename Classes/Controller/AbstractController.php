@@ -233,7 +233,7 @@ abstract class AbstractController extends ActionController implements ConstInter
         foreach ($messages as $message) {
             // And translate them.
             $this->addFlashMessage(
-                static::translate($message->getKey(), $message->getArguments()) ?? $message->getKey(),
+                static::translate($message->getKey(), $message->getArguments()) ?? $message->getText(),
                 static::translate('general.error.title'),
                 $this->flashMessageError
             );
