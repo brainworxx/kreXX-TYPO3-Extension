@@ -30,6 +30,8 @@
   start event when there is no meta to display.
 - Bugfix: The serialized string analysis was too strict to detect
   all possible candidates.
+- Bugfix: The method return type analysis prefixes 'self' with a
+  backslash.
 
 5.0.6
 - Added the handling of type casting to the regex getter analysis.

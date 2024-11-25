@@ -71,7 +71,8 @@ class ReturnType extends AbstractComment
         'false',
         'never',
         'static',
-        'iterable'
+        'iterable',
+        'self'
     ];
 
     /**
