@@ -1,4 +1,4 @@
-<phpunit bootstrap="../Tests/Scripts/Bootstrap.php">
+<phpunit bootstrap="../Tests/Scripts/Bootstrap.php" stopOnFailure="true">
     <testsuites>
         <testsuite name="krexxsuit">
             <directory>../Resources/Private/krexx/tests</directory>
