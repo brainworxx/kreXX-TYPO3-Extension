@@ -16,6 +16,7 @@ Changes:
     * [Bugfix] The serialized string analysis was too strict to detect all possible candidates.
     * [Bugfix] The fluid caller finder trims too much from the identifies variable name.
     * [Bugfix] The fluid code generation does not work with complex inline values.
+    * [Bugfix] The method return type analysis prefixes 'self' with a backslash.
 
 -----
 
