@@ -100,7 +100,7 @@ class AbstractCallerFinderTest extends AbstractHelper
             $this->retrieveValueByReflection(static::PARSED_TEMPLATE, $newFluid),
             $renderingStack[0][static::PARSED_TEMPLATE]
         );
-        $this->assertEquals($this->retrieveValueByReflection('renderingType', $newFluid), 5);
+        $this->assertEquals(5, $this->retrieveValueByReflection('renderingType', $newFluid));
         $this->assertFalse($this->retrieveValueByReflection(static::ERROR, $newFluid));
     }
 

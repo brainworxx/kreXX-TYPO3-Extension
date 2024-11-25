@@ -113,7 +113,14 @@ class ProcessClosureTest extends AbstractHelper
         $this->assertStringContainsString('Just another fixture.', $parameters['Comment']);
         $this->assertEquals($containingCode, $parameters['Source']);
         $this->assertStringContainsString(__FILE__, $parameters['Declared in']);
-        $this->assertEquals(__NAMESPACE__, $parameters['Namespace']);
+
+        // Closures can not get namespaced anymore in PHP 8.4.0 and beyond.
+        if (version_compare(phpversion(), '8.4.0', '<=')) {
+            $this->assertEquals(__NAMESPACE__, $parameters['Namespace']);
+        } else {
+            $this->assertArrayNotHasKey('Namespace', $parameters);
+        }
+
         $this->assertEquals($parameter, $parameters['Parameter #1']);
     }
 
