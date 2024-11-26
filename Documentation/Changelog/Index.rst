@@ -5,7 +5,7 @@ Changelog
 =============================================================
 
 :Version: 5.1.2
-:Date: tbd
+:Date: 2024-11-26
 
 Changes:
     * [Feature] Updated to PHP 8.4.
