@@ -329,7 +329,7 @@ abstract class AbstractController extends ActionController implements ConstInter
         }
 
         $cssPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Private/Css/Index.css');
-        $this->pageRenderer->addCssInlineBlock('krexxcss', file_get_contents($cssPath));
+        $this->pageRenderer->addCssInlineBlock('krexxBeCss', file_get_contents($cssPath), false, false, true);
         $this->moduleTemplate->setModuleName('tx_includekrexx');
     }
 

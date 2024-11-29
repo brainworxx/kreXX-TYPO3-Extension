@@ -203,7 +203,7 @@ class IndexControllerTest extends AbstractHelper
 
         $pageRenderer->expects($this->once())
             ->method('addCssInlineBlock')
-            ->with('krexxcss', $jsCssFileContent);
+            ->with('krexxBeCss', $jsCssFileContent);
 
         // Inject it, like there is no tomorrow.
         $this->indexController = new IndexController($configurationMock, $configFeMock, $settingsModel, $pageRenderer, $typo3Version);
