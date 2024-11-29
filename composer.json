@@ -21,7 +21,8 @@
     "typo3/cms-base-distribution": "^10.4 || ^11 || ^12 || ^13",
     "phpunit/phpunit": "^8.5 || ^9.5 || ^10.5",
     "php-mock/php-mock-phpunit": "^2",
-    "typo3/cms-adminpanel": "^10.4 || ^11 || ^12 || ^13"
+    "typo3/cms-adminpanel": "^10.4 || ^11 || ^12 || ^13",
+    "aimeos/aimeos-typo3": "^20 || ^21 || ^22 || ^23 || ^24"
   },
   "suggest": {
     "fluidtypo3/vhs": "Allows calling of methods in Fluid templates.",
