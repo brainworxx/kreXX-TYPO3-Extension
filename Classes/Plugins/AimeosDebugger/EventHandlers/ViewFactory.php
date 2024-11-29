@@ -96,9 +96,9 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
     /**
      * List of all retrieved helper classes from the view.
      *
-     * @var object[]
+     * @var object[]|null
      */
-    protected array $helpers = [];
+    protected ?array $helpers = [];
 
     /**
      * Inject the pool.

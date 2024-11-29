@@ -126,7 +126,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
     /**
      * The regex should look something like this:
      */
-     // \s*<krexx:debug value="{(.*)}"\/>\s*/u
+    // \s*<krexx:debug value="{(.*)}"\/>\s*/u
     /**
      * Meh, the regex un-comments the doc-comment.
      *

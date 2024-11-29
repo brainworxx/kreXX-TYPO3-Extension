@@ -39,6 +39,7 @@ namespace Brainworxx\Includekrexx\Controller;
 
 use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
+use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -88,9 +89,9 @@ class IndexController extends AbstractController implements ConstInterface
      * @param \Brainworxx\Includekrexx\Domain\Model\Settings $settings
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      *
-     * @return null|\Psr\Http\Message\ResponseInterface
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    public function saveAction(Settings $settings)
+    public function saveAction(Settings $settings): ResponseInterface
     {
         if (!$this->hasAccess()) {
             $this->addFlashMessage(
