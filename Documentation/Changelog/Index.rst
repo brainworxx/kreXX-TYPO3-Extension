@@ -34,8 +34,16 @@ Changes:
 
 -----
 
-:Version: 5.1.2
+:Version: 5.1.3
 :Date: tbd
+
+Changes:
+    * [Bugfix] Added the inline CSS to the asset collector to prevent CSP problems with it.
+
+-----
+
+:Version: 5.1.2
+:Date: 2024-11-26
 
 Changes:
     * [Feature] Updated to PHP 8.4.

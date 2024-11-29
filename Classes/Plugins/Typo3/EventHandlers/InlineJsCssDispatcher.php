@@ -84,6 +84,12 @@ class InlineJsCssDispatcher implements EventHandlerInterface, ConfigConstInterfa
                     [],
                     ['priority' => false, 'useNonce' => true]
                 );
+                $collector->addInlineStyleSheet(
+                    'krexxInlineCss',
+                    $model->getNormal(),
+                    [],
+                    ['priority' => false, 'useNonce' => true]
+                );
             }
         }
 

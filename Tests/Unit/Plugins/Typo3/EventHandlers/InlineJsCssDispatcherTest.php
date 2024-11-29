@@ -108,11 +108,22 @@ class InlineJsCssDispatcherTest extends AbstractHelper implements ConfigConstInt
                 [],
                 ['priority' => false, 'useNonce' => true]
             );
+        $css = 'body {background-color: red;}';
+        $collectorMock->expects($this->once())
+            ->method('addInlineStyleSheet')
+            ->with(
+                'krexxInlineCss',
+                $css,
+                [],
+                ['priority' => false, 'useNonce' => true]
+            );
+
         $this->injectIntoGeneralUtility(AssetCollector::class, $collectorMock);
 
         $dispatcher = new InlineJsCssDispatcher($pool);
         $model = new Model($pool);
         $model->setData($payload);
+        $model->setNormal($css);
         $dispatcher->handle(null, $model);
     }
 
