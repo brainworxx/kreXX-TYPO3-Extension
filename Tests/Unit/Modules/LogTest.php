@@ -42,6 +42,9 @@ use Brainworxx\Krexx\Krexx;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
 use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Core\View\ViewFactoryInterface;
+use TYPO3\CMS\Core\View\ViewInterface;
+use TYPO3\CMS\Fluid\View\FluidViewFactory;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class LogTest extends AbstractHelper
@@ -53,14 +56,6 @@ class LogTest extends AbstractHelper
     const TEXT = 'text';
     const RENDER = 'render';
 
-    /**
-     * @var \Brainworxx\Includekrexx\Modules\Log
-     */
-    protected $log;
-
-    protected $mainView;
-
-    protected $messageView;
 
     /**
      * {@inheritDoc}
@@ -69,18 +64,20 @@ class LogTest extends AbstractHelper
     {
         parent::setUp();
         $this->simulatePackage('includekrexx', 'whatever');
-        $this->mainView = $this->mockView();
-        $this->messageView = $this->mockView();
-        $this->log = new Log($this->mainView, $this->messageView);
     }
 
     /**
      * @covers \Brainworxx\Includekrexx\Modules\Log::__construct
+     * @covers \Brainworxx\Includekrexx\Modules\Log::createViews12
+     * @covers \Brainworxx\Includekrexx\Modules\Log::createViews13
      */
     public function testConstruct()
     {
-        $this->assertSame($this->mainView, $this->retrieveValueByReflection('mainView', $this->log));
-        $this->assertSame($this->messageView, $this->retrieveValueByReflection('messageView', $this->log));
+        $viewMock = $this->mockView();
+
+        $logModule = new Log();
+        $this->assertSame($viewMock, $this->retrieveValueByReflection('mainView', $logModule));
+        $this->assertSame($viewMock, $this->retrieveValueByReflection('messageView', $logModule));
     }
 
     /**
@@ -90,7 +87,9 @@ class LogTest extends AbstractHelper
      */
     public function testGetIdentifier()
     {
-        $this->assertEquals(Bootstrap::KREXX, $this->log->getIdentifier());
+        $this->mockView();
+        $logModule = new Log();
+        $this->assertEquals(Bootstrap::KREXX, $logModule->getIdentifier());
     }
 
     /**
@@ -100,9 +99,11 @@ class LogTest extends AbstractHelper
      */
     public function testGetLabel()
     {
+        $this->mockView();
+        $logModule = new Log();
         $this->assertEquals(
             'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:mlang_tabs_tab',
-            $this->log->getLabel()
+            $logModule->getLabel()
         );
     }
 
@@ -113,6 +114,8 @@ class LogTest extends AbstractHelper
      */
     public function testGetDataToStore()
     {
+        $this->mockView();
+        $logModule = new Log();
         $fileList = ['file', 'list'];
         $expectations = new ModuleData([static::FILES => $fileList]);
 
@@ -123,7 +126,7 @@ class LogTest extends AbstractHelper
         $this->injectIntoGeneralUtility(LogfileList::class, $logfileListMock);
 
         $request = new ServerRequest();
-        $this->assertEquals($expectations, $this->log->getDataToStore($request));
+        $this->assertEquals($expectations, $logModule->getDataToStore($request));
     }
 
     /**
@@ -135,19 +138,21 @@ class LogTest extends AbstractHelper
      */
     public function testGetContentNoAccess()
     {
+        $mockview = $this->mockView();
         // Prepare the view for the messages.
-        $this->messageView->expects($this->once())
+        $mockview->expects($this->once())
             ->method(static::ASSIGN_MULTIPLE)
             ->with([
                 static::TEXT => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:accessDenied',
                 static::SEVERITY => 'error',
             ]);
-        $this->messageView->expects($this->once())
+        $mockview->expects($this->once())
             ->method(static::RENDER)
             ->willReturn('Rendered Messages');
 
         $moduleData = new ModuleData();
-        $this->assertEquals('Rendered Messages', $this->log->getContent($moduleData));
+        $logModule = new Log();
+        $this->assertEquals('Rendered Messages', $logModule->getContent($moduleData));
     }
 
     /**
@@ -162,11 +167,12 @@ class LogTest extends AbstractHelper
     public function testGetContentEmpty()
     {
         $this->mockBeUser();
+        $mockview = $this->mockView();
 
         Krexx::$pool->messages->addMessage('translationkey');
         $moduleData = new ModuleData([static::FILES => []]);
 
-        $this->messageView->expects($this->exactly(2))
+        $mockview->expects($this->exactly(2))
             ->method(static::ASSIGN_MULTIPLE)
             ->with(...$this->withConsecutive(
                 [
@@ -182,13 +188,12 @@ class LogTest extends AbstractHelper
                     ]
                 ]
             ));
-        $this->messageView->expects($this->exactly(2))
+        $mockview->expects($this->exactly(2))
             ->method(static::RENDER)
             ->willReturn('rendering');
-        $this->mainView->expects($this->never())
-            ->method(static::RENDER);
 
-        $this->assertEquals('renderingrendering', $this->log->getContent($moduleData));
+        $logModule = new Log();
+        $this->assertEquals('renderingrendering', $logModule->getContent($moduleData));
     }
 
     /**
@@ -205,14 +210,16 @@ class LogTest extends AbstractHelper
         $expectations = 'list of files';
         $moduleData = new ModuleData($fileList);
 
-        $this->mainView->expects($this->once())
+        $mockview = $this->mockView();
+        $mockview->expects($this->once())
             ->method(static::ASSIGN_MULTIPLE)
             ->with($fileList);
-        $this->mainView->expects($this->once())
+        $mockview->expects($this->once())
             ->method(static::RENDER)
             ->willReturn($expectations);
 
-         $this->assertEquals($expectations, $this->log->getContent($moduleData));
+        $logModule = new Log();
+        $this->assertEquals($expectations, $logModule->getContent($moduleData));
     }
 
     /**
@@ -222,9 +229,11 @@ class LogTest extends AbstractHelper
      */
     public function testGetCssFiles()
     {
+        $this->mockView();
+        $logModule = new Log();
         $this->assertEquals(
             ['EXT:includekrexx/Resources/Public/Css/Adminpanel.css'],
-            $this->log->getCssFiles()
+            $logModule->getCssFiles()
         );
     }
 
@@ -235,7 +244,9 @@ class LogTest extends AbstractHelper
      */
     public function testGetJavaScriptFiles()
     {
-        $this->assertEmpty($this->log->getJavaScriptFiles());
+        $this->mockView();
+        $logModule = new Log();
+        $this->assertEmpty($logModule->getJavaScriptFiles());
     }
 
     /**
@@ -243,16 +254,35 @@ class LogTest extends AbstractHelper
      *
      * @return \PHPUnit\Framework\MockObject\MockObject
      */
-    protected function mockView() : MockObject
+    protected function mockView(): MockObject
     {
-        // Prepare the view for the messages.
-        $viewMock = $this->createMock(StandaloneView::class);
-        $viewMock->expects($this->any())
-            ->method('setTemplatePathAndFilename');
-        $viewMock->expects($this->any())
-            ->method('setPartialRootPaths');
-        $viewMock->expects($this->any())
-            ->method('setLayoutRootPaths');
+        if (interface_exists(ViewFactoryInterface::class)) {
+            $viewFactoryMock = $this->createMock(ViewFactoryInterface::class);
+            $viewMock = $this->createMock(ViewInterface::class);
+            $viewFactoryMock->expects($this->exactly(2))
+                ->method('create')
+                ->willReturn($viewMock);
+            $this->injectIntoGeneralUtility(ViewFactoryInterface::class, $viewFactoryMock);
+        } else {
+            $viewMock = $this->createMock(StandaloneView::class);
+            $viewMock->expects($this->exactly(2))
+                ->method('setPartialRootPaths')
+                ->with(['EXT:includekrexx/Resources/Private/Partials']);
+            $viewMock->expects($this->exactly(2))
+                ->method('setLayoutRootPaths')
+                ->with(['EXT:includekrexx/Resources/Private/Layouts']);
+            $viewMock->expects($this->exactly(2))
+                ->method('setTemplatePathAndFilename')
+                ->with(...$this->withConsecutive(
+                    ['EXT:includekrexx/Resources/Private/Templates/Modules/Log.html'],
+                    ['EXT:includekrexx/Resources/Private/Templates/Modules/Message.html']
+                ));
+            $viewMock->expects($this->exactly(2))
+                ->method('setFormat')
+                ->with('html');
+
+            $this->injectIntoGeneralUtility(StandaloneView::class, $viewMock);
+        }
 
         return $viewMock;
     }

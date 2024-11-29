@@ -51,7 +51,11 @@ use TYPO3\CMS\Adminpanel\ModuleApi\DataProviderInterface;
 use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
 use TYPO3\CMS\Adminpanel\ModuleApi\ResourceProviderInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\View\ViewFactoryData;
+use TYPO3\CMS\Core\View\ViewFactoryInterface;
+use TYPO3\CMS\Core\View\ViewInterface;
 use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3Fluid\Fluid\View\ViewInterface as FluidViewInterface;
 
 /**
  * Frontend Access to the logfiles inside the admin panel.
@@ -87,21 +91,86 @@ class Log extends AbstractSubModule implements
     /**
      * The main view for the admin panel display.
      *
-     * @var \TYPO3\CMS\Fluid\View\StandaloneView
+     * @var ViewInterface|FluidViewInterface
      */
-    protected StandaloneView $mainView;
+    protected $mainView;
 
     /**
      * The message view for the admin panel display.
      *
-     * @var \TYPO3\CMS\Fluid\View\StandaloneView
+     * @var ViewInterface|FluidViewInterface
      */
-    protected StandaloneView $messageView;
+    protected $messageView;
 
-    public function __construct(StandaloneView $mainView, StandaloneView $messageView)
+    /**
+     * Createing the views for the frontend.
+     *
+     * The StandaloneView got itself deprecated, so we need to mitigate this.
+     */
+    public function __construct()
     {
-        $this->mainView = $mainView;
-        $this->messageView = $messageView;
+        if (interface_exists(ViewFactoryInterface::class)) {
+            $this->createViews13();
+        } else {
+            $this->createViews12();
+        }
+    }
+
+    /**
+     * Create the views, TYPO3 12 style
+     *
+     * @deprecated
+     *   Will be removed as sooon as we drop TYPO3 12 support
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated stuff.
+     *   (Well, actually we do, but we do not send these data to CodeClimate)
+     */
+    protected function createViews12()
+    {
+        $this->mainView = GeneralUtility::makeInstance(StandaloneView::class);
+        $this->mainView->setPartialRootPaths(['EXT:includekrexx/Resources/Private/Partials']);
+        $this->mainView->setLayoutRootPaths(['EXT:includekrexx/Resources/Private/Layouts']);
+        $this->mainView->setTemplatePathAndFilename(
+            'EXT:includekrexx/Resources/Private/Templates/Modules/Log.html'
+        );
+        $this->mainView->setFormat('html');
+
+        $this->messageView = GeneralUtility::makeInstance(StandaloneView::class);
+        $this->messageView->setPartialRootPaths(['EXT:includekrexx/Resources/Private/Partials']);
+        $this->messageView->setLayoutRootPaths(['EXT:includekrexx/Resources/Private/Layouts']);
+        $this->messageView->setTemplatePathAndFilename(
+            'EXT:includekrexx/Resources/Private/Templates/Modules/Message.html'
+        );
+        $this->messageView->setFormat('html');
+    }
+
+    /**
+     * Create the views, TYPO3 12 style
+     */
+    protected function createViews13()
+    {
+        /** @var ViewFactoryInterface $viewFactory */
+        $viewFactory = GeneralUtility::makeInstance(ViewFactoryInterface::class);
+        $viewFactoryData = new ViewFactoryData(
+            null,
+            ['EXT:includekrexx/Resources/Private/Partials'],
+            ['EXT:includekrexx/Resources/Private/Layouts'],
+            'EXT:includekrexx/Resources/Private/Templates/Modules/Log.html',
+            null,
+            'html'
+        );
+        $this->mainView = $viewFactory->create($viewFactoryData);
+
+        $viewFactoryData = new ViewFactoryData(
+            null,
+            ['EXT:includekrexx/Resources/Private/Partials'],
+            ['EXT:includekrexx/Resources/Private/Layouts'],
+            'EXT:includekrexx/Resources/Private/Templates/Modules/Message.html',
+            null,
+            'html'
+        );
+        $this->messageView = $viewFactory->create($viewFactoryData);
     }
 
     /**
@@ -170,13 +239,7 @@ class Log extends AbstractSubModule implements
             );
         }
 
-        $this->mainView->setTemplatePathAndFilename(
-            GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Private/Templates/Modules/Log.html')
-        );
-        $this->mainView->setPartialRootPaths(['EXT:includekrexx/Resources/Private/Partials']);
-        $this->mainView->setLayoutRootPaths(['EXT:includekrexx/Resources/Private/Layouts']);
         $this->mainView->assignMultiple($filelist);
-
 
         return $this->retrieveKrexxMessages() . $this->mainView->render();
     }
@@ -216,13 +279,7 @@ class Log extends AbstractSubModule implements
      */
     protected function renderMessage(string $text, string $severity): string
     {
-        $this->messageView->setTemplatePathAndFilename(
-            GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Private/Templates/Modules/Message.html')
-        );
-        $this->messageView->setPartialRootPaths(['EXT:includekrexx/Resources/Private/Partials']);
-        $this->messageView->setLayoutRootPaths(['EXT:includekrexx/Resources/Private/Layouts']);
         $this->messageView->assignMultiple(['text' => $text, 'severity' => $severity]);
-
         return $this->messageView->render();
     }
 
