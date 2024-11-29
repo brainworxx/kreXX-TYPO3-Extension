@@ -96,7 +96,7 @@ ajax every few seconds.
 Each entry has a unique colour to make new files better recognisable,
 
 .. figure:: https://raw.githubusercontent.com/brainworxx/kreXX-TYPO3-Extension/refs/heads/main/Documentation/Images/Logging.png
-	:alt: Logfiles backend menu
+   :alt: Logfiles backend menu
 
     Logfiles backend menu
 
@@ -111,8 +111,7 @@ A file can be access by simply clicking on the filename. The trashcan on the rig
 
 
 .. figure:: https://raw.githubusercontent.com/brainworxx/kreXX-TYPO3-Extension/refs/heads/main/Documentation/Images/AdminPanel.png
-   :class: with-shadow d-inline-block
-	:alt: Logfiles in the Admin Panel
+   :alt: Logfiles in the Admin Panel
 
     Logfiles in the Admin Panel
 
