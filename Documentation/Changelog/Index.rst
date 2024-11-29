@@ -10,6 +10,8 @@ Changelog
 Changes:
     * [Bugfix] Added the inline CSS to the asset collector to prevent CSP problems with it.
 
+-----
+
 :Version: 5.1.2
 :Date: 2024-11-26
 
