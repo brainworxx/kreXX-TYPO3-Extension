@@ -22,12 +22,7 @@
     "phpunit/phpunit": "^9.5 || ^10.5",
     "php-mock/php-mock-phpunit": "^2",
     "typo3/cms-adminpanel": "^10.4 || ^11 || ^12 || ^13",
-    "aimeos/aimeos-typo3": "^20.10 || ^21.10 || ^22.10 || ^23.10 || ^24.10",
-    "squizlabs/php_codesniffer": "*",
-    "phpmd/phpmd": "*",
-    "phpstan/phpstan": "*",
-    "friendsofphp/php-cs-fixer": "*",
-    "vimeo/psalm": "*"
+    "aimeos/aimeos-typo3": "^20.10 || ^21.10 || ^22.10 || ^23.10 || ^24.10"
   },
   "suggest": {
     "fluidtypo3/vhs": "Allows calling of methods in Fluid templates.",
