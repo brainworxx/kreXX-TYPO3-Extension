@@ -38,7 +38,7 @@ Fluid (and PHP debugger) with backend access to logfiles, code generation to rea
    :header-rows: 0
 
    * - **kreXX mainlibrary**
-     - https://github.com/brainworxx/kreXX 
+     - https://github.com/brainworxx/kreXX
    * - **Documentation**
      - https://docs.typo3.org/p/brainworxx/includekrexx/main/en-us/
    * - **TER:**
