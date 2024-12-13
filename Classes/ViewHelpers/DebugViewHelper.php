@@ -98,6 +98,13 @@ class DebugViewHelper extends AbstractViewHelper
     protected $analysisType = 'open';
 
     /**
+     * The rendered children.
+     *
+     * @var mixed
+     */
+    protected $children;
+
+    /**
      * {@inheritdoc}
      */
     public function initializeArguments(): void
@@ -115,6 +122,7 @@ class DebugViewHelper extends AbstractViewHelper
      */
     public function render(): string
     {
+        $this->children = $this->renderChildren();
         Pool::createPool();
         $view = $this->viewHelperVariableContainer->getView();
         $pool = Krexx::$pool;
@@ -149,9 +157,8 @@ class DebugViewHelper extends AbstractViewHelper
             $found = true;
         }
 
-        $children = $this->renderChildren();
-        if (isset($children)) {
-            Krexx::$type($children);
+        if (isset($this->children)) {
+            Krexx::$type($this->children);
             $found = true;
         }
 
