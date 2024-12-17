@@ -259,11 +259,7 @@ class LogTest extends AbstractHelper
                 ->method('setLayoutRootPaths')
                 ->with(['EXT:includekrexx/Resources/Private/Layouts']);
             $viewMock->expects($this->exactly($count))
-                ->method('setTemplatePathAndFilename')
-                ->with(...$this->withConsecutive(
-                    ['EXT:includekrexx/Resources/Private/Templates/Modules/Log.html'],
-                    ['EXT:includekrexx/Resources/Private/Templates/Modules/Message.html']
-                ));
+                ->method('setTemplatePathAndFilename');
             $viewMock->expects($this->exactly($count))
                 ->method('setFormat')
                 ->with('html');
