@@ -89,31 +89,17 @@ class Log extends AbstractSubModule implements
     protected const TRANSLATION_PREFIX = 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:';
 
     /**
-     * The main view for the admin panel display.
-     *
-     * @var ViewInterface|FluidViewInterface
-     */
-    protected $mainView;
-
-    /**
-     * The message view for the admin panel display.
-     *
-     * @var ViewInterface|FluidViewInterface
-     */
-    protected $messageView;
-
-    /**
      * Createing the views for the frontend.
      *
      * The StandaloneView got itself deprecated, so we need to mitigate this.
      */
-    public function __construct()
+    protected function createView(string $templateName)
     {
         if (interface_exists(ViewFactoryInterface::class)) {
-            $this->createViews13();
-        } else {
-            $this->createViews12();
+            return $this->createView13($templateName);
         }
+
+        return $this->createView12($templateName);
     }
 
     /**
@@ -126,29 +112,23 @@ class Log extends AbstractSubModule implements
      *   We do not test deprecated stuff.
      *   (Well, actually we do, but we do not send these data to CodeClimate)
      */
-    protected function createViews12()
+    protected function createView12(string $template): StandaloneView
     {
-        $this->mainView = GeneralUtility::makeInstance(StandaloneView::class);
-        $this->mainView->setPartialRootPaths(['EXT:includekrexx/Resources/Private/Partials']);
-        $this->mainView->setLayoutRootPaths(['EXT:includekrexx/Resources/Private/Layouts']);
-        $this->mainView->setTemplatePathAndFilename(
-            'EXT:includekrexx/Resources/Private/Templates/Modules/Log.html'
+        $view = GeneralUtility::makeInstance(StandaloneView::class);
+        $view->setPartialRootPaths(['EXT:includekrexx/Resources/Private/Partials']);
+        $view->setLayoutRootPaths(['EXT:includekrexx/Resources/Private/Layouts']);
+        $view->setTemplatePathAndFilename(
+            'EXT:includekrexx/Resources/Private/Templates/Modules/' . $template . '.html'
         );
-        $this->mainView->setFormat('html');
+        $view->setFormat('html');
 
-        $this->messageView = GeneralUtility::makeInstance(StandaloneView::class);
-        $this->messageView->setPartialRootPaths(['EXT:includekrexx/Resources/Private/Partials']);
-        $this->messageView->setLayoutRootPaths(['EXT:includekrexx/Resources/Private/Layouts']);
-        $this->messageView->setTemplatePathAndFilename(
-            'EXT:includekrexx/Resources/Private/Templates/Modules/Message.html'
-        );
-        $this->messageView->setFormat('html');
+        return $view;
     }
 
     /**
      * Create the views, TYPO3 12 style
      */
-    protected function createViews13()
+    protected function createView13(string $template): ViewInterface
     {
         /** @var ViewFactoryInterface $viewFactory */
         $viewFactory = GeneralUtility::makeInstance(ViewFactoryInterface::class);
@@ -156,21 +136,11 @@ class Log extends AbstractSubModule implements
             null,
             ['EXT:includekrexx/Resources/Private/Partials'],
             ['EXT:includekrexx/Resources/Private/Layouts'],
-            'EXT:includekrexx/Resources/Private/Templates/Modules/Log.html',
+            'EXT:includekrexx/Resources/Private/Templates/Modules/' . $template . '.html',
             null,
             'html'
         );
-        $this->mainView = $viewFactory->create($viewFactoryData);
-
-        $viewFactoryData = new ViewFactoryData(
-            null,
-            ['EXT:includekrexx/Resources/Private/Partials'],
-            ['EXT:includekrexx/Resources/Private/Layouts'],
-            'EXT:includekrexx/Resources/Private/Templates/Modules/Message.html',
-            null,
-            'html'
-        );
-        $this->messageView = $viewFactory->create($viewFactoryData);
+        return $viewFactory->create($viewFactoryData);
     }
 
     /**
@@ -239,9 +209,10 @@ class Log extends AbstractSubModule implements
             );
         }
 
-        $this->mainView->assignMultiple($filelist);
+        $view = $this->createView('Log');
+        $view->assignMultiple($filelist);
 
-        return $this->retrieveKrexxMessages() . $this->mainView->render();
+        return $this->retrieveKrexxMessages() . $view->render();
     }
 
     /**
@@ -279,8 +250,9 @@ class Log extends AbstractSubModule implements
      */
     protected function renderMessage(string $text, string $severity): string
     {
-        $this->messageView->assignMultiple(['text' => $text, 'severity' => $severity]);
-        return $this->messageView->render();
+        $view = $this->createView('Message');
+        $view->assignMultiple(['text' => $text, 'severity' => $severity]);
+        return $view->render();
     }
 
     /**
