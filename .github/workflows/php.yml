@@ -54,11 +54,11 @@ jobs:
       run: composer install --prefer-dist --no-progress
 
     - name: Build without coverage
-      if: ${{ matrix.env.CodeClimate == 'yes'}}
+      if: ${{ matrix.env.CodeClimate == 'no' }}
       run: composer test
 
     - name: Build
-      if: ${{ matrix.env.CodeClimate == 'yes' && env.BRANCH_NAME == 'main'}}
+      if: ${{ matrix.env.CodeClimate == 'yes' }}
       run: composer test-coverage
 
     - name: Publish code coverage
