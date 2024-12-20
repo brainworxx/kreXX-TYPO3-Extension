@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *

@@ -49,11 +49,15 @@ use StdClass;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(QueryDebugger::class, 'handle')]
+#[CoversMethod(QueryDebugger::class, 'retrieveSql')]
+#[CoversMethod(QueryDebugger::class, '__construct')]
 class QueryDebuggerTest extends AbstractHelper implements CallbackConstInterface
 {
-    const FINAL_CLASS_NAME_CACHE = 'finalClassNameCache';
-    const SINGLETON_INSTANCES = 'singletonInstances';
+    protected const FINAL_CLASS_NAME_CACHE = 'finalClassNameCache';
+    protected const SINGLETON_INSTANCES = 'singletonInstances';
 
     protected $expectation = 'SELECT * FROM whatever WHERE uid=&#039;nothing&#039;';
 
@@ -82,6 +86,9 @@ class QueryDebuggerTest extends AbstractHelper implements CallbackConstInterface
         Krexx::$pool->eventService = new Event(Krexx::$pool);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function tearDown(): void
     {
         parent::tearDown();
@@ -93,8 +100,6 @@ class QueryDebuggerTest extends AbstractHelper implements CallbackConstInterface
 
     /**
      * Test the assigning of the pool.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger::__construct
      */
     public function testConstruct()
     {
@@ -104,9 +109,6 @@ class QueryDebuggerTest extends AbstractHelper implements CallbackConstInterface
 
     /**
      * Test the debugging with a query interface.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger::handle
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger::retrieveSql
      */
     public function testHandleNormalObject()
     {
@@ -123,9 +125,6 @@ class QueryDebuggerTest extends AbstractHelper implements CallbackConstInterface
 
     /**
      * Test the debugging with a query builder.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger::handle
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger::retrieveSql
      */
     public function testHandleQueryBuilder()
     {
@@ -151,9 +150,6 @@ class QueryDebuggerTest extends AbstractHelper implements CallbackConstInterface
 
     /**
      * Test the debugging with a query interface.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger::handle
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger::retrieveSql
      */
     public function testHandleQueryInterface()
     {

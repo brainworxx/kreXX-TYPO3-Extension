@@ -19,7 +19,7 @@
   },
   "require-dev": {
     "typo3/cms-base-distribution": "^10.4 || ^11 || ^12 || ^13",
-    "phpunit/phpunit": "^9.5 || ^10.5",
+    "phpunit/phpunit": "^9.5 || ^10.5 || ^11.4",
     "php-mock/php-mock-phpunit": "^2",
     "typo3/cms-adminpanel": "^10.4 || ^11 || ^12 || ^13",
     "aimeos/aimeos-typo3": "^20.10 || ^21.10 || ^22.10 || ^23.10 || ^24.10"
@@ -64,7 +64,8 @@
     "issues": "https://github.com/brainworxx/kreXX-TYPO3-Extension/issues"
   },
   "scripts": {
-    "test": "./vendor/bin/phpunit --coverage-clover=./clover.xml --color -d memory_limit=-1 -c Build/phpunit.xml"
+    "test": "./vendor/bin/phpunit --color -d memory_limit=-1 -c Build/phpunit.xml",
+    "test-coverage": "./vendor/bin/phpunit --coverage-html=./coverage --color -d memory_limit=-1 -c Build/phpunit.xml"
   },
   "config": {
     "allow-plugins": {

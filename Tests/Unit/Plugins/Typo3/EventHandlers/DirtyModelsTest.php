@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -45,7 +46,11 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
 use TYPO3\CMS\Extbase\Persistence\Generic\Exception\TooDirtyException;
 use StdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(DirtyModels::class, 'handle')]
+#[CoversMethod(DirtyModels::class, 'createReadableBoolean')]
+#[CoversMethod(DirtyModels::class, '__construct')]
 class DirtyModelsTest extends AbstractHelper
 {
     /**
@@ -72,8 +77,6 @@ class DirtyModelsTest extends AbstractHelper
 
     /**
      * Test the assigning of the pool.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels::__construct
      */
     public function testConstruct()
     {
@@ -83,9 +86,6 @@ class DirtyModelsTest extends AbstractHelper
 
     /**
      * Test the additional stuff.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels::handle
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels::createReadableBoolean
      */
     public function testHandle()
     {

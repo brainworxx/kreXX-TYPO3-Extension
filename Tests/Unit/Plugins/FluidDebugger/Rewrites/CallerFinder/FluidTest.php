@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -34,20 +35,34 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
-use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Fluid\View\TemplatePaths;
 use TYPO3Fluid\Fluid\Core\Parser\ParsedTemplateInterface;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(AbstractFluid::class, 'findCaller')]
+#[CoversMethod(AbstractFluid::class, 'resolvePath')]
+#[CoversMethod(Fluid::class, 'getPartialPath')]
+#[CoversMethod(Fluid::class, 'resolveTemplateName')]
+#[CoversMethod(AbstractFluid::class, 'getType')]
+#[CoversMethod(AbstractFluid::class, 'resolveLineAndVarName')]
+#[CoversMethod(AbstractFluid::class, 'retrieveNameLine')]
+#[CoversMethod(AbstractFluid::class, 'checkForComplicatedStuff')]
+#[CoversMethod(Fluid::class, 'getLayoutPath')]
+#[CoversMethod(Fluid::class, 'getTemplatePath')]
 class FluidTest extends AbstractHelper
 {
-    const RENDERING_CONTEXT = 'renderingContext';
-    const GET_TEMPLATE_PATHS = 'getTemplatePaths';
-    const VARMANE = 'varname';
+    protected const RENDERING_CONTEXT = 'renderingContext';
+    protected const GET_TEMPLATE_PATHS = 'getTemplatePaths';
+    protected const VARMANE = 'varname';
 
+    /**
+     * {@inheritDoc}
+     */
     public function setUp(): void
     {
         parent::setUp();
@@ -59,14 +74,6 @@ class FluidTest extends AbstractHelper
 
     /**
      * Test the template part.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::findCaller
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolvePath
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid::getTemplatePath
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::getType
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveLineAndVarName
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::retrieveNameLine
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::checkForComplicatedStuff
      */
     public function testFindCallerTemplate()
     {
@@ -110,14 +117,6 @@ class FluidTest extends AbstractHelper
 
     /**
      * Test the layout part.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::findCaller
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolvePath
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid::getLayoutPath
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::getType
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveLineAndVarName
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::retrieveNameLine
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::checkForComplicatedStuff
      */
     public function testFindCallerLayout()
     {
@@ -155,15 +154,6 @@ class FluidTest extends AbstractHelper
 
     /**
      * Test the partial part.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::findCaller
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolvePath
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid::getPartialPath
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid::resolveTemplateName
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::getType
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveLineAndVarName
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::retrieveNameLine
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::checkForComplicatedStuff
      */
     public function testFindCallerPartial()
     {
@@ -210,11 +200,9 @@ class FluidTest extends AbstractHelper
             'Testing the complicated code generation stuff.'
         );
     }
+
     /**
      * Test what happens when there is an error.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::findCaller
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolvePath
      */
     public function testFindCallerError()
     {
@@ -230,14 +218,7 @@ class FluidTest extends AbstractHelper
     }
 
     /**
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::findCaller
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolvePath
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid::getPartialPath
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid::resolveTemplateName
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::getType
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveLineAndVarName
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::retrieveNameLine
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::checkForComplicatedStuff
+     * Find the caller, when krexx is called twice.
      */
     public function testFindCallerDoubleCall()
     {

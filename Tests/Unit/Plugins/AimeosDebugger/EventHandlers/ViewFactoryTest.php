@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -34,10 +35,10 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\EventHandlers;
 
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\AbstractEventHandler;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory;
 use Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\AimeosTestTrait;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
-use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
@@ -51,16 +52,20 @@ use Aimeos\MW\View\Standard as StandardView;
 use Aimeos\Base\View\Standard as BaseView;
 use Aimeos\MW\View\Helper\Csrf\Standard as CsrfHelper;
 use Aimeos\Base\View\Helper\Csrf\Standard as BaseCsrfHelper;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
-
+#[CoversMethod(ViewFactory::class, 'handle')]
+#[CoversMethod(ViewFactory::class, 'retrieveHelperList')]
+#[CoversMethod(ViewFactory::class, 'retrieveHelpers')]
+#[CoversMethod(AbstractEventHandler::class, 'retrieveProperty')]
+#[CoversMethod(ViewFactory::class, 'retrievePossibleOtherHelpers')]
+#[CoversMethod(ViewFactory::class, '__construct')]
 class ViewFactoryTest extends AbstractHelper
 {
     use AimeosTestTrait;
 
     /**
      * Test the handling of the pool.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory::__construct
      */
     public function testConstruct()
     {
@@ -72,12 +77,6 @@ class ViewFactoryTest extends AbstractHelper
 
     /**
      * Test the analysis of the view factory helper classes.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory::handle
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory::retrieveHelperList
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory::retrieveHelpers
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\AbstractEventHandler::retrieveProperty
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory::retrievePossibleOtherHelpers
      */
     public function testHandle()
     {
@@ -133,12 +132,6 @@ class ViewFactoryTest extends AbstractHelper
 
     /**
      * Test the analysis of the view factory helper classes.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory::handle
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory::retrieveHelperList
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory::retrieveHelpers
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\AbstractEventHandler::retrieveProperty
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory::retrievePossibleOtherHelpers
      */
     public function testHandleEarlyReturn()
     {

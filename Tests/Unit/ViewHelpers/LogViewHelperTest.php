@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -43,13 +44,13 @@ use Brainworxx\Krexx\Service\Config\Config;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\ViewHelperVariableContainer;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(LogViewHelper::class, 'analysis')]
 class LogViewHelperTest extends AbstractHelper
 {
     /**
      * Test the logging part of the log ViewHelper.
-     *
-     * @covers \Brainworxx\Includekrexx\ViewHelpers\LogViewHelper::analysis
      */
     public function testRender()
     {

@@ -50,16 +50,27 @@ use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Log\LogRecord;
 use stdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(FileWriter::class, 'writeLog')]
+#[CoversMethod(FileWriter::class, 'retrieveBacktrace')]
+#[CoversMethod(FileWriter::class, 'prepareLogModelOops')]
+#[CoversMethod(FileWriter::class, 'isDisabled')]
+#[CoversMethod(FileWriter::class, 'prepareLogModelNormal')]
+#[CoversMethod(FileWriter::class, 'applyTheConfiguration')]
+#[CoversMethod(FileWriter::class, '__construct')]
 class FileWriterTest extends AbstractHelper implements BacktraceConstInterface, ConstInterface
 {
-    const REQUEST_URI  = 'REQUEST_URI';
-    const REQUEST_URI_VAR = 'requestURIvar';
-    const REMOTE_ADDR = 'REMOTE_ADDR';
-    const ORIG_SCRIPT_NAME = 'ORIG_SCRIPT_NAME';
-    const QUERY_STRING = 'QUERY_STRING';
-    const REVERSE_PROXY_IP = 'reverseProxyIP';
+    protected const REQUEST_URI  = 'REQUEST_URI';
+    protected const REQUEST_URI_VAR = 'requestURIvar';
+    protected const REMOTE_ADDR = 'REMOTE_ADDR';
+    protected const ORIG_SCRIPT_NAME = 'ORIG_SCRIPT_NAME';
+    protected const QUERY_STRING = 'QUERY_STRING';
+    protected const REVERSE_PROXY_IP = 'reverseProxyIP';
 
+    /**
+     * {@inheritDoc}
+     */
     public function setUp(): void
     {
         parent::setUp();
@@ -93,8 +104,6 @@ class FileWriterTest extends AbstractHelper implements BacktraceConstInterface, 
 
     /**
      * Test the setting of the configuration.
-     *
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::__construct
      */
     public function testConstruct()
     {
@@ -110,12 +119,6 @@ class FileWriterTest extends AbstractHelper implements BacktraceConstInterface, 
 
     /**
      * Simple test with no configuration.
-     *
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::applyTheConfiguration
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveBacktrace
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::prepareLogModelNormal
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::prepareLogModelOops
      */
     public function testWriteLogNormal()
     {
@@ -160,10 +163,6 @@ class FileWriterTest extends AbstractHelper implements BacktraceConstInterface, 
 
     /**
      * Test the setting of configurations during the logging.
-     *
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::applyTheConfiguration
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveBacktrace
      */
     public function testWriteLogWithConfig()
     {
@@ -191,11 +190,6 @@ class FileWriterTest extends AbstractHelper implements BacktraceConstInterface, 
 
     /**
      * Test the early return, in case kreXX ist disabled.
-     *
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::applyTheConfiguration
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveBacktrace
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::isDisabled
      */
     public function testWriteLogDisabled()
     {
@@ -210,11 +204,6 @@ class FileWriterTest extends AbstractHelper implements BacktraceConstInterface, 
     /**
      * Test the disabling of the file writer, if we are facing a backend route
      * from includekrexx.
-     *
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveBacktrace
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::prepareLogModelNormal
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::isDisabled
      */
     public function testWriteLogRouting()
     {
@@ -235,11 +224,6 @@ class FileWriterTest extends AbstractHelper implements BacktraceConstInterface, 
 
     /**
      * Test the writing of the log file when getting the dreaded Oops error.
-     *
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveBacktrace
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::prepareLogModelOops
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::isDisabled
      */
     public function testWriteLogOops()
     {

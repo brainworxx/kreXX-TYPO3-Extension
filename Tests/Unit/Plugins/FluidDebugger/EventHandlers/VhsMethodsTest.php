@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -46,13 +47,14 @@ use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(VhsMethods::class, 'handle')]
+#[CoversMethod(VhsMethods::class, '__construct')]
 class VhsMethodsTest extends AbstractHelper implements CallbackConstInterface
 {
     /**
      * Test the setting of the pool.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\VhsMethods::__construct
      */
     public function testConstruct()
     {
@@ -62,8 +64,6 @@ class VhsMethodsTest extends AbstractHelper implements CallbackConstInterface
 
     /**
      * Test the fluid-vhs-ique source code generation for methods.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\VhsMethods::handle
      */
     public function testHandle()
     {

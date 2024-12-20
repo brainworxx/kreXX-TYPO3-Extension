@@ -43,14 +43,23 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Information\Typo3Version;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(LllString::class, 'canHandle')]
+#[CoversMethod(LllString::class, 'resolveExtPath')]
+#[CoversMethod(LllString::class, '__construct')]
+#[CoversMethod(LllString::class, 'handle')]
+#[CoversMethod(LllString::class, 'isActive')]
 class LllStringTest extends AbstractHelper
 {
-    const TSFE = 'TSFE';
-    const KREXX_DEBUGGER = 'kreXX Debugger';
+    protected const TSFE = 'TSFE';
+    protected const KREXX_DEBUGGER = 'kreXX Debugger';
 
     protected $originalLang;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -65,6 +74,9 @@ class LllStringTest extends AbstractHelper
         Krexx::$pool->messages->readHelpTexts();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function tearDown(): void
     {
         parent::tearDown();
@@ -76,8 +88,6 @@ class LllStringTest extends AbstractHelper
 
     /**
      * We test if the LocalizationUtility::translate still exists.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString::isActive
      */
     public function testIsActive()
     {
@@ -86,8 +96,6 @@ class LllStringTest extends AbstractHelper
 
     /**
      * Testing a method that only exists for the sake of the interface . . .
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString::handle
      */
     public function testHandle()
     {
@@ -97,10 +105,6 @@ class LllStringTest extends AbstractHelper
 
     /**
      * Testing the "glue" to the TYPO3 translation handling.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString::canHandle
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString::resolveExtPath
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString::__construct
      */
     public function testCanHandle()
     {

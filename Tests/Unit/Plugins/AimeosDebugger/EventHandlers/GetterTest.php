@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -34,6 +35,7 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\EventHandlers;
 
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\AbstractEventHandler;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter;
 use Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\AimeosTestTrait;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
@@ -44,7 +46,14 @@ use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Getter::class, 'handle')]
+#[CoversMethod(Getter::class, 'assignResultsToModel')]
+#[CoversMethod(Getter::class, 'retrieveValueArray')]
+#[CoversMethod(AbstractEventHandler::class, 'retrieveProperty')]
+#[CoversMethod(Getter::class, 'retrievePossibleKey')]
+#[CoversMethod(Getter::class, '__construct')]
 class GetterTest extends AbstractHelper
 {
     use AimeosTestTrait;
@@ -68,8 +77,6 @@ class GetterTest extends AbstractHelper
 
     /**
      * Test the assigning of the pool.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter::__construct
      */
     public function testConstruct()
     {
@@ -81,8 +88,6 @@ class GetterTest extends AbstractHelper
 
     /**
      * Test the analysis of something else.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter::handle
      */
     public function testHandleEmpty()
     {
@@ -112,12 +117,6 @@ class GetterTest extends AbstractHelper
 
     /**
      * Test the analysis of an Aimeos item.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter::handle
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter::assignResultsToModel
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter::retrieveValueArray
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\AbstractEventHandler::retrieveProperty
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter::retrievePossibleKey
      */
     public function testHandle()
     {

@@ -1,4 +1,11 @@
-<phpunit bootstrap="../Tests/Scripts/Bootstrap.php" stopOnFailure="true">
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="../Tests/Scripts/Bootstrap.php"
+         cacheDirectory=".phpunit.cache"
+         beStrictAboutOutputDuringTests="true"
+         failOnRisky="true"
+         failOnWarning="true">
     <testsuites>
         <testsuite name="krexxsuit">
             <directory>../Resources/Private/krexx/tests</directory>
@@ -7,10 +14,11 @@
             <directory>../Tests</directory>
         </testsuite>
     </testsuites>
-    <coverage processUncoveredFiles="true">
+
+    <source restrictNotices="true" restrictWarnings="true">
         <include>
             <directory suffix=".php">../Classes</directory>
             <directory suffix=".php">../Resources/Private/krexx/src</directory>
         </include>
-    </coverage>
+    </source>
 </phpunit>

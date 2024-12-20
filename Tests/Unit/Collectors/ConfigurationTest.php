@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -38,16 +39,16 @@ use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Service\Config\Config;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Configuration::class, 'assignData')]
+#[CoversMethod(Configuration::class, 'retrieveConfiguration')]
+#[CoversMethod(Configuration::class, 'applyFallbackToConfig')]
+#[CoversMethod(Configuration::class, 'retrieveDropDowns')]
 class ConfigurationTest extends AbstractHelper
 {
     /**
-     * The the assigning of data to the view.
-     *
-     * @covers \Brainworxx\Includekrexx\Collectors\Configuration::assignData
-     * @covers \Brainworxx\Includekrexx\Collectors\Configuration::retrieveConfiguration
-     * @covers \Brainworxx\Includekrexx\Collectors\Configuration::applyFallbackToConfig
-     * @covers \Brainworxx\Includekrexx\Collectors\Configuration::retrieveDropDowns
+     * Test the assigning of data to the view.
      */
     public function testAssignData()
     {

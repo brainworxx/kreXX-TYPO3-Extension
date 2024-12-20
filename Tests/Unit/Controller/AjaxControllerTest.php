@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -38,13 +39,16 @@ use Brainworxx\Includekrexx\Collectors\LogfileList;
 use Brainworxx\Includekrexx\Controller\AjaxController;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use TYPO3\CMS\Core\Http\ServerRequest;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(AjaxController::class, 'deleteAction')]
+#[CoversMethod(AjaxController::class, 'hasAccess')]
+#[CoversMethod(AjaxController::class, 'delete')]
+#[CoversMethod(AjaxController::class, 'refreshLoglistAction')]
 class AjaxControllerTest extends AbstractHelper
 {
     /**
-     * Test the retrival of the log file list.
-     *
-     * @covers \Brainworxx\Includekrexx\Controller\AjaxController::refreshLoglistAction
+     * Test the retrieval of the log file list.
      */
     public function testRefreshLoglistAction()
     {
@@ -66,9 +70,6 @@ class AjaxControllerTest extends AbstractHelper
 
     /**
      * Test the deleting attempt of a logfile.
-     *
-     * @covers \Brainworxx\Includekrexx\Controller\AjaxController::deleteAction
-     * @covers \Brainworxx\Includekrexx\Controller\AjaxController::hasAccess
      */
     public function testDeleteActionNoAccess()
     {
@@ -82,10 +83,6 @@ class AjaxControllerTest extends AbstractHelper
 
     /**
      * Testing the real deletion of a file.
-     *
-     * @covers \Brainworxx\Includekrexx\Controller\AjaxController::deleteAction
-     * @covers \Brainworxx\Includekrexx\Controller\AjaxController::hasAccess
-     * @covers \Brainworxx\Includekrexx\Controller\AjaxController::delete
      */
     public function testDeleteActionNormal()
     {
@@ -116,10 +113,6 @@ class AjaxControllerTest extends AbstractHelper
 
     /**
      * Testing the real deletion of a file wit an error.
-     *
-     * @covers \Brainworxx\Includekrexx\Controller\AjaxController::deleteAction
-     * @covers \Brainworxx\Includekrexx\Controller\AjaxController::hasAccess
-     * @covers \Brainworxx\Includekrexx\Controller\AjaxController::delete
      */
     public function testDeleteActionError()
     {

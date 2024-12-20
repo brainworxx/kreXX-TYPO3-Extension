@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -48,7 +49,6 @@ use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Scalar\String\Xml;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
-use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Controller\BacktraceController;
 use Brainworxx\Krexx\Controller\DumpController;
 use Brainworxx\Krexx\Controller\EditSettingsController;
@@ -64,11 +64,22 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput as T3CheckOutput;
 use Brainworxx\Krexx\View\Output\CheckOutput;
 use Krexx;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Configuration::class, 'exec')]
+#[CoversMethod(Configuration::class, 'registerBlacklisting')]
+#[CoversMethod(Configuration::class, 'createWorkingDirectories')]
+#[CoversMethod(Configuration::class, 'registerVersionDependantStuff')]
+#[CoversMethod(Configuration::class, 'registerFileWriterSettings')]
+#[CoversMethod(Configuration::class, 'registerFileWriter')]
+#[CoversMethod(Configuration::class, 'createFileWriterValidator')]
+#[CoversMethod(Configuration::class, 'generateTempPaths')]
+#[CoversMethod(Configuration::class, 'getVersion')]
+#[CoversMethod(Configuration::class, 'getName')]
 class ConfigurationTest extends AbstractHelper implements ConstInterface
 {
 
-    const REVERSE_PROXY = 'reverseProxyIP';
+    protected const REVERSE_PROXY = 'reverseProxyIP';
     protected const TYPO3_TEMP = 'typo3temp';
 
     /**
@@ -119,8 +130,6 @@ class ConfigurationTest extends AbstractHelper implements ConstInterface
 
     /**
      * Simple string contains assertion.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::getName
      */
     public function testGetName()
     {
@@ -129,8 +138,6 @@ class ConfigurationTest extends AbstractHelper implements ConstInterface
 
     /**
      * Test the getting of the version, which is the same as the extension.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::getVersion
      */
     public function testGetVersion()
     {
@@ -148,15 +155,6 @@ class ConfigurationTest extends AbstractHelper implements ConstInterface
 
     /**
      * Test the adjustments done by the TYPO3 plugin.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::exec
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::registerBlacklisting
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::createWorkingDirectories
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::registerVersionDependantStuff
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::registerFileWriterSettings
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::registerFileWriter
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::createFileWriterValidator
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::generateTempPaths
      */
     public function testExec()
     {

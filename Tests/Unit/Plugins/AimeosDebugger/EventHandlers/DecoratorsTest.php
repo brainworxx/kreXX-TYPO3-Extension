@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -38,6 +39,7 @@ use Aimeos\Map;
 use Aimeos\MShop\Context\Item\Standard as MShopContextStandard;
 use Aimeos\MShop\Context as MShopContext;
 use Aimeos\Bootstrap;
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\AbstractEventHandler;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Decorators;
 use Brainworxx\Includekrexx\Tests\Fixtures\AimeosJobsDecorator;
 use Brainworxx\Includekrexx\Tests\Fixtures\Fixture20Job;
@@ -55,15 +57,23 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use stdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Decorators::class, 'handle')]
+#[CoversMethod(Decorators::class, 'retrieveMethods')]
+#[CoversMethod(Decorators::class, 'checkClassName')]
+#[CoversMethod(Decorators::class, 'retrievePublicMethods')]
+#[CoversMethod(Decorators::class, 'retrieveReceiverObject')]
+#[CoversMethod(AbstractEventHandler::class, 'retrieveProperty')]
+#[CoversMethod(Decorators::class, 'retrieveProperty')]
+#[CoversMethod(Decorators::class, 'retrieveReceiverObjectName')]
+#[CoversMethod(Decorators::class, '__construct')]
 class DecoratorsTest extends AbstractHelper
 {
     use AimeosTestTrait;
 
     /**
      * Test the setting of the pool.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Decorators::__construct
      */
     public function testConstruct()
     {
@@ -75,10 +85,6 @@ class DecoratorsTest extends AbstractHelper
 
     /**
      * Call the handle with an invalid class instance.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Decorators::handle
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Decorators::checkClassName
-     *
      */
     public function testHandleEarlyReturn()
     {
@@ -103,15 +109,6 @@ class DecoratorsTest extends AbstractHelper
 
     /**
      * Create a decorator, trigger the event and assert the result.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Decorators::handle
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Decorators::retrieveMethods
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Decorators::checkClassName
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Decorators::retrievePublicMethods
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Decorators::retrieveReceiverObject
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\AbstractEventHandler::retrieveProperty
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Decorators::retrieveProperty
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Decorators::retrieveReceiverObjectName
      */
     public function testHandle()
     {

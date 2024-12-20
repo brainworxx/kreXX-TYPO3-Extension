@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -36,14 +37,14 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger\Rewrites\Code
 
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Connectors;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Connectors::class, 'getConnectorRight')]
+#[CoversMethod(Connectors::class, '__construct')]
 class ConnectorsTest extends AbstractHelper
 {
-
     /**
      * Test the update of the connectors array.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Connectors::__construct
      */
     public function testConstruct()
     {
@@ -65,8 +66,6 @@ class ConnectorsTest extends AbstractHelper
 
     /**
      * Test the handling of the do-nothing approach.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Connectors::getConnectorRight
      */
     public function testGetConnectorRight()
     {

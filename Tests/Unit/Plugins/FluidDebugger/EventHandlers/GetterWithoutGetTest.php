@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -44,13 +45,14 @@ use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\GetterFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(GetterWithoutGet::class, 'handle')]
+#[CoversMethod(GetterWithoutGet::class, '__construct')]
 class GetterWithoutGetTest extends AbstractHelper implements CallbackConstInterface
 {
     /**
      * Test the setting of the pool.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterWithoutGet::__construct
      */
     public function testConstruct()
     {
@@ -60,8 +62,6 @@ class GetterWithoutGetTest extends AbstractHelper implements CallbackConstInterf
 
     /**
      * Test the removal of 'get' from the methodnames in fluid mode.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterWithoutGet::handle
      */
     public function testHandle()
     {

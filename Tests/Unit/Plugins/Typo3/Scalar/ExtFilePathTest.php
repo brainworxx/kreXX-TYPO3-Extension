@@ -43,10 +43,14 @@ use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Package\UnitTestPackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ExtFilePath::class, 'canHandle')]
 class ExtFilePathTest extends AbstractHelper
 {
-
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -59,8 +63,6 @@ class ExtFilePathTest extends AbstractHelper
 
     /**
      * Test the resolving of EXT: strings for their actual files.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath::canHandle
      */
     public function testCanHandle()
     {
