@@ -36,22 +36,25 @@
 namespace Brainworxx\Krexx\Tests\Unit\View\Skins\SmokyGrey;
 
 use Brainworxx\Krexx\Analyse\Code\Codegen;
-use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderSmokyGrey;
+use Brainworxx\Krexx\View\AbstractRender;
+use Brainworxx\Krexx\View\Skins\SmokyGrey\ConnectorRight;
+use Brainworxx\Krexx\View\Skins\SmokyGrey\ExpandableChild;
+use Brainworxx\Krexx\View\Skins\SmokyGrey\Help;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ExpandableChild::class, 'renderExpandableChild')]
+#[CoversMethod(ExpandableChild::class, 'renderSourceButtonSg')]
+#[CoversMethod(ConnectorRight::class, 'renderConnectorRight')]
+#[CoversMethod(Help::class, 'renderHelp')]
+#[CoversMethod(AbstractRender::class, 'retrieveTypeClasses')]
+#[CoversMethod(AbstractRender::class, 'encodeJson')]
 class ExpandableChildTest extends AbstractRenderSmokyGrey
 {
     /**
      * Test the rendering of an expandable child.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\ExpandableChild::renderExpandableChild
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\ExpandableChild::renderSourceButtonSg
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\ConnectorRight::renderConnectorRight
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Help::renderHelp
-     * @covers \Brainworxx\Krexx\View\AbstractRender::retrieveTypeClasses
-     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderExpandableChild()
     {

@@ -35,21 +35,19 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Comment;
 
+use Brainworxx\Krexx\Analyse\Comment\AbstractComment;
 use Brainworxx\Krexx\Analyse\Comment\Functions;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use ReflectionFunction;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Functions::class, 'getComment')]
+#[CoversMethod(AbstractComment::class, 'prettifyComment')]
 class FunctionsTest extends AbstractHelper
 {
-
     /**
      * Test the getting of a comment from a closure.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Comment\Functions::getComment
-     * @covers \Brainworxx\Krexx\Analyse\Comment\AbstractComment::prettifyComment
-     *
-     * @throws \ReflectionException
      */
     public function testGetComment()
     {
@@ -62,7 +60,13 @@ class FunctionsTest extends AbstractHelper
         };
         $functionComment = new Functions(Krexx::$pool);
         $reflection = new ReflectionFunction($fixture);
-
         $this->assertEquals('Do something.', $functionComment->getComment($reflection));
+
+        $fixture = function () {
+            // Doing something else.
+            return 2;
+        };
+        $reflection = new ReflectionFunction($fixture);
+        $this->assertEquals('', $functionComment->getComment($reflection));
     }
 }

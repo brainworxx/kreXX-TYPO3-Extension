@@ -46,14 +46,21 @@ use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 use Brainworxx\Krexx\View\Output\Chunks;
-use StdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
-/**
- * The second most important part. Here we save memory by avoiding large string
- * in memory.
- *
- * @package Brainworxx\Krexx\Tests\View\Output
- */
+#[CoversMethod(Chunks::class, 'getOfficialEncoding')]
+#[CoversMethod(Chunks::class, 'detectEncoding')]
+#[CoversMethod(Chunks::class, '__destruct')]
+#[CoversMethod(Chunks::class, 'addMetadata')]
+#[CoversMethod(Chunks::class, 'isLoggingAllowed')]
+#[CoversMethod(Chunks::class, 'setLoggingAllowed')]
+#[CoversMethod(Chunks::class, 'isChunkAllowed')]
+#[CoversMethod(Chunks::class, 'setChunkAllowed')]
+#[CoversMethod(Chunks::class, 'saveDechunkedToFile')]
+#[CoversMethod(Chunks::class, 'sendDechunkedToBrowser')]
+#[CoversMethod(Chunks::class, 'dechunkMe')]
+#[CoversMethod(Chunks::class, 'chunkMe')]
+#[CoversMethod(Chunks::class, '__construct')]
 class ChunksTest extends AbstractHelper
 {
     public const  CHUNK_DIR = 'chunkDir';
@@ -67,8 +74,6 @@ class ChunksTest extends AbstractHelper
 
     /**
      * Test the initialization of a new chunks class.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::__construct
      */
     public function testConstruct()
     {
@@ -102,8 +107,6 @@ class ChunksTest extends AbstractHelper
 
     /**
      * Test the adding of a small chunk string
-     *
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::chunkMe
      */
     public function testChunkMeSmall()
     {
@@ -120,8 +123,6 @@ class ChunksTest extends AbstractHelper
 
     /**
      * Test the adding of a large chunk string, without chunking.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::chunkMe
      */
     public function testChunkMeLargeNochunk()
     {
@@ -141,8 +142,6 @@ class ChunksTest extends AbstractHelper
 
     /**
      * Test the adding of a large chunk string.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::chunkMe
      */
     public function testChunkMeLarge()
     {
@@ -179,9 +178,6 @@ class ChunksTest extends AbstractHelper
 
     /**
      * Test the sending of the output to the browser.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::sendDechunkedToBrowser
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::dechunkMe
      */
     public function testSendDechunkedToBrowser()
     {
@@ -206,14 +202,12 @@ class ChunksTest extends AbstractHelper
                 [$chunk1File],
                 [$chunk2File],
                 [$chunk3File]
-            ))->will(
-                $this->returnValueMap(
-                    [
-                        [$chunk1File, true, $chunk1Content],
-                        [$chunk2File, true, $chunk2Content],
-                        [$chunk3File, true, $chunk3Content],
-                    ]
-                )
+            ))->willReturnMap(
+                [
+                    [$chunk1File, true, $chunk1Content],
+                    [$chunk2File, true, $chunk2Content],
+                    [$chunk3File, true, $chunk3Content],
+                ]
             );
         $fileServiceMock->expects($this->exactly(3))
             ->method(static::DELETE_FILE)
@@ -241,9 +235,6 @@ class ChunksTest extends AbstractHelper
 
     /**
      * Test the sending of the output to a logfile.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::saveDechunkedToFile
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::dechunkMe
      */
     public function testSaveDechunkedToFile()
     {
@@ -272,14 +263,12 @@ class ChunksTest extends AbstractHelper
                 [$chunk1File],
                 [$chunk2File],
                 [$chunk3File]
-            ))->will(
-                $this->returnValueMap(
-                    [
-                        [$chunk1File, true, $chunk1Content],
-                        [$chunk2File, true, $chunk2Content],
-                        [$chunk3File, true, $chunk3Content],
-                    ]
-                )
+            ))->willReturnMap(
+                [
+                    [$chunk1File, true, $chunk1Content],
+                    [$chunk2File, true, $chunk2Content],
+                    [$chunk3File, true, $chunk3Content],
+                ]
             );
         $fileServiceMock->expects($this->exactly(4))
             ->method(static::DELETE_FILE)
@@ -317,8 +306,6 @@ class ChunksTest extends AbstractHelper
 
     /**
      * Test the setter for chunk allowance. Pun intended.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::setChunkAllowed
      */
     public function testSetChunkAllowed()
     {
@@ -332,8 +319,6 @@ class ChunksTest extends AbstractHelper
 
     /**
      * Test the getter for chunk allowance. Pun intended.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::isChunkAllowed
      */
     public function testIsChunkAllowed()
     {
@@ -346,9 +331,7 @@ class ChunksTest extends AbstractHelper
     }
 
     /**
-     * Test the setter fpr the logging allowance. The puns are killing me.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::setLoggingAllowed
+     * Test the setter for the logging allowance. The puns are killing me.
      */
     public function testSetLoggingAllowed()
     {
@@ -361,9 +344,7 @@ class ChunksTest extends AbstractHelper
     }
 
     /**
-     * Test the getter fpr the logging is allowed. No pun,see?
-     *
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::isLoggingAllowed
+     * Test the getter for the logging is allowed. No pun,see?
      */
     public function testIsLoggingAllowed()
     {
@@ -377,8 +358,6 @@ class ChunksTest extends AbstractHelper
 
     /**
      * Test the adding of meta data.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::addMetadata
      */
     public function testAddMetaData()
     {
@@ -402,8 +381,6 @@ class ChunksTest extends AbstractHelper
     /**
      * Test cleanup of all currently used chunkfiles, in case there was
      * something left. Actually, this should not happen.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::__destruct
      */
     public function testDestruct()
     {
@@ -440,8 +417,6 @@ class ChunksTest extends AbstractHelper
 
     /**
      * Test the encoding detection.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::detectEncoding
      */
     public function testDetectEncoding()
     {
@@ -468,8 +443,6 @@ class ChunksTest extends AbstractHelper
 
     /**
      * Test the getter for the official encoding.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::getOfficialEncoding
      */
     public function testGetOfficialEncoding()
     {

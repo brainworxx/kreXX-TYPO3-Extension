@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Service\Config\Fallback;
@@ -46,7 +47,12 @@ use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 use ReflectionMethod;
 use stdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Methods::class, 'callMe')]
+#[CoversMethod(Methods::class, 'analyseMethods')]
+#[CoversMethod(Methods::class, 'generateDomIdFromClassname')]
+#[CoversMethod(AbstractObjectAnalysis::class, 'reflectionSorting')]
 class MethodsTest extends AbstractHelper
 {
     public const  PRIVATE_METHOD = 'privateMethod';
@@ -117,11 +123,6 @@ class MethodsTest extends AbstractHelper
 
     /**
      * Testing the methods analysis recursion.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::analyseMethods
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::generateDomIdFromClassname
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
      */
     public function testCallMeRecursion()
     {
@@ -145,13 +146,6 @@ class MethodsTest extends AbstractHelper
 
     /**
      * Testing the analysis for public methods only.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::analyseMethods
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::generateDomIdFromClassname
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
-     *
-     * @throws \ReflectionException
      */
     public function testCallMePublic()
     {
@@ -184,13 +178,6 @@ class MethodsTest extends AbstractHelper
 
     /**
      * Testing the analysis for public and protected methods.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::analyseMethods
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::generateDomIdFromClassname
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeProtected()
     {
@@ -224,13 +211,6 @@ class MethodsTest extends AbstractHelper
 
     /**
      * Testing the analysis for public and private methods.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::analyseMethods
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::generateDomIdFromClassname
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
-     *
-     * @throws \ReflectionException
      */
     public function testCallMePrivate()
     {
@@ -264,13 +244,6 @@ class MethodsTest extends AbstractHelper
 
     /**
      * Testing the analysis for public and private methods.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::analyseMethods
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::generateDomIdFromClassname
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
-     *
-     * @throws \ReflectionException
      */
     public function testCallMePrivateProtected()
     {
@@ -305,13 +278,6 @@ class MethodsTest extends AbstractHelper
 
     /**
      * Testing the analysis with an empty stdClass
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::analyseMethods
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::generateDomIdFromClassname
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
-     *
-     * @throws \ReflectionException
      */
     public function testCallMePrivateEmpty()
     {

@@ -35,19 +35,22 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Comment;
 
+use Brainworxx\Krexx\Analyse\Comment\AbstractComment;
 use Brainworxx\Krexx\Analyse\Comment\Properties;
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
+use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
 use Brainworxx\Krexx\Tests\Fixtures\PrivateFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use ReflectionProperty;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Properties::class, 'getComment')]
+#[CoversMethod(AbstractComment::class, 'prettifyComment')]
 class PropertiesTest extends AbstractHelper
 {
     /**
      * Testing the comment retrieval for properties.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Comment\Properties::getComment
-     * @covers \Brainworxx\Krexx\Analyse\Comment\AbstractComment::prettifyComment
      */
     public function testGetComment()
     {
@@ -58,5 +61,9 @@ class PropertiesTest extends AbstractHelper
             'A private that overwrites a property from the SimpleFixture',
             $propertiesComment->getComment($reflectionProperty)
         );
+
+        $reflectionClass = new ReflectionClass(PrivateFixture::class);
+        $reflectionProperty = new UndeclaredProperty($reflectionClass, 'value5');
+        $this->assertEquals('', $propertiesComment->getComment($reflectionProperty));
     }
 }

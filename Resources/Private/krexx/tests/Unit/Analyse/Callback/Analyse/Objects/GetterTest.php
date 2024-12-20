@@ -45,7 +45,12 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 use ReflectionMethod;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Getter::class, 'callMe')]
+#[CoversMethod(Getter::class, 'populateGetterLists')]
+#[CoversMethod(Getter::class, 'retrieveMethodList')]
+#[CoversMethod(Getter::class, 'callMe')]
 class GetterTest extends AbstractHelper
 {
     public const  TEST_STRING = 'some name';
@@ -81,12 +86,6 @@ class GetterTest extends AbstractHelper
 
     /**
      * Test without any methods at all.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::populateGetterLists
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::retrieveMethodList
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeEmpty()
     {
@@ -117,12 +116,6 @@ class GetterTest extends AbstractHelper
 
     /**
      * Test without any getter methods.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::populateGetterLists
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::retrieveMethodList
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeWithoutGetter()
     {
@@ -151,13 +144,6 @@ class GetterTest extends AbstractHelper
         $this->assertEquals([], CallbackCounter::$staticParameters);
     }
 
-    /**
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::populateGetterLists
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::retrieveMethodList
-     *
-     * @throws \ReflectionException
-     */
     public function testCallMeInScope()
     {
         // Setup the events.
@@ -201,13 +187,6 @@ class GetterTest extends AbstractHelper
         $this->assertEquals($expectedResult, CallbackCounter::$staticParameters);
     }
 
-    /**
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::populateGetterLists
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::retrieveMethodList
-     *
-     * @throws \ReflectionException
-     */
     public function testCallMeOutOfScope()
     {
         // Setup the events.

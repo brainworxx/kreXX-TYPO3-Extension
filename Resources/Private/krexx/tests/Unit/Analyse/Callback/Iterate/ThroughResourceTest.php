@@ -39,7 +39,9 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughResource;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ThroughResource::class, 'callMe')]
 class ThroughResourceTest extends AbstractHelper
 {
     public const  SOME_KEY = 'some_key';
@@ -51,8 +53,6 @@ class ThroughResourceTest extends AbstractHelper
 
     /**
      * Testing the analysis of a resource stream.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughResource::callMe
      */
     public function testCallMe()
     {

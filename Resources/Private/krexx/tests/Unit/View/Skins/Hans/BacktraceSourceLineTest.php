@@ -36,13 +36,14 @@
 namespace Brainworxx\Krexx\Tests\Unit\View\Skins\Hans;
 
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
+use Brainworxx\Krexx\View\Skins\Hans\BacktraceSourceLine;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(BacktraceSourceLine::class, 'renderBacktraceSourceLine')]
 class BacktraceSourceLineTest extends AbstractRenderHans
 {
     /**
      * Test the rendering of a single source code line for the backtrace.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\BacktraceSourceLine::renderBacktraceSourceLine
      */
     public function testRenderBacktraceSourceLine()
     {

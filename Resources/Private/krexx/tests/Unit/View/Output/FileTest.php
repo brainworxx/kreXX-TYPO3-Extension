@@ -38,17 +38,18 @@ namespace Brainworxx\Krexx\Tests\Unit\View\Output;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\Cleanup;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use Brainworxx\Krexx\View\Output\AbstractOutput;
 use Brainworxx\Krexx\View\Output\Chunks;
 use Brainworxx\Krexx\View\Output\File;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(File::class, 'finalize')]
+#[CoversMethod(File::class, 'destruct')]
+#[CoversMethod(AbstractOutput::class, 'destruct')]
 class FileTest extends AbstractHelper
 {
     /**
      * Test the creation of a file.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\File::finalize
-     * @covers \Brainworxx\Krexx\View\Output\File::destruct
-     * @covers \Brainworxx\Krexx\View\Output\AbstractOutput::destruct
      */
     public function testFinalize()
     {

@@ -41,15 +41,16 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Krexx;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use ReflectionFunction;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ReturnType::class, 'getComment')]
+#[CoversMethod(ReturnType::class, 'retrieveReturnTypeFromComment')]
 class ReturnTypesTest extends AbstractHelper
 {
     /**
      * Test the retrieval of different return types from different sources.
      *
      * @see \Brainworxx\Krexx\Tests\Fixtures\ReturnTypeFixture
-     * @covers \Brainworxx\Krexx\Analyse\Comment\ReturnType::getComment
-     * @covers \Brainworxx\Krexx\Analyse\Comment\ReturnType::retrieveReturnTypeFromComment
      */
     public function testGetComment()
     {

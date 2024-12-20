@@ -52,7 +52,13 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use DateTime;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Meta::class, 'callMe')]
+#[CoversMethod(Meta::class, 'generateDomIdFromClassname')]
+#[CoversMethod(Meta::class, 'analyseMeta')]
+#[CoversMethod(Meta::class, 'generateMetaData')]
+#[CoversMethod(Meta::class, 'generateName')]
 class MetaTest extends AbstractHelper
 {
     /**
@@ -72,9 +78,6 @@ class MetaTest extends AbstractHelper
 
     /**
      * Test the recursion handling.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::generateDomIdFromClassname
      */
     public function testCallMeRecursion()
     {
@@ -127,12 +130,6 @@ class MetaTest extends AbstractHelper
 
     /**
      * Test the start of the meta analysis.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::generateDomIdFromClassname
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::analyseMeta
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::generateMetaData
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::generateName
      */
     public function testCallMe()
     {
@@ -203,12 +200,6 @@ class MetaTest extends AbstractHelper
 
     /**
      * Test the meta analysis with other class types.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::generateDomIdFromClassname
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::analyseMeta
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::generateMetaData
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::generateName
      */
     public function testCallMeOthers()
     {

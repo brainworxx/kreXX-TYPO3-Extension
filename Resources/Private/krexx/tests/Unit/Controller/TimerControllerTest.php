@@ -39,10 +39,14 @@ use Brainworxx\Krexx\Controller\DumpController;
 use Brainworxx\Krexx\Controller\TimerController;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(TimerController::class, 'timerEndAction')]
+#[CoversMethod(TimerController::class, 'miniBenchTo')]
+#[CoversMethod(TimerController::class, 'timerAction')]
+#[CoversMethod(TimerController::class, '__construct')]
 class TimerControllerTest extends AbstractController
 {
-
     public const  COUNTER_CACHE = 'counterCache';
     public const  TIME_KEEPING = 'timekeeping';
     /**
@@ -61,10 +65,9 @@ class TimerControllerTest extends AbstractController
             ->willReturn(3000);
     }
 
-    protected function krexxDown()
+    protected function tearDown(): void
     {
-        parent::krexxDown();
-
+        parent::tearDown();
         // Clean up the timekeeping stuff.
         $this->setValueByReflection(static::COUNTER_CACHE, [], $this->controller);
         $this->setValueByReflection(static::TIME_KEEPING, [], $this->controller);
@@ -72,8 +75,6 @@ class TimerControllerTest extends AbstractController
 
     /**
      * Testing the setting of the pool
-     *
-     * @covers \Brainworxx\Krexx\Controller\TimerController::__construct
      */
     public function testConstruct()
     {
@@ -91,8 +92,6 @@ class TimerControllerTest extends AbstractController
 
     /**
      * Testing the timer action.
-     *
-     * @covers \Brainworxx\Krexx\Controller\TimerController::timerAction
      */
     public function testTimerAction()
     {
@@ -125,16 +124,13 @@ class TimerControllerTest extends AbstractController
 
     /**
      * Testing the output of the timer.
-     *
-     * @covers \Brainworxx\Krexx\Controller\TimerController::timerEndAction
-     * @covers \Brainworxx\Krexx\Controller\TimerController::miniBenchTo
      */
     public function testTimerEndAction()
     {
         $dumpMock = $this->createMock(DumpController::class);
         $dumpMock->expects($this->once())
             ->method('dumpAction')
-            ->will($this->returnCallback(
+            ->willReturnCallback(
                 function ($bench, $headline) {
                     $this->assertEquals('kreXX timer', $headline);
                     $this->assertEquals(
@@ -147,7 +143,7 @@ class TimerControllerTest extends AbstractController
                     );
                     return new DumpController(new Pool());
                 }
-            ));
+            );
 
         $poolMock = $this->createMock(Pool::class);
         $poolMock->expects($this->once())

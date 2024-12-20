@@ -41,23 +41,31 @@ use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\Validation;
 use Brainworxx\Krexx\Service\Plugin\NewSetting;
 use Brainworxx\Krexx\Service\Plugin\Registration;
-use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use ReflectionType;
 use ReflectionGenerator;
 use Reflector;
 use stdClass;
 use SplObjectStorage;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Validation::class, 'evaluateSetting')]
+#[CoversMethod(Validation::class, 'evalBool')]
+#[CoversMethod(Validation::class, 'evalDebugMethods')]
+#[CoversMethod(Validation::class, 'evalDestination')]
+#[CoversMethod(Validation::class, 'evalInt')]
+#[CoversMethod(Validation::class, 'evalIpRange')]
+#[CoversMethod(Validation::class, 'evalMaxRuntime')]
+#[CoversMethod(Validation::class, 'evalSkin')]
+#[CoversMethod(Validation::class, 'evalLanguage')]
+#[CoversMethod(Validation::class, 'isAllowedDebugCall')]
+#[CoversMethod(Validation::class, '__construct')]
 class ValidationTest extends AbstractHelper
 {
-
     public const  WHATEVER = 'whatever';
 
     /**
      * Testing the setting of the pool and the merging of the method blacklist
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::__construct
      */
     public function testConstruct()
     {
@@ -92,8 +100,6 @@ class ValidationTest extends AbstractHelper
 
     /**
      * Testing, if a specific class is blacklisted for debug methods.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::isAllowedDebugCall
      */
     public function testIsAllowedDebugCall()
     {
@@ -112,16 +118,6 @@ class ValidationTest extends AbstractHelper
 
     /**
      * Testing the validation of settings.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evaluateSetting
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evalBool
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evalDebugMethods
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evalDestination
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evalInt
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evalIpRange
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evalMaxRuntime
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evalSkin
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evalLanguage
      */
     public function testEvaluateSetting()
     {
@@ -253,9 +249,6 @@ class ValidationTest extends AbstractHelper
 
     /**
      * We evaluate the max runtime with a simulated eternal runtime setting.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evaluateSetting
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evalMaxRuntime
      */
     public function testEvalMaxRuntime()
     {
@@ -276,9 +269,6 @@ class ValidationTest extends AbstractHelper
 
     /**
      * Crete a custom setting, and then evaluate it.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::__construct
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evaluateSetting
      */
     public function testEvaluateSettingCustom()
     {

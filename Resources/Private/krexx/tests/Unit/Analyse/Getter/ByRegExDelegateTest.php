@@ -39,7 +39,12 @@ use Brainworxx\Krexx\Analyse\Getter\ByRegExDelegate;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\DelegateGetterFixture;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ByRegExDelegate::class, '__construct')]
+#[CoversMethod(ByRegExDelegate::class, 'retrieveIt')]
+#[CoversMethod(ByRegExDelegate::class, 'extractValue')]
+#[CoversMethod(ByRegExDelegate::class, 'retrieveReflectionClass')]
 class ByRegExDelegateTest extends AbstractGetter
 {
     public function setUp(): void
@@ -50,8 +55,6 @@ class ByRegExDelegateTest extends AbstractGetter
 
     /**
      * Test the initialization of the getter analysers
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByRegExDelegate::__construct
      */
     public function testConstruct()
     {
@@ -60,10 +63,6 @@ class ByRegExDelegateTest extends AbstractGetter
 
     /**
      * The class to test should not be able to retrieve any of these.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByRegExDelegate::retrieveIt
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByRegExDelegate::extractValue
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByRegExDelegate::retrieveReflectionClass
      */
     public function testRetrieveIt()
     {

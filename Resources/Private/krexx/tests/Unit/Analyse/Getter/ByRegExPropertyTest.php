@@ -41,7 +41,14 @@ use Brainworxx\Krexx\Tests\Fixtures\DeepGetterFixture;
 use Brainworxx\Krexx\Tests\Fixtures\GetterFixture;
 use Brainworxx\Krexx\Krexx;
 use Exception;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ByRegExProperty::class, '__construct')]
+#[CoversMethod(ByRegExProperty::class, 'retrieveIt')]
+#[CoversMethod(ByRegExProperty::class, 'retrieveReflectionProperty')]
+#[CoversMethod(ByRegExProperty::class, 'findIt')]
+#[CoversMethod(ByRegExProperty::class, 'analyseRegexResult')]
+#[CoversMethod(ByRegExProperty::class, 'retrievePropertyByName')]
 class ByRegExPropertyTest extends AbstractGetter
 {
     public function setUp(): void
@@ -50,7 +57,7 @@ class ByRegExPropertyTest extends AbstractGetter
         $this->testSubject = new ByRegExProperty(Krexx::$pool);
     }
     /**
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByRegExProperty::__construct
+     * Test the construct
      */
     public function testConstruct()
     {
@@ -59,11 +66,7 @@ class ByRegExPropertyTest extends AbstractGetter
     }
 
     /**
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByRegExProperty::retrieveIt
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByRegExProperty::retrieveReflectionProperty
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByRegExProperty::findIt
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByRegExProperty::analyseRegexResult
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByRegExProperty::retrievePropertyByName
+     * Test with a simple fixture.
      */
     public function testRetrieveItSimple()
     {
@@ -107,13 +110,6 @@ class ByRegExPropertyTest extends AbstractGetter
 
     /**
      * Test that we do not handle internal classes or methods.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByRegExProperty::retrieveIt
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByRegExProperty::retrieveReflectionProperty
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByRegExProperty::findIt
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByRegExProperty::analyseRegexResult
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByRegExProperty::retrievePropertyByName
-     *
      */
     public function testRetrieveItInternal()
     {
@@ -133,13 +129,7 @@ class ByRegExPropertyTest extends AbstractGetter
     }
 
     /**
-     * Test the retrieval of the possible getter by the method name and by, deep
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByRegExProperty::retrieveIt
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByRegExProperty::retrieveReflectionProperty
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByRegExProperty::findIt
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByRegExProperty::analyseRegexResult
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByRegExProperty::retrievePropertyByName
+     * Test the retrieval of the possible getter by the method name and by, deep.
      */
     public function testRetrieveItDeep()
     {

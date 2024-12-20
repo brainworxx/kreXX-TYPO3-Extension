@@ -36,19 +36,21 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBoolean;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ProcessBoolean::class, 'handle')]
+#[CoversMethod(AbstractRouting::class, 'dispatchProcessEvent')]
+#[CoversMethod(ProcessBoolean::class, 'canHandle')]
 class ProcessBooleanTest extends AbstractHelper
 {
     /**
      * Testing the processing of booleans.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBoolean::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcess()
     {
@@ -83,8 +85,6 @@ class ProcessBooleanTest extends AbstractHelper
 
     /**
      * Test the check if we can handle the array processing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBoolean::canHandle
      */
     public function testCanHandle()
     {

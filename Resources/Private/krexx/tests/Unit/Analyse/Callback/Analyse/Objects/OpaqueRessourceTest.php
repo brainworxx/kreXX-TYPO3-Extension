@@ -7,13 +7,13 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(OpaqueRessource::class, 'callMe')]
 class OpaqueRessourceTest extends AbstractHelper implements CallbackConstInterface
 {
      /**
      * What the method name says. Call it with a simulated wrong php version.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\OpaqueRessource::callMe
      */
     public function testCallMeWrongPhpVersion()
     {
@@ -35,8 +35,6 @@ class OpaqueRessourceTest extends AbstractHelper implements CallbackConstInterfa
 
     /**
      * Test the analysis of the so-called opaque ressource class analysis.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\OpaqueRessource::callMe
      */
     public function testCallMe()
     {

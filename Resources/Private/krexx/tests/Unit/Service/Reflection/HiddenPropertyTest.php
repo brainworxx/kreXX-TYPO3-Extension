@@ -39,14 +39,15 @@ use Brainworxx\Krexx\Service\Reflection\HiddenProperty;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use DateTime;
 use ReflectionClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(HiddenProperty::class, 'hasType')]
+#[CoversMethod(HiddenProperty::class, '__construct')]
 class HiddenPropertyTest extends AbstractHelper
 {
     /**
      * Test the setting of the class reflection as well as the
      * special handling of the DateTime anomaly.
-     *
-     * @covers \Brainworxx\Krexx\Service\Reflection\HiddenProperty::__construct
      */
     public function testConstruct()
     {
@@ -65,9 +66,6 @@ class HiddenPropertyTest extends AbstractHelper
         $this->assertFalse($hiddenProperty->isPublic(), 'The DateTime properties are not public.');
     }
 
-    /**
-     * @covers \Brainworxx\Krexx\Service\Reflection\HiddenProperty::hasType
-     */
     public function testHasType()
     {
         $fixture = new ReflectionClass($this);

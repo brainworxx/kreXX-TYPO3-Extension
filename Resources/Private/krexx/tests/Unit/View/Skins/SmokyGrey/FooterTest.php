@@ -37,14 +37,16 @@ namespace Brainworxx\Krexx\Tests\Unit\View\Skins\SmokyGrey;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderSmokyGrey;
+use Brainworxx\Krexx\View\Skins\SmokyGrey\Footer;
+use Brainworxx\Krexx\View\Skins\SmokyGrey\Help;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Footer::class, 'renderFooter')]
+#[CoversMethod(Help::class, 'renderHelp')]
 class FooterTest extends AbstractRenderSmokyGrey
 {
     /**
      * Test the removal of the debug tab, when we are in config mode.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Footer::renderFooter
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Help::renderHelp
      */
     public function testRenderFooter()
     {

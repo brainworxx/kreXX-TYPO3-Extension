@@ -38,13 +38,16 @@ namespace Brainworxx\Krexx\Tests\Unit\Service\Misc;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\Registry;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Registry::class, 'get')]
+#[CoversMethod(Registry::class, 'has')]
+#[CoversMethod(Registry::class, 'set')]
+#[CoversMethod(Registry::class, '__construct')]
 class RegistryTest extends AbstractHelper
 {
     /**
      * Test the setting of itself in the pool.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Registry::__construct
      */
     public function testConstruct()
     {
@@ -54,8 +57,6 @@ class RegistryTest extends AbstractHelper
 
     /**
      * What the method name says.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Registry::set
      */
     public function testSet()
     {
@@ -70,9 +71,6 @@ class RegistryTest extends AbstractHelper
 
     /**
      * What the method name says.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Registry::get
-     * @covers \Brainworxx\Krexx\Service\Misc\Registry::has
      */
     public function testGetHas()
     {

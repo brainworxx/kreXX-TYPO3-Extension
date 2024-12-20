@@ -38,9 +38,14 @@ namespace Brainworxx\Krexx\Tests\Unit\View\Output;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\Cleanup;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use Brainworxx\Krexx\View\Output\AbstractOutput;
 use Brainworxx\Krexx\View\Output\Browser;
 use Brainworxx\Krexx\View\Output\Chunks;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Browser::class, 'finalize')]
+#[CoversMethod(Browser::class, 'shutdownCallback')]
+#[CoversMethod(AbstractOutput::class, 'destruct')]
 class BrowserTest extends AbstractHelper
 {
     /**
@@ -60,9 +65,6 @@ class BrowserTest extends AbstractHelper
 
     /**
      * Test the initializing of the send-stuff-to-browser mechanism.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\Browser::shutdownCallback
-     * @covers \Brainworxx\Krexx\View\Output\AbstractOutput::destruct
      */
     public function testShutdownCallback()
     {

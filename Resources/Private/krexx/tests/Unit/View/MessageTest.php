@@ -39,13 +39,20 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Message;
 use Brainworxx\Krexx\View\Messages;
 use Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Message::class, '__construct')]
+#[CoversMethod(Message::class, 'getKey')]
+#[CoversMethod(Message::class, 'setKey')]
+#[CoversMethod(Message::class, 'setIsThrowAway')]
+#[CoversMethod(Message::class, 'setArguments')]
+#[CoversMethod(Message::class, 'getArguments')]
+#[CoversMethod(Message::class, 'setText')]
+#[CoversMethod(Message::class, 'getText')]
 class MessageTest extends AbstractHelper
 {
     /**
      * Test the setting of the pool
-     *
-     * @covers \Brainworxx\Krexx\View\Message::__construct
      */
     public function testConstruct()
     {
@@ -55,9 +62,6 @@ class MessageTest extends AbstractHelper
 
     /**
      * Test the setter / getter of the key.
-     *
-     * @covers \Brainworxx\Krexx\View\Message::getKey
-     * @covers \Brainworxx\Krexx\View\Message::setKey
      */
     public function testSetGetKey()
     {
@@ -68,8 +72,6 @@ class MessageTest extends AbstractHelper
 
     /**
      * Test the setter of the trow away status.
-     *
-     * @covers \Brainworxx\Krexx\View\Message::setIsThrowAway
      */
     public function testSetIsThrowAway()
     {
@@ -80,9 +82,6 @@ class MessageTest extends AbstractHelper
 
     /**
      * Test the setter/getter for the arguments.
-     *
-     * @covers \Brainworxx\Krexx\View\Message::setArguments
-     * @covers \Brainworxx\Krexx\View\Message::getArguments
      */
     public function testSetGetArguments()
     {
@@ -95,9 +94,6 @@ class MessageTest extends AbstractHelper
     /**
      * Test the setter/getter of the text. We also take a look at the message
      * removal
-     *
-     * @covers \Brainworxx\Krexx\View\Message::setText
-     * @covers \Brainworxx\Krexx\View\Message::getText
      */
     public function testSetGetText()
     {

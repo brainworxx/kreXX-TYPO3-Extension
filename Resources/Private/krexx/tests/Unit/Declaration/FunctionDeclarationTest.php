@@ -37,13 +37,13 @@ namespace Brainworxx\Krexx\Tests\Unit\Declaration;
 
 use Brainworxx\Krexx\Analyse\Declaration\FunctionDeclaration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(FunctionDeclaration::class, 'retrieveDeclaration')]
 class FunctionDeclarationTest extends AbstractHelper
 {
     /**
      * Test the retrieval of declaration of simple functions.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\FunctionDeclaration::retrieveDeclaration
      */
     public function testRetrieveDeclaration()
     {

@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Debug;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods;
 use Brainworxx\Krexx\Service\Config\Fallback;
@@ -43,7 +44,13 @@ use Brainworxx\Krexx\Tests\Fixtures\DebugMethodFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(DebugMethods::class, 'callMe')]
+#[CoversMethod(DebugMethods::class, 'checkIfAccessible')]
+#[CoversMethod(DebugMethods::class, 'retrieveValue')]
+#[CoversMethod(AbstractCallback::class, 'dispatchStartEvent')]
+#[CoversMethod(AbstractCallback::class, 'dispatchEventWithModel')]
 class DebugMethodsTest extends AbstractHelper
 {
     /**
@@ -98,11 +105,6 @@ class DebugMethodsTest extends AbstractHelper
     /**
      * Testing the not-existing debug method, the one throwing a exception and
      * the one with the parameters. None of these must get thorough.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::checkIfAccessible
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::retrieveValue
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
      */
     public function testCallMeNothing()
     {
@@ -127,12 +129,6 @@ class DebugMethodsTest extends AbstractHelper
 
     /**
      * Testing the "good" and "ugly" debug methods.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::checkIfAccessible
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::retrieveValue
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchEventWithModel
      */
     public function testCallMeNormal()
     {

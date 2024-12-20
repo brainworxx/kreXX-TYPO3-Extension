@@ -36,15 +36,18 @@
 namespace Brainworxx\Krexx\Tests\Unit\View\Skins\SmokyGrey;
 
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderSmokyGrey;
+use Brainworxx\Krexx\View\AbstractRender;
+use Brainworxx\Krexx\View\Skins\SmokyGrey\Button;
+use Brainworxx\Krexx\View\Skins\SmokyGrey\Help;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Button::class, 'renderButton')]
+#[CoversMethod(Help::class, 'renderHelp')]
+#[CoversMethod(AbstractRender::class, 'encodeJson')]
 class ButtonTest extends AbstractRenderSmokyGrey
 {
     /**
      * Test the rendering of a button. Again we test only the additional stuff.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Button::renderButton
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Help::renderHelp
-     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderButton()
     {
@@ -61,10 +64,6 @@ class ButtonTest extends AbstractRenderSmokyGrey
 
     /**
      * Test the rendering of a button, buth without the json.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Button::renderButton
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Help::renderHelp
-     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderButtonWithoutJson()
     {

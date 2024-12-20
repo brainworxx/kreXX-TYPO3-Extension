@@ -39,7 +39,14 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Output\CheckOutput;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(CheckOutput::class, 'isAllowedIp')]
+#[CoversMethod(CheckOutput::class, 'checkWildcards')]
+#[CoversMethod(CheckOutput::class, 'isOutputHtml')]
+#[CoversMethod(CheckOutput::class, 'isCli')]
+#[CoversMethod(CheckOutput::class, 'isAjax')]
+#[CoversMethod(CheckOutput::class, '__construct')]
 class CheckOutputTest extends AbstractHelper
 {
     public const  HTTP_X_REQUESTED_WITH = 'HTTP_X_REQUESTED_WITH';
@@ -70,8 +77,6 @@ class CheckOutputTest extends AbstractHelper
 
     /**
      * Test the setting of the pool.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\CheckOutput::__construct
      */
     public function testConstruct()
     {
@@ -81,8 +86,6 @@ class CheckOutputTest extends AbstractHelper
 
     /**
      * Test the ajax detection.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\CheckOutput::isAjax
      */
     public function testIsAjax()
     {
@@ -97,8 +100,6 @@ class CheckOutputTest extends AbstractHelper
 
     /**
      * Test the cli detection, with a cli mock
-     *
-     * @covers \Brainworxx\Krexx\View\Output\CheckOutput::isCli
      */
     public function testIsCliCli()
     {
@@ -112,8 +113,6 @@ class CheckOutputTest extends AbstractHelper
 
     /**
      * Test the cli detection with something else  mock.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\CheckOutput::isCli
      */
     public function testIsCliOther()
     {
@@ -127,8 +126,6 @@ class CheckOutputTest extends AbstractHelper
 
     /**
      * Test the detection of already send HTML output.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\CheckOutput::isOutputHtml
      */
     public function testIsOutputHtmlHtml()
     {
@@ -142,8 +139,6 @@ class CheckOutputTest extends AbstractHelper
 
     /**
      * Test the detection of already send PDF output.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\CheckOutput::isOutputHtml
      */
     public function testIsOutputHtmlPdf()
     {
@@ -157,9 +152,6 @@ class CheckOutputTest extends AbstractHelper
 
     /**
      * Test if the remote address is allowed to trigger kreXX
-     *
-     * @covers \Brainworxx\Krexx\View\Output\CheckOutput::isAllowedIp
-     * @covers \Brainworxx\Krexx\View\Output\CheckOutput::checkWildcards
      */
     public function testIsAllowedIp()
     {

@@ -42,9 +42,19 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use stdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(AbstractFactory::class, 'retrieveErrorCallback')]
+#[CoversMethod(AbstractFactory::class, '__construct')]
+#[CoversMethod(AbstractFactory::class, 'createPool')]
+#[CoversMethod(AbstractFactory::class, 'getServer')]
+#[CoversMethod(AbstractFactory::class, 'getGlobals')]
+#[CoversMethod(AbstractFactory::class, 'createClass')]
 class AbstractFactoryTest extends AbstractHelper
 {
+    /**
+     * {@inheritDoc}
+     */
     protected function tearDown(): void
     {
         // Remove a sdtClass, which may replace the pool.
@@ -57,8 +67,6 @@ class AbstractFactoryTest extends AbstractHelper
 
     /**
      * Testing the creation of a class with and without rewrites.
-     *
-     * @covers \Brainworxx\Krexx\Service\Factory\AbstractFactory::createClass
      */
     public function testCreateClass()
     {
@@ -77,8 +85,6 @@ class AbstractFactoryTest extends AbstractHelper
 
     /**
      * Test the retrieval of the super variable globals.
-     *
-     * @covers \Brainworxx\Krexx\Service\Factory\AbstractFactory::getGlobals
      */
     public function testGetGlobals()
     {
@@ -88,8 +94,6 @@ class AbstractFactoryTest extends AbstractHelper
 
     /**
      * Test the retrieval of the superglobal SERVER.
-     *
-     * @covers \Brainworxx\Krexx\Service\Factory\AbstractFactory::getServer
      */
     public function testGetServer()
     {
@@ -98,8 +102,6 @@ class AbstractFactoryTest extends AbstractHelper
 
     /**
      * Test the creation of a new pool.
-     *
-     * @covers \Brainworxx\Krexx\Service\Factory\AbstractFactory::createPool
      */
     public function testCreatePool()
     {
@@ -128,12 +130,11 @@ class AbstractFactoryTest extends AbstractHelper
 
     /**
      * Test the retrieval of the error callback, as well as running it.
-     *
-     * @covers \Brainworxx\Krexx\Service\Factory\AbstractFactory::retrieveErrorCallback
      */
     public function testRetrieveErrorCallback()
     {
-        $callback = Krexx::$pool->retrieveErrorCallback();
+        $pool = new Pool();
+        $callback = $pool->retrieveErrorCallback();
         $this->assertTrue($callback(1234, 'Barf!'), 'Must do nothing, and return TRUE');
     }
 }

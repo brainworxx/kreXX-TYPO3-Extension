@@ -36,6 +36,7 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties;
+use Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
@@ -48,7 +49,20 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
 use ReflectionProperty;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ThroughProperties::class, 'callMe')]
+#[CoversMethod(ThroughProperties::class, 'prepareModel')]
+#[CoversMethod(ThroughProperties::class, 'retrieveConnector')]
+#[CoversMethod(ThroughProperties::class, 'retrievePropertyName')]
+#[CoversMethod(PropertyDeclaration::class, 'retrieveDeclaration')]
+#[CoversMethod(PropertyDeclaration::class, 'retrieveDeclaringClassFromTraits')]
+#[CoversMethod(ThroughProperties::class, 'getAdditionalData')]
+#[CoversMethod(ThroughProperties::class, 'retrieveDefaultValue')]
+#[CoversMethod(ThroughProperties::class, 'formatDefaultValue')]
+#[CoversMethod(ThroughProperties::class, 'retrieveValueStatus')]
+#[CoversMethod(PropertyDeclaration::class, 'retrieveNamedPropertyType')]
+#[CoversMethod(ThroughProperties::class, 'isPropertyNameNormal')]
 class ThroughPropertiesTest extends AbstractHelper
 {
     public const PUBLIC_STRING_PROPERTY = 'publicStringProperty';
@@ -96,9 +110,6 @@ class ThroughPropertiesTest extends AbstractHelper
 
     /**
      * Testing an analysis without any methods to look at.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::prepareModel
      */
     public function testCallMeEmpty()
     {
@@ -121,19 +132,6 @@ class ThroughPropertiesTest extends AbstractHelper
 
     /**
      * Normal test run for the property analysis.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::prepareModel
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveConnector
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrievePropertyName
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaration
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaringClassFromTraits
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::getAdditionalData
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveDefaultValue
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::formatDefaultValue
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveValueStatus
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeNormal()
     {
@@ -414,17 +412,6 @@ class ThroughPropertiesTest extends AbstractHelper
 
     /**
      * Provoke an error when getting the default value.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::prepareModel
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveConnector
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrievePropertyName
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaration
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaringClassFromTraits
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::getAdditionalData
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveDefaultValue
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::formatDefaultValue
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveValueStatus
      */
     public function testCallMeError()
     {
@@ -480,17 +467,6 @@ class ThroughPropertiesTest extends AbstractHelper
 
     /**
      * Normal test run for the property analysis.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::prepareModel
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveConnector
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrievePropertyName
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaration
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaringClassFromTraits
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::getAdditionalData
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveDefaultValue
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::formatDefaultValue
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveValueStatus
      */
     public function testCallMeAttributes()
     {
@@ -545,18 +521,6 @@ class ThroughPropertiesTest extends AbstractHelper
 
     /**
      * Special tests for PHP 8, actually with some 7.4'er stuff.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::prepareModel
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveConnector
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrievePropertyName
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaration
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaringClassFromTraits
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveNamedPropertyType
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::getAdditionalData
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveDefaultValue
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::formatDefaultValue
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveValueStatus
      */
     public function testCallMePhpEight()
     {
@@ -645,8 +609,6 @@ class ThroughPropertiesTest extends AbstractHelper
 
     /**
      * Testing the property name analysis.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::isPropertyNameNormal
      */
     public function testIsPropertyNameNormal()
     {

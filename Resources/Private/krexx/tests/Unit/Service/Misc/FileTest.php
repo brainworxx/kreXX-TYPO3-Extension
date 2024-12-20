@@ -42,17 +42,28 @@ use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Fixtures\TraversableFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Skins\RenderHans;
+use PHPUnit\Framework\Attributes\CoversMethod;
 use ReflectionClass;
 
+#[CoversMethod(File::class, '__construct')]
+#[CoversMethod(File::class, 'readSourcecode')]
+#[CoversMethod(File::class, 'getFileContentsArray')]
+#[CoversMethod(File::class, 'fileIsReadable')]
+#[CoversMethod(File::class, 'realpath')]
+#[CoversMethod(File::class, 'readFile')]
+#[CoversMethod(File::class, 'getFileContents')]
+#[CoversMethod(File::class, 'putFileContents')]
+#[CoversMethod(File::class, 'deleteFile')]
+#[CoversMethod(File::class, 'filetime')]
 class FileTest extends AbstractHelper
 {
-    public const  DOC_ROOT = 'docRoot';
-    public const  IS_READABLE_CACHE = 'isReadableCache';
-    public const  FILE_NAME = 'some file';
-    public const  MISC_NAMESPACE = '\\Brainworxx\\Krexx\\Service\\Misc\\';
-    public const  CHMOD = 'chmod';
-    public const  UNLINK = 'unlink';
-    public const  IS_FILE = 'is_file';
+    public const DOC_ROOT = 'docRoot';
+    public const IS_READABLE_CACHE = 'isReadableCache';
+    public const FILE_NAME = 'some file';
+    public const MISC_NAMESPACE = '\\Brainworxx\\Krexx\\Service\\Misc\\';
+    public const CHMOD = 'chmod';
+    public const UNLINK = 'unlink';
+    public const IS_FILE = 'is_file';
 
     /**
      * @var \Brainworxx\Krexx\Service\Misc\File
@@ -73,13 +84,11 @@ class FileTest extends AbstractHelper
         // Mock the realpath of the not existing files.
         $realpath = $this->getFunctionMock(static::MISC_NAMESPACE, 'realpath');
         $realpath->expects($this->any())
-            ->will($this->returnArgument(1));
+            ->willReturnArgument(1);
     }
 
     /**
      * Setting of the pool and assigning itself to the pool.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::__construct
      */
     public function testConstruct()
     {
@@ -89,10 +98,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Test the reading of source code from a fixture file.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::readSourcecode
-     * @covers \Brainworxx\Krexx\Service\Misc\File::getFileContentsArray
-     * @covers \Brainworxx\Krexx\Service\Misc\File::fileIsReadable
      */
     public function testReadSourcecodeNormal()
     {
@@ -149,10 +154,6 @@ class FileTest extends AbstractHelper
     /**
      * Test the reading of source code from a cached fixture file, with messed
      * up parameters.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::readSourcecode
-     * @covers \Brainworxx\Krexx\Service\Misc\File::getFileContentsArray
-     * @covers \Brainworxx\Krexx\Service\Misc\File::fileIsReadable
      */
     public function testReadSourcecodeMessedUp()
     {
@@ -184,10 +185,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Test the reading of a fixture file into a string.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::readFile
-     * @covers \Brainworxx\Krexx\Service\Misc\File::getFileContentsArray
-     * @covers \Brainworxx\Krexx\Service\Misc\File::fileIsReadable
      */
     public function testReadFile()
     {
@@ -215,8 +212,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Test the direct reading of a file into a string.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::getFileContents
      */
     public function testGetFileContents()
     {
@@ -227,8 +222,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Test the reading of a file that we can not open (for whatever reason.)
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::getFileContents
      */
     public function testGetFileContentsWithfailedFile()
     {
@@ -248,8 +241,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Test the wrapper around the file_put_contents in the file handler.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::putFileContents
      */
     public function testPutFileContents()
     {
@@ -265,8 +256,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Test the deleting of a registered file.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::deleteFile
      */
     public function testDeleteFileRegistered()
     {
@@ -291,8 +280,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Test the deleting of a not existing file.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::deleteFile
      */
     public function testDeleteFileNotExisting()
     {
@@ -318,8 +305,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Test the deleting of a unregistered file.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::deleteFile
      */
     public function testDeleteFileUnRegistered()
     {
@@ -347,8 +332,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Test the deleting of a problematic file.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::deleteFile
      */
     public function testDeleteFileWithProblems()
     {
@@ -379,8 +362,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Test, if an already registered file is readable.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::fileIsReadable
      */
     public function testFileIsReadableRegistered()
     {
@@ -395,8 +376,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Test, if an already registered file is readable.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::fileIsReadable
      */
     public function testFileIsReadableUnregistered()
     {
@@ -416,8 +395,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Test if a not existing file is readable.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::fileIsReadable
      */
     public function testFileIsReadableNotExisting()
     {
@@ -427,8 +404,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Test the getting of a file stamp from an "existing" file.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::filetime
      */
     public function testFileTimeExisting()
     {
@@ -447,8 +422,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Test the getting of a file stamp from a not "existing" file.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::filetime
      */
     public function testFileTimeNotExisting()
     {

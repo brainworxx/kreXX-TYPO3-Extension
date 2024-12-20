@@ -36,20 +36,22 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessOther;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use stdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ProcessOther::class, 'canHandle')]
+#[CoversMethod(ProcessOther::class, 'handle')]
+#[CoversMethod(AbstractRouting::class, 'dispatchProcessEvent')]
 class ProcessOtherTest extends AbstractHelper
 {
     /**
      * Testing of not yet handled stuff, aka 'other'.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessOther::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcess()
     {
@@ -73,8 +75,6 @@ class ProcessOtherTest extends AbstractHelper
 
     /**
      * Test the check if we can handle the array processing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessOther::canHandle
      */
     public function testCanHandle()
     {

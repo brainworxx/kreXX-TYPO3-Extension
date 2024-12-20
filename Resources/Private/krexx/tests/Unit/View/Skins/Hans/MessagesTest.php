@@ -37,14 +37,15 @@ namespace Brainworxx\Krexx\Tests\Unit\View\Skins\Hans;
 
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
 use Brainworxx\Krexx\View\Message;
+use Brainworxx\Krexx\View\Skins\Hans\Messages;
 use Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Messages::class, 'renderMessages')]
 class MessagesTest extends AbstractRenderHans
 {
     /**
      * Test the message rendering.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\Messages::renderMessages
      */
     public function testRenderMessages()
     {

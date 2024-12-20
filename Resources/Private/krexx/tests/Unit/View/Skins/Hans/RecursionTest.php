@@ -36,18 +36,23 @@
 namespace Brainworxx\Krexx\Tests\Unit\View\Skins\Hans;
 
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
+use Brainworxx\Krexx\View\AbstractRender;
+use Brainworxx\Krexx\View\Skins\Hans\ConnectorLeft;
+use Brainworxx\Krexx\View\Skins\Hans\ConnectorRight;
+use Brainworxx\Krexx\View\Skins\Hans\Help;
+use Brainworxx\Krexx\View\Skins\Hans\Recursion;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Recursion::class, 'renderRecursion')]
+#[CoversMethod(ConnectorLeft::class, 'renderConnectorLeft')]
+#[CoversMethod(ConnectorRight::class, 'renderConnectorRight')]
+#[CoversMethod(AbstractRender::class, 'generateDataAttribute')]
+#[CoversMethod(Help::class, 'renderHelp')]
+#[CoversMethod(AbstractRender::class, 'encodeJson')]
 class RecursionTest extends AbstractRenderHans
 {
     /**
      * Test the rendering of a recursion.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\Recursion::renderRecursion
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\ConnectorLeft::renderConnectorLeft
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\ConnectorRight::renderConnectorRight
-     * @covers \Brainworxx\Krexx\View\AbstractRender::generateDataAttribute
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\Help::renderHelp
-     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderRecursion()
     {

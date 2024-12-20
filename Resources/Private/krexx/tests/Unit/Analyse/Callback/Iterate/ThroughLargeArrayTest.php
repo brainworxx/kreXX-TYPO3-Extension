@@ -35,7 +35,6 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Iterate;
 
-use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray;
 use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Service\Factory\Event;
@@ -44,7 +43,11 @@ use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
 use stdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ThroughLargeArray::class, 'callMe')]
+#[CoversMethod(ThroughLargeArray::class, 'handleKey')]
+#[CoversMethod(ThroughLargeArray::class, 'handleValue')]
 class ThroughLargeArrayTest extends AbstractHelper
 {
     public const  RENDER_EXPANDABLE_CHILD = 'renderExpandableChild';
@@ -110,10 +113,6 @@ class ThroughLargeArrayTest extends AbstractHelper
 
     /**
      * Testing the iteration through large arrays.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray::handleKey
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray::handleValue
      */
     public function testCallMeNormal()
     {
@@ -154,10 +153,6 @@ class ThroughLargeArrayTest extends AbstractHelper
 
     /**
      * Testing the iteration through large arrays.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray::handleKey
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray::handleValue
      */
     public function testCallMeMultiline()
     {

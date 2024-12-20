@@ -38,22 +38,27 @@ namespace Brainworxx\Krexx\Tests\Unit\Controller;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig;
 use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
+use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Code\Scope;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Routing;
+use Brainworxx\Krexx\Controller\BacktraceController;
 use Brainworxx\Krexx\Controller\DumpController;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\View\Output\Browser;
+use Brainworxx\Krexx\View\Output\Chunks;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(DumpController::class, 'dumpAction')]
+#[CoversMethod(BacktraceController::class, 'outputFooter')]
+#[CoversMethod(BacktraceController::class, 'outputCssAndJs')]
 class DumpControllerTest extends AbstractController
 {
     /**
      * Testing of the dump action, with too many calls before.
-     *
-     * @covers \Brainworxx\Krexx\Controller\DumpController::dumpAction
      */
     public function testBacktraceActionWithMaxCall()
     {
@@ -76,10 +81,6 @@ class DumpControllerTest extends AbstractController
 
     /**
      * Testing a simple dump action.
-     *
-     * @covers \Brainworxx\Krexx\Controller\DumpController::dumpAction
-     * @covers \Brainworxx\Krexx\Controller\BacktraceController::outputFooter
-     * @covers \Brainworxx\Krexx\Controller\BacktraceController::outputCssAndJs
      */
     public function testDumpAction()
     {
@@ -130,5 +131,32 @@ class DumpControllerTest extends AbstractController
             );
 
         $dumpController->dumpAction($fixture);
+    }
+
+    /**
+     * Testing the use of a log model, without code generation and with an emergency break.
+     */
+    public function testDumpActionSpecialCases()
+    {
+        $dumpController = new DumpController(Krexx::$pool);
+        $fixture = new \Brainworxx\Krexx\Logging\Model();
+        $message = 'Message in a bottle';
+        $emergencyMock = $this->createMock(Emergency::class);
+        $emergencyMock->expects($this->any())
+            ->method('checkEmergencyBreak')
+            ->willReturn(true);
+        $codeGenMock = $this->createMock(Codegen::class);
+        $codeGenMock->expects($this->once())
+            ->method('setCodegenAllowed')
+            ->with(false);
+        $chunkMock = $this->createMock(Chunks::class);
+        $chunkMock->expects($this->never())
+            ->method('addMetadata');
+        Krexx::$pool->emergencyHandler = $emergencyMock;
+        Krexx::$pool->codegenHandler = $codeGenMock;
+        Krexx::$pool->chunks = $chunkMock;
+
+        $dumpController->dumpAction($fixture, $message);
+
     }
 }

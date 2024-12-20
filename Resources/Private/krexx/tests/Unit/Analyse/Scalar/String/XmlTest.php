@@ -41,7 +41,12 @@ use Brainworxx\Krexx\Analyse\Scalar\String\Xml;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Xml::class, 'handle')]
+#[CoversMethod(Xml::class, 'canHandle')]
+#[CoversMethod(Xml::class, 'errorCallback')]
+#[CoversMethod(Xml::class, 'isActive')]
 class XmlTest extends AbstractHelper
 {
     public const  SCALAR_NAMESPACE = '\\Brainworxx\\Krexx\\Analyse\\Scalar\\String\\';
@@ -51,8 +56,6 @@ class XmlTest extends AbstractHelper
 
     /**
      * Test the disabling of the XML analysis.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::isActive
      */
     public function testIsActiveNot()
     {
@@ -65,8 +68,6 @@ class XmlTest extends AbstractHelper
 
     /**
      * Test the enabling of the XML analysis.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::isActive
      */
     public function testIsActive()
     {
@@ -82,9 +83,6 @@ class XmlTest extends AbstractHelper
 
     /**
      * Test the handling of strings.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::canHandle
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::errorCallback
      */
     public function testCanHandle()
     {
@@ -109,8 +107,6 @@ class XmlTest extends AbstractHelper
 
     /**
      * Test the actual handling of an XML string.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::handle
      */
     public function testHandle()
     {
@@ -135,8 +131,6 @@ class XmlTest extends AbstractHelper
 
     /**
      * Test with a broken XML structure.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::handle
      */
     public function testHandleBrokenXml()
     {

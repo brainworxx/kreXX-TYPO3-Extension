@@ -37,7 +37,15 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Code;
 
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Connectors::class, 'setParameters')]
+#[CoversMethod(Connectors::class, 'getParameters')]
+#[CoversMethod(Connectors::class, 'setType')]
+#[CoversMethod(Connectors::class, 'getConnectorLeft')]
+#[CoversMethod(Connectors::class, 'getConnectorRight')]
+#[CoversMethod(Connectors::class, 'setCustomConnectorLeft')]
+#[CoversMethod(Connectors::class, 'getLanguage')]
 class ConnectorsTest extends AbstractHelper
 {
     public const  TEST_STRING = 'test me';
@@ -56,9 +64,6 @@ class ConnectorsTest extends AbstractHelper
 
     /**
      * Test the setting of the parameters
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Connectors::setParameters
-     * @covers \Brainworxx\Krexx\Analyse\Code\Connectors::getParameters
      */
     public function testSetParameters()
     {
@@ -67,9 +72,7 @@ class ConnectorsTest extends AbstractHelper
     }
 
     /**
-     * Test the seter of the type
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Connectors::setType
+     * Test the setter of the type
      */
     public function testSetType()
     {
@@ -79,8 +82,6 @@ class ConnectorsTest extends AbstractHelper
 
     /**
      * Test the getter for the left connector.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Connectors::getConnectorLeft
      */
     public function testGetConnectorLeft()
     {
@@ -95,8 +96,6 @@ class ConnectorsTest extends AbstractHelper
 
     /**
      * Test the getter for the right connector.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Connectors::getConnectorRight
      */
     public function testGetConnectorRight()
     {
@@ -121,8 +120,6 @@ class ConnectorsTest extends AbstractHelper
 
     /**
      * Test the setter for a custom connector left.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Connectors::setCustomConnectorLeft
      */
     public function testSetCustomconnectorLeft()
     {
@@ -132,8 +129,6 @@ class ConnectorsTest extends AbstractHelper
 
     /**
      * Test the getLanguage
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Connectors::getLanguage
      */
     public function testGetLanguage()
     {

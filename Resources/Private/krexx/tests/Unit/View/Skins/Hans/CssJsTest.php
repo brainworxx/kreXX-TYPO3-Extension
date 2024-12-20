@@ -36,13 +36,14 @@
 namespace Brainworxx\Krexx\Tests\Unit\View\Skins\Hans;
 
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
+use Brainworxx\Krexx\View\Skins\Hans\CssJs;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(CssJs::class, 'renderCssJs')]
 class CssJsTest extends AbstractRenderHans
 {
     /**
      * Testing the inserting of css and js.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\CssJs::renderCssJs
      */
     public function testRenderCssJs()
     {

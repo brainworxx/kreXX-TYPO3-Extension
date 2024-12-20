@@ -36,12 +36,17 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Scalar\AbstractScalar;
 use Brainworxx\Krexx\Analyse\Scalar\ScalarString;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ScalarNothing;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(AbstractScalar::class, 'generateDomId')]
+#[CoversMethod(ScalarString::class, 'handle')]
+#[CoversMethod(ScalarString::class, '__construct')]
 class ScalarStringTest extends AbstractHelper
 {
     /**
@@ -77,8 +82,6 @@ class ScalarStringTest extends AbstractHelper
 
     /**
      * Test the retrieval of the plugin scalar string analysis classes.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\ScalarString::__construct
      */
     public function testConstruct()
     {
@@ -101,8 +104,6 @@ class ScalarStringTest extends AbstractHelper
 
     /**
      * Test the scalar deep analysis, without any fitting callback.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\ScalarString::handle
      */
     public function testHandleNoHandle()
     {
@@ -125,9 +126,6 @@ class ScalarStringTest extends AbstractHelper
     /**
      * Test the handling with a handler that handles the handling with a handle
      * Meh, the puns are killing me.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\ScalarString::handle
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\AbstractScalar::generateDomId
      */
     public function testHandleNormal()
     {

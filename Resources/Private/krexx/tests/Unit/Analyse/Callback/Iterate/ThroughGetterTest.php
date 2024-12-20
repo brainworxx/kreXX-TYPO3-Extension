@@ -46,13 +46,20 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\View\Skins\RenderHans;
 use Brainworxx\Krexx\Tests\Fixtures\ContainerFixture;
 use ReflectionMethod;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ThroughGetter::class, '__construct')]
+#[CoversMethod(ThroughGetter::class, 'callMe')]
+#[CoversMethod(ThroughGetter::class, 'goThroughMethodList')]
+#[CoversMethod(ThroughGetter::class, 'assignMetaDataToJson')]
+#[CoversMethod(ThroughGetter::class, 'retrievePropertyValue')]
+#[CoversMethod(ThroughGetter::class, 'resetParameters')]
+#[CoversMethod(ThroughGetter::class, 'prepareModel')]
+#[CoversMethod(ThroughGetter::class, 'prepareParameters')]
 class ThroughGetterTest extends AbstractHelper
 {
     /**
      * Test the creation of the comment analysis.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::__construct
      */
     public function testConstruct()
     {
@@ -63,16 +70,6 @@ class ThroughGetterTest extends AbstractHelper
 
     /**
      * Testing the value retrieving in the getter analysis.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::goThroughMethodList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::assignMetaDataToJson
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::retrievePropertyValue
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::resetParameters
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::prepareModel
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::prepareParameters
-     *
-     * @throws \ReflectionException
      */
     public function testCallMe()
     {
@@ -245,13 +242,7 @@ class ThroughGetterTest extends AbstractHelper
     }
 
     /**
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::goThroughMethodList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::assignMetaDataToJson
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::retrievePropertyValue
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::resetParameters
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::prepareModel
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::prepareParameters
+     * Testing the value retrieving in the getter analysis from a value container.
      */
     public function testCallMeContainer()
     {
@@ -351,13 +342,7 @@ class ThroughGetterTest extends AbstractHelper
     }
 
     /**
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::goThroughMethodList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::assignMetaDataToJson
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::retrievePropertyValue
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::resetParameters
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::prepareModel
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::prepareParameters
+     * Testing the value retrieving in the getter analysis from a value delegate method.
      */
     public function testCallMeDelegate()
     {

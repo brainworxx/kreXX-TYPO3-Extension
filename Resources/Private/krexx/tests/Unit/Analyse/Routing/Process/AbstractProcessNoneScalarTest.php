@@ -36,6 +36,8 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
+use Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Service\Flow\Emergency;
@@ -44,19 +46,16 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Krexx;
 use stdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
-/**
- * This is one huge class name.
- *
- * @package Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process
- */
+#[CoversMethod(AbstractProcessNoneScalar::class, 'handle')]
+#[CoversMethod(AbstractProcessNoneScalar::class, 'handleNestedTooDeep')]
+#[CoversMethod(AbstractProcessNoneScalar::class, 'handleRecursion')]
+#[CoversMethod(AbstractRouting::class, 'generateDomIdFromObject')]
 class AbstractProcessNoneScalarTest extends AbstractHelper
 {
     /**
      * Test the handling of a too deep nesting.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar::handleNestedTooDeep
      */
     public function testHandleNestedTooDeep()
     {
@@ -94,10 +93,6 @@ class AbstractProcessNoneScalarTest extends AbstractHelper
 
     /**
      * Test the recursion handling of the none scalar routing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar::handleRecursion
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::generateDomIdFromObject
      */
     public function testHandleRecursionObject()
     {
@@ -128,9 +123,6 @@ class AbstractProcessNoneScalarTest extends AbstractHelper
 
     /**
      * Test the recursion handling of the globals array.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar::handleRecursion
      */
     public function testHandleGlobals()
     {

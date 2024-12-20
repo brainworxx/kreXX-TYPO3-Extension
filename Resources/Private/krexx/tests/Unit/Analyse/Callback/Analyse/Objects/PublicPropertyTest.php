@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties;
 use Brainworxx\Krexx\Service\Reflection\HiddenProperty;
@@ -48,7 +49,12 @@ use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 use ReflectionProperty;
 use DateTime;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(PublicProperties::class, 'callMe')]
+#[CoversMethod(AbstractObjectAnalysis::class, 'getReflectionPropertiesData')]
+#[CoversMethod(AbstractObjectAnalysis::class, 'reflectionSorting')]
+#[CoversMethod(PublicProperties::class, 'handleUndeclaredProperties')]
 class PublicPropertyTest extends AbstractHelper
 {
     /**
@@ -86,13 +92,6 @@ class PublicPropertyTest extends AbstractHelper
     /**
      * Test the public property analysis, without any public ones in the
      * fixture
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::getReflectionPropertiesData
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties::handleUndeclaredProperties
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeNoPublic()
     {
@@ -119,13 +118,6 @@ class PublicPropertyTest extends AbstractHelper
     /**
      * Test the public property analysis, with public ones in the fixture.
      * We also add some undeclared ones to the mix.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::getReflectionPropertiesData
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties::handleUndeclaredProperties
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeWithPublic()
     {
@@ -168,11 +160,6 @@ class PublicPropertyTest extends AbstractHelper
 
     /**
      * Testing the "public" properties of a date time analysis.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::getReflectionPropertiesData
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties::handleUndeclaredProperties
      */
     public function testCallMeDateTime()
     {

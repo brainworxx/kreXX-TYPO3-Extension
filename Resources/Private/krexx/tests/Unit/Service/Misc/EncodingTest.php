@@ -38,8 +38,15 @@ namespace Brainworxx\Krexx\Tests\Unit\Service\Misc;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\Encoding;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
-use phpmock\generator\MockFunctionGenerator;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Encoding::class, 'mbStrLen')]
+#[CoversMethod(Encoding::class, 'encodeStringForCodeGeneration')]
+#[CoversMethod(Encoding::class, 'encodeString')]
+#[CoversMethod(Encoding::class, 'arrayMapCallbackCode')]
+#[CoversMethod(Encoding::class, 'arrayMapCallbackNormal')]
+#[CoversMethod(Encoding::class, 'encodeCompletely')]
+#[CoversMethod(Encoding::class, '__construct')]
 class EncodingTest extends AbstractHelper
 {
     /**
@@ -57,8 +64,6 @@ class EncodingTest extends AbstractHelper
      * Testing the setting of the pool annd the assigning of the string encoder.
      *
      * We will not test the cheap mb_string polyfills.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::__construct
      */
     public function testConstruct()
     {
@@ -68,9 +73,6 @@ class EncodingTest extends AbstractHelper
 
     /**
      * Testing the early return with an empty string.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::encodeString
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::encodeCompletely
      */
     public function testEncodeStringEmpty()
     {
@@ -80,9 +82,6 @@ class EncodingTest extends AbstractHelper
 
     /**
      * Testing the encoding of strings, also with some special stuff.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::encodeString
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::encodeCompletely
      */
     public function testEncodeStringNormal()
     {
@@ -96,12 +95,7 @@ class EncodingTest extends AbstractHelper
     }
 
     /**
-     * Testing the encoding of strings, where htmlentities fail.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::encodeString
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::arrayMapCallbackCode
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::arrayMapCallbackNormal
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::encodeCompletely
+     * Testing the encoding of strings, where html entities fail.
      */
     public function testEncodeStringBroken()
     {
@@ -115,9 +109,7 @@ class EncodingTest extends AbstractHelper
     }
 
     /**
-     * Testing the preparation of striong as code connectors.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::encodeStringForCodeGeneration
+     * Testing the preparation of string as code connectors.
      */
     public function testEncodeStringForCodeGeneration()
     {
@@ -147,8 +139,6 @@ class EncodingTest extends AbstractHelper
 
     /**
      * Testing the wrapper around the mb_strlen.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::mbStrLen
      */
     public function testMbStrLen()
     {

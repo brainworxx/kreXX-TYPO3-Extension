@@ -41,7 +41,11 @@ use Brainworxx\Krexx\Tests\Fixtures\ConstantsFixture71;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ThroughConstants::class, 'callMe')]
+#[CoversMethod(ThroughConstants::class, 'canDump')]
+#[CoversMethod(ThroughConstants::class, 'retrieveAdditionalData')]
 class ThroughConstantsTest extends AbstractHelper
 {
     public const  SKIPPED_REASON = 'Skipped due to wrong PHP version.';
@@ -84,10 +88,6 @@ class ThroughConstantsTest extends AbstractHelper
 
     /**
      * Testing the PHP 7.1 plus constants handling.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::canDump
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::retrieveAdditionalData
      */
     public function testCallMe()
     {
@@ -121,10 +121,6 @@ class ThroughConstantsTest extends AbstractHelper
 
     /**
      * And now the same thing while coming from the inside.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::canDump
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::retrieveAdditionalData
      */
     public function testCallMe71InScope()
     {

@@ -36,15 +36,18 @@
 namespace Brainworxx\Krexx\Tests\Unit\View\Skins\SmokyGrey;
 
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderSmokyGrey;
+use Brainworxx\Krexx\View\AbstractRender;
+use Brainworxx\Krexx\View\Skins\SmokyGrey\Help;
+use Brainworxx\Krexx\View\Skins\SmokyGrey\SingleEditableChild;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(SingleEditableChild::class, 'renderSingleEditableChild')]
+#[CoversMethod(Help::class, 'renderHelp')]
+#[CoversMethod(AbstractRender::class, 'encodeJson')]
 class SingleEditableChildTest extends AbstractRenderSmokyGrey
 {
     /**
      * Test the additional stuff of the single editable child rendering.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\SingleEditableChild::renderSingleEditableChild
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Help::renderHelp
-     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderSingleEditableChild()
     {

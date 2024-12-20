@@ -39,20 +39,20 @@ use Brainworxx\Krexx\Service\Misc\FormatSerialize;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesFixture;
 use Brainworxx\Krexx\Tests\Fixtures\SerializableFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(FormatSerialize::class, 'prettyPrint')]
+#[CoversMethod(FormatSerialize::class, 'assert')]
+#[CoversMethod(FormatSerialize::class, 'parse')]
+#[CoversMethod(FormatSerialize::class, 'parseArrayOrObject')]
+#[CoversMethod(FormatSerialize::class, 'parseSerializableObject')]
+#[CoversMethod(FormatSerialize::class, 'parseString')]
+#[CoversMethod(FormatSerialize::class, 'read')]
+#[CoversMethod(FormatSerialize::class, 'readTo')]
 class FormatSerializeTest extends AbstractHelper
 {
     /**
      * Test the pretty print of a serialized string.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::prettyPrint
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::assert
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::parse
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::parseArrayOrObject
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::parseSerializableObject
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::parseString
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::read
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::readTo
      */
     public function testPrettyPrint()
     {
@@ -83,15 +83,6 @@ class FormatSerializeTest extends AbstractHelper
 
     /**
      * We feed the pretty print with an invalid string.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::prettyPrint
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::assert
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::parse
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::parseArrayOrObject
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::parseSerializableObject
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::parseString
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::read
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::readTo
      */
     public function testPrettyPrintFail()
     {
@@ -108,15 +99,6 @@ class FormatSerializeTest extends AbstractHelper
 
     /**
      * Again with a serializable class.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::prettyPrint
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::assert
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::parse
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::parseArrayOrObject
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::parseSerializableObject
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::parseString
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::read
-     * @covers \Brainworxx\Krexx\Service\Misc\FormatSerialize::readTo
      */
     public function testPrettyPrintSerializable()
     {

@@ -22,7 +22,7 @@
     "ext-json": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "^9.5 || ^10.5",
+    "phpunit/phpunit": "^9.5 || ^10.5 || ^11.4",
     "php-mock/php-mock-phpunit": "^2"
   },
   "autoload": {
@@ -42,6 +42,7 @@
     ]
   },
   "scripts": {
-    "test": "./vendor/bin/phpunit --coverage-clover=./clover.xml --color -d memory_limit=-1 -c phpunit.xml"
+    "test": "./vendor/bin/phpunit --color -d memory_limit=-1 -c phpunit.xml",
+    "test-coverage": "./vendor/bin/phpunit --coverage-html=./coverage --color -d memory_limit=-1 -c phpunit.xml"
   }
 }

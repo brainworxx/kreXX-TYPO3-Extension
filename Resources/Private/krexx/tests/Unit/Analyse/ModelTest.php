@@ -41,10 +41,47 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
+use PHPUnit\Framework\Attributes\CoversMethod;
 use stdClass;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\View\Messages;
 
+#[CoversMethod(Model::class, '__construct')]
+#[CoversMethod(Model::class, 'injectCallback')]
+#[CoversMethod(Model::class, 'renderMe')]
+#[CoversMethod(Model::class, 'addParameter')]
+#[CoversMethod(Model::class, 'setHelpid')]
+#[CoversMethod(Model::class, 'addToJson')]
+#[CoversMethod(Model::class, 'getJson')]
+#[CoversMethod(Model::class, 'setData')]
+#[CoversMethod(Model::class, 'getData')]
+#[CoversMethod(Model::class, 'setName')]
+#[CoversMethod(Model::class, 'getName')]
+#[CoversMethod(Model::class, 'setNormal')]
+#[CoversMethod(Model::class, 'getNormal')]
+#[CoversMethod(Model::class, 'setAdditional')]
+#[CoversMethod(Model::class, 'getAdditional')]
+#[CoversMethod(Model::class, 'setType')]
+#[CoversMethod(Model::class, 'getType')]
+#[CoversMethod(Model::class, 'getConnectorLeft')]
+#[CoversMethod(Model::class, 'getConnectorRight')]
+#[CoversMethod(Model::class, 'setDomid')]
+#[CoversMethod(Model::class, 'getDomid')]
+#[CoversMethod(Model::class, 'hasExtra')]
+#[CoversMethod(Model::class, 'setHasExtra')]
+#[CoversMethod(Model::class, 'setConnectorParameters')]
+#[CoversMethod(Model::class, 'getConnectorParameters')]
+#[CoversMethod(Model::class, 'setConnectorType')]
+#[CoversMethod(Model::class, 'setCustomConnectorLeft')]
+#[CoversMethod(Model::class, 'getConnectorLanguage')]
+#[CoversMethod(Model::class, 'getParameters')]
+#[CoversMethod(Model::class, 'setCodeGenType')]
+#[CoversMethod(Model::class, 'getCodeGenType')]
+#[CoversMethod(Model::class, 'isExpandable')]
+#[CoversMethod(Model::class, 'setReturnType')]
+#[CoversMethod(Model::class, 'getReturnType')]
+#[CoversMethod(Connectors::class, 'getReturnType')]
+#[CoversMethod(Connectors::class, 'setReturnType')]
 class ModelTest extends AbstractHelper
 {
     public const  SOME_STRING_TO_PASS_THROUGH = 'some string to pass through';
@@ -72,8 +109,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Test if we get the pool as well as the connector service.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::__construct
      */
     public function testConstruct()
     {
@@ -87,8 +122,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Test if the callback gets set.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::injectCallback
      */
     public function testInjectCallback()
     {
@@ -110,8 +143,6 @@ class ModelTest extends AbstractHelper
     /**
      * The rendering will call the callback. We will mock the callback and test
      * if we get the actual output from it.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::renderMe
      */
     public function testRenderMe()
     {
@@ -138,8 +169,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Test if we can add several parameters.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::addParameter
      */
     public function testAddParameter()
     {
@@ -160,8 +189,6 @@ class ModelTest extends AbstractHelper
     /**
      * Test the setting of the help id. The help id sets additional text to the
      * specific analysis, to explain the output.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::setHelpid
      */
     public function testSetHelpId()
     {
@@ -171,13 +198,11 @@ class ModelTest extends AbstractHelper
         $messageMock->expects($this->exactly(2))
             ->method('getHelp')
             ->with(...$this->withConsecutive(['metaHelp'], ['some id']))
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['metaHelp', [], 'Help'],
-                        ['some id', [], $helpText]
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    ['metaHelp', [], 'Help'],
+                    ['some id', [], $helpText]
+                ]
             );
         Krexx::$pool->messages = $messageMock;
 
@@ -190,8 +215,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Test if we can add stuff to the json. Linebreaks should be removed.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::addToJson
      */
     public function testAddToJson()
     {
@@ -212,8 +235,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Test the getter for the json value.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::getJson
      */
     public function testGetJson()
     {
@@ -229,8 +250,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the setter for the data value.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::setData
      */
     public function testSetData()
     {
@@ -241,8 +260,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the getter of the data value.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::getData
      */
     public function testGetData()
     {
@@ -253,8 +270,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the setter for the name value.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::setName
      */
     public function testSetName()
     {
@@ -265,8 +280,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the getter for the name value.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::getName
      */
     public function testGetName()
     {
@@ -277,8 +290,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the setter for the normal value.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::setNormal
      */
     public function testSetNormal()
     {
@@ -289,8 +300,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the getter for the normal value.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::getNormal
      */
     public function testGetNormal()
     {
@@ -301,8 +310,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the setter for the additional value.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::setAdditional
      */
     public function testSetAdditional()
     {
@@ -313,8 +320,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the getter for the additional value.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::getAdditional
      */
     public function testGetAdditional()
     {
@@ -325,8 +330,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the setter for the type value.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::setType
      */
     public function testSetType()
     {
@@ -337,8 +340,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the getter for the type value.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::getType
      */
     public function testGetType()
     {
@@ -349,8 +350,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the getter for the left connector.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::getConnectorLeft
      */
     public function testGetConnectorLeft()
     {
@@ -367,8 +366,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the right connector.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::getConnectorRight
      */
     public function testGetConnectorRight()
     {
@@ -387,8 +384,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the setter of the dom id.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::setDomid
      */
     public function testSetDomid()
     {
@@ -400,8 +395,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the getter of the dom id.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::getDomid
      */
     public function testGetDomid()
     {
@@ -413,8 +406,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the getter for the extras boolean.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::hasExtra
      */
     public function testGetHasExtra()
     {
@@ -426,8 +417,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the setter for the extras boolean.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::setHasExtra
      */
     public function testSetHasExtra()
     {
@@ -439,8 +428,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the setter for the connector parameters.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::setConnectorParameters
      */
     public function testSetConnectorParameters()
     {
@@ -457,8 +444,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the getter for the connector parameters.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::getConnectorParameters
      */
     public function testGetConnectorParameters()
     {
@@ -475,8 +460,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the setter of the connector type
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::setConnectorType
      */
     public function testSetConnectorType()
     {
@@ -492,8 +475,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the setter of the custom connector left.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::setCustomConnectorLeft
      */
     public function testSetCustomConnectorLeft()
     {
@@ -509,8 +490,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the getter of the language connector.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::getConnectorLanguage
      */
     public function testGetConnectorLanguage()
     {
@@ -527,8 +506,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the getter of the parameter fo the callback.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::getParameters
      */
     public function testGetParameters()
     {
@@ -543,8 +520,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the setting of the code generation type.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::setCodeGenType
      */
     public function testSetCodeGenType()
     {
@@ -557,8 +532,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the getter of the code generation type.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::getCodeGenType
      */
     public function testGetCodeGenType()
     {
@@ -583,8 +556,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Test if we are handling a callback or stuff with "extra".
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::isExpandable
      */
     public function testIsExpandable()
     {
@@ -604,11 +575,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Test the setter/getter for the return type.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::setReturnType
-     * @covers \Brainworxx\Krexx\Analyse\Model::getReturnType
-     * @covers \Brainworxx\Krexx\Analyse\Code\Connectors::getReturnType
-     * @covers \Brainworxx\Krexx\Analyse\Code\Connectors::setReturnType
      */
     public function testSetGetReturnType()
     {

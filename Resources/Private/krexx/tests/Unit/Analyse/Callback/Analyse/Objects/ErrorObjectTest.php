@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject;
 use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
@@ -44,7 +45,13 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\View\Messages;
 use Exception;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ErrorObject::class, 'callMe')]
+#[CoversMethod(ErrorObject::class, 'renderBacktrace')]
+#[CoversMethod(ErrorObject::class, 'addExceptionMessage')]
+#[CoversMethod(AbstractCallback::class, 'dispatchStartEvent')]
+#[CoversMethod(AbstractCallback::class, 'dispatchEventWithModel')]
 class ErrorObjectTest extends AbstractHelper
 {
     /**
@@ -63,12 +70,6 @@ class ErrorObjectTest extends AbstractHelper
 
     /**
      * Test with a real error object.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject::renderBacktrace
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject::addExceptionMessage
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchEventWithModel
      */
     public function testCallMe()
     {
@@ -133,12 +134,6 @@ class ErrorObjectTest extends AbstractHelper
 
     /**
      * Do not display the error message, when we are deeper into the object hive.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject::renderBacktrace
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject::addExceptionMessage
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchEventWithModel
      */
     public function testCallMeNested()
     {

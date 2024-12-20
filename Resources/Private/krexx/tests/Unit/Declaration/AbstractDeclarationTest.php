@@ -35,15 +35,16 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Declaration;
 
+use Brainworxx\Krexx\Analyse\Declaration\AbstractDeclaration;
 use Brainworxx\Krexx\Analyse\Declaration\FunctionDeclaration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(AbstractDeclaration::class, '__construct')]
 class AbstractDeclarationTest extends AbstractHelper
 {
     /**
      * Test the injection of the pool
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\AbstractDeclaration::__construct
      */
     public function testConstruct()
     {

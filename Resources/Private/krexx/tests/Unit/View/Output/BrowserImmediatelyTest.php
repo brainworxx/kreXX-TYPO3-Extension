@@ -40,7 +40,9 @@ use Brainworxx\Krexx\Service\Misc\Cleanup;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Output\BrowserImmediately;
 use Brainworxx\Krexx\View\Output\Chunks;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(BrowserImmediately::class, 'finalize')]
 class BrowserImmediatelyTest extends AbstractHelper
 {
     /**
@@ -61,8 +63,6 @@ class BrowserImmediatelyTest extends AbstractHelper
     /**
      * Since this is a wrapper around the Browser::shutdownCallback()
      * we recycle the same test.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\BrowserImmediately::finalize
      */
     public function testFinalize()
     {

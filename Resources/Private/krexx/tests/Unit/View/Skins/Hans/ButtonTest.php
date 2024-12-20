@@ -36,14 +36,16 @@
 namespace Brainworxx\Krexx\Tests\Unit\View\Skins\Hans;
 
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
+use Brainworxx\Krexx\View\AbstractRender;
+use Brainworxx\Krexx\View\Skins\Hans\Button;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Button::class, 'renderButton')]
+#[CoversMethod(AbstractRender::class, 'encodeJson')]
 class ButtonTest extends AbstractRenderHans
 {
     /**
      * Test the rendering of a button.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\Button::renderButton
-     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderButton()
     {

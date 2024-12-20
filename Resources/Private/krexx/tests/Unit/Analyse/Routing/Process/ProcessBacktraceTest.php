@@ -41,7 +41,12 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ProcessBacktrace::class, '__construct')]
+#[CoversMethod(ProcessBacktrace::class, 'callMe')]
+#[CoversMethod(ProcessBacktrace::class, 'handle')]
+#[CoversMethod(ProcessBacktrace::class, 'getBacktrace')]
 class ProcessBacktraceTest extends AbstractHelper
 {
 
@@ -77,8 +82,6 @@ class ProcessBacktraceTest extends AbstractHelper
 
     /**
      * Test the setting of the pool.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace::__construct
      */
     public function testConstruct()
     {
@@ -88,9 +91,6 @@ class ProcessBacktraceTest extends AbstractHelper
 
     /**
      * Create a mock backtrace, and see if it is processed.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace::handle
      */
     public function testProcessNormal()
     {
@@ -155,9 +155,6 @@ class ProcessBacktraceTest extends AbstractHelper
 
     /**
      * Testing the backtrace processing, without a backtrace.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace::getBacktrace
      */
     public function testProcessEmpty()
     {

@@ -40,10 +40,22 @@ use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Emergency::class, 'getKrexxCount')]
+#[CoversMethod(Emergency::class, 'checkMaxCall')]
+#[CoversMethod(Emergency::class, 'initTimer')]
+#[CoversMethod(Emergency::class, 'getNestingLevel')]
+#[CoversMethod(Emergency::class, 'checkNesting')]
+#[CoversMethod(Emergency::class, 'downOneNestingLevel')]
+#[CoversMethod(Emergency::class, 'upOneNestingLevel')]
+#[CoversMethod(Emergency::class, 'checkRuntime')]
+#[CoversMethod(Emergency::class, 'checkMemory')]
+#[CoversMethod(Emergency::class, 'checkEmergencyBreak')]
+#[CoversMethod(Emergency::class, 'setDisable')]
+#[CoversMethod(Emergency::class, '__construct')]
 class EmergencyTest extends AbstractHelper
 {
-
     public const  ALL_IS_OK = 'allIsOk';
     public const  MAX_RUNTIME = 'maxRuntime';
     public const  MIN_MEMORY_LEFT = 'minMemoryLeft';
@@ -99,8 +111,6 @@ class EmergencyTest extends AbstractHelper
     /**
      * Test the caching of several settings, as well as retreating the memory
      * limit.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::__construct
      */
     public function testConstructWithKb()
     {
@@ -143,8 +153,6 @@ class EmergencyTest extends AbstractHelper
     /**
      * Test the caching of several settings, as well as retreating the memory
      * limit.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::__construct
      */
     public function testConstructWithMb()
     {
@@ -165,8 +173,6 @@ class EmergencyTest extends AbstractHelper
     /**
      * Test the caching of several settings, as well as retreating the memory
      * limit.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::__construct
      */
     public function testConstructWithNoLimit()
     {
@@ -183,8 +189,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Test the disabling of the emergency break.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::setDisable
      */
     public function testDisable()
     {
@@ -197,8 +201,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Test disabled.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkEmergencyBreak
      */
     public function testCheckEmergencyBreakDisabled()
     {
@@ -209,8 +211,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Test failed before
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkEmergencyBreak
      */
     public function testCheckEmergencyBreakFailedBefore()
     {
@@ -220,9 +220,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Test failed memory limit.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkEmergencyBreak
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkMemory
      */
     public function testCheckEmergencyBreakFailedMemory()
     {
@@ -240,10 +237,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Test with failed runtime check and successful memory check.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkEmergencyBreak
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkMemory
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkRuntime
      */
     public function testCheckEmergencyBreakFailedRuntime()
     {
@@ -274,10 +267,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Everything went better than expected.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkEmergencyBreak
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkMemory
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkRuntime
      */
     public function testCheckEmergencyBreakOk()
     {
@@ -300,8 +289,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Going up one level.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::upOneNestingLevel
      */
     public function testUpOneNestingLevel()
     {
@@ -312,8 +299,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Going down one nesting level.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::downOneNestingLevel
      */
     public function testDownOneNestingLevel()
     {
@@ -324,8 +309,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Test the nesting level.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkNesting
      */
     public function testCheckNesting()
     {
@@ -340,8 +323,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Test the getter of the current nesting level.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::getNestingLevel
      */
     public function testGetNestingLevel()
     {
@@ -351,8 +332,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Test the timer initialization.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::initTimer
      */
     public function testInitTimer()
     {
@@ -376,8 +355,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Test the re-initializing of the timer on cli.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::initTimer
      */
     public function testInitTimerOnCli()
     {
@@ -397,8 +374,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Test the checking and up-counting of the krexx counts
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkMaxCall
      */
     public function testCheckMaxCall()
     {
@@ -421,8 +396,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Test the getter for the kreXX count
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::getKrexxCount
      */
     public function testGetKrexxCount()
     {

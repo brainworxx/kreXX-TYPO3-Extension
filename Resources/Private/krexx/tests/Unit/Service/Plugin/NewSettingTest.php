@@ -37,23 +37,23 @@ namespace Brainworxx\Krexx\Tests\Unit\Service\Plugin;
 
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Service\Plugin\NewSetting;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(NewSetting::class, 'setSection')]
+#[CoversMethod(NewSetting::class, 'setIsFeProtected')]
+#[CoversMethod(NewSetting::class, 'setDefaultValue')]
+#[CoversMethod(NewSetting::class, 'setIsEditable')]
+#[CoversMethod(NewSetting::class, 'setRenderType')]
+#[CoversMethod(NewSetting::class, 'setValidation')]
+#[CoversMethod(NewSetting::class, 'setName')]
+#[CoversMethod(NewSetting::class, 'isFeProtected')]
+#[CoversMethod(NewSetting::class, 'getFeSettings')]
+#[CoversMethod(NewSetting::class, 'getName')]
+#[CoversMethod(NewSetting::class, 'getSection')]
 class NewSettingTest extends AbstractHelper
 {
     /**
      * Test the setter and getter.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\NewSetting::setSection
-     * @covers \Brainworxx\Krexx\Service\Plugin\NewSetting::setIsFeProtected
-     * @covers \Brainworxx\Krexx\Service\Plugin\NewSetting::setDefaultValue
-     * @covers \Brainworxx\Krexx\Service\Plugin\NewSetting::setIsEditable
-     * @covers \Brainworxx\Krexx\Service\Plugin\NewSetting::setRenderType
-     * @covers \Brainworxx\Krexx\Service\Plugin\NewSetting::setValidation
-     * @covers \Brainworxx\Krexx\Service\Plugin\NewSetting::setName
-     * @covers \Brainworxx\Krexx\Service\Plugin\NewSetting::isFeProtected
-     * @covers \Brainworxx\Krexx\Service\Plugin\NewSetting::getFeSettings
-     * @covers \Brainworxx\Krexx\Service\Plugin\NewSetting::getName
-     * @covers \Brainworxx\Krexx\Service\Plugin\NewSetting::getSection
      */
     public function testSetterGetter()
     {

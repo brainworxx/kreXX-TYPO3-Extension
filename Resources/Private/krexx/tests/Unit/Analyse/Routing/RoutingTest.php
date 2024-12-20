@@ -42,7 +42,10 @@ use Brainworxx\Krexx\Analyse\Routing\Routing;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Routing::class, '__construct')]
+#[CoversMethod(Routing::class, 'analysisHub')]
 class RoutingTest extends AbstractHelper
 {
     public const  ROUTING_MOCK_RETURN_VALUE = 'routing mock success';
@@ -106,8 +109,6 @@ class RoutingTest extends AbstractHelper
     /**
      * Test if all processors will get set, and that the routing class gets
      * set in the pool.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::__construct
      */
     public function testConstruct()
     {
@@ -120,8 +121,6 @@ class RoutingTest extends AbstractHelper
 
     /**
      * Simply test, if an emergency break gets respected.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
      */
     public function testAnalysisHubEmergencyBreak()
     {
@@ -142,8 +141,6 @@ class RoutingTest extends AbstractHelper
 
     /**
      * Simple routing of a string.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
      */
     public function testAnalysisHubString()
     {

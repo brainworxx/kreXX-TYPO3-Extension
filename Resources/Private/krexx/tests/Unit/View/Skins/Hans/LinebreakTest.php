@@ -36,16 +36,20 @@
 namespace Brainworxx\Krexx\Tests\Unit\View\Skins\Hans;
 
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
+use Brainworxx\Krexx\View\Skins\Hans\Linebreak;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Linebreak::class, 'renderLinebreak')]
 class LinebreakTest extends AbstractRenderHans
 {
     /**
      * Test the rednering of a line break.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\Linebreak::renderLinebreak
      */
     public function testRenderLineBreak()
     {
-        $this->assertStringContainsString('Breaking the line! Breaking the line!', $this->renderHans->renderLinebreak());
+        $this->assertStringContainsString(
+            'Breaking the line! Breaking the line!',
+            $this->renderHans->renderLinebreak()
+        );
     }
 }

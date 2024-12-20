@@ -43,14 +43,17 @@ use Brainworxx\Krexx\Tests\Fixtures\TraitUsingClass;
 use Brainworxx\Krexx\Tests\Fixtures\TypeFixture;
 use Brainworxx\Krexx\Tests\Fixtures\UnionTypeFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(PropertyDeclaration::class, 'retrieveNamedPropertyType')]
+#[CoversMethod(PropertyDeclaration::class, 'retrieveNamedType')]
+#[CoversMethod(PropertyDeclaration::class, 'formatNamedType')]
+#[CoversMethod(PropertyDeclaration::class, 'retrieveDeclaration')]
+#[CoversMethod(PropertyDeclaration::class, 'retrieveDeclaringClassFromTraits')]
 class PropertyDeclarationTest extends AbstractHelper
 {
     /**
      * Test the retrieval of the declaration place of properties
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaration
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaringClassFromTraits
      */
     public function testRetrieveDeclaration()
     {
@@ -87,10 +90,6 @@ class PropertyDeclarationTest extends AbstractHelper
 
     /**
      * Test the retrieval of a typed property declaration type.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveNamedPropertyType
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveNamedType
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::formatNamedType
      */
     public function testRetrieveNamedPropertyType()
     {

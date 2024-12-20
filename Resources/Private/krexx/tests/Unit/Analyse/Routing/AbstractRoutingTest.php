@@ -35,16 +35,17 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing;
 
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ProcessNothing;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(AbstractRouting::class, '__construct')]
 class AbstractRoutingTest extends AbstractHelper
 {
     /**
      * Test if we get the pool was set.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::__construct
      */
     public function testConstruct()
     {
