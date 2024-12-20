@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -41,21 +42,21 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContext;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(AbstractFluid::class, '__construct')]
+#[CoversMethod(AbstractFluid::class, 'assignParsedTemplateRenderType')]
 class AbstractCallerFinderTest extends AbstractHelper
 {
-    const PARSED_TEMPLATE = 'parsedTemplate';
-    const HAS_PROPERTY = 'hasProperty';
-    const RENDERING_STACK = 'renderingStack';
-    const VIEW_REFLECTION = 'viewReflection';
-    const RENDERING_CONTEXT = 'renderingContext';
-    const ERROR = 'error';
+    public const PARSED_TEMPLATE = 'parsedTemplate';
+    protected const HAS_PROPERTY = 'hasProperty';
+    protected const RENDERING_STACK = 'renderingStack';
+    protected const VIEW_REFLECTION = 'viewReflection';
+    protected const RENDERING_CONTEXT = 'renderingContext';
+    protected const ERROR = 'error';
 
     /**
      * Test the retrieval of all necessary objects from the ViewHelper.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::__construct
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::assignParsedTemplateRenderType
      */
     public function testConstructNormal()
     {
@@ -106,9 +107,6 @@ class AbstractCallerFinderTest extends AbstractHelper
 
     /**
      * Test the error handling during construct.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::__construct
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::assignParsedTemplateRenderType
      */
     public function testConstructError()
     {

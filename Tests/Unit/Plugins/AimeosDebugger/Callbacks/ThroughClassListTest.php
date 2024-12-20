@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -43,15 +44,15 @@ use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use StdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ThroughClassList::class, 'callMe')]
 class ThroughClassListTest extends AbstractHelper
 {
     use AimeosTestTrait;
 
     /**
      * Test the passing of a bunch of objects into the analysis hub.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughClassList::callMe
      */
     public function testCallMe()
     {

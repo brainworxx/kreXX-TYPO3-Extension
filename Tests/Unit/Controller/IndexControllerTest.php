@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -36,6 +37,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Controller;
 
 use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
+use Brainworxx\Includekrexx\Controller\AbstractController;
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
@@ -50,12 +52,27 @@ use TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 use TYPO3\CMS\Extbase\Mvc\Response;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(IndexController::class, 'dispatchAction')]
+#[CoversMethod(AbstractController::class, 'dispatchFile')]
+#[CoversMethod(IndexController::class, 'saveAction')]
+#[CoversMethod(AbstractController::class, 'retrieveKrexxMessages')]
+#[CoversMethod(Settings::class, 'prepareFileName')]
+#[CoversMethod(IndexController::class, 'indexAction')]
+#[CoversMethod(AbstractController::class, 'hasAccess')]
+#[CoversMethod(AbstractController::class, 'checkProductiveSetting')]
+#[CoversMethod(AbstractController::class, 'assignCssJs')]
+#[CoversMethod(AbstractController::class, 'assignCssJs11Style')]
+#[CoversMethod(AbstractController::class, 'generateAjaxTranslations')]
+#[CoversMethod(AbstractController::class, 'moduleTemplateRender')]
+#[CoversMethod(AbstractController::class, 'moduleTemplateRenderOld')]
+#[CoversMethod(AbstractController::class, 'assignMultiple')]
 class IndexControllerTest extends AbstractHelper
 {
-    const NO_MORE_MESSAGES = 'No more messages here.';
-    const CONTROLLER_NAMESPACE = '\\Brainworxx\\Includekrexx\\Controller\\';
-    const REDIRECT_MESSAGE = 'We did have an redirect here.';
+    protected const NO_MORE_MESSAGES = 'No more messages here.';
+    protected const CONTROLLER_NAMESPACE = '\\Brainworxx\\Includekrexx\\Controller\\';
+    protected const REDIRECT_MESSAGE = 'We did have an redirect here.';
 
     protected $indexController;
 
@@ -77,12 +94,6 @@ class IndexControllerTest extends AbstractHelper
 
     /**
      * Test the index action, without access.
-     *
-     * @covers \Brainworxx\Includekrexx\Controller\IndexController::indexAction
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::hasAccess
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::moduleTemplateRender
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::moduleTemplateRenderOld
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::assignMultiple
      */
     public function testIndexActionNoAccess()
     {
@@ -102,17 +113,6 @@ class IndexControllerTest extends AbstractHelper
 
     /**
      * Normal test of the index action.
-     *
-     * @covers \Brainworxx\Includekrexx\Controller\IndexController::indexAction
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::hasAccess
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::checkProductiveSetting
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::retrieveKrexxMessages
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::assignCssJs
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::assignCssJs11Style
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::generateAjaxTranslations
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::moduleTemplateRender
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::moduleTemplateRenderOld
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::assignMultiple
      */
     public function testIndexActionNormal()
     {
@@ -239,8 +239,6 @@ class IndexControllerTest extends AbstractHelper
 
     /**
      * Test the redirect when having no access for the save action.
-     *
-     * @covers \Brainworxx\Includekrexx\Controller\IndexController::saveAction
      */
     public function testSaveActionNoAccess()
     {
@@ -270,10 +268,6 @@ class IndexControllerTest extends AbstractHelper
 
     /**
      * Testing the saving of the ini file.
-     *
-     * @covers \Brainworxx\Includekrexx\Controller\IndexController::saveAction
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::retrieveKrexxMessages
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::prepareFileName
      */
     public function testSaveActionNormal()
     {
@@ -322,10 +316,6 @@ class IndexControllerTest extends AbstractHelper
 
     /**
      * Testing the saving of the ini file.
-     *
-     * @covers \Brainworxx\Includekrexx\Controller\IndexController::saveAction
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::retrieveKrexxMessages
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::prepareFileName
      */
     public function testSaveActionNoWriteAccess()
     {
@@ -373,8 +363,6 @@ class IndexControllerTest extends AbstractHelper
 
     /**
      * Testing the dispatching without access.
-     *
-     * @covers \Brainworxx\Includekrexx\Controller\IndexController::dispatchAction
      */
     public function testDispatchActionNoAccess()
     {
@@ -391,9 +379,6 @@ class IndexControllerTest extends AbstractHelper
 
     /**
      * Testing the normal dispatching of a file.
-     *
-     * @covers \Brainworxx\Includekrexx\Controller\IndexController::dispatchAction
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::dispatchFile
      */
     public function testDispatchActionNormal()
     {

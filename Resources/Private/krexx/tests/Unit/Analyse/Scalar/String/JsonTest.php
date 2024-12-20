@@ -44,13 +44,15 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Krexx;
 use stdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Json::class, 'handle')]
+#[CoversMethod(Json::class, 'canHandle')]
+#[CoversMethod(Json::class, 'isActive')]
 class JsonTest extends AbstractHelper
 {
     /**
      * Test the json extension detection.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Json::isActive()
      */
     public function testIsActive()
     {
@@ -74,8 +76,6 @@ class JsonTest extends AbstractHelper
 
     /**
      * Test the json recognition.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Json::canHandle
      */
     public function testCanHandle()
     {
@@ -94,8 +94,6 @@ class JsonTest extends AbstractHelper
 
     /**
      * Test the handling of the json.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Json::handle
      */
     public function testHandle()
     {

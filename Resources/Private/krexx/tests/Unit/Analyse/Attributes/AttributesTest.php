@@ -41,23 +41,20 @@ use Brainworxx\Krexx\Tests\Fixtures\AttributesFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Krexx;
 use Exception;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Attributes::class, '__construct')]
+#[CoversMethod(Attributes::class, 'getFlatAttributes')]
+#[CoversMethod(Attributes::class, 'getAttributes')]
+#[CoversMethod(Attributes::class, 'generateParameterList')]
 class AttributesTest extends AbstractHelper
 {
-    /**
-     * @covers \Brainworxx\Krexx\Analyse\Attributes\Attributes::__construct
-     */
     public function testConstruct()
     {
         $attributes = new Attributes(Krexx::$pool);
         $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $attributes));
     }
 
-    /**
-     * @covers \Brainworxx\Krexx\Analyse\Attributes\Attributes::getFlatAttributes
-     * @covers \Brainworxx\Krexx\Analyse\Attributes\Attributes::getAttributes
-     * @covers \Brainworxx\Krexx\Analyse\Attributes\Attributes::generateParameterList
-     */
     public function testGetFlatAttributes()
     {
         $attributes = new Attributes(\Krexx::$pool);

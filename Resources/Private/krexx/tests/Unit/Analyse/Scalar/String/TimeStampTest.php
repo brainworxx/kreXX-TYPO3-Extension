@@ -39,13 +39,14 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Scalar\String\TimeStamp;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use DateTime;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(TimeStamp::class, 'isActive')]
+#[CoversMethod(TimeStamp::class, 'canHandle')]
 class TimeStampTest extends AbstractHelper
 {
     /**
      * Test something, that is always true.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\TimeStamp::isActive
      */
     public function testIsActive()
     {
@@ -54,8 +55,6 @@ class TimeStampTest extends AbstractHelper
 
     /**
      * Test the handling of time stamps that got cast into a string.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\TimeStamp::canHandle
      */
     public function testCanHandle()
     {

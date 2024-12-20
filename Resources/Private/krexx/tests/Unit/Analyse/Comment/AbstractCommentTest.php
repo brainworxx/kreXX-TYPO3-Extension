@@ -35,16 +35,17 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Comment;
 
+use Brainworxx\Krexx\Analyse\Comment\AbstractComment;
 use Brainworxx\Krexx\Analyse\Comment\Methods;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(AbstractComment::class, '__construct')]
 class AbstractCommentTest extends AbstractHelper
 {
     /**
      * Testing the setting of the pool.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Comment\AbstractComment::__construct
      */
     public function testConstruct()
     {

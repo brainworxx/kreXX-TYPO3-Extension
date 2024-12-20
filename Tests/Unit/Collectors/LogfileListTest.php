@@ -39,18 +39,18 @@ use Brainworxx\Includekrexx\Collectors\LogfileList;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(LogfileList::class, 'assignData')]
+#[CoversMethod(LogfileList::class, 'retrieveFileList')]
+#[CoversMethod(LogfileList::class, 'retrieveFileInfo')]
+#[CoversMethod(LogfileList::class, 'addMetaToFileInfo')]
+#[CoversMethod(LogfileList::class, 'fileSizeConvert')]
+#[CoversMethod(LogfileList::class, 'getRoute')]
 class LogfileListTest extends AbstractHelper
 {
     /**
      * Test the retrieval of logfile infos.
-     *
-     * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::assignData
-     * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::retrieveFileList
-     * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::retrieveFileInfo
-     * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::addMetaToFileInfo
-     * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::fileSizeConvert
-     * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::getRoute
      */
     public function testAssignData()
     {
@@ -145,9 +145,7 @@ class LogfileListTest extends AbstractHelper
     }
 
     /**
-     * Test the retrival of an empty file list.
-     *
-     * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::retrieveFileList
+     * Test the retrieval of an empty file list.
      */
     public function testRetrieveFileListEmpty()
     {

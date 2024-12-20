@@ -38,14 +38,15 @@ namespace Brainworxx\Krexx\Tests\Unit\View;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use Brainworxx\Krexx\View\AbstractRender;
 use Brainworxx\Krexx\View\Skins\RenderHans;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(AbstractRender::class, '__construct')]
 class AbstractRenderTest extends AbstractHelper
 {
     /**
      * Test the initializing of the render class.
-     *
-     * @covers \Brainworxx\Krexx\View\AbstractRender::__construct
      */
     public function testConstruct()
     {

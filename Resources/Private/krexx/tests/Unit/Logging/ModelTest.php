@@ -35,13 +35,20 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Logging;
 
+use Brainworxx\Krexx\Logging\Model;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
-/**
- * Test for the logger model.
- *
- * @package Brainworxx\Krexx\Tests\Unit\Logging
- */
+#[CoversMethod(Model::class, 'getCode')]
+#[CoversMethod(Model::class, 'setCode')]
+#[CoversMethod(Model::class, 'getFile')]
+#[CoversMethod(Model::class, 'setFile')]
+#[CoversMethod(Model::class, 'getLine')]
+#[CoversMethod(Model::class, 'setLine')]
+#[CoversMethod(Model::class, 'getTrace')]
+#[CoversMethod(Model::class, 'setTrace')]
+#[CoversMethod(Model::class, 'getMessage')]
+#[CoversMethod(Model::class, 'setMessage')]
 class ModelTest extends AbstractHelper
 {
     /**
@@ -53,14 +60,11 @@ class ModelTest extends AbstractHelper
     {
         parent::setUp();
 
-        $this->model = new \Brainworxx\Krexx\Logging\Model();
+        $this->model = new Model();
     }
 
     /**
      * Test the getter and setter of the message.
-     *
-     * @covers \Brainworxx\Krexx\Logging\Model::getMessage
-     * @covers \Brainworxx\Krexx\Logging\Model::setMessage
      */
     public function testSetGetMessage()
     {
@@ -72,9 +76,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Test the getter and setter of the trace.
-     *
-     * @covers \Brainworxx\Krexx\Logging\Model::getTrace
-     * @covers \Brainworxx\Krexx\Logging\Model::setTrace
      */
     public function testSetGetTrace()
     {
@@ -89,9 +90,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Test the getter and setter of the line.
-     *
-     * @covers \Brainworxx\Krexx\Logging\Model::getLine
-     * @covers \Brainworxx\Krexx\Logging\Model::setLine
      */
     public function testSetGetLine()
     {
@@ -103,9 +101,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Test the getter and setter of the file.
-     *
-     * @covers \Brainworxx\Krexx\Logging\Model::getFile
-     * @covers \Brainworxx\Krexx\Logging\Model::setFile
      */
     public function testSetGetFile()
     {
@@ -117,9 +112,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Test the getter and setter of the code.
-     *
-     * @covers \Brainworxx\Krexx\Logging\Model::getCode
-     * @covers \Brainworxx\Krexx\Logging\Model::setCode
      */
     public function testSetGetCode()
     {

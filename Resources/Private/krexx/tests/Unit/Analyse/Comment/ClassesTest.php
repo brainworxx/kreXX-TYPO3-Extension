@@ -39,13 +39,13 @@ use Brainworxx\Krexx\Analyse\Comment\Classes;
 use Brainworxx\Krexx\Krexx;
 use ReflectionClass;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Classes::class, 'getComment')]
 class ClassesTest extends AbstractHelper
 {
     /**
      * Test the retrieval of a class comment from a class reflection
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Comment\Classes::getComment
      */
     public function testGetComment()
     {

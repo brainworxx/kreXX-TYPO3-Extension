@@ -36,19 +36,22 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ProcessFloat::class, 'handle')]
+#[CoversMethod(AbstractRouting::class, 'dispatchProcessEvent')]
+#[CoversMethod(ProcessFloat::class, 'formatFloat')]
+#[CoversMethod(ProcessFloat::class, 'canHandle')]
 class ProcessFloatTest extends AbstractHelper
 {
     /**
      * Testing the float value processing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcess()
     {
@@ -69,9 +72,6 @@ class ProcessFloatTest extends AbstractHelper
 
     /**
      * Testing the float value processing, with a micro time
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat::formatFloat
      */
     public function testProcessWithMicrotime()
     {
@@ -89,8 +89,6 @@ class ProcessFloatTest extends AbstractHelper
 
     /**
      * Test the check if we can handle the array processing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat::canHandle
      */
     public function testCanHandle()
     {
@@ -104,10 +102,7 @@ class ProcessFloatTest extends AbstractHelper
     }
 
     /**
-     *
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat::formatFloat
+     * Test the special formatting.
      */
     public function testProcessFormat()
     {

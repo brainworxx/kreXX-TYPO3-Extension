@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessString;
 use Brainworxx\Krexx\Krexx;
@@ -50,7 +51,14 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use finfo;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ProcessString::class, '__construct')]
+#[CoversMethod(ProcessString::class, 'canHandle')]
+#[CoversMethod(ProcessString::class, 'handle')]
+#[CoversMethod(ProcessString::class, 'retrieveLengthAndEncoding')]
+#[CoversMethod(AbstractRouting::class, 'dispatchProcessEvent')]
+#[CoversMethod(ProcessString::class, 'handleStringScalar')]
 class ProcessStringTest extends AbstractHelper
 {
 
@@ -73,8 +81,6 @@ class ProcessStringTest extends AbstractHelper
 
     /**
      * Testing the setting of the pool and of the file info class.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::__construct
      */
     public function testConstructWithoutFinfo()
     {
@@ -97,8 +103,6 @@ class ProcessStringTest extends AbstractHelper
 
     /**
      * Testing the setting of the pool and of the file info class.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::__construct
      */
     public function testConstructWithFinfo()
     {
@@ -113,11 +117,6 @@ class ProcessStringTest extends AbstractHelper
 
     /**
      * Testing with a normal short string.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handleStringScalar
      */
     public function testProcessNormal()
     {
@@ -139,11 +138,6 @@ class ProcessStringTest extends AbstractHelper
 
     /**
      * Testing with broken encoding.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handleStringScalar
      */
     public function testProcessBrokenEncodung()
     {
@@ -166,11 +160,6 @@ class ProcessStringTest extends AbstractHelper
 
     /**
      * Testing with a large string.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handleStringScalar
      */
     public function testProcessLargerString()
     {
@@ -195,11 +184,6 @@ class ProcessStringTest extends AbstractHelper
 
     /**
      * Testing with a string larger than 50 characters.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handleStringScalar
      */
     public function testProcessHugeString()
     {
@@ -228,11 +212,6 @@ class ProcessStringTest extends AbstractHelper
 
     /**
      * Testing with linebreaks in the fixture.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handleStringScalar
      */
     public function testProcessWithLinebreaks()
     {
@@ -256,10 +235,7 @@ class ProcessStringTest extends AbstractHelper
     }
 
     /**
-     * Testing the triggering of the scalar analysis and its recursion handling.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handleStringScalar
+     * Testing the triggering of the scalar analysis and its recursion handling.r
      */
     public function testProcessWithScalar()
     {
@@ -376,8 +352,6 @@ class ProcessStringTest extends AbstractHelper
 
     /**
      * Test the check if we can handle the array processing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::canHandle
      */
     public function testCanHandle()
     {

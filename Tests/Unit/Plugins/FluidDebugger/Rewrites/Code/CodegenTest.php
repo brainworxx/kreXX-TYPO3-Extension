@@ -41,17 +41,20 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
-use Brainworxx\Krexx\View\Messages;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Codegen::class, 'setComplicatedWrapperRight')]
+#[CoversMethod(Codegen::class, 'generateWrapperRight')]
+#[CoversMethod(Codegen::class, 'setComplicatedWrapperLeft')]
+#[CoversMethod(Codegen::class, 'generateWrapperLeft')]
+#[CoversMethod(Codegen::class, 'generateSource')]
+#[CoversMethod(Codegen::class, 'generateAll')]
+#[CoversMethod(Codegen::class, 'generateVhsCall')]
+#[CoversMethod(Codegen::class, 'isUnknownType')]
 class CodegenTest extends AbstractHelper
 {
     /**
      * Testing the source code generation for fluid.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::generateSource
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::generateAll
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::generateVhsCall
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::isUnknownType
      */
     public function testGenerateSource()
     {
@@ -157,9 +160,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the setter / getter
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::setComplicatedWrapperLeft
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::generateWrapperLeft
      */
     public function testSetGenerateComplicatedWrapperLeft()
     {
@@ -171,9 +171,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the setter / getter
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::setComplicatedWrapperRight
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::generateWrapperRight
      */
     public function testSetGenerateComplicatedWrapperRight()
     {

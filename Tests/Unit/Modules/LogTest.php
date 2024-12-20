@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -44,18 +45,28 @@ use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use TYPO3\CMS\Core\View\ViewInterface;
-use TYPO3\CMS\Fluid\View\FluidViewFactory;
 use TYPO3\CMS\Fluid\View\StandaloneView;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Log::class, 'getJavaScriptFiles')]
+#[CoversMethod(Log::class, 'getCssFiles')]
+#[CoversMethod(Log::class, 'getContent')]
+#[CoversMethod(Log::class, 'hasAccess')]
+#[CoversMethod(Log::class, 'retrieveKrexxMessages')]
+#[CoversMethod(Log::class, 'createView')]
+#[CoversMethod(Log::class, 'createView13')]
+#[CoversMethod(Log::class, 'renderMessage')]
+#[CoversMethod(Log::class, 'getDataToStore')]
+#[CoversMethod(Log::class, 'getLabel')]
+#[CoversMethod(Log::class, 'getIdentifier')]
 class LogTest extends AbstractHelper
 {
-    const WRONG_VERSION = 'Wrong TYPO3 version.';
-    const FILES = 'files';
-    const ASSIGN_MULTIPLE = 'assignMultiple';
-    const SEVERITY = 'severity';
-    const TEXT = 'text';
-    const RENDER = 'render';
-
+    protected const WRONG_VERSION = 'Wrong TYPO3 version.';
+    protected const FILES = 'files';
+    protected const ASSIGN_MULTIPLE = 'assignMultiple';
+    protected const SEVERITY = 'severity';
+    protected const TEXT = 'text';
+    protected const RENDER = 'render';
 
     /**
      * {@inheritDoc}
@@ -68,8 +79,6 @@ class LogTest extends AbstractHelper
 
     /**
      * Testing the unique identifier.
-     *
-     * @covers \Brainworxx\Includekrexx\Modules\Log::getIdentifier
      */
     public function testGetIdentifier()
     {
@@ -79,8 +88,6 @@ class LogTest extends AbstractHelper
 
     /**
      * Test the 'translated' label getter.
-     *
-     * @covers \Brainworxx\Includekrexx\Modules\Log::getLabel
      */
     public function testGetLabel()
     {
@@ -93,8 +100,6 @@ class LogTest extends AbstractHelper
 
     /**
      * Test the retrieval of the log fil list class.
-     *
-     * @covers \Brainworxx\Includekrexx\Modules\Log::getDataToStore
      */
     public function testGetDataToStore()
     {
@@ -114,12 +119,6 @@ class LogTest extends AbstractHelper
 
     /**
      * Test the displaying of the file list, when having no access.
-     *
-     * @covers \Brainworxx\Includekrexx\Modules\Log::getContent
-     * @covers \Brainworxx\Includekrexx\Modules\Log::hasAccess
-     * @covers \Brainworxx\Includekrexx\Modules\Log::renderMessage
-     * @covers \Brainworxx\Includekrexx\Modules\Log::createView
-     * @covers \Brainworxx\Includekrexx\Modules\Log::createView13
      */
     public function testGetContentNoAccess()
     {
@@ -142,14 +141,7 @@ class LogTest extends AbstractHelper
 
     /**
      * Test the display of the no-logfiles-available message and the display of
-     * kreXX messasges, complaining about stuff.
-     *
-     * @covers \Brainworxx\Includekrexx\Modules\Log::getContent
-     * @covers \Brainworxx\Includekrexx\Modules\Log::hasAccess
-     * @covers \Brainworxx\Includekrexx\Modules\Log::renderMessage
-     * @covers \Brainworxx\Includekrexx\Modules\Log::retrieveKrexxMessages
-     * @covers \Brainworxx\Includekrexx\Modules\Log::createView
-     * @covers \Brainworxx\Includekrexx\Modules\Log::createView13
+     * kreXX messages, complaining about stuff.
      */
     public function testGetContentEmpty()
     {
@@ -184,13 +176,7 @@ class LogTest extends AbstractHelper
     }
 
     /**
-     * Test the normal diosplay of the file list and without any messages.
-     *
-     * @covers \Brainworxx\Includekrexx\Modules\Log::getContent
-     * @covers \Brainworxx\Includekrexx\Modules\Log::hasAccess
-     * @covers \Brainworxx\Includekrexx\Modules\Log::retrieveKrexxMessages
-     * @covers \Brainworxx\Includekrexx\Modules\Log::createView
-     * @covers \Brainworxx\Includekrexx\Modules\Log::createView13
+     * Test the normal display of the file list and without any messages.
      */
     public function testGetContentNormal()
     {
@@ -213,8 +199,6 @@ class LogTest extends AbstractHelper
 
     /**
      * Test the assigning of the css file.
-     *
-     * @covers \Brainworxx\Includekrexx\Modules\Log::getCssFiles
      */
     public function testGetCssFiles()
     {
@@ -227,8 +211,6 @@ class LogTest extends AbstractHelper
 
     /**
      * Test the not-assigning of any js files.
-     *
-     * @covers \Brainworxx\Includekrexx\Modules\Log::getJavaScriptFiles
      */
     public function testGetJavaScriptFiles()
     {

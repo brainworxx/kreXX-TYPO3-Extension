@@ -39,27 +39,25 @@ use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use stdClass;
 use ReflectionClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(UndeclaredProperty::class, '__construct')]
+#[CoversMethod(UndeclaredProperty::class, 'isStatic')]
+#[CoversMethod(UndeclaredProperty::class, 'getDeclaringClass')]
+#[CoversMethod(UndeclaredProperty::class, 'isDefault')]
+#[CoversMethod(UndeclaredProperty::class, 'isPrivate')]
+#[CoversMethod(UndeclaredProperty::class, 'isProtected')]
+#[CoversMethod(UndeclaredProperty::class, 'isPublic')]
+#[CoversMethod(UndeclaredProperty::class, 'setIsPublic')]
+#[CoversMethod(UndeclaredProperty::class, 'getName')]
+#[CoversMethod(UndeclaredProperty::class, '__toString')]
+#[CoversMethod(UndeclaredProperty::class, 'getDefaultValue')]
 class UndeclaredPropertyTest extends AbstractHelper
 {
 
     /**
      * This one is too simple and I'm too lazy to write test methods for
      * everything. So we test everything at once.
-     *
-     * @covers \Brainworxx\Krexx\Service\Reflection\UndeclaredProperty::__construct
-     * @covers \Brainworxx\Krexx\Service\Reflection\UndeclaredProperty::isStatic
-     * @covers \Brainworxx\Krexx\Service\Reflection\UndeclaredProperty::getDeclaringClass
-     * @covers \Brainworxx\Krexx\Service\Reflection\UndeclaredProperty::isDefault
-     * @covers \Brainworxx\Krexx\Service\Reflection\UndeclaredProperty::isPrivate
-     * @covers \Brainworxx\Krexx\Service\Reflection\UndeclaredProperty::isProtected
-     * @covers \Brainworxx\Krexx\Service\Reflection\UndeclaredProperty::isPublic
-     * @covers \Brainworxx\Krexx\Service\Reflection\UndeclaredProperty::setIsPublic
-     * @covers \Brainworxx\Krexx\Service\Reflection\UndeclaredProperty::getName
-     * @covers \Brainworxx\Krexx\Service\Reflection\UndeclaredProperty::__toString
-     * @covers \Brainworxx\Krexx\Service\Reflection\UndeclaredProperty::getDefaultValue
-     *
-     * @throws \ReflectionException
      */
     public function testThemAll()
     {

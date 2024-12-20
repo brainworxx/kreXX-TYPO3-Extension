@@ -33,7 +33,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Unit\Analyse\Scalar\String;
+namespace Brainworxx\Krexx\Tests\Unit\Analyse\Scalar\String;
 
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
@@ -44,11 +44,15 @@ use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ClassName::class, 'handle')]
+#[CoversMethod(ClassName::class, 'canHandle')]
+#[CoversMethod(ClassName::class, 'isActive')]
 class ClassNameTest extends AbstractHelper
 {
     /**
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\ClassName::isActive
+     * Test if it is active.
      */
     public function testIsActive()
     {
@@ -57,8 +61,6 @@ class ClassNameTest extends AbstractHelper
 
     /**
      * Test the class name recognition
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\ClassName::canHandle
      */
     public function testCanHandle()
     {
@@ -76,8 +78,6 @@ class ClassNameTest extends AbstractHelper
 
     /**
      * Test the handling of the json.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\ClassName::handle
      */
     public function testHandle()
     {

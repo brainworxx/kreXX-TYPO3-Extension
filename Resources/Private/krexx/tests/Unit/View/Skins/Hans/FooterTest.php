@@ -40,7 +40,15 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use Brainworxx\Krexx\Tests\Helpers\PluginConfiguration;
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
+use Brainworxx\Krexx\View\Skins\Hans\ExpandableChild;
+use Brainworxx\Krexx\View\Skins\Hans\Footer;
+use Brainworxx\Krexx\View\Skins\Hans\PluginList;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Footer::class, 'renderFooter')]
+#[CoversMethod(ExpandableChild::class, 'renderExpandableChild')]
+#[CoversMethod(Footer::class, 'renderCaller')]
+#[CoversMethod(PluginList::class, 'renderPluginList')]
 class FooterTest extends AbstractRenderHans
 {
     /**
@@ -48,11 +56,6 @@ class FooterTest extends AbstractRenderHans
      *
      * We test the renderExpandableChild separately to keep this one at least
      * a little bit sane.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\Footer::renderFooter
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\ExpandableChild::renderExpandableChild
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\Footer::renderCaller
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\PluginList::renderPluginList
      */
     public function testRenderFooter()
     {

@@ -40,11 +40,19 @@ use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use SplObjectStorage;
 use StdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Recursion::class, 'addToMetaHive')]
+#[CoversMethod(Recursion::class, 'isInMetaHive')]
+#[CoversMethod(Recursion::class, 'getMarker')]
+#[CoversMethod(Recursion::class, 'isInHive')]
+#[CoversMethod(Recursion::class, 'addToHive')]
+#[CoversMethod(Recursion::class, '__destruct')]
+#[CoversMethod(Recursion::class, '__construct')]
 class RecursionTest extends AbstractHelper
 {
-
     public const  RECURSION_HIVE = 'recursionHive';
+
     /**
      * @var \Brainworxx\Krexx\Service\Flow\Recursion
      */
@@ -62,8 +70,6 @@ class RecursionTest extends AbstractHelper
 
     /**
      * Test the setting of the recursion marker and the creation of the hive.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Recursion::__construct
      */
     public function testConstruct()
     {
@@ -83,8 +89,6 @@ class RecursionTest extends AbstractHelper
 
     /**
      * Test the removal of the recursion marker in the globals.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Recursion::__destruct
      */
     public function testDestruct()
     {
@@ -99,8 +103,6 @@ class RecursionTest extends AbstractHelper
 
     /**
      * Test the adding of classes to the hive.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Recursion::addToHive
      */
     public function testAddToHive()
     {
@@ -117,8 +119,6 @@ class RecursionTest extends AbstractHelper
 
     /**
      * Test the actual recursion handling.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Recursion::isInHive
      */
     public function testIsInHive()
     {
@@ -141,8 +141,6 @@ class RecursionTest extends AbstractHelper
 
     /**
      * Test the geter for the marker
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Recursion::getMarker
      */
     public function testGetMarker()
     {
@@ -153,8 +151,6 @@ class RecursionTest extends AbstractHelper
 
     /**
      * Test the meta hive.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Recursion::isInMetaHive
      */
     public function testIsInMetaHive()
     {
@@ -166,8 +162,6 @@ class RecursionTest extends AbstractHelper
 
     /**
      * Test the adding of stuff to the meta hive.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Recursion::addToMetaHive
      */
     public function testAddToMetaHive()
     {

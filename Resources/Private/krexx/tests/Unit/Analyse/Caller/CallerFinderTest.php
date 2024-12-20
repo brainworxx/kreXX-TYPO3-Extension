@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Caller;
 
+use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
 use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -43,7 +44,15 @@ use Brainworxx\Krexx\Tests\Fixtures\LoggerCallerFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use ReflectionClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(CallerFinder::class, '__construct')]
+#[CoversMethod(CallerFinder::class, 'findCaller')]
+#[CoversMethod(CallerFinder::class, 'getVarName')]
+#[CoversMethod(CallerFinder::class, 'getType')]
+#[CoversMethod(CallerFinder::class, 'identifyCaller')]
+#[CoversMethod(CallerFinder::class, 'removeKrexxPartFromCommand')]
+#[CoversMethod(AbstractCaller::class, 'getCurrentUrl')]
 class CallerFinderTest extends AbstractHelper
 {
     public const  FUNCTION_TO_TRACE = 'krexx';
@@ -99,9 +108,9 @@ class CallerFinderTest extends AbstractHelper
         $poolMock->messages = Krexx::$pool->messages;
         $poolMock->expects($this->any())
             ->method('createClass')
-            ->will($this->returnCallback(function ($classname) {
+            ->willReturnCallback(function ($classname) {
                 return Krexx::$pool->createClass($classname);
-            }));
+            });
 
         // Create our test subject.
         $this->callerFinder = new CallerFinder($poolMock);
@@ -134,9 +143,7 @@ class CallerFinderTest extends AbstractHelper
     }
 
     /**
-     * Test the setting of the call pattern and the pattern itself.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::__construct
+     * Test the setting of the call pattern and the pattern itself.´ß
      */
     public function testConstruct()
     {
@@ -159,16 +166,7 @@ class CallerFinderTest extends AbstractHelper
 
     /**
      * Test normally, without any outside iterference, the way it is normally
-     * exrcuted
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::findCaller
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getVarName
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getType
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::identifyCaller
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::removeKrexxPartFromCommand
-     * @covers \Brainworxx\Krexx\Analyse\Caller\AbstractCaller::getCurrentUrl
-     *
-     * @throws \ReflectionException
+     * executed.
      */
     public function testFindCallerNormal()
     {
@@ -190,11 +188,6 @@ class CallerFinderTest extends AbstractHelper
 
     /**
      * Test the resolving of inline calles of kreXX.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::findCaller
-     * @covers \Brainworxx\Krexx\Analyse\Caller\AbstractCaller::getType
-     *
-     * @throws \ReflectionException
      */
     public function testFindCallerInline()
     {
@@ -218,14 +211,6 @@ class CallerFinderTest extends AbstractHelper
 
     /**
      * Test with an externally set headline.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::findCaller
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getVarName
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getType
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::identifyCaller
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::removeKrexxPartFromCommand
-     *
-     * @throws \ReflectionException
      */
     public function testFindCallerHeadline()
     {
@@ -246,15 +231,7 @@ class CallerFinderTest extends AbstractHelper
     }
 
     /**
-     * Test with an source file, that is not readable.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::findCaller
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getVarName
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getType
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::identifyCaller
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::removeKrexxPartFromCommand
-     *
-     * @throws \ReflectionException
+     * Test with a source file, that is not readable.
      */
     public function testFindCallerUnreadableSource()
     {
@@ -279,12 +256,6 @@ class CallerFinderTest extends AbstractHelper
 
     /**
      * Test the caller finder with the forced logger.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::findCaller
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getVarName
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getType
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::identifyCaller
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::removeKrexxPartFromCommand
      */
     public function testFindCallerLogging()
     {

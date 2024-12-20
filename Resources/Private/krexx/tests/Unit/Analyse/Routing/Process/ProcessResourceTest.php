@@ -38,6 +38,7 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughResource;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource;
 use Brainworxx\Krexx\Krexx;
@@ -45,8 +46,13 @@ use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use stdClass;
-use CurlHandle;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ProcessResource::class, 'canHandle')]
+#[CoversMethod(ProcessResource::class, 'handle')]
+#[CoversMethod(AbstractRouting::class, 'dispatchProcessEvent')]
+#[CoversMethod(ProcessResource::class, 'renderUnknownOrClosed')]
+#[CoversMethod(AbstractRouting::class, 'dispatchNamedEvent')]
 class ProcessResourceTest extends AbstractHelper
 {
     public const  PROCESS_NAMESPACE = '\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\';
@@ -56,9 +62,6 @@ class ProcessResourceTest extends AbstractHelper
 
     /**
      * Testing the processing of a stream resource.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessStream()
     {
@@ -80,9 +83,6 @@ class ProcessResourceTest extends AbstractHelper
 
     /**
      * Testing the processing of a curl resource.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessCurl()
     {
@@ -104,10 +104,6 @@ class ProcessResourceTest extends AbstractHelper
 
     /**
      * Testing the processing of a not yet implemented resource type analysis.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::renderUnknownOrClosed
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchNamedEvent
      */
     public function testProcessOther()
     {
@@ -126,9 +122,6 @@ class ProcessResourceTest extends AbstractHelper
 
     /**
      * Test the processing of a shell resource.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessShell()
     {
@@ -196,8 +189,6 @@ class ProcessResourceTest extends AbstractHelper
 
     /**
      * Test the check if we can handle the array processing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::canHandle
      */
     public function testCanHandle()
     {

@@ -40,13 +40,13 @@ use Brainworxx\Krexx\Analyse\Caller\ExceptionCallerFinder;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Logging\Model;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ExceptionCallerFinder::class, 'findCaller')]
 class ExceptionCallerFinderTest extends AbstractHelper
 {
     /**
      * Test the return array.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Caller\ExceptionCallerFinder::findCaller
      */
     public function testFindCaller()
     {

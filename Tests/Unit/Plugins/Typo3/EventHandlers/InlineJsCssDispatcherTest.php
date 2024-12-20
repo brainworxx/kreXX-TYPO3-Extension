@@ -42,13 +42,14 @@ use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use TYPO3\CMS\Core\Page\AssetCollector;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(InlineJsCssDispatcher::class, 'handle')]
+#[CoversMethod(InlineJsCssDispatcher::class, '__construct')]
 class InlineJsCssDispatcherTest extends AbstractHelper implements ConfigConstInterface
 {
     /**
      * Test the assigning of the pool.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\InlineJsCssDispatcher::__construct
      */
     public function testConstuct()
     {
@@ -58,8 +59,6 @@ class InlineJsCssDispatcherTest extends AbstractHelper implements ConfigConstInt
 
     /**
      * Test with logging on.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\InlineJsCssDispatcher::handle
      */
     public function testHandleLogging()
     {
@@ -85,8 +84,6 @@ class InlineJsCssDispatcherTest extends AbstractHelper implements ConfigConstInt
 
     /**
      * Test with normal output.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\InlineJsCssDispatcher::handle
      */
     public function testHandleNormal()
     {
@@ -127,6 +124,9 @@ class InlineJsCssDispatcherTest extends AbstractHelper implements ConfigConstInt
         $dispatcher->handle(null, $model);
     }
 
+    /**
+     * Test without any JS dispatching.
+     */
     public function testHandleEmpty()
     {
         $configMock = $this->createMock(Config::class);

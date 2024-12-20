@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ProtectedProperties;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
@@ -45,7 +46,11 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 use ReflectionProperty;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ProtectedProperties::class, 'callMe')]
+#[CoversMethod(AbstractObjectAnalysis::class, 'getReflectionPropertiesData')]
+#[CoversMethod(AbstractObjectAnalysis::class, 'reflectionSorting')]
 class ProtectedPropertiesTest extends AbstractHelper
 {
     /**
@@ -76,11 +81,6 @@ class ProtectedPropertiesTest extends AbstractHelper
     /**
      * Test the private property analysis, without any protected ones in the
      * fixture.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ProtectedProperties::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeNoProtected()
     {
@@ -112,12 +112,6 @@ class ProtectedPropertiesTest extends AbstractHelper
     /**
      * Test, if the private analysis gets all privates, including the
      * "inherited"  ones.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ProtectedProperties::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::getReflectionPropertiesData
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeWithProtected()
     {

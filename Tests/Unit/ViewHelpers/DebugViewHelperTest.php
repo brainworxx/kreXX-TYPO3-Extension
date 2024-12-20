@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -42,13 +43,15 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3Fluid\Fluid\Core\Parser\SyntaxTree\ViewHelperNode;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\ViewHelperVariableContainer;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(DebugViewHelper::class, 'render')]
+#[CoversMethod(DebugViewHelper::class, 'analysis')]
+#[CoversMethod(DebugViewHelper::class, 'initializeArguments')]
 class DebugViewHelperTest extends AbstractHelper
 {
     /**
      * Testing the initializing of our single argument.
-     *
-     * @covers \Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper::initializeArguments
      */
     public function testInitializeArguments()
     {
@@ -63,9 +66,6 @@ class DebugViewHelperTest extends AbstractHelper
 
     /**
      * Test the rendering of the debug ViewHelper.
-     *
-     * @covers \Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper::render
-     * @covers \Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper::analysis
      */
     public function testRender()
     {

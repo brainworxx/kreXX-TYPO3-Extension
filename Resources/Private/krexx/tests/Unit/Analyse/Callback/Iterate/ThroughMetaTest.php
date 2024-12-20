@@ -46,7 +46,12 @@ use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ThroughMeta::class, '__construct')]
+#[CoversMethod(ThroughMeta::class, 'callMe')]
+#[CoversMethod(ThroughMeta::class, 'handleNoneReflections')]
+#[CoversMethod(ThroughMeta::class, 'prepareModel')]
 class ThroughMetaTest extends AbstractHelper
 {
     public const  RENDER_EXPANDABLE_CHILD = 'renderExpandableChild';
@@ -90,8 +95,6 @@ class ThroughMetaTest extends AbstractHelper
 
     /**
      * Test the initializing of the workflow.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::__construct
      */
     public function testConstruct()
     {
@@ -107,10 +110,6 @@ class ThroughMetaTest extends AbstractHelper
 
     /**
      * Test with a comment string.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::handleNoneReflections
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::prepareModel
      */
     public function testCallMeComment()
     {
@@ -122,10 +121,6 @@ class ThroughMetaTest extends AbstractHelper
 
     /**
      * Test with a classname in a string
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::handleNoneReflections
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::prepareModel
      */
     public function testCallMeClassName()
     {
@@ -147,10 +142,6 @@ class ThroughMetaTest extends AbstractHelper
 
     /**
      * Test with a decoded json
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::handleNoneReflections
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::prepareModel
      */
     public function testCallMeDecodedJson()
     {
@@ -172,10 +163,6 @@ class ThroughMetaTest extends AbstractHelper
 
     /**
      * Test with a decoded base64 string
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::handleNoneReflections
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::prepareModel
      */
     public function testCallMeDecodedBase64()
     {
@@ -197,10 +184,6 @@ class ThroughMetaTest extends AbstractHelper
 
     /**
      * Test with a declared-in string
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::handleNoneReflections
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::prepareModel
      */
     public function testCallMeDeclaredIn()
     {
@@ -215,10 +198,6 @@ class ThroughMetaTest extends AbstractHelper
      *
      * -> testCallMeSource
      * Insert Matrix joke here.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::handleNoneReflections
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::prepareModel
      */
     public function testCallMeSource()
     {
@@ -266,10 +245,6 @@ class ThroughMetaTest extends AbstractHelper
 
     /**
      * Test the interface processing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeInterfaces()
     {
@@ -278,10 +253,6 @@ class ThroughMetaTest extends AbstractHelper
 
     /**
      * Test the trait processing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeTraits()
     {
@@ -289,9 +260,7 @@ class ThroughMetaTest extends AbstractHelper
     }
 
     /**
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
-     *
-     * @throws \ReflectionException
+     * Test the inheritance
      */
     public function testCallMeInherited()
     {

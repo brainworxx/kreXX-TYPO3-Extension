@@ -53,8 +53,13 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
-    - name: Build
+    - name: Build without coverage
+      if: ${{ matrix.env.CodeClimate == 'no' }}
       run: composer test
+
+    - name: Build
+      if: ${{ matrix.env.CodeClimate == 'yes' }}
+      run: composer test-coverage
 
     - name: Publish code coverage
       uses: paambaati/codeclimate-action@v8.0.0

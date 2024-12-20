@@ -23,6 +23,7 @@
 - Change: Split the getter analysis into several smaller classes.
 - Change: Removed deprecations from the unit tests.
 - Change: Deprecated the exception handler.
+- Change: Updated to UnitTest 11.4
 
 5.0.7
 - Bugfix: The XML analysis does not recognise a broken XML string.

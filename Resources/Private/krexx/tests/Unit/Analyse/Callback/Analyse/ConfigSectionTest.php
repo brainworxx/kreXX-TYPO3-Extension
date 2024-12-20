@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse;
 
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\Model;
@@ -42,16 +43,16 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Messages;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\View\Skins\RenderHans;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ConfigSection::class, 'callMe')]
+#[CoversMethod(ConfigSection::class, 'generateOutput')]
+#[CoversMethod(ConfigSection::class, 'prepareValue')]
+#[CoversMethod(AbstractCallback::class, 'dispatchStartEvent')]
 class ConfigSectionTest extends AbstractHelper
 {
     /**
      * Testing if the configuration is rendered correctly.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection::generateOutput
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection::prepareValue
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
      */
     public function testCallMe()
     {

@@ -37,19 +37,16 @@ namespace Brainworxx\Krexx\Tests\Unit\View\Output;
 
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use Brainworxx\Krexx\View\Output\AbstractOutput;
 use Brainworxx\Krexx\View\Output\Browser;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
-/**
- * Although the name implies an abstract class, it's just a normal one.
- *
- * @package Brainworxx\Krexx\Tests\View\Output
- */
+#[CoversMethod(Browser::class, 'addChunkString')]
+#[CoversMethod(AbstractOutput::class, '__construct')]
 class AbstractOutputTest extends AbstractHelper
 {
     /**
      * Test the setting of the pool.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\AbstractOutput::__construct
      */
     public function testConstruct()
     {
@@ -59,8 +56,6 @@ class AbstractOutputTest extends AbstractHelper
 
     /**
      * Test the adding of a chunk string, just like the method name implies.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\Browser::addChunkString
      */
     public function testAddChunkString()
     {

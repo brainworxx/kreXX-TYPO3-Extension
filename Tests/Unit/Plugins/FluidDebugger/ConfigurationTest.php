@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -49,7 +50,11 @@ use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid as CallerFinderFluid;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Getter as GetterFluid;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Configuration::class, 'exec')]
+#[CoversMethod(Configuration::class, 'getVersion')]
+#[CoversMethod(Configuration::class, 'getName')]
 class ConfigurationTest extends AbstractHelper
 {
     /**
@@ -97,8 +102,6 @@ class ConfigurationTest extends AbstractHelper
 
     /**
      * Simple string contains assertion.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration::getName
      */
     public function testGetName()
     {
@@ -107,8 +110,6 @@ class ConfigurationTest extends AbstractHelper
 
     /**
      * Test the getting of the version, which is the same as the extension.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration::getVersion
      */
     public function testGetVersion()
     {
@@ -126,8 +127,6 @@ class ConfigurationTest extends AbstractHelper
 
     /**
      * Test the registration of all necessary adjustments to the kreXX lib.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration::exec
      */
     public function testExec()
     {

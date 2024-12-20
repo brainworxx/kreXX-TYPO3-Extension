@@ -36,13 +36,14 @@
 namespace Brainworxx\Krexx\Tests\Unit\View\Skins\SmokyGrey;
 
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderSmokyGrey;
+use Brainworxx\Krexx\View\Skins\SmokyGrey\Header;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Header::class, 'renderHeader')]
 class HeaderTest extends AbstractRenderSmokyGrey
 {
     /**
      * Test the additional stuff in the header rendering.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Header::renderHeader
      */
     public function testRenderHeader()
     {

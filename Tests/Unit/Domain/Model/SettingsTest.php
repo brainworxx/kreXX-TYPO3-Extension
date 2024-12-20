@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -46,11 +47,62 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Package\MetaData;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Settings::class, 'generateContent')]
+#[CoversMethod(Settings::class, 'processGroups')]
+#[CoversMethod(Settings::class, 'processFeEditing')]
+#[CoversMethod(Settings::class, 'setAnalyseGetter')]
+#[CoversMethod(Settings::class, 'setAnalysePrivate')]
+#[CoversMethod(Settings::class, 'setAnalysePrivateMethods')]
+#[CoversMethod(Settings::class, 'setAnalyseProtected')]
+#[CoversMethod(Settings::class, 'setAnalyseProtectedMethods')]
+#[CoversMethod(Settings::class, 'setAnalyseTraversable')]
+#[CoversMethod(Settings::class, 'setArrayCountLimit')]
+#[CoversMethod(Settings::class, 'setDebugMethods')]
+#[CoversMethod(Settings::class, 'setDestination')]
+#[CoversMethod(Settings::class, 'setDetectAjax')]
+#[CoversMethod(Settings::class, 'setAnalyseScalar')]
+#[CoversMethod(Settings::class, 'setDisabled')]
+#[CoversMethod(Settings::class, 'setFormanalyseGetter')]
+#[CoversMethod(Settings::class, 'setFormanalysePrivate')]
+#[CoversMethod(Settings::class, 'setFormanalysePrivateMethods')]
+#[CoversMethod(Settings::class, 'setFormanalyseProtected')]
+#[CoversMethod(Settings::class, 'setFormanalyseProtectedMethods')]
+#[CoversMethod(Settings::class, 'setFormanalyseTraversable')]
+#[CoversMethod(Settings::class, 'setFormarrayCountLimit')]
+#[CoversMethod(Settings::class, 'setFormdebugMethods')]
+#[CoversMethod(Settings::class, 'setFormdestination')]
+#[CoversMethod(Settings::class, 'setFormdetectAjax')]
+#[CoversMethod(Settings::class, 'setFormdisabled')]
+#[CoversMethod(Settings::class, 'setFormiprange')]
+#[CoversMethod(Settings::class, 'setFormlevel')]
+#[CoversMethod(Settings::class, 'setFormmaxCall')]
+#[CoversMethod(Settings::class, 'setFormmaxfiles')]
+#[CoversMethod(Settings::class, 'setFormmaxRuntime')]
+#[CoversMethod(Settings::class, 'setFormmaxStepNumber')]
+#[CoversMethod(Settings::class, 'setFormmemoryLeft')]
+#[CoversMethod(Settings::class, 'setFormskin')]
+#[CoversMethod(Settings::class, 'setFormanalyseScalar')]
+#[CoversMethod(Settings::class, 'setIprange')]
+#[CoversMethod(Settings::class, 'setLevel')]
+#[CoversMethod(Settings::class, 'setMaxCall')]
+#[CoversMethod(Settings::class, 'setMaxfiles')]
+#[CoversMethod(Settings::class, 'setMaxRuntime')]
+#[CoversMethod(Settings::class, 'setMaxStepNumber')]
+#[CoversMethod(Settings::class, 'setMemoryLeft')]
+#[CoversMethod(Settings::class, 'setSkin')]
+#[CoversMethod(Settings::class, 'setActivateT3FileWriter')]
+#[CoversMethod(Settings::class, 'setLoglevelT3FileWriter')]
+#[CoversMethod(Settings::class, 'setFormactivateT3FileWriter')]
+#[CoversMethod(Settings::class, 'setFormloglevelT3FileWriter')]
+#[CoversMethod(Settings::class, 'setLanguageKey')]
+#[CoversMethod(Settings::class, 'setFormlanguageKey')]
+#[CoversMethod(Settings::class, 'prepareFileName')]
+#[CoversMethod(Settings::class, 'setFactory')]
 class SettingsTest extends AbstractHelper implements ConstInterface
 {
-
-    const REVERSE_PROXY = 'reverseProxyIP';
+    protected const REVERSE_PROXY = 'reverseProxyIP';
 
     protected const TYPO3_TEMP = 'typo3temp';
 
@@ -104,56 +156,6 @@ class SettingsTest extends AbstractHelper implements ConstInterface
     /**
      * There are no getter implemented. Hence, we set a value for each property
      * and then test the ini.
-     *
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::generateContent
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::processGroups
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::processFeEditing
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setAnalyseGetter
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setAnalysePrivate
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setAnalysePrivateMethods
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setAnalyseProtected
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setAnalyseProtectedMethods
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setAnalyseTraversable
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setArrayCountLimit
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setDebugMethods
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setDestination
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setDetectAjax
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setAnalyseScalar
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setDisabled
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormanalyseGetter
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormanalysePrivate
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormanalysePrivateMethods
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormanalyseProtected
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormanalyseProtectedMethods
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormanalyseTraversable
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormarrayCountLimit
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormdebugMethods
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormdestination
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormdetectAjax
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormdisabled
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormiprange
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormlevel
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormmaxCall
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormmaxfiles
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormmaxRuntime
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormmaxStepNumber
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormmemoryLeft
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormskin
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormanalyseScalar
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setIprange
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setLevel
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setMaxCall
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setMaxfiles
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setMaxRuntime
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setMaxStepNumber
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setMemoryLeft
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setSkin
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setActivateT3FileWriter
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setLoglevelT3FileWriter
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormactivateT3FileWriter
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormloglevelT3FileWriter
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setLanguageKey
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormlanguageKey
      *
      * There is a point where we needed to stop and we have clearly passed it
      * but let's keep going and see what happens.
@@ -264,7 +266,7 @@ class SettingsTest extends AbstractHelper implements ConstInterface
     }
 
     /**
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFactory
+     * Test the factory settings.
      */
     public function testSetFactory()
     {

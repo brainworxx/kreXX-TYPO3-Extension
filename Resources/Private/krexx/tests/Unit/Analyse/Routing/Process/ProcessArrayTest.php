@@ -38,13 +38,22 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
+use Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ProcessArray::class, '__construct')]
+#[CoversMethod(ProcessArray::class, 'handleNoneScalar')]
+#[CoversMethod(AbstractProcessNoneScalar::class, 'handle')]
+#[CoversMethod(AbstractRouting::class, 'dispatchProcessEvent')]
+#[CoversMethod(AbstractRouting::class, 'generateDomIdFromObject')]
+#[CoversMethod(ProcessArray::class, 'canHandle')]
 class ProcessArrayTest extends AbstractHelper
 {
     protected function assertResults()
@@ -77,8 +86,6 @@ class ProcessArrayTest extends AbstractHelper
 
     /**
      * Test the reading of the settings
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray::__construct
      */
     public function testConstruct()
     {
@@ -88,11 +95,6 @@ class ProcessArrayTest extends AbstractHelper
 
     /**
      * Test the processing of a normal array.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray::handleNoneScalar
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::generateDomIdFromObject
      */
     public function testProcessNormal()
     {
@@ -102,11 +104,6 @@ class ProcessArrayTest extends AbstractHelper
 
     /**
      * Test the processing of a large array.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray::handleNoneScalar
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::generateDomIdFromObject
      */
     public function testProcessLargeArray()
     {
@@ -117,8 +114,6 @@ class ProcessArrayTest extends AbstractHelper
 
     /**
      * Test the check if we can handle the array processing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray::canHandle
      */
     public function testCanHandle()
     {

@@ -45,14 +45,32 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 use Brainworxx\Krexx\Krexx;
 use FilesystemIterator;
-use stdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Krexx::class, 'timerMoment')]
+#[CoversMethod(Krexx::class, 'open')]
+#[CoversMethod(Krexx::class, 'backtrace')]
+#[CoversMethod(Krexx::class, 'disable')]
+#[CoversMethod(Krexx::class, 'editSettings')]
+#[CoversMethod(Krexx::class, 'timerEnd')]
+#[CoversMethod(Krexx::class, 'logTimerEnd')]
+#[CoversMethod(Krexx::class, 'startForcedLog')]
+#[CoversMethod(Krexx::class, 'endForcedLog')]
+#[CoversMethod(Krexx::class, 'logBacktrace')]
+#[CoversMethod(Krexx::class, 'log')]
 class KrexxTest extends AbstractHelper
 {
     public const KREXX_COUNT = 'krexxCount';
     public const TIME_KEEPING = 'timekeeping';
     public const COUNTER_CACHE = 'counterCache';
     public const CONTROLLER_NAMESPACE = '\\Brainworxx\\Krexx\\Controller\\';
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $this->setValueByReflection(static::COUNTER_CACHE, [], TimerController::class);
+        $this->setValueByReflection(static::TIME_KEEPING, [], TimerController::class);
+    }
 
     protected function getDirContents($dir, &$results = array())
     {
@@ -117,7 +135,6 @@ class KrexxTest extends AbstractHelper
     /**
      * Test if we can take a moment while kreXX is disabled.
      *
-     * @covers \Brainworxx\Krexx\Krexx::timerMoment
      */
     public function testTimerMomentDisabled()
     {
@@ -134,7 +151,6 @@ class KrexxTest extends AbstractHelper
     /**
      * Test if we can take a moment while kreXX is analying something else.
      *
-     * @covers \Brainworxx\Krexx\Krexx::timerMoment
      */
     public function testTimerMomentInProgress()
     {
@@ -151,7 +167,6 @@ class KrexxTest extends AbstractHelper
     /**
      * Testing, if it can be disabled, as expected.
      *
-     * @covers \Brainworxx\Krexx\Krexx::timerMoment
      */
     public function testTimerMomentEnabled()
     {
@@ -169,8 +184,6 @@ class KrexxTest extends AbstractHelper
 
     /**
      * Testing if we get an output while kreXX is disabled.
-     *
-     * @covers \Brainworxx\Krexx\Krexx::timerEnd
      */
     public function testTimerEndDisabled()
     {
@@ -185,8 +198,6 @@ class KrexxTest extends AbstractHelper
 
     /**
      * Test if we can get an output, while another analysis is in progress.
-     *
-     * @covers \Brainworxx\Krexx\Krexx::timerEnd
      */
     public function testTimerEndInProgress()
     {
@@ -201,8 +212,6 @@ class KrexxTest extends AbstractHelper
 
     /**
      * Test if we can get an output at all.
-     *
-     * @covers \Brainworxx\Krexx\Krexx::timerEnd
      */
     public function testTimerEndNormal()
     {
@@ -214,8 +223,6 @@ class KrexxTest extends AbstractHelper
 
     /**
      * Test if we can get an output when disabled.
-     *
-     * @covers \Brainworxx\Krexx\Krexx::open
      */
     public function testOpenDisabled()
     {
@@ -229,8 +236,6 @@ class KrexxTest extends AbstractHelper
 
     /**
      * Test if we can get an output, while another analysis is in progress.
-     *
-     * @covers \Brainworxx\Krexx\Krexx::open
      */
     public function testOpenInProgress()
     {
@@ -244,8 +249,6 @@ class KrexxTest extends AbstractHelper
 
     /**
      * Test if we can get an output at all.
-     *
-     * @covers \Brainworxx\Krexx\Krexx::open
      */
     public function testOpen()
     {
@@ -258,8 +261,6 @@ class KrexxTest extends AbstractHelper
 
     /**
      * Test if we can get an output when disabled.
-     *
-     * @covers \Brainworxx\Krexx\Krexx::backtrace
      */
     public function testBacktraceDisabled()
     {
@@ -273,8 +274,6 @@ class KrexxTest extends AbstractHelper
 
     /**
      * Test if we can get an output, while another analysis is in progress.
-     *
-     * @covers \Brainworxx\Krexx\Krexx::backtrace
      */
     public function testBacktraceInProgress()
     {
@@ -288,8 +287,6 @@ class KrexxTest extends AbstractHelper
 
     /**
      * Test if we can get an output at all.
-     *
-     * @covers \Brainworxx\Krexx\Krexx::backtrace
      */
     public function testBacktrace()
     {
@@ -304,8 +301,6 @@ class KrexxTest extends AbstractHelper
 
     /**
      * Test if it sets the value if kreXX beeing disabled.
-     *
-     * @covers \Brainworxx\Krexx\Krexx::disable
      */
     public function testDisable()
     {
@@ -315,9 +310,18 @@ class KrexxTest extends AbstractHelper
     }
 
     /**
+     * Test the edit settings, normally.
+     */
+    public function testEditSettings()
+    {
+        $this->mockDebugBacktraceStandard();
+        Krexx::editSettings();
+        // The counter should be at 1.
+        $this->assertEquals(1, $this->retrieveValueByReflection(static::KREXX_COUNT, Krexx::$pool->emergencyHandler));
+    }
+
+    /**
      * Test if we can get an output when disabled.
-     *
-     * @covers \Brainworxx\Krexx\Krexx::editSettings
      */
     public function testEditSettingsDisabled()
     {
@@ -394,10 +398,6 @@ class KrexxTest extends AbstractHelper
 
     /**
      * Test the forced logger.
-     *
-     * @covers \Brainworxx\Krexx\Krexx::log
-     * @covers \Brainworxx\Krexx\Krexx::startForcedLog
-     * @covers \Brainworxx\Krexx\Krexx::endForcedLog
      */
     public function testLog()
     {
@@ -418,10 +418,6 @@ class KrexxTest extends AbstractHelper
 
     /**
      * Testing the backtrace logger.
-     *
-     * @covers \Brainworxx\Krexx\Krexx::logBacktrace
-     * @covers \Brainworxx\Krexx\Krexx::startForcedLog
-     * @covers \Brainworxx\Krexx\Krexx::endForcedLog
      */
     public function testLogBacktrace()
     {
@@ -443,10 +439,6 @@ class KrexxTest extends AbstractHelper
 
     /**
      * Testing the timer logging.
-     *
-     * @covers \Brainworxx\Krexx\Krexx::logTimerEnd
-     * @covers \Brainworxx\Krexx\Krexx::startForcedLog
-     * @covers \Brainworxx\Krexx\Krexx::endForcedLog
      */
     public function testLogTimerEnd()
     {
@@ -465,8 +457,6 @@ class KrexxTest extends AbstractHelper
 
     /**
      * Testing, if kreXX is disabled, if the call comes from the wrong IP.
-     *
-     * @covers \Brainworxx\Krexx\Krexx::open
      */
     public function testDisabledByIp()
     {

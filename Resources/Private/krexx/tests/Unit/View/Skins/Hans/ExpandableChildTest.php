@@ -36,12 +36,20 @@
 namespace Brainworxx\Krexx\Tests\Unit\View\Skins\Hans;
 
 use Brainworxx\Krexx\Analyse\Code\Codegen;
-use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
+use Brainworxx\Krexx\View\AbstractRender;
 use Brainworxx\Krexx\View\Output\Chunks;
+use Brainworxx\Krexx\View\Skins\Hans\ExpandableChild;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ExpandableChild::class, 'renderExpandableChild')]
+#[CoversMethod(ExpandableChild::class, 'renderSourceButtonWithStop')]
+#[CoversMethod(ExpandableChild::class, 'renderNest')]
+#[CoversMethod(ExpandableChild::class, 'renderExtra')]
+#[CoversMethod(AbstractRender::class, 'retrieveTypeClasses')]
+#[CoversMethod(AbstractRender::class, 'encodeJson')]
 class ExpandableChildTest extends AbstractRenderHans
 {
     /**
@@ -49,13 +57,6 @@ class ExpandableChildTest extends AbstractRenderHans
      *
      * On hindsight, these names are just silly. Then again, we do have a skin
      * with the name 'Hans'.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\ExpandableChild::renderExpandableChild
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\ExpandableChild::renderSourceButtonWithStop
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\ExpandableChild::renderNest
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\ExpandableChild::renderExtra
-     * @covers \Brainworxx\Krexx\View\AbstractRender::retrieveTypeClasses
-     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderExpandableChild()
     {

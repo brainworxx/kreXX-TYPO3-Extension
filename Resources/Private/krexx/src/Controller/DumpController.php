@@ -60,7 +60,7 @@ class DumpController extends AbstractController implements BacktraceConstInterfa
      * @param string $level
      *   The log level, if available.
      *
-     * @return $this;
+     * @return $this
      *   Return $this for chaining.
      */
     public function dumpAction(&$data, string $message = '', string $level = 'debug'): DumpController

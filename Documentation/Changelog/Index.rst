@@ -31,6 +31,7 @@ Changes:
     * [Change] Moved some frontend literals to the translations.
     * [Change] Removed deprecations from the unit tests.
     * [Change] Deprecated the exception handler.
+    * [Change] Updated the unit tests to 11.
 
 -----
 

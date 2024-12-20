@@ -42,10 +42,20 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Message;
 use Brainworxx\Krexx\View\Messages;
 use Brainworxx\Krexx\View\Skins\RenderHans;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Messages::class, 'setLanguageKey')]
+#[CoversMethod(Messages::class, 'readHelpTexts')]
+#[CoversMethod(Messages::class, 'getHelp')]
+#[CoversMethod(Messages::class, '__construct')]
+#[CoversMethod(Messages::class, 'removeKey')]
+#[CoversMethod(Messages::class, 'outputMessages')]
+#[CoversMethod(Messages::class, 'getHelp')]
+#[CoversMethod(Messages::class, 'getMessages')]
+#[CoversMethod(Messages::class, 'addMessage')]
+#[CoversMethod(Messages::class, 'readHelpTexts')]
 class MessagesTest extends AbstractHelper
 {
-
     public const  KEY_VARIABLE_NAME = 'messages';
     public const  PARAMS = 'params';
 
@@ -76,8 +86,6 @@ class MessagesTest extends AbstractHelper
 
     /**
      * Test the initializing of the messages class.
-     *
-     * @covers \Brainworxx\Krexx\View\Messages::__construct
      */
     public function testConstruct()
     {
@@ -87,8 +95,6 @@ class MessagesTest extends AbstractHelper
 
     /**
      * Test the removing od message keys.
-     *
-     * @covers \Brainworxx\Krexx\View\Messages::removeKey
      */
     public function testRemoveKey()
     {
@@ -101,8 +107,6 @@ class MessagesTest extends AbstractHelper
 
     /**
      * Testing the outputting of messages.
-     *
-     * @covers \Brainworxx\Krexx\View\Messages::outputMessages
      */
     public function testOutputMessages()
     {
@@ -148,8 +152,6 @@ class MessagesTest extends AbstractHelper
 
     /**
      * Seriously, get help!
-     *
-     * @covers \Brainworxx\Krexx\View\Messages::getHelp
      */
     public function testGetHelp()
     {
@@ -162,9 +164,6 @@ class MessagesTest extends AbstractHelper
 
     /**
      * Test a simple getter.
-     *
-     * @covers \Brainworxx\Krexx\View\Messages::getMessages
-     * @covers \Brainworxx\Krexx\View\Messages::addMessage
      */
     public function testGetMessages()
     {
@@ -190,7 +189,6 @@ class MessagesTest extends AbstractHelper
     /**
      * Purging of the already read stuff, and read it again.
      *
-     * @covers \Brainworxx\Krexx\View\Messages::readHelpTexts
      */
     public function testReadHelpTexts()
     {
@@ -213,10 +211,6 @@ class MessagesTest extends AbstractHelper
 
     /**
      * Test the assignment of the language key.
-     *
-     * @covers \Brainworxx\Krexx\View\Messages::setLanguageKey
-     * @covers \Brainworxx\Krexx\View\Messages::readHelpTexts
-     * @covers \Brainworxx\Krexx\View\Messages::getHelp
      */
     public function testSetLanguageKey()
     {

@@ -38,18 +38,23 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Scalar\String;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Scalar\String\AbstractScalarAnalysis;
 use Brainworxx\Krexx\Analyse\Scalar\String\Serialized;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
+
+#[CoversMethod(Serialized::class, 'isActive')]
+#[CoversMethod(Serialized::class, 'canHandle')]
+#[CoversMethod(AbstractScalarAnalysis::class, 'callMe')]
+#[CoversMethod(Serialized::class, 'handle')]
 
 class SerializedTest extends AbstractHelper
 {
     /**
      * Test if the pretty print for the serialize is active.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Serialized::isActive
      */
     public function testIsActive()
     {
@@ -61,8 +66,6 @@ class SerializedTest extends AbstractHelper
     /**
      * Test with loops you have to jump through to test if we can pretty print
      * this one.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Serialized::canHandle
      */
     public function testCanHandle()
     {
@@ -91,9 +94,6 @@ class SerializedTest extends AbstractHelper
 
     /**
      * Test the calling of the pretty print class.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\AbstractScalarAnalysis::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Serialized::handle
      */
     public function testCallMeNormal()
     {
@@ -133,9 +133,6 @@ class SerializedTest extends AbstractHelper
     /**
      * Test the calling of the pretty print class. We expect it to fail, because
      * we do not provide a valid serialized string.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\AbstractScalarAnalysis::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Serialized::handle
      */
     public function testCallMeFail()
     {

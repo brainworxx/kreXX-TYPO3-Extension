@@ -44,13 +44,14 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser as OriginalParser;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Typo3DbQueryParser::class, 'convertQueryToDoctrineQueryBuilder')]
+#[CoversMethod(Typo3DbQueryParser::class, '__construct')]
 class Typo3DbQueryParserTest extends AbstractHelper
 {
     /**
      * Test the creation of the query parser with nd without dependency injection
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQueryParser::__construct
      */
     public function testConstruct()
     {
@@ -71,8 +72,6 @@ class Typo3DbQueryParserTest extends AbstractHelper
      * We are actually somewhat supposed to test the part where the DI works.
      * The bad thing here is that this part has changed much since 8.7.
      * And testing the parent method across all LTS versions is a very bad idea.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQueryParser::convertQueryToDoctrineQueryBuilder
      */
     public function testConvertQueryToDoctrineQueryBuilderNoDi()
     {
@@ -104,8 +103,6 @@ class Typo3DbQueryParserTest extends AbstractHelper
      * I'm not really sure if this is possible in TYPO3 12, because development
      * has just begun. When DI is not available, the QueryBuilder should not be
      * available, but that does not stop me from actually testing it.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQueryParser::convertQueryToDoctrineQueryBuilder
      */
     public function testConvertQueryToDoctrineQueryBuilderFailedDi()
     {

@@ -55,17 +55,19 @@ use Brainworxx\Krexx\View\Messages;
 use Brainworxx\Krexx\View\Output\Chunks;
 use Brainworxx\Krexx\View\Skins\RenderHans;
 use PHPUnit\Framework\MockObject\MockObject;
-use stdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Pool::class, 'reset')]
+#[CoversMethod(Pool::class, 'checkEnvironment')]
+#[CoversMethod(File::class, 'isDirectoryWritable')]
+#[CoversMethod(Pool::class, '__construct')]
+#[CoversMethod(Pool::class, 'checkEnvironment')]
 class PoolTest extends AbstractHelper
 {
     public const  MISC_NAMESPACE = '\\Brainworxx\\Krexx\\Service\\Misc\\';
 
     /**
      * Testing the creation of all neccessary classes.
-     *
-     * @covers \Brainworxx\Krexx\Service\Factory\Pool::__construct
-     * @covers \Brainworxx\Krexx\Service\Factory\Pool::checkEnvironment
      */
     public function testConstruct()
     {
@@ -99,9 +101,6 @@ class PoolTest extends AbstractHelper
 
     /**
      * Test the checking of the environment, where kreXX is running.
-     *
-     * @covers \Brainworxx\Krexx\Service\Factory\Pool::checkEnvironment
-     * @covers \Brainworxx\Krexx\Service\Misc\File::isDirectoryWritable
      */
     public function testCheckEnvironmentIsWritable()
     {
@@ -125,9 +124,6 @@ class PoolTest extends AbstractHelper
 
     /**
      * Test the checking of the environment, where kreXX is running.
-     *
-     * @covers \Brainworxx\Krexx\Service\Factory\Pool::checkEnvironment
-     * @covers \Brainworxx\Krexx\Service\Misc\File::isDirectoryWritable
      */
     public function testCheckEnvironmentIsNotWritable()
     {
@@ -155,8 +151,6 @@ class PoolTest extends AbstractHelper
 
     /**
      * Test the renewal of the "semi-singletons" after an analysis.
-     *
-     * @covers \Brainworxx\Krexx\Service\Factory\Pool::reset
      */
     public function testReset()
     {
@@ -175,8 +169,6 @@ class PoolTest extends AbstractHelper
     /**
      * Test the renewal of the "semi-singletons" after an analysis, with
      * simulating a new process fork.
-     *
-     * @covers \Brainworxx\Krexx\Service\Factory\Pool::reset
      */
     public function testResetWithNewFork()
     {

@@ -62,6 +62,10 @@ class ClassName extends AbstractScalarAnalysis
     }
 
     /**
+     * Is this string a class name, and will we do a meta analysis of it?
+     *
+     * To avoid needless junk, we only look at classes with a namespace.
+     *
      * @param string $string
      *   The possible class name we are looking at
      * @param \Brainworxx\Krexx\Analyse\Model $model
@@ -74,7 +78,7 @@ class ClassName extends AbstractScalarAnalysis
     {
         set_error_handler($this->pool->retrieveErrorCallback());
         try {
-            if (class_exists($string)) {
+            if (strpos($string, '\\') !== false && class_exists($string)) {
                 $this->handledValue = $string;
                 $this->model = $model;
                 restore_error_handler();

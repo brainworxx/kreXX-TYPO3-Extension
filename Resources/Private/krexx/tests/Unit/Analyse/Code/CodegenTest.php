@@ -47,7 +47,19 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use ReflectionParameter;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Codegen::class, '__construct')]
+#[CoversMethod(Codegen::class, 'translateDefaultValue')]
+#[CoversMethod(Codegen::class, 'generateWrapperLeft')]
+#[CoversMethod(Codegen::class, 'generateWrapperRight')]
+#[CoversMethod(Codegen::class, 'setCodegenAllowed')]
+#[CoversMethod(Codegen::class, 'isCodegenAllowed')]
+#[CoversMethod(Codegen::class, 'generateSource')]
+#[CoversMethod(Codegen::class, 'generateComplicatedStuff')]
+#[CoversMethod(Codegen::class, 'concatenation')]
+#[CoversMethod(Codegen::class, 'addTypeHint')]
+#[CoversMethod(Codegen::class, 'parameterToString')]
 class CodegenTest extends AbstractHelper
 {
     public const  FIRST_RUN = 'firstRun';
@@ -110,8 +122,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the pool handling.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::__construct
      */
     public function testConstruct()
     {
@@ -121,9 +131,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the forbidden code generation.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      */
     public function testGenerateSourceNoGen()
     {
@@ -135,11 +142,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the concatenation of the first run.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::addTypeHint
      */
     public function testGenerateSourceFirstRun()
     {
@@ -166,11 +168,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the type hint with a more complicated varname from the source.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::addTypeHint
      */
     public function testGenerateSourceFirstRunNoTypeHint()
     {
@@ -200,11 +197,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test an empty run, something like krexx(), without any variable.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::addTypeHint
      */
     public function testGenerateSourceEmptyFirstRunNoTypeHint()
     {
@@ -216,12 +208,7 @@ class CodegenTest extends AbstractHelper
     }
 
     /**
-     * Test the type hint with a more complitated varname from t he source.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::addTypeHint
+     * Test the type hint with a more complitated varname from the source.
      */
     public function testGenerateSourceFirstRunTypeHintScalar()
     {
@@ -244,9 +231,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the stop return, in case of constants.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      */
     public function testGenerateSourceMetaConstants()
     {
@@ -260,9 +244,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test an empty return value, in case of empty connectors.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      */
     public function testGenerateSourceEmpty()
     {
@@ -281,10 +262,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the concatenation in case of debug methods.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
      */
     public function testGenerateSourceIsDebug()
     {
@@ -300,10 +277,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the concatenation in case of debug methods.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
      */
     public function testGenerateSourceIteratorToArray()
     {
@@ -317,9 +290,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the meta json code generation.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      */
     public function testGenerateSourceMetaDecodedJson()
     {
@@ -333,9 +303,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the meta Base64 code generation.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      */
     public function testGenerateMetaDecodedBase64()
     {
@@ -348,10 +315,7 @@ class CodegenTest extends AbstractHelper
     }
 
     /**
-     * Test the coegeneration for unaccessible array values.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
+     * Test the code generation for inaccessible array values.
      */
     public function testGenerateSourceArrayValueAccess()
     {
@@ -374,10 +338,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the concatenation in case of public access.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
      */
     public function testGenerateSourceIsPublic()
     {
@@ -391,10 +351,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the concatenation in case that the model is in the scope.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
      */
     public function testGenerateSourceInScope()
     {
@@ -416,9 +372,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the '. . .' when out of scope.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      */
     public function testGenerateSourceNotInScope()
     {
@@ -437,10 +390,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the special handling of special chars in the parameters.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::translateDefaultValue
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
      */
     public function testGenerateSourceWithEscaping()
     {
@@ -461,11 +410,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the small ones.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateWrapperLeft
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateWrapperRight
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::setCodegenAllowed
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::isCodegenAllowed
      */
     public function testSimpleGetterandSetter()
     {
@@ -478,8 +422,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the multiple enabling / disabling of the code generation.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::setCodegenAllowed
      */
     public function testSetAllowCodegen()
     {
@@ -511,9 +453,6 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the parameter analysis, with a required parameter.
      * We use a special DateTime parameter as a fixture.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::parameterToString
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::translateDefaultValue
      */
     public function testParameterToString()
     {
@@ -529,9 +468,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the parameter analysis, with a special default value.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::parameterToString
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::translateDefaultValue
      */
     public function testParameterToStringWithQuotationMarks()
     {
@@ -554,9 +490,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test with a bunch of real parameters.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::parameterToString
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::translateDefaultValue
      */
     public function testDefaultValueTranslation()
     {
@@ -610,9 +543,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test stuff with a Enum parameter.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::parameterToString
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::translateDefaultValue
      */
     public function testDefaultValueEnum()
     {

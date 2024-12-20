@@ -36,20 +36,29 @@
 namespace Brainworxx\Krexx\Tests\Unit\Service\Plugin;
 
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
-/**
- * Even more static fun: . . . yay . . .
- *
- * @package Brainworxx\Krexx\Tests\Service\Plugin
- */
+#[CoversMethod(SettingsGetter::class, 'getNewFallbackValues')]
+#[CoversMethod(SettingsGetter::class, 'getAdditionalLanguages')]
+#[CoversMethod(SettingsGetter::class, 'getNewSettings')]
+#[CoversMethod(SettingsGetter::class, 'getAdditionalScalarString')]
+#[CoversMethod(SettingsGetter::class, 'getAdditionalSkinList')]
+#[CoversMethod(SettingsGetter::class, 'getPlugins')]
+#[CoversMethod(SettingsGetter::class, 'getAdditionalHelpFiles')]
+#[CoversMethod(SettingsGetter::class, 'getEventList')]
+#[CoversMethod(SettingsGetter::class, 'getRewriteList')]
+#[CoversMethod(SettingsGetter::class, 'getBlacklistDebugClass')]
+#[CoversMethod(SettingsGetter::class, 'getBlacklistDebugMethods')]
+#[CoversMethod(SettingsGetter::class, 'getLogFolder')]
+#[CoversMethod(SettingsGetter::class, 'getChunkFolder')]
+#[CoversMethod(SettingsGetter::class, 'getConfigFile')]
 class SettingsGetterTest extends AbstractRegistration
 {
     public const  TEST_THE_FALLBACK = 'Test the fallback value.';
     public const  TEST_THE_NEW_VALUE = 'Test the new value.';
+
     /**
      * Test the getting of the getter for the configuration file, and it's fallback.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\SettingsGetter::getConfigFile
      */
     public function testGetConfigFile()
     {
@@ -69,8 +78,6 @@ class SettingsGetterTest extends AbstractRegistration
 
     /**
      * Test the getting of the getter for the chunk folder, and it's fallback.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\SettingsGetter::getChunkFolder
      */
     public function testGetChunkFolder()
     {
@@ -90,8 +97,6 @@ class SettingsGetterTest extends AbstractRegistration
 
     /**
      * Test the getting of the getter for the log folder, and it's fallback.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\SettingsGetter::getLogFolder
      */
     public function testGetLogFolder()
     {
@@ -111,8 +116,6 @@ class SettingsGetterTest extends AbstractRegistration
 
     /**
      * What the method name says.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\SettingsGetter::getBlacklistDebugMethods
      */
     public function testGetBlacklistDebugMethods()
     {
@@ -122,8 +125,6 @@ class SettingsGetterTest extends AbstractRegistration
 
     /**
      * What the method name says.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\SettingsGetter::getBlacklistDebugClass
      */
     public function testGetBlacklistDebugClass()
     {
@@ -133,8 +134,6 @@ class SettingsGetterTest extends AbstractRegistration
 
     /**
      * What the method name says.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\SettingsGetter::getRewriteList
      */
     public function testGetRewriteList()
     {
@@ -144,8 +143,6 @@ class SettingsGetterTest extends AbstractRegistration
 
     /**
      * What the method name says.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\SettingsGetter::getEventList
      */
     public function testGetEventList()
     {
@@ -155,8 +152,6 @@ class SettingsGetterTest extends AbstractRegistration
 
     /**
      * What the method name says.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\SettingsGetter::getAdditionalHelpFiles
      */
     public function testGetAdditionalHelpFiles()
     {
@@ -166,8 +161,6 @@ class SettingsGetterTest extends AbstractRegistration
 
     /**
      * What the method name says.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\SettingsGetter::getPlugins
      */
     public function testGetPlugins()
     {
@@ -177,8 +170,6 @@ class SettingsGetterTest extends AbstractRegistration
 
     /**
      * What the method name says.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\SettingsGetter::getAdditionalSkinList
      */
     public function testGetAdditionalSkinList()
     {
@@ -188,8 +179,6 @@ class SettingsGetterTest extends AbstractRegistration
 
     /**
      * Testing the getting of the scalar string analysis classes.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\SettingsGetter::getAdditionalScalarString
      */
     public function testGetAdditionalScalarString()
     {
@@ -199,8 +188,6 @@ class SettingsGetterTest extends AbstractRegistration
 
     /**
      * Testing the getting of new registered settings definitions.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\SettingsGetter::getNewSettings
      */
     public function testGetNewSettings()
     {
@@ -210,8 +197,6 @@ class SettingsGetterTest extends AbstractRegistration
 
     /**
      * Testing the getting of additional languages.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\SettingsGetter::getAdditionalLanguages
      */
     public function testGetAdditionalLanguages()
     {
@@ -221,8 +206,6 @@ class SettingsGetterTest extends AbstractRegistration
 
     /**
      * Testing the getting of additional languages.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\SettingsGetter::getNewFallbackValues
      */
     public function testGetNewFallbackValues()
     {

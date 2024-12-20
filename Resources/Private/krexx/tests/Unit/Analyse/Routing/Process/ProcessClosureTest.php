@@ -37,25 +37,28 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
+use Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\File as Fileservice;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ProcessClosure::class, 'handleNoneScalar')]
+#[CoversMethod(ProcessClosure::class, 'retrieveMetaData')]
+#[CoversMethod(AbstractProcessNoneScalar::class, 'handle')]
+#[CoversMethod(ProcessClosure::class, 'retrieveParameterList')]
+#[CoversMethod(ProcessClosure::class, 'retrieveSourceCode')]
+#[CoversMethod(AbstractRouting::class, 'dispatchProcessEvent')]
+#[CoversMethod(AbstractRouting::class, 'generateDomIdFromObject')]
+#[CoversMethod(ProcessClosure::class, 'canHandle')]
 class ProcessClosureTest extends AbstractHelper
 {
     /**
      * Test the processing of a closure.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::handleNoneScalar
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::retrieveMetaData
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::retrieveParameterList
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::retrieveSourceCode
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::generateDomIdFromObject
      */
     public function testProcess()
     {
@@ -126,8 +129,6 @@ class ProcessClosureTest extends AbstractHelper
 
     /**
      * Test the check if we can handle the array processing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::canHandle
      */
     public function testCanHandle()
     {

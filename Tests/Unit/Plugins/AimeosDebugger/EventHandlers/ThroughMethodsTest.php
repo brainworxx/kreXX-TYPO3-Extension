@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -47,15 +48,16 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods as IterateThroughMethods;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use ReflectionMethod;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ThroughMethods::class, 'handle')]
+#[CoversMethod(ThroughMethods::class, '__construct')]
 class ThroughMethodsTest extends AbstractHelper
 {
     use AimeosTestTrait;
 
     /**
      * Test the handling of the pool.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ThroughMethods::__construct
      */
     public function testConstruct()
     {
@@ -67,8 +69,6 @@ class ThroughMethodsTest extends AbstractHelper
 
     /**
      * Test the correcting of the name with the factory method name.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ThroughMethods::handle
      */
     public function testHandle()
     {

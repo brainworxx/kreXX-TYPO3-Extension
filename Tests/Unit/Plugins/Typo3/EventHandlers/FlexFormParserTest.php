@@ -43,13 +43,15 @@ use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use TYPO3\CMS\Core\Service\FlexFormService as FlexFromServiceCore;
 use TYPO3\CMS\Extbase\Service\FlexFormService as FlexFromServiceExtbase;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(FlexFormParser::class, 'handle')]
+#[CoversMethod(FlexFormParser::class, 'handle')]
+#[CoversMethod(FlexFormParser::class, '__construct')]
 class FlexFormParserTest extends AbstractHelper
 {
     /**
      * Test the assigning of the pool
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\FlexFormParser::__construct
      */
     public function testConstruct()
     {
@@ -59,8 +61,6 @@ class FlexFormParserTest extends AbstractHelper
 
     /**
      * Test the flex form parsing with a thrown error.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\FlexFormParser::handle
      */
     public function testHandleError()
     {
@@ -85,8 +85,6 @@ class FlexFormParserTest extends AbstractHelper
 
     /**
      * Test the flex form parsing.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\FlexFormParser::handle
      */
     public function testHandle()
     {

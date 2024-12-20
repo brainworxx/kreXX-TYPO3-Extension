@@ -42,13 +42,15 @@ use Brainworxx\Krexx\Service\Config\Model;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ThroughConfig::class, 'callMe')]
+#[CoversMethod(ThroughConfig::class, 'renderAllSections')]
+#[CoversMethod(ThroughConfig::class, 'hasSomethingToRender')]
 class ThroughConfigTest extends AbstractHelper
 {
     /**
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig::renderAllSections
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig::hasSomethingToRender
+     * Test the configuration iteration.
      */
     public function testCallMe()
     {

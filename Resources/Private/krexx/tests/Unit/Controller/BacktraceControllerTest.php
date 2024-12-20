@@ -47,13 +47,15 @@ use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\View\Output\Browser;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(BacktraceController::class, 'backtraceAction')]
+#[CoversMethod(BacktraceController::class, 'outputFooter')]
+#[CoversMethod(BacktraceController::class, 'outputCssAndJs')]
 class BacktraceControllerTest extends AbstractController
 {
     /**
      * Testing of the backtrace action, with too many calls before.
-     *
-     * @covers \Brainworxx\Krexx\Controller\BacktraceController::backtraceAction
      */
     public function testBacktraceActionWithMaxCall()
     {
@@ -75,10 +77,6 @@ class BacktraceControllerTest extends AbstractController
 
     /**
      * Testing a simple backtrace.
-     *
-     * @covers \Brainworxx\Krexx\Controller\BacktraceController::backtraceAction
-     * @covers \Brainworxx\Krexx\Controller\BacktraceController::outputFooter
-     * @covers \Brainworxx\Krexx\Controller\BacktraceController::outputCssAndJs
      */
     public function testBacktraceAction()
     {

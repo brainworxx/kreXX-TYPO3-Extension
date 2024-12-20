@@ -40,7 +40,15 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\DeepGetterFixture;
 use Brainworxx\Krexx\Tests\Fixtures\GetterFixture;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ByMethodName::class, 'retrieveIt')]
+#[CoversMethod(ByMethodName::class, 'retrieveReflectionProperty')]
+#[CoversMethod(ByMethodName::class, 'prepareResult')]
+#[CoversMethod(ByMethodName::class, 'preparePropertyName')]
+#[CoversMethod(ByMethodName::class, 'convertToSnakeCase')]
+#[CoversMethod(ByMethodName::class, 'hasResult')]
+#[CoversMethod(ByMethodName::class, 'getReflectionProperty')]
 class ByMethodNameTest extends AbstractGetter
 {
     public function setUp(): void
@@ -51,14 +59,6 @@ class ByMethodNameTest extends AbstractGetter
 
     /**
      * Test the retrieval of the possible getter by the method name, simple.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByMethodName::retrieveIt
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByMethodName::retrieveReflectionProperty
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByMethodName::prepareResult
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByMethodName::preparePropertyName
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByMethodName::convertToSnakeCase
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByMethodName::hasResult
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByMethodName::getReflectionProperty
      */
     public function testRetrieveItSimple()
     {
@@ -102,14 +102,6 @@ class ByMethodNameTest extends AbstractGetter
 
     /**
      * Test the retrieval of the possible getter by the method name and by, deep
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByMethodName::retrieveIt
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByMethodName::retrieveReflectionProperty
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByMethodName::prepareResult
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByMethodName::preparePropertyName
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByMethodName::convertToSnakeCase
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByMethodName::hasResult
-     * @covers \Brainworxx\Krexx\Analyse\Getter\ByMethodName::getReflectionProperty
      */
     public function testRetrieveItDeep()
     {

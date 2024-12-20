@@ -36,19 +36,21 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ProcessInteger::class, 'handle')]
+#[CoversMethod(AbstractRouting::class, 'dispatchProcessEvent')]
+#[CoversMethod(ProcessInteger::class, 'canHandle')]
 class ProcessIntegerTest extends AbstractHelper
 {
     /**
      * Testing the integer value processing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessNormal()
     {
@@ -70,9 +72,6 @@ class ProcessIntegerTest extends AbstractHelper
 
     /**
      * Testing the integer value with timestamp processing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessWithTimestamp()
     {
@@ -93,8 +92,6 @@ class ProcessIntegerTest extends AbstractHelper
 
     /**
      * Test the check if we can handle the array processing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger::canHandle
      */
     public function testCanHandle()
     {

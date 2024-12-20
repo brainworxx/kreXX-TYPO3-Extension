@@ -37,30 +37,33 @@ namespace Brainworxx\Krexx\Tests\Unit\Service\Config;
 
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
+use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Plugin\NewSetting;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Skins\RenderHans;
 use Brainworxx\Krexx\View\Skins\RenderSmokyGrey;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Fallback::class, 'generateFeConfigFallback')]
+#[CoversMethod(Fallback::class, '__construct')]
+#[CoversMethod(Fallback::class, 'returnBoolSelectFalse')]
+#[CoversMethod(Fallback::class, 'returnBoolSelectTrue')]
+#[CoversMethod(Fallback::class, 'returnDebugMethods')]
+#[CoversMethod(Fallback::class, 'returnDestination')]
+#[CoversMethod(Fallback::class, 'returnInput')]
+#[CoversMethod(Fallback::class, 'returnIpRange')]
+#[CoversMethod(Fallback::class, 'returnMaxFiles')]
+#[CoversMethod(Fallback::class, 'returnMaxRuntime')]
+#[CoversMethod(Fallback::class, 'returnSkin')]
+#[CoversMethod(Fallback::class, 'generateSkinConfiguration')]
+#[CoversMethod(Fallback::class, 'generateConfigFallback')]
+#[CoversMethod(Fallback::class, 'generatePluginConfig')]
+#[CoversMethod(Fallback::class, 'returnLanguages')]
 class FallbackTest extends AbstractHelper
 {
     /**
      * Test the construct of an abstract class. Sounds about right.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Fallback::__construct
-     * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnBoolSelectFalse
-     * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnBoolSelectTrue
-     * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnDebugMethods
-     * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnDestination
-     * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnInput
-     * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnIpRange
-     * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnMaxFiles
-     * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnMaxRuntime
-     * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnSkin
-     * @covers \Brainworxx\Krexx\Service\Config\Fallback::generateSkinConfiguration
-     * @covers \Brainworxx\Krexx\Service\Config\Fallback::generateConfigFallback
-     * @covers \Brainworxx\Krexx\Service\Config\Fallback::generatePluginConfig
      */
     public function testConstruct()
     {
@@ -89,11 +92,7 @@ class FallbackTest extends AbstractHelper
     }
 
     /**
-     * Test the assigning of custom settings.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Fallback::generateConfigFallback
-     * @covers \Brainworxx\Krexx\Service\Config\Fallback::generateFeConfigFallback
-     * @covers \Brainworxx\Krexx\Service\Config\Fallback::generatePluginConfig
+     * Test the assigning of custom settings
      */
     public function testConstructWithCustomSettings()
     {

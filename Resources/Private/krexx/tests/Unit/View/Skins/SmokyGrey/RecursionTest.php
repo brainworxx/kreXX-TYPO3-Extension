@@ -36,14 +36,16 @@
 namespace Brainworxx\Krexx\Tests\Unit\View\Skins\SmokyGrey;
 
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderSmokyGrey;
+use Brainworxx\Krexx\View\AbstractRender;
+use Brainworxx\Krexx\View\Skins\SmokyGrey\Recursion;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Recursion::class, 'renderRecursion')]
+#[CoversMethod(AbstractRender::class, 'encodeJson')]
 class RecursionTest extends AbstractRenderSmokyGrey
 {
     /**
      * Test the additional stuff of the recursion rendering.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Recursion::renderRecursion
-     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderRecursion()
     {

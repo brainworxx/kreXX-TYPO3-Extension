@@ -45,7 +45,11 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 use ArrayObject;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Traversable::class, 'callMe')]
+#[CoversMethod(Traversable::class, 'retrieveTraversableData')]
+#[CoversMethod(Traversable::class, 'analyseTraversableResult')]
 class TraversableTest extends AbstractHelper
 {
     public const  CHECK_NESTING = 'checkNesting';
@@ -88,10 +92,6 @@ class TraversableTest extends AbstractHelper
 
     /**
      * Test, if we do not ignore the emergency handler.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::callMe
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeWithEmergency()
     {
@@ -146,12 +146,6 @@ class TraversableTest extends AbstractHelper
 
     /**
      * Test, if the traversable analysis can handle some errors and warnings.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::retrieveTraversableData
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::analyseTraversableResult
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeWithErrors()
     {
@@ -186,12 +180,6 @@ class TraversableTest extends AbstractHelper
 
     /**
      * Test, if the normal array analysis is called.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::retrieveTraversableData
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::analyseTraversableResult
-     *
-     * @throws \ReflectionException
      */
     public function testMeWithSmallArray()
     {
@@ -243,12 +231,6 @@ class TraversableTest extends AbstractHelper
 
     /**
      * Test if the large array analysis is called.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::retrieveTraversableData
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::analyseTraversableResult
-     *
-     * @throws \ReflectionException
      */
     public function testMeWithLargeArray()
     {

@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse;
 
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Constants;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods;
@@ -62,10 +63,15 @@ use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Tests\Fixtures\TraversableFixture;
 use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\Tests\Helpers\ProcessNothing;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Exception;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Objects::class, 'callMe')]
+#[CoversMethod(Objects::class, 'generateDumperList')]
+#[CoversMethod(Objects::class, 'addPropertyDumper')]
+#[CoversMethod(AbstractCallback::class, 'dispatchStartEvent')]
+#[CoversMethod(Objects::class, 'setParameters')]
 class ObjectsTest extends AbstractHelper
 {
     /**
@@ -130,13 +136,6 @@ class ObjectsTest extends AbstractHelper
     /**
      * Testing the start event and if other analysis classes are getting used,
      * according to the configuration.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeEvent()
     {
@@ -151,12 +150,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test, if the public properties are getting analysed.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMePublic()
     {
@@ -174,12 +167,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test, if the getter get analysed.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeGetter()
     {
@@ -207,8 +194,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test, if the meta stuff is analysed.
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeMeta()
     {
@@ -221,12 +206,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test, if the protected properties are analysed.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeProtected()
     {
@@ -253,12 +232,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test, if the private properties are analysed.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMePrivate()
     {
@@ -287,12 +260,6 @@ class ObjectsTest extends AbstractHelper
      * Test, if the scope analysis is used.
      *
      * Pun not intended.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeConstants()
     {
@@ -308,12 +275,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test, if the method analysis is used.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeMethods()
     {
@@ -329,12 +290,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test with traversable deactivated and with a traversable class
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeTraversableDeactivatedTraversable()
     {
@@ -347,12 +302,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test with traversable deactivated and with a normal class
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeTraversableDeactivatedNormal()
     {
@@ -364,12 +313,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test with traversable activated and with a normal class
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeTraversableActivatedTraversable()
     {
@@ -381,12 +324,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test, if the traversable part is called.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeTraversableActivated()
     {
@@ -402,12 +339,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test, if the debug methods analysis is triggered.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeDebugMethods()
     {
@@ -420,12 +351,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test, if the analysis of an error object works.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeException()
     {
@@ -439,12 +364,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test the handling of the log model.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeLogModel()
     {
@@ -466,11 +385,6 @@ class ObjectsTest extends AbstractHelper
      * Test the handling of incomplete objects.
      *
      * Wasn't there a Swing Out Sister song about this?
-     *
-     * @throws \ReflectionException
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
      */
     public function testCallMeIncomplete()
     {
@@ -488,12 +402,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test the order of the in scope analysis.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeInScope()
     {

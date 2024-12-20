@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -34,6 +35,7 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\EventHandlers;
 
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\AbstractEventHandler;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties;
 use Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\AimeosTestTrait;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties;
@@ -48,15 +50,19 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Aimeos\MW\View\Standard as StandardView;
 use Aimeos\Base\View\Standard as BaseView;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Properties::class, 'handle')]
+#[CoversMethod(Properties::class, 'extractValues')]
+#[CoversMethod(AbstractEventHandler::class, 'retrieveProperty')]
+#[CoversMethod(Properties::class, 'dumpTheMagic')]
+#[CoversMethod(Properties::class, '__construct')]
 class PropertiesTest extends AbstractHelper
 {
     use AimeosTestTrait;
 
     /**
      * Test the handling of the pool.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties::__construct
      */
     public function testConstruct()
     {
@@ -68,11 +74,6 @@ class PropertiesTest extends AbstractHelper
 
     /**
      * Test the retrieval of the Aimeos magical properties.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties::handle
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties::extractValues
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\AbstractEventHandler::retrieveProperty
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties::dumpTheMagic
      */
     public function testHandleItem()
     {
@@ -141,11 +142,6 @@ class PropertiesTest extends AbstractHelper
      * Pretty much the same as the item handler, but with a view object.
      * And with a much lesser complexity, because the really deep stuff already
      * got themselves tested.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties::handle
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties::extractValues
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\AbstractEventHandler::retrieveProperty
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties::dumpTheMagic
      */
     public function testHandleView()
     {

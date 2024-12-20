@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -42,11 +43,14 @@ use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration as AimeosConfig
 use TYPO3\CMS\Core\Package\Package;
 use TYPO3\CMS\Core\Package\UnitTestPackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Bootstrap::class, 'run')]
+#[CoversMethod(Bootstrap::class, 'loadKrexx')]
 class BootstrapTest extends AbstractHelper
 {
-    const BOOTSTRAP_NAMESPACE = '\\Brainworxx\\Includekrexx\\Bootstrap\\';
-    const DEFINED = 'defined';
+    protected const BOOTSTRAP_NAMESPACE = '\\Brainworxx\\Includekrexx\\Bootstrap\\';
+    protected const DEFINED = 'defined';
 
     /**
      * @var \Brainworxx\Includekrexx\Bootstrap\Bootstrap
@@ -67,9 +71,6 @@ class BootstrapTest extends AbstractHelper
 
     /**
      * Testing the early failing of the bootstrapping.
-     *
-     * @covers \Brainworxx\Includekrexx\Bootstrap\Bootstrap::run
-     * @covers \Brainworxx\Includekrexx\Bootstrap\Bootstrap::loadKrexx
      */
     public function testRunEarlyFail()
     {
@@ -115,9 +116,6 @@ class BootstrapTest extends AbstractHelper
      * provided by kreXX.
      *
      * We expect that there will be no exception when doing it.
-     *
-     * @covers \Brainworxx\Includekrexx\Bootstrap\Bootstrap::run
-     * @covers \Brainworxx\Includekrexx\Bootstrap\Bootstrap::loadKrexx
      */
     public function testRunInlcudeKrexx()
     {
@@ -139,6 +137,9 @@ class BootstrapTest extends AbstractHelper
         $this->bootstrap->run();
     }
 
+    /**
+     * The normal bootstrapping.
+     */
     public function testRunNormal()
     {
         $definedMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, static::DEFINED);

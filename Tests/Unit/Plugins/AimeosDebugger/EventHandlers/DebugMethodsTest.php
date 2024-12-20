@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -51,7 +52,12 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods as AnalyseDebugMethods;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Aimeos\MShop\Product\Item\Standard as StandardProduct;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(DebugMethods::class, 'handle')]
+#[CoversMethod(DebugMethods::class, 'callDebugMethod')]
+#[CoversMethod(DebugMethods::class, 'retrieveParameters')]
+#[CoversMethod(DebugMethods::class, '__construct')]
 class DebugMethodsTest extends AbstractHelper implements CallbackConstInterface
 {
     use AimeosTestTrait;
@@ -75,8 +81,6 @@ class DebugMethodsTest extends AbstractHelper implements CallbackConstInterface
 
     /**
      * Test the assigning of the pool.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods::__construct
      */
     public function testConstruct()
     {
@@ -88,9 +92,6 @@ class DebugMethodsTest extends AbstractHelper implements CallbackConstInterface
 
     /**
      * Test the subscribing and then handling of the event, with the wrong object.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods::handle
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods::callDebugMethod
      */
     public function testHandleWrongObject()
     {
@@ -117,10 +118,6 @@ class DebugMethodsTest extends AbstractHelper implements CallbackConstInterface
 
     /**
      * Test the subscribing and then handling of the event, with the right object.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods::handle
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods::callDebugMethod
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods::retrieveParameters
      */
     public function testHandleNormal()
     {

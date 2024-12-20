@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -36,6 +37,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Controller;
 
 use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
+use Brainworxx\Includekrexx\Controller\AbstractController;
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
@@ -49,15 +51,16 @@ use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
-
+#[CoversMethod(AbstractController::class, 'injectLivePreset')]
+#[CoversMethod(AbstractController::class, 'initializeAction')]
+#[CoversMethod(AbstractController::class, '__construct')]
+#[CoversMethod(AbstractController::class, 'prepare11Flashmessages')]
 class AbstractControllerTest extends AbstractHelper
 {
     /**
      * Test the creation of the pool and its assigning to the class.
-     *
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::__construct
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::prepare11Flashmessages
      */
     public function testConstruct()
     {
@@ -78,8 +81,6 @@ class AbstractControllerTest extends AbstractHelper
 
     /**
      * Test if the initialize action can produce the module template
-     *
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::initializeAction
      */
     public function testInitializeAction()
     {
@@ -117,8 +118,6 @@ class AbstractControllerTest extends AbstractHelper
 
     /**
      * Test the injection of the live preset.
-     *
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::injectLivePreset
      */
     public function testInjectLivePreset()
     {

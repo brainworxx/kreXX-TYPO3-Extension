@@ -43,13 +43,13 @@ use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\View\Output\Browser;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(EditSettingsController::class, 'editSettingsAction')]
 class EditSettingsControllerTest extends AbstractController
 {
     /**
      * Call the action when the max call is already reached.
-     *
-     * @covers \Brainworxx\Krexx\Controller\EditSettingsController::editSettingsAction
      */
     public function testEditSettingsActionWithMaxCall()
     {
@@ -67,8 +67,6 @@ class EditSettingsControllerTest extends AbstractController
 
     /**
      * Normal call of the action, nothing special.
-     *
-     * @covers \Brainworxx\Krexx\Controller\EditSettingsController::editSettingsAction
      */
     public function testEditSettingsActionNormal()
     {

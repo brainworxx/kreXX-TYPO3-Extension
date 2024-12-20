@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -45,15 +46,15 @@ use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use ReflectionMethod;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ThroughMethods::class, 'callMe')]
 class ThroughMethodsTest extends AbstractHelper implements CallbackConstInterface
 {
     use AimeosTestTrait;
 
     /**
      * Test the preprocessing of methods.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughMethods::callMe
      */
     public function testCallMe()
     {

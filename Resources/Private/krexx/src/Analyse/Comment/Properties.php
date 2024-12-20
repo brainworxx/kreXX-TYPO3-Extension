@@ -58,21 +58,11 @@ class Properties extends AbstractComment
             return '';
         }
 
-        // Do some static caching. The comment will not change during a run.
-        static $cache = [];
-        /** @var \ReflectionProperty $reflection */
-        $cachingKey = $reflection->getDeclaringClass()->getName() . '::' . $reflection->getName();
-        if (isset($cache[$cachingKey])) {
-            return $cache[$cachingKey];
-        }
-
         // Cache not found. We need to generate this one.
-        $cache[$cachingKey] = nl2br(
+        return nl2br(
             $this->pool->encodingService->encodeString(
                 $this->prettifyComment($reflection->getDocComment())
             )
         );
-
-        return $cache[$cachingKey];
     }
 }

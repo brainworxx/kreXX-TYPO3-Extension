@@ -38,7 +38,18 @@ namespace Brainworxx\Krexx\Tests\Unit\Service\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\Model;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Model::class, 'setValue')]
+#[CoversMethod(Model::class, 'setEditable')]
+#[CoversMethod(Model::class, 'isEditable')]
+#[CoversMethod(Model::class, 'setType')]
+#[CoversMethod(Model::class, 'getSection')]
+#[CoversMethod(Model::class, 'getType')]
+#[CoversMethod(Model::class, 'getValue')]
+#[CoversMethod(Model::class, 'setSection')]
+#[CoversMethod(Model::class, 'getSource')]
+#[CoversMethod(Model::class, 'setSource')]
 class ModelTest extends AbstractHelper
 {
     public const  VALUE = 'some value';
@@ -55,18 +66,12 @@ class ModelTest extends AbstractHelper
         $this->model = new Model();
     }
 
-    /**
-     * @covers \Brainworxx\Krexx\Service\Config\Model::setEditable
-     */
     public function testSetEditable()
     {
         $this->assertSame($this->model, $this->model->setEditable(true));
         $this->assertEquals(true, $this->model->isEditable());
     }
 
-    /**
-     * @covers \Brainworxx\Krexx\Service\Config\Model::setType
-     */
     public function testSetType()
     {
         $this->assertSame($this->model, $this->model->setType(static::VALUE));
@@ -75,8 +80,6 @@ class ModelTest extends AbstractHelper
 
     /**
      * Testing the setting and the traqnformation into a boolean, if neccessary.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Model::setValue
      */
     public function testSetValue()
     {
@@ -90,63 +93,42 @@ class ModelTest extends AbstractHelper
         $this->assertEquals(true, $this->model->getValue());
     }
 
-    /**
-     * @covers \Brainworxx\Krexx\Service\Config\Model::isEditable
-     */
     public function testGetEditable()
     {
         $this->setValueByReflection('editable', true, $this->model);
         $this->assertEquals(true, $this->model->isEditable());
     }
 
-    /**
-     * @covers \Brainworxx\Krexx\Service\Config\Model::getSection
-     */
     public function testGetSection()
     {
         $this->setValueByReflection('section', static::VALUE, $this->model);
         $this->assertEquals(static::VALUE, $this->model->getSection());
     }
 
-    /**
-     * @covers \Brainworxx\Krexx\Service\Config\Model::getType
-     */
     public function testGetType()
     {
         $this->setValueByReflection('type', static::VALUE, $this->model);
         $this->assertEquals(static::VALUE, $this->model->getType());
     }
 
-    /**
-     * @covers \Brainworxx\Krexx\Service\Config\Model::getValue
-     */
     public function testGetValue()
     {
         $this->setValueByReflection('value', static::VALUE, $this->model);
         $this->assertEquals(static::VALUE, $this->model->getValue());
     }
 
-    /**
-     * @covers \Brainworxx\Krexx\Service\Config\Model::setSection
-     */
     public function testSetSection()
     {
         $this->assertSame($this->model, $this->model->setSection(static::VALUE));
         $this->assertEquals(static::VALUE, $this->model->getSection());
     }
 
-    /**
-     * @covers \Brainworxx\Krexx\Service\Config\Model::getSource
-     */
     public function testGetSource()
     {
         $this->setValueByReflection('source', static::VALUE, $this->model);
         $this->assertEquals(static::VALUE, $this->model->getSource());
     }
 
-    /**
-     * @covers \Brainworxx\Krexx\Service\Config\Model::setSource
-     */
     public function testSetSource()
     {
         $this->assertSame($this->model, $this->model->setSource(static::VALUE));

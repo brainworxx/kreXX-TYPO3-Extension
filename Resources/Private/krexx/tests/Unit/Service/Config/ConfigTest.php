@@ -44,10 +44,26 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Config::class, 'getLanguageList')]
+#[CoversMethod(Config::class, 'setPathToConfigFile')]
+#[CoversMethod(Config::class, 'getPathToConfigFile')]
+#[CoversMethod(Config::class, 'getSkinClass')]
+#[CoversMethod(Config::class, 'getSkinDirectory')]
+#[CoversMethod(Config::class, 'getSkinList')]
+#[CoversMethod(Config::class, 'loadConfigValue')]
+#[CoversMethod(Config::class, 'prepareModelWithFeSettings')]
+#[CoversMethod(Config::class, 'isCookieValueAllowed')]
+#[CoversMethod(Config::class, 'getSetting')]
+#[CoversMethod(Config::class, 'setDisabled')]
+#[CoversMethod(Config::class, '__construct')]
+#[CoversMethod(Config::class, 'getChunkDir')]
+#[CoversMethod(Config::class, 'getLogDir')]
+#[CoversMethod(Config::class, 'getPathToConfigFile')]
+#[CoversMethod(Config::class, 'checkEnabledStatus')]
 class ConfigTest extends AbstractHelper
 {
-
     public const  NOT_CLI = 'not cli';
     public const  FILE_CONFIG = 'fileConfig';
     public const  COOKIE_CONFIG = 'cookieConfig';
@@ -72,6 +88,9 @@ class ConfigTest extends AbstractHelper
         Pool::createPool();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function tearDown(): void
     {
         parent::tearDown();
@@ -81,12 +100,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Test the initialisation of the configuration class.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::__construct
-     * @covers \Brainworxx\Krexx\Service\Config\Config::getChunkDir
-     * @covers \Brainworxx\Krexx\Service\Config\Config::getLogDir
-     * @covers \Brainworxx\Krexx\Service\Config\Config::getPathToConfigFile
-     * @covers \Brainworxx\Krexx\Service\Config\Config::checkEnabledStatus
      */
     public function testConstructNormal()
     {
@@ -140,9 +153,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Test the browser output on cli.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::__construct
-     * @covers \Brainworxx\Krexx\Service\Config\Config::checkEnabledStatus
      */
     public function testConstructCliBrowser()
     {
@@ -159,9 +169,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Test the browser output on ajax.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::__construct
-     * @covers \Brainworxx\Krexx\Service\Config\Config::checkEnabledStatus
      */
     public function testConstructAjaxBrowser()
     {
@@ -179,9 +186,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Test the file output on cli.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::__construct
-     * @covers \Brainworxx\Krexx\Service\Config\Config::checkEnabledStatus
      */
     public function testConstructCliFile()
     {
@@ -202,9 +206,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Test the access from different ips.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::__construct
-     * @covers \Brainworxx\Krexx\Service\Config\Config::checkEnabledStatus
      */
     public function testConstructIpRange()
     {
@@ -239,8 +240,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Test the disabling, directly in the configuration.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::setDisabled
      */
     public function testSetDisabled()
     {
@@ -254,8 +253,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Test setting getter.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::getSetting
      */
     public function testGetSetting()
     {
@@ -266,10 +263,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Test the loading of a config value from fallback.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::loadConfigValue
-     * @covers \Brainworxx\Krexx\Service\Config\Config::prepareModelWithFeSettings
-     * @covers \Brainworxx\Krexx\Service\Config\Config::isCookieValueAllowed
      */
     public function testLoadConfigValueFromFallback()
     {
@@ -305,10 +298,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Test the loading of a config value from ini.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::loadConfigValue
-     * @covers \Brainworxx\Krexx\Service\Config\Config::prepareModelWithFeSettings
-     * @covers \Brainworxx\Krexx\Service\Config\Config::isCookieValueAllowed
      */
     public function testLoadConfigValueFromIni()
     {
@@ -341,10 +330,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Test the loading of a config value from cookies.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::loadConfigValue
-     * @covers \Brainworxx\Krexx\Service\Config\Config::prepareModelWithFeSettings
-     * @covers \Brainworxx\Krexx\Service\Config\Config::isCookieValueAllowed
      */
     public function testLoadConfigValueFromCookies()
     {
@@ -375,10 +360,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Ignoring the cookie config, because the demanded value is uneditable.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::loadConfigValue
-     * @covers \Brainworxx\Krexx\Service\Config\Config::prepareModelWithFeSettings
-     * @covers \Brainworxx\Krexx\Service\Config\Config::isCookieValueAllowed
      */
     public function testLoadConfigValueUneditable()
     {
@@ -410,10 +391,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Testing that re-enabling kreXX with cookies does not work.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::loadConfigValue
-     * @covers \Brainworxx\Krexx\Service\Config\Config::prepareModelWithFeSettings
-     * @covers \Brainworxx\Krexx\Service\Config\Config::isCookieValueAllowed
      */
     public function testLoadConfigValueReEnableWithCookies()
     {
@@ -445,9 +422,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Testing the overwriting of factory settings.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::loadConfigValue
-     * @covers \Brainworxx\Krexx\Service\Config\Config::isCookieValueAllowed
      */
     public function testLoadConfigValueWithPluginOverwrite()
     {
@@ -460,10 +434,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Testing all the skin related getters.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::getSkinClass
-     * @covers \Brainworxx\Krexx\Service\Config\Config::getSkinDirectory
-     * @covers \Brainworxx\Krexx\Service\Config\Config::getSkinList
      */
     public function testSkinStuff()
     {
@@ -489,9 +459,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Test the feedback setter from the file loader.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::setPathToConfigFile
-     * @covers \Brainworxx\Krexx\Service\Config\Config::getPathToConfigFile
      */
     public function testSetPathToConfigFile()
     {
@@ -502,9 +469,7 @@ class ConfigTest extends AbstractHelper
     }
 
     /**
-     * Test the retrieval of the language list
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::getLanguageList
+     * Test the retrieval of the language listst
      */
     public function testGetLanguageList()
     {

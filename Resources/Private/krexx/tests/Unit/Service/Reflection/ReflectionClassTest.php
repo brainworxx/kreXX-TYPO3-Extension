@@ -46,16 +46,21 @@ use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use ReflectionClass as OriginalReflectionClass;
 use stdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ReflectionClass::class, 'getParentClass')]
+#[CoversMethod(ReflectionClass::class, 'getTraits')]
+#[CoversMethod(ReflectionClass::class, 'getInterfaces')]
+#[CoversMethod(ReflectionClass::class, 'retrieveValue')]
+#[CoversMethod(ReflectionClass::class, 'retrieveEsotericValue')]
+#[CoversMethod(ReflectionClass::class, 'isPropertyUnset')]
+#[CoversMethod(ReflectionClass::class, 'getData')]
+#[CoversMethod(ReflectionClass::class, '__construct')]
 class ReflectionClassTest extends AbstractHelper
 {
     /**
      * Testing the array casting of an object as well as creating the actual
      * reflection.
-     *
-     * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::__construct
-     *
-     * @throws \ReflectionException
      */
     public function testConstruct()
     {
@@ -76,10 +81,6 @@ class ReflectionClassTest extends AbstractHelper
 
     /**
      * Simple getter tester.
-     *
-     * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::getData
-     *
-     * @throws \ReflectionException
      */
     public function testGetData()
     {
@@ -92,12 +93,6 @@ class ReflectionClassTest extends AbstractHelper
     /**
      * It may not look like it, but this is the most important part of kreXX.
      * Here we retrieve the values from objects.
-     *
-     * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::retrieveValue
-     * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::retrieveEsotericValue
-     * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::isPropertyUnset
-     *
-     * @throws \ReflectionException
      */
     public function testRetrieveValue()
     {
@@ -149,10 +144,6 @@ class ReflectionClassTest extends AbstractHelper
 
     /**
      * Test the retrieval of the actually implemented interfaces of this class.
-     *
-     * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::getInterfaces
-     *
-     * @throws \ReflectionException
      */
     public function testGetInterfaces()
     {
@@ -173,10 +164,6 @@ class ReflectionClassTest extends AbstractHelper
 
     /**
      * Test the retrieval of the traits.
-     *
-     * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::getTraits
-     *
-     * @throws \ReflectionException
      */
     public function testGetTraits()
     {
@@ -193,10 +180,6 @@ class ReflectionClassTest extends AbstractHelper
 
     /**
      * Test the retrieval and caching of the parent class.
-     *
-     * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::getParentClass
-     *
-     * @throws \ReflectionException
      */
     public function testGetParentClass()
     {

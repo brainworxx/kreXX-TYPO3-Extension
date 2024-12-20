@@ -39,15 +39,18 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
+use Brainworxx\Krexx\View\AbstractRender;
+use Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(SingleEditableChild::class, 'renderSingleEditableChild')]
+#[CoversMethod(SingleEditableChild::class, 'renderSpecificEditableElement')]
+#[CoversMethod(SingleEditableChild::class, 'renderSelectOptions')]
+#[CoversMethod(AbstractRender::class, 'encodeJson')]
 class SingleEditableChildTest extends AbstractRenderHans
 {
     /**
      * Test the rendering of a editable input field.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSingleEditableChild
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSpecificEditableElement
-     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderSingleEditableChildInput()
     {
@@ -76,11 +79,6 @@ class SingleEditableChildTest extends AbstractRenderHans
 
     /**
      * Test the rendering of an editable dropdown field, the skin list
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSingleEditableChild
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSpecificEditableElement
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSelectOptions
-     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderSingleEditableChildSelectSkin()
     {
@@ -118,11 +116,6 @@ class SingleEditableChildTest extends AbstractRenderHans
 
     /**
      * Test the rendering of a simple boolean.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSingleEditableChild
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSpecificEditableElement
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSelectOptions
-     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderSingleEditableChildSelectBool()
     {
@@ -141,11 +134,6 @@ class SingleEditableChildTest extends AbstractRenderHans
 
     /**
      * Test the rendering of the language dropdown
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSingleEditableChild
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSpecificEditableElement
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSelectOptions
-     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderSingleEditableChildSelectLang()
     {

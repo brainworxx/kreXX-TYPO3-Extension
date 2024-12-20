@@ -202,10 +202,10 @@ abstract class AbstractHelper extends TestCase
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->any())
             ->method('checkEmergencyBreak')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $emergencyMock->expects($this->any())
             ->method('getKrexxCount')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         Krexx::$pool->emergencyHandler = $emergencyMock;
     }
 
@@ -219,7 +219,7 @@ abstract class AbstractHelper extends TestCase
         $eventServiceMock = $this->createMock(Event::class);
         $invocationMocker = $eventServiceMock->expects($this->exactly(count($eventList)))
             ->method('dispatch')
-            ->will($this->returnValue(''));
+            ->willReturn('');
         $invocationMocker->with(...$this->withConsecutive(...$eventList));
 
         // Inject the mock.
@@ -255,10 +255,7 @@ abstract class AbstractHelper extends TestCase
     protected function mockPhpSapiNameStandard()
     {
         $phpSapiNameMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\View\\Output\\', 'php_sapi_name');
-        $phpSapiNameMock->expects($this->any())
-            ->will(
-                $this->returnValue('whatever')
-            );
+        $phpSapiNameMock->expects($this->any())->willReturn('whatever');
     }
 
     /**

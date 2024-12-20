@@ -42,7 +42,10 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
 use stdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ThroughArray::class, 'callMe')]
+#[CoversMethod(ThroughArray::class, 'prepareModel')]
 class ThroughArrayTest extends AbstractHelper
 {
     /**
@@ -55,8 +58,7 @@ class ThroughArrayTest extends AbstractHelper
     }
 
     /**
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray::prepareModel
+     * Test the normal array iteration.
      */
     public function testCallMe()
     {
@@ -107,9 +109,6 @@ class ThroughArrayTest extends AbstractHelper
 
     /**
      * Testing the special handling of a PHP bug.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray::prepareModel
      */
     public function testCallMeInaccessibleArray()
     {

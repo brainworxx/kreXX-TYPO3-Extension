@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -38,13 +39,13 @@ use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(AbstractCollector::class, '__construct')]
 class AbstractCollectorTest extends AbstractHelper
 {
     /**
      * Test, if the current BE user has access and test the retrieval of the uc.
-     *
-     * @covers \Brainworxx\Includekrexx\Collectors\AbstractCollector::__construct
      */
     public function testConstruct()
     {

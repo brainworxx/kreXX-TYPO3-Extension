@@ -35,16 +35,19 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback;
 
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Debug;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(AbstractCallback::class, '__construct')]
+#[CoversMethod(AbstractCallback::class, 'setParameters')]
+#[CoversMethod(AbstractCallback::class, 'getParameters')]
 class AbstractCallbackTest extends AbstractHelper
 {
     /**
      * Test if the __construct injects the pool.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::__construct
      */
     public function testConstruct()
     {
@@ -55,8 +58,6 @@ class AbstractCallbackTest extends AbstractHelper
 
     /**
      * Testing the settings of the parameters for the callback.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::setParameters
      */
     public function testSetParameters()
     {
@@ -72,8 +73,6 @@ class AbstractCallbackTest extends AbstractHelper
 
     /**
      * Testing if we can retrieve previously set parameters from the callback
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::getParameters
      */
     public function testGetParameters()
     {

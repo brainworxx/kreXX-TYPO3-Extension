@@ -36,6 +36,8 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
+use Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Flow\Emergency;
@@ -44,16 +46,17 @@ use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use stdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ProcessObject::class, 'handleNoneScalar')]
+#[CoversMethod(ProcessObject::class, 'canHandle')]
+#[CoversMethod(AbstractProcessNoneScalar::class, 'handle')]
+#[CoversMethod(AbstractRouting::class, 'dispatchProcessEvent')]
+#[CoversMethod(AbstractRouting::class, 'generateDomIdFromObject')]
 class ProcessObjectTest extends AbstractHelper
 {
     /**
      * Testing the initial object processing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject::handleNoneScalar
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::generateDomIdFromObject
      */
     public function testProcess()
     {
@@ -87,8 +90,6 @@ class ProcessObjectTest extends AbstractHelper
 
     /**
      * Test the check if we can handle the array processing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject::canHandle
      */
     public function testCanHandle()
     {

@@ -38,6 +38,7 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Iterate;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Analyse\Comment\Methods;
+use Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Fixtures\AttributesFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
@@ -48,7 +49,16 @@ use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Krexx;
 use ReflectionMethod;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ThroughMethods::class, '__construct')]
+#[CoversMethod(ThroughMethods::class, 'callMe')]
+#[CoversMethod(ThroughMethods::class, 'retrieveConnectorType')]
+#[CoversMethod(ThroughMethods::class, 'retrieveParameters')]
+#[CoversMethod(MethodDeclaration::class, 'retrieveDeclaration')]
+#[CoversMethod(MethodDeclaration::class, 'retrieveDeclaringReflection')]
+#[CoversMethod(ThroughMethods::class, 'getDeclarationKeywords')]
+#[CoversMethod(ThroughMethods::class, 'retrieveMethodData')]
 class ThroughMethodsTest extends AbstractHelper
 {
     /**
@@ -80,8 +90,6 @@ class ThroughMethodsTest extends AbstractHelper
 
     /**
      * Testing the creation of the comment analysis.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::__construct
      */
     public function testConstruct()
     {
@@ -93,8 +101,6 @@ class ThroughMethodsTest extends AbstractHelper
 
     /**
      * Testing an analysis without any methods to look at.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::callMe
      */
     public function testCallMeEmpty()
     {
@@ -117,14 +123,6 @@ class ThroughMethodsTest extends AbstractHelper
 
     /**
      * Normal testrun for the method analysis.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::retrieveConnectorType
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::retrieveParameters
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration::retrieveDeclaration
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration::retrieveDeclaringReflection
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::getDeclarationKeywords
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::retrieveMethodData
      */
     public function testCallMeNormal()
     {
@@ -292,14 +290,6 @@ class ThroughMethodsTest extends AbstractHelper
 
     /**
      * Test the attributes fixture
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::retrieveConnectorType
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::retrieveParameters
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration::retrieveDeclaration
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration::retrieveDeclaringReflection
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::getDeclarationKeywords
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::retrieveMethodData
      */
     public function testCallMeAttributes()
     {

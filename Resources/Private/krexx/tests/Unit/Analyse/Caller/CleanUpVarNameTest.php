@@ -37,15 +37,15 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Caller;
 
 use Brainworxx\Krexx\Analyse\Caller\CleanUpVarName;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(CleanUpVarName::class, 'adjustActiveQuotes')]
+#[CoversMethod(CleanUpVarName::class, 'cleanup')]
+#[CoversMethod(CleanUpVarName::class, 'isReady')]
 class CleanUpVarNameTest extends AbstractHelper
 {
     /**
      * Simply test stuff the cleanup of variable names from a kreXX call.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CleanUpVarName::adjustActiveQuotes
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CleanUpVarName::cleanup
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CleanUpVarName::isReady
      */
     public function testCleanup()
     {
