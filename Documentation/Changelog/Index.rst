@@ -32,6 +32,7 @@ Changes:
     * [Change] Removed deprecations from the unit tests.
     * [Change] Deprecated the exception handler.
     * [Change] Updated the unit tests to 11.
+    * [Change] Dropped Aimeos 20 Support due to Composer 1 eol.
 
 -----
 

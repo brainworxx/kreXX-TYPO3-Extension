@@ -63,8 +63,6 @@ class DebugMethods extends AbstractEventHandler implements
      */
     protected array $methods = [
             'getRefItems' => [
-                // Aimeos 2019 & 2020
-                \Aimeos\MShop\Common\Item\ListRef\Iface::class,
                 // Aimeos 2021
                 \Aimeos\MShop\Common\Item\ListsRef\Iface::class,
             ],
@@ -78,8 +76,6 @@ class DebugMethods extends AbstractEventHandler implements
                 \Aimeos\MShop\Common\Item\PropertyRef\Iface::class,
             ],
             'getListItems' => [
-                // Aimeos 2018 & 2019 & 2020
-                \Aimeos\MShop\Common\Item\ListRef\Iface::class,
                 // Aimeos 2021
                 \Aimeos\MShop\Common\Item\ListsRef\Iface::class
             ],
