@@ -138,17 +138,27 @@ class ErrorObjectTest extends AbstractHelper
     public function testCallMeNested()
     {
         $this->mockEmergencyHandler();
+        Krexx::$pool->emergencyHandler->expects($this->once())
+            ->method('getNestingLevel')
+            ->willReturn(2);
 
         $exception = new Exception('This is exceptional!');
 
         $messageMock = $this->createMock(Messages::class);
         $messageMock->expects($this->never())
             ->method('addMessage');
+        $messageMock->expects($this->exactly(4))
+            ->method('getHelp')
+            ->with(...$this->withConsecutive(['backTrace'], ['classInternals'], ['noSourceAvailable'], ['sourceCode']))
+            ->willReturn('something');
         Krexx::$pool->messages = $messageMock;
 
-        Krexx::$pool->emergencyHandler->expects($this->once())
-            ->method('getNestingLevel')
-            ->willReturn(2);
+
+        $fileServiceMock = $this->createMock(File::class);
+        $fileServiceMock->expects($this->once())
+            ->method('readSourcecode')
+            ->willReturn('');
+        Krexx::$pool->fileService = $fileServiceMock;
 
         $fixture = [
             $this->errorObject::PARAM_DATA => $exception

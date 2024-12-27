@@ -81,7 +81,6 @@ class Routing extends AbstractRouting
         $this->processors[ProcessFloat::class] = $pool->createClass(ProcessFloat::class);
         $this->processors[ProcessNull::class] = $pool->createClass(ProcessNull::class);
         $this->processors[ProcessResource::class] = $pool->createClass(ProcessResource::class);
-        $this->processors[ProcessOther::class] = $pool->createClass(ProcessOther::class);
 
         $pool->routing = $this;
     }
@@ -111,7 +110,11 @@ class Routing extends AbstractRouting
             }
         }
 
-        // The ProcessOther should prevent this.
-        return '';
+        // Looks like we ran out of processors.
+        /** @var ProcessOther $processOther */
+        $processOther = $this->pool->createClass(ProcessOther::class);
+        $processOther->canHandle($model);
+
+        return $processOther->handle();
     }
 }

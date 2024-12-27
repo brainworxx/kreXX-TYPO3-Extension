@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Analyse\Routing\Routing;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(Routing::class, '__construct')]
@@ -150,5 +151,24 @@ class RoutingTest extends AbstractHelper
         $model->setData($parameter);
 
         $this->assertEquals(static::ROUTING_MOCK_RETURN_VALUE, $this->mockRouting(ProcessString::class, $model));
+    }
+
+    /**
+     * We test the final calling of the ProcessOther after everything else
+     * has failed.
+     */
+    public function testAnalysisHubOther()
+    {
+        $renderNothing = new RenderNothing(Krexx::$pool);
+        Krexx::$pool->render = $renderNothing;
+
+        // Create the model.
+        $model = new Model(Krexx::$pool);
+        $model->setData('some string');
+        $routing = new Routing(Krexx::$pool);
+        $this->setValueByReflection('processors', [], $routing);
+        $routing->analysisHub($model);
+
+        $this->assertTrue(in_array(Krexx::$pool->messages->getHelp('unhandedOtherHelp'), $model->getJson()));
     }
 }

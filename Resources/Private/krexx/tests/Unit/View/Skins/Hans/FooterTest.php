@@ -131,4 +131,23 @@ class FooterTest extends AbstractRenderHans
         $this->assertStringContainsString('line 123', $result);
         $this->assertStringContainsString('yesteryear', $result);
     }
+
+    /**
+     * Test everything with an empty caller array.
+     */
+    public function testRenderFooterNoCaller()
+    {
+        // Mock the caller
+        $caller = [];
+        Krexx::$pool->fileService->expects($this->any())
+            ->method('filterFilePath')
+            ->willReturn('');
+        Krexx::$pool->fileService->expects($this->any())
+            ->method('fileIsReadable')
+            ->willReturn(true);
+
+        $model = new Model(Krexx::$pool);
+        $result = $this->renderHans->renderFooter($caller, $model);
+        $this->assertStringNotContainsString('Called from,', $result, 'We do not have any caller info.');
+    }
 }

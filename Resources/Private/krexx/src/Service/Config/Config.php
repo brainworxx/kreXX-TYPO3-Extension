@@ -261,7 +261,7 @@ class Config extends Fallback
      */
     public function getChunkDir(): string
     {
-        return $this->directories[static::CHUNKS_FOLDER];
+        return $this->directories[static::CHUNKS_FOLDER] ?? '';
     }
 
     /**
@@ -272,7 +272,7 @@ class Config extends Fallback
      */
     public function getLogDir(): string
     {
-        return $this->directories[static::LOG_FOLDER];
+        return $this->directories[static::LOG_FOLDER] ?? '';
     }
 
     /**
@@ -283,7 +283,7 @@ class Config extends Fallback
      */
     public function getPathToConfigFile(): string
     {
-        return $this->directories[static::CONFIG_FOLDER];
+        return $this->directories[static::CONFIG_FOLDER] ?? '';
     }
 
     /**

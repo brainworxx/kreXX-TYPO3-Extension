@@ -76,14 +76,9 @@ class Callback extends AbstractScalarAnalysis
      */
     public function canHandle($string, Model $model): bool
     {
-        try {
-            if (is_callable($string)) {
-                $this->handledValue = $string;
-                return true;
-            }
-        } catch (Throwable $exception) {
-            // Do nothing.
-            // The autoloading just failed.
+        if (is_callable($string)) {
+            $this->handledValue = $string;
+            return true;
         }
 
         return false;

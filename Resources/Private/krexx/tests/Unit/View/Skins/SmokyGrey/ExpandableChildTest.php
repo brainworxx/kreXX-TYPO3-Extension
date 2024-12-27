@@ -36,6 +36,7 @@
 namespace Brainworxx\Krexx\Tests\Unit\View\Skins\SmokyGrey;
 
 use Brainworxx\Krexx\Analyse\Code\Codegen;
+use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderSmokyGrey;
@@ -102,5 +103,36 @@ class ExpandableChildTest extends AbstractRenderSmokyGrey
         $this->assertStringContainsString('noNose.', $result);
         $this->assertStringContainsString('passport', $result);
         $this->assertStringContainsString('birdnest', $result);
+    }
+
+    /**
+     * Test the rendering of an expandable child, but with a small connector.
+     */
+    public function testRenderExpandableChildSmallConnector()
+    {
+        $this->mockModel(static::GET_CONNECTOR_RIGHT, 'xx');
+        $this->mockModel(static::GET_RETURN_TYPE, '');
+        $emergencyMock = $this->createMock(Emergency::class);
+        $emergencyMock->expects($this->once())
+            ->method('checkEmergencyBreak')
+            ->willReturn(false);
+        Krexx::$pool->emergencyHandler = $emergencyMock;
+        $result = $this->renderSmokyGrey->renderExpandableChild($this->modelMock);
+        $this->assertStringNotContainsString('xx', $result, 'We do not render small connectors.');
+    }
+
+    public function testRenderExpandableChildEmergency()
+    {
+        $modelMock = $this->createMock(Model::class);
+        $modelMock->expects($this->never())
+            ->method('getName');
+        $emergencyMock = $this->createMock(Emergency::class);
+        $emergencyMock->expects($this->once())
+            ->method('checkEmergencyBreak')
+            ->willReturn(true);
+        Krexx::$pool->emergencyHandler = $emergencyMock;
+
+        $result = $this->renderSmokyGrey->renderExpandableChild($modelMock);
+        $this->assertEquals('', $result, 'An emergency break must not create any output.');
     }
 }

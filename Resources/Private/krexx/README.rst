@@ -1,13 +1,14 @@
 .. image:: https://github.com/brainworxx/kreXX/actions/workflows/php.yml/badge.svg?branch=main
    :target: https://github.com/brainworxx/kreXX/actions/workflows/php.yml
-.. image:: https://api.codeclimate.com/v1/badges/c9d414a09928ede869c7/maintainability
+.. image:: https://api.codeclimate.com/v1/badges/53704d0c1be1f2d589fa/maintainability
    :target: https://codeclimate.com/github/brainworxx/kreXX/maintainability
-.. image:: https://api.codeclimate.com/v1/badges/c9d414a09928ede869c7/test_coverage.svg
+.. image:: https://api.codeclimate.com/v1/badges/53704d0c1be1f2d589fa/test_coverage
    :target: https://codeclimate.com/github/brainworxx/kreXX/test_coverage
 .. image:: https://poser.pugx.org/brainworxx/krexx/v/stable
    :target: https://packagist.org/packages/brainworxx/krexx
 .. image:: https://poser.pugx.org/brainworxx/krexx/license
    :target: https://packagist.org/packages/brainworxx/krexx
+
 
 ==============
 kreXX Debugger

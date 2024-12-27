@@ -155,6 +155,23 @@ class DeepGetterFixture
     protected $false = false;
 
     /**
+     * This is clearly uppercase.
+     *
+     * @var int
+     */
+    protected $Uppercase = 1;
+
+    /**
+     * Things!
+     *
+     * @return int
+     */
+    public function Theuppercase(): int
+    {
+        return $this->Uppercase;
+    }
+
+    /**
      * @return string
      */
     public function getMyPropertyOne(): string

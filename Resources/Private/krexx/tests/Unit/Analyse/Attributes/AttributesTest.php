@@ -86,4 +86,21 @@ class AttributesTest extends AbstractHelper
             $this->assertEmpty($propertyResult, 'Wrong PHP Version ?!?');
         }
     }
+
+    /**
+     * Test the attribute retrieval with errors.
+     */
+    public function testGetFlatAttributesWithErrors()
+    {
+        if (version_compare(phpversion(), '8.0.0', '<=')) {
+            $this->markTestSkipped('Wrong PHP version.');
+        }
+        $attributes = new Attributes(\Krexx::$pool);
+        $reflectorMock = $this->createMock(\ReflectionClass::class);
+        $reflectorMock->expects($this->once())
+            ->method('getAttributes')
+            ->willThrowException(new \Exception());
+
+        $this->assertEquals('', $attributes->getFlatAttributes($reflectorMock));
+    }
 }

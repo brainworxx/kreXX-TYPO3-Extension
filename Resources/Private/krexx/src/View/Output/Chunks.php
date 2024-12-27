@@ -353,7 +353,7 @@ class Chunks implements ConfigConstInterface
      */
     public function __destruct()
     {
-        if (!isset($this->chunkDir)) {
+        if (empty($this->chunkDir)) {
             return;
         }
 

@@ -141,7 +141,7 @@ class ThroughMeta extends AbstractCallback implements CallbackConstInterface
     }
 
     /**
-     * Prepare the model for the noe reflection rendering.
+     * Prepare the model for the no reflection rendering.
      *
      * @param string $key
      *   The key in the output list.

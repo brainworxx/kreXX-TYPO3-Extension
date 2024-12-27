@@ -226,7 +226,14 @@ class ByMethodNameTest extends AbstractGetter
                 'expectation' => true,
                 'propertyName' => 'myPropertyOne',
                 'hasResult' => true
-            ]
+            ],
+            [
+                'reflection' => $classReflection->getMethod('Theuppercase'),
+                'prefix' => 'get',
+                'expectation' => null,
+                'propertyName' => 'Uppercase',
+                'hasResult' => false
+            ],
         ];
         $this->validateResults($fixture, $classReflection);
     }

@@ -53,6 +53,7 @@ abstract class AbstractRenderSmokyGrey extends AbstractHelper
     public const GET_TYPE = 'getType';
     public const RENDER_ME = 'renderMe';
     public const GET_CONNECTOR_LANGUAGE = 'getConnectorLanguage';
+    public const GET_RETURN_TYPE = 'getReturnType';
 
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject

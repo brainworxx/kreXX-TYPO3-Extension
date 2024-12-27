@@ -77,6 +77,27 @@ class ClassNameTest extends AbstractHelper
     }
 
     /**
+     * Testing the failure of the autoloading.
+     */
+    public function testCanHandleError()
+    {
+        $className = new ClassName(Krexx::$pool);
+        $model = new Model(Krexx::$pool);
+
+        $classExistsMock = $this->getFunctionMock(
+            '\\Brainworxx\\Krexx\\Analyse\\Scalar\String\\',
+            'class_exists'
+        );
+        $classExistsMock->expects($this->once())
+            ->willThrowException(new \Exception());
+
+        $this->assertFalse(
+            $className->canHandle(static::class, $model),
+            'Throwing an error must always result in false.'
+        );
+    }
+
+    /**
      * Test the handling of the json.
      */
     public function testHandle()

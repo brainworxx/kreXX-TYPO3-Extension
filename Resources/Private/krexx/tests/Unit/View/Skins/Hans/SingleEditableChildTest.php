@@ -40,6 +40,7 @@ use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
 use Brainworxx\Krexx\View\AbstractRender;
+use Brainworxx\Krexx\View\Skins\Hans\Help;
 use Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
@@ -47,6 +48,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(SingleEditableChild::class, 'renderSpecificEditableElement')]
 #[CoversMethod(SingleEditableChild::class, 'renderSelectOptions')]
 #[CoversMethod(AbstractRender::class, 'encodeJson')]
+#[CoversMethod(Help::class, 'renderHelp')]
 class SingleEditableChildTest extends AbstractRenderHans
 {
     /**

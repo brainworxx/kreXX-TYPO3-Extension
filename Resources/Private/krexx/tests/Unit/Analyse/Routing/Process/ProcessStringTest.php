@@ -42,8 +42,10 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessString;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\From\File;
+use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Service\Misc\Encoding;
 use Brainworxx\Krexx\Service\Misc\FileinfoDummy;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
@@ -235,20 +237,10 @@ class ProcessStringTest extends AbstractHelper
     }
 
     /**
-     * Testing the triggering of the scalar analysis and its recursion handling.r
+     * Testing the triggering of the scalar analysis and its recursion handling.
      */
     public function testProcessWithScalar()
     {
-        // Activate the scalar analysis.
-        Krexx::$pool->rewrite[File::class] = ConfigSupplier::class;
-        ConfigSupplier::$overwriteValues[Fallback::SETTING_ANALYSE_SCALAR] = 'true';
-
-        // To prevent a bad rating, I have to do something with the newly
-        // instantiated configuration. If I don't, it's considered a bug.
-        // Hence, I do "something" with it.
-        $whatever = new Config(\Krexx::$pool);
-        $whatever->getLogDir();
-
         $fixture = '{"whatever": "okay"}';
         $renderNothing = new RenderNothing(Krexx::$pool);
         Krexx::$pool->render = $renderNothing;
@@ -270,6 +262,38 @@ class ProcessStringTest extends AbstractHelper
             $renderNothing->model['renderRecursion'],
             'We should have something in the recursion array.'
         );
+        $this->assertCount(
+            1,
+            $renderNothing->model['renderExpandableChild'],
+            'The first one should be in the expandable child.'
+        );
+    }
+
+    public function testProcessWithoutScalar()
+    {
+        // Deactivate the scalar analysis.
+        Krexx::$pool->rewrite[File::class] = ConfigSupplier::class;
+        ConfigSupplier::$overwriteValues[ConfigConstInterface::SETTING_ANALYSE_SCALAR] = false;
+        new Config(\Krexx::$pool);
+
+        $fixture = '{"whatever": "okay"}';
+        $renderNothing = new RenderNothing(Krexx::$pool);
+        Krexx::$pool->render = $renderNothing;
+
+        $recursionHandlerMock = $this->createMock(Recursion::class);
+        $recursionHandlerMock->expects($this->never())
+            ->method('isInMetaHive');
+        $recursionHandlerMock->expects($this->never())
+            ->method('addToMetaHive');
+        Krexx::$pool->recursionHandler = $recursionHandlerMock;
+
+        $model = new Model(Krexx::$pool);
+        $model->setData($fixture);
+
+        $this->processString = new ProcessString(Krexx::$pool);
+        $this->processString->canHandle($model);
+        $this->processString->handle();
+
         $this->assertCount(
             1,
             $renderNothing->model['renderExpandableChild'],

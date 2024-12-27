@@ -38,6 +38,7 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Iterate;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties;
 use Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
 use Brainworxx\Krexx\Tests\Fixtures\AttributesFixture;
@@ -516,6 +517,36 @@ class ThroughPropertiesTest extends AbstractHelper
             '->',
             '',
             'Public '
+        );
+    }
+
+    public function testCallMeEmergency()
+    {
+        // Test the events.
+        // We do not expect a stop event.
+        $this->mockEventService([$this->startEvent, $this->throughProperties]);
+
+        // Make sure to stop everything in its tracks.
+        $emergencyHandlerMock = $this->createMock(Emergency::class);
+        $emergencyHandlerMock->expects($this->once())
+            ->method('checkEmergencyBreak')
+            ->willReturn(true);
+        Krexx::$pool->emergencyHandler = $emergencyHandlerMock;
+
+        // Create a fixture.
+        $subject = new AttributesFixture();
+        $fixture = [
+            $this->throughProperties::PARAM_REF => new ReflectionClass($subject),
+            $this->throughProperties::PARAM_DATA => [
+                new ReflectionProperty(AttributesFixture::class, static::PROPERTY),
+            ]
+        ];
+
+        // Run the test
+        $this->assertEquals(
+            '',
+            $this->throughProperties->setParameters($fixture)->callMe(),
+            'We use the normal routing. If there is any HTML in there, the break has failed!'
         );
     }
 

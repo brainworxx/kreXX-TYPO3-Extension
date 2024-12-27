@@ -108,7 +108,7 @@ class DebugMethodsTest extends AbstractHelper
      */
     public function testCallMeNothing()
     {
-        // Setup the start events
+        // Set up the start events
         $this->mockEventService(
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\DebugMethods::callMe::start', $this->debugMethods]
         );
@@ -125,6 +125,37 @@ class DebugMethodsTest extends AbstractHelper
         // Test if the callback was executed.
         $this->assertEquals(0, CallbackCounter::$counter);
         $this->assertEquals([], CallbackCounter::$staticParameters);
+    }
+
+    public function testCallMeError()
+    {
+
+        $fixtureClass = new DebugMethodFixture();
+        $reflectionMock = $this->createMock(ReflectionClass::class);
+        $reflectionMock->expects($this->any())
+            ->method('getMethod')
+            ->willThrowException(new \ReflectionException());
+        $reflectionMock->expects($this->once())
+            ->method('getData')
+            ->willReturn($fixtureClass);
+
+        $fixture = [
+            'data' => $fixtureClass,
+            'name' => 'some name,',
+            'ref' => $reflectionMock
+        ];
+        $this->debugMethods = new DebugMethods(Krexx::$pool);
+        $this->debugMethods->setParameters($fixture);
+
+        // Configure the debug method we want to run.
+        $this->setConfigValue(Fallback::SETTING_DEBUG_METHODS, 'goodDebugMethod,uglyDebugMethod');
+
+        // Set up the start events
+        $this->mockEventService(
+            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\DebugMethods::callMe::start', $this->debugMethods]
+        );
+
+        $this->assertEquals('', $this->debugMethods->callMe());
     }
 
     /**

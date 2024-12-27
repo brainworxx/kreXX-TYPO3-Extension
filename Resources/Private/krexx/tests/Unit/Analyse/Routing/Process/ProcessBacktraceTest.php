@@ -49,11 +49,11 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(ProcessBacktrace::class, 'getBacktrace')]
 class ProcessBacktraceTest extends AbstractHelper
 {
-
-    protected function setUp(): void
+    /**
+     * Mock the debug backtrace, to provide a fixture.
+     */
+    protected function mockDebugBacktrace()
     {
-        parent::setUp();
-
         $data = 'data';
         $someFile = 'some file';
         $debugBacktrace = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'debug_backtrace');
@@ -95,6 +95,7 @@ class ProcessBacktraceTest extends AbstractHelper
     public function testProcessNormal()
     {
         $this->mockEmergencyHandler();
+        $this->mockDebugBacktrace();
 
         // Inject the RenderNothing.
         $renderNothing = new RenderNothing(Krexx::$pool);
@@ -159,6 +160,7 @@ class ProcessBacktraceTest extends AbstractHelper
     public function testProcessEmpty()
     {
         $this->mockEmergencyHandler();
+        $this->mockDebugBacktrace();
 
         // Inject the RenderNothing.
         $renderNothing = new RenderNothing(Krexx::$pool);
@@ -182,7 +184,7 @@ class ProcessBacktraceTest extends AbstractHelper
 
         // Check the parameters
         $data = 'data';
-        $someFile = $orgPath = 'some file';
+        $orgPath = 'some file';
         for ($i = 0; $i <= 2; $i++) {
             /** @var \Brainworxx\Krexx\Analyse\Model $model */
             $model = $renderNothing->model['renderExpandableChild'][$i];
@@ -212,5 +214,24 @@ class ProcessBacktraceTest extends AbstractHelper
                 'The name is the step number, starting with 1'
             );
         }
+    }
+
+    /**
+     * We mock the debug_backtrace, and make it return an empty value to
+     * simulate a tiny backtrace.
+     */
+    public function testProcessReallyEmpty()
+    {
+        $this->mockEmergencyHandler();
+
+        $backtraceMock = $this->getFunctionMock(
+            '\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\',
+            'debug_backtrace'
+        );
+        $backtraceMock->expects($this->once())
+            ->willReturn([]);
+
+        $processBacktrace = new ProcessBacktrace(Krexx::$pool);
+        $this->assertEquals('', $processBacktrace->handle());
     }
 }

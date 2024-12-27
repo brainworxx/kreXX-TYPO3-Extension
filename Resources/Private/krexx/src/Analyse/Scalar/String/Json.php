@@ -93,6 +93,7 @@ class Json extends AbstractScalarAnalysis implements CodegenConstInterface
             return false;
         }
 
+        // @deprecated Will be removed once we drop 8.3 support.
         if (function_exists('json_validate') && json_validate($string)) {
             // Doing it the PHP 8.3 way.
             $this->model = $model;
@@ -122,7 +123,7 @@ class Json extends AbstractScalarAnalysis implements CodegenConstInterface
     {
         if (empty($this->decodedJson)) {
             // We will not decode it again, if we already have a result.
-            // The "if" will be removed in PHP 8.3.
+            // @deprecated The "if" will be removed in PHP 8.3.
             $this->decodedJson = json_decode($this->handledValue);
         }
 

@@ -39,6 +39,7 @@ use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Code\Scope;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Flow\Emergency;
+use Brainworxx\Krexx\Tests\Fixtures\PublicFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use stdClass;
@@ -121,8 +122,9 @@ class ScopeTest extends AbstractHelper
         $object = new stdClass();
         $array = [];
         $string = 'whatever';
+        $objectWithPrivate = new PublicFixture();
 
-        // No genereation for 'some' scope.
+        // No generation for 'some' scope.
         $this->setNestingLevel(1);
         $this->scope->setScope('some');
         $model = new Model(Krexx::$pool);
@@ -143,6 +145,17 @@ class ScopeTest extends AbstractHelper
         $this->setNestingLevel(2);
         $model->setData($object);
         $this->assertTrue($this->scope->testModelForCodegen($model));
+
+        // Code generation with a real class on level 1
+        $messages = Krexx::$pool->messages;
+        $this->setNestingLevel(1);
+        $model->setData($objectWithPrivate)
+            ->setType(
+                $messages->getHelp('private') . ' ' . $messages->getHelp('inherited')
+            );
+        $this->scope->setScope('$this');
+        $this->assertFalse($this->scope->testModelForCodegen($model));
+        $model->setType('');
 
         // Code generation for a level 2 array.
         $this->setNestingLevel(2);

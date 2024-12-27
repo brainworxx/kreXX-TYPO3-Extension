@@ -100,8 +100,7 @@ class ThroughArray extends AbstractCallback implements
      * @param array $array
      *   The array we are analysing.
      * @param int|string $key
-     *   A current key that we check if the value in that array is actually
-     *   accessible. And yes, inaccessible array values do exist.
+     *   A current key.
      * @param mixed $value
      *   The value of that key that we are analysing
      * @param string $multilineCodeGen
@@ -117,12 +116,6 @@ class ThroughArray extends AbstractCallback implements
             ->createClass(Model::class)
             ->setData($value)
             ->setCodeGenType($multilineCodeGen);
-
-        if (!array_key_exists($key, $array)) {
-            // Looks like we have an inaccessible array value here.
-            $model->setCodeGenType(static::CODEGEN_TYPE_ARRAY_VALUES_ACCESS)
-                ->setConnectorParameters(array_search($key, array_keys($array)));
-        }
 
         if (is_string($key)) {
             $model->setName($this->pool->encodingService->encodeString($key))

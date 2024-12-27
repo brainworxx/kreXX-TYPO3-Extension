@@ -326,6 +326,8 @@ class ThroughProperties extends AbstractCallback implements
         // In a rather buggy state. When the property is not readonly, this may
         // trigger an
         // "Error : Internal error: Failed to retrieve the reflection object".
+        // It was later fixed in PHP 8.1.?.
+        // @deprecated The try catch will be removed.
         try {
             if ($refProperty->isReadOnly()) {
                 $additional .= $messages->getHelp('readonly') . ' ';

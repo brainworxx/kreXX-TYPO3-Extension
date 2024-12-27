@@ -33,40 +33,19 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Tests\Fixtures;
+namespace Brainworxx\Krexx\Tests\Helpers;
 
-use Serializable as SerializableInterface;
+use Brainworxx\Krexx\View\Output\AbstractOutput;
 
-class SerializableFixture implements SerializableInterface
+class OutputNothing extends AbstractOutput
 {
-    protected $data;
-
-    public function __construct()
+    public function finalize(): void
     {
-        $this->data = "just a string";
+        // Do nothing.
     }
 
-    public function serialize()
+    public function getChunkStrings(): array
     {
-        return serialize($this->data);
-    }
-
-    public function unserialize($data)
-    {
-        $this->data = unserialize($data);
-    }
-
-    public function getData() {
-        return $this->data;
-    }
-
-    public function __serialize(): array
-    {
-        return [$this->serialize()];
-    }
-
-    public function __unserialize(array $data): void
-    {
-        $this->unserialize($data);
+        return $this->chunkStrings;
     }
 }

@@ -416,6 +416,19 @@ class ChunksTest extends AbstractHelper
     }
 
     /**
+     * Test the cleanup without any directory to clean up.
+     */
+    public function testDestructWithoutChunkDir()
+    {
+        $chunks = new Chunks(Krexx::$pool);
+        $globMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\View\\Output\\', 'glob');
+        $globMock->expects($this->never());
+        $this->setValueByReflection('chunkDir', '', $chunks);
+
+        $chunks->__destruct();
+    }
+
+    /**
      * Test the encoding detection.
      */
     public function testDetectEncoding()

@@ -47,7 +47,9 @@ use Brainworxx\Krexx\Controller\DumpController;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Flow\Emergency;
+use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
+use Brainworxx\Krexx\Tests\Helpers\OutputNothing;
 use Brainworxx\Krexx\View\Output\Browser;
 use Brainworxx\Krexx\View\Output\Chunks;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -157,6 +159,38 @@ class DumpControllerTest extends AbstractController
         Krexx::$pool->chunks = $chunkMock;
 
         $dumpController->dumpAction($fixture, $message);
+    }
 
+    /**
+     * Test if the outputFooter can handle
+     *   - No configuration file
+     *   - No minimized JS files
+     *   - No minimized CSS files.
+     */
+    public function testDumpActionWithFooterHandling()
+    {
+        $dumpController = new DumpController(Krexx::$pool);
+        $fixture = null;
+        $expectation = Krexx::$pool->messages->getHelp('configFileNotFound');
+
+        $fileServiceMock = $this->createMock(File::class);
+        $fileServiceMock->expects($this->any())
+            ->method('fileIsReadable')
+            ->willReturn(false);
+        Krexx::$pool->fileService = $fileServiceMock;
+
+        $outputService = new OutputNothing(Krexx::$pool);
+        $this->setValueByReflection('outputService', $outputService, $dumpController);
+        $emergencyMock = $this->createMock(Emergency::class);
+        $emergencyMock->expects($this->any())
+            ->method('checkEmergencyBreak')
+            ->willReturn(false);
+        Krexx::$pool->emergencyHandler = $emergencyMock;
+        $this->setValueByReflection('jsCssSend', [], $dumpController);
+
+        $dumpController->dumpAction($fixture);
+
+        $result = $outputService->getChunkStrings()[2];
+        $this->assertStringContainsString($expectation, $result);
     }
 }

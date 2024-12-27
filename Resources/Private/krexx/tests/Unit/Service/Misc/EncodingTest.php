@@ -92,6 +92,25 @@ class EncodingTest extends AbstractHelper
         $fixture = 'just another string <div> { @' . chr(9);
         $expected = 'just another string &lt;div&gt; &#123; &#64;&nbsp;&nbsp;';
         $this->assertEquals($expected, $this->encoding->encodeString($fixture, true));
+
+        $fixture = random_bytes(102401);
+        $expected = Krexx::$pool->messages->getHelp('stringTooLarge');
+        $this->assertEquals($expected, $this->encoding->encodeString($fixture));
+    }
+
+    /**
+     * We test it with a completely broken string.
+     */
+    public function testEncodeStringCompletelyBroken()
+    {
+        $mbConvertEncodingMock = $this->getFunctionMock(
+            '\\Brainworxx\\Krexx\\Service\\Misc\\',
+            'mb_convert_encoding'
+        );
+        $mbConvertEncodingMock->expects($this->once())->willReturn('');
+        $fixture = random_bytes(50);
+        $expected = '';
+        $this->assertEquals($expected, $this->encoding->encodeString($fixture));
     }
 
     /**

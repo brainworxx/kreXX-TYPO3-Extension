@@ -47,6 +47,7 @@ use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\View\Output\Browser;
+use Brainworxx\Krexx\View\Output\Chunks;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(BacktraceController::class, 'backtraceAction')]
@@ -71,6 +72,31 @@ class BacktraceControllerTest extends AbstractController
         $callerFinderMock->expects($this->never())
             ->method('findCaller');
         $this->setValueByReflection('callerFinder', $callerFinderMock, $backtraceController);
+
+        $this->assertEquals($backtraceController, $backtraceController->backtraceAction());
+    }
+
+    /**
+     * Test it with a triggered emergency break.
+     */
+    public function testBacktraceActionWithEmergency()
+    {
+        $backtraceController = new BacktraceController(Krexx::$pool);
+
+        // Mix it, this time with a different kind of mox.
+        $emergencyMock = $this->createMock(Emergency::class);
+        $emergencyMock->expects($this->once())
+            ->method('checkMaxCall')
+            ->willReturn(false);
+        $emergencyMock->expects($this->any())
+            ->method('checkEmergencyBreak')
+            ->willReturn(true);
+        Krexx::$pool->emergencyHandler = $emergencyMock;
+
+        $chunksMock = $this->createMock(Chunks::class);
+        $chunksMock->expects($this->never())
+            ->method('addMetadata');
+        Krexx::$pool->chunks = $chunksMock;
 
         $this->assertEquals($backtraceController, $backtraceController->backtraceAction());
     }

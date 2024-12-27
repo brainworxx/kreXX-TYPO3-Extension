@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Caller;
 
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
 use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
@@ -252,6 +253,64 @@ class CallerFinderTest extends AbstractHelper
         $this->assertEquals('. . .', $result[BacktraceConstInterface::TRACE_VARNAME]);
         $this->assertEquals('Analysis of . . ., string', $result[BacktraceConstInterface::TRACE_TYPE]);
         $this->assertArrayHasKey(BacktraceConstInterface::TRACE_DATE, $result);
+    }
+
+    /**
+     * Test the finding without a valid url.
+     */
+    public function testFindCallerNoUrl()
+    {
+        $this->mockDebugBacktrace()
+            ->expects($this->once())
+            ->willReturn($this->createFixture(75));
+
+        // We need a different pool mock.
+        $poolMock = $this->createMock(Pool::class);
+        $poolMock->expects($this->any())
+            ->method('getServer')
+            ->willReturn([
+                'SERVER_PROTOCOL' => 'abcd/',
+                'SERVER_PORT' => 123,
+                'SERVER_NAME' => 'localhorst',
+                'HTTPS' => 'on'
+            ]);
+        $poolMock->fileService = Krexx::$pool->fileService;
+        $poolMock->encodingService = Krexx::$pool->encodingService;
+        $poolMock->config = Krexx::$pool->config;
+        $poolMock->emergencyHandler = Krexx::$pool->emergencyHandler;
+        $poolMock->messages = Krexx::$pool->messages;
+        $poolMock->expects($this->any())
+            ->method('createClass')
+            ->willReturnCallback(function ($classname) {
+                return Krexx::$pool->createClass($classname);
+            });
+        $this->callerFinder = new CallerFinder($poolMock);
+
+        // Run the test
+        $result = $this->callerFinder->findCaller('', $this->subjectVar);
+        $this->assertEquals('n/a', $result[BacktraceConstInterface::TRACE_URL]);
+    }
+
+    /**
+     * Manipulate the lookup array to prevent finding anything.
+     */
+    public function testFindCallerNoResult()
+    {
+        $this->mockDebugBacktrace()
+            ->expects($this->once())
+            ->willReturn($this->createFixture(75));
+        $this->setValueByReflection('callPattern', [], $this->callerFinder);
+
+        // Run the test
+        $result = $this->callerFinder->findCaller('', $this->subjectVar);
+        $this->assertEquals(
+            CallbackConstInterface::UNKNOWN_VALUE,
+            $result[BacktraceConstInterface::TRACE_VARNAME]
+        );
+        $this->assertEquals(
+            'Analysis of ' . CallbackConstInterface::UNKNOWN_VALUE . ', string',
+            $result[BacktraceConstInterface::TRACE_TYPE]
+        );
     }
 
     /**

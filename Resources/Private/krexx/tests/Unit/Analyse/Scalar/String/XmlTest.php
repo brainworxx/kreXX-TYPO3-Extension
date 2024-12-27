@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Krexx;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Xml::class, '__construct')]
 #[CoversMethod(Xml::class, 'handle')]
 #[CoversMethod(Xml::class, 'canHandle')]
 #[CoversMethod(Xml::class, 'errorCallback')]

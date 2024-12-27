@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Tests\Unit\Declaration;
 
 use Brainworxx\Krexx\Analyse\Declaration\AbstractDeclaration;
 use Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration;
+use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\LoggerCallerFixture;
 use Brainworxx\Krexx\Tests\Fixtures\MethodParameterFixture;
@@ -80,6 +81,30 @@ class MethodDeclarationTest extends AbstractHelper
         $result = $methodDeclaration->retrieveDeclaration($fixture);
         $this->assertStringContainsString(DIRECTORY_SEPARATOR . 'tests' .
             DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'TraitFixture.php', $result);
+    }
+
+    /**
+     * Test the retrieval of an unknown declaration.
+     */
+    public function testRetrieveDeclarationUnknown()
+    {
+        $reflectionMethodMock = $this->createMock(\ReflectionMethod::class);
+        $reflectionClassMock = $this->createMock(\ReflectionClass::class);
+        $reflectionMethodMock->expects($this->once())
+            ->method('getDeclaringClass')
+            ->willReturn($reflectionClassMock);
+        $reflectionMethodMock->expects($this->once())
+            ->method('getFileName')
+            ->willReturn('');
+        $reflectionClassMock->expects($this->once())
+            ->method('isInternal')
+            ->willReturn(false);
+        $reflectionClassMock->expects($this->never())
+            ->method('getFileName');
+
+        $methodDeclaration = new MethodDeclaration(\Krexx::$pool);
+        $result = $methodDeclaration->retrieveDeclaration($reflectionMethodMock);
+        $this->assertEquals(Krexx::$pool->messages->getHelp('unknownDeclaration'), $result);
     }
 
     /**

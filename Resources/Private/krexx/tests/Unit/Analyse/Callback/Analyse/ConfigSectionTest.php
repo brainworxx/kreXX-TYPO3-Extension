@@ -60,6 +60,7 @@ class ConfigSectionTest extends AbstractHelper
         $noRender = new Model();
         $renderEditable = new Model();
         $renderNotEditable = new Model();
+        $stringSetting = new Model();
 
         $sectionString = 'some Section';
         $sourceString = 'some source';
@@ -83,11 +84,18 @@ class ConfigSectionTest extends AbstractHelper
             ->setType(Fallback::RENDER_TYPE_INPUT)
             ->setValue(false);
 
+        $stringSetting->setSection($sectionString)
+            ->setEditable(false)
+            ->setSource($sourceString)
+            ->setType(Fallback::RENDER_TYPE_INPUT)
+            ->setValue('just a string');
+
         $data = ['data' =>
             [
                 'noRender' => $noRender,
                 'renderEditable' => $renderEditable,
-                'renderNotEditable' => $renderNotEditable
+                'renderNotEditable' => $renderNotEditable,
+                'stringSetting' => $stringSetting
             ]
         ];
 
@@ -101,7 +109,7 @@ class ConfigSectionTest extends AbstractHelper
 
         // Test Render Type None
         $messageMock = $this->createMock(Messages::class);
-        $messageMock->expects($this->exactly(6))
+        $messageMock->expects($this->exactly(9))
             ->method('getHelp')
             ->with(...$this->withConsecutive(
                 ['metaHelp'],
@@ -109,7 +117,10 @@ class ConfigSectionTest extends AbstractHelper
                 ['renderEditableReadable'],
                 ['metaHelp'],
                 ['renderNotEditableHelp'],
-                ['renderNotEditableReadable']
+                ['renderNotEditableReadable'],
+                ['metaHelp'],
+                ['stringSettingHelp'],
+                ['stringSettingReadable'],
             ))->willReturn('some help text');
         Krexx::$pool->messages = $messageMock;
 
@@ -119,7 +130,7 @@ class ConfigSectionTest extends AbstractHelper
             ->method('renderSingleEditableChild')
             ->with($this->anything())
             ->willReturn('some string');
-        $renderMock->expects($this->once())
+        $renderMock->expects($this->exactly(2))
             ->method('renderExpandableChild')
             ->with($this->anything())
             ->willReturn('some string');

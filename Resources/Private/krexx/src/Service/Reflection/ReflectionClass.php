@@ -95,7 +95,7 @@ class ReflectionClass extends \ReflectionClass
      * @param \ReflectionProperty $refProperty
      *   The reflection of the property we are analysing.
      *
-     * @return mixed;
+     * @return mixed
      *   The retrieved value.
      */
     public function retrieveValue(ReflectionProperty $refProperty)
@@ -154,7 +154,7 @@ class ReflectionClass extends \ReflectionClass
             // accessing the object directly.
             return array_values($this->objectArray)[
                 array_search($propName, array_keys($this->objectArray))
-            ];
+            ] ?? null;
         }
 
         if ($refProperty instanceof HiddenProperty) {

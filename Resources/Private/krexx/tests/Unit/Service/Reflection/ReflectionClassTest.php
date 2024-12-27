@@ -41,6 +41,7 @@ use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\InheritDocFixture;
 use Brainworxx\Krexx\Tests\Fixtures\InterfaceFixture;
+use Brainworxx\Krexx\Tests\Fixtures\MagicMethods;
 use Brainworxx\Krexx\Tests\Fixtures\PublicFixture;
 use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
@@ -140,6 +141,46 @@ class ReflectionClassTest extends AbstractHelper
                 $this->assertFalse($reflection->isPropertyUnset($refProperty));
             }
         }
+    }
+
+    /**
+     * We deliberately throw an error when retrieving the value.
+     */
+    public function testRetrieveValueWithErrors()
+    {
+        // Doing it with an undeclared property.
+        $reflectionMock = $this->createMock(UndeclaredProperty::class);
+        $reflectionMock->expects($this->exactly(2))
+            ->method('getName')
+            ->willReturn('5');
+        $reflectionMock->expects($this->once())
+            ->method('isStatic')
+            ->willThrowException(new \Exception());
+        $reflection = new ReflectionClass(new \stdClass());
+
+        $this->assertNull(
+            $reflection->retrieveValue($reflectionMock),
+            'There never was a value in the first place.'
+        );
+
+        // Again, but with a hidden property.
+        $reflectionMock = $this->createMock(HiddenProperty::class);
+        $reflectionMock->expects($this->exactly(2))
+            ->method('getName')
+            ->willReturn('Tobi');
+        $reflectionMock->expects($this->once())
+            ->method('isStatic')
+            ->willThrowException(new \Exception());
+        $fixture = $this->createMock(MagicMethods::class);
+        $fixture->expects($this->once())
+            ->method('__get')
+            ->willThrowException(new \Exception());
+
+        $reflection = new ReflectionClass($fixture);
+        $this->assertNull(
+            $reflection->retrieveValue($reflectionMock),
+            'There never was a value in the first place.'
+        );
     }
 
     /**

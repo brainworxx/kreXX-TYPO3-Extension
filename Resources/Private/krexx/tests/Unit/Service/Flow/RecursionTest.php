@@ -137,6 +137,18 @@ class RecursionTest extends AbstractHelper
             $this->assertFalse($this->recursion->isInHive($GLOBALS));
             $this->assertTrue($this->recursion->isInHive($GLOBALS), 'Render them a second time');
         }
+
+        // And now the same thing with an array.
+        $fixture = [];
+        $this->assertFalse($this->recursion->isInHive($fixture));
+        $this->assertFalse($this->recursion->isInHive($fixture), 'We do not track arrays');
+        $fixture[$this->recursion->getMarker()] = true;
+
+        if (version_compare(phpversion(), '8.1.0', '>=')) {
+            // 8.1.0 does not have globals anymore.
+            $this->assertFalse($this->recursion->isInHive($fixture), 'Pretend that this is the global array.');
+            $this->assertTrue($this->recursion->isInHive($fixture), 'We did track it.');
+        }
     }
 
     /**

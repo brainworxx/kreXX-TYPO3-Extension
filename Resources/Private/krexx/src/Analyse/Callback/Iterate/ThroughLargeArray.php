@@ -85,6 +85,7 @@ class ThroughLargeArray extends AbstractCallback implements
             // Meh, the only reason for the recursion marker
             // in arrays is because of the $GLOBAL array, which
             // we will only render once.
+            // @deprecated Will be removed when we drop 8.0 support
             if ($key === $recursionMarker) {
                 continue;
             }

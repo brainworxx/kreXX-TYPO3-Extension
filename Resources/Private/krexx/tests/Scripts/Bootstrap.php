@@ -44,12 +44,14 @@ $serviceMisc = '\\Brainworxx\\Krexx\\Service\\Misc\\';
 $viewOutput = '\\Brainworxx\\Krexx\\View\\Output\\';
 $view = '\\Brainworxx\\Krexx\\View\\';
 $callbackScalar = '\\Brainworxx\\Krexx\\Analyse\\Scalar\\String\\';
-$caller = '\\Brainworxx\\Krexx\\Analyse\\Caller';
-$factory = '\\Brainworxx\\Krexx\\Service\\Factory';
+$caller = '\\Brainworxx\\Krexx\\Analyse\\Caller\\';
+$factory = '\\Brainworxx\\Krexx\\Service\\Factory\\';
+$scalaString = '\\Brainworxx\\Krexx\\Analyse\\Scalar\String\\';
 
 AbstractHelper::defineFunctionMock($analyseRoutingProcess, 'class_exists');
 AbstractHelper::defineFunctionMock($analyseRoutingProcess, 'is_object');
 AbstractHelper::defineFunctionMock($analyseRoutingProcess, 'is_resource');
+AbstractHelper::defineFunctionMock($analyseRoutingProcess, 'debug_backtrace');
 AbstractHelper::defineFunctionMock($serviceFlow, 'ini_get');
 AbstractHelper::defineFunctionMock($serviceFlow, 'time');
 AbstractHelper::defineFunctionMock($serviceFlow, 'memory_get_usage');
@@ -63,6 +65,7 @@ AbstractHelper::defineFunctionMock($serviceMisc, 'mb_strlen');
 AbstractHelper::defineFunctionMock($serviceMisc, 'glob');
 AbstractHelper::defineFunctionMock($serviceMisc, 'time');
 AbstractHelper::defineFunctionMock($serviceMisc, 'fopen');
+AbstractHelper::defineFunctionMock($serviceMisc, 'mb_convert_encoding');
 AbstractHelper::defineFunctionMock($callbackScalar, 'class_exists');
 AbstractHelper::defineFunctionMock($callbackScalar, 'is_file');
 AbstractHelper::defineFunctionMock($callbackScalar, 'function_exists');
@@ -74,6 +77,8 @@ AbstractHelper::defineFunctionMock($view, 'php_sapi_name');
 AbstractHelper::defineFunctionMock($view, 'defined');
 AbstractHelper::defineFunctionMock($caller, 'time');
 AbstractHelper::defineFunctionMock($factory, 'getmypid');
+AbstractHelper::defineFunctionMock($scalaString, 'class_exists');
+
 
 // Register a shutdown method to die, so we get no output on the shell.
 register_shutdown_function(function () {

@@ -36,11 +36,13 @@
 namespace Brainworxx\Krexx\Tests\Unit\View\Skins\Hans;
 
 use Brainworxx\Krexx\Analyse\Code\Codegen;
+use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
 use Brainworxx\Krexx\View\AbstractRender;
 use Brainworxx\Krexx\View\Output\Chunks;
+use Brainworxx\Krexx\View\Skins\Hans\ConnectorRight;
 use Brainworxx\Krexx\View\Skins\Hans\ExpandableChild;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
@@ -50,6 +52,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(ExpandableChild::class, 'renderExtra')]
 #[CoversMethod(AbstractRender::class, 'retrieveTypeClasses')]
 #[CoversMethod(AbstractRender::class, 'encodeJson')]
+#[CoversMethod(ConnectorRight::class, 'renderConnectorRight')]
 class ExpandableChildTest extends AbstractRenderHans
 {
     /**
@@ -84,6 +87,9 @@ class ExpandableChildTest extends AbstractRenderHans
             ->method('generateSource')
             ->with($this->modelMock)
             ->willReturn('generated source');
+        $codegenMock->expects($this->once())
+            ->method('isCodegenAllowed')
+            ->willReturn(true);
         Krexx::$pool->codegenHandler = $codegenMock;
 
         $chunkMock = $this->createMock(Chunks::class);
@@ -105,5 +111,58 @@ class ExpandableChildTest extends AbstractRenderHans
         $this->assertStringContainsString('model html', $result);
         $this->assertStringContainsString('x12345', $result);
         $this->assertStringNotContainsString('khidden', $result);
+    }
+
+    /**
+     * Test everything with an active emergency break.
+     */
+    public function testRenderExpandableChildEmergency()
+    {
+        $emergencyMock = $this->createMock(Emergency::class);
+        $emergencyMock->expects($this->once())
+            ->method('checkEmergencyBreak')
+            ->willReturn(true);
+        Krexx::$pool->emergencyHandler = $emergencyMock;
+        $model = new Model(Krexx::$pool);
+
+        $result = $this->renderHans->renderExpandableChild($model, true);
+        $this->assertEquals('', $result, 'There should be nothing in there.');
+    }
+
+    /**
+     * Test the rendering without any connectors on the right.
+     */
+    public function testRenderExpandableChildNoConnector()
+    {
+        $emergencyMock = $this->createMock(Emergency::class);
+        $emergencyMock->expects($this->once())
+            ->method('checkEmergencyBreak')
+            ->willReturn(false);
+        Krexx::$pool->emergencyHandler = $emergencyMock;
+        $this->mockModel(static::GET_CONNECTOR_RIGHT, '');
+        $this->mockModel(static::GET_RETURN_TYPE, '');
+        $result = $this->renderHans->renderExpandableChild($this->modelMock, true);
+
+        $this->assertStringContainsString(
+            'data-codewrapperRight=""',
+            $result,
+            'No connector for you!'
+        );
+    }
+
+    /**
+     * Test it with a source code button and expanded.
+     */
+    public function testRenderExpandableChildCollapsed()
+    {
+        $emergencyMock = $this->createMock(Emergency::class);
+        $emergencyMock->expects($this->once())
+            ->method('checkEmergencyBreak')
+            ->willReturn(false);
+        Krexx::$pool->emergencyHandler = $emergencyMock;
+        $model = new Model(Krexx::$pool);
+
+        $result = $this->renderHans->renderExpandableChild($model);
+        $this->assertStringContainsString('khidden', $result, 'The collapsed CSS class.');
     }
 }

@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\BacktraceStep;
+use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Service\Plugin\Registration;
@@ -88,5 +89,25 @@ class BacktraceStepTest extends AbstractHelper
         $singleStep = ['data' => debug_backtrace()[5]];
         $backtraceStep->setParameters($singleStep);
         $backtraceStep->callMe();
+    }
+
+    /**
+     * Test everything, but some data is missing.
+     */
+    public function testCallMeEmpty()
+    {
+        $backtraceStep = new BacktraceStep(Krexx::$pool);
+        $singleStep = ['data' => debug_backtrace()[5]];
+
+        unset($singleStep['data'][BacktraceConstInterface::TRACE_LINE]);
+        unset($singleStep['data'][BacktraceConstInterface::TRACE_OBJECT]);
+        unset($singleStep['data'][BacktraceConstInterface::TRACE_FUNCTION]);
+        $backtraceStep->setParameters($singleStep);
+        $result = $backtraceStep->callMe();
+
+        $this->assertStringContainsString(
+            Krexx::$pool->messages->getHelp('noSourceAvailable'),
+            $result
+        );
     }
 }

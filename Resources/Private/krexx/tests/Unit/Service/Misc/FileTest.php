@@ -208,6 +208,18 @@ class FileTest extends AbstractHelper
             $this->file->readFile($reflection->getFileName(), -41, -45),
             'Test it with nonsense from to stuff.'
         );
+
+        $this->assertEquals(
+            '',
+            $this->file->readFile('NoFile', 42, 48),
+            'Test it with a none existing file.'
+        );
+
+        $this->assertEquals(
+            '',
+            $this->file->readFile($reflection->getFileName(), 85, 999),
+            'Read more than the file has to offer. We expect the last line which is empty.'
+        );
     }
 
     /**
