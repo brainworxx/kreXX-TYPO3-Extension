@@ -33,6 +33,8 @@ Changes:
     * [Change] Deprecated the exception handler.
     * [Change] Updated the unit tests to 11.
     * [Change] Dropped Aimeos 20 Support due to Composer 1 eol.
+    * [Change] Use the encoding service to encode comments.
+    * [Change] Introduced a static cache to the string mimetype analysis.
 
 -----
 
@@ -42,6 +44,7 @@ Changes:
 Changes:
     * [Bugfix] Added the inline CSS to the asset collector to prevent CSP problems with it.
     * [Bugfix] Render the children before activating the fluid debugger.
+    * [Bugfix] The serialized string analysis was not thorough enough to detect all possible candidates.
 
 -----
 

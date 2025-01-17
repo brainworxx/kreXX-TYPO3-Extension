@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2025 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -106,25 +106,12 @@ abstract class AbstractRender implements RenderInterface
             return '';
         }
 
-        return json_encode(
-            str_replace(
-                [
-                    '"',
-                    "'",
-                    '&quot;',
-                    '&lt;',
-                    '&gt;',
-                ],
-                [
-                    "\\u0027",
-                    "\\u0022",
-                    "\\u0027",
-                    "\\u276E",
-                    "\\u02C3",
-                ],
-                $array
-            )
-        );
+        $encodingService = $this->pool->encodingService;
+        foreach ($array as &$entry) {
+            $entry = $encodingService->encodeString($entry);
+        }
+
+        return json_encode($array);
     }
 
     /**

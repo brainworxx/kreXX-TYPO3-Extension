@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2025 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -212,7 +212,11 @@ class ProcessString extends AbstractRouting implements
         // Long string or with broken encoding.
         if ($length > $this->bufferInfoThreshold) {
             // Let's see, what the buffer-info can do with it.
-            $this->model->addToJson($messages->getHelp('metaMimeTypeString'), $this->bufferInfo->buffer($data));
+            static $bufferCache = [];
+            if (!isset($bufferCache[$data])) {
+                $bufferCache[$data] = $this->bufferInfo->buffer($data);
+            }
+            $this->model->addToJson($messages->getHelp('metaMimeTypeString'), $bufferCache[$data]);
         } elseif ($encoding === false) {
             // Short string with broken encoding.
             $this->model->addToJson($messages->getHelp('metaEncoding'), 'broken');

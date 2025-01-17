@@ -24,6 +24,12 @@
 - Change: Removed deprecations from the unit tests.
 - Change: Deprecated the exception handler.
 - Change: Updated to UnitTest 11.4
+- Change: Use the encoding service to encode comments.
+- Change: Introduced a static cache to the string mimetype analysis.
+
+5.0.8
+- Bugfix: The serialized string analysis was not thorough enough
+  to detect all possible candidates.
 
 5.0.7
 - Bugfix: The XML analysis does not recognise a broken XML string.

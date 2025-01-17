@@ -90,6 +90,10 @@ class SerializedTest extends AbstractHelper
         $model->setData($fixture);
         $this->assertTrue($serialized->canHandle($fixture, $model));
         $this->assertEquals($fixture, $this->retrieveValueByReflection('handledValue', $serialized));
+
+        $fixture = serialize(new \stdClass());
+        $model->setData($fixture);
+        $this->assertTrue($serialized->canHandle($fixture, $model));
     }
 
     /**
