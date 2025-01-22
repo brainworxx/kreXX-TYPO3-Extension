@@ -11,6 +11,7 @@ Changes:
     * [Bugfix] Added the inline CSS to the asset collector to prevent CSP problems with it.
     * [Bugfix] Render the children before activating the fluid debugger.
     * [Bugfix] The serialized string analysis was not thorough enough to detect all possible candidates.
+    * [Bugfix] Prevent other extensions from changing the color of the backend module logo.
 
 -----
 
