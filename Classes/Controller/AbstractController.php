@@ -370,7 +370,7 @@ abstract class AbstractController extends ActionController implements ConstInter
             // 12'er style.
             $this->configuration->assignData($this->moduleTemplate);
             $this->formConfiguration->assignData($this->moduleTemplate);
-            return $this->moduleTemplate->renderResponse();
+            return $this->moduleTemplate->renderResponse('Index/Index');
         }
 
         // 10'er and 11'er style.
