@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use ReflectionClass;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+use Throwable;
 
 /**
  * Our fluid wrapper for kreXX.
@@ -122,7 +123,11 @@ class DebugViewHelper extends AbstractViewHelper
      */
     public function render(): string
     {
-        $this->children = $this->renderChildren();
+        try {
+            $this->children = $this->renderChildren();
+        } catch (Throwable $e) {
+        }
+
         Pool::createPool();
         $view = $this->viewHelperVariableContainer->getView();
         $pool = Krexx::$pool;

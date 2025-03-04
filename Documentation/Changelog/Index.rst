@@ -8,7 +8,8 @@ Changelog
 :Date: tbt
 
 Changes:
-    * [Bugfix] Fixed the releade date in the changelog of the 5.1.3.
+    * [Bugfix] Fixed the release date in the changelog of the 5.1.3.
+    * [Bugfix] Fixed an error when trying to access a protected property with the fluid debugger.
 
 -----
 
