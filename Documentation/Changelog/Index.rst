@@ -11,6 +11,7 @@ Changes:
     * [Change] Suggest the admin panel in the composer.json.
     * [Bugfix] Fixed the release date in the changelog of the 5.1.3.
     * [Bugfix] Fixed an error when trying to access a protected property with the fluid debugger.
+    * [Bugfix] Removed a console.log from the Index.js.
 
 -----
 
