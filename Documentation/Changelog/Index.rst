@@ -7,10 +7,13 @@ Changelog
 :Version: 5.1.4
 :Date: tbt
 
+Changes:
+    * [Bugfix] Fixed the releade date in the changelog of the 5.1.3.
+
 -----
 
 :Version: 5.1.3
-:Date: 2024-02-01
+:Date: 2025-02-01
 
 Changes:
     * [Bugfix] Added the inline CSS to the asset collector to prevent CSP problems with it.
