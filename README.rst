@@ -30,7 +30,7 @@ kreXX Debugger - TYPO3 Backend Extension
    :alt: kreXX logo
 
 
-Fluid (and PHP debugger) with backend access to logfiles, code generation to reach the displayed values and much more. We added some special stuff for Aimeos.
+Fluid (and PHP) debugger with backend access to logfiles, code generation to reach the displayed values and much more. We added some special stuff for Aimeos.
 
 
 .. list-table:: Title
