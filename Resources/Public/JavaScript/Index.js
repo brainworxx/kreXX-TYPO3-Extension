@@ -373,7 +373,6 @@
         message.classList.add('ajax-msg');
         message.classList.add(json.class);
         message.innerHTML = ajaxRefresh.generateIcon(json.class) + '<div class="text">' + json.text + '</div>';
-        console.log(json);
         messagebox.appendChild(message);
 
         setTimeout(function () {

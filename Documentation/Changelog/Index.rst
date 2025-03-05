@@ -38,8 +38,19 @@ Changes:
 
 -----
 
+:Version: 5.1.4
+:Date: tbd
+
+Changes:
+    * [Change] Suggest the admin panel in the composer.json.
+    * [Bugfix] Fixed the release date in the changelog of the 5.1.3.
+    * [Bugfix] Fixed an error when trying to access a protected property with the fluid debugger.
+    * [Bugfix] Removed a console.log from the Index.js.
+
+-----
+
 :Version: 5.1.3
-:Date: 2024-02-01
+:Date: 2025-02-01
 
 Changes:
     * [Bugfix] Added the inline CSS to the asset collector to prevent CSP problems with it.
