@@ -51,6 +51,8 @@ use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid as
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Getter as GetterFluid;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter;
 use PHPUnit\Framework\Attributes\CoversMethod;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Analyse\Objects as ObjectsFluid;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
 #[CoversMethod(Configuration::class, 'exec')]
 #[CoversMethod(Configuration::class, 'getVersion')]
@@ -70,6 +72,7 @@ class ConfigurationTest extends AbstractHelper
         Codegen::class => FluidCodegen::class,
         CallerFinder::class => CallerFinderFluid::class,
         Getter::class => GetterFluid::class,
+        Objects::class => ObjectsFluid::class
     ];
 
     /**
