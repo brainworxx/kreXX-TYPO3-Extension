@@ -103,6 +103,7 @@ abstract class AbstractHelper extends KrexxAbstractHelper
         $this->setValueByReflection('rewriteList', [], Registration::class);
         $this->setValueByReflection('additionalSkinList', [], Registration::class);
         $this->setValueByReflection('plugins', [], Registration::class);
+        $this->setValueByReflection('context', null, Environment::class);
 
         unset($GLOBALS['BE_USER']);
         GeneralUtility::flushInternalRuntimeCaches();

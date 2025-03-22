@@ -43,6 +43,8 @@ use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate;
+use TYPO3\CMS\Core\Core\ApplicationContext;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\ResponseFactory;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Information\Typo3Version;
@@ -129,10 +131,11 @@ class IndexControllerTest extends AbstractHelper
         $this->mockBeUser();
 
         // Prepare a productive setting.
-        $presetMock = $this->createMock(LivePreset::class);
-        $presetMock->expects($this->once())
-            ->method('isActive')
-            ->willReturn(true);
+        $contextMock = $this->createMock(ApplicationContext::class);
+        $contextMock->expects($this->once())
+            ->method('isProduction')
+            ->will($this->returnValue(true));
+        $this->setValueByReflection('context', $contextMock, Environment::class);
 
         // Prepare a message from kreXX.
         $messageFromKrexx = 'some key';
@@ -210,7 +213,6 @@ class IndexControllerTest extends AbstractHelper
 
         // Inject it, like there is no tomorrow.
         $this->indexController = new IndexController($configurationMock, $configFeMock, $settingsModel, $pageRenderer, $typo3Version);
-        $this->indexController->injectLivePreset($presetMock);
         $this->setValueByReflection('moduleTemplate', $moduleTemplateMock, $this->indexController);
 
         if (method_exists($this->indexController, 'injectResponseFactory')) {
