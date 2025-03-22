@@ -222,7 +222,7 @@ abstract class AbstractController extends ActionController implements ConstInter
      */
     protected function checkProductiveSetting(): void
     {
-        if (!Environment::getContext()->isDevelopment()) {
+        if (Environment::getContext()->isProduction()) {
             //Display a warning, if we are in Productive / Live settings.
             $this->addFlashMessage(
                 static::translate('debugpreset.warning.message'),

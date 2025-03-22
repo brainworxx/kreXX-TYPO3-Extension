@@ -130,8 +130,8 @@ class IndexControllerTest extends AbstractHelper
         // Prepare a productive setting.
         $contextMock = $this->createMock(ApplicationContext::class);
         $contextMock->expects($this->once())
-            ->method('isDevelopment')
-            ->will($this->returnValue(false));
+            ->method('isProduction')
+            ->will($this->returnValue(true));
         $this->setValueByReflection('context', $contextMock, Environment::class);
 
         // Prepare a message from kreXX.
