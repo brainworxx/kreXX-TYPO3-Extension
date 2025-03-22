@@ -48,6 +48,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use stdClass;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Information\Typo3Version;
@@ -110,6 +111,10 @@ abstract class AbstractController extends ActionController implements ConstInter
     protected $settingsModel;
 
     /**
+     * @deprecated
+     *   Since 5.1.4.
+     *   Use Environment::getContext()->isDevelopment() instead.
+     *
      * @var LivePreset
      */
     protected $livePreset;
@@ -199,6 +204,11 @@ abstract class AbstractController extends ActionController implements ConstInter
     /**
      * Inject the private LivePreset.
      *
+     * @deprecated
+     *   Since 5.1.4. Will be removed.
+     * @codeCoverageIgnore
+     *   We do not test deprecated code.
+     *
      * @param \TYPO3\CMS\Install\Configuration\Context\LivePreset $livePreset
      */
     public function injectLivePreset(LivePreset $livePreset): void
@@ -212,7 +222,7 @@ abstract class AbstractController extends ActionController implements ConstInter
      */
     protected function checkProductiveSetting(): void
     {
-        if ($this->livePreset->isActive()) {
+        if (!Environment::getContext()->isDevelopment()) {
             //Display a warning, if we are in Productive / Live settings.
             $this->addFlashMessage(
                 static::translate('debugpreset.warning.message'),

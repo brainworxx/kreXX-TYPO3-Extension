@@ -14,6 +14,7 @@ Changes:
     * [Bugfix] Fixed an error when trying to access a protected property with the fluid debugger.
     * [Bugfix] Removed a console.log from the Index.js.
     * [Bugfix][Change] Removed the constants-analysis from the fluid debugger. Constants are not reachable and hold little to no information.
+    * [Bugfix][Change] Use the application context to detect a productive environment instead of the LivePreset.
 
 -----
 

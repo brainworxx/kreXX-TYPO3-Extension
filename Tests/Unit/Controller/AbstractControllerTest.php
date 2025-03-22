@@ -110,24 +110,4 @@ class AbstractControllerTest extends AbstractHelper
 
         $indexController->initializeAction();
     }
-
-    /**
-     * Test the injection of the live preset.
-     *
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::injectLivePreset
-     */
-    public function testInjectLivePreset()
-    {
-        $configMock = $this->createMock(Configuration::class);
-        $formConfigMock = $this->createMock(FormConfiguration::class);
-        $settings = $this->createMock(Settings::class);
-        $pageRenderer = $this->createMock(PageRenderer::class);
-        $typo3Version = new Typo3Version();
-
-        $indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer, $typo3Version);
-
-        $preset = $this->createMock(LivePreset::class);
-        $indexController->injectLivePreset($preset);
-        $this->assertSame($preset, $this->retrieveValueByReflection('livePreset', $indexController));
-    }
 }
