@@ -12,6 +12,7 @@ Changes:
     * [Bugfix] Fixed the release date in the changelog of the 5.1.3.
     * [Bugfix] Fixed an error when trying to access a protected property with the fluid debugger.
     * [Bugfix] Removed a console.log from the Index.js.
+    * [Bugfix][Change] Removed the constants-analysis from the fluid debugger. Constants are not reachable and hold little to no information.
 
 -----
 

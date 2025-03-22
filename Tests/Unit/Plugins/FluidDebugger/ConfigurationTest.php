@@ -49,6 +49,8 @@ use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid as CallerFinderFluid;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Getter as GetterFluid;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Analyse\Objects as ObjectsFluid;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
 class ConfigurationTest extends AbstractHelper
 {
@@ -65,6 +67,7 @@ class ConfigurationTest extends AbstractHelper
         Codegen::class => FluidCodegen::class,
         CallerFinder::class => CallerFinderFluid::class,
         Getter::class => GetterFluid::class,
+        Objects::class => ObjectsFluid::class
     ];
 
     /**
