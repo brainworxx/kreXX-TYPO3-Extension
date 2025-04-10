@@ -234,6 +234,21 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface
             }
         }
 
+        // Parse the code via regex, and retrieve default values.
+        // Read the sourcecode into a string.
+        $sourcecode = $this->pool->fileService->readFile(
+            $reflectionMethod->getFileName(),
+            $reflectionMethod->getStartLine(),
+            $reflectionMethod->getEndLine()
+        );
+
+        // Clean it up.
+        $sourcecode = str_replace(['(int)', '(string)', '(float)', '(bool)'], '', $sourcecode);
+        preg_match("/this->get\(\s*'([^']*)',\s*'([^']*)'\s*\);/", $sourcecode, $matches);
+        if (count($matches) === 3 && empty($result[$matches[1]])) {
+            $result[$matches[1]] = $matches[2];
+        }
+
         return $result;
     }
 }
