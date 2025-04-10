@@ -53,7 +53,6 @@ use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
-#[CoversMethod(AbstractController::class, 'injectLivePreset')]
 #[CoversMethod(AbstractController::class, 'initializeAction')]
 #[CoversMethod(AbstractController::class, '__construct')]
 #[CoversMethod(AbstractController::class, 'prepare11Flashmessages')]
