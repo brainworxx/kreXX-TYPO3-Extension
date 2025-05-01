@@ -32,6 +32,7 @@
   to detect all possible candidates.
 - Bugfix: Add the missing "kreXX Messages" to the translation.
 - Bugfix: Remove HTML tags from the shell output.
+- Bugfix: Added a missing closing tag to both skins.
 
 5.0.7
 - Bugfix: The XML analysis does not recognise a broken XML string.

@@ -50,6 +50,7 @@ Changes:
     * [Bugfix] Removed a console.log from the Index.js.
     * [Bugfix] Add the missing "kreXX Messages" to the translation.
     * [Bugfix] Remove HTML tags from the shell output.
+    * [Bugfix] Added a missing closing tag to both skins.
     * [Bugfix][Change] Removed the constants-analysis from the fluid debugger. Constants are not reachable and hold little to no information.
     * [Bugfix][Change] Use the application context to detect a productive environment instead of the LivePreset.
 
