@@ -72,6 +72,7 @@ class MessagesTest extends AbstractHelper
         parent::setUp();
 
         $this->messagesClass = new Messages(Krexx::$pool);
+        $this->messagesClass->readHelpTexts();
     }
 
     /**
