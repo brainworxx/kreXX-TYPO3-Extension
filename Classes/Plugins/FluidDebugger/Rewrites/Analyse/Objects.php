@@ -56,7 +56,7 @@ class Objects extends OriginalObjects
      *
      * @var string[]
      */
-    protected $standardDumper = [
+    protected array $standardDumper = [
         OpaqueRessource::class,
         Meta::class,
         Methods::class,

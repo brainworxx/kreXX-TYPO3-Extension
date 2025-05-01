@@ -39,6 +39,7 @@ use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\AbstractEventHa
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter;
 use Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\AimeosTestTrait;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
+use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\Registration;
@@ -109,10 +110,13 @@ class GetterTest extends AbstractHelper
         $params[Getter::PARAM_ADDITIONAL][Getter::PARAM_NOTHING_FOUND] = true;
         $params[ThroughGetter::CURRENT_PREFIX] = 'get';
         $params[Getter::PARAM_REF] = $ref;
-        $params[Getter::PARAM_ADDITIONAL][Getter::PARAM_REFLECTION_METHOD] = new \ReflectionMethod($item, 'getFacility');
+        $params[Getter::PARAM_ADDITIONAL][Getter::PARAM_REFLECTION_METHOD] = new \ReflectionMethod($item, 'getPriority');
         $callback = new CallbackNothing(Krexx::$pool);
         $callback->setParameters($params);
-        $this->assertEquals('', $getter->handle($callback), 'This one sould be empty.');
+        /** @var Model $model */
+        $model = \Krexx::$pool->createClass(Model::class);
+        $getter->handle($callback, $model);
+        $this->assertEquals(0, $model->getData(), '0 is the default value.');
     }
 
     /**
@@ -132,6 +136,8 @@ class GetterTest extends AbstractHelper
             'log.timestamp' => null,
             // Standard class (values)
             'log.facility' => 'kreXX',
+            // Funfact: The priority should be a number, but we use a string here.
+            // evilGrin();
             'log.priority' => 'high',
             'log.message' => 'testing',
             'log.request' => 'please'
