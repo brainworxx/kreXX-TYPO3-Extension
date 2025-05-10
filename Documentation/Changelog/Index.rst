@@ -8,6 +8,7 @@ Changelog
 :Date: tbd
 
 Changes:
+    * [Change] Updated the documentation.
 
 -----
 
