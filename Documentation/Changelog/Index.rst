@@ -4,6 +4,14 @@
 Changelog
 =============================================================
 
+:Version: 5.1.5
+:Date: tbd
+
+Changes:
+    * [Change] Updated the documentation.
+
+-----
+
 :Version: 5.1.4
 :Date: 2025-05-10
 
