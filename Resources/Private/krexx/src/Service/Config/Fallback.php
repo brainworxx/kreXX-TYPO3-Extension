@@ -560,5 +560,5 @@ abstract class Fallback implements ConfigConstInterface
      *
      * @var string
      */
-    public $version = '5.0.8';
+    public $version = '5.0.9';
 }
