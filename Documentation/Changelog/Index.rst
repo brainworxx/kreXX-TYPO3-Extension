@@ -4,8 +4,66 @@
 Changelog
 =============================================================
 
+:Version: 5.1.4
+:Date: 2025-05-10
+
+Changes:
+    * [Change] Suggest the admin panel in the composer.json.
+    * [Change] Removed Aimeos 20 from the Github Actions matrix because downgrading composer is not possible anymore.
+    * [Bugfix] Fixed the release date in the changelog of the 5.1.3.
+    * [Bugfix] Fixed an error when trying to access a protected property with the fluid debugger.
+    * [Bugfix] Removed a console.log from the Index.js.
+    * [Bugfix] Add the missing "kreXX Messages" to the translation.
+    * [Bugfix] Remove HTML tags from the shell output.
+    * [Bugfix] Added a missing closing tag to both skins.
+    * [Bugfix][Change] Removed the constants-analysis from the fluid debugger. Constants are not reachable and hold little to no information.
+    * [Bugfix][Change] Use the application context to detect a productive environment instead of the LivePreset.
+
+-----
+
+:Version: 5.1.3
+:Date: 2025-02-01
+
+Changes:
+    * [Bugfix] Added the inline CSS to the asset collector to prevent CSP problems with it.
+    * [Bugfix] Render the children before activating the fluid debugger.
+    * [Bugfix] The serialized string analysis was not thorough enough to detect all possible candidates.
+    * [Bugfix] Prevent other extensions from changing the color of the backend module logo.
+    * [Bugfix] The backend module is not compatible with the breaking changes in TYPO3 13.4.3.
+
+-----
+
+:Version: 5.1.2
+:Date: 2024-11-26
+
+Changes:
+    * [Feature] Updated to PHP 8.4.
+    * [Bugfix] The XML analysis does not recognise a broken XML string.
+    * [Bugfix] The scalar analysis does not return the output from the start event when there is no meta to display.
+    * [Bugfix] Better test for handling no analysis value in the fluid debugger.
+    * [Bugfix] Possible TypeError in the AbstractController.
+    * [Bugfix] The serialized string analysis was too strict to detect all possible candidates.
+    * [Bugfix] The fluid caller finder trims too much from the identifies variable name.
+    * [Bugfix] The fluid code generation does not work with complex inline values.
+    * [Bugfix] The method return type analysis prefixes 'self' with a backslash.
+
+-----
+
+:Version: 5.1.1
+:Date: 2024-10-25
+
+Changes:
+    * [Feature] Added the handling of type casting to the regex getter analysis.
+    * [Feature] Updated to Aimeos 24.10.
+    * [Bugfix] Removed some self:: references.
+    * [Bugfix] Better looking exclamation mark for the SmokyGrey skin.
+    * [Bugfix] The dragging of the kreXX output window may not work under certain circumstances.
+    * [Bugfix] The fluid caller finder layout path resolver may return a stringable object instead of a string when the cache is empty.
+
+-----
+
 :Version: 5.1.0
-:Date: tbd
+:Date: 2024-10-15
 
 Changes:
     * [Feature] Updated to Aimeos 24.
