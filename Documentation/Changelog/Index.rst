@@ -5,7 +5,7 @@ Changelog
 =============================================================
 
 :Version: 5.1.4
-:Date: tbt
+:Date: 2025-05-10
 
 Changes:
     * [Change] Suggest the admin panel in the composer.json.
