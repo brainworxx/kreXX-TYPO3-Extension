@@ -1,4 +1,3 @@
-@charset "UTF-8";
 /**
  * kreXX: Krumo eXXtended
  *
@@ -295,7 +294,7 @@
   font: bold 12px tahoma, verdana;
 }
 .kwrapper .kmessage::before, .kfatalwrapper-outer .kmessage::before {
-  content: "  !  ";
+  content: "\00a0\00a0!\00a0\00a0";
   font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
   background-color: #FED300;
   border: 1px solid #555555;
@@ -352,7 +351,7 @@
 .kwrapper .kchild .kname.keystring::before,
 .kwrapper .kchild .kname.keystring::after, .kfatalwrapper-outer .kchild .kname.keystring::before,
 .kfatalwrapper-outer .kchild .kname.keystring::after {
-  content: "'";
+  content: "\27";
   background: transparent;
 }
 .kwrapper .kchild .kel, .kfatalwrapper-outer .kchild .kel {
@@ -412,7 +411,7 @@
   padding-left: 2px;
 }
 .kwrapper .kchild .kel.kexpand::before, .kfatalwrapper-outer .kchild .kel.kexpand::before {
-  content: " ▶  ";
+  content: "\00a0\25B6\00a0\00a0";
   font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
 }
 .kwrapper .kchild .kel.kexpand .kel-bg, .kfatalwrapper-outer .kchild .kel.kexpand .kel-bg {
@@ -422,7 +421,7 @@
   background-image: none;
 }
 .kwrapper .kchild .kel.kopened::before, .kfatalwrapper-outer .kchild .kel.kopened::before {
-  content: " ▼  ";
+  content: "\00a0\25BC\00a0\00a0";
   font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
 }
 .kwrapper .kchild .kel:not(.kexpand), .kfatalwrapper-outer .kchild .kel:not(.kexpand) {
@@ -432,7 +431,7 @@
   /* grey line */
   width: 3px;
   background: #919191 none repeat scroll 0 0;
-  content: " ";
+  content: "\00a0";
   margin-left: 5px;
   display: inline-block;
   margin-right: 13px;
@@ -528,7 +527,7 @@
   cursor: pointer;
 }
 .kwrapper .kchild .kolps::before, .kfatalwrapper-outer .kchild .kolps::before {
-  content: "⇔";
+  content: "\21D4";
   font-weight: bolder;
   font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
 }
@@ -539,7 +538,7 @@
   color: #FED300;
 }
 .kwrapper .kchild .kolps.kcollapsed::before, .kfatalwrapper-outer .kchild .kolps.kcollapsed::before {
-  content: "⇕";
+  content: "\21D5";
   font-weight: bolder;
   font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
 }
@@ -589,7 +588,7 @@
 .kwrapper .kchild .kstring .kshort::before,
 .kwrapper .kchild .kstring .kshort::after, .kfatalwrapper-outer .kchild .kstring .kshort::before,
 .kfatalwrapper-outer .kchild .kstring .kshort::after {
-  content: "'";
+  content: "\27";
 }
 .kwrapper .kchild .kclass::before, .kfatalwrapper-outer .kchild .kclass::before {
   color: #00AD00;
@@ -732,7 +731,7 @@
   color: #ffffff;
 }
 .kwrapper .kclose.knormal::before, .kfatalwrapper-outer .kclose.knormal::before {
-  content: "✕";
+  content: "\2715";
 }
 .kwrapper .kclose.knormal:hover, .kfatalwrapper-outer .kclose.knormal:hover {
   color: #B2B2B2;
@@ -792,7 +791,7 @@
   cursor: pointer;
 }
 .kwrapper .search-wrapper .ksearch .koptions::before, .kfatalwrapper-outer .search-wrapper .ksearch .koptions::before {
-  content: "☼";
+  content: "\263C";
   font-weight: bolder;
   font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
 }

@@ -9,6 +9,7 @@ Changelog
 
 Changes:
     * [Change] Updated the documentation.
+    * [Bugfix] Remove all Unicode chars from the generated CSS for the smokygrey skin, because the TYPO3 asset collector does not support them anymore.
 
 -----
 
