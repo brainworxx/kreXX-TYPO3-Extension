@@ -147,6 +147,13 @@ class QueryDebuggerTest extends AbstractHelper implements CallbackConstInterface
         $this->assertEquals($this->expectation, $model->getData());
     }
 
+    /**
+     * Test the debugging with a query builder, with ten or more parameters.
+     *
+     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger::handle
+     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger::retrieveSql
+     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger::replaceParameter
+     */
     public function testHandleQueryBuilderWithMorThanTenParameters()
     {
         $renderNothing = new RenderNothing(Krexx::$pool);
