@@ -31,6 +31,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+
 /**
  * Variables
  *
@@ -380,7 +381,7 @@ $fontLight: lighter 10px tahoma, verdana;
     font: bold 12px tahoma, verdana;
 
     &::before {
-      content: "\00a0\00a0!\00a0\00a0";
+      content: "\\00a0\\00a0!\\00a0\\00a0";
       font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
       background-color: $yellowBwx;
       border: 1px solid $blackLight;
@@ -447,7 +448,7 @@ $fontLight: lighter 10px tahoma, verdana;
 
     .kname.keystring::before,
     .kname.keystring::after {
-      content: "\27";
+      content: "\\27";
       background: transparent;
     }
 
@@ -505,7 +506,7 @@ $fontLight: lighter 10px tahoma, verdana;
         padding-left: 2px;
 
         &::before {
-          content: "\00a0\25B6\00a0\00a0";
+          content: "\\00a0\\25B6\\00a0\\00a0";
           font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
         }
 
@@ -518,7 +519,7 @@ $fontLight: lighter 10px tahoma, verdana;
         background-image: none;
 
         &::before {
-          content: "\00a0\25BC\00a0\00a0";
+          content: "\\00a0\\25BC\\00a0\\00a0";
           font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
         }
       }
@@ -530,7 +531,7 @@ $fontLight: lighter 10px tahoma, verdana;
           /* grey line */
           width: 3px;
           background: $greyDark none repeat scroll 0 0;
-          content: "\00a0";
+          content: "\\00a0";
           margin-left: 5px;
           display: inline-block;
           margin-right: 13px;
@@ -644,7 +645,7 @@ $fontLight: lighter 10px tahoma, verdana;
       cursor: pointer;
 
       &::before {
-        content: '\21D4';
+        content: '\\21D4';
         font-weight: bolder;
         font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
       }
@@ -657,7 +658,7 @@ $fontLight: lighter 10px tahoma, verdana;
         color: $yellowBwx;
 
         &::before {
-          content: '\21D5';
+          content: '\\21D5';
           font-weight: bolder;
           font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
         }
@@ -726,7 +727,7 @@ $fontLight: lighter 10px tahoma, verdana;
 
       .kshort::before,
       .kshort::after {
-        content: '\27';
+        content: '\\27';
       }
     }
 
@@ -907,7 +908,7 @@ $fontLight: lighter 10px tahoma, verdana;
       color: $white;
 
       &::before {
-        content: '\2715';
+        content: '\\2715';
       }
 
       &:hover {
@@ -973,7 +974,7 @@ $fontLight: lighter 10px tahoma, verdana;
         cursor: pointer;
 
         &::before {
-          content: '\263C';
+          content: '\\263C';
           font-weight: bolder;
           font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
         }

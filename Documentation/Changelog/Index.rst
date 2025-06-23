@@ -39,11 +39,20 @@ Changes:
 
 -----
 
+:Version: 5.1.6
+:Date: tbd
+
+Changes:
+    * [Bugfix] The query debugger creates gibberish when there are more than 10 parameters in the query.
+
+-----
+
 :Version: 5.1.5
 :Date: tbd
 
 Changes:
     * [Change] Updated the documentation.
+    * [Bugfix] Remove all Unicode chars from the generated CSS for the smokygrey skin, because the TYPO3 asset collector does not support them anymore.
 
 -----
 
