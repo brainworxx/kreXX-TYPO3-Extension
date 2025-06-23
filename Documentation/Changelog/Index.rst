@@ -8,6 +8,7 @@ Changelog
 :Date: tbd
 
 Changes:
+    * [Bugfix] The query debugger creates gibberish when there are more than 10 parameters in the query.
 
 -----
 

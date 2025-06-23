@@ -143,10 +143,7 @@ class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, Pr
 
             // Insert the parameters into the sql
             foreach ($query->getParameters() as $key => $parameter) {
-                if (is_string($parameter)) {
-                    $parameter = '\'' . $parameter . '\'';
-                }
-                $sql = str_replace(':' . $key, (string) $parameter, $sql);
+                $sql = $this->replaceParameter($sql, ':' . $key, $parameter);
             }
 
             return $sql;
@@ -154,5 +151,32 @@ class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, Pr
             // Tell the dev, that there is an error in the sql.
             return $this->pool->messages->getHelp('TYPO3Error') . $e->getMessage();
         }
+    }
+
+    /**
+     * Replace the parameter in the SQL with the actual value.
+     *
+     * @param string $sql
+     *   The SQL string.
+     * @param string $key
+     *   The key of the parameter.
+     * @param mixed $parameter
+     *   The value of the parameter.
+     *
+     * @return string
+     *   The SQL with the replaced parameter.
+     */
+    protected function replaceParameter(string $sql, string $key, $parameter): string
+    {
+        if (is_string($parameter)) {
+            $parameter = '\'' . $parameter . '\'';
+        }
+
+        $pos = strpos($sql, $key);
+        if ($pos !== false) {
+            $sql = substr_replace($sql, (string) $parameter, $pos, strlen($key));
+        }
+
+        return $sql;
     }
 }

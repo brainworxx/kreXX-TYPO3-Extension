@@ -107,6 +107,7 @@ class QueryDebuggerTest extends AbstractHelper implements CallbackConstInterface
      *
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger::handle
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger::retrieveSql
+     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger::replaceParameter
      */
     public function testHandleNormalObject()
     {
@@ -126,6 +127,7 @@ class QueryDebuggerTest extends AbstractHelper implements CallbackConstInterface
      *
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger::handle
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger::retrieveSql
+     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger::replaceParameter
      */
     public function testHandleQueryBuilder()
     {
@@ -137,16 +139,53 @@ class QueryDebuggerTest extends AbstractHelper implements CallbackConstInterface
             static::PARAM_NAME => 'queryBuilder'
         ];
 
-        $this->mockStrLen()
-            ->expects($this->once())
-            ->with(str_replace('&#039;', '\'', $this->expectation));
-
         $objectAnalyser = new Objects(Krexx::$pool);
-        $objectAnalyser->setParameters( $fixture)->callMe();
+        $objectAnalyser->setParameters($fixture)->callMe();
 
         /** @var \Brainworxx\Krexx\Analyse\Model $model */
         $model = $renderNothing->model['renderExpandableChild'][0];
         $this->assertEquals($this->expectation, $model->getData());
+    }
+
+    public function testHandleQueryBuilderWithMorThanTenParameters()
+    {
+        $renderNothing = new RenderNothing(Krexx::$pool);
+        Krexx::$pool->render = $renderNothing;
+
+        $queryBuilderMock = $this->createMock(QueryBuilder::class);
+        $queryBuilderMock->expects($this->once())
+            ->method('getSQL')
+            ->will($this->returnValue(
+                'SELECT * FROM whatever WHERE `uid` IN (:stuff1, :stuff2, :stuff3, :stuff4, :stuff5, :stuff6, :stuff7, :stuff8, :stuff9, :stuff10)')
+            );
+        $queryBuilderMock->expects($this->once())
+            ->method('getParameters')
+            ->will($this->returnValue(
+                [
+                    'stuff1' => 'nothing1',
+                    'stuff2' => 'nothing2',
+                    'stuff3' => 'nothing3',
+                    'stuff4' => 'nothing4',
+                    'stuff5' => 'nothing5',
+                    'stuff6' => 'nothing6',
+                    'stuff7' => 'nothing7',
+                    'stuff8' => 'nothing8',
+                    'stuff9' => 'nothing9',
+                    'stuff10' => 'nothing10'
+                ]
+            ));
+        $fixture = [
+            static::PARAM_DATA => $queryBuilderMock,
+            static::PARAM_NAME => 'queryBuilder'
+        ];
+        $objectAnalyser = new Objects(Krexx::$pool);
+        $objectAnalyser->setParameters($fixture)->callMe();
+
+        $expectation = 'SELECT * FROM whatever WHERE `uid` IN (&#039;nothing1&#039;, &#039;nothing2&#039;, &#039;nothing3&#039;, &#039;nothing4&#039;, &#039;nothing5&#039;, &#039;nothing6&#039;, &#039;nothing7&#039;, &#039;nothing8&#039;, &#039;nothing9&#039;, &#039;nothing10&#039;)';
+
+        /** @var \Brainworxx\Krexx\Analyse\Model $model */
+        $model = $renderNothing->model['renderExpandableChild'][0];
+        $this->assertEquals($expectation, $model->getData());
     }
 
     /**
@@ -154,6 +193,7 @@ class QueryDebuggerTest extends AbstractHelper implements CallbackConstInterface
      *
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger::handle
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger::retrieveSql
+     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger::replaceParameter
      */
     public function testHandleQueryInterface()
     {
@@ -172,11 +212,6 @@ class QueryDebuggerTest extends AbstractHelper implements CallbackConstInterface
             ->with($queryMock)
             ->will($this->returnValue($this->createQueryBuilderMock()));
         $this->injectIntoGeneralUtility(Typo3DbQueryParser::class, $queryParserMock);
-
-        $this->mockStrLen()
-            ->expects($this->once())
-            ->with(str_replace('&#039;', '\'', $this->expectation))
-            ->will($this->returnValue(500));
 
         $objectAnalyser = new Objects(Krexx::$pool);
         $objectAnalyser->setParameters($fixture)->callMe();
