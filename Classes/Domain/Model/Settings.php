@@ -39,28 +39,6 @@ namespace Brainworxx\Includekrexx\Domain\Model;
 
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Controller\ControllerConstInterface;
-use Brainworxx\Includekrexx\Domain\Model\Settings\AnalyseGetter;
-use Brainworxx\Includekrexx\Domain\Model\Settings\AnalysePrivate;
-use Brainworxx\Includekrexx\Domain\Model\Settings\AnalysePrivateMethods;
-use Brainworxx\Includekrexx\Domain\Model\Settings\AnalyseProtected;
-use Brainworxx\Includekrexx\Domain\Model\Settings\AnalyseProtectedMethods;
-use Brainworxx\Includekrexx\Domain\Model\Settings\AnalyseScalar;
-use Brainworxx\Includekrexx\Domain\Model\Settings\AnalyseTraversable;
-use Brainworxx\Includekrexx\Domain\Model\Settings\ArrayCountLimit;
-use Brainworxx\Includekrexx\Domain\Model\Settings\DebugMethods;
-use Brainworxx\Includekrexx\Domain\Model\Settings\Destination;
-use Brainworxx\Includekrexx\Domain\Model\Settings\DetectAjax;
-use Brainworxx\Includekrexx\Domain\Model\Settings\Disabled;
-use Brainworxx\Includekrexx\Domain\Model\Settings\Iprange;
-use Brainworxx\Includekrexx\Domain\Model\Settings\LanguageKey;
-use Brainworxx\Includekrexx\Domain\Model\Settings\Level;
-use Brainworxx\Includekrexx\Domain\Model\Settings\LogFileWriter;
-use Brainworxx\Includekrexx\Domain\Model\Settings\MaxCall;
-use Brainworxx\Includekrexx\Domain\Model\Settings\Maxfiles;
-use Brainworxx\Includekrexx\Domain\Model\Settings\MaxRuntime;
-use Brainworxx\Includekrexx\Domain\Model\Settings\MaxStepNumber;
-use Brainworxx\Includekrexx\Domain\Model\Settings\MemoryLeft;
-use Brainworxx\Includekrexx\Domain\Model\Settings\Skin;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -70,33 +48,370 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  */
 class Settings implements ControllerConstInterface, ConfigConstInterface
 {
-    use Disabled;
-    use Iprange;
-    use DetectAjax;
-    use Skin;
-    use Destination;
-    use Maxfiles;
-    use MaxStepNumber;
-    use ArrayCountLimit;
-    use Level;
-    use AnalyseProtected;
-    use AnalysePrivate;
-    use AnalyseScalar;
-    use AnalyseTraversable;
-    use AnalyseProtectedMethods;
-    use AnalysePrivateMethods;
-    use AnalyseGetter;
-    use DebugMethods;
-    use MaxCall;
-    use MaxRuntime;
-    use MemoryLeft;
-    use LogFileWriter;
-    use LanguageKey;
+    /**
+     * @var null|string
+     */
+    protected ?string $analyseGetter = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $formanalyseGetter = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $analysePrivate = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $formanalysePrivate = null;
+
+     /**
+     * @var null|string
+     */
+    protected ?string $analysePrivateMethods = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $formanalysePrivateMethods = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $analyseProtected = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $formanalyseProtected = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $analyseProtectedMethods = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $formanalyseProtectedMethods = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $analyseScalar = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $formanalyseScalar = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $analyseTraversable = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $formanalyseTraversable = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $arrayCountLimit = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $formarrayCountLimit = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $debugMethods = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $formdebugMethods = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $destination = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $formdestination = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $detectAjax = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $formdetectAjax = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $disabled = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $formdisabled = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $iprange = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $formiprange = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $languageKey = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $formlanguageKey = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $level = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $formlevel = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $activateT3FileWriter = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $loglevelT3FileWriter = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $maxCall = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $formmaxCall = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $maxfiles = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $formmaxfiles = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $maxRuntime = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $formmaxRuntime = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $maxStepNumber = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $formmaxStepNumber = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $memoryLeft = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $formmemoryLeft = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $skin = null;
+
+    /**
+     * @var null|string
+     */
+    protected ?string $formskin = null;
 
     /**
      * @var string
      */
     protected string $factory;
+
+    /**
+     * I really would like to drop PHP 7.4 support now. Pretty please?
+     *
+     * @param string|null $analyseGetter
+     * @param string|null $formanalyseGetter
+     * @param string|null $analysePrivate
+     * @param string|null $formanalysePrivate
+     * @param string|null $analysePrivateMethods
+     * @param string|null $formanalysePrivateMethods
+     * @param string|null $analyseProtected
+     * @param string|null $formanalyseProtected
+     * @param string|null $analyseProtectedMethods
+     * @param string|null $formanalyseProtectedMethods
+     * @param string|null $analyseScalar
+     * @param string|null $formanalyseScalar
+     * @param string|null $analyseTraversable
+     * @param string|null $formanalyseTraversable
+     * @param string|null $arrayCountLimit
+     * @param string|null $formarrayCountLimit
+     * @param string|null $debugMethods
+     * @param string|null $formdebugMethods
+     * @param string|null $destination
+     * @param string|null $formdestination
+     * @param string|null $detectAjax
+     * @param string|null $formdetectAjax
+     * @param string|null $disabled
+     * @param string|null $formdisabled
+     * @param string|null $iprange
+     * @param string|null $formiprange
+     * @param string|null $languageKey
+     * @param string|null $formlanguageKey
+     * @param string|null $level
+     * @param string|null $formlevel
+     * @param string|null $activateT3FileWriter
+     * @param string|null $loglevelT3FileWriter
+     * @param string|null $maxCall
+     * @param string|null $formmaxCall
+     * @param string|null $maxfiles
+     * @param string|null $formmaxfiles
+     * @param string|null $maxRuntime
+     * @param string|null $formmaxRuntime
+     * @param string|null $maxStepNumber
+     * @param string|null $formmaxStepNumber
+     * @param string|null $memoryLeft
+     * @param string|null $formmemoryLeft
+     * @param string|null $skin
+     * @param string|null $formskin
+     */
+    public function __construct(
+        ?string $analyseGetter = null,
+        ?string $formanalyseGetter = null,
+        ?string $analysePrivate = null,
+        ?string $formanalysePrivate = null,
+        ?string $analysePrivateMethods = null,
+        ?string $formanalysePrivateMethods = null,
+        ?string $analyseProtected = null,
+        ?string $formanalyseProtected = null,
+        ?string $analyseProtectedMethods = null,
+        ?string $formanalyseProtectedMethods = null,
+        ?string $analyseScalar = null,
+        ?string $formanalyseScalar = null,
+        ?string $analyseTraversable = null,
+        ?string $formanalyseTraversable = null,
+        ?string $arrayCountLimit = null,
+        ?string $formarrayCountLimit = null,
+        ?string $debugMethods = null,
+        ?string $formdebugMethods = null,
+        ?string $destination = null,
+        ?string $formdestination = null,
+        ?string $detectAjax = null,
+        ?string $formdetectAjax = null,
+        ?string $disabled = null,
+        ?string $formdisabled = null,
+        ?string $iprange = null,
+        ?string $formiprange = null,
+        ?string $languageKey = null,
+        ?string $formlanguageKey = null,
+        ?string $level = null,
+        ?string $formlevel = null,
+        ?string $activateT3FileWriter = null,
+        ?string $loglevelT3FileWriter = null,
+        ?string $maxCall = null,
+        ?string $formmaxCall = null,
+        ?string $maxfiles = null,
+        ?string $formmaxfiles = null,
+        ?string $maxRuntime = null,
+        ?string $formmaxRuntime = null,
+        ?string $maxStepNumber = null,
+        ?string $formmaxStepNumber = null,
+        ?string $memoryLeft = null,
+        ?string $formmemoryLeft = null,
+        ?string $skin = null,
+        ?string $formskin = null
+    ) {
+        $this->analyseGetter = $analyseGetter;
+        $this->formanalyseGetter = $formanalyseGetter;
+        $this->analysePrivate = $analysePrivate;
+        $this->formanalysePrivate = $formanalysePrivate;
+        $this->analysePrivateMethods = $analysePrivateMethods;
+        $this->formanalysePrivateMethods = $formanalysePrivateMethods;
+        $this->analyseProtected = $analyseProtected;
+        $this->formanalyseProtected = $formanalyseProtected;
+        $this->analyseProtectedMethods = $analyseProtectedMethods;
+        $this->formanalyseProtectedMethods = $formanalyseProtectedMethods;
+        $this->analyseScalar = $analyseScalar;
+        $this->formanalyseScalar = $formanalyseScalar;
+        $this->analyseTraversable = $analyseTraversable;
+        $this->formanalyseTraversable = $formanalyseTraversable;
+        $this->arrayCountLimit = $arrayCountLimit;
+        $this->formarrayCountLimit = $formarrayCountLimit;
+        $this->debugMethods = $debugMethods;
+        $this->formdebugMethods = $formdebugMethods;
+        $this->destination = $destination;
+        $this->formdestination = $formdestination;
+        $this->detectAjax = $detectAjax;
+        $this->formdetectAjax = $formdetectAjax;
+        $this->disabled = $disabled;
+        $this->formdisabled = $formdisabled;
+        $this->iprange = $iprange;
+        $this->formiprange = $formiprange;
+        $this->languageKey = $languageKey;
+        $this->formlanguageKey = $formlanguageKey;
+        $this->level = $level;
+        $this->formlevel = $formlevel;
+        $this->activateT3FileWriter = $activateT3FileWriter;
+        $this->loglevelT3FileWriter = $loglevelT3FileWriter;
+        $this->maxCall = $maxCall;
+        $this->formmaxCall = $formmaxCall;
+        $this->maxfiles = $maxfiles;
+        $this->formmaxfiles = $formmaxfiles;
+        $this->maxRuntime = $maxRuntime;
+        $this->formmaxRuntime = $formmaxRuntime;
+        $this->maxStepNumber = $maxStepNumber;
+        $this->formmaxStepNumber = $formmaxStepNumber;
+        $this->memoryLeft = $memoryLeft;
+        $this->formmemoryLeft = $formmemoryLeft;
+        $this->skin = $skin;
+        $this->formskin = $formskin;
+    }
 
     /**
      * @param string $factory

@@ -52,54 +52,9 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(Settings::class, 'generateContent')]
 #[CoversMethod(Settings::class, 'processGroups')]
 #[CoversMethod(Settings::class, 'processFeEditing')]
-#[CoversMethod(Settings::class, 'setAnalyseGetter')]
-#[CoversMethod(Settings::class, 'setAnalysePrivate')]
-#[CoversMethod(Settings::class, 'setAnalysePrivateMethods')]
-#[CoversMethod(Settings::class, 'setAnalyseProtected')]
-#[CoversMethod(Settings::class, 'setAnalyseProtectedMethods')]
-#[CoversMethod(Settings::class, 'setAnalyseTraversable')]
-#[CoversMethod(Settings::class, 'setArrayCountLimit')]
-#[CoversMethod(Settings::class, 'setDebugMethods')]
-#[CoversMethod(Settings::class, 'setDestination')]
-#[CoversMethod(Settings::class, 'setDetectAjax')]
-#[CoversMethod(Settings::class, 'setAnalyseScalar')]
-#[CoversMethod(Settings::class, 'setDisabled')]
-#[CoversMethod(Settings::class, 'setFormanalyseGetter')]
-#[CoversMethod(Settings::class, 'setFormanalysePrivate')]
-#[CoversMethod(Settings::class, 'setFormanalysePrivateMethods')]
-#[CoversMethod(Settings::class, 'setFormanalyseProtected')]
-#[CoversMethod(Settings::class, 'setFormanalyseProtectedMethods')]
-#[CoversMethod(Settings::class, 'setFormanalyseTraversable')]
-#[CoversMethod(Settings::class, 'setFormarrayCountLimit')]
-#[CoversMethod(Settings::class, 'setFormdebugMethods')]
-#[CoversMethod(Settings::class, 'setFormdestination')]
-#[CoversMethod(Settings::class, 'setFormdetectAjax')]
-#[CoversMethod(Settings::class, 'setFormdisabled')]
-#[CoversMethod(Settings::class, 'setFormiprange')]
-#[CoversMethod(Settings::class, 'setFormlevel')]
-#[CoversMethod(Settings::class, 'setFormmaxCall')]
-#[CoversMethod(Settings::class, 'setFormmaxfiles')]
-#[CoversMethod(Settings::class, 'setFormmaxRuntime')]
-#[CoversMethod(Settings::class, 'setFormmaxStepNumber')]
-#[CoversMethod(Settings::class, 'setFormmemoryLeft')]
-#[CoversMethod(Settings::class, 'setFormskin')]
-#[CoversMethod(Settings::class, 'setFormanalyseScalar')]
-#[CoversMethod(Settings::class, 'setIprange')]
-#[CoversMethod(Settings::class, 'setLevel')]
-#[CoversMethod(Settings::class, 'setMaxCall')]
-#[CoversMethod(Settings::class, 'setMaxfiles')]
-#[CoversMethod(Settings::class, 'setMaxRuntime')]
-#[CoversMethod(Settings::class, 'setMaxStepNumber')]
-#[CoversMethod(Settings::class, 'setMemoryLeft')]
-#[CoversMethod(Settings::class, 'setSkin')]
-#[CoversMethod(Settings::class, 'setActivateT3FileWriter')]
-#[CoversMethod(Settings::class, 'setLoglevelT3FileWriter')]
-#[CoversMethod(Settings::class, 'setFormactivateT3FileWriter')]
-#[CoversMethod(Settings::class, 'setFormloglevelT3FileWriter')]
-#[CoversMethod(Settings::class, 'setLanguageKey')]
-#[CoversMethod(Settings::class, 'setFormlanguageKey')]
 #[CoversMethod(Settings::class, 'prepareFileName')]
 #[CoversMethod(Settings::class, 'setFactory')]
+#[CoversMethod(Settings::class, '__cosntruct')]
 class SettingsTest extends AbstractHelper implements ConstInterface
 {
     protected const REVERSE_PROXY = 'reverseProxyIP';
@@ -170,7 +125,6 @@ class SettingsTest extends AbstractHelper implements ConstInterface
         Krexx::$pool = null;
         Pool::createPool();
 
-        $settingsModel = new Settings();
         $validationMock = $this->createMock(Validation::class);
         $validationMock->expects($this->exactly(23))
             ->method('evaluateSetting')
@@ -179,24 +133,53 @@ class SettingsTest extends AbstractHelper implements ConstInterface
 
         $this->mockBeUser();
 
-        // Fill this one, according to the fallback settings.
-        foreach (Krexx::$pool->config->configFallback as $settings) {
-            foreach ($settings as $settingName) {
-                $settingsModel->{'set' . $settingName}($settingName);
-            }
-        }
-        foreach (Krexx::$pool->config->feConfigFallback as $settingName => $settings) {
-            if ($settingName === 'devHandle') {
-                // This one is not part of the settings file.
-                continue;
-            }
-            if ($settingName === 'skin') {
-                // We let this one fail on purpose.
-                $settingsModel->{'setForm' . $settingName}('blargh');
-            } else {
-                $settingsModel->{'setForm' . $settingName}(Fallback::RENDER_TYPE_CONFIG_FULL);
-            }
-        }
+        // Fill this one with teir own name as a value, so we can test it.
+        $settingsModel = new Settings(
+            Fallback::SETTING_ANALYSE_GETTER,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_ANALYSE_PRIVATE,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_ANALYSE_PRIVATE_METHODS,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_ANALYSE_PROTECTED,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_ANALYSE_PROTECTED_METHODS,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_ANALYSE_SCALAR,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_ANALYSE_TRAVERSABLE,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_ARRAY_COUNT_LIMIT,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_DEBUG_METHODS,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_DESTINATION,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_DETECT_AJAX,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_DISABLED,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_IP_RANGE,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_LANGUAGE_KEY,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_NESTING_LEVEL,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            static::ACTIVATE_T3_FILE_WRITER,
+            static::LOG_LEVEL_T3_FILE_WRITER,
+            Fallback::SETTING_MAX_CALL,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_MAX_FILES,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_MAX_RUNTIME,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_MAX_STEP_NUMBER,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_MEMORY_LEFT,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_SKIN,
+            'blargh', // Invalid value, so we can test the fallback.
+        );
 
         $expectation = [
             Fallback::SECTION_OUTPUT => [

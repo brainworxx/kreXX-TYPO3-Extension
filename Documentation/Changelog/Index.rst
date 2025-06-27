@@ -36,6 +36,7 @@ Changes:
     * [Change] Dropped Aimeos 20 Support due to Composer 1 eol.
     * [Change] Use the encoding service to encode comments.
     * [Change] Introduced a static cache to the string mimetype analysis.
+    * [Change] Simplified the TYPO3 backend modul settings model.
 
 -----
 
