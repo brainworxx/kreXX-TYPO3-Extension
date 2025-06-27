@@ -54,7 +54,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(Settings::class, 'processFeEditing')]
 #[CoversMethod(Settings::class, 'prepareFileName')]
 #[CoversMethod(Settings::class, 'setFactory')]
-#[CoversMethod(Settings::class, '__cosntruct')]
+#[CoversMethod(Settings::class, '__construct')]
 class SettingsTest extends AbstractHelper implements ConstInterface
 {
     protected const REVERSE_PROXY = 'reverseProxyIP';
