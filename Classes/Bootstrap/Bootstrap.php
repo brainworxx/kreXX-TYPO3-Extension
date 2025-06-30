@@ -39,6 +39,7 @@ namespace Brainworxx\Includekrexx\Bootstrap;
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration as AimeosConfiguration;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
+use Brainworxx\Includekrexx\Plugins\ContentBlocks\Configuration as ContentBlocksConfiguration;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
@@ -91,6 +92,13 @@ class Bootstrap implements ConstInterface
         // Check if we have the Aimeos shop available.
         if (ExtensionManagementUtility::isLoaded('aimeos')) {
             Registration::activatePlugin(get_class($aimeosConfiguration));
+        }
+
+        // Register the ContentBlocks plugin.
+        $contentBlocksConfiguration = GeneralUtility::makeInstance(ContentBlocksConfiguration::class);
+        Registration::register($contentBlocksConfiguration);
+        if (ExtensionManagementUtility::isLoaded('content_blocks')) {
+            Registration::activatePlugin(get_class($contentBlocksConfiguration));
         }
     }
 
