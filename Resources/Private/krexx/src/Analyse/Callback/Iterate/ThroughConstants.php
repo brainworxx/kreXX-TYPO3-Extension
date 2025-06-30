@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
-use Brainworxx\Krexx\Analyse\Attributes\Attributes;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
@@ -78,7 +77,6 @@ class ThroughConstants extends AbstractCallback implements CallbackConstInterfac
         $prefix = $this->isInScope ? 'static' : '\\' . $ref->getName();
 
         // Dump them with visibility infos.
-        $attributes = $this->pool->createClass(Attributes::class);
         foreach ($this->parameters[static::PARAM_DATA] as $constantName => $constantValue) {
             /** @var ReflectionClassConstant $reflectionConstant */
             $reflectionConstant = $this->parameters[static::PARAM_REF]->getReflectionConstant($constantName);
@@ -87,10 +85,6 @@ class ThroughConstants extends AbstractCallback implements CallbackConstInterfac
                     $this->pool->createClass(Model::class)
                         ->setData($constantValue)
                         ->setAdditional($this->retrieveAdditionalData($reflectionConstant))
-                        ->addToJson(
-                            $this->pool->messages->getHelp('metaAttributes'),
-                            $attributes->getFlatAttributes($reflectionConstant)
-                        )
                         ->setName($constantName)
                         ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
                         ->setCustomConnectorLeft($prefix . '::')

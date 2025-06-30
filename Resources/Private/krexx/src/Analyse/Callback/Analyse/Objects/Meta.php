@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
-use Brainworxx\Krexx\Analyse\Attributes\Attributes;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Comment\Classes;
 use Brainworxx\Krexx\Analyse\Model;
@@ -149,10 +148,6 @@ class Meta extends AbstractObjectAnalysis
                 $ref->getFileName() . ' ' .
                 $messages->getHelp('metaInLine') . $ref->getStartLine(),
         ];
-        $attributes = $this->pool->createClass(Attributes::class)->getFlatAttributes($ref);
-        if (!empty($attributes)) {
-            $data[$messages->getHelp('metaAttributes')] = $attributes;
-        }
 
         // Now to collect the inheritance stuff.
         // Each of them will get analysed by the ThroughMeta callback.

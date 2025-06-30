@@ -22,12 +22,14 @@
     "phpunit/phpunit": "^9.5 || ^10.5 || ^11.5",
     "php-mock/php-mock-phpunit": "^2",
     "typo3/cms-adminpanel": "^10.4 || ^11 || ^12 || ^13",
-    "aimeos/aimeos-typo3": "^21.10 || ^22.10 || ^23.10 || ^24.10"
+    "aimeos/aimeos-typo3": "^21.10 || ^22.10 || ^23.10 || ^24.10",
+    "friendsoftypo3/content-blocks": "^1.0"
   },
   "suggest": {
     "fluidtypo3/vhs": "Allows calling of methods in Fluid templates.",
     "aimeos/aimeos-typo3": "We offer advanced debugging for Aimeos.",
-    "typo3/cms-adminpanel": "Offers an additional way to access the logfiles."
+    "typo3/cms-adminpanel": "Offers an additional way to access the logfiles.",
+    "friendsoftypo3/content-blocks": "Additional analysis for content block objects."
   },
   "authors": [
     {
