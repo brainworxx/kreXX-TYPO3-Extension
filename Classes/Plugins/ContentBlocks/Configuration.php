@@ -37,10 +37,16 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\ContentBlocks;
 
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
+use Brainworxx\Krexx\Service\Plugin\Registration;
+use Brainworxx\Includekrexx\Plugins\ContentBlocks\EventHandlers\DynamicGetter;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface as Typo3ConstInterface;
 
+/**
+ * @todo: Move this one to the Fluid plugin.
+ */
 class Configuration implements PluginConfigInterface, Typo3ConstInterface
 {
     /**
@@ -64,6 +70,6 @@ class Configuration implements PluginConfigInterface, Typo3ConstInterface
      */
     public function exec(): void
     {
-        // TODO: Implement exec() method.
+        Registration::registerEvent(ThroughGetter::class . static::START_EVENT, DynamicGetter::class);
     }
 }
