@@ -5,7 +5,6 @@
 - Added a unit of measurement to the benchmarking.
 - Added better readability to the exception analysis.
 - Added delegate handling to the getter analysis.
-- Added attribute handling to the meta analysis.
 - Added the declaration place to the getter analysis.
 - Added error info when analysing an XML string.
 - Change: The scalar analysis classes are now reused.

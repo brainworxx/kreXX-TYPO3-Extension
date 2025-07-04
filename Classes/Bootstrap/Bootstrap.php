@@ -39,6 +39,7 @@ namespace Brainworxx\Includekrexx\Bootstrap;
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration as AimeosConfiguration;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
+use Brainworxx\Includekrexx\Plugins\ContentBlocks\Configuration as ContentBlocksConfiguration;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;

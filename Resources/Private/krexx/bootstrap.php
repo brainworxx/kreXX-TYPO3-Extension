@@ -69,8 +69,6 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Code/Connectors.php';
         include_once KREXX_DIR . 'src/Analyse/Code/Scope.php';
 
-        include_once KREXX_DIR . 'src/Analyse/Attributes/Attributes.php';
-
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Objects/AbstractObjectAnalysis.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Objects/Constants.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Objects/DebugMethods.php';

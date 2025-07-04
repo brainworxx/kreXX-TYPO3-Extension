@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
-use Brainworxx\Krexx\Analyse\Attributes\Attributes;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
@@ -68,11 +67,6 @@ class ThroughProperties extends AbstractCallback implements
     protected PropertyDeclaration $propertyDeclaration;
 
     /**
-     * @var \Brainworxx\Krexx\Analyse\Attributes\Attributes
-     */
-    protected Attributes $attributes;
-
-    /**
      * Renders the properties of a class.
      *
      * @return string
@@ -87,7 +81,6 @@ class ThroughProperties extends AbstractCallback implements
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $this->parameters[static::PARAM_REF];
         $this->propertyDeclaration = $this->pool->createClass(PropertyDeclaration::class);
-        $this->attributes = $this->pool->createClass(Attributes::class);
 
         foreach ($this->parameters[static::PARAM_DATA] as $refProperty) {
             // Check memory and runtime.
@@ -128,7 +121,6 @@ class ThroughProperties extends AbstractCallback implements
                 $messages->getHelp('metaComment'),
                 $this->pool->createClass(Properties::class)->getComment($refProperty)
             )
-            ->addToJson($messages->getHelp('metaAttributes'), $this->attributes->getFlatAttributes($refProperty))
             ->addToJson(
                 $messages->getHelp('metaDeclaredIn'),
                 $this->propertyDeclaration->retrieveDeclaration($refProperty)

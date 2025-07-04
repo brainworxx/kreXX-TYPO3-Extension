@@ -47,7 +47,6 @@ class ConstantsFixture71
     protected const CONST_3 = 'string';
     private const CONST_4 = 21;
 
-    #[stuff('lorem'), more('ipsum')]
     public const CONST_5 = 'Attributes!';
 
     /**

@@ -41,7 +41,6 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
-use Brainworxx\Krexx\Tests\Fixtures\AttributesFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesInheritanceFixture;
 use Brainworxx\Krexx\Tests\Fixtures\PublicFixture;
@@ -464,90 +463,6 @@ class ThroughPropertiesTest extends AbstractHelper
         $model = $routeNothing->model[0];
 
         $this->assertSame('&#039;whatever&#039;', $model->getJson()['Default value']);
-    }
-
-    /**
-     * Normal test run for the property analysis.
-     */
-    public function testCallMeAttributes()
-    {
-        // Test the events.
-        $this->mockEventService(
-            [$this->startEvent, $this->throughProperties],
-            [$this->endEvent, $this->throughProperties]
-        );
-
-        // Create a fixture.
-        $subject = new AttributesFixture();
-        $fixture = [
-            $this->throughProperties::PARAM_REF => new ReflectionClass($subject),
-            $this->throughProperties::PARAM_DATA => [
-                new ReflectionProperty(AttributesFixture::class, static::PROPERTY),
-            ]
-        ];
-
-        // Inject the nothing-router.
-        $routeNothing = new RoutingNothing(Krexx::$pool);
-        Krexx::$pool->routing = $routeNothing;
-        $this->mockEmergencyHandler();
-
-        // Run the test
-        $this->throughProperties
-            ->setParameters($fixture)
-            ->callMe();
-        // Retrieve the result models and assert them.
-        $models = $routeNothing->model;
-
-        // Looking at the attributes.
-        if (method_exists(ReflectionClass::class, 'getAttributes')) {
-            $json = [
-                static::JSON_DECLARED_KEY => AttributesFixture::class,
-                static::ATTRIBUTES_KEY => 'Brainworxx\Krexx\Tests\Fixtures\Property()'
-            ];
-        } else {
-            $json = [
-                static::JSON_DECLARED_KEY => AttributesFixture::class,
-            ];
-        }
-        $this->assertModelValues(
-            $models[0],
-            null,
-            static::PROPERTY,
-            $json,
-            '->',
-            '',
-            'Public '
-        );
-    }
-
-    public function testCallMeEmergency()
-    {
-        // Test the events.
-        // We do not expect a stop event.
-        $this->mockEventService([$this->startEvent, $this->throughProperties]);
-
-        // Make sure to stop everything in its tracks.
-        $emergencyHandlerMock = $this->createMock(Emergency::class);
-        $emergencyHandlerMock->expects($this->once())
-            ->method('checkEmergencyBreak')
-            ->willReturn(true);
-        Krexx::$pool->emergencyHandler = $emergencyHandlerMock;
-
-        // Create a fixture.
-        $subject = new AttributesFixture();
-        $fixture = [
-            $this->throughProperties::PARAM_REF => new ReflectionClass($subject),
-            $this->throughProperties::PARAM_DATA => [
-                new ReflectionProperty(AttributesFixture::class, static::PROPERTY),
-            ]
-        ];
-
-        // Run the test
-        $this->assertEquals(
-            '',
-            $this->throughProperties->setParameters($fixture)->callMe(),
-            'We use the normal routing. If there is any HTML in there, the break has failed!'
-        );
     }
 
     /**
