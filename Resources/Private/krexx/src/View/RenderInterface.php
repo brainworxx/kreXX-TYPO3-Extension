@@ -38,7 +38,6 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\View;
 
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Interface for the render class, defining all public methods.

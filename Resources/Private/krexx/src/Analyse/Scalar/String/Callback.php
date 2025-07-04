@@ -43,7 +43,6 @@ use Brainworxx\Krexx\Analyse\Model;
 use ReflectionException;
 use ReflectionFunction;
 use TypeError;
-use Throwable;
 
 /**
  * The stuff we are doing here is very similar to the method analysis. The

@@ -6,7 +6,6 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Model;
-use Throwable;
 use CurlHandle;
 use OpenSSLCertificate;
 use AddressInfo;

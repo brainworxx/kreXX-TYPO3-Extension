@@ -82,12 +82,20 @@ class ByRegExDelegate extends ByRegExContainer
      */
     protected string $currentPrefix;
 
+    /**
+     * We are going deep into the object structure.
+     *
+     * @var int
+     */
+    protected int $deep = 0;
+
     public function __construct(Pool $pool)
     {
         parent::__construct($pool);
         $this->getterAnalyser[] = $this->pool->createClass(ByMethodName::class);
         $this->getterAnalyser[] = $this->pool->createClass(ByRegExProperty::class);
         $this->getterAnalyser[] = $this->pool->createClass(ByRegExContainer::class);
+        $this->getterAnalyser[] = $this;
     }
 
     /**
@@ -113,6 +121,12 @@ class ByRegExDelegate extends ByRegExContainer
      */
     protected function extractValue(array $parts, ReflectionClass $reflectionClass)
     {
+        ++$this->deep;
+        if ($this->deep > 10) {
+            // We do not want to go too deep, since this may lead to an infinite loop.
+            return null;
+        }
+
         try {
             $delegateReflection = $this->retrieveReflectionClass($parts, $reflectionClass);
             if ($delegateReflection === null) {

@@ -39,6 +39,7 @@ use Brainworxx\Krexx\Analyse\Getter\ByRegExDelegate;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\DelegateGetterFixture;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Tests\Fixtures\EndlessLoop;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(ByRegExDelegate::class, '__construct')]
@@ -59,6 +60,27 @@ class ByRegExDelegateTest extends AbstractGetter
     public function testConstruct()
     {
         $this->assertNotEmpty($this->retrieveValueByReflection('getterAnalyser', $this->testSubject));
+    }
+
+    /**
+     * Make sure that we do not create an infinite loop by running into a circular reference.
+     * But then, there is no way for the getter to work in the first place!
+     */
+    public function testRetrieveItTooDeep()
+    {
+        $instance = new EndlessLoop();
+        $classReflection = new ReflectionClass($instance);
+        $result = $this->testSubject->retrieveIt(
+            $classReflection->getMethod('getEndlessLoop'),
+            $classReflection,
+            'get'
+        );
+        $this->assertNull($result, 'The result should be null, because the depth is too high.');
+        $this->assertEquals(
+            11,
+            $this->retrieveValueByReflection('deep', $this->testSubject),
+            'The analysis stops when reaching 11.'
+        );
     }
 
     /**
