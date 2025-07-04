@@ -47,6 +47,10 @@ jobs:
       run: composer require --no-update "aimeos/aimeos-typo3:${{ matrix.env.Aimeos }}"
       if: ${{ matrix.env.Aimeos != 'no' }}
 
+    - name: Remove ContentBlocks
+      run: composer remove --no-update "friendsoftypo3/content-blocks"
+      if: matrix.env.TYPO3 != '^13.4' }}
+
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
