@@ -39,6 +39,8 @@ namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
+use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -51,7 +53,11 @@ use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockData;
  * @see \TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockData::get()
  * @event \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::callMe::start
  */
-class DynamicGetter implements EventHandlerInterface, CallbackConstInterface
+class DynamicGetter implements
+    EventHandlerInterface,
+    CallbackConstInterface,
+    CodegenConstInterface,
+    ConnectorsConstInterface
 {
     /**
      * The resource pool
@@ -85,6 +91,7 @@ class DynamicGetter implements EventHandlerInterface, CallbackConstInterface
         $ref = $callback->getParameters()[static::PARAM_REF];
         $data = $ref->getData();
 
+        // We only want to handle ContentBlockData objects.
         if (!$data instanceof ContentBlockData) {
             return '';
         }
@@ -92,17 +99,18 @@ class DynamicGetter implements EventHandlerInterface, CallbackConstInterface
         $result = '';
         $routing = $this->pool->routing;
         foreach ($this->retrieveGetterArray($ref) as $key => $value) {
+            // Iterate through the analysis result, and throw everything into the frontend.
             $result .= $routing->analysisHub(
                 (new Model($this->pool))
                     ->setData($value)
                     ->setName($key)
-                    ->addToJson(
-                        $this->pool->messages->getHelp('metaHelp'),
-                        $this->pool->messages->getHelp('fluidMagicContentBlocks')
-                    )
+                    ->setConnectorType(static::CONNECTOR_NORMAL_PROPERTY)
+                    ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
+                    ->setHelpid('fluidMagicContentBlocks')
             );
         }
 
+        // Add a HR after the dynamic getter output, just because.
         return $result . $this->pool->render->renderSingeChildHr();
     }
 
