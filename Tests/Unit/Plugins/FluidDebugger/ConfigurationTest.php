@@ -37,6 +37,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\DynamicGetter;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterWithoutGet;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\VhsMethods;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
@@ -84,6 +85,9 @@ class ConfigurationTest extends AbstractHelper
         ],
         'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethods::callMe::end' => [
             VhsMethods::class => VhsMethods::class
+        ],
+        'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter::callMe::start' => [
+            DynamicGetter::class => DynamicGetter::class
         ]
     ];
 
