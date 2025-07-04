@@ -49,7 +49,7 @@ jobs:
 
     - name: Remove ContentBlocks
       run: composer remove --dev --no-update "friendsoftypo3/content-blocks"
-      if: ${{ matrix.env.ContentBlocks = 'no' }}
+      if: ${{ matrix.env.ContentBlocks == 'no' }}
 
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
