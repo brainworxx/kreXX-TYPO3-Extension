@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger;
 
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\DynamicGetter;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Analyse\Objects as ObjectsFluid;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterWithoutGet;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\VhsMethods;
@@ -102,15 +103,11 @@ class Configuration implements PluginConfigInterface, Typo3ConstInterface
 
         // Register our event handler, to remove the 'get' from the getter
         // method names. Fluid does not use these.
-        Registration::registerEvent(
-            ThroughGetter::class . '::goThroughMethodList::end',
-            GetterWithoutGet::class
-        );
+        Registration::registerEvent(ThroughGetter::class . '::goThroughMethodList::end', GetterWithoutGet::class);
         // Another event switches to VHS code generation.
-        Registration::registerEvent(
-            ThroughMethods::class . static::END_EVENT,
-            VhsMethods::class
-        );
+        Registration::registerEvent(ThroughMethods::class . static::END_EVENT, VhsMethods::class);
+        // Special analysis for the ContentBlocks objects.
+        Registration::registerEvent(ThroughGetter::class . static::START_EVENT, DynamicGetter::class);
 
         // Adding additional texts.
         $extPath = ExtensionManagementUtility::extPath(static::EXT_KEY);

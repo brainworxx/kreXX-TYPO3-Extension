@@ -93,13 +93,6 @@ class Bootstrap implements ConstInterface
         if (ExtensionManagementUtility::isLoaded('aimeos')) {
             Registration::activatePlugin(get_class($aimeosConfiguration));
         }
-
-        // Register the ContentBlocks plugin.
-        $contentBlocksConfiguration = GeneralUtility::makeInstance(ContentBlocksConfiguration::class);
-        Registration::register($contentBlocksConfiguration);
-        if (ExtensionManagementUtility::isLoaded('content_blocks')) {
-            Registration::activatePlugin(get_class($contentBlocksConfiguration));
-        }
     }
 
     /**

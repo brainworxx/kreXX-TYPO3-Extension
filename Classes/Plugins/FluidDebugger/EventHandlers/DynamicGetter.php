@@ -35,7 +35,7 @@
 
 declare(strict_types=1);
 
-namespace Brainworxx\Includekrexx\Plugins\ContentBlocks\EventHandlers;
+namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
@@ -89,12 +89,31 @@ class DynamicGetter implements EventHandlerInterface, CallbackConstInterface
             return '';
         }
 
-        $result = $this->retrieveGetterArray($ref);
-        // @todo: Iterate through the result and feed it to the renderer
+        $result = '';
+        $routing = $this->pool->routing;
+        foreach ($this->retrieveGetterArray($ref) as $key => $value) {
+            $result .= $routing->analysisHub(
+                (new Model($this->pool))
+                    ->setData($value)
+                    ->setName($key)
+                    ->addToJson(
+                        $this->pool->messages->getHelp('metaHelp'),
+                        $this->pool->messages->getHelp('fluidMagicContentBlocks')
+                    )
+            );
+        }
 
-        return '';
+        return $result . $this->pool->render->renderSingeChildHr();
     }
 
+    /**
+     * Retrieve everything that we should be able to access in the Fluid template.
+     *
+     * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
+     *   The reflection class of the ContentBlockData object.
+     * @return array
+     *   Everything that we should be able to access in the Fluid template.
+     */
     protected function retrieveGetterArray(ReflectionClass $ref): array
     {
         $result = [];
@@ -108,9 +127,10 @@ class DynamicGetter implements EventHandlerInterface, CallbackConstInterface
             $result['_grids'] = $ref->retrieveValue($ref->getProperty('_grids'));
         }
 
-        // @todo: Add the record data to the result array.
         if ($ref->hasProperty('_record')) {
+            /** @var \TYPO3\CMS\Core\Domain\Record $record */
             $record = $ref->retrieveValue($ref->getProperty('_record'));
+            $result = array_merge($record->toArray(), $result);
         }
         return $result;
     }
