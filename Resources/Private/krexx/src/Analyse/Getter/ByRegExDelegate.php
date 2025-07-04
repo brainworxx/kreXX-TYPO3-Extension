@@ -89,6 +89,11 @@ class ByRegExDelegate extends ByRegExContainer
      */
     protected int $deep = 0;
 
+    /**
+     * Inject the pool.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     */
     public function __construct(Pool $pool)
     {
         parent::__construct($pool);
@@ -127,9 +132,15 @@ class ByRegExDelegate extends ByRegExContainer
             return null;
         }
 
+        // The call may look like this:
+        // $this->myObject?->getStuff();
+        // We need to remove the question mark, since it is not part of the
+        // object name.
+        $parts[0] = trim($parts[0], '?');
         try {
             $delegateReflection = $this->retrieveReflectionClass($parts, $reflectionClass);
             if ($delegateReflection === null) {
+                $this->deep = 0;
                 return null;
             }
 
@@ -139,6 +150,7 @@ class ByRegExDelegate extends ByRegExContainer
                 $value = $analyser->retrieveIt($reflectionMethod, $delegateReflection, $this->currentPrefix);
                 if ($analyser->hasResult()) {
                     $this->foundSomething = true;
+                    $this->deep = 0;
                     return $value;
                 }
             }
