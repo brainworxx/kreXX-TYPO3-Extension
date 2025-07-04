@@ -18,6 +18,7 @@ Changes:
     * [Feature] Added delegate handling to the getter analysis.
     * [Feature] Refactored and extended the getter analysis, for better results.
     * [Feature] Added code parsing to the Aimeos getter analysis to retrieve the default value.
+    * [Feature] Added ContentBlock support.
     * [Change] The scalar analysis classes are now reused.
     * [Change] Renamed the language fallback key from 'text' to 'en'.
     * [Change] Dropped PHP 7.2 and 7.3 support.

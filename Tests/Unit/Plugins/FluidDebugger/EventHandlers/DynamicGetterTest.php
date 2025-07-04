@@ -52,6 +52,7 @@ use TYPO3\CMS\Core\Domain\Record;
 #[CoversMethod(DynamicGetter::class, 'handle')]
 #[CoversMethod(DynamicGetter::class, 'retrieveGetterArray')]
 #[CoversMethod(DynamicGetter::class, '__construct')]
+#[CoversMethod(DynamicGetter::class, 'removeFromGetter')]
 class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface, CodegenConstInterface
 {
     /**
@@ -97,7 +98,25 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
         $cbData = new ContentBlockData($record);
         $reflectionClass = new ReflectionClass($cbData);
         $callback = new CallbackNothing($pool);
-        $callback->setParameters([static::PARAM_REF => $reflectionClass]);
+
+        // Mock the already existing getter values.
+        $uidMock = $this->createMock(\ReflectionMethod::class);
+        $uidMock->expects($this->once())
+            ->method('getName')
+            ->willReturn('getUid');
+        $pidMock = $this->createMock(\ReflectionMethod::class);
+        $pidMock->expects($this->once())
+            ->method('getName')
+            ->willReturn('getPid');
+        $anyMock = $this->createMock(\ReflectionMethod::class);
+        $anyMock->expects($this->once())
+            ->method('getName')
+            ->willReturn('getAny');
+
+        $callback->setParameters([
+            static::PARAM_REF => $reflectionClass,
+            static::PARAM_NORMAL_GETTER => [$uidMock, $pidMock, $anyMock]
+        ]);
 
         // Short circuit the routing, so we can get the results directly.
         $routing = new RoutingNothing($pool);
@@ -135,5 +154,11 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
                 break; // We only expect 5 items
             }
         }
+
+        // And in a last ditched effort, test if the getter was removed from the callback.
+        $parameters = $callback->getParameters();
+        $getterMethods = $parameters[static::PARAM_NORMAL_GETTER] ?? [];
+        $this->assertCount(1, $getterMethods, 'There is supposed to be the \'getAny\' getter left.');
+        $this->assertSame($anyMock, $getterMethods[0], 'The remaining getter is the \'getAny\'.');
     }
 }

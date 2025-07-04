@@ -45,6 +45,7 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
+use ReflectionMethod;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockData;
 
 /**
@@ -97,9 +98,11 @@ class DynamicGetter implements
         }
 
         $result = '';
+        $done = [];
         $routing = $this->pool->routing;
         foreach ($this->retrieveGetterArray($ref) as $key => $value) {
             // Iterate through the analysis result, and throw everything into the frontend.
+            $done[] = 'get' . ucfirst($key);
             $result .= $routing->analysisHub(
                 (new Model($this->pool))
                     ->setData($value)
@@ -109,9 +112,33 @@ class DynamicGetter implements
                     ->setHelpid('fluidMagicContentBlocks')
             );
         }
+        $this->removeFromGetter($done, $callback);
 
-        // Add a HR after the dynamic getter output, just because.
+        // Add an HR after the dynamic getter output, just because.
         return $result . $this->pool->render->renderSingeChildHr();
+    }
+
+    /**
+     * We remove duplicates from the getter analysis, because we already did this one.
+     *
+     * @param array $done
+     *   Getter that are already done by the dynamic getter.
+     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback $callback
+     *   The callback that we are currently processing. We need to remove the
+     *   duplicates from the further getter analysis.
+     */
+    protected function removeFromGetter(array $done, AbstractCallback $callback): void
+    {
+        $parameters = $callback->getParameters();
+        $getter = $parameters[static::PARAM_NORMAL_GETTER] ?? [];
+        /** @var ReflectionMethod $reflectionMethod */
+        foreach ($getter as $key => $reflectionMethod) {
+            if (in_array($reflectionMethod->getName(), $done, true)) {
+                unset($getter[$key]);
+            }
+        }
+        $parameters[static::PARAM_NORMAL_GETTER] = array_values($getter);
+        $callback->setParameters($parameters);
     }
 
     /**
