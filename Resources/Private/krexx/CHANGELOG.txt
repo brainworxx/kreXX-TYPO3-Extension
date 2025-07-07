@@ -2,6 +2,7 @@
 - Bugfix: Remove all Unicode chars from the generated CSS for the
   smokygrey skin, because the TYPO3 asset collector does not
   support them anymore.
+- Bugfix: Do not run out of memory when escaping very large strings.
 
 5.0.9
 - Bugfix: Add the missing "kreXX Messages" to the translation.

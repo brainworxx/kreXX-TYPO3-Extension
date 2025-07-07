@@ -1,8 +1,8 @@
 .. image:: https://github.com/brainworxx/kreXX/actions/workflows/php.yml/badge.svg?branch=5.0
    :target: https://github.com/brainworxx/kreXX/actions/workflows/php.yml
-.. image:: https://api.codeclimate.com/v1/badges/c9d414a09928ede869c7/maintainability
-   :target: https://codeclimate.com/github/brainworxx/kreXX/maintainability
-.. image:: https://api.codeclimate.com/v1/badges/c9d414a09928ede869c7/test_coverage.svg
+.. image:: https://qlty.sh/badges/2d6ba77e-92e3-43af-b954-85041ce2664e/maintainability.svg
+   :target: https://qlty.sh/gh/brainworxx/projects/kreXX
+.. image:: https://qlty.sh/badges/2d6ba77e-92e3-43af-b954-85041ce2664e/test_coverage.svg
    :target: https://codeclimate.com/github/brainworxx/kreXX/test_coverage
 .. image:: https://poser.pugx.org/brainworxx/krexx/v/stable
    :target: https://packagist.org/packages/brainworxx/krexx

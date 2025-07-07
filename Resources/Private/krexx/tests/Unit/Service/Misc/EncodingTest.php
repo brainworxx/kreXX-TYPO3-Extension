@@ -115,6 +115,16 @@ class EncodingTest extends AbstractHelper
     }
 
     /**
+     * Testing the encoding of normal string when they are larger than 3 MB.
+     */
+    public function testEncodeStringNormalHuge()
+    {
+        $fixture = str_pad('', 3072001, 'just another string <div> { @ ');
+        $expected = Krexx::$pool->messages->getHelp('stringTooLargeNormal');
+        $this->assertEquals($expected, $this->encoding->encodeString($fixture));
+    }
+
+    /**
      * Testing the preparation of striong as code connectors.
      *
      * @covers \Brainworxx\Krexx\Service\Misc\Encoding::encodeStringForCodeGeneration

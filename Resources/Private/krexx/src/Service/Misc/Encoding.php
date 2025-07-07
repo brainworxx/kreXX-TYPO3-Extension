@@ -170,6 +170,12 @@ class Encoding
             return '';
         }
 
+        if (strlen($data) > 3072000) {
+            // This is a very large string.
+            // We would run out of memory, if we try to encode it.
+            return $this->pool->messages->getHelp('stringTooLargeNormal');
+        }
+
         // Initialize the encoding configuration.
         if ($code) {
             // We are encoding @, because we need them for our chunks.
