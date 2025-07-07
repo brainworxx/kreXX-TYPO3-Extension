@@ -52,17 +52,23 @@ class HiddenPropertyTest extends AbstractHelper
     {
         $fixture = new ReflectionClass($this);
         $justaName = 'whatever';
-
         $hiddenProperty = new HiddenProperty($fixture, $justaName);
         $this->assertTrue($hiddenProperty->isPublic(), 'Nearly all hidden propeties are public.');
+
 
         $reflectionClassMock = $this->createMock(ReflectionClass::class);
         $reflectionClassMock->expects($this->once())
             ->method('getName')
             ->will($this->returnValue(DateTime::class));
-
         $hiddenProperty = new HiddenProperty($reflectionClassMock, $justaName);
         $this->assertFalse($hiddenProperty->isPublic(), 'The DateTime properties are not public.');
+
+        $reflectionClassMock = $this->createMock(ReflectionClass::class);
+        $reflectionClassMock->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue(\DateTimeImmutable::class));
+        $hiddenProperty = new HiddenProperty($reflectionClassMock, $justaName);
+        $this->assertFalse($hiddenProperty->isPublic(), 'The DateTimeImmutable properties are not public.');
     }
 
     /**
