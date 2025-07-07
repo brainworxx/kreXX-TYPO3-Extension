@@ -37,6 +37,7 @@ Changes:
     * [Change] Use the encoding service to encode comments.
     * [Change] Introduced a static cache to the string mimetype analysis.
     * [Change] Simplified the TYPO3 backend modul settings model.
+    * [Change] Use an SVG in both skins for the kreXX logo.
 
 -----
 
@@ -45,6 +46,7 @@ Changes:
 
 Changes:
     * [Bugfix] The query debugger creates gibberish when there are more than 10 parameters in the query.
+    * [Bugfix] Do not run out of memory when escaping very large strings.
 
 -----
 

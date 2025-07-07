@@ -285,23 +285,11 @@ $fontLight: lighter 10px tahoma, verdana;
 
       .klogo {
         display: inline-block;
-        background-color: $yellowBwx;
-        border-radius: 50%;
-        color: $blackLight;
-        font-size: 16px;
-        font-weight: bold;
         height: 20px;
         width: 20px;
-        //margin-left: -2px;
-        vertical-align: -2px;
-
-        .klogo-xx {
-          /* Klo go XX? Really? */
-          margin-left: 3px;
-          margin-top: 4px;
-          position: absolute;
-          font-size: 9px;
-        }
+        vertical-align: -3px;
+        font-size: initial;
+        font-weight: initial;
       }
 
       .ktext {

@@ -369,21 +369,9 @@ div.kwrapper {
 }
 
 .kwrapper .klogo {
-    background-color: #ffcd00;
-    border-radius: 50%;
-    color: black;
     float: left;
-    font-size: 12px;
-    font-weight: bold;
     height: 24px;
     width: 24px;
-    /*position: relative;*/
-}
-
-.kwrapper .klogo-xx {
-    /* Klo go XX? Really? */
-    margin-left: 4px;
-    line-height: 22px;
 }
 
 .kwrapper .kheadnote-wrapper {
