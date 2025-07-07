@@ -36,6 +36,7 @@ html {
 }
 
 .kwrapper * {
+    all: revert-layer;
     box-sizing: content-box;
     opacity: 1;
     position: initial;
