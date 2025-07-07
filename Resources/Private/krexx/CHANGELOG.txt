@@ -27,13 +27,15 @@
 - Change: Introduced a static cache to the string mimetype analysis.
 - Change: Use an SVG in both skins for the kreXX logo.
 
+5.0.11
+- Bugfix: Do not run out of memory when escaping very large strings.
+- Bugfix: Minimise the interference from the hosting CMS styles.
+- Bugfix: Missing hidden property support for DatetimeImmutable.
+
 5.0.10
 - Bugfix: Remove all Unicode chars from the generated CSS for the
   smokygrey skin, because the TYPO3 asset collector does not
   support them anymore.
-- Bugfix: Do not run out of memory when escaping very large strings.
-- Bugfix: Minimise the interference from the hosting CMS styles.
-- Bugfix: Missing hidden property support for DatetimeImmutable.
 
 5.0.9
 - Bugfix: Add the missing "kreXX Messages" to the translation.
