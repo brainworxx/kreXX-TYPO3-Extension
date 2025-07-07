@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Reflection;
 
+use DateTimeImmutable;
 use DOMDocument;
 use DOMAttr;
 use DOMCdataSection;
@@ -188,7 +189,12 @@ class HiddenProperty extends UndeclaredProperty
             'date',
             'timezone',
             'timezone_type'
-        ]
+        ],
+        DateTimeImmutable::class => [
+            'date',
+            'timezone',
+            'timezone_type'
+        ],
     ];
 
     /**
@@ -205,7 +211,8 @@ class HiddenProperty extends UndeclaredProperty
     {
         parent::__construct($ref, $name);
 
-        if ($ref->getName() === DateTime::class) {
+        $name = $ref->getName();
+        if ($name === DateTime::class || $name === DateTimeImmutable::class) {
             $this->isPublic = false;
             $this->isProtected = true;
         }
