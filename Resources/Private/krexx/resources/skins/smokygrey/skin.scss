@@ -98,6 +98,10 @@ $fontLight: lighter 10px tahoma, verdana;
 
 .kwrapper, .kfatalwrapper-outer {
 
+  * {
+    all: revert-layer;
+  }
+
   // We need to secure some initial formating for our elements, to prevent the
   // host-system from making them unusable with css formatting.
   div, span, em, ul, li, a, input, table, caption, tbody, tr, td, strong, hr, select, option, label {

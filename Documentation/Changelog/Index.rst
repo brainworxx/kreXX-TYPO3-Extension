@@ -47,6 +47,7 @@ Changes:
 Changes:
     * [Bugfix] The query debugger creates gibberish when there are more than 10 parameters in the query.
     * [Bugfix] Do not run out of memory when escaping very large strings.
+    * [Bugfix] Minimise the interference from the hosting CMS styles.
 
 -----
 
