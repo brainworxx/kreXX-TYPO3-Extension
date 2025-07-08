@@ -39,6 +39,7 @@ namespace Brainworxx\Includekrexx\Plugins\Typo3;
 
 use Brainworxx\Includekrexx\Log\FileWriter as KrexxFileWriter;
 use Brainworxx\Includekrexx\Modules\Log;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Analyse\Objects as FluidObjects;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\FlexFormParser;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\InlineJsCssDispatcher;
@@ -287,6 +288,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
     {
         // The QueryBuilder special analysis.
         Registration::registerEvent(Objects::class . static::START_EVENT, QueryDebugger::class);
+        Registration::registerEvent(FluidObjects::class . static::START_EVENT, QueryDebugger::class);
 
         // Register our modules for the admin panel.
         if (
