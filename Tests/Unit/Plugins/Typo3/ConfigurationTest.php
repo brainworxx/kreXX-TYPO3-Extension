@@ -48,7 +48,7 @@ use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Scalar\String\Xml;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
-use Brainworxx\Krexx\Controller\AbstractController;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Analyse\Objects as FluidObjects;
 use Brainworxx\Krexx\Controller\BacktraceController;
 use Brainworxx\Krexx\Controller\DumpController;
 use Brainworxx\Krexx\Controller\EditSettingsController;
@@ -207,7 +207,8 @@ class ConfigurationTest extends AbstractHelper implements ConstInterface
                 EditSettingsController::class . '::outputCssAndJs' => [InlineJsCssDispatcher::class => InlineJsCssDispatcher::class],
                 ExceptionController::class . '::outputCssAndJs' => [InlineJsCssDispatcher::class => InlineJsCssDispatcher::class],
                 BacktraceController::class . '::outputCssAndJs' => [InlineJsCssDispatcher::class => InlineJsCssDispatcher::class],
-                DumpController::class . '::outputCssAndJs' => [InlineJsCssDispatcher::class => InlineJsCssDispatcher::class]
+                DumpController::class . '::outputCssAndJs' => [InlineJsCssDispatcher::class => InlineJsCssDispatcher::class],
+                FluidObjects::class . '::callMe::start' => [QueryDebugger::class => QueryDebugger::class],
             ],
             SettingsGetter::getEventList()
         );

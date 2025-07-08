@@ -46,6 +46,7 @@ use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
 use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput as T3CheckOutput;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Analyse\Objects as FluidObjects;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Analyse\Scalar\String\Xml;
@@ -288,6 +289,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
     {
         // The QueryBuilder special analysis.
         Registration::registerEvent(Objects::class . static::START_EVENT, QueryDebugger::class);
+        Registration::registerEvent(FluidObjects::class . static::START_EVENT, QueryDebugger::class);
 
         // Register our modules for the admin panel.
         if (

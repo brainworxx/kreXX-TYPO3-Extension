@@ -8,6 +8,7 @@ Changelog
 :Date: tbd
 
 Changes:
+    * [Bugfix] The query debugger does not fire anymore in fluid context.
 
 -----
 
