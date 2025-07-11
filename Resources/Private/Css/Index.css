@@ -203,6 +203,7 @@ body, a {
 .krexx-backend .table-wrapper table {
   width: 100%;
   max-width: 100%;
+  table-layout: fixed;
 }
 .krexx-backend .table-wrapper table * {
   font-size: 12px;
@@ -220,7 +221,7 @@ body, a {
   width: 80px;
 }
 .krexx-backend .table-wrapper table th.delete {
-  width: 32px;
+  width: 42px;
 }
 .krexx-backend .table-wrapper table th.filename {
   width: 250px;
@@ -258,6 +259,7 @@ body, a {
 .krexx-backend .table-wrapper table td {
   padding: 6px 6px 3px 6px;
   vertical-align: top;
+  overflow: hidden;
 }
 .krexx-backend .table-wrapper table td.description {
   width: 400px;

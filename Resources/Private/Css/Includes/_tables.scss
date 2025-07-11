@@ -11,6 +11,7 @@
     table {
       width: 100%;
       max-width: 100%;
+      table-layout: fixed;
 
       * {
         font-size: 12px;
@@ -31,7 +32,7 @@
         }
 
         &.delete {
-          width: 32px;
+          width: 42px;
         }
 
         &.filename {
@@ -81,6 +82,7 @@
       td {
         padding: 6px 6px 3px 6px;
         vertical-align: top;
+        overflow: hidden;
 
         &.description {
           width: 400px;
