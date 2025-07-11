@@ -11,6 +11,7 @@ Changes:
     * [Bugfix] The query debugger does not fire anymore in fluid context.
     * [Bugfix] The backend layout may break when the analysis meta data is too long.
     * [Bugfix] The backend usage help contains a wrong closing tag.
+    * [Bugfix] Prevent get_object_vars() from triggering a fatal in a faulty property hook.
 
 -----
 

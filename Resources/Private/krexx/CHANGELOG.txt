@@ -1,3 +1,7 @@
+5.0.12
+- Bugfix: Prevent get_object_vars() from triggering a fatal in a
+  faulty property hook.
+
 5.0.11
 - Bugfix: Do not run out of memory when escaping very large strings.
 - Bugfix: Minimise the interference from the hosting CMS styles.
