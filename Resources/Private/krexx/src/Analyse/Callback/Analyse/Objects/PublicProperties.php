@@ -113,9 +113,17 @@ class PublicProperties extends AbstractObjectAnalysis
         array $publicProps,
         ReflectionClass $ref
     ): void {
+        try {
+            $undeclaredVars = get_object_vars($data);
+        } catch (\Throwable $e) {
+            // If we cannot get the object vars, we simply skip this step.
+            // This happens when the property access is triggering a
+            // faulty property hook, which throws an exception.
+            return;
+        }
         // For every not-declared property, we add another reflection.
         // Those are simply added during runtime
-        foreach (array_keys(array_diff_key(get_object_vars($data), $publicProps)) as $key) {
+        foreach (array_keys(array_diff_key($undeclaredVars, $publicProps)) as $key) {
             $refProps[$key] = new UndeclaredProperty($ref, $key);
         }
 

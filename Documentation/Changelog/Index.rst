@@ -38,6 +38,7 @@ Changes:
     * [Change] Introduced a static cache to the string mimetype analysis.
     * [Change] Simplified the TYPO3 backend modul settings model.
     * [Change] Use an SVG in both skins for the kreXX logo.
+    * [Change] Both skins have the child nodes aligned for better readability.
 
 -----
 
@@ -48,6 +49,7 @@ Changes:
     * [Bugfix] The query debugger does not fire anymore in fluid context.
     * [Bugfix] The backend layout may break when the analysis meta data is too long.
     * [Bugfix] The backend usage help contains a wrong closing tag.
+    * [Bugfix] Prevent get_object_vars() from triggering a fatal in a faulty property hook.
 
 -----
 
