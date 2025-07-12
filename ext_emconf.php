@@ -34,7 +34,7 @@
 
 $EM_CONF[$_EXTKEY] = [
     'title' => 'kreXX Debugger',
-    'description' => 'Fluid and PHP debugger with backend access to logfiles, code generation to reach the displayed values and much more. We added some special stuff for Aimeos.',
+    'description' => 'Fluid and PHP debugger with backend access to logfiles, code generation to reach the displayed values and much more. We added some special stuff for Aimeos and Content Blocks.',
     'category' => 'misc',
     'version' => '6.0.0',
     'state' => 'stable',
@@ -52,7 +52,8 @@ $EM_CONF[$_EXTKEY] = [
         'suggests' => [
             'adminpanel' => '10.4.0-13.4.99',
             'aimeos' => '20.10.5-23.99.99',
-            'vhs' => '6.0.0-7.99.99'
+            'vhs' => '6.0.0-7.99.99',
+            'content_blocks' => '1.0.0-1.99.99'
         ],
     ],
 ];
