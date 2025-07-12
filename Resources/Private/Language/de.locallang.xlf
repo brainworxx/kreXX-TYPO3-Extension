@@ -622,7 +622,7 @@
 			</trans-unit>
 			<trans-unit id="log.time">
 				<source>Last modified</source>
-				<target>Änderungsdatum</target>
+				<target>Änd.-Datum</target>
 			</trans-unit>
 			<trans-unit id="log.size">
 				<source>Size</source>
@@ -630,7 +630,7 @@
 			</trans-unit>
 			<trans-unit id="log.fileerror">
 				<source>Error reading logfile</source>
-				<target>Fehler beim lesen der Logdatei</target>
+				<target>Fehler beim Lesen der Logdatei</target>
 			</trans-unit>
 			<trans-unit id="log.notreadable">
 				<source>File %1$s is not readable!</source>
