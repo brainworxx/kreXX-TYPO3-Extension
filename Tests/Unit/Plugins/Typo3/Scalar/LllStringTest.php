@@ -121,8 +121,6 @@ class LllStringTest extends AbstractHelper
             LocalizationUtility::$values[$payload] = static::KREXX_DEBUGGER;
         }
 
-
-
         $this->simulatePackage('includekrexx', 'some path');
 
         $lllString->canHandle($payload, $model);
@@ -135,5 +133,23 @@ class LllStringTest extends AbstractHelper
         $model = new Model(\Krexx::$pool);
         $lllString->canHandle($payload, $model);
         $this->assertEmpty($model->getJson(), 'Expecting an empty array.');
+    }
+
+    /**
+     * Just like the original test, but we expect the translation to throw an exception.
+     */
+    public function testCanHandleException()
+    {
+        $payload = 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:mlang_tabs_tab';
+        $model = new Model(\Krexx::$pool);
+        $lllString = new LllString(\Krexx::$pool);
+        // This should trigger a 'Static method "translate" cannot be invoked on mock object' exception.
+        $localisationUtility = $this->createMock(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::class);
+        $lllString->setLocalisationUtility($localisationUtility);
+
+        $this->assertFalse(
+            $lllString->canHandle($payload, $model),
+            'Expecting false, because the translation utility throws an exception.'
+        );
     }
 }

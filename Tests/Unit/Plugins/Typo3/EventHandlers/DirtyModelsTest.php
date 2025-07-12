@@ -122,4 +122,25 @@ class DirtyModelsTest extends AbstractHelper
         Krexx::$pool->routing->analysisHub($model);
         $this->assertEquals([], $model->getJson());
     }
+
+    /**
+     * Test the exception handling
+     */
+    public function testHandleException()
+    {
+        $this->mockEmergencyHandler();
+        $modelMock = $this->createMock(AbstractDomainObject::class);
+        $modelMock->expects($this->once())
+            ->method('_isDirty')
+            ->will($this->throwException(new \Exception()));
+        $modelMock->expects($this->never())
+            ->method('_isClone');
+        $modelMock->expects($this->never())
+            ->method('_isNew');
+        $model = new Model(Krexx::$pool);
+        $model->setData($modelMock);
+
+        Krexx::$pool->routing->analysisHub($model);
+        $this->assertEquals([], $model->getJson(), 'It si empty, because the exception was thrown.');
+    }
 }
