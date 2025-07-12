@@ -5,6 +5,10 @@ exclude_patterns = [
     "**/Private/Layouts/**",
     "**/Private/Partials/**",
     "**/Private/Templates/**",
+    "**/Configuration/**",
+    "ext_tables.php",
+    "ext_emconf.php",
+    "ext_localconf.php",
 ]
 
 test_patterns = [
