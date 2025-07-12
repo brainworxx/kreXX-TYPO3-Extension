@@ -124,5 +124,28 @@ class DebugViewHelperTest extends AbstractHelper
         $debugViewHelper->setViewHelperNode($nodeMock);
 
         $debugViewHelper->render();
+
+        // Analyse something that jumps at the debuggers face like an alien facehugger!
+        // I mean, we throw an expected exception in the renderChildrenClosure.
+        $configMock = $this->createMock(Config::class);
+        $configMock->expects($this->exactly(1))
+            ->method('getSetting')
+            ->willReturn(true);
+        Krexx::$pool->config = $configMock;
+        $debugViewHelper = new DebugViewHelper();
+        $view = $this->createMock(StandaloneView::class);
+        $variableContainer = $this->createMock(ViewHelperVariableContainer::class);
+        $variableContainer->expects($this->once())
+            ->method('getView')
+            ->willReturn($view);
+        $renderingContext = $this->createMock(RenderingContextInterface::class);
+        $renderingContext->expects($this->any())
+            ->method('getViewHelperVariableContainer')
+            ->willReturn($variableContainer);
+        $debugViewHelper->setRenderingContext($renderingContext);
+        $debugViewHelper->setRenderChildrenClosure(function () {
+            throw new \RuntimeException('This is an expected exception.');
+        });
+        $debugViewHelper->render();
     }
 }
