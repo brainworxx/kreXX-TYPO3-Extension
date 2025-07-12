@@ -156,12 +156,12 @@ class QueryDebuggerTest extends AbstractHelper implements CallbackConstInterface
         $queryBuilderMock = $this->createMock(QueryBuilder::class);
         $queryBuilderMock->expects($this->once())
             ->method('getSQL')
-            ->will($this->returnValue(
-                'SELECT * FROM whatever WHERE `uid` IN (:stuff1, :stuff2, :stuff3, :stuff4, :stuff5, :stuff6, :stuff7, :stuff8, :stuff9, :stuff10)')
+            ->willReturn(
+                'SELECT * FROM whatever WHERE `uid` IN (:stuff1, :stuff2, :stuff3, :stuff4, :stuff5, :stuff6, :stuff7, :stuff8, :stuff9, :stuff10)'
             );
         $queryBuilderMock->expects($this->once())
             ->method('getParameters')
-            ->will($this->returnValue(
+            ->willReturn(
                 [
                     'stuff1' => 'nothing1',
                     'stuff2' => 'nothing2',
@@ -174,7 +174,7 @@ class QueryDebuggerTest extends AbstractHelper implements CallbackConstInterface
                     'stuff9' => 'nothing9',
                     'stuff10' => 'nothing10'
                 ]
-            ));
+            );
         $fixture = [
             static::PARAM_DATA => $queryBuilderMock,
             static::PARAM_NAME => 'queryBuilder'
