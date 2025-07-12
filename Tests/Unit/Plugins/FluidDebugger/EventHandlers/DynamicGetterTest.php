@@ -67,7 +67,7 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
     /**
      * Test the handle method.
      *
-     * Yo dog, we heard you like putting objects into objects.
+     * Yo dawg, we heard you like putting objects into objects.
      */
     public function testHandle()
     {
@@ -160,5 +160,29 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
         $getterMethods = $parameters[static::PARAM_NORMAL_GETTER] ?? [];
         $this->assertCount(1, $getterMethods, 'There is supposed to be the \'getAny\' getter left.');
         $this->assertSame($anyMock, $getterMethods[0], 'The remaining getter is the \'getAny\'.');
+    }
+
+    /**
+     * Test the handle method with a wrong class.
+     */
+    public function testHandleWithWrongClass()
+    {
+        if (!class_exists(ContentBlockData::class)) {
+            $this->markTestSkipped('ContentBlockData class does not exist, skipping test.');
+        }
+
+        $subject = new \stdClass();
+        $reflectionClass = new ReflectionClass($subject);
+        $callback = new CallbackNothing(Krexx::$pool);
+        $callback->setParameters([
+            static::PARAM_REF => $reflectionClass,
+            static::PARAM_NORMAL_GETTER => []
+        ]);
+        $pool = Krexx::$pool;
+        $routing = new RoutingNothing($pool);
+        $pool->routing = $routing;
+        $getter = new DynamicGetter($pool);
+        $result = $getter->handle($callback);
+        $this->assertEquals('', $result, 'The result should be an empty string for a wrong class.');
     }
 }
