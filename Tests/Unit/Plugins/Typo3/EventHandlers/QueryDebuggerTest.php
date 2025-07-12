@@ -219,6 +219,31 @@ class QueryDebuggerTest extends AbstractHelper implements CallbackConstInterface
     }
 
     /**
+     * Test the exception handling of the SQL retrieval.
+     */
+    public function testHandleException()
+    {
+        $renderNothing = new RenderNothing(Krexx::$pool);
+        Krexx::$pool->render = $renderNothing;
+        $queryMock = $this->createMock(QueryBuilder::class);
+        $expectation = 'Error while retrieving SQL: This is a test exception';
+        $queryMock->expects($this->once())
+            ->method('getSQL')
+            ->willThrowException(new \RuntimeException($expectation));
+        $fixture = [
+            static::PARAM_DATA => $queryMock,
+            static::PARAM_NAME => 'queryBuilder'
+        ];
+
+        $objectAnalyser = new Objects(Krexx::$pool);
+        $objectAnalyser->setParameters($fixture)->callMe();
+
+        /** @var \Brainworxx\Krexx\Analyse\Model $model */
+        $model = $renderNothing->model['renderExpandableChild'][0];
+        $this->assertEquals($expectation, $model->getData());
+    }
+
+    /**
      * What the method name says.
      *
      * @return \PHPUnit\Framework\MockObject\MockObject
