@@ -11,7 +11,6 @@
     table {
       width: 100%;
       max-width: 100%;
-      table-layout: fixed;
 
       * {
         font-size: 12px;
@@ -82,7 +81,6 @@
       td {
         padding: 6px 6px 3px 6px;
         vertical-align: top;
-        overflow: hidden;
 
         &.description {
           width: 400px;
@@ -94,6 +92,7 @@
           min-width: 77px;
           text-align: right;
         }
+
         &.td-icon {
           width: 10px;
         }
@@ -117,6 +116,13 @@
         td.description {
           max-width: 200px;
         }
+      }
+    }
+    table.krexx-logs {
+      table-layout: fixed;
+
+      td {
+        overflow: hidden;
       }
     }
   }

@@ -203,7 +203,6 @@ body, a {
 .krexx-backend .table-wrapper table {
   width: 100%;
   max-width: 100%;
-  table-layout: fixed;
 }
 .krexx-backend .table-wrapper table * {
   font-size: 12px;
@@ -259,7 +258,6 @@ body, a {
 .krexx-backend .table-wrapper table td {
   padding: 6px 6px 3px 6px;
   vertical-align: top;
-  overflow: hidden;
 }
 .krexx-backend .table-wrapper table td.description {
   width: 400px;
@@ -290,6 +288,12 @@ body, a {
   .krexx-backend .table-wrapper table td.description {
     max-width: 200px;
   }
+}
+.krexx-backend .table-wrapper table.krexx-logs {
+  table-layout: fixed;
+}
+.krexx-backend .table-wrapper table.krexx-logs td {
+  overflow: hidden;
 }
 
 .krexx-backend label {
