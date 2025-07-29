@@ -5,7 +5,7 @@ Changelog
 =============================================================
 
 :Version: 5.1.7
-:Date: tbd
+:Date: 2025-07-29
 
 Changes:
     * [Bugfix] The query debugger does not fire anymore in fluid context.
