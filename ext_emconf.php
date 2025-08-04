@@ -34,7 +34,7 @@
 
 $EM_CONF[$_EXTKEY] = [
     'title' => 'kreXX Debugger',
-    'description' => 'Fluid and PHP debugger with backend access to logfiles, code generation to reach the displayed values and much more. We added some special stuff for Aimeos and Content Blocks.',
+    'description' => 'Alternative for f:debug (fluid) and debug(); (PHP) with additional analysis features and logging options.',
     'category' => 'misc',
     'version' => '6.1.0',
     'state' => 'stable',

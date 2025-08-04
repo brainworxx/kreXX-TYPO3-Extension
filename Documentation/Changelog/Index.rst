@@ -11,6 +11,7 @@ Changes:
     * [Feature] Added support for Emun default values.
     * [Feature] Added flattened attribute analysis.
     * [Change] Moved the comment retrieval class in the properties iterator to the class variables.
+    * [Change] Better and more clear extension description.
 
 :Version: 6.0.0
 :Date: 2025-07-29
