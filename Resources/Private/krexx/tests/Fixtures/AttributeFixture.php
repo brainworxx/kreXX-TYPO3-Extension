@@ -35,14 +35,61 @@
 
 namespace Brainworxx\Krexx\Tests\Fixtures;
 
-class EnumFixture
-{
-    /**
-     * @var SuitEnumFixture
-     */
-    public $enumValue = SuitEnumFixture::Hearts;
+use DateTime;
+use stdClass;
 
-    public function useEnums(SuitEnumFixture $cardDeck = SuitEnumFixture::Hearts)
+#[\someAttribute]
+#[\Phobject(
+    [
+        'validation' => [
+            'required' => FALSE,
+            'maxFiles' => 1,
+            'fileSize' => [
+                'minimum' => '0K',
+                'maximum' => '2M'
+            ],
+            'allowedMimeTypes' => [
+                0 => 'image/jpeg',
+                1 => 'image/png',
+                2 => 'image/gif'
+            ],
+            'imageDimensions' => [
+                'maxWidth' => 4096,
+                'maxHeight' => 4096
+            ]
+        ],
+        'uploadFolder' => '1:/user_upload/',
+        'addRandomSuffix' => TRUE,
+        'duplicationBehavior' => 'myInterface',
+        'enum' => SuitEnumFixture::Clubs
+    ],
+)]
+#[Phobject\Attributes\Stuff(
+    'beep',
+    NULL,
+    123,
+    4.56,
+    TRUE,
+    FALSE,
+    [
+        0 => 'foo',
+        1 => 'bar'
+    ],
+    stdClass::class,
+    DateTime::class,
+    [],
+)]
+class AttributeFixture
+{
+    public function __construct(
+        #[Phobject\Attributes\Stuff('foo', 'bar')]
+        public string $foo = 'bar',
+    ) {
+    }
+
+    #[Phobject\Attributes\Stuff('grault', 'garply')]
+    public function getFoo(): string
     {
+        return $this->foo;
     }
 }

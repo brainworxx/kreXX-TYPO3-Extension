@@ -40,6 +40,7 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Analyse\Comment\Methods;
 use Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Tests\Fixtures\AttributeFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
@@ -280,6 +281,48 @@ class ThroughMethodsTest extends AbstractHelper
     }
 
     /**
+     * Testing the method analysis with attributes.
+     */
+    public function testCallMeAttributes()
+    {
+        if (version_compare(PHP_VERSION, '8.1.0', '<')) {
+            $this->markTestSkipped('Wrong PHP version.');
+        }
+
+        // Test the event calling.
+        $this->mockEventService(
+            [$this->startEvent, $this->throughMethods],
+            [$this->endEvent, $this->throughMethods]
+        );
+
+        $fixture = [
+            $this->throughMethods::PARAM_REF => new ReflectionClass(AttributeFixture::class),
+            $this->throughMethods::PARAM_DATA => [
+                new ReflectionMethod(AttributeFixture::class, 'getFoo'),
+            ]
+        ];
+
+        // Inject the render nothing.
+        $renderNothing = new RenderNothing(Krexx::$pool);
+        Krexx::$pool->render = $renderNothing;
+        // Overwrite the callback.
+        Krexx::$pool->rewrite[ThroughMeta::class] = CallbackNothing::class;
+
+        // Run the test.
+        $this->throughMethods
+            ->setParameters($fixture)
+            ->callMe();
+
+        // Check the result
+        /** @var Model $model */
+        $model = $renderNothing->model['renderExpandableChild'][0];
+        $this->assertStringContainsString(
+            "#[Brainworxx\Krexx\Tests\Fixtures\Phobject\Attributes\Stuff(",
+            $model->getParameters()[$this->throughMethods::PARAM_DATA]['Attributes']
+        );
+    }
+
+    /**
      * @param \Brainworxx\Krexx\Analyse\Model $model
      * @param string $name
      * @param string $type
@@ -289,7 +332,6 @@ class ThroughMethodsTest extends AbstractHelper
      * @param string $comment
      * @param string $declaredInFile
      * @param string $declaredInClass
-     * @param string $attributes
      */
     protected function assertModelValues(
         Model $model,

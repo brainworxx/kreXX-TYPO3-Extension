@@ -7,6 +7,10 @@ Changelog
 :Version: 6.1.0
 :Date: tbd
 
+Changes:
+    * [Feature] Added support for Emun default values.
+    * [Feature] Added flattened attribute analysis.
+    * [Change] Moved the comment retrieval class in the properties iterator to the class variables.
 
 :Version: 6.0.0
 :Date: 2025-07-29

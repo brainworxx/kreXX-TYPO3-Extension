@@ -41,12 +41,15 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
+use Brainworxx\Krexx\Analyse\Comment\Attributes;
 use Brainworxx\Krexx\Analyse\Comment\Properties;
 use Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use ReflectionProperty;
 use Throwable;
+use UnitEnum;
 
 /**
  * Class properties' analysis methods.
@@ -67,6 +70,16 @@ class ThroughProperties extends AbstractCallback implements
     protected PropertyDeclaration $propertyDeclaration;
 
     /**
+     * @var Properties
+     */
+    protected Properties $propertyComment;
+
+    /**
+     * @var \Brainworxx\Krexx\Analyse\Comment\Attributes
+     */
+    protected Attributes $attributes;
+
+    /**
      * Renders the properties of a class.
      *
      * @return string
@@ -81,6 +94,8 @@ class ThroughProperties extends AbstractCallback implements
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $this->parameters[static::PARAM_REF];
         $this->propertyDeclaration = $this->pool->createClass(PropertyDeclaration::class);
+        $this->propertyComment = $this->pool->createClass(Properties::class);
+        $this->attributes = $this->pool->createClass(Attributes::class);
 
         foreach ($this->parameters[static::PARAM_DATA] as $refProperty) {
             // Check memory and runtime.
@@ -113,13 +128,17 @@ class ThroughProperties extends AbstractCallback implements
     protected function prepareModel($value, ReflectionProperty $refProperty): Model
     {
         $messages = $this->pool->messages;
-
         return $this->pool->createClass(Model::class)
             ->setData($value)
             ->setName($this->retrievePropertyName($refProperty))
             ->addToJson(
                 $messages->getHelp('metaComment'),
-                $this->pool->createClass(Properties::class)->getComment($refProperty)
+                $this->propertyComment->getComment($refProperty)
+            )
+            ->addToJson(
+                $messages->getHelp('metaAttributes'),
+                // Meh, the addToJson method does not support real new lines.
+                nl2br($this->attributes->getAttributes($refProperty))
             )
             ->addToJson(
                 $messages->getHelp('metaDeclaredIn'),
@@ -173,7 +192,7 @@ class ThroughProperties extends AbstractCallback implements
     /**
      * Format the default value into something readable
      *
-     * @param string|int|float|array $default
+     * @param string|int|float|array|UnitEnum $default
      * @return string
      */
     protected function formatDefaultValue($default): string
@@ -186,7 +205,7 @@ class ThroughProperties extends AbstractCallback implements
         $result = '';
         if (is_string($default)) {
             $result = '\'' . $default . '\'';
-        } elseif (is_array($default)) {
+        } elseif (is_array($default) || $default instanceof UnitEnum) {
             $result = var_export($default, true);
         }
 

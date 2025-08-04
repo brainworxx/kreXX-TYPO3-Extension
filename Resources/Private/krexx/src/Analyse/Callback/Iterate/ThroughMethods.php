@@ -41,6 +41,7 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
+use Brainworxx\Krexx\Analyse\Comment\Attributes;
 use Brainworxx\Krexx\Analyse\Comment\Methods;
 use Brainworxx\Krexx\Analyse\Comment\ReturnType;
 use Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration;
@@ -84,6 +85,13 @@ class ThroughMethods extends AbstractCallback implements
     protected ReturnType $returnType;
 
     /**
+     * Analysis class for method attributes.
+     *
+     * @var \Brainworxx\Krexx\Analyse\Comment\Attributes
+     */
+    protected Attributes $attributes;
+
+    /**
      * Inject the pool and get the comment analysis online.
      *
      * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
@@ -95,6 +103,7 @@ class ThroughMethods extends AbstractCallback implements
         $this->commentAnalysis = $pool->createClass(Methods::class);
         $this->methodDeclaration = $pool->createClass(MethodDeclaration::class);
         $this->returnType = $pool->createClass(ReturnType::class);
+        $this->attributes = $pool->createClass(Attributes::class);
     }
 
     /**
@@ -158,6 +167,8 @@ class ThroughMethods extends AbstractCallback implements
         return [
             // Get the comment from the class, it's parents, interfaces or traits.
             $messages->getHelp('metaComment') => $this->commentAnalysis->getComment($refMethod, $refClass),
+            // Get the method attributes.
+            $messages->getHelp('metaAttributes') => $this->attributes->getAttributes($refMethod),
             // Get declaration place.
             $messages->getHelp('metaDeclaredIn') => $this->methodDeclaration->retrieveDeclaration($refMethod),
             // Get the return type.

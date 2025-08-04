@@ -40,6 +40,7 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Tests\Fixtures\AbstractFixture;
+use Brainworxx\Krexx\Tests\Fixtures\AttributeFixture;
 use Brainworxx\Krexx\Tests\Fixtures\AttributesFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\EmptyInterfaceFixture;
@@ -236,5 +237,81 @@ class MetaTest extends AbstractHelper
             $metaResult = $model->getParameters();
             $this->assertEquals($expectation, $metaResult['data']['Classname']);
         }
+    }
+
+    /**
+     * Test attributes with enums in them. and lots of other stuff in there.
+     */
+    public function testCallMeWithAttributes()
+    {
+        if (version_compare(phpversion(), '8.0.99', '<')) {
+            $this->markTestSkipped('Wrong PHP Version');
+        }
+
+        // Make sure that we are not testing a recursion.
+        $recursionMock = $this->createMock(Recursion::class);
+        $recursionMock->expects($this->any())
+            ->method('isInMetaHive')
+            ->willReturn(false);
+        Krexx::$pool->recursionHandler = $recursionMock;
+
+        // Short circuit the rendering process.
+        $renderNothing = new RenderNothing(Krexx::$pool);
+        Krexx::$pool->render = $renderNothing;
+
+        // Set up the fixture.
+        $meta = new Meta(Krexx::$pool);
+        $ref = new ReflectionClass(AttributeFixture::class);
+        $parameters = [
+            $meta::PARAM_REF => $ref,
+        ];
+        $meta->setParameters($parameters)->callMe();
+
+        /** @var \Brainworxx\Krexx\Analyse\Model $model */
+        $model = $renderNothing->model['renderExpandableChild'][0];
+        $metaResult = $model->getParameters();
+
+        $expectations = "#[someAttribute]
+#[Phobject(
+    [
+        'validation' => [
+            'required' => FALSE,
+            'maxFiles' => 1,
+            'fileSize' => [
+                'minimum' => '0K',
+                'maximum' => '2M'
+            ],
+            'allowedMimeTypes' => [
+                0 => 'image/jpeg',
+                1 => 'image/png',
+                2 => 'image/gif'
+            ],
+            'imageDimensions' => [
+                'maxWidth' => 4096,
+                'maxHeight' => 4096
+            ]
+        ],
+        'uploadFolder' => '1:/user_upload/',
+        'addRandomSuffix' => TRUE,
+        'duplicationBehavior' => 'myInterface',
+        'enum' => Brainworxx\Krexx\Tests\Fixtures\SuitEnumFixture::Clubs
+    ],
+)]
+#[Brainworxx\Krexx\Tests\Fixtures\Phobject\Attributes\Stuff(
+    'beep',
+    NULL,
+    123,
+    4.56,
+    TRUE,
+    FALSE,
+    [
+        0 => 'foo',
+        1 => 'bar'
+    ],
+    'stdClass',
+    'DateTime',
+    [],
+)]";
+        $this->assertEquals($expectations, $metaResult['data']['Attributes']);
     }
 }

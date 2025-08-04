@@ -41,10 +41,13 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
+use Brainworxx\Krexx\Tests\Fixtures\AttributeFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesInheritanceFixture;
+use Brainworxx\Krexx\Tests\Fixtures\EnumFixture;
 use Brainworxx\Krexx\Tests\Fixtures\PublicFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ReadOnlyFixture;
+use Brainworxx\Krexx\Tests\Fixtures\SuitEnumFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
@@ -82,6 +85,7 @@ class ThroughPropertiesTest extends AbstractHelper
     public const ATTRIBUTES_KEY = 'Attributes';
     public const PUBLIC_ARRAY_DEFAULT = 'array';
     public const READ_ONLY_STRING = 'readOnyString';
+    public const ENUM_VALUE = 'enumValue';
     public const PROPERTY = 'property';
 
     /**
@@ -511,6 +515,99 @@ class ThroughPropertiesTest extends AbstractHelper
             '->',
             '',
             'Public Readonly Uninitialized '
+        );
+    }
+
+    /**
+     * Testing the default enum value.
+     */
+    public function testCallMeDefaultEnum()
+    {
+        if (version_compare(phpversion(), '8.0.99', '<')) {
+            $this->markTestSkipped('Wrong PHP Version');
+        }
+
+        // Test the events.
+        $this->mockEventService(
+            [$this->startEvent, $this->throughProperties],
+            [$this->endEvent, $this->throughProperties]
+        );
+
+        $subject = new EnumFixture();
+        $fixture = [
+            $this->throughProperties::PARAM_REF => new ReflectionClass($subject),
+            $this->throughProperties::PARAM_DATA => [
+                new ReflectionProperty(EnumFixture::class, static::ENUM_VALUE),
+            ]
+        ];
+
+        // Inject the nothing-router.
+        $routeNothing = new RoutingNothing(Krexx::$pool);
+        Krexx::$pool->routing = $routeNothing;
+        $this->mockEmergencyHandler();
+
+        $this->throughProperties
+            ->setParameters($fixture)
+            ->callMe();
+        $model = $routeNothing->model[0];
+
+        $this->assertModelValues(
+            $model,
+            SuitEnumFixture::Hearts,
+            static::ENUM_VALUE,
+            [
+                static::JSON_COMMENT_KEY => '&#64;var SuitEnumFixture',
+                static::JSON_DECLARED_KEY => 'EnumFixture.php<br />in class: Brainworxx\Krexx\Tests\Fixtures\EnumFixture',
+                'Default value' => var_export(SuitEnumFixture::Hearts, true),
+            ],
+            '->',
+            '',
+            'Public '
+        );
+    }
+
+    public function testCallMeAttribute()
+    {
+        if (version_compare(phpversion(), '8.0.99', '<')) {
+            $this->markTestSkipped('Wrong PHP Version');
+        }
+
+        // Test the events.
+        $this->mockEventService(
+            [$this->startEvent, $this->throughProperties],
+            [$this->endEvent, $this->throughProperties]
+        );
+
+        $subject = new AttributeFixture();
+        $fixture = [
+            $this->throughProperties::PARAM_REF => new ReflectionClass($subject),
+            $this->throughProperties::PARAM_DATA => [
+                new ReflectionProperty(AttributeFixture::class, 'foo'),
+            ]
+        ];
+
+        // Inject the nothing-router.
+        $routeNothing = new RoutingNothing(Krexx::$pool);
+        Krexx::$pool->routing = $routeNothing;
+        $this->mockEmergencyHandler();
+
+        $this->throughProperties
+            ->setParameters($fixture)
+            ->callMe();
+        $model = $routeNothing->model[0];
+
+        $this->assertModelValues(
+            $model,
+            'bar',
+            'foo',
+            [
+                static::JSON_DECLARED_KEY => 'AttributeFixture.php<br />in class: Brainworxx\Krexx\Tests\Fixtures\AttributeFixture',
+                'Attributes' => "#[Brainworxx\Krexx\Tests\Fixtures\Phobject\Attributes\Stuff(<br />    'foo',<br />    'bar',<br />)]",
+                'Typed as' => 'string'
+            ],
+            '->',
+            '',
+            'Public '
         );
     }
 
