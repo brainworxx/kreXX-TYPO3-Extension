@@ -374,7 +374,7 @@
 			</trans-unit>
 			<trans-unit id="subhead.pruneOutput">
 				<source>Prune output</source>
-				<target>Output kappen</target>
+				<target>Ausgabe begrenzen</target>
 			</trans-unit>
 			<trans-unit id="subhead.emergencystop">
 				<source>Emergency stop</source>

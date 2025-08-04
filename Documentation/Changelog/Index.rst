@@ -12,6 +12,7 @@ Changes:
     * [Feature] Added flattened attribute analysis.
     * [Change] Moved the comment retrieval class in the properties iterator to the class variables.
     * [Change] Better and more clear extension description.
+    * [Bugfix] Use the same translation for "Prune output" in  the backend module as in the debugger itself.
 
 :Version: 6.0.0
 :Date: 2025-07-29
