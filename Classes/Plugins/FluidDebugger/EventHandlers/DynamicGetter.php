@@ -120,6 +120,7 @@ class DynamicGetter implements
         foreach ($this->retriever as $retriever) {
             // Check if the retriever can handle the object.
             if ($retriever->canHandle($data)) {
+                $metaHelp = $this->pool->messages->getHelp('fluidMagicContentBlocks', [$retriever->getName()]);
                 foreach ($retriever->handle($ref) as $key => $value) {
                     // Iterate through the analysis result, and throw everything into the frontend.
                     $done[] = 'get' . ucfirst($key);
@@ -129,7 +130,7 @@ class DynamicGetter implements
                             ->setName($key)
                             ->setConnectorType(static::CONNECTOR_NORMAL_PROPERTY)
                             ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
-                            ->setHelpid('fluidMagicContentBlocks')
+                            ->addToJson('metaHelp', $metaHelp)
                     );
                 }
                 $this->removeFromGetter($done, $callback);

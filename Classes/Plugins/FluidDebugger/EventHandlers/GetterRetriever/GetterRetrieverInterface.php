@@ -42,6 +42,13 @@ use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 interface GetterRetrieverInterface
 {
     /**
+     * Return the name of the handled class.
+     *
+     * @return string
+     */
+    public function getName(): string;
+
+    /**
      * Can we get the dynamic getters for the given object?
      *
      * @param object $object

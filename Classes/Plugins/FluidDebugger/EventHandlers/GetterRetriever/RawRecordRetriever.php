@@ -60,4 +60,12 @@ class RawRecordRetriever extends DomainRecordRetriever
     {
         return $this->retrieveRawRecordProperties($ref);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getName(): string
+    {
+        return 'RawRecord';
+    }
 }

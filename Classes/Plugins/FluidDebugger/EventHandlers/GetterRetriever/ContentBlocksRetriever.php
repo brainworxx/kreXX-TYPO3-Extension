@@ -76,4 +76,9 @@ class ContentBlocksRetriever implements GetterRetrieverInterface
         }
         return $result;
     }
+
+    public function getName(): string
+    {
+        return 'ContentBlocks';
+    }
 }

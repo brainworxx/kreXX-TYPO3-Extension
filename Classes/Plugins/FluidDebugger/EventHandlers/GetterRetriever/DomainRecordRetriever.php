@@ -129,4 +129,12 @@ class DomainRecordRetriever implements GetterRetrieverInterface
         }
         return $result;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getName(): string
+    {
+        return 'DomainRecord';
+    }
 }
