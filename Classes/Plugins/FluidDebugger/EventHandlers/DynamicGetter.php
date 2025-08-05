@@ -37,6 +37,10 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers;
 
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\ContentBlocksRetriever;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\DomainRecordRetriever;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\RawRecordRetriever;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\SettingsRetriever;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
@@ -49,9 +53,13 @@ use ReflectionMethod;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockData;
 
 /**
- * ContentBlocks uses dynamic getters in fluid.
+ * There are dynamic getter in TYPO3 13.4. We handle them here.
  *
  * @see \TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockData::get()
+ * @see \TYPO3\CMS\Core\Domain\Record::get()
+ * @see \TYPO3\CMS\Core\Domain\RawRecord::get()
+ * @see \TYPO3\CMS\Core\Settings\Settings::get()
+ *
  * @event \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::callMe::start
  */
 class DynamicGetter implements
@@ -68,11 +76,25 @@ class DynamicGetter implements
     protected Pool $pool;
 
     /**
+     * The retriever for the dynamic getters.
+     *
+     * @var \Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\GetterRetrieverInterface[]
+     *   The retriever is an array of getter retrievers, which can handle the
+     *   given object.
+     */
+    protected array $retriever;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
+
+        $this->retriever[] = $pool->createClass(ContentBlocksRetriever::class);
+        $this->retriever[] = $pool->createClass(DomainRecordRetriever::class);
+        $this->retriever[] = $pool->createClass(RawRecordRetriever::class);
+        $this->retriever[] = $pool->createClass(SettingsRetriever::class);
     }
 
     /**
@@ -91,31 +113,33 @@ class DynamicGetter implements
         /** @var ReflectionClass $ref */
         $ref = $callback->getParameters()[static::PARAM_REF];
         $data = $ref->getData();
-
-        // We only want to handle ContentBlockData objects.
-        if (!$data instanceof ContentBlockData) {
-            return '';
-        }
-
         $result = '';
         $done = [];
         $routing = $this->pool->routing;
-        foreach ($this->retrieveGetterArray($ref) as $key => $value) {
-            // Iterate through the analysis result, and throw everything into the frontend.
-            $done[] = 'get' . ucfirst($key);
-            $result .= $routing->analysisHub(
-                (new Model($this->pool))
-                    ->setData($value)
-                    ->setName($key)
-                    ->setConnectorType(static::CONNECTOR_NORMAL_PROPERTY)
-                    ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
-                    ->setHelpid('fluidMagicContentBlocks')
-            );
-        }
-        $this->removeFromGetter($done, $callback);
 
-        // Add an HR after the dynamic getter output, just because.
-        return $result . $this->pool->render->renderSingeChildHr();
+        foreach ($this->retriever as $retriever) {
+            // Check if the retriever can handle the object.
+            if ($retriever->canHandle($data)) {
+                foreach ($retriever->handle($ref) as $key => $value) {
+                    // Iterate through the analysis result, and throw everything into the frontend.
+                    $done[] = 'get' . ucfirst($key);
+                    $result .= $routing->analysisHub(
+                        $this->pool->createClass(Model::class)
+                            ->setData($value)
+                            ->setName($key)
+                            ->setConnectorType(static::CONNECTOR_NORMAL_PROPERTY)
+                            ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
+                            ->setHelpid('fluidMagicContentBlocks')
+                    );
+                }
+                $this->removeFromGetter($done, $callback);
+
+                // Add an HR after the dynamic getter output, just because.
+                return $result . $this->pool->render->renderSingeChildHr();
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -139,34 +163,5 @@ class DynamicGetter implements
         }
         $parameters[static::PARAM_NORMAL_GETTER] = array_values($getter);
         $callback->setParameters($parameters);
-    }
-
-    /**
-     * Retrieve everything that we should be able to access in the Fluid template.
-     *
-     * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
-     *   The reflection class of the ContentBlockData object.
-     * @return array
-     *   Everything that we should be able to access in the Fluid template.
-     */
-    protected function retrieveGetterArray(ReflectionClass $ref): array
-    {
-        $result = [];
-        if ($ref->hasProperty('_processed')) {
-            $result = $ref->retrieveValue($ref->getProperty('_processed'));
-        }
-        if ($ref->hasProperty('_name')) {
-            $result['_name'] = $ref->retrieveValue($ref->getProperty('_name'));
-        }
-        if ($ref->hasProperty('_grids')) {
-            $result['_grids'] = $ref->retrieveValue($ref->getProperty('_grids'));
-        }
-
-        if ($ref->hasProperty('_record')) {
-            /** @var \TYPO3\CMS\Core\Domain\Record $record */
-            $record = $ref->retrieveValue($ref->getProperty('_record'));
-            $result = array_merge($record->toArray(), $result);
-        }
-        return $result;
     }
 }
