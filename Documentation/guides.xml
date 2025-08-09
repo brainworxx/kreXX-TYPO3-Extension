@@ -6,7 +6,7 @@
 >
     <extension class="\T3Docs\Typo3DocsTheme\DependencyInjection\Typo3DocsThemeExtension"
                project-home="https://extensions.typo3.org/extension/includekrexx/"
-               project-contact="info@brainworxx.de"
+               project-contact="mailto:info@brainworxx.de"
                project-repository="https://github.com/brainworxx/kreXX-TYPO3-Extension"
                project-issues="https://github.com/brainworxx/kreXX-TYPO3-Extension/issues"
                edit-on-github-branch="main"

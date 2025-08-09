@@ -1,7 +1,7 @@
 {
   "name": "brainworxx/includekrexx",
   "type": "typo3-cms-extension",
-  "description": "Fluid and PHP debugger with backend access to logfiles, code generation to reach the displayed values and much more. We added some special stuff for Aimeos.",
+  "description": "Alternative for `f:debug` (fluid) and `debug();` (PHP) with additional analysis features and logging options.",
   "homepage": "https://github.com/brainworxx/kreXX-TYPO3-Extension",
   "license": [
     "LGPL-2.1-or-later"
