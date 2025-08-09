@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever;
 
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
+use Throwable;
 use TYPO3\CMS\Core\Domain\RawRecord;
 use TYPO3\CMS\Core\Domain\RecordPropertyClosure;
 
@@ -67,15 +68,7 @@ class RawRecordRetriever implements GetterRetrieverInterface
      */
     public function handle(ReflectionClass $ref): array
     {
-        $properties = $this->retrieveProperties($ref);
-        if (!$ref->hasProperty('uid')) {
-            $properties['uid'] = $ref->retrieveValue($ref->getProperty('uid'));
-        }
-        if (!$ref->hasProperty('pid')) {
-            $properties['pid'] = $ref->retrieveValue($ref->getProperty('pid'));
-        }
-
-        return $properties;
+        return $this->retrieveProperties($ref);
     }
 
     /**
@@ -95,11 +88,16 @@ class RawRecordRetriever implements GetterRetrieverInterface
             // But it is the right class?!?
             return [];
         }
+
         $propertyReflection = $ref->getProperty('properties');
-        $ref->retrieveValue($propertyReflection);
         foreach ($ref->retrieveValue($propertyReflection) as $property => $value) {
             if ($value instanceof RecordPropertyClosure) {
-                $result[$property] = $value->instantiate();
+                try {
+                    $result[$property] = $value->instantiate();
+                } catch (Throwable $e) {
+                    // Do nothing.
+                    // We skip this one.
+                }
             } else {
                 $result[$property] = $value;
             }

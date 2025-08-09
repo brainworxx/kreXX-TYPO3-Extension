@@ -67,6 +67,7 @@ use TYPO3\CMS\Core\Settings\Settings;
 #[CoversMethod(DomainRecordRetriever::class, 'handle')]
 #[CoversMethod(RawRecordRetriever::class, 'canHandle')]
 #[CoversMethod(RawRecordRetriever::class, 'handle')]
+#[CoversMethod(RawRecordRetriever::class, 'retrieveProperties')]
 #[CoversMethod(SettingsRetriever::class, 'canHandle')]
 #[CoversMethod(SettingsRetriever::class, 'handle')]
 class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface, CodegenConstInterface

@@ -66,10 +66,26 @@ class DomainRecordRetriever extends RawRecordRetriever
             // Again: Huh, not what I expected.
             return $result;
         }
+
+        // We are only allowed to merge the properties from the RawRecord,
+        // if the RawRecord type does not contain a dot.
         $rawRecordPropertyRef = $ref->getProperty('rawRecord');
         /** @var \TYPO3\CMS\Core\Domain\RawRecord $rawRecord */
         $rawRecord = $ref->retrieveValue($rawRecordPropertyRef);
         $rawRecordRef = new ReflectionClass($rawRecord);
-        return  array_merge($result, parent::handle($rawRecordRef));
+        if (!$rawRecordRef->hasProperty('type')) {
+            // Huh, not what I expected.
+            return $result;
+        }
+        $rawRecordType = $rawRecordRef->retrieveValue($rawRecordRef->getProperty('type'));
+        $rawRecordValues = parent::handle($rawRecordRef);
+        if (strpos($rawRecordType, '.') !== false) {
+            // If the type contains a dot, we only merge the uid and pid.
+            $result['uid'] = $rawRecordValues['uid'] ?? null;
+            $result['pid'] = $rawRecordValues['pid'] ?? null;
+            return $result;
+        }
+
+        return array_merge($result, $rawRecordValues);
     }
 }
