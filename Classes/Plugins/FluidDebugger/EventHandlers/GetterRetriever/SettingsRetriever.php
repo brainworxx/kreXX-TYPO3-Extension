@@ -66,12 +66,4 @@ class SettingsRetriever implements GetterRetrieverInterface
         $settingsPropertyRef = $ref->getProperty('settings');
         return $ref->retrieveValue($settingsPropertyRef);
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function getName(): string
-    {
-        return 'Code Settings';
-    }
 }

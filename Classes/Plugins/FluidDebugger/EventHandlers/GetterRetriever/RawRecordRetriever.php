@@ -39,11 +39,12 @@ namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetr
 
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use TYPO3\CMS\Core\Domain\RawRecord;
+use TYPO3\CMS\Core\Domain\RecordPropertyClosure;
 
 /**
  * Retrieve the dynamic getter values of a RawRecord object.
  */
-class RawRecordRetriever extends DomainRecordRetriever
+class RawRecordRetriever implements GetterRetrieverInterface
 {
     /**
      * @inheritDoc
@@ -54,18 +55,55 @@ class RawRecordRetriever extends DomainRecordRetriever
     }
 
     /**
-     * @inheritDoc
+     * Retrieve the properties, the uid and the pid from the RawRecord.
+     *
+     * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
+     *   ReflectionClass of the RawRecord.
+     *
+     * @throws \ReflectionException
+     *
+     * @return array
+     *   The properties of the RawRecord, including uid and pid.
      */
     public function handle(ReflectionClass $ref): array
     {
-        return $this->retrieveRawRecordProperties($ref);
+        $properties = $this->retrieveProperties($ref);
+        if (!$ref->hasProperty('uid')) {
+            $properties['uid'] = $ref->retrieveValue($ref->getProperty('uid'));
+        }
+        if (!$ref->hasProperty('pid')) {
+            $properties['pid'] = $ref->retrieveValue($ref->getProperty('pid'));
+        }
+
+        return $properties;
     }
 
     /**
-     * @inheritDoc
+     * Retrieve 'properties' from the Record object. If it is a
+     * RecordPropertyClosure is, then instantiate it.
+     *
+     * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
+     * @return array
      */
-    public function getName(): string
+    protected function retrieveProperties(ReflectionClass $ref): array
     {
-        return 'RawRecord';
+        $result = [];
+
+        if (!$ref->hasProperty('properties')) {
+            // Huh, not what I expected.
+            // This is not a Record object, so we cannot retrieve the properties.
+            // But it is the right class?!?
+            return [];
+        }
+        $propertyReflection = $ref->getProperty('properties');
+        $ref->retrieveValue($propertyReflection);
+        foreach ($ref->retrieveValue($propertyReflection) as $property => $value) {
+            if ($value instanceof RecordPropertyClosure) {
+                $result[$property] = $value->instantiate();
+            } else {
+                $result[$property] = $value;
+            }
+        }
+        return $result;
     }
 }

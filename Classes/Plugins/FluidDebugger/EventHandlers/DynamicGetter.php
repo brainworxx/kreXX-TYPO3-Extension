@@ -53,7 +53,7 @@ use ReflectionMethod;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockData;
 
 /**
- * There are dynamic getter in TYPO3 13.4. We handle them here.
+ * There are dynamic getter in TYPO3 13.4. We handle some of them here.
  *
  * @see \TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockData::get()
  * @see \TYPO3\CMS\Core\Domain\Record::get()
@@ -85,16 +85,27 @@ class DynamicGetter implements
     protected array $retriever;
 
     /**
+     * The class names of the retrievers.
+     *
+     * @var string[]
+     */
+    protected array $processersClassNames = [
+        ContentBlocksRetriever::class,
+        DomainRecordRetriever::class,
+        RawRecordRetriever::class,
+        SettingsRetriever::class,
+    ];
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
 
-        $this->retriever[] = $pool->createClass(ContentBlocksRetriever::class);
-        $this->retriever[] = $pool->createClass(DomainRecordRetriever::class);
-        $this->retriever[] = $pool->createClass(RawRecordRetriever::class);
-        $this->retriever[] = $pool->createClass(SettingsRetriever::class);
+        foreach ($this->processersClassNames as $class) {
+            $this->retriever[] = $pool->createClass($class);
+        }
     }
 
     /**
@@ -120,7 +131,6 @@ class DynamicGetter implements
         foreach ($this->retriever as $retriever) {
             // Check if the retriever can handle the object.
             if ($retriever->canHandle($data)) {
-                $metaHelp = $this->pool->messages->getHelp('fluidMagicContentBlocks', [$retriever->getName()]);
                 foreach ($retriever->handle($ref) as $key => $value) {
                     // Iterate through the analysis result, and throw everything into the frontend.
                     $done[] = 'get' . ucfirst($key);
@@ -130,7 +140,7 @@ class DynamicGetter implements
                             ->setName($key)
                             ->setConnectorType(static::CONNECTOR_NORMAL_PROPERTY)
                             ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
-                            ->addToJson('metaHelp', $metaHelp)
+                            ->setHelpid('fluidMagicGetter')
                     );
                 }
                 $this->removeFromGetter($done, $callback);
