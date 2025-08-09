@@ -1,4 +1,4 @@
-6.1.0
+6.0.1
 - Added support for Emun default values.
 - Added flattened attribute analysis.
 - Change: Moved the comment retrieval class in the properties

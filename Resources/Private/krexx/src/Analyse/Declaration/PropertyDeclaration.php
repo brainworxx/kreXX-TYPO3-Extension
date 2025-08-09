@@ -88,7 +88,7 @@ class PropertyDeclaration extends AbstractDeclaration
      */
     public function retrieveNamedPropertyType(ReflectionProperty $refProperty): string
     {
-        if (method_exists($refProperty, 'hasType') && $refProperty->hasType()) {
+        if ($refProperty->hasType()) {
             return trim($this->retrieveNamedType($refProperty->getType()));
         }
 

@@ -311,6 +311,7 @@ class MetaTest extends AbstractHelper
     'stdClass',
     'DateTime',
     [],
+    stdClass::class,
 )]";
         $this->assertEquals($expectations, $metaResult['data']['Attributes']);
     }

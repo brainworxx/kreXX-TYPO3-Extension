@@ -352,7 +352,7 @@ class ThroughProperties extends AbstractCallback implements
             return $additional;
         }
 
-        if (method_exists($refProperty, 'hasType') && $refProperty->hasType()) {
+        if ($refProperty->hasType()) {
             // Typed properties where introduced in 7.4.
             // This one was either unset, or never received a value in the
             // first place. Either way, it's status is uninitialized.

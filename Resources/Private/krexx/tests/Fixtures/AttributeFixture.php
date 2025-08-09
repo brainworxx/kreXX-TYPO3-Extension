@@ -78,6 +78,7 @@ use stdClass;
     stdClass::class,
     DateTime::class,
     [],
+    new \stdClass(),
 )]
 class AttributeFixture
 {

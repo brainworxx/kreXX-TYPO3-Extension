@@ -100,6 +100,7 @@ class AttributesTest extends AbstractHelper
     'stdClass',
     'DateTime',
     [],
+    stdClass::class,
 )]";
         $this->assertEquals($expectations, $classAttributes);
 

@@ -115,32 +115,32 @@ class Attributes
         $result = $useIndention ? $this->indent($indention) : '';
         switch (true) {
             case is_null($parameter):
-                return $result . 'NULL,';
-
+                $result .= 'NULL,';
+                break;
             case is_string($parameter):
-                return $result . '\'' . $parameter . '\',';
-
+                $result .= '\'' . $parameter . '\',';
+                break;
             case is_numeric($parameter):
-                return $result . $parameter . ',';
-
+                $result .= $parameter . ',';
+                break;
             case $parameter === true:
-                return $result . 'TRUE,';
-
+                $result .= 'TRUE,';
+                break;
             case $parameter === false:
-                return $result . 'FALSE,';
-
+                $result .= 'FALSE,';
+                break;
             case is_array($parameter):
-                return $result . $this->handleArray($parameter, $indention) . ',';
-
+                $result .= $this->handleArray($parameter, $indention) . ',';
+                break;
             case $parameter instanceof UnitEnum:
-                return $result . get_class($parameter) . '::' . $parameter->name;
-
+                $result .= get_class($parameter) . '::' . $parameter->name;
+                break;
             case is_object($parameter):
                 // If the parameter is an object, we return its class name.
-                return $result . get_class($parameter) . '::class,';
+                $result .= get_class($parameter) . '::class,';
         }
 
-        return '';
+        return $result;
     }
 
     /**
