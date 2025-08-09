@@ -10,6 +10,9 @@ Changelog
 Changes:
     * [Feature] Added support for Emun default values.
     * [Feature] Added flattened attribute analysis.
+    * [Feature] Added support for Domain Record objects.
+    * [Feature] Added support for Raw Record objects.
+    * [Feature] Added support for Settings objects.
     * [Change] Moved the comment retrieval class in the properties iterator to the class variables.
     * [Change] Better and more clear extension description.
     * [Bugfix] Use the same translation for "Prune output" in  the backend module as in the debugger itself.

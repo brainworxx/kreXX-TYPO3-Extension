@@ -64,7 +64,8 @@
     }
   },
   "support": {
-    "issues": "https://github.com/brainworxx/kreXX-TYPO3-Extension/issues"
+    "issues": "https://github.com/brainworxx/kreXX-TYPO3-Extension/issues",
+    "docs": "https://docs.typo3.org/p/brainworxx/includekrexx/main/en-us/"
   },
   "scripts": {
     "test": "./vendor/bin/phpunit --color -d memory_limit=-1 -c Build/phpunit.xml",
