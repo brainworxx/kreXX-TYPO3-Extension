@@ -59,7 +59,7 @@ class DomainRecordRetriever extends RawRecordRetriever
     public function handle(ReflectionClass $ref): array
     {
         // First stop, we retrieve the properties from the Record object.
-        $result = $this->retrieveProperties($ref);
+        $result = parent::handle($ref);
 
         // Second stop, retrieve everything else from the RawRecord.
         if (!$ref->hasProperty('rawRecord')) {

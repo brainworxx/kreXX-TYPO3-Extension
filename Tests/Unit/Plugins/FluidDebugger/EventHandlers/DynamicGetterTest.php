@@ -56,6 +56,7 @@ use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockData;
 use TYPO3\CMS\Core\Domain\RawRecord;
 use TYPO3\CMS\Core\Domain\Record;
 use TYPO3\CMS\Core\Domain\Record\ComputedProperties;
+use TYPO3\CMS\Core\Domain\RecordPropertyClosure;
 use TYPO3\CMS\Core\Settings\Settings;
 
 #[CoversMethod(DynamicGetter::class, 'handle')]
@@ -67,7 +68,6 @@ use TYPO3\CMS\Core\Settings\Settings;
 #[CoversMethod(DomainRecordRetriever::class, 'handle')]
 #[CoversMethod(RawRecordRetriever::class, 'canHandle')]
 #[CoversMethod(RawRecordRetriever::class, 'handle')]
-#[CoversMethod(RawRecordRetriever::class, 'retrieveProperties')]
 #[CoversMethod(SettingsRetriever::class, 'canHandle')]
 #[CoversMethod(SettingsRetriever::class, 'handle')]
 class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface, CodegenConstInterface
@@ -100,6 +100,20 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
             'args' => [1],
         ];
 
+        $errorClosure = new RecordPropertyClosure(
+            function () {
+                throw new \RuntimeException('This is a test error.');
+            }
+        );
+        $troublePayload = [
+            'uid' => 1,
+            'pid' => 2,
+            'error' => $errorClosure,
+            'someData' => 'wat'
+        ];
+        $troubleRaw = new RawRecord(1, 2, $troublePayload, new ComputedProperties(), 'unit_test.1');
+        $troubleRecord = new Record($troubleRaw, $payload);
+
         $computedProperties = new ComputedProperties();
         $rawRecord = new RawRecord(1, 2, $payload, $computedProperties, 'unit_test');
         $record = new Record($rawRecord, $payload);
@@ -116,6 +130,8 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
             new ReflectionClass($contentBlockData),
             // The settings are handled by the SettingsRetriever.
             new ReflectionClass($settings),
+            // The trouble record does exactly this, causes trouble.
+            new ReflectionClass($troubleRecord),
         ];
 
         $getter = new DynamicGetter(Krexx::$pool);
@@ -192,13 +208,23 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
 
     protected function testResultNormal(array $result): void
     {
-    /** @var \Brainworxx\Krexx\Analyse\Model $model */
+        /** @var \Brainworxx\Krexx\Analyse\Model $model */
         $this->assertEquals('class', $result[0]->getName());
         $this->assertEquals(ContentBlockData::class, $result[0]->getData());
         $this->assertEquals('method', $result[1]->getName());
         $this->assertEquals('get', $result[1]->getData());
         $this->assertEquals('args', $result[2]->getName());
         $this->assertEquals([1], $result[2]->getData());
-        $this->assertFalse(isset($result[3]), 'There should be no fourth element in the result.');
+
+        if (empty($result[3])) {
+            return;
+        }
+
+        // Handling the trouble record.
+        $this->assertEquals('uid', $result[3]->getName());
+        $this->assertEquals(1, $result[3]->getData());
+        $this->assertEquals('pid', $result[4]->getName());
+        $this->assertEquals(2, $result[4]->getData());
+        $this->assertfalse(isset($result[5]), 'There should be no "error" property in the result. As well as no "someData" property.');
     }
 }

@@ -56,29 +56,16 @@ class RawRecordRetriever implements GetterRetrieverInterface
     }
 
     /**
-     * Retrieve the properties, the uid and the pid from the RawRecord.
+     * Retrieve 'properties' from the Record object. If it is a
+     * RecordPropertyClosure is, then instantiate it.
      *
      * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
      *   ReflectionClass of the RawRecord.
-     *
-     * @throws \ReflectionException
      *
      * @return array
      *   The properties of the RawRecord, including uid and pid.
      */
     public function handle(ReflectionClass $ref): array
-    {
-        return $this->retrieveProperties($ref);
-    }
-
-    /**
-     * Retrieve 'properties' from the Record object. If it is a
-     * RecordPropertyClosure is, then instantiate it.
-     *
-     * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
-     * @return array
-     */
-    protected function retrieveProperties(ReflectionClass $ref): array
     {
         $result = [];
 
