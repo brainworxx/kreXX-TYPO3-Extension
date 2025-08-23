@@ -5,7 +5,7 @@ Changelog
 =============================================================
 
 :Version: 6.1.0
-:Date: tbd
+:Date: 2025-08-23
 
 Changes:
     * [Feature] Added support for Emun default values.
@@ -16,7 +16,7 @@ Changes:
     * [Feature] Added documentation link to the composer.json.
     * [Change] Moved the comment retrieval class in the properties iterator to the class variables.
     * [Change] Better and more clear extension description.
-    * [Bugfix] Use the same translation for "Prune output" in  the backend module as in the debugger itself.
+    * [Bugfix] Use the same translation for "Prune output" in the backend module as in the debugger itself.
     * [Bugfix] Fixed the contact link in the documentation.
 
 :Version: 6.0.0
