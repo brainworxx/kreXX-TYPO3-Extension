@@ -13,6 +13,9 @@ Changes:
     * [Bugfix] Do not add double entries to the hidden properties list.
     * [Bugfix] The backtrace analysis is using the right color for strings again.
     * [Bugfix] Do not withhold empty metadata.
+    * [Bugfix] Added missing line breaks to the changelog.
+
+-----
 
 :Version: 6.1.0
 :Date: 2025-08-23
@@ -28,6 +31,8 @@ Changes:
     * [Change] Better and more clear extension description.
     * [Bugfix] Use the same translation for "Prune output" in the backend module as in the debugger itself.
     * [Bugfix] Fixed the contact link in the documentation.
+
+-----
 
 :Version: 6.0.0
 :Date: 2025-07-29
