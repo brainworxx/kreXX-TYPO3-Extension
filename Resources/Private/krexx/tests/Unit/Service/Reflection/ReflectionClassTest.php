@@ -57,6 +57,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(ReflectionClass::class, 'isPropertyUnset')]
 #[CoversMethod(ReflectionClass::class, 'getData')]
 #[CoversMethod(ReflectionClass::class, '__construct')]
+#[CoversMethod(ReflectionClass::class, 'getObjectVars')]
 class ReflectionClassTest extends AbstractHelper
 {
     /**
@@ -232,5 +233,29 @@ class ReflectionClassTest extends AbstractHelper
         $reflection = new ReflectionClass($fixture);
         $result = $reflection->getParentClass();
         $this->assertInstanceOf(ReflectionClass::class, $result);
+    }
+
+    /**
+     * Test the retrieval of the object vars.
+     */
+    public function testGetObjectVars()
+    {
+        $simple = new SimpleFixture();
+        $reflection = new ReflectionClass($simple);
+        $vars = $reflection->getObjectVars();
+        $this->assertCount(2, $vars);
+        $this->assertArrayHasKey('value1', $vars);
+        $this->assertArrayHasKey('value2', $vars);
+
+        $public = new PublicFixture();
+        $public->notSoSpecial = 'normal';
+
+        $reflection = new ReflectionClass($public);
+        $vars = $reflection->getObjectVars();
+        $this->assertCount(4, $vars);
+        $this->assertArrayHasKey('value1', $vars);
+        $this->assertArrayHasKey('value2', $vars);
+        $this->assertArrayHasKey('someValue', $vars);
+        $this->assertArrayHasKey('notSoSpecial', $vars);
     }
 }

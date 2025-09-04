@@ -121,7 +121,7 @@ class HiddenProperty extends UndeclaredProperty
             'textContent',
         ],
         DOMCharacterData::class => [
-           'data',
+            'data',
             'length',
         ],
         DOMDocumentType::class => [

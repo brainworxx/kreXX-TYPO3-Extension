@@ -132,7 +132,7 @@ class ThroughMeta extends AbstractCallback implements CallbackConstInterface
                             )
                     )
                 );
-            } elseif (!empty($metaData)) {
+            } else {
                 $output .= $this->handleNoneReflections($this->prepareModel($key, $metaData));
             }
         }

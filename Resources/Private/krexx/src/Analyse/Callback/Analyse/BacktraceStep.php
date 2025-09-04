@@ -218,7 +218,7 @@ class BacktraceStep extends AbstractCallback implements
                         ->setData($stepData[$type])
                         ->setName($name)
                         ->setNormal($stepData[$type])
-                        ->setType(static::TYPE_STRING . strlen($stepData[$type]))
+                        ->setType(static::TYPE_STRING)
                 )
             );
         }

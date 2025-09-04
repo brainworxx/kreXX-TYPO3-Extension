@@ -8,6 +8,11 @@ Changelog
 :Date: tbd
 
 Changes:
+    * [Feature] Added support for the \GdImage analysis.
+    * [Bugfix] Do not trigger PropertyHooks, LazyProxies und LazyGhosts when analysing properties.
+    * [Bugfix] Do not add double entries to the hidden properties list.
+    * [Bugfix] The backtrace analysis is using the right color for strings again.
+    * [Bugfix] Do not withhold empty metadata.
 
 :Version: 6.1.0
 :Date: 2025-08-23

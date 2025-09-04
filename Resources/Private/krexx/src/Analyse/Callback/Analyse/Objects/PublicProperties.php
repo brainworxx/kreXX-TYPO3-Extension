@@ -65,8 +65,6 @@ class PublicProperties extends AbstractObjectAnalysis
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $this->parameters[static::PARAM_REF];
         $data = $ref->getData();
-
-        $refProps = $ref->getProperties(ReflectionProperty::IS_PUBLIC);
         $publicProps = [];
 
         // Adding undeclared public properties to the dump.
@@ -80,11 +78,11 @@ class PublicProperties extends AbstractObjectAnalysis
         //
         // What is left are those special properties that were dynamically
         // set during runtime, but were not declared in the class.
-        foreach ($refProps as $refProp) {
-            $publicProps[$refProp->name] = true;
+        foreach ($ref->getProperties(ReflectionProperty::IS_PUBLIC) as $refProp) {
+            $publicProps[$refProp->name] = $refProp;
         }
 
-        $this->handleUndeclaredProperties($refProps, $data, $publicProps, $ref);
+        $refProps = $this->handleUndeclaredProperties($data, $publicProps, $ref);
         if (empty($refProps)) {
             return $output;
         }
@@ -102,42 +100,35 @@ class PublicProperties extends AbstractObjectAnalysis
      *
      * Also: Take care of the \DateTime properties anomaly.
      *
-     * @param ReflectionProperty[] $refProps
      * @param mixed $data
      * @param ReflectionProperty[] $publicProps
-     * @param ReflectionClass $ref
+     * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
+     * @return array
      */
     protected function handleUndeclaredProperties(
-        array &$refProps,
         $data,
         array $publicProps,
         ReflectionClass $ref
-    ): void {
-        try {
-            $undeclaredVars = get_object_vars($data);
-        } catch (\Throwable $e) {
-            // If we cannot get the object vars, we simply skip this step.
-            // This happens when the property access is triggering a
-            // faulty property hook, which throws an exception.
-            return;
-        }
+    ): array {
         // For every not-declared property, we add another reflection.
         // Those are simply added during runtime
-        foreach (array_keys(array_diff_key($undeclaredVars, $publicProps)) as $key) {
-            $refProps[$key] = new UndeclaredProperty($ref, $key);
+        foreach (array_keys(array_diff_key($ref->getObjectVars(), $publicProps)) as $key) {
+            $publicProps[$key] = new UndeclaredProperty($ref, $key);
         }
 
         // Test for hidden properties
         $missingProperties = [];
         foreach (HiddenProperty::HIDDEN_LIST as $className => $propertyNames) {
             if ($data instanceof $className) {
-                $missingProperties = array_diff($propertyNames, array_keys($refProps));
+                $missingProperties = array_diff($propertyNames, $publicProps);
                 break;
             }
         }
 
         foreach ($missingProperties as $propertyName) {
-            $refProps[$propertyName] = new HiddenProperty($ref, $propertyName);
+            $publicProps[$propertyName] = new HiddenProperty($ref, $propertyName);
         }
+
+        return $publicProps;
     }
 }
