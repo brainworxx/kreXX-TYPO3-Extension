@@ -33,7 +33,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Unit\Plugins\FluidDebugger\EventHandlers;
+namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger\EventHandlers;
 
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\ContentBlocksRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\DomainRecordRetriever;
@@ -196,7 +196,7 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
         $this->assertEquals('_name', $result[5]->getName());
         $this->assertEquals('unit_test', $result[5]->getData());
         $this->assertEquals('_grids', $result[6]->getName());
-        $this->assertEquals([], $result[6]->getData());
+        $this->assertEmpty($result[6]->getData());
 
         $this->assertFalse(isset($result[7]), 'There should be no seventh element in the result.');
     }
