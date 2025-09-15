@@ -43,7 +43,7 @@ use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockData;
 /**
  * Retrieve the dynamic getter values of a ContentBlockData object.
  */
-class ContentBlocksRetriever implements GetterRetrieverInterface
+class ContentBlocksRetriever extends AbstractGetterRetriever implements GetterRetrieverInterface
 {
     /**
      * {@inheritDoc}
@@ -74,6 +74,6 @@ class ContentBlocksRetriever implements GetterRetrieverInterface
             $record = $ref->retrieveValue($ref->getProperty('_record'));
             $result = array_merge($record->toArray(), $result);
         }
-        return $result;
+        return $this->processObjectValues($result);
     }
 }

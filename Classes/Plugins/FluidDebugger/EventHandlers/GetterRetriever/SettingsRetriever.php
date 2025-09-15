@@ -44,7 +44,7 @@ use TYPO3\CMS\Core\Settings\Settings;
 /**
  * Retrieve the dynamic getter values of a Settings object.
  */
-class SettingsRetriever implements GetterRetrieverInterface
+class SettingsRetriever extends AbstractGetterRetriever implements GetterRetrieverInterface
 {
     /**
      * @inheritDoc
@@ -64,6 +64,6 @@ class SettingsRetriever implements GetterRetrieverInterface
         }
 
         $settingsPropertyRef = $ref->getProperty('settings');
-        return $ref->retrieveValue($settingsPropertyRef);
+        return $this->processObjectValues($ref->retrieveValue($settingsPropertyRef));
     }
 }

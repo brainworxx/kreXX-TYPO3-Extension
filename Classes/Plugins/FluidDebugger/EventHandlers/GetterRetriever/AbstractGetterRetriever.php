@@ -39,41 +39,47 @@ namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetr
 
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Throwable;
-use TYPO3\CMS\Core\Domain\RawRecord;
 use TYPO3\CMS\Core\Domain\RecordPropertyClosure;
 
-/**
- * Retrieve the dynamic getter values of a RawRecord object.
- */
-class RawRecordRetriever extends AbstractGetterRetriever implements GetterRetrieverInterface
+abstract class AbstractGetterRetriever
 {
     /**
-     * @inheritDoc
+     * Can we get the dynamic getters for the given object?
+     *
+     * @param object $object
+     *   The object. What else?
+     *
+     * @return bool
+     *   True if we can handle the object, false otherwise.
      */
-    public function canHandle(object $object): bool
-    {
-        return $object instanceof RawRecord;
-    }
+    abstract public function canHandle(object $object): bool;
 
     /**
-     * Retrieve 'properties' from the Record object. If it is a
-     * RecordPropertyClosure is, then instantiate it.
+     * Retrieve the dynamic getters for the given object.
      *
-     * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
-     *   ReflectionClass of the RawRecord.
+     * @param ReflectionClass $ref
+     *   The reflection class of the object.
      *
      * @return array
-     *   The properties of the RawRecord, including uid and pid.
+     *   An array of dynamic getters, where the key is the getter name and the value is the method name.
      */
-    public function handle(ReflectionClass $ref): array
-    {
-        if (!$ref->hasProperty('properties')) {
-            // Huh, not what I expected.
-            // This is not a Record object, so we cannot retrieve the properties.
-            // But it is the right class?!?
-            return [];
-        }
+    abstract public function handle(ReflectionClass $ref): array;
 
-        return $this->processObjectValues($ref->retrieveValue($ref->getProperty('properties')));
+    protected function processObjectValues(array $values): array
+    {
+        $result = [];
+        foreach ($values as $property => $value) {
+            if ($value instanceof RecordPropertyClosure) {
+                try {
+                    $result[$property] = $value->instantiate();
+                } catch (Throwable $e) {
+                    // Do nothing.
+                    // We skip this one.
+                }
+            } else {
+                $result[$property] = $value;
+            }
+        }
+        return $result;
     }
 }

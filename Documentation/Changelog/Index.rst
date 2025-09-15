@@ -14,6 +14,7 @@ Changes:
     * [Bugfix] The backtrace analysis is using the right color for strings again.
     * [Bugfix] Do not withhold empty metadata.
     * [Bugfix] Added missing line breaks to the changelog.
+    * [Bugfix] Resolve the RecordPropertyClosure in all Fluid GetterRetrievers.
 
 -----
 

@@ -78,12 +78,12 @@ class DomainRecordRetriever extends RawRecordRetriever
             return $result;
         }
         $rawRecordType = $rawRecordRef->retrieveValue($rawRecordRef->getProperty('type'));
-        $rawRecordValues = parent::handle($rawRecordRef);
+        $rawRecordValues = $this->processObjectValues(parent::handle($rawRecordRef));
         if (strpos($rawRecordType, '.') !== false) {
             // If the type contains a dot, we only merge the uid and pid.
             $result['uid'] = $rawRecordValues['uid'] ?? null;
             $result['pid'] = $rawRecordValues['pid'] ?? null;
-            return $result;
+            return $this->processObjectValues($result);
         }
 
         return array_merge($result, $rawRecordValues);
