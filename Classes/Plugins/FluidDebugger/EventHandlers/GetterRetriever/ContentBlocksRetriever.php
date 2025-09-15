@@ -43,7 +43,7 @@ use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockData;
 /**
  * Retrieve the dynamic getter values of a ContentBlockData object.
  */
-class ContentBlocksRetriever extends AbstractGetterRetriever implements GetterRetrieverInterface
+class ContentBlocksRetriever extends AbstractGetterRetriever
 {
     /**
      * {@inheritDoc}

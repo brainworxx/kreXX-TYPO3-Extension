@@ -78,7 +78,7 @@ class DynamicGetter implements
     /**
      * The retriever for the dynamic getters.
      *
-     * @var \Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\GetterRetrieverInterface[]
+     * @var \Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\AbstractGetterRetriever[]
      *   The retriever is an array of getter retrievers, which can handle the
      *   given object.
      */

@@ -45,7 +45,7 @@ use TYPO3\CMS\Core\Domain\RecordPropertyClosure;
 /**
  * Retrieve the dynamic getter values of a RawRecord object.
  */
-class RawRecordRetriever extends AbstractGetterRetriever implements GetterRetrieverInterface
+class RawRecordRetriever extends AbstractGetterRetriever
 {
     /**
      * @inheritDoc

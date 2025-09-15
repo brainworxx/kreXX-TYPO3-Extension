@@ -35,9 +35,9 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger\EventHandlers;
 
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\AbstractGetterRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\ContentBlocksRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\DomainRecordRetriever;
-use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\GetterRetrieverInterface;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\RawRecordRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\SettingsRetriever;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
@@ -70,6 +70,7 @@ use TYPO3\CMS\Core\Settings\Settings;
 #[CoversMethod(RawRecordRetriever::class, 'handle')]
 #[CoversMethod(SettingsRetriever::class, 'canHandle')]
 #[CoversMethod(SettingsRetriever::class, 'handle')]
+#[CoversMethod(AbstractGetterRetriever::class, 'processObjectValues')]
 class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface, CodegenConstInterface
 {
     /**
@@ -82,7 +83,7 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
 
         foreach ($this->retrieveValueByReflection('retriever', $getter) as $retriever) {
             $this->assertTrue(
-                $retriever instanceof GetterRetrieverInterface,
+                $retriever instanceof AbstractGetterRetriever,
                 'The retriever ' .  get_class($retriever) .  '  should implement the GetterRetrieverInterface.'
             );
         }

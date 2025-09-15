@@ -37,14 +37,13 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever;
 
-use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\GetterRetrieverInterface;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use TYPO3\CMS\Core\Settings\Settings;
 
 /**
  * Retrieve the dynamic getter values of a Settings object.
  */
-class SettingsRetriever extends AbstractGetterRetriever implements GetterRetrieverInterface
+class SettingsRetriever extends AbstractGetterRetriever
 {
     /**
      * @inheritDoc
