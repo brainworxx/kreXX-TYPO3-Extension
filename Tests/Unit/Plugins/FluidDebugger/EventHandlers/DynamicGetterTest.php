@@ -38,6 +38,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger\EventHandlers
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\AbstractGetterRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\ContentBlocksRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\DomainRecordRetriever;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\GridDataRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\RawRecordRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\SettingsRetriever;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
@@ -53,6 +54,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 use ReflectionMethod;
 use stdClass;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockData;
+use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockGridData;
 use TYPO3\CMS\Core\Domain\RawRecord;
 use TYPO3\CMS\Core\Domain\Record;
 use TYPO3\CMS\Core\Domain\Record\ComputedProperties;
@@ -62,6 +64,7 @@ use TYPO3\CMS\Core\Settings\Settings;
 #[CoversMethod(DynamicGetter::class, 'handle')]
 #[CoversMethod(DynamicGetter::class, '__construct')]
 #[CoversMethod(DynamicGetter::class, 'removeFromGetter')]
+#[CoversMethod(DynamicGetter::class, 'iterateResults')]
 #[CoversMethod(ContentBlocksRetriever::class, 'canHandle')]
 #[CoversMethod(ContentBlocksRetriever::class, 'handle')]
 #[CoversMethod(DomainRecordRetriever::class, 'canHandle')]
@@ -70,6 +73,8 @@ use TYPO3\CMS\Core\Settings\Settings;
 #[CoversMethod(RawRecordRetriever::class, 'handle')]
 #[CoversMethod(SettingsRetriever::class, 'canHandle')]
 #[CoversMethod(SettingsRetriever::class, 'handle')]
+#[CoversMethod(GridDataRetriever::class, 'canHandle')]
+#[CoversMethod(GridDataRetriever::class, 'handle')]
 #[CoversMethod(AbstractGetterRetriever::class, 'processObjectValues')]
 class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface, CodegenConstInterface
 {
@@ -112,6 +117,13 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
             'error' => $errorClosure,
             'someData' => 'wat'
         ];
+        $gridPayload = [
+            'someGrid' => new RecordPropertyClosure(
+                function () {
+                    return [new stdClass(), new stdClass()];
+                }
+            )
+        ];
         $troubleRaw = new RawRecord(1, 2, $troublePayload, new ComputedProperties(), 'unit_test.1');
         $troubleRecord = new Record($troubleRaw, $payload);
 
@@ -133,6 +145,8 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
             new ReflectionClass($settings),
             // The trouble record does exactly this, causes trouble.
             new ReflectionClass($troubleRecord),
+            // The grid data is handled by the GridDataRetriever.
+            new ReflectionClass(new ContentBlockGridData($gridPayload)),
         ];
 
         $getter = new DynamicGetter(Krexx::$pool);
@@ -171,12 +185,31 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
                 case RawRecord::class:
                     $this->testResultNormal($result);
                     break;
+
+                case ContentBlockGridData::class:
+                    $this->testContentBlockGridData($result);
+                    break;
                 default:
                     $this->fail('Unknown subject class: ' . $subjectClass);
             }
         }
     }
 
+    /**
+     * @param \Brainworxx\Krexx\Analyse\Model[] $result
+     */
+    protected function testContentBlockGridData(array $result): void
+    {
+        $this->assertCount(1, $result);
+        $this->assertEquals('someGrid', $result[0]->getName());
+        $this->assertCount(2, $result[0]->getData());
+        $this->assertInstanceOf(stdClass::class, $result[0]->getData()[0]);
+        $this->assertInstanceOf(stdClass::class, $result[0]->getData()[1]);
+    }
+
+    /**
+     * @param \Brainworxx\Krexx\Analyse\Model[] $result
+     */
     protected function testResultContentBlockData(array $result): void
     {
         // The special additional payload from ContentBlockData

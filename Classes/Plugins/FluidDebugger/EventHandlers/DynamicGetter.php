@@ -39,6 +39,7 @@ namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers;
 
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\ContentBlocksRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\DomainRecordRetriever;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\GridDataRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\RawRecordRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\SettingsRetriever;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
@@ -93,6 +94,7 @@ class DynamicGetter implements
         ContentBlocksRetriever::class,
         DomainRecordRetriever::class,
         RawRecordRetriever::class,
+        GridDataRetriever::class,
         SettingsRetriever::class,
     ];
 
@@ -124,31 +126,52 @@ class DynamicGetter implements
         /** @var ReflectionClass $ref */
         $ref = $callback->getParameters()[static::PARAM_REF];
         $data = $ref->getData();
-        $result = '';
-        $done = [];
-        $routing = $this->pool->routing;
 
         foreach ($this->retriever as $retriever) {
             // Check if the retriever can handle the object.
             if ($retriever->canHandle($data)) {
-                foreach ($retriever->handle($ref) as $key => $value) {
-                    // Iterate through the analysis result, and throw everything into the frontend.
-                    $done[] = 'get' . ucfirst($key);
-                    $result .= $routing->analysisHub(
-                        $this->pool->createClass(Model::class)
-                            ->setData($value)
-                            ->setName($key)
-                            ->setConnectorType(static::CONNECTOR_NORMAL_PROPERTY)
-                            ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
-                            ->setHelpid('fluidMagicGetter')
-                    );
+                $getters = $retriever->handle($ref);
+                if (empty($getters)) {
+                    // Nothing to do.
+                    continue;
                 }
-                $this->removeFromGetter($done, $callback);
-
-                // Add an HR after the dynamic getter output, just because.
-                return $result . $this->pool->render->renderSingeChildHr();
+                return $this->iterateResults($getters, $callback) . $this->pool->render->renderSingeChildHr();
             }
         }
+
+        return '';
+    }
+
+    /**
+     * Iterate through the results of the dynamic getter, and add them to the output.
+     *
+     * @param array $getters
+     *   The results of the dynamic getter.
+     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback $callback
+     *   The actual callback, so that we can remove the duplicates from the
+     *   further getter analysis.
+     *
+     * @return string
+     *   The generated markup.
+     */
+    protected function iterateResults(array $getters, AbstractCallback $callback): string
+    {
+        $routing = $this->pool->routing;
+        $result = '';
+        $done = [];
+        foreach ($getters as $key => $value) {
+            // Iterate through the analysis result, and throw everything into the frontend.
+            $done[] = 'get' . ucfirst($key);
+            $result .= $routing->analysisHub(
+                $this->pool->createClass(Model::class)
+                    ->setData($value)
+                    ->setName($key)
+                    ->setConnectorType(static::CONNECTOR_NORMAL_PROPERTY)
+                    ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
+                    ->setHelpid('fluidMagicGetter')
+            );
+        }
+        $this->removeFromGetter($done, $callback);
 
         return $result;
     }

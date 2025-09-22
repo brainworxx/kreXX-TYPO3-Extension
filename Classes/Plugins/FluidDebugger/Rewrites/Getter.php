@@ -56,7 +56,9 @@ class Getter extends OriginalGetter
 
         // Get all public methods.
         $this->retrieveMethodList($ref);
-        if (empty($this->normalGetter + $this->isGetter + $this->hasGetter)) {
+        // The 'get' method indicated dynamic fluid getter.
+        // If there are no other getter methods, we do not show this section.
+        if (empty($this->normalGetter + $this->isGetter + $this->hasGetter) && !$ref->hasMethod('get')) {
             // There are no getter methods in here.
             return '';
         }
