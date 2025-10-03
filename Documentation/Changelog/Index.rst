@@ -5,7 +5,7 @@ Changelog
 =============================================================
 
 :Version: 6.1.1
-:Date: tbd
+:Date: 2025-10-03
 
 Changes:
     * [Feature] Added support for the \GdImage analysis.
