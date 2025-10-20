@@ -64,7 +64,6 @@ class FlexFormParserTest extends AbstractHelper
      */
     public function testHandleError()
     {
-        $flexFormParser = new FlexFormParser(Krexx::$pool);
         $model = new Model(Krexx::$pool);
         $meta = [];
         $callback = new CallbackNothing(Krexx::$pool);
@@ -76,6 +75,8 @@ class FlexFormParserTest extends AbstractHelper
             ->method('convertFlexFormContentToArray')
             ->willThrowException(new \Exception());
         $this->injectIntoGeneralUtility(FlexFromServiceCore::class, $flexFormServiceMock);
+        $flexFormParser = new FlexFormParser(Krexx::$pool);
+
         $this->assertEquals(
             '',
             $flexFormParser->handle($callback, $model),
@@ -88,7 +89,6 @@ class FlexFormParserTest extends AbstractHelper
      */
     public function testHandle()
     {
-        $flexFormParser = new FlexFormParser(Krexx::$pool);
         $model = new Model(Krexx::$pool);
         $meta = [];
         $callback = new CallbackNothing(Krexx::$pool);
@@ -125,6 +125,7 @@ class FlexFormParserTest extends AbstractHelper
             ->with($fixture)
             ->willReturn($expectation);
         $this->injectIntoGeneralUtility(FlexFromServiceCore::class, $flexFormServiceMock);
+        $flexFormParser = new FlexFormParser(Krexx::$pool);
 
         // Run the test.
         $flexFormParser->handle($callback, $model);

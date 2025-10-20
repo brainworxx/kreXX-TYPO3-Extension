@@ -8,6 +8,7 @@ Changelog
 :Date: tbd
 
 Changes:
+    * [Bugfix] Do not add an empty flexform analysis to the meta data.
 
 -----
 
