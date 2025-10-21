@@ -9,6 +9,7 @@ Changelog
 
 Changes:
     * [Bugfix] Do not add an empty flexform analysis to the meta data.
+    * [Bugfix] Use a better meta translation for the flexform analysis.
 
 -----
 

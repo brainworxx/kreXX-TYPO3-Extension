@@ -40,6 +40,7 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
+use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use TYPO3\CMS\Core\Service\FlexFormService as FlexFromServiceCore;
 use TYPO3\CMS\Extbase\Service\FlexFormService as FlexFromServiceExtbase;
@@ -125,14 +126,16 @@ class FlexFormParserTest extends AbstractHelper
             ->with($fixture)
             ->willReturn($expectation);
         $this->injectIntoGeneralUtility(FlexFromServiceCore::class, $flexFormServiceMock);
+        // Load the TYPO3 language files
+        Registration::registerAdditionalHelpFile(KREXX_DIR . '..' .
+            DIRECTORY_SEPARATOR . 'Language' . DIRECTORY_SEPARATOR . 't3.kreXX.ini');
+        Krexx::$pool->messages->readHelpTexts();
         $flexFormParser = new FlexFormParser(Krexx::$pool);
 
         // Run the test.
         $flexFormParser->handle($callback, $model);
         $result = $model->getParameters()[CallbackConstInterface::PARAM_DATA];
 
-
-        $this->assertEquals($result['Decoded xml'], $expectation, 'Should look the same');
-
+        $this->assertEquals($result['Decoded flexform data'], $expectation, 'Should look the same');
     }
 }

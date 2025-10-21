@@ -89,7 +89,7 @@ class FlexFormParser implements EventHandlerInterface, CallbackConstInterface
                 return '';
             }
 
-            $meta[$this->pool->messages->getHelp('metaDecodedXml')] = $result;
+            $meta[$this->pool->messages->getHelp('TYPO3metaDecodedFlexform')] = $result;
             $model->addParameter(static::PARAM_DATA, $meta);
         } catch (Throwable $exception) {
             // Do nothing.
