@@ -86,6 +86,6 @@ class DomainRecordRetriever extends RawRecordRetriever
             return $this->processObjectValues($result);
         }
 
-        return array_merge($result, $rawRecordValues);
+        return array_merge($rawRecordValues, $result);
     }
 }

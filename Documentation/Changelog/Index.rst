@@ -13,6 +13,7 @@ Changes:
     * [Bugfix] Closed ressources are not recognised as a ressource by the resource analysis.
     * [Bugfix] Do not add an empty flexform analysis to the meta data.
     * [Bugfix] Use a better meta translation for the flexform analysis.
+    * [Bugfix] The values from the RawRecord are overwriting the values from the properties in the DomainRecord analysis.
 
 -----
 
