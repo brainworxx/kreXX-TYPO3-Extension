@@ -14,6 +14,7 @@ Changes:
     * [Bugfix] Do not add an empty flexform analysis to the meta data.
     * [Bugfix] Use a better meta translation for the flexform analysis.
     * [Bugfix] The values from the RawRecord are overwriting the values from the properties in the DomainRecord analysis.
+    * [Bugfix] The Fluid caller finder does not reset its state between multiple calls.
 
 -----
 

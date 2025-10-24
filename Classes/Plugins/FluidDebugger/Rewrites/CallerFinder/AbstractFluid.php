@@ -196,6 +196,9 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
      */
     public function findCaller(string $headline, $data): array
     {
+        // Reset the varname from the last call.
+        $this->varname = static::FLUID_VARIABLE;
+
         $messages = $this->pool->messages;
         $helpKey = 'fluidAnalysis';
 
