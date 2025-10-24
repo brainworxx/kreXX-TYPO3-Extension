@@ -8,6 +8,9 @@ Changelog
 :Date: tbd
 
 Changes:
+    * [Bugfix] Removed the last deprecation in the unit tests.
+    * [Bugfix] Do not clutter up the output by analysing internal callables in the string analysis.
+    * [Bugfix] Closed ressources are not recognised as a ressource by the resource analysis.
     * [Bugfix] Do not add an empty flexform analysis to the meta data.
     * [Bugfix] Use a better meta translation for the flexform analysis.
 

@@ -66,7 +66,7 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
     public function canHandle(Model $model): bool
     {
         $this->model = $model;
-        return is_resource($model->getData());
+        return is_resource($model->getData()) || gettype($model->getData()) === 'resource (closed)';
     }
 
     /**

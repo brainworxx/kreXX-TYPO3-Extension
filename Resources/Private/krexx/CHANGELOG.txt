@@ -1,3 +1,10 @@
+6.0.3
+- Bugfix: Removed the last deprecation in the unit tests.
+- Bugfix: Do not clutter up the output by analysing internal
+  callables in the string analysis.
+- Bugfix: Closed ressources are not recognised as a ressource
+  by the resource analysis.
+
 6.0.2
 - Added support for the \GdImage analysis.
 - Bugfix: Do not trigger PropertyHooks, LazyProxies und LazyGhosts

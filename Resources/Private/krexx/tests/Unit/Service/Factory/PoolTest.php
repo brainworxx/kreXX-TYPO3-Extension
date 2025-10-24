@@ -132,12 +132,10 @@ class PoolTest extends AbstractHelper
         // Log folder is not writable
         $filePutContents = $this->getFunctionMock(static::MISC_NAMESPACE, 'file_put_contents');
         $filePutContents->expects($this->exactly(2))
-            ->will(
-                $this->returnValueMap([
-                    [Krexx::$pool->config->getChunkDir() . $filename, 'x', false],
-                    [Krexx::$pool->config->getLogDir() . $filename, 'x', false]
-                ])
-            );
+            ->willReturnMap([
+                [Krexx::$pool->config->getChunkDir() . $filename, 'x', false],
+                [Krexx::$pool->config->getLogDir() . $filename, 'x', false]
+            ]);
         $unlink = $this->getFunctionMock(static::MISC_NAMESPACE, 'unlink');
         // Ther was no file "created", hence there is no unlink'ing done.
         $unlink->expects($this->never());

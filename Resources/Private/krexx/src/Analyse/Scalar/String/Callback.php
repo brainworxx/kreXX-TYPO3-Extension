@@ -96,6 +96,11 @@ class Callback extends AbstractScalarAnalysis
             return [];
         }
 
+        if ($reflectionFunction->isInternal()) {
+            // We do not analyse internal functions.
+            return [];
+        }
+
         // Stitching together the main analysis.
         /** @var FunctionDeclaration $functionDeclaration */
         $functionDeclaration = $this->pool->createClass(FunctionDeclaration::class);
