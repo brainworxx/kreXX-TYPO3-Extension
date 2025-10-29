@@ -8,6 +8,7 @@ Changelog
 :Date: tbd
 
 Changes:
+    * [Feature] Updated to Aimeos 2025.10.
     * [Bugfix] Removed the last deprecation in the unit tests.
     * [Bugfix] Do not clutter up the output by analysing internal callables in the string analysis.
     * [Bugfix] Closed ressources are not recognised as a ressource by the resource analysis.

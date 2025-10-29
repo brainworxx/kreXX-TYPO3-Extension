@@ -26,7 +26,8 @@ jobs:
           - { php: 8.2, TYPO3: ^12.4, Aimeos: ^23, CodeClimate: no, ContentBlocks: no }
           - { php: 8.3, TYPO3: ^12.4, Aimeos: ^24, CodeClimate: no, ContentBlocks: no }
           - { php: 8.3, TYPO3: ^13.4, Aimeos: ^24, CodeClimate: no, ContentBlocks: yes }
-          - { php: 8.4, TYPO3: ^13.4, Aimeos: ^24, CodeClimate: yes, ContentBlocks: yes }
+          - { php: 8.4, TYPO3: ^13.4, Aimeos: ^24, CodeClimate: no, ContentBlocks: yes }
+          - { php: 8.4, TYPO3: ^13.4, Aimeos: ^25, CodeClimate: yes, ContentBlocks: yes }
 
     steps:
     - name: Checkout
