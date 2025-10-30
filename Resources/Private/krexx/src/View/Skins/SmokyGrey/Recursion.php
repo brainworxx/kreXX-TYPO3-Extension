@@ -41,6 +41,11 @@ use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Redners a recursion.
+ *
+ * @deprecated
+ *   Since 6.1.3, will be removed. Not sure why it was there in the first place.
+ * @codeCoverageIgnore
+ *  We are not testing deprecated code.
  */
 trait Recursion
 {

@@ -238,7 +238,9 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/FatalMain.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Footer.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Header.php';
+        // @deprecated
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Recursion.php';
+        // @deprecated
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/SingleEditableChild.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/ConnectorRight.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Help.php';

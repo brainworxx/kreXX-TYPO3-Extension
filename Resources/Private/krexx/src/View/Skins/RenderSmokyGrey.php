@@ -53,7 +53,6 @@ use Brainworxx\Krexx\View\Skins\SmokyGrey\SingleEditableChild;
 class RenderSmokyGrey extends RenderHans
 {
     use ExpandableChild;
-    use Recursion;
     use SingleEditableChild;
     use Button;
     use Header;
