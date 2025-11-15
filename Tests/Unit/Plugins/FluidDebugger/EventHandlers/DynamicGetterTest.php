@@ -38,6 +38,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger\EventHandlers
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\AbstractGetterRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\ContentBlocksRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\DomainRecordRetriever;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\FlexFormRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\GridDataRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\RawRecordRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\SettingsRetriever;
@@ -55,6 +56,7 @@ use ReflectionMethod;
 use stdClass;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockData;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockGridData;
+use TYPO3\CMS\Core\Domain\FlexFormFieldValues;
 use TYPO3\CMS\Core\Domain\RawRecord;
 use TYPO3\CMS\Core\Domain\Record;
 use TYPO3\CMS\Core\Domain\Record\ComputedProperties;
@@ -75,6 +77,8 @@ use TYPO3\CMS\Core\Settings\Settings;
 #[CoversMethod(SettingsRetriever::class, 'handle')]
 #[CoversMethod(GridDataRetriever::class, 'canHandle')]
 #[CoversMethod(GridDataRetriever::class, 'handle')]
+#[CoversMethod(FlexFormRetriever::class, 'canHandle')]
+#[CoversMethod(FlexformRetriever::class, 'handle')]
 #[CoversMethod(AbstractGetterRetriever::class, 'processObjectValues')]
 class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface, CodegenConstInterface
 {
@@ -132,6 +136,16 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
         $record = new Record($rawRecord, $payload);
         $contentBlockData = new ContentBlockData($record, 'unit_test');
         $settings = new Settings($payload);
+        $flexForm = new FlexFormFieldValues([
+            'justAsheet' => [
+                'field1' => 'value1',
+                'field2' => 'value2',
+                'field3' => 'value3'
+            ],
+            'anotherSheet' => [
+                'field3' => 'anotherValue1'
+            ]
+        ]);
         $testSubjects = [
             // The computed properties are not handled at all.
             new ReflectionClass($computedProperties),
@@ -147,6 +161,8 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
             new ReflectionClass($troubleRecord),
             // The grid data is handled by the GridDataRetriever.
             new ReflectionClass(new ContentBlockGridData($gridPayload)),
+            // The flex form field values is handled by the FlexFormRetriever.
+            new ReflectionClass($flexForm),
         ];
 
         $getter = new DynamicGetter(Krexx::$pool);
@@ -188,6 +204,17 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
 
                 case ContentBlockGridData::class:
                     $this->testContentBlockGridData($result);
+                    break;
+                case FlexFormFieldValues::class:
+                    $this->assertCount(3, $result);
+                    $this->assertEquals('field1', $result[0]->getName());
+                    $this->assertEquals('value1', $result[0]->getData());
+                    $this->assertEquals('field2', $result[1]->getName());
+                    $this->assertEquals('value2', $result[1]->getData());
+                    $this->assertEquals('field3', $result[2]->getName());
+                    $this->assertNull($result[2]->getData(), 'The field3 is duplicated, so its value must be null.');
+                    $messages = Krexx::$pool->messages->getMessages();
+                    $this->assertCount(1, $messages, 'There should be one message about the broken flexform.');
                     break;
                 default:
                     $this->fail('Unknown subject class: ' . $subjectClass);

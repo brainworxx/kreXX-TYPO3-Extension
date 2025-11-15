@@ -5,10 +5,11 @@ Changelog
 =============================================================
 
 :Version: 6.1.2
-:Date: 2025-11-15
+:Date: tbd
 
 Changes:
     * [Feature] Updated to Aimeos 2025.10.
+    * [Feature] Added support for FlexFormFieldValues objects.
     * [Change] Deprecated the Smokey Grey recursion special handling. Not sure why it was there in the first place.
     * [Bugfix] Removed the last deprecation in the unit tests.
     * [Bugfix] Do not clutter up the output by analysing internal callables in the string analysis.
@@ -25,7 +26,7 @@ Changes:
 
 Changes:
     * [Feature] Added support for the \GdImage analysis.
-    * [Feature] Added Support for ContentBlockGridData objects.
+    * [Feature] Added support for ContentBlockGridData objects.
     * [Bugfix] Do not trigger PropertyHooks, LazyProxies und LazyGhosts when analysing properties.
     * [Bugfix] Do not add double entries to the hidden properties list.
     * [Bugfix] The backtrace analysis is using the right color for strings again.

@@ -39,6 +39,7 @@ namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers;
 
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\ContentBlocksRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\DomainRecordRetriever;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\FlexFormRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\GridDataRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\RawRecordRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\SettingsRetriever;
@@ -96,6 +97,7 @@ class DynamicGetter implements
         RawRecordRetriever::class,
         GridDataRetriever::class,
         SettingsRetriever::class,
+        FlexFormRetriever::class,
     ];
 
     /**
