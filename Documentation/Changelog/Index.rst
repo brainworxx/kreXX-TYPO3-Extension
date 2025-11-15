@@ -5,7 +5,7 @@ Changelog
 =============================================================
 
 :Version: 6.1.2
-:Date: tbd
+:Date: 2025-11-15
 
 Changes:
     * [Feature] Updated to Aimeos 2025.10.
