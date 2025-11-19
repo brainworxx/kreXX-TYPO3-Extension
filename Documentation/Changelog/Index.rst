@@ -8,6 +8,7 @@ Changelog
 :Date: tbd
 
 Changes:
+    * [Feature] Updated to TYPO3 14.0.
 
 -----
 

@@ -6,8 +6,9 @@ services:
 
   Brainworxx\Includekrexx\:
     resource: '../Classes/*'
+    # Exclude everything from Modules folder, due to the TYPO3 13/14 compatibility hack.
+    exclude: '../Classes/Modules/*'
 
-# Make sure that we can use the Typo3DbQueryParser outside of
-# extbase.
+  # Make sure that we can use the Typo3DbQueryParser outside extbase.
   Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQueryParser:
     public: true

@@ -161,9 +161,13 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
             new ReflectionClass($troubleRecord),
             // The grid data is handled by the GridDataRetriever.
             new ReflectionClass(new ContentBlockGridData($gridPayload)),
-            // The flex form field values is handled by the FlexFormRetriever.
-            new ReflectionClass($flexForm),
         ];
+
+        // We do not add the flexform retriever to the list in TYPO3 14.0 and higher,
+        // because there was a getter added directly to the FlexFormFieldValues class.
+        if (!method_exists($flexForm, 'getSheets')) {
+            $testSubjects[] = new ReflectionClass($flexForm);
+        }
 
         $getter = new DynamicGetter(Krexx::$pool);
         /**

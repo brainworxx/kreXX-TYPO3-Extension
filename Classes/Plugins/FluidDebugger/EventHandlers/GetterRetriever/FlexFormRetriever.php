@@ -41,11 +41,20 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use TYPO3\CMS\Core\Domain\FlexFormFieldValues;
 
+/**
+ * Retrieving the values from a FlexFormFieldValues object.
+ *
+ * @deprecated
+ *   Will be removed as soon as we drop support for TYPO3 13.
+ */
 class FlexFormRetriever extends AbstractGetterRetriever
 {
-
     /**
      * We only handle flex form field values
+     *
+     * TYPO3 14 has the 'getSheets' method, which is visible in the debug output
+     * by default.
+     * TYPO3 13 does not have this method, so we need to handle it here.
      *
      * @param object $object
      *   The possible flexform fields object.
@@ -55,7 +64,8 @@ class FlexFormRetriever extends AbstractGetterRetriever
      */
     public function canHandle(object $object): bool
     {
-        return $object instanceof FlexFormFieldValues;
+        return $object instanceof FlexFormFieldValues
+            && !method_exists($object, 'getSheets');
     }
 
     /**

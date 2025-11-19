@@ -45,12 +45,12 @@ $EM_CONF[$_EXTKEY] = [
     'author' => 'BRAINWORXX GmbH',
     'constraints' => [
         'depends' => [
-            'typo3' => '10.4.0-13.4.99',
+            'typo3' => '10.4.0-14.0.99',
             'php' => '7.4.0-8.4.99',
         ],
         'conflicts' => [],
         'suggests' => [
-            'adminpanel' => '10.4.0-13.4.99',
+            'adminpanel' => '10.4.0-14.0.99',
             'aimeos' => '20.10.5-23.99.99',
             'vhs' => '6.0.0-7.99.99',
             'content_blocks' => '1.0.0-1.99.99'

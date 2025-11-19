@@ -37,6 +37,7 @@ namespace Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser;
 
 use Brainworxx\Krexx\Krexx;
 use Exception;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
@@ -77,7 +78,7 @@ class Typo3DbQueryParser extends OriginalParser
      *
      * {@inheritDoc}
      */
-    public function convertQueryToDoctrineQueryBuilder(QueryInterface $query)
+    public function convertQueryToDoctrineQueryBuilder(QueryInterface $query): QueryBuilder
     {
         if (empty($this->dataMapper)) {
             // Well, the service.yaml configuration got ignored.

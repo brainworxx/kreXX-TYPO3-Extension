@@ -37,246 +37,69 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Modules;
 
-use Brainworxx\Includekrexx\Collectors\LogfileList;
-use Brainworxx\Includekrexx\Controller\AccessTrait;
-use Brainworxx\Includekrexx\Controller\ControllerConstInterface;
-use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
-use Brainworxx\Includekrexx\Service\LanguageTrait;
-use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\Service\Factory\Pool;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Adminpanel\ModuleApi\AbstractSubModule;
-use TYPO3\CMS\Adminpanel\ModuleApi\ContentProviderInterface;
-use TYPO3\CMS\Adminpanel\ModuleApi\DataProviderInterface;
 use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
-use TYPO3\CMS\Adminpanel\ModuleApi\ResourceProviderInterface;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\View\ViewFactoryData;
-use TYPO3\CMS\Core\View\ViewFactoryInterface;
-use TYPO3\CMS\Core\View\ViewInterface;
-use TYPO3\CMS\Fluid\View\StandaloneView;
-use TYPO3Fluid\Fluid\View\ViewInterface as FluidViewInterface;
+use Brainworxx\Includekrexx\Collectors\LogfileList;
+
+$version = GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion();
 
 /**
- * Frontend Access to the logfiles inside the admin panel.
+ * This is so evil.
  *
- * This class *must-not-have* any class variables, because it gets serialized
- * by the core. Any class variable would cause a fatal in the frontend.
+ * But . . . TYPO3 loads all files for some reason.
+ * Adding this to the ignore list in the Sevice.yaml does not help.
+ *
+ * I literally have no idea how to keep this compatible with both TYPO3 v13 and
+ * v14+ without this hack.
+ *
+ * So, if anybody actually reads this and knows how to do this properly:
+ * Please, give me a ticket on GitHub or contact me via TYPO3 Slack.
  */
-class Log extends AbstractSubModule implements
-    DataProviderInterface,
-    ContentProviderInterface,
-    ResourceProviderInterface,
-    ConstInterface,
-    ControllerConstInterface
-{
-    use LanguageTrait;
-    use AccessTrait;
-
-    /**
-     * @var string
-     */
-    protected const MESSAGE_SEVERITY_ERROR = 'error';
-
-    /**
-     * @var string
-     */
-    protected const MESSAGE_SEVERITY_INFO = 'info';
-
-    /**
-     * @var string
-     */
-    protected const TRANSLATION_PREFIX = 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:';
-
-    /**
-     * Createing the views for the frontend.
-     *
-     * The StandaloneView got itself deprecated, so we need to mitigate this.
-     */
-    protected function createView(string $templateName)
+if ($version > 13) {
+    class Log extends AbstractLog
     {
-        if (interface_exists(ViewFactoryInterface::class)) {
-            return $this->createView13($templateName);
-        }
-
-        return $this->createView12($templateName);
-    }
-
-    /**
-     * Create the views, TYPO3 12 style
-     *
-     * @deprecated
-     *   Will be removed as sooon as we drop TYPO3 12 support
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated stuff.
-     *   (Well, actually we do, but we do not send these data to CodeClimate)
-     */
-    protected function createView12(string $template): StandaloneView
-    {
-        $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setPartialRootPaths(['EXT:includekrexx/Resources/Private/Partials']);
-        $view->setLayoutRootPaths(['EXT:includekrexx/Resources/Private/Layouts']);
-        $view->setTemplatePathAndFilename(
-            'EXT:includekrexx/Resources/Private/Templates/Modules/' . $template . '.html'
-        );
-        $view->setFormat('html');
-
-        return $view;
-    }
-
-    /**
-     * Create the views, TYPO3 12 style
-     */
-    protected function createView13(string $template): ViewInterface
-    {
-        /** @var ViewFactoryInterface $viewFactory */
-        $viewFactory = GeneralUtility::makeInstance(ViewFactoryInterface::class);
-        $viewFactoryData = new ViewFactoryData(
-            null,
-            ['EXT:includekrexx/Resources/Private/Partials'],
-            ['EXT:includekrexx/Resources/Private/Layouts'],
-            'EXT:includekrexx/Resources/Private/Templates/Modules/' . $template . '.html',
-            null,
-            'html'
-        );
-        return $viewFactory->create($viewFactoryData);
-    }
-
-    /**
-     * The identifier for the Admin Panel Module.
-     *
-     * @return string
-     */
-    public function getIdentifier(): string
-    {
-        return static::KREXX;
-    }
-
-    /**
-     * Sub-Module label
-     *
-     * @return string
-     */
-    public function getLabel(): string
-    {
-        return static::translate(static::TRANSLATION_PREFIX . 'mlang_tabs_tab');
-    }
-
-    /**
-     * Retrieve the file list.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     *   The frontend request, which is currently not used.
-     *
-     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
-     *
-     * @return \TYPO3\CMS\Adminpanel\ModuleApi\ModuleData
-     *   The data we will assign to the admin panel.
-     */
-    public function getDataToStore(ServerRequestInterface $request): ModuleData
-    {
-        return new ModuleData(
-            ['files' => GeneralUtility::makeInstance(LogfileList::class)->retrieveFileList()]
-        );
-    }
-
-    /**
-     * Render a standalone view with the links.
-     *
-     * @param \TYPO3\CMS\Adminpanel\ModuleApi\ModuleData $data
-     *   The data we need to display.
-     *
-     * @return string
-     *   The rendered content.
-     */
-    public function getContent(ModuleData $data): string
-    {
-        if (!$this->hasAccess()) {
-            return $this->renderMessage(
-                static::translate(static::TRANSLATION_PREFIX . static::ACCESS_DENIED),
-                static::MESSAGE_SEVERITY_ERROR
+        /**
+         * Retrieve the file list.
+         *
+         * @param \Psr\Http\Message\ServerRequestInterface $request
+         *   The frontend request, which is currently not used.
+         * @param \Psr\Http\Message\ResponseInterface $response
+         *   A response interface, currently not used.
+         *
+         * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
+         *
+         * @return \TYPO3\CMS\Adminpanel\ModuleApi\ModuleData
+         *   The data we will assign to the admin panel.
+         */
+        public function getDataToStore(ServerRequestInterface $request, ResponseInterface $response): ModuleData
+        {
+            return new ModuleData(
+                ['files' => GeneralUtility::makeInstance(LogfileList::class)->retrieveFileList()]
             );
         }
-
-        $filelist = $data->getArrayCopy();
-
-        // Handling an empty log file list.
-        if (empty($filelist['files'])) {
-            return $this->retrieveKrexxMessages() . $this->renderMessage(
-                static::translate(static::TRANSLATION_PREFIX . 'log.noresult'),
-                static::MESSAGE_SEVERITY_INFO
+    }
+} else {
+    class Log extends AbstractLog
+    {
+        /**
+         * Retrieve the file list.
+         *
+         * @param \Psr\Http\Message\ServerRequestInterface $request
+         *   The frontend request, which is currently not used.
+         *
+         * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
+         *
+         * @return \TYPO3\CMS\Adminpanel\ModuleApi\ModuleData
+         *   The data we will assign to the admin panel.
+         */
+        public function getDataToStore(ServerRequestInterface $request): ModuleData
+        {
+            return new ModuleData(
+                ['files' => GeneralUtility::makeInstance(LogfileList::class)->retrieveFileList()]
             );
         }
-
-        $view = $this->createView('Log');
-        $view->assignMultiple($filelist);
-
-        return $this->retrieveKrexxMessages() . $view->render();
-    }
-
-    /**
-     * Whet the method name says
-     *
-     * @return array
-     *   The css file list.
-     */
-    public function getCssFiles(): array
-    {
-        return ['EXT:includekrexx/Resources/Public/Css/Adminpanel.css'];
-    }
-
-    /**
-     * No JS so far.
-     *
-     * @return array
-     */
-    public function getJavaScriptFiles(): array
-    {
-        return [];
-    }
-
-    /**
-     * Similar to the Flashmessages, just for the Admin Panel.
-     *
-     * @param string $text
-     *   The text to display.
-     * @param string $severity
-     *   One of the severity constants from this class, which is also the
-     *   message css class
-     *
-     * @return string
-     *   The rendered HTML message.
-     */
-    protected function renderMessage(string $text, string $severity): string
-    {
-        $view = $this->createView('Message');
-        $view->assignMultiple(['text' => $text, 'severity' => $severity]);
-        return $view->render();
-    }
-
-    /**
-     * Retrieve messages from the kreXX lib.
-     *
-     * @return string
-     *   The renders messages.
-     */
-    protected function retrieveKrexxMessages(): string
-    {
-        // Relay the renderedMessages from kreXX.
-        Pool::createPool();
-        $renderedMessages = '';
-
-        foreach (Krexx::$pool->messages->getMessages() as $message) {
-            $renderedMessages .= $this->renderMessage(
-                static::translate(
-                    static::TRANSLATION_PREFIX . $message->getKey(),
-                    $message->getArguments()
-                ),
-                static::MESSAGE_SEVERITY_ERROR
-            );
-        }
-
-        return $renderedMessages;
     }
 }
