@@ -66,7 +66,7 @@ class AbstractCallerFinderTest extends AbstractHelper
         $viewMock = $this->createMock(StandaloneView::class);
         $renderingStackRefMock = $this->createMock(\ReflectionProperty::class);
         // Mock the property reflection of the rendering context.
-        $renderingStackRefMock->expects($this->once())
+        $renderingStackRefMock->expects($this->any())
             ->method('setAccessible')
             ->with(true);
         $renderingStackRefMock->expects($this->once())

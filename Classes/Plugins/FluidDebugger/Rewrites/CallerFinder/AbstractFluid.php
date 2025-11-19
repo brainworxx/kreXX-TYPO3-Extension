@@ -173,7 +173,9 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
 
         try {
             $renderingStackRef = $this->viewReflection->getProperty('renderingStack');
-            $renderingStackRef->setAccessible(true);
+            if (version_compare(PHP_VERSION, '8.1.0', '<')) {
+                $renderingStackRef->setAccessible(true);
+            }
             $renderingStack = $renderingStackRef->getValue($this->view);
         } catch (ReflectionException $e) {
             $this->error = true;

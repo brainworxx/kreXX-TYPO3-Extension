@@ -426,6 +426,9 @@ class ThroughPropertiesTest extends AbstractHelper
         // Create a fixture.
         $refPropertyMock = $this->createMock(ReflectionProperty::class);
         $refPropertyMock->expects($this->any())
+            ->method('hasDefaultValue')
+            ->willReturn(true);
+        $refPropertyMock->expects($this->any())
             ->method('getDefaultValue')
             ->willThrowException(new \Exception());
         $refPropertyMock->expects($this->any())

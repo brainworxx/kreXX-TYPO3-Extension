@@ -115,14 +115,14 @@ class Recursion
     }
 
     /**
-     * Simple wrapper around the SplObjectStorage->attach().
+     * Simple wrapper around the SplObjectStorage->offsetSet().
      *
      * @param object $bee
      *   The object we want to track.
      */
     public function addToHive(object $bee): void
     {
-        $this->recursionHive->attach($bee);
+        $this->recursionHive->offsetSet($bee);
     }
 
     /**
@@ -138,7 +138,7 @@ class Recursion
     {
         // Check objects.
         if (is_object($bee)) {
-            return $this->recursionHive->contains($bee);
+            return $this->recursionHive->offsetExists($bee);
         }
 
         // Check arrays (only the $GLOBAL array may apply).

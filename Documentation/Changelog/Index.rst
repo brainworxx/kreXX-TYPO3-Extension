@@ -9,6 +9,7 @@ Changelog
 
 Changes:
     * [Feature] Updated to TYPO3 14.0.
+    * [Feature] Updated to PHP 8.5.
 
 -----
 

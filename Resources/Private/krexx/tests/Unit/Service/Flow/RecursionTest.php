@@ -110,7 +110,7 @@ class RecursionTest extends AbstractHelper
 
         $hiveMock = $this->createMock(SplObjectStorage::class);
         $hiveMock->expects($this->once())
-            ->method('attach')
+            ->method('offsetSet')
             ->with($fixture);
         $this->setValueByReflection(static::RECURSION_HIVE, $hiveMock, $this->recursion);
 
@@ -126,7 +126,7 @@ class RecursionTest extends AbstractHelper
 
         $hiveMock = $this->createMock(SplObjectStorage::class);
         $hiveMock->expects($this->once())
-            ->method('contains')
+            ->method('offsetExists')
             ->with($fixture)
             ->willReturn(true);
         $this->setValueByReflection(static::RECURSION_HIVE, $hiveMock, $this->recursion);

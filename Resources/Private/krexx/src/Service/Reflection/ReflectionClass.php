@@ -70,6 +70,18 @@ class ReflectionClass extends \ReflectionClass
     protected SplObjectStorage $unsetPropertyStorage;
 
     /**
+     * Must we set the properties accessible?
+     *
+     * This is not necessarily in PHP 8.1 and higher.
+     *
+     * @deprecated
+     *   Will be removed as soon as we drop support for PHP 8.0.
+     *
+     * @var bool|null
+     */
+    protected static ?bool $mustSetAccessible = null;
+
+    /**
      * ReflectionClass constructor.
      *
      * @param object|string $data
@@ -79,6 +91,10 @@ class ReflectionClass extends \ReflectionClass
      */
     public function __construct($data)
     {
+        if (static::$mustSetAccessible === null) {
+            // Determine, if we must set the properties accessible.
+            static::$mustSetAccessible = version_compare(phpversion(), '8.1.0', '<');
+        }
         // Retrieve the class variables.
         $this->objectArray = (array) $data;
         // Remember the current object.
@@ -117,9 +133,11 @@ class ReflectionClass extends \ReflectionClass
         }
 
         try {
+            // Static values are not inside the value array.
             if ($refProperty->isStatic()) {
-                // Static values are not inside the value array.
-                $refProperty->setAccessible(true);
+                if (static::$mustSetAccessible) {
+                    $refProperty->setAccessible(true);
+                }
                 return $refProperty->getValue($this->data);
             }
         } catch (Throwable $throwable) {
@@ -174,7 +192,7 @@ class ReflectionClass extends \ReflectionClass
             restore_error_handler();
         }
 
-        $this->unsetPropertyStorage->attach($refProperty);
+        $this->unsetPropertyStorage->offsetSet($refProperty);
         return null;
     }
 
@@ -201,7 +219,7 @@ class ReflectionClass extends \ReflectionClass
      */
     public function isPropertyUnset(ReflectionProperty $reflectionProperty): bool
     {
-        return $this->unsetPropertyStorage->contains($reflectionProperty);
+        return $this->unsetPropertyStorage->offsetExists($reflectionProperty);
     }
 
     /**

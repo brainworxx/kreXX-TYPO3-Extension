@@ -48,7 +48,7 @@ use Throwable;
 abstract class AbstractEventHandler implements EventHandlerInterface, AimeosConstInterface
 {
     /**
-     * Retrieve a private or protected property byx using a reflection.
+     * Retrieve a private or protected property by using a reflection.
      *
      * @param \ReflectionClass $reflectionClass
      *   Reflection of the class with the property.
@@ -62,10 +62,18 @@ abstract class AbstractEventHandler implements EventHandlerInterface, AimeosCons
      */
     protected function retrieveProperty(ReflectionClass $reflectionClass, string $objectName, object $object)
     {
+        static $setAccessible = null;
+
+        if ($setAccessible === null) {
+            $setAccessible = version_compare(PHP_VERSION, '8.1.0', '<');
+        }
+
         try {
             if ($reflectionClass->hasProperty($objectName)) {
                 $propertyRef = $reflectionClass->getProperty($objectName);
-                $propertyRef->setAccessible(true);
+                if ($setAccessible) {
+                    $propertyRef->setAccessible(true);
+                }
                 return $propertyRef->getValue($object);
             }
         } catch (Throwable $e) {

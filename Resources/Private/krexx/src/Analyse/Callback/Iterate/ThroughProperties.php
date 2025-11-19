@@ -170,7 +170,9 @@ class ThroughProperties extends AbstractCallback implements
             // There is also a PHP 8.0 bug that may cause an
             // "Internal error: Failed to retrieve the reflection object"
             // That is not even a Reflection exception, it's an "Error".
-            $default = $property->getDefaultValue();
+            if ($property->hasDefaultValue()) {
+                $default = $property->getDefaultValue();
+            }
         } catch (Throwable $exception) {
             // Fallback to the 7.x way.
             // The values of static properties are stored in the default
