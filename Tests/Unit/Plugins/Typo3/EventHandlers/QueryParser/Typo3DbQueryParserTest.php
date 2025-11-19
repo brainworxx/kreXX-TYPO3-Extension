@@ -39,6 +39,7 @@ use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQuery
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Messages;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
@@ -79,11 +80,12 @@ class Typo3DbQueryParserTest extends AbstractHelper
         $parser = new Typo3DbQueryParser();
 
         if (class_exists(ObjectManager::class)) {
+            $queryBuilderMock = $this->createMock(QueryBuilder::class);
             $originalParserMock = $this->createMock(OriginalParser::class);
             $originalParserMock->expects($this->once())
                 ->method('convertQueryToDoctrineQueryBuilder')
                 ->with($fixture)
-                ->willReturn('some sql');
+                ->willReturn($queryBuilderMock);
             $objectManagerMock = $this->createMock(ObjectManager::class);
             $objectManagerMock->expects($this->once())
                 ->method('get')
