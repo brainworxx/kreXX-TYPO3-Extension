@@ -196,7 +196,10 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
             }
         }
 
-        $model->addToJson(static::CODEGEN_TYPE_HINT, '/** @var ' . $type . ' ' . $name . ' */');
+        $model->addToJson(
+            $this->pool->messages->getHelp('metaTypeHint'),
+            '/** @var ' . $type . ' ' . $name . ' */'
+        );
     }
 
     /**

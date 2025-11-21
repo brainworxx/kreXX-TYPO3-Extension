@@ -1,5 +1,7 @@
 .6.0.4
 - Updated to PHP 8.5.
+- Bugfix: Added the missing 'Type hint' to the translation.
+- Bugfix: More space for the additional data in the SmokyGrey skin.
 
 6.0.3
 - Change: Deprecated the Smokey Grey recursion special handling.

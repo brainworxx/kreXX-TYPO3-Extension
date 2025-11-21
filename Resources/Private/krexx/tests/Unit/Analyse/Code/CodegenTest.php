@@ -67,6 +67,7 @@ class CodegenTest extends AbstractHelper
     public const  GET_CONNECTOR_LEFT = 'getConnectorLeft';
     public const  GET_CONNECTOR_RIGHT = 'getConnectorRight';
     public const  CONCATENATED_CONNECTORS = 'getConnectorLeftnamegetConnectorRight';
+    public const  CODEGEN_TYPE_HINT = 'Type hint';
 
     /**
      * Our test subject
@@ -158,10 +159,10 @@ class CodegenTest extends AbstractHelper
         $this->assertEquals(false, $this->retrieveValueByReflection(static::FIRST_RUN, $this->codegenHandler));
         // Check the type hint value.
         $json = $this->fixture->getJson();
-        $this->assertArrayHasKey(Codegen::CODEGEN_TYPE_HINT, $json);
+        $this->assertArrayHasKey(static::CODEGEN_TYPE_HINT, $json);
         $this->assertEquals(
             '/** @var ' . static::class . ' $name */',
-            $json[Codegen::CODEGEN_TYPE_HINT],
+            $json[static::CODEGEN_TYPE_HINT],
             'Test the typehint'
         );
     }
@@ -178,21 +179,21 @@ class CodegenTest extends AbstractHelper
 
         $this->codegenHandler->generateSource($this->fixture);
         $json = $this->fixture->getJson();
-        $this->assertArrayNotHasKey(Codegen::CODEGEN_TYPE_HINT, $json, 'Type hint is not set.');
+        $this->assertArrayNotHasKey(static::CODEGEN_TYPE_HINT, $json, 'Type hint is not set.');
 
         // do it again, with another name.
         $this->setValueByReflection(static::FIRST_RUN, true, $this->codegenHandler);
         $this->fixture->setNormal(static::class)->setName('justastring');
         $this->codegenHandler->generateSource($this->fixture);
         $json = $this->fixture->getJson();
-        $this->assertArrayNotHasKey(Codegen::CODEGEN_TYPE_HINT, $json, 'Do not add a typehint ot a none variable');
+        $this->assertArrayNotHasKey(static::CODEGEN_TYPE_HINT, $json, 'Do not add a typehint ot a none variable');
 
         // And again.
         $this->setValueByReflection(static::FIRST_RUN, true, $this->codegenHandler);
         $this->fixture->setNormal(static::class)->setName('$justastring . \'wasGehtAb\'');
         $this->codegenHandler->generateSource($this->fixture);
         $json = $this->fixture->getJson();
-        $this->assertArrayNotHasKey(Codegen::CODEGEN_TYPE_HINT, $json, 'Do not add a typehint ot a none variable');
+        $this->assertArrayNotHasKey(static::CODEGEN_TYPE_HINT, $json, 'Do not add a typehint ot a none variable');
     }
 
     /**
@@ -204,7 +205,7 @@ class CodegenTest extends AbstractHelper
         $this->setValueByReflection(static::FIRST_RUN, true, $this->codegenHandler);
         $this->codegenHandler->generateSource($this->fixture);
         $json = $this->fixture->getJson();
-        $this->assertArrayNotHasKey(Codegen::CODEGEN_TYPE_HINT, $json, 'Type hint is not set.');
+        $this->assertArrayNotHasKey(static::CODEGEN_TYPE_HINT, $json, 'Type hint is not set.');
     }
 
     /**
@@ -221,10 +222,10 @@ class CodegenTest extends AbstractHelper
 
         $this->codegenHandler->generateSource($this->fixture);
         $json = $this->fixture->getJson();
-        $this->assertArrayHasKey(Codegen::CODEGEN_TYPE_HINT, $json);
+        $this->assertArrayHasKey(static::CODEGEN_TYPE_HINT, $json);
         $this->assertEquals(
             '/** @var array $variable */',
-            $json[Codegen::CODEGEN_TYPE_HINT],
+            $json[static::CODEGEN_TYPE_HINT],
             'Test the typehint'
         );
     }

@@ -97,6 +97,9 @@ interface CodegenConstInterface
     /**
      * "Additional" json key, that contains the source code type hint.
      *
+     * @deprecated
+     *   Since 6.0.4, will be removed.
+     *
      * @var string
      */
     public const CODEGEN_TYPE_HINT = 'Type hint';

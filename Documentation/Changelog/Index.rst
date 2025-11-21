@@ -10,6 +10,8 @@ Changelog
 Changes:
     * [Feature] Updated to TYPO3 14.0.
     * [Feature] Updated to PHP 8.5.
+    * [Bugfix] Added the missing 'Type hint' to the translation.
+    * [Bugfix] More space for the additional data in the SmokyGrey skin.
 
 -----
 
