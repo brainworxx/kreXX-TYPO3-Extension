@@ -37,6 +37,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Collectors;
 
 use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
+use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate;
 use Brainworxx\Krexx\Service\Config\Config;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -54,7 +55,12 @@ class ConfigurationTest extends AbstractHelper
     {
         // No access.
         $configuration = new Configuration();
-        $viewMock = $this->createMock(AbstractTemplateView::class);
+        if (class_exists(AbstractTemplateView::class)) {
+            $viewMock = $this->createMock(AbstractTemplateView::class);
+        } else {
+            $viewMock = $this->createMock(ModuleTemplate::class);
+        }
+
         $viewMock->expects($this->never())
             ->method('assign');
         $configuration->assignData($viewMock);
@@ -73,7 +79,11 @@ class ConfigurationTest extends AbstractHelper
         $this->setValueByReflection('userUc', [Config::SETTING_MAX_FILES => '1000'], $configuration);
 
         // Mock the view.
-        $viewMock = $this->createMock(AbstractTemplateView::class);
+        if (class_exists(AbstractTemplateView::class)) {
+            $viewMock = $this->createMock(AbstractTemplateView::class);
+        } else {
+            $viewMock = $this->createMock(ModuleTemplate::class);
+        }
         $viewMock->expects($this->exactly(2))
             ->method('assign')
             ->with(...$this->withConsecutive(

@@ -45,6 +45,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility as UnitLocalizationUtility;
 use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility12 as UnitLocalizationUtility12;
+use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility14 as UnitLocalizationUtility14;
 
 /**
  * LLL string parser.
@@ -148,7 +149,7 @@ class LllString extends AbstractScalarAnalysis
      * @codeCoverageIgnore
      *   Who tests the tests?
      *
-     * @param UnitLocalizationUtility|UnitLocalizationUtility12 $object
+     * @param UnitLocalizationUtility|UnitLocalizationUtility12|UnitLocalizationUtility14 $object
      *   The name of the localisation utility.
      */
     public function setLocalisationUtility($object): void

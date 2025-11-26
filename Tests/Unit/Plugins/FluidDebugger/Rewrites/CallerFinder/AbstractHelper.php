@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
+use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper as AbstractKrexxTest;
 use TYPO3\CMS\Fluid\View\StandaloneView;
@@ -52,7 +53,11 @@ abstract class AbstractHelper extends AbstractKrexxTest
     protected function createInstance(array $renderingStack, $classname)
     {
         // Mock the view
-        $view = $this->createMock(StandaloneView::class);
+        if (class_exists(StandaloneView::class)) {
+            $view = $this->createMock(StandaloneView::class);
+        } else {
+            $view = $this->createMock(ModuleTemplate::class);
+        }
         $renderingStackRefMock = $this->createMock(\ReflectionProperty::class);
         // Mock the property reflection of the rendering context.
         $renderingStackRefMock->expects($this->any())

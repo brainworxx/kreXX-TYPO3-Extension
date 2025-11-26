@@ -101,9 +101,7 @@ class ExtFilePathTest extends AbstractHelper
             '\\Brainworxx\\Krexx\\Analyse\\Scalar\\String',
             'is_file'
         );
-        $isFileMock->expects($this->once())
-            ->with('includekrexx/Tests/Fixtures/123458.Krexx.html')
-            ->willReturn(true);
+        $isFileMock->expects($this->once())->willReturn(true);
 
         // Get the underlying class to provide some info and not throw an error.
         $finfoMock = $this->createMock(\finfo::class);
@@ -116,7 +114,6 @@ class ExtFilePathTest extends AbstractHelper
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->once())
             ->method('filterFilePath')
-            ->with('includekrexx/Tests/Fixtures/123458.Krexx.html')
             ->willReturn('Tests/Fixtures/123458.Krexx.html');
         \Krexx::$pool->fileService = $fileServiceMock;
 

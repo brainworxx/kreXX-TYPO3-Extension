@@ -42,7 +42,7 @@ use TYPO3\CMS\Core\View\ViewInterface;
 /**
  * The things you do, because some classes are final.
  */
-class ModuleTemplate
+class ModuleTemplate14 implements ViewInterface
 {
     public function setModuleName(string $moduleName)
     {

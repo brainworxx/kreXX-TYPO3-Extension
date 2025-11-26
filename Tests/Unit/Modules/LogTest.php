@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Krexx;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
 use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use TYPO3\CMS\Core\View\ViewInterface;
 use TYPO3\CMS\Fluid\View\StandaloneView;
@@ -114,7 +115,14 @@ class LogTest extends AbstractHelper
         $this->injectIntoGeneralUtility(LogfileList::class, $logfileListMock);
 
         $request = new ServerRequest();
-        $this->assertEquals($expectations, $logModule->getDataToStore($request));
+
+        $typo3Version = new Typo3Version();
+        if ($typo3Version->getMajorVersion() > 13) {
+            $response = $this->createMock(\Psr\Http\Message\ResponseInterface::class);
+            $this->assertEquals($expectations, $logModule->getDataToStore($request, $response));
+        } else {
+            $this->assertEquals($expectations, $logModule->getDataToStore($request));
+        }
     }
 
     /**

@@ -37,6 +37,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Collectors;
 
 use Brainworxx\Includekrexx\Collectors\LogfileList;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
+use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -62,7 +63,11 @@ class LogfileListTest extends AbstractHelper
 
         // No access. Show no files at all.
         $logLister = new LogfileList();
-        $viewMock = $this->createMock(AbstractTemplateView::class);
+        if (class_exists(AbstractTemplateView::class)) {
+            $viewMock = $this->createMock(AbstractTemplateView::class);
+        } else {
+            $viewMock = $this->createMock(ModuleTemplate::class);
+        }
         $viewMock->expects($this->once())
             ->method($assign)
             ->with($fileList, []);
@@ -137,7 +142,11 @@ class LogfileListTest extends AbstractHelper
                 'meta' => []
             ]
         ];
-        $viewMock = $this->createMock(AbstractTemplateView::class);
+        if (class_exists(AbstractTemplateView::class)) {
+            $viewMock = $this->createMock(AbstractTemplateView::class);
+        } else {
+            $viewMock = $this->createMock(ModuleTemplate::class);
+        }
         $viewMock->expects($this->once())
             ->method($assign)
             ->with($fileList, $expectation);
