@@ -45,6 +45,7 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\ViewHelperVariableContainer;
 use PHPUnit\Framework\Attributes\CoversMethod;
+use TYPO3Fluid\Fluid\View\ViewInterface;
 
 #[CoversMethod(LogViewHelper::class, 'analysis')]
 class LogViewHelperTest extends AbstractHelper
@@ -56,7 +57,11 @@ class LogViewHelperTest extends AbstractHelper
     {
         $logViewHelper = new LogViewHelper();
         // Inject the view and the rendering context.
-        $view = $this->createMock(StandaloneView::class);
+        if (class_exists(StandaloneView::class)) {
+            $view = $this->createMock(StandaloneView::class);
+        } else {
+            $view = $this->createMock(ViewInterface::class);
+        }
         $variableContainer = $this->createMock(ViewHelperVariableContainer::class);
         $variableContainer->expects($this->once())
             ->method('getView')

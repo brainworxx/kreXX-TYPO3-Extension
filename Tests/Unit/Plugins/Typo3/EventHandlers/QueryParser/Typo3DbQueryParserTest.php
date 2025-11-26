@@ -39,7 +39,10 @@ use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQuery
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Messages;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
@@ -57,9 +60,19 @@ class Typo3DbQueryParserTest extends AbstractHelper
     public function testConstruct()
     {
         new Typo3DbQueryParser();
-        if (method_exists(OriginalParser::class, '__construct')) {
+        $typo3Version = new Typo3Version();
+        if (
+            method_exists(OriginalParser::class, '__construct')
+            && $typo3Version->getMajorVersion() < 14
+        ) {
             $dataMapperMock = $this->createMock(DataMapper::class);
             new Typo3DbQueryParser($dataMapperMock);
+        } else {
+            // 14 and beyond.
+            $dataMapperMock = $this->createMock(DataMapper::class);
+            $schemaFactoryMock = $this->createMock(TcaSchemaFactory::class);
+            $connectionPoolMock = $this->createMock(ConnectionPool::class);
+            new Typo3DbQueryParser($dataMapperMock, $schemaFactoryMock, $connectionPoolMock);
         }
 
         // We simply assert that this part is still reached, without throwing

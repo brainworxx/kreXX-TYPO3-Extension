@@ -145,7 +145,11 @@ class IndexControllerTest extends AbstractHelper
         $settingsModel = new Settings();
 
         // Mock the view.
-        $viewMock = $this->createMock(AbstractTemplateView::class);
+        if (class_exists(AbstractTemplateView::class)) {
+            $viewMock = $this->createMock(AbstractTemplateView::class);
+        } else {
+            $viewMock = $this->createMock(ModuleTemplate::class);
+        }
         if ($typo3Version->getMajorVersion() < 11) {
             $viewMock->expects($this->exactly(1))
                 ->method('assignMultiple')

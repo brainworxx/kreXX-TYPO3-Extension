@@ -50,7 +50,6 @@ use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Core\Page\PageRenderer;
-use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(AbstractController::class, 'initializeAction')]

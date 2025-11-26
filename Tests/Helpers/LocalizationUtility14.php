@@ -35,43 +35,39 @@
 
 namespace Brainworxx\Includekrexx\Tests\Helpers;
 
-use Psr\Http\Message\ResponseInterface;
-use TYPO3\CMS\Core\Http\Response;
-use TYPO3\CMS\Core\View\ViewInterface;
-
 /**
- * The things you do, because some classes are final.
+ * The things you do to unit tests static stuff.
+ *
+ * @package Brainworxx\Includekrexx\Tests\Helpers
  */
-class ModuleTemplate implements ViewInterface
+class LocalizationUtility14 extends \TYPO3\CMS\Extbase\Utility\LocalizationUtility
 {
-    public function setModuleName(string $moduleName)
-    {
-        return $this;
-    }
+    /**
+     * @var array
+     */
+    public static $values = [];
 
-    public function renderResponse(string $templateFileName = ''): ResponseInterface
-    {
-        return new Response();
-    }
+    /**
+     * Mock the translations.
+     *
+     * @param string $key
+     * @param string|null $extensionName
+     * @param array|null $arguments
+     * @param string|null $languageKey
+     * @param array|null $alternativeLanguageKeys
+     * @return mixed|null
+     */
+    public static function translate(
+        string $key,
+        ?string $extensionName = null,
+        ?array $arguments = null,
+        string|\TYPO3\CMS\Core\Localization\Locale|null $languageKey = null,
+        \Psr\Http\Message\ServerRequestInterface|null $request = null
+    ): ?string {
+        if (isset(static::$values[$key])) {
+            return static::$values[$key];
+        }
 
-    public function assignMultiple(array $stuff): ViewInterface
-    {
-    }
-
-    public function setContent()
-    {
-    }
-
-    public function renderContent()
-    {
-    }
-
-    public function assign(string $key, $value): ViewInterface
-    {
-    }
-
-    public function render(string $templateFileName = ''): string
-    {
-        // TODO: Implement render() method.
+        return null;
     }
 }

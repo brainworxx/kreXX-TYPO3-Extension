@@ -56,6 +56,8 @@ class FlexFormParserTest extends AbstractHelper
      */
     public function testConstruct()
     {
+        $flexFormServiceMock = $this->createMock(FlexFromServiceCore::class);
+        $this->injectIntoGeneralUtility(FlexFromServiceCore::class, $flexFormServiceMock);
         $flexFormParser = new FlexFormParser(Krexx::$pool);
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $flexFormParser));
     }

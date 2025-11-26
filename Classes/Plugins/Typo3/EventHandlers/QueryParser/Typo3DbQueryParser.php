@@ -37,7 +37,9 @@ namespace Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser;
 
 use Brainworxx\Krexx\Krexx;
 use Exception;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
@@ -62,10 +64,27 @@ class Typo3DbQueryParser extends OriginalParser
      *
      * @param \TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper|null $dataMapper
      */
-    public function __construct(?DataMapper $dataMapper = null)
-    {
-        if (!empty($dataMapper) && method_exists(OriginalParser::class, '__construct')) {
+    public function __construct(
+        ?DataMapper $dataMapper = null,
+        ?TcaSchemaFactory $tcaSchemaFactory = null,
+        ?ConnectionPool $connectionPool = null
+    ) {
+        if (
+            !empty($dataMapper)
+            && method_exists(OriginalParser::class, '__construct')
+            && empty($tcaSchemaFactory)
+        ) {
+            // TYPO3 11.3 and beyond with DI.
             parent::__construct($dataMapper);
+        }
+        if (
+            !empty($dataMapper)
+            && method_exists(OriginalParser::class, '__construct')
+            && !empty($tcaSchemaFactory)
+            && !empty($connectionPool)
+        ) {
+            // TYPO3 14 and beyond with DI.
+            parent::__construct($dataMapper, $tcaSchemaFactory, $connectionPool);
         }
     }
 

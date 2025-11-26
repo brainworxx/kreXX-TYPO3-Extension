@@ -49,6 +49,7 @@ use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Package\Package;
 use TYPO3\CMS\Core\Package\UnitTestPackageManager;
+use TYPO3\CMS\Core\SystemResource\Identifier\SystemResourceIdentifierFactory;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
@@ -173,6 +174,8 @@ abstract class AbstractHelper extends KrexxAbstractHelper
         $packageManagerMock->expects($this->any())
             ->method('getPackage')
             ->willReturn($packageMock);
+
+        ExtensionManagementUtility::setPackageManager($packageManagerMock);
 
         return $packageMock;
     }

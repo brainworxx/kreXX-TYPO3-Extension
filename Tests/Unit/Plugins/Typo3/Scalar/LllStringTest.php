@@ -39,6 +39,7 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility;
 use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility12;
+use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility14;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\Registration;
@@ -113,7 +114,10 @@ class LllStringTest extends AbstractHelper
         $lllString = new LllString(\Krexx::$pool);
 
         $typo3Version = new Typo3Version();
-        if ($typo3Version->getMajorVersion() > 11) {
+        if ($typo3Version->getMajorVersion() > 13) {
+            $lllString->setLocalisationUtility(new LocalizationUtility14());
+            LocalizationUtility14::$values[$payload] = static::KREXX_DEBUGGER;
+        } elseif ($typo3Version->getMajorVersion() > 11) {
             $lllString->setLocalisationUtility(new LocalizationUtility12());
             LocalizationUtility12::$values[$payload] = static::KREXX_DEBUGGER;
         } else {
