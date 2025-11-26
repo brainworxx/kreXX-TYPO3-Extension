@@ -61,18 +61,18 @@ class Typo3DbQueryParserTest extends AbstractHelper
     {
         new Typo3DbQueryParser();
         $typo3Version = new Typo3Version();
-        if (
-            method_exists(OriginalParser::class, '__construct')
-            && $typo3Version->getMajorVersion() < 14
-        ) {
-            $dataMapperMock = $this->createMock(DataMapper::class);
-            new Typo3DbQueryParser($dataMapperMock);
-        } else {
-            // 14 and beyond.
-            $dataMapperMock = $this->createMock(DataMapper::class);
-            $schemaFactoryMock = $this->createMock(TcaSchemaFactory::class);
-            $connectionPoolMock = $this->createMock(ConnectionPool::class);
-            new Typo3DbQueryParser($dataMapperMock, $schemaFactoryMock, $connectionPoolMock);
+
+        if (method_exists(OriginalParser::class, '__construct')) {
+            if ($typo3Version->getMajorVersion() < 14) {
+                $dataMapperMock = $this->createMock(DataMapper::class);
+                new Typo3DbQueryParser($dataMapperMock);
+            } else {
+                // 14 and beyond.
+                $dataMapperMock = $this->createMock(DataMapper::class);
+                $schemaFactoryMock = $this->createMock(TcaSchemaFactory::class);
+                $connectionPoolMock = $this->createMock(ConnectionPool::class);
+                new Typo3DbQueryParser($dataMapperMock, $schemaFactoryMock, $connectionPoolMock);
+            }
         }
 
         // We simply assert that this part is still reached, without throwing

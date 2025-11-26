@@ -41,6 +41,7 @@ use Brainworxx\Includekrexx\Controller\AbstractController;
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
+use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate14;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate;
 use TYPO3\CMS\Core\Core\ApplicationContext;
@@ -52,7 +53,6 @@ use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
-use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 use TYPO3\CMS\Extbase\Mvc\Response;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
@@ -148,7 +148,7 @@ class IndexControllerTest extends AbstractHelper
         if (class_exists(AbstractTemplateView::class)) {
             $viewMock = $this->createMock(AbstractTemplateView::class);
         } else {
-            $viewMock = $this->createMock(ModuleTemplate::class);
+            $viewMock = $this->createMock(ModuleTemplate14::class);
         }
         if ($typo3Version->getMajorVersion() < 11) {
             $viewMock->expects($this->exactly(1))

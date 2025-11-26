@@ -42,11 +42,13 @@ use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate as ModuleTemplateUnit;
+use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate14 as ModuleTemplateUnit14;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplateFactory as ModuleTemplateFactoryUnit;
 use Brainworxx\Krexx\Krexx;
 use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\View\ViewInterface;
 use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Core\Page\PageRenderer;
@@ -90,7 +92,12 @@ class AbstractControllerTest extends AbstractHelper
 
         $indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer, $typo3Version);
 
-        $mtMock = $this->createMock(ModuleTemplateUnit::class);
+        if (class_exists(ViewInterface::class)) {
+            $mtMock = $this->createMock(ModuleTemplateUnit14::class);
+        } else {
+            $mtMock = $this->createMock(ModuleTemplateUnit::class);
+        }
+
         if (method_exists($indexController, 'injectObjectManager')) {
             // TYPO3 11 style
             $objectManagerMock = $this->createMock(ObjectManager::class);
