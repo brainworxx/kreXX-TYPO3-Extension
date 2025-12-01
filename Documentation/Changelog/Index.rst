@@ -12,6 +12,7 @@ Changes:
     * [Feature] Updated to PHP 8.5.
     * [Bugfix] Added the missing 'Type hint' to the translation.
     * [Bugfix] More space for the additional data in the SmokyGrey skin.
+    * [Bugfix] TYPO3 Exceptions after update “symfony/dependency-injection” to "7.4.0"
 
 -----
 
