@@ -37,6 +37,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Modules\Log;
+use Brainworxx\Includekrexx\Modules\Log14;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
@@ -59,6 +60,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Package\MetaData;
 use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput as T3CheckOutput;
@@ -194,12 +196,20 @@ class ConfigurationTest extends AbstractHelper implements ConstInterface
             $typo3Namespace,
             'array_replace_recursive'
         );
+
+        $typo3Version = new Typo3Version();
+        if ($typo3Version->getMajorVersion() > 13) {
+            $logClass = Log14::class;
+        } else {
+            $logClass = Log::class;
+        }
+
         $arrayReplaceRecursiveMock->expects($this->any())
-            ->with($this->anything(), [Configuration::KREXX => ['module' => Log::class, 'before' => [$log]]]);
+            ->with($this->anything(), [Configuration::KREXX => ['module' => $logClass, 'before' => [$log]]]);
         // You just have to love these large arrays inside the globals.
         $GLOBALS[Configuration::TYPO3_CONF_VARS][Configuration::EXTCONF]
             [Configuration::ADMIN_PANEL][Configuration::MODULES][Configuration::DEBUG]
-            [Configuration::SUBMODULES] = ['module' => Log::class, 'after' => [$log]];
+            [Configuration::SUBMODULES] = ['module' => $logClass, 'after' => [$log]];
 
         $this->configuration->exec();
 

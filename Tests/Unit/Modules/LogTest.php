@@ -38,6 +38,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Modules;
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Collectors\LogfileList;
 use Brainworxx\Includekrexx\Modules\Log;
+use Brainworxx\Includekrexx\Modules\Log14;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -69,6 +70,8 @@ class LogTest extends AbstractHelper
     protected const TEXT = 'text';
     protected const RENDER = 'render';
 
+    protected $log;
+
     /**
      * {@inheritDoc}
      */
@@ -76,6 +79,12 @@ class LogTest extends AbstractHelper
     {
         parent::setUp();
         $this->simulatePackage('includekrexx', 'whatever');
+        $typo3Version = new Typo3Version();
+        if ($typo3Version->getMajorVersion() > 13) {
+            $this->log = new Log14();
+        } else {
+            $this->log = new Log();
+        }
     }
 
     /**
@@ -83,8 +92,7 @@ class LogTest extends AbstractHelper
      */
     public function testGetIdentifier()
     {
-        $logModule = new Log();
-        $this->assertEquals(Bootstrap::KREXX, $logModule->getIdentifier());
+        $this->assertEquals(Bootstrap::KREXX, $this->log->getIdentifier());
     }
 
     /**
@@ -92,10 +100,9 @@ class LogTest extends AbstractHelper
      */
     public function testGetLabel()
     {
-        $logModule = new Log();
         $this->assertEquals(
             'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:mlang_tabs_tab',
-            $logModule->getLabel()
+            $this->log->getLabel()
         );
     }
 
@@ -104,7 +111,7 @@ class LogTest extends AbstractHelper
      */
     public function testGetDataToStore()
     {
-        $logModule = new Log();
+
         $fileList = ['file', 'list'];
         $expectations = new ModuleData([static::FILES => $fileList]);
 
@@ -119,9 +126,9 @@ class LogTest extends AbstractHelper
         $typo3Version = new Typo3Version();
         if ($typo3Version->getMajorVersion() > 13) {
             $response = $this->createMock(\Psr\Http\Message\ResponseInterface::class);
-            $this->assertEquals($expectations, $logModule->getDataToStore($request, $response));
+            $this->assertEquals($expectations, $this->log->getDataToStore($request, $response));
         } else {
-            $this->assertEquals($expectations, $logModule->getDataToStore($request));
+            $this->assertEquals($expectations, $this->log->getDataToStore($request));
         }
     }
 
@@ -143,8 +150,7 @@ class LogTest extends AbstractHelper
             ->willReturn('Rendered Messages');
 
         $moduleData = new ModuleData();
-        $logModule = new Log();
-        $this->assertEquals('Rendered Messages', $logModule->getContent($moduleData));
+        $this->assertEquals('Rendered Messages', $this->log->getContent($moduleData));
     }
 
     /**
@@ -179,8 +185,7 @@ class LogTest extends AbstractHelper
             ->method(static::RENDER)
             ->willReturn('rendering');
 
-        $logModule = new Log();
-        $this->assertEquals('renderingrendering', $logModule->getContent($moduleData));
+        $this->assertEquals('renderingrendering', $this->log->getContent($moduleData));
     }
 
     /**
@@ -201,8 +206,7 @@ class LogTest extends AbstractHelper
             ->method(static::RENDER)
             ->willReturn($expectations);
 
-        $logModule = new Log();
-        $this->assertEquals($expectations, $logModule->getContent($moduleData));
+        $this->assertEquals($expectations, $this->log->getContent($moduleData));
     }
 
     /**
@@ -210,10 +214,9 @@ class LogTest extends AbstractHelper
      */
     public function testGetCssFiles()
     {
-        $logModule = new Log();
         $this->assertEquals(
             ['EXT:includekrexx/Resources/Public/Css/Adminpanel.css'],
-            $logModule->getCssFiles()
+            $this->log->getCssFiles()
         );
     }
 
@@ -222,8 +225,7 @@ class LogTest extends AbstractHelper
      */
     public function testGetJavaScriptFiles()
     {
-        $logModule = new Log();
-        $this->assertEmpty($logModule->getJavaScriptFiles());
+        $this->assertEmpty($this->log->getJavaScriptFiles());
     }
 
     /**

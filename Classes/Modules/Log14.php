@@ -38,31 +38,35 @@ declare(strict_types=1);
 namespace Brainworxx\Includekrexx\Modules;
 
 use Brainworxx\Includekrexx\Collectors\LogfileList;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-
-
 /**
- * @deprecated
- *   Since 6.1.0, will be removed when we drop support for TYPO3 v13 LTS.
+ * @codeCoverageIgnore
+ *   We ignore the coverage for now. This will be changed as soon as the 14 lts
+ *   is our main target.
  */
-class Log extends AbstractLog
+class Log14 extends AbstractLog
 {
     /**
      * Retrieve the file list.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *   The frontend request, which is currently not used.
+     * @param \Psr\Http\Message\ResponseInterface $response
+     *   A response interface, currently not used.
      *
      * @return \TYPO3\CMS\Adminpanel\ModuleApi\ModuleData
      *   The data we will assign to the admin panel.
      * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
      *
      */
-    public function getDataToStore(ServerRequestInterface $request): ModuleData
-    {
+    public function getDataToStore(
+        ServerRequestInterface $request,
+        ResponseInterface $response
+    ): ModuleData {
         return new ModuleData(
             [
                 'files' => GeneralUtility::makeInstance(
@@ -72,4 +76,3 @@ class Log extends AbstractLog
         );
     }
 }
-

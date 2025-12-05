@@ -39,6 +39,7 @@ namespace Brainworxx\Includekrexx\Plugins\Typo3;
 
 use Brainworxx\Includekrexx\Log\FileWriter as KrexxFileWriter;
 use Brainworxx\Includekrexx\Modules\Log;
+use Brainworxx\Includekrexx\Modules\Log14;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Analyse\Objects as FluidObjects;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\FlexFormParser;
@@ -66,6 +67,7 @@ use Closure;
 use Psr\Log\LogLevel;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder as DbQueryBuilder;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -295,11 +297,18 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
             isset($GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL]
                 [static::MODULES][static::DEBUG])
         ) {
+            $version = GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion();
+            if ($version > 13) {
+                $logClass = Log14::class;
+            } else {
+                $logClass = Log::class;
+            }
+
             $GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL]
             [static::MODULES][static::DEBUG][static::SUBMODULES] = array_replace_recursive(
                 $GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL]
                 [static::MODULES][static::DEBUG][static::SUBMODULES],
-                [static::KREXX => ['module' => Log::class, 'before' => ['log']]]
+                [static::KREXX => ['module' => $logClass, 'before' => ['log']]]
             );
         }
     }
