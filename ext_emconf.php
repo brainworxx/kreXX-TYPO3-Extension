@@ -34,7 +34,7 @@
 
 $EM_CONF[$_EXTKEY] = [
     'title' => 'kreXX Debugger',
-    'description' => 'Alternative for f:debug (fluid) and debug(); (PHP) with additional analysis features and logging options.',
+    'description' => 'Alternative for `f:debug` (fluid) and `debug();` (PHP) with additional analysis features and logging options.',
     'category' => 'misc',
     'version' => '6.1.4',
     'state' => 'stable',

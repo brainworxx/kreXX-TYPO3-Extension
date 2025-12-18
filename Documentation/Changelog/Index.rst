@@ -8,6 +8,7 @@ Changelog
 :Date: tbd
 
 Changes:
+    * [Bugfix] Populate extension title from composer.json
 
 -----
 

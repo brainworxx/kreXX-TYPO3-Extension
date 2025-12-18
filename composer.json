@@ -1,7 +1,7 @@
 {
   "name": "brainworxx/includekrexx",
   "type": "typo3-cms-extension",
-  "description": "Alternative for `f:debug` (fluid) and `debug();` (PHP) with additional analysis features and logging options.",
+  "description": "kreXX Debugger - Alternative for `f:debug` (fluid) and `debug();` (PHP) with additional analysis features and logging options.",
   "homepage": "https://github.com/brainworxx/kreXX-TYPO3-Extension",
   "license": [
     "LGPL-2.1-or-later"
