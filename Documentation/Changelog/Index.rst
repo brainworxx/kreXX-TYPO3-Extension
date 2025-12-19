@@ -8,6 +8,7 @@ Changelog
 :Date: tbd
 
 Changes:
+    * [Feature] Added support for Domain Page objects in TYPO3 14.
     * [Bugfix] Populate extension title from composer.json
 
 -----

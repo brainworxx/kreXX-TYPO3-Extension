@@ -54,6 +54,7 @@ use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use ReflectionMethod;
 use stdClass;
+use TYPO3\CMS\Core\Domain\Page;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockData;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockGridData;
 use TYPO3\CMS\Core\Domain\FlexFormFieldValues;
@@ -61,6 +62,7 @@ use TYPO3\CMS\Core\Domain\RawRecord;
 use TYPO3\CMS\Core\Domain\Record;
 use TYPO3\CMS\Core\Domain\Record\ComputedProperties;
 use TYPO3\CMS\Core\Domain\RecordPropertyClosure;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Settings\Settings;
 
 #[CoversMethod(DynamicGetter::class, 'handle')]
@@ -80,6 +82,8 @@ use TYPO3\CMS\Core\Settings\Settings;
 #[CoversMethod(FlexFormRetriever::class, 'canHandle')]
 #[CoversMethod(FlexformRetriever::class, 'handle')]
 #[CoversMethod(AbstractGetterRetriever::class, 'processObjectValues')]
+#[CoversMethod(DomainRecordRetriever::class, 'canHandle')]
+#[CoversMethod(DomainRecordRetriever::class, 'handle')]
 class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface, CodegenConstInterface
 {
     /**
@@ -146,6 +150,7 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
                 'field3' => 'anotherValue1'
             ]
         ]);
+
         $testSubjects = [
             // The computed properties are not handled at all.
             new ReflectionClass($computedProperties),
@@ -162,6 +167,14 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
             // The grid data is handled by the GridDataRetriever.
             new ReflectionClass(new ContentBlockGridData($gridPayload)),
         ];
+
+        if (class_exists(Page::class)) {
+            // The page record is handled by the DomainPageRetriever in TYPO3 14.0 and higher.
+            // The class does not exist in 10.
+            $page = new Page(['uid' => 1, 'pid' => 2, 'title' => 'Test Page']);
+            $testSubjects[] = new ReflectionClass($page);
+        }
+
 
         // We do not add the flexform retriever to the list in TYPO3 14.0 and higher,
         // because there was a getter added directly to the FlexFormFieldValues class.
@@ -219,6 +232,20 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
                     $this->assertNull($result[2]->getData(), 'The field3 is duplicated, so its value must be null.');
                     $messages = Krexx::$pool->messages->getMessages();
                     $this->assertCount(1, $messages, 'There should be one message about the broken flexform.');
+                    break;
+                case Page::class:
+                    $typo3Version = new Typo3Version();
+                    if ($typo3Version->getMajorVersion() >= 14) {
+                        $this->assertCount(3, $result);
+                        $this->assertEquals('uid', $result[0]->getName());
+                        $this->assertEquals(1, $result[0]->getData());
+                        $this->assertEquals('pid', $result[1]->getName());
+                        $this->assertEquals(2, $result[1]->getData());
+                        $this->assertEquals('title', $result[2]->getName());
+                        $this->assertEquals('Test Page', $result[2]->getData());
+                    } else {
+                        $this->assertEmpty($result, 'In TYPO3 versions below 14.0 the Page record is not handled.');
+                    }
                     break;
                 default:
                     $this->fail('Unknown subject class: ' . $subjectClass);
