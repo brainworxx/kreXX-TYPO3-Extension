@@ -10,6 +10,7 @@ Changelog
 Changes:
     * [Feature] Added support for Domain Page objects in TYPO3 14.
     * [Bugfix] Populate extension title from composer.json
+    * [Bugfix] Do not trim quotes from the caller finder result.
 
 -----
 

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2025 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -188,7 +188,7 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
                     ->encodingService
                     ->encodeString(
                         $this->pool->createClass(CleanUpVarName::class)
-                            ->cleanup(trim($name[1], " \t\n\r\0\x0B'\""))
+                            ->cleanup(trim($name[1], " \t\n\r\0\x0B"))
                     );
             }
         }
