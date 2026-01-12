@@ -40,6 +40,8 @@ use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration as AimeosConfiguration;
+use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Package\Package;
 use TYPO3\CMS\Core\Package\UnitTestPackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -156,10 +158,20 @@ class BootstrapTest extends AbstractHelper
 
         $this->bootstrap->run();
 
-        $this->assertEquals(
-            [0 => 'Brainworxx\\Includekrexx\\ViewHelpers'],
-            $GLOBALS[$this->bootstrap::TYPO3_CONF_VARS][$this->bootstrap::SYS][$this->bootstrap::FLUID][$this->bootstrap::FLUID_NAMESPACE][$this->bootstrap::KREXX],
-            'Registering of the krexx fluid namespace'
-        );
+        $typo3Version = new Typo3Version();
+        if (version_compare('14.0', $typo3Version->getVersion(), '>')) {
+            $this->assertEquals(
+                [0 => 'Brainworxx\\Includekrexx\\ViewHelpers'],
+                $GLOBALS[$this->bootstrap::TYPO3_CONF_VARS][$this->bootstrap::SYS][$this->bootstrap::FLUID][$this->bootstrap::FLUID_NAMESPACE][$this->bootstrap::KREXX],
+                'Registering of the krexx fluid namespace'
+            );
+        }
+
+        // We test for the registration of the plugins.
+        $registrations = SettingsGetter::getPlugins();
+        $this->assertCount(3, $registrations, 'Number of registered plugins');
+        $this->assertArrayHasKey(get_class($t3ConfigMock), $registrations, 'Registration of the TYPO3 plugin');
+        $this->assertArrayHasKey(get_class($fluidConfigMock), $registrations, 'Registration of the Fluid plugin');
+        $this->assertArrayHasKey(get_class($aimeosConfigMock), $registrations, 'Registration of the Aimeos plugin');
     }
 }

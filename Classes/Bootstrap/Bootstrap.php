@@ -43,6 +43,7 @@ use Brainworxx\Includekrexx\Plugins\ContentBlocks\Configuration as ContentBlocks
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -81,8 +82,12 @@ class Bootstrap implements ConstInterface
         // do it inside the template. 'krexx' as a namespace should be unique enough.
         // Theoretically, this should be part of the fluid debugger plugin, but
         // activating it in the viewhelper is too late, for obvious reason.
-        $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID]
+        // @deprecated Will be removed as soon as we drop support for TYPO3 14.0.
+        $typo3Version = new Typo3Version();
+        if (version_compare('14.0', $typo3Version->getVersion(), '>')) {
+            $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID]
             [static::FLUID_NAMESPACE][static::KREXX][] = 'Brainworxx\\Includekrexx\\ViewHelpers';
+        }
 
         // Register the Aimeos Magic plugin.
         /** @var AimeosConfiguration $aimeosConfiguration */

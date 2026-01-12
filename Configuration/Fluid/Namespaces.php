@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,28 +33,14 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-$EM_CONF[$_EXTKEY] = [
-    'title' => 'kreXX Debugger',
-    'description' => 'Alternative for `f:debug` (fluid) and `debug();` (PHP) with additional analysis features and logging options.',
-    'category' => 'misc',
-    'version' => '6.1.4',
-    'state' => 'stable',
-    'uploadfolder' => false,
-    'createDirs' => '',
-    'clearCacheOnLoad' => 0,
-    'author_email' => 'info@brainworxx.de',
-    'author' => 'BRAINWORXX GmbH',
-    'constraints' => [
-        'depends' => [
-            'typo3' => '10.4.0-14.1.99',
-            'php' => '7.4.0-8.5.99',
-        ],
-        'conflicts' => [],
-        'suggests' => [
-            'adminpanel' => '10.4.0-14.1.99',
-            'aimeos' => '20.10.5-25.99.99',
-            'vhs' => '6.0.0-7.99.99',
-            'content_blocks' => '1.0.0-2.99.99'
-        ],
-    ],
+declare(strict_types=1);
+
+use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
+
+// Register our debug-viewhelper globally, so people don't have to
+// do it inside the template. 'krexx' as a namespace should be unique enough.
+// Theoretically, this should be part of the fluid debugger plugin, but
+// activating it in the viewhelper is too late, for obvious reason.
+return [
+    ConstInterface::KREXX => ['Brainworxx\\Includekrexx\\ViewHelpers'],
 ];
