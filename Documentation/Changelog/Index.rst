@@ -11,8 +11,11 @@ Changes:
     * [Feature] Added support for Domain Page objects in TYPO3 14.
     * [Feature] Updated to TYPO3 14.1.
     * [Bugfix] Populate extension title from composer.json
-    * [Bugfix] Do not trim quotes from the caller finder result.
     * [Bugfix] Fixed the access definition in the modules configuration.
+    * [Bugfix] Do not trim quotes from the caller finder result.
+    * [Bugfix] Do not add strings to the recursion hive that were not analysed because they were internal callables.
+    * [Bugfix] Do not add the internal array of an ArrayObject to the list of public undeclared properties.
+    * [Bugfix] Prevent a fatal when analysing a class with broken attributes.
 
 -----
 

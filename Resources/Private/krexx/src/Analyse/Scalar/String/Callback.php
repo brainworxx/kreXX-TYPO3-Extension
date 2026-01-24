@@ -53,6 +53,13 @@ use TypeError;
 class Callback extends AbstractScalarAnalysis
 {
     /**
+     * The reflection function we are analysing.
+     *
+     * @var \ReflectionFunction
+     */
+    protected ReflectionFunction $reflectionFunction;
+
+    /**
      * Is always active, because there are no system dependencies.
      *
      * @return bool
@@ -75,12 +82,25 @@ class Callback extends AbstractScalarAnalysis
      */
     public function canHandle($string, Model $model): bool
     {
-        if (is_callable($string)) {
-            $this->handledValue = $string;
-            return true;
+        if (!is_callable($string)) {
+            return false;
         }
 
-        return false;
+        try {
+            $this->reflectionFunction = new ReflectionFunction($string);
+        } catch (ReflectionException | TypeError $e) {
+            // Huh, we were unable to retrieve the reflection.
+            // Nothing left to do here.
+            return false;
+        }
+
+        if ($this->reflectionFunction->isInternal()) {
+            // We do not analyse internal functions.
+            return false;
+        }
+
+        $this->handledValue = $string;
+        return true;
     }
 
     /**
@@ -88,29 +108,16 @@ class Callback extends AbstractScalarAnalysis
      */
     protected function handle(): array
     {
-        try {
-            $reflectionFunction = new ReflectionFunction($this->handledValue);
-        } catch (ReflectionException | TypeError $e) {
-            // Huh, we were unable to retrieve the reflection.
-            // Nothing left to do here.
-            return [];
-        }
-
-        if ($reflectionFunction->isInternal()) {
-            // We do not analyse internal functions.
-            return [];
-        }
-
         // Stitching together the main analysis.
         /** @var FunctionDeclaration $functionDeclaration */
         $functionDeclaration = $this->pool->createClass(FunctionDeclaration::class);
         $messages = $this->pool->messages;
         $meta = [
             $messages->getHelp('metaComment') => $this->pool
-                ->createClass(Functions::class)->getComment($reflectionFunction),
-            $messages->getHelp('metaDeclaredIn') => $functionDeclaration->retrieveDeclaration($reflectionFunction)
+                ->createClass(Functions::class)->getComment($this->reflectionFunction),
+            $messages->getHelp('metaDeclaredIn') => $functionDeclaration->retrieveDeclaration($this->reflectionFunction)
         ];
-        $this->insertParameters($reflectionFunction, $meta);
+        $this->insertParameters($meta);
 
         return $meta;
     }
@@ -123,9 +130,9 @@ class Callback extends AbstractScalarAnalysis
      * @param string[] $meta
      *   The meta array, so far.
      */
-    protected function insertParameters(ReflectionFunction $reflectionFunction, array &$meta): void
+    protected function insertParameters(array &$meta): void
     {
-        foreach ($reflectionFunction->getParameters() as $key => $reflectionParameter) {
+        foreach ($this->reflectionFunction->getParameters() as $key => $reflectionParameter) {
             ++$key;
             $meta[$this->pool->messages->getHelp('metaParamNo') . $key] = $this->pool
                 ->codegenHandler

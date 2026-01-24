@@ -82,6 +82,27 @@ class ReflectionClassTest extends AbstractHelper
     }
 
     /**
+     * Testing the array casting of an ArrayObject as well as creating the actual
+     * reflection.
+     */
+    public function testConstructWithArrayObject()
+    {
+        $fixture = new \ArrayObject(['key1' => 'value1', 'key2' => 'value2']);
+        set_error_handler(function (){});
+        // This is actually deprecated as of PHP 8.2, hence the error handler.
+        $fixture->someProperty = 'someValue';
+        restore_error_handler();
+        $reflection = new ReflectionClass($fixture);
+        $this->assertEquals(
+            ['someProperty' => 'someValue'],
+            $this->retrieveValueByReflection('objectArray', $reflection),
+            'ArrayObject does not expose its properties when cast to array.'
+        );
+        $this->assertInstanceOf(OriginalReflectionClass::class, $reflection);
+        $this->assertSame($fixture, $reflection->getData());
+    }
+
+    /**
      * Simple getter tester.
      */
     public function testGetData()

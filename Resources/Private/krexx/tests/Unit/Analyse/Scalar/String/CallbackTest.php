@@ -60,8 +60,9 @@ class CallbackTest extends AbstractHelper
     {
         $stringCallback = new Callback(Krexx::$pool);
         $model = new Model(Krexx::$pool);
-        $this->assertTrue($stringCallback->canHandle('strpos', $model), 'This ia a predefined php function.');
-        $this->assertEquals('strpos', $this->retrieveValueByReflection('handledValue', $stringCallback));
+        $this->assertFalse($stringCallback->canHandle('strpos', $model), 'A predefined php function. We don\'t handle these');
+        $this->assertTrue($stringCallback->canHandle('krexx', $model), 'This is our shorthand, we handle it.');
+        $this->assertEquals('krexx', $this->retrieveValueByReflection('handledValue', $stringCallback));
         $this->assertFalse($stringCallback->canHandle('sdfsd dsf sdf ', $model), 'Just a random string.');
     }
 
@@ -100,41 +101,6 @@ class CallbackTest extends AbstractHelper
         );
         $this->assertStringContainsString('in line: 45', $result['Declared in']);
         $this->assertEquals('string $justAString', $result['Parameter #1']);
-    }
-
-    /**
-     * Test the error handling in the callMe.
-     */
-    public function testCallMeError()
-    {
-        // Create a fixture that is supposed to trigger a ReflectionException.
-        $stringCallback = new Callback(Krexx::$pool);
-
-        // Expect a start event, nothing more here.
-        // The callback should be null, triggering a TypeError.
-        $this->mockEventService([Callback::class . PluginConfigInterface::START_EVENT, $stringCallback]);
-
-        $stringCallback->callMe();
-    }
-
-    public function testCallMeInternal()
-    {
-        $this->mockEmergencyHandler();
-
-        // Prepare the guinea pig.
-        $stringCallback = new Callback(Krexx::$pool);
-        $stringCallback->canHandle('echo', new Model(Krexx::$pool));
-
-        Krexx::$pool->rewrite = [
-            ThroughMeta::class => CallbackCounter::class
-        ];
-
-        $stringCallback->callMe();
-        $this->assertEquals(0, CallbackCounter::$counter, 'We do not handle interal functions.');
-        $this->assertTrue(
-            empty(CallbackCounter::$staticParameters[0][Callback::PARAM_DATA]),
-            'No result for internal functions.'
-        );
     }
 
     /**

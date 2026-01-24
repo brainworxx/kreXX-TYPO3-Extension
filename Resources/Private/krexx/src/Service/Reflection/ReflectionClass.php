@@ -96,7 +96,19 @@ class ReflectionClass extends \ReflectionClass
             static::$mustSetAccessible = version_compare(phpversion(), '8.1.0', '<');
         }
         // Retrieve the class variables.
-        $this->objectArray = (array) $data;
+        if ($data instanceof \ArrayObject) {
+            try {
+                $flags = $data->getFlags();
+                $data->setFlags(\ArrayObject::STD_PROP_LIST);
+                $this->objectArray = (array) $data;
+                $data->setFlags($flags);
+            } catch (Throwable $throwable) {
+                // Do nothing.
+            }
+        } else {
+            $this->objectArray = (array) $data;
+        }
+
         // Remember the current object.
         $this->data = $data;
         // Init our unset object storage;

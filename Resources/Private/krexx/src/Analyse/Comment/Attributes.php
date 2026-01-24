@@ -77,8 +77,14 @@ class Attributes
         /** @var \ReflectionAttribute $attribute */
         foreach ($attributes as $attribute) {
             // Get the name of the attribute class.
-            $name = $attribute->getName();
-            $arguments = $attribute->getArguments();
+            try {
+                $name = $attribute->getName();
+                $arguments = $attribute->getArguments();
+            } catch (Throwable $e) {
+                // In case of an error, we skip this attribute.
+                continue;
+            }
+
             if (empty($arguments)) {
                 // If there are no arguments, we can just return the name.
                 $result[] = '#[' . $name . ']';
