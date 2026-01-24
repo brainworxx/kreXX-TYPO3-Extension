@@ -12,6 +12,7 @@ Changes:
     * [Feature] Updated to TYPO3 14.1.
     * [Bugfix] Populate extension title from composer.json
     * [Bugfix] Do not trim quotes from the caller finder result.
+    * [Bugfix] Fixed the access definition in the modules configuration.
 
 -----
 
