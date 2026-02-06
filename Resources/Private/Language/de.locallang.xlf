@@ -1,674 +1,675 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<xliff version="1.0">
-	<file source-language="de" datatype="plaintext" original="messages" product-name="includekrexx" date="2021-12-31T14:10:00+01:00">
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+	<file target-language="de" source-language="en" datatype="plaintext" original="EXT:includekrexx\Resources\Private\Language\locallang.xlf" product-name="includekrexx" date="2021-12-31T14:10:00+01:00">
 		<header/>
 		<body>
 
-			<trans-unit id="mlang_tabs_tab">
+			<trans-unit id="mlang_tabs_tab" approved="yes">
 				<source>kreXX Debugger</source>
+				<target state="final">kreXX Debugger</target>
 			</trans-unit>
-			<trans-unit id="mlang_labels_tabdescr">
+			<trans-unit id="mlang_labels_tabdescr" approved="yes">
 				<source>kreXX is a feature rich php debugger with a neatly arranged debug window, featuring backend access to logfiles, code generation to reach the displayed values and much more.</source>
-				<target>kreXX ist ein featurereicher PHP Debugger mit einer übersichtlichen Debug Ausgabe. Die Features umfassen einen Backendzugang zu seinen Logdateien, Quellcode Generierung um die dargestellten Werte zu erreichen und vieles mehr.</target>
+				<target state="final">kreXX ist ein featurereicher PHP Debugger mit einer übersichtlichen Debug Ausgabe. Die Features umfassen einen Backendzugang zu seinen Logdateien, Quellcode Generierung um die dargestellten Werte zu erreichen und vieles mehr.</target>
 			</trans-unit>
-			<trans-unit id="mlang_labels_tablabel">
+			<trans-unit id="mlang_labels_tablabel" approved="yes">
 				<source>kreXX Debugger</source>
 			</trans-unit>
 
 			<!-- General stuff for the configuration file -->
-			<trans-unit id="file">
+			<trans-unit id="file" approved="yes">
 				<source>File</source>
-				<target>Datei</target>
+				<target state="final">Datei</target>
 			</trans-unit>
-			<trans-unit id="browser">
+			<trans-unit id="browser" approved="yes">
 				<source>Browser shutdown phase</source>
-				<target>Browser Shutdown Phase</target>
+				<target state="final">Browser Shutdown Phase</target>
 			</trans-unit>
-			<trans-unit id="browserImmediately">
+			<trans-unit id="browserImmediately" approved="yes">
 				<source>Browser immediately</source>
-				<target>Browser sofort</target>
+				<target state="final">Browser sofort</target>
 			</trans-unit>
-			<trans-unit id="true">
+			<trans-unit id="true" approved="yes">
 				<source>True</source>
-				<target>Wahr</target>
+				<target state="final">Wahr</target>
 			</trans-unit>
-			<trans-unit id="false">
+			<trans-unit id="false" approved="yes">
 				<source>False</source>
-				<target>Falsch</target>
+				<target state="final">Falsch</target>
 			</trans-unit>
-			<trans-unit id="save">
+			<trans-unit id="save" approved="yes">
 				<source>Save</source>
-				<target>Speichern</target>
+				<target state="final">Speichern</target>
 			</trans-unit>
-			<trans-unit id="simple">
+			<trans-unit id="simple" approved="yes">
 				<source>Simple mode</source>
-				<target>Einfacher Modus</target>
+				<target state="final">Einfacher Modus</target>
 			</trans-unit>
-			<trans-unit id="expert">
+			<trans-unit id="expert" approved="yes">
 				<source>Expert mode</source>
-				<target>Experten Modus</target>
+				<target state="final">Experten Modus</target>
 			</trans-unit>
-			<trans-unit id="clear.cookies">
+			<trans-unit id="clear.cookies" approved="yes">
 				<source>Reset local cookie settings</source>
-				<target>Browser Debugging Cookies löschen</target>
+				<target state="final">Browser Debugging Cookies löschen</target>
 			</trans-unit>
-			<trans-unit id="loglevel.debug">
+			<trans-unit id="loglevel.debug" approved="yes">
 				<source>Debug</source>
-				<target>Debug</target>
+				<target state="final">Debug</target>
 			</trans-unit>
-			<trans-unit id="loglevel.info">
+			<trans-unit id="loglevel.info" approved="yes">
 				<source>Info</source>
-				<target>Info</target>
+				<target state="final">Info</target>
 			</trans-unit>
-			<trans-unit id="loglevel.notice">
+			<trans-unit id="loglevel.notice" approved="yes">
 				<source>Notice</source>
-				<target>Notice</target>
+				<target state="final">Notice</target>
 			</trans-unit>
-			<trans-unit id="loglevel.warning">
+			<trans-unit id="loglevel.warning" approved="yes">
 				<source>Warning</source>
-				<target>Warning</target>
+				<target state="final">Warning</target>
 			</trans-unit>
-			<trans-unit id="loglevel.error">
+			<trans-unit id="loglevel.error" approved="yes">
 				<source>Error</source>
-				<target>Error</target>
+				<target state="final">Error</target>
 			</trans-unit>
-			<trans-unit id="loglevel.alert">
+			<trans-unit id="loglevel.alert" approved="yes">
 				<source>Alert</source>
-				<target>Alert</target>
+				<target state="final">Alert</target>
 			</trans-unit>
-			<trans-unit id="loglevel.critical">
+			<trans-unit id="loglevel.critical" approved="yes">
 				<source>Critical</source>
-				<target>Critical</target>
+				<target state="final">Critical</target>
 			</trans-unit>
-			<trans-unit id="loglevel.emergency">
+			<trans-unit id="loglevel.emergency" approved="yes">
 				<source>Emergency</source>
-				<target>Emergency</target>
+				<target state="final">Emergency</target>
 			</trans-unit>
 
 			<!-- General stuff for the FE configuration -->
-			<trans-unit id="full">
+			<trans-unit id="full" approved="yes">
 				<source>Full edit</source>
-				<target>Editierbar</target>
+				<target state="final">Editierbar</target>
 			</trans-unit>
-			<trans-unit id="display">
+			<trans-unit id="display" approved="yes">
 				<source>Display only</source>
-				<target>Nur anzeigen</target>
+				<target state="final">Nur anzeigen</target>
 			</trans-unit>
-			<trans-unit id="none">
+			<trans-unit id="none" approved="yes">
 				<source>Do not display</source>
-				<target>Nicht anzeigen</target>
+				<target state="final">Nicht anzeigen</target>
 			</trans-unit>
 
 			<!-- Help texts -->
-			<trans-unit id="analyseProtected">
+			<trans-unit id="analyseProtected" approved="yes">
 				<source>Shall kreXX try to analyse the protected properties of a class? This may result in a lot of output.</source>
-				<target>Soll kreXX Protected Properties von Klassen analysieren? Das kann eine große Menge an Output bedeuten.</target>
+				<target state="final">Soll kreXX Protected Properties von Klassen analysieren? Das kann eine große Menge an Output bedeuten.</target>
 			</trans-unit>
-			<trans-unit id="analysePrivate">
+			<trans-unit id="analysePrivate" approved="yes">
 				<source>Shall kreXX try to analyse the private properties of a class? This may result in a lot of output.</source>
-				<target>Soll kreXX Private Properties von Klassen analysieren? Das kann eine große Menge an Output bedeuten.</target>
+				<target state="final">Soll kreXX Private Properties von Klassen analysieren? Das kann eine große Menge an Output bedeuten.</target>
 			</trans-unit>
-			<trans-unit id="analyseScalar">
+			<trans-unit id="analyseScalar" approved="yes">
 				<source>Shall kreXX do a deep analysis for scalar types? We are handling XML, JSON, callbacks and filepath.</source>
-				<target>Soll kreXX eine fortgeschrittene Analyse von Skalaren Variablen machen? Unterstützt wird XML, JSON, Callbacks und Dateipfade.</target>
+				<target state="final">Soll kreXX eine fortgeschrittene Analyse von Skalaren Variablen machen? Unterstützt wird XML, JSON, Callbacks und Dateipfade.</target>
 			</trans-unit>
-			<trans-unit id="analyseTraversable">
+			<trans-unit id="analyseTraversable" approved="yes">
 				<source>Shall kreXX try to analyse possible traversable data?</source>
-				<target>Soll kreXX versuchen iterierbare Klassendaten zu analysieren?</target>
+				<target state="final">Soll kreXX versuchen iterierbare Klassendaten zu analysieren?</target>
 			</trans-unit>
-			<trans-unit id="debugMethods">
+			<trans-unit id="debugMethods" approved="yes">
 				<source>Comma-separated list of used debug callback functions. A lot of frameworks offer these, toArray and toString being the most common. kreXX will try to call them, if they are available and display their provided data.</source>
-				<target>Komma separierte Liste mit zu benutzenden Debugfunktionen. Viele Frameworks bieten solche an, wobei toArray und toString die häufigst genutzen sind. kreXX wird versuchen diese aufzurufen falls sie zuer Verfügung stehen, und ihre Daten anzeigen.</target>
+				<target state="final">Komma separierte Liste mit zu benutzenden Debugfunktionen. Viele Frameworks bieten solche an, wobei toArray und toString die häufigst genutzen sind. kreXX wird versuchen diese aufzurufen falls sie zuer Verfügung stehen, und ihre Daten anzeigen.</target>
 			</trans-unit>
-			<trans-unit id="level">
+			<trans-unit id="level" approved="yes">
 				<source>Most frameworks have objects inside of objects inside of objects, and so on. Normally kreXX does not run in circles, but going to deep inside of an object tree can result in a lot of output.</source>
-				<target>Die meisten Frameworks haben Objekte in Objekten, welche wieder Objekte haben, usw. Normalerweise hat kreXX keine Probleme mit Rekursionen, aber wenn man zu tief in Objektstrukturen vorstößt, erhält man auch jede Menge Output.</target>
+				<target state="final">Die meisten Frameworks haben Objekte in Objekten, welche wieder Objekte haben, usw. Normalerweise hat kreXX keine Probleme mit Rekursionen, aber wenn man zu tief in Objektstrukturen vorstößt, erhält man auch jede Menge Output.</target>
 			</trans-unit>
-			<trans-unit id="destination">
+			<trans-unit id="destination" approved="yes">
 				<source>'Browser shutdown phase' = Sending everything to the browser after TYPO3 is finished with everything. 'File' = Saving everything to the log folder. 'Browser immediately' = Sending everything to the browser right away.</source>
-				<target>'Browser Shutdown Phase' = Es wird alles an den Browser geschickt, sobalt TYPO3 mit allem fertig ist. 'Datei' = Alles wird im Logordner gespeichert. 'Browser sofort' = Alles wird sofort an den Browser geschickt.</target>
+				<target state="final">'Browser Shutdown Phase' = Es wird alles an den Browser geschickt, sobalt TYPO3 mit allem fertig ist. 'Datei' = Alles wird im Logordner gespeichert. 'Browser sofort' = Alles wird sofort an den Browser geschickt.</target>
 			</trans-unit>
-			<trans-unit id="maxCall">
+			<trans-unit id="maxCall" approved="yes">
 				<source>kreXX has no problem with creating 1 GB of output, your browser can certainly not handle this much HTML. When using kreXX in a loop, it will create output every time the loop is executed. To limit this, you can configure the maximum call settings.</source>
-				<target>kreXX hat kein Problem damit 1 GB an Output zu erzeugen, ein Webrowser wird damit aber nicht umgehen können. Wenn kreXX in einer Schleife eingesetzt wird, wird für jeden Durchlauf Output generiert. Um das einzuschränken kann hier angegeben werden, wie oft kreXX pro Request ausgeführt werden darf.</target>
+				<target state="final">kreXX hat kein Problem damit 1 GB an Output zu erzeugen, ein Webrowser wird damit aber nicht umgehen können. Wenn kreXX in einer Schleife eingesetzt wird, wird für jeden Durchlauf Output generiert. Um das einzuschränken kann hier angegeben werden, wie oft kreXX pro Request ausgeführt werden darf.</target>
 			</trans-unit>
-			<trans-unit id="disabled">
+			<trans-unit id="disabled" approved="yes">
 				<source>Here you can disable kreXX without uninstalling the whole extension.</source>
-				<target>Hier kann man kreXX abschalten ohne die Extension deinstallieren zu müssen.</target>
+				<target state="final">Hier kann man kreXX abschalten ohne die Extension deinstallieren zu müssen.</target>
 			</trans-unit>
-			<trans-unit id="maxfiles">
+			<trans-unit id="maxfiles" approved="yes">
 				<source>How many logfiles do you want to store inside your logging folder? When there are more files than this number, the older files will get deleted.</source>
-				<target>Wie viele Logdateien soll kreXX im Logordner aufbewahren? Wenn es mehr gibt als hier angegeben ist, werden ältere Dateien gelöscht.</target>
+				<target state="final">Wie viele Logdateien soll kreXX im Logordner aufbewahren? Wenn es mehr gibt als hier angegeben ist, werden ältere Dateien gelöscht.</target>
 			</trans-unit>
-			<trans-unit id="skin">
+			<trans-unit id="skin" approved="yes">
 				<source>Choose a skin here. We have provided kreXX with two skins: smoky-grey and hans.</source>
-				<target>Hier kann ein Skin ausgewählt werden. kreXX bringt zwei skins mit: Smoky-Grey und Hans</target>
+				<target state="final">Hier kann ein Skin ausgewählt werden. kreXX bringt zwei skins mit: Smoky-Grey und Hans</target>
 			</trans-unit>
-			<trans-unit id="maxStepNumber">
+			<trans-unit id="maxStepNumber" approved="yes">
 				<source>A backtrace tends to produce a lot of output, and browsers tend to have problems with more than 100MB output in HTML text. Normally it is not necessary to go back more than 10 steps, but if you need to, you can increase this number here.</source>
-				<target>Ein Backtrace hat die Angewohnheit sehr viel Output zu erzeugen, und Webbrowser haben die Angewohnheit Probleme mit mehr als 100 MB HTML Code zu haben. Normalerweise ist es nicht nötig weiter als die letzten 10 Steps zu analysieren. Aber falls es doch nötig ist, hier kann dieser Wert eingestellt werden.</target>
+				<target state="final">Ein Backtrace hat die Angewohnheit sehr viel Output zu erzeugen, und Webbrowser haben die Angewohnheit Probleme mit mehr als 100 MB HTML Code zu haben. Normalerweise ist es nicht nötig weiter als die letzten 10 Steps zu analysieren. Aber falls es doch nötig ist, hier kann dieser Wert eingestellt werden.</target>
 			</trans-unit>
-			<trans-unit id="detectAjax">
+			<trans-unit id="detectAjax" approved="yes">
 				<source>kreXX tries to detect whether a request is made via AJAX. When it is detected, it will not send any output to the browser at all, because an AJAX request hat most certainly no way of displaying the kreXX output. Logging is still possible of course. The AJAX detection can be disabled here.</source>
-				<target>kreXX versucht herauszufinden, ob ein Request per AJAX gemacht wurde. Es wird dann keine HTML an den Browser geschickt, weil ein AJAX Request damit nichts anfangen kann. Logging ist selbstverständlich möglich. Die AJAX Erkennung kann hier ausgeschaltet werden.</target>
+				<target state="final">kreXX versucht herauszufinden, ob ein Request per AJAX gemacht wurde. Es wird dann keine HTML an den Browser geschickt, weil ein AJAX Request damit nichts anfangen kann. Logging ist selbstverständlich möglich. Die AJAX Erkennung kann hier ausgeschaltet werden.</target>
 			</trans-unit>
-			<trans-unit id="memoryLeft">
+			<trans-unit id="memoryLeft" approved="yes">
 				<source>kreXX checks regularly how much memory is left. Here you can adjust the amount where it will trigger an emergency break. Unit of measurement is MB.</source>
-				<target>kreXX überprüft regelmäßig wie viel Speicher noch frei ist. Hier kann die Menge angegeben werden bevor ein Notstop ausgelöst wird. Die Maßeinheit ist MB.</target>
+				<target state="final">kreXX überprüft regelmäßig wie viel Speicher noch frei ist. Hier kann die Menge angegeben werden bevor ein Notstop ausgelöst wird. Die Maßeinheit ist MB.</target>
 			</trans-unit>
-			<trans-unit id="maxRuntime">
+			<trans-unit id="maxRuntime" approved="yes">
 				<source>kreXX checks during the analysis how much time has elapsed since start. Here you can adjust the amount where it will trigger an emergency break. Unit of measurement is seconds.</source>
-				<target>kreXX überprüft regelmäßig wie lange sein Start her ist. Hier kann die Zeit eingestellt werden bevor ein Notstop ausgelöst wird. Die Maßeinheit ist Sekunden.</target>
+				<target state="final">kreXX überprüft regelmäßig wie lange sein Start her ist. Hier kann die Zeit eingestellt werden bevor ein Notstop ausgelöst wird. Die Maßeinheit ist Sekunden.</target>
 			</trans-unit>
-			<trans-unit id="analyseProtectedMethods">
+			<trans-unit id="analyseProtectedMethods" approved="yes">
 				<source>Here you can toggle if kreXX shall analyse the protected methods of a class.</source>
-				<target>Hier kann eingestellt werden ob kreXX Protected Methoden von Klassen analysieren soll.</target>
+				<target state="final">Hier kann eingestellt werden ob kreXX Protected Methoden von Klassen analysieren soll.</target>
 			</trans-unit>
-			<trans-unit id="analysePrivateMethods">
+			<trans-unit id="analysePrivateMethods" approved="yes">
 				<source>Here you can toggle if kreXX shall analyse the private methods of a class.</source>
-				<target>Hier kann eingestellt werden ob kreXX Private Methoden einer Klasse analysieren soll.</target>
+				<target state="final">Hier kann eingestellt werden ob kreXX Private Methoden einer Klasse analysieren soll.</target>
 			</trans-unit>
-			<trans-unit id="iprange">
+			<trans-unit id="iprange" approved="yes">
 				<source>List of IPs that can trigger kreXX. Wildcards can be used.</source>
-				<target>IP Filter zum Aufrufen von kreXX. Wildcards können genutzt werden.</target>
+				<target state="final">IP Filter zum Aufrufen von kreXX. Wildcards können genutzt werden.</target>
 			</trans-unit>
-			<trans-unit id="analyseGetter">
+			<trans-unit id="analyseGetter" approved="yes">
 				<source>Shall kreXX try to determine the output of getter methods? These methods will not be called. kreXX will try to get the (possible) result from the class properties, which may lead to false results.</source>
-				<target>Soll kreXX versuchen die Ergebnisse von Getter-Methoden zu erraten? Diese Methoden werden nicht aufgerufen. kreXX wird versuchen die (möglichen) Werte aus den Klassen Properties zu zeihen, was zu falschen Ergebnissen führen kann.</target>
+				<target state="final">Soll kreXX versuchen die Ergebnisse von Getter-Methoden zu erraten? Diese Methoden werden nicht aufgerufen. kreXX wird versuchen die (möglichen) Werte aus den Klassen Properties zu zeihen, was zu falschen Ergebnissen führen kann.</target>
 			</trans-unit>
-			<trans-unit id="arrayCountLimit">
+			<trans-unit id="arrayCountLimit" approved="yes">
 				<source>When encountering an array larger than this number, kreXX will resort to a simplified array analysis. This means that classes or other arrays in this large array will only get a rudimentary analysis to prevent an overkill output.</source>
-				<target>Wenn kreXX auf einen sehr großen Array analysieren soll wird eine einfachere Array Analyse genutzt. Das bedeutet, dass Objekte oder andere Arrays welche darin enthalten sind nur rudimentär analysiert werden, um nicht zu viel Output zu erzeugen.</target>
+				<target state="final">Wenn kreXX auf einen sehr großen Array analysieren soll wird eine einfachere Array Analyse genutzt. Das bedeutet, dass Objekte oder andere Arrays welche darin enthalten sind nur rudimentär analysiert werden, um nicht zu viel Output zu erzeugen.</target>
 			</trans-unit>
-			<trans-unit id="activateT3FileWriter">
+			<trans-unit id="activateT3FileWriter" approved="yes">
 				<source>Use kreXX as the TYPO3 log file writer?</source>
-				<target>Soll kreXX als TYPO3-Log-Writer eingesetzt werden?</target>
+				<target state="final">Soll kreXX als TYPO3-Log-Writer eingesetzt werden?</target>
 			</trans-unit>
-			<trans-unit id="loglevelT3FileWriter">
+			<trans-unit id="loglevelT3FileWriter" approved="yes">
 				<source>There are different log levels. Depending on the setting, you may get a lot of output.</source>
-				<target>Es gibt unterschiedliche Log-Level. Je nachdem was hier eingestellt wird kann das eine Menge Output erzeugen.</target>
+				<target state="final">Es gibt unterschiedliche Log-Level. Je nachdem was hier eingestellt wird kann das eine Menge Output erzeugen.</target>
 			</trans-unit>
 
 			<!-- Messages -->
-			<trans-unit id="file.not.writable">
+			<trans-unit id="file.not.writable" approved="yes">
 				<source>Configuration file %1$s is not writable!</source>
-				<target>Die Konfigurationsdatei %1$s kann nicht geschrieben werden.</target>
+				<target state="final">Die Konfigurationsdatei %1$s kann nicht geschrieben werden.</target>
 			</trans-unit>
-			<trans-unit id="value.not.allowed">
+			<trans-unit id="value.not.allowed" approved="yes">
 				<source>%1$s is not an allowed value!</source>
-				<target>Der Wert %1$s ist hier nicht erlaubt.</target>
+				<target state="final">Der Wert %1$s ist hier nicht erlaubt.</target>
 			</trans-unit>
-			<trans-unit id="save.fail.title">
+			<trans-unit id="save.fail.title" approved="yes">
 				<source>The settings were NOT saved.</source>
-				<target>Die Einstellungen wurden NICHT gespeichert.</target>
+				<target state="final">Die Einstellungen wurden NICHT gespeichert.</target>
 			</trans-unit>
-			<trans-unit id="save.success.title">
+			<trans-unit id="save.success.title" approved="yes">
 				<source>The settings were saved.</source>
-				<target>Die Einstellungen wurden gespeichert.</target>
+				<target state="final">Die Einstellungen wurden gespeichert.</target>
 			</trans-unit>
-			<trans-unit id="save.success.text">
+			<trans-unit id="save.success.text" approved="yes">
 				<source>The settings were saved to: %1$s</source>
-				<target>Die Einstellungen wurden hier gespeichert: %1$s</target>
+				<target state="final">Die Einstellungen wurden hier gespeichert: %1$s</target>
 			</trans-unit>
-			<trans-unit id="general.error.title">
+			<trans-unit id="general.error.title" approved="yes">
 				<source>General error</source>
-				<target>Allgemeiner Fehler</target>
+				<target state="final">Allgemeiner Fehler</target>
 			</trans-unit>
-			<trans-unit id="debugpreset.warning.title">
+			<trans-unit id="debugpreset.warning.title" approved="yes">
 				<source>Productive Settings detected!</source>
-				<target>Produktiv-Einstellungen gefunden!</target>
+				<target state="final">Produktiv-Einstellungen gefunden!</target>
 			</trans-unit>
-			<trans-unit id="debugpreset.warning.message">
+			<trans-unit id="debugpreset.warning.message" approved="yes">
 				<source>kreXX will function normally, but please do not debug a productive system.</source>
-				<target>kreXX wird normal funktionieren, aber bitte debuggen Sie kein Produktiv-System.</target>
+				<target state="final">kreXX wird normal funktionieren, aber bitte debuggen Sie kein Produktiv-System.</target>
 			</trans-unit>
-			<trans-unit id="fileDeleted" xml:space="preserve">
+			<trans-unit id="fileDeleted" xml:space="preserve" approved="yes">
 				<source>The file "%s" was successfully deleted.</source>
-				<target>Die Datei "%s" wurde erflogreich gelöscht.</target>
+				<target state="final">Die Datei "%s" wurde erflogreich gelöscht.</target>
 			</trans-unit>
-			<trans-unit id="fileDeletedFail" xml:space="preserve">
+			<trans-unit id="fileDeletedFail" xml:space="preserve" approved="yes">
 				<source>The file "%s" was NOT deleted.</source>
-				<target>Die Datei "%s" wurde NICHT gelöscht.</target>
+				<target state="final">Die Datei "%s" wurde NICHT gelöscht.</target>
 			</trans-unit>
-			<trans-unit id="accessDenied">
+			<trans-unit id="accessDenied" approved="yes">
 				<source>Access denied!</source>
-				<target>Zugang verweigert!</target>
+				<target state="final">Zugang verweigert!</target>
 			</trans-unit>
-			<trans-unit id="languageKey">
+			<trans-unit id="languageKey" approved="yes">
 				<source>The language key from the help file(s). We provide kreXX in two language english as a fall back, and german (de).</source>
-				<target>Der Sprachschlüssel für die Hilfedatei(en). kreXX wird in zwei Sprachen ausgeliefert, Englisch und  Deutsch (de).</target>
+				<target state="final">Der Sprachschlüssel für die Hilfedatei(en). kreXX wird in zwei Sprachen ausgeliefert, Englisch und Deutsch (de).</target>
 			</trans-unit>
 
 			<!--
 				Error messages from the krexx lib
 				@see Brainworxx\Krexx\Service\Config\Security->evaluateSetting( . . . )
 			-->
-			<trans-unit id="configErrorBool">
+			<trans-unit id="configErrorBool" approved="yes">
 				<source>Wrong configuration for: '%s => %s'! Expected boolean. The configured setting was not applied!</source>
-				<target>Falsche Konfiguration für: '%s => %s'! Boolean erwartet. Dieses Setting wurde nicht angewendet!</target>
+				<target state="final">Falsche Konfiguration für: '%s => %s'! Boolean erwartet. Dieses Setting wurde nicht angewendet!</target>
 			</trans-unit>
-			<trans-unit id="configErrorInt">
+			<trans-unit id="configErrorInt" approved="yes">
 				<source>Wrong configuration for: '%s => %s'! Expected integer. The configured setting was not applied!</source>
-				<target>Falsche Konfiguration für: '%s => %s'! Integer erwartet. Dieses Setting wurde nicht angewendet!</target>
+				<target state="final">Falsche Konfiguration für: '%s => %s'! Integer erwartet. Dieses Setting wurde nicht angewendet!</target>
 			</trans-unit>
-			<trans-unit id="configErrorDestination">
+			<trans-unit id="configErrorDestination" approved="yes">
 				<source>Wrong configuration for: 'output => destination'! Expected 'browser', 'file' or 'browserImmediately'. The configured setting was not applied!</source>
-				<target>Falsche Konfiguration für:'output => destination'! Zulässige Werte sind 'browser', 'file' oder 'browserImmediately'. Dieses Setting wurde nicht angewendet!</target>
+				<target state="final">Falsche Konfiguration für:'output => destination'! Zulässige Werte sind 'browser', 'file' oder 'browserImmediately'. Dieses Setting wurde nicht angewendet!</target>
 			</trans-unit>
-			<trans-unit id="configErrorSkin">
+			<trans-unit id="configErrorSkin" approved="yes">
 				<source>Wrong configuration for: 'output => skin'! Skin not found. The configured setting was not applied!</source>
-				<target>Falsche Konfiguration für: 'output => skin'! Der Skin wurde nicht gefunden. Dieses Setting wurde nicht angewendet!</target>
+				<target state="final">Falsche Konfiguration für: 'output => skin'! Der Skin wurde nicht gefunden. Dieses Setting wurde nicht angewendet!</target>
 			</trans-unit>
-			<trans-unit id="configErrorLocal">
+			<trans-unit id="configErrorLocal" approved="yes">
 				<source>Could not read the Local Cookie configuration. Sorry :-/</source>
-				<target>Konnte die Browser Debugging Cookies nicht lesen. Sorry :-/</target>
+				<target state="final">Konnte die Browser Debugging Cookies nicht lesen. Sorry :-/</target>
 			</trans-unit>
-			<trans-unit id="configErrorIprange">
+			<trans-unit id="configErrorIprange" approved="yes">
 				<source>Wrong configuration for: 'output => iprange'! An empty IP list means that no one will be able to use kreXX. The configured setting was not applied!</source>
-				<target>Falsche Konfiguration für: 'output => iprange'! Eine leere IP Liste bedeutet, dass niemand kreXX zu sehen bekommt. Dieses Setting wurde nicht angewendet!</target>
+				<target state="final">Falsche Konfiguration für: 'output => iprange'! Eine leere IP Liste bedeutet, dass niemand kreXX zu sehen bekommt. Dieses Setting wurde nicht angewendet!</target>
 			</trans-unit>
-			<trans-unit id="configErrorMaxRuntimeBig">
+			<trans-unit id="configErrorMaxRuntimeBig" approved="yes">
 				<source>Wrong configuration for: 'runtime => maxRuntime'! Maximum for this server is: %s. The configured setting was not applied!</source>
-				<target>Falsche Konfiguration für: 'runtime => maxRuntime'! Das Maximum für diesen Server beträgt: %s. Dieses Setting wurde nicht angewendet!</target>
+				<target state="final">Falsche Konfiguration für: 'runtime => maxRuntime'! Das Maximum für diesen Server beträgt: %s. Dieses Setting wurde nicht angewendet!</target>
 			</trans-unit>
-			<trans-unit id="maxCallReached">
+			<trans-unit id="maxCallReached" approved="yes">
 				<source>Maximum call-level reached. This is the last analysis for this request. To increase this value, please edit: emergency => maxCall.</source>
-				<target>Maximales Aufruflimit erreicht. Dies ist die letzte Analyse dieses Requests. Um diesen Wert zu erhöhen, bitte emergency => maxCall anpassen.</target>
+				<target state="final">Maximales Aufruflimit erreicht. Dies ist die letzte Analyse dieses Requests. Um diesen Wert zu erhöhen, bitte emergency => maxCall anpassen.</target>
 			</trans-unit>
-			<trans-unit id="configErrorDebugBlacklist">
+			<trans-unit id="configErrorDebugBlacklist" approved="yes">
 				<source>Wrong configuration for: '%s => %s'! The debugmethod '%s' is blacklisted. The configured setting was not applied!</source>
-				<target>Falsche Konfiguration für: '%s => %s'! Die Debugmethode '%s' ist geblacklistet. Dieses Setting wurde nicht angewendet!</target>
+				<target state="final">Falsche Konfiguration für: '%s => %s'! Die Debugmethode '%s' ist geblacklistet. Dieses Setting wurde nicht angewendet!</target>
 			</trans-unit>
-			<trans-unit id="configErrorDebugInvalid">
+			<trans-unit id="configErrorDebugInvalid" approved="yes">
 				<source>Wrong configuration for: '%s => %s'! '%s' is not a valid method. The configured setting was not applied!</source>
-				<target>Falsche Konfiguration für: '%s => %s'! '%s' ist keine valide Methode. Dieses Setting wurde nicht angewendet!</target>
+				<target state="final">Falsche Konfiguration für: '%s => %s'! '%s' ist keine valide Methode. Dieses Setting wurde nicht angewendet!</target>
 			</trans-unit>
-			 <trans-unit id="configErrorLoglevelT3FileWriter">
+			<trans-unit id="configErrorLoglevelT3FileWriter" approved="yes">
 				<source>Wrong configuration for: 'TYPO3 => activateT3FileWriter'! '%s' is not a valid logging level. The configured setting was not applied!</source>
-				 <target>Falsche Konfiguration für: 'TYPO3 => activateT3FileWriter'! '%s' ist kein valides Loglevel. Dieses Setting wurde nicht angewendet!</target>
+				<target state="final">Falsche Konfiguration für: 'TYPO3 => activateT3FileWriter'! '%s' ist kein valides Loglevel. Dieses Setting wurde nicht angewendet!</target>
 			</trans-unit>
-			<trans-unit id="emergencyTimer">
+			<trans-unit id="emergencyTimer" approved="yes">
 				<source>Emergency break due to extensive run time!</source>
-				<target>Notstop wegen exzessiver Laufzeit!</target>
+				<target state="final">Notstop wegen exzessiver Laufzeit!</target>
 			</trans-unit>
-			<trans-unit id="emergencyMemory">
+			<trans-unit id="emergencyMemory" approved="yes">
 				<source>Emergency break due to extensive memory usage!</source>
-				<target>Notstop wegen zu hoher Speicherauslastung!</target>
+				<target state="final">Notstop wegen zu hoher Speicherauslastung!</target>
 			</trans-unit>
-			<trans-unit id="fileserviceDelete">
+			<trans-unit id="fileserviceDelete" approved="yes">
 				<source>Unable to delete file: %s</source>
-				<target>Datei kann nicht gelöscht werden: %s</target>
+				<target state="final">Datei kann nicht gelöscht werden: %s</target>
 			</trans-unit>
-			<trans-unit id="fileserviceAccess">
+			<trans-unit id="fileserviceAccess" approved="yes">
 				<source>Could not access file: %s</source>
-				<target>Auf Dtei kann nicht zugegriffen werden: %s</target>
+				<target state="final">Auf Dtei kann nicht zugegriffen werden: %s</target>
 			</trans-unit>
-			<trans-unit id="omittedBacktrace">
+			<trans-unit id="omittedBacktrace" approved="yes">
 				<source>Omitted backtrace steps %s until %s.</source>
-				<target>Ausgelassene Backtrace Schritte von %s bis %s.</target>
+				<target state="final">Ausgelassene Backtrace Schritte von %s bis %s.</target>
 			</trans-unit>
-			<trans-unit id="chunksNotWritable">
+			<trans-unit id="chunksNotWritable" approved="yes">
 				<source>Chunksfolder %s is not writable! This will increase the memory usage of kreXX significantly!</source>
-				<target>Der Chunksordner %s ist schreibgeschützt! Das wird erhöht die Speicherauslastung von kreXX erheblich.</target>
+				<target state="final">Der Chunksordner %s ist schreibgeschützt! Das wird erhöht die Speicherauslastung von kreXX erheblich.</target>
 			</trans-unit>
-			<trans-unit id="logNotWritable">
+			<trans-unit id="logNotWritable" approved="yes">
 				<source>Logfolder %s is not writable!</source>
-				<target>Der Logordner %s ist schreibgeschützt!</target>
+				<target state="final">Der Logordner %s ist schreibgeschützt!</target>
 			</trans-unit>
-			<trans-unit id="fileinfoNotInstalled">
+			<trans-unit id="fileinfoNotInstalled" approved="yes">
 				<source>The PHP extension 'fileinfo' is not installed. The mime type analysis is not available.</source>
-				<target>Die PHP Extension 'fineinfo' ist nicht installiert. Die Mimetype Analyse steht nicht zur Verfügung.</target>
+				<target state="final">Die PHP Extension 'fineinfo' ist nicht installiert. Die Mimetype Analyse steht nicht zur Verfügung.</target>
 			</trans-unit>
-			<trans-unit id="mbstringNotInstalled">
+			<trans-unit id="mbstringNotInstalled" approved="yes">
 				<source>The php extension 'mb-string' is not installed. The string analysis may be unreliable.</source>
-				<target>Die PHP Extension 'mb-string' ist nicht installiert. Die String Analyse ist deswegen unzuverlässig.</target>
+				<target state="final">Die PHP Extension 'mb-string' ist nicht installiert. Die String Analyse ist deswegen unzuverlässig.</target>
 			</trans-unit>
-			<trans-unit id="configErrorLangInvalid">
+			<trans-unit id="configErrorLangInvalid" approved="yes">
 				<source>Wrong configuration for: '%s => %s'! The language '%s' is not available. The configured setting was not applied!</source>
-				<target>Falsche Konfiguration für: '%s => %s'! Die Sprache '%s' steht nicht zur Verfügung. Dieses Setting wurde nicht angewendet!</target>
+				<target state="final">Falsche Konfiguration für: '%s => %s'! Die Sprache '%s' steht nicht zur Verfügung. Dieses Setting wurde nicht angewendet!</target>
 			</trans-unit>
-			<trans-unit id="maximumLevelReached1">
+			<trans-unit id="maximumLevelReached1" approved="yes">
 				<source>Maximale Verschachtelung erreicht..</source>
-				<target>Maximale Verschachtelungsebene für die Analyse erreicht. Ich werde nicht weiter gehen.</target>
+				<target state="final">Maximale Verschachtelungsebene für die Analyse erreicht. Ich werde nicht weiter gehen.</target>
 			</trans-unit>
-			<trans-unit id="maximumLevelReached2">
+			<trans-unit id="maximumLevelReached2" approved="yes">
 				<source>To increase this value, change the Prune output => level setting."</source>
-				<target>Um diesen Wert zu erhöhen muss der Wert 'Ausgabe begrenzen => Maximale Verschachtelung' erhöht werden.</target>
+				<target state="final">Um diesen Wert zu erhöhen muss der Wert 'Ausgabe begrenzen => Maximale Verschachtelung' erhöht werden.</target>
 			</trans-unit>
 
 
 			<!-- Tabs -->
-			<trans-unit id="layout.edit.config.file">
+			<trans-unit id="layout.edit.config.file" approved="yes">
 				<source>Edit configuration file</source>
-				<target>Konfigurationsdatei editieren</target>
+				<target state="final">Konfigurationsdatei editieren</target>
 			</trans-unit>
-			<trans-unit id="layout.edit.config.fe">
+			<trans-unit id="layout.edit.config.fe" approved="yes">
 				<source>Edit FE configuration</source>
-				<target>Frontend Konfiguration editieren</target>
+				<target state="final">Frontend Konfiguration editieren</target>
 			</trans-unit>
-			<trans-unit id="layout.usage.help">
+			<trans-unit id="layout.usage.help" approved="yes">
 				<source>Usage help</source>
-				<target>Schnelleinführung</target>
+				<target state="final">Schnelleinführung</target>
 			</trans-unit>
-			<trans-unit id="layout.log.index">
+			<trans-unit id="layout.log.index" approved="yes">
 				<source>Logfiles access</source>
-				<target>Logdateien Zugriff</target>
+				<target state="final">Logdateien Zugriff</target>
 			</trans-unit>
 
 			<!-- Headlines -->
-			<trans-unit id="subhead.output">
+			<trans-unit id="subhead.output" approved="yes">
 				<source>Output</source>
-				<target>Output</target>
+				<target state="final">Output</target>
 			</trans-unit>
-			<trans-unit id="subhead.behavior">
+			<trans-unit id="subhead.behavior" approved="yes">
 				<source>Behavior</source>
-				<target>Verhalten</target>
+				<target state="final">Verhalten</target>
 			</trans-unit>
-			<trans-unit id="subhead.properties">
+			<trans-unit id="subhead.properties" approved="yes">
 				<source>Properties</source>
-				<target>Properties</target>
+				<target state="final">Properties</target>
 			</trans-unit>
-			<trans-unit id="subhead.methods">
+			<trans-unit id="subhead.methods" approved="yes">
 				<source>Methods</source>
-				<target>Methoden</target>
+				<target state="final">Methoden</target>
 			</trans-unit>
-			<trans-unit id="subhead.pruneOutput">
+			<trans-unit id="subhead.pruneOutput" approved="yes">
 				<source>Prune output</source>
-				<target>Ausgabe begrenzen</target>
+				<target state="final">Ausgabe begrenzen</target>
 			</trans-unit>
-			<trans-unit id="subhead.emergencystop">
+			<trans-unit id="subhead.emergencystop" approved="yes">
 				<source>Emergency stop</source>
-				<target>Notstop</target>
+				<target state="final">Notstop</target>
 			</trans-unit>
-			<trans-unit id="subhead.typo3">
+			<trans-unit id="subhead.typo3" approved="yes">
 				<source>TYPO3 specific</source>
-				<target>TYPO3 spezifisches</target>
+				<target state="final">TYPO3 spezifisches</target>
 			</trans-unit>
-			<trans-unit id="table.desc">
+			<trans-unit id="table.desc" approved="yes">
 				<source>Description</source>
-				<target>Beschreibung</target>
+				<target state="final">Beschreibung</target>
 			</trans-unit>
-			<trans-unit id="table.value">
+			<trans-unit id="table.value" approved="yes">
 				<source>Value</source>
-				<target>Wert</target>
+				<target state="final">Wert</target>
 			</trans-unit>
 
 			<!-- Labels -->
-			<trans-unit id="label.skin">
+			<trans-unit id="label.skin" approved="yes">
 				<source>Skin:</source>
-				<target>Skin:</target>
+				<target state="final">Skin:</target>
 			</trans-unit>
-			<trans-unit id="label.memoryLeft">
+			<trans-unit id="label.memoryLeft" approved="yes">
 				<source>Minimum amount of memory [MB]:</source>
-				<target>Minimal genutzer Speicher [MB]:</target>
+				<target state="final">Minimal genutzer Speicher [MB]:</target>
 			</trans-unit>
-			<trans-unit id="label.maxRuntime">
+			<trans-unit id="label.maxRuntime" approved="yes">
 				<source>Maximum Runtime [Seconds]:</source>
-				<target>Maximale Laufzeit [Sekunden]:</target>
+				<target state="final">Maximale Laufzeit [Sekunden]:</target>
 			</trans-unit>
-			<trans-unit id="label.maxfiles">
+			<trans-unit id="label.maxfiles" approved="yes">
 				<source>Maximum files in the logfolder:</source>
-				<target>Maximale Anzahl von Dateien im Logverzeichnis:</target>
+				<target state="final">Maximale Anzahl von Dateien im Logverzeichnis:</target>
 			</trans-unit>
-			<trans-unit id="label.destination">
+			<trans-unit id="label.destination" approved="yes">
 				<source>Destination:</source>
-				<target>Ziel:</target>
+				<target state="final">Ziel:</target>
 			</trans-unit>
-			<trans-unit id="label.maxCall">
+			<trans-unit id="label.maxCall" approved="yes">
 				<source>Maximum amount of calls:</source>
-				<target>Maximale Anzahl an Aufrufen:</target>
+				<target state="final">Maximale Anzahl an Aufrufen:</target>
 			</trans-unit>
-			<trans-unit id="label.disabled">
+			<trans-unit id="label.disabled" approved="yes">
 				<source>Disable kreXX:</source>
-				<target>kreXX abschalten</target>
+				<target state="final">kreXX abschalten</target>
 			</trans-unit>
-			<trans-unit id="label.detectAjax">
+			<trans-unit id="label.detectAjax" approved="yes">
 				<source>Try to detect AJAX requests:</source>
-				<target>Versuche AJAX Requests zu erkennen:</target>
+				<target state="final">Versuche AJAX Requests zu erkennen:</target>
 			</trans-unit>
-			<trans-unit id="label.analyseProtected">
+			<trans-unit id="label.analyseProtected" approved="yes">
 				<source>Analyse protected properties:</source>
-				<target>Analysiere Protected Properties:</target>
+				<target state="final">Analysiere Protected Properties:</target>
 			</trans-unit>
-			<trans-unit id="label.analysePrivate">
+			<trans-unit id="label.analysePrivate" approved="yes">
 				<source>Analyse private properties:</source>
-				<target>Analysiere Private Properties:</target>
+				<target state="final">Analysiere Private Properties:</target>
 			</trans-unit>
-			<trans-unit id="label.analyseScalar">
+			<trans-unit id="label.analyseScalar" approved="yes">
 				<source>Deep analysis for scalar types:</source>
-				<target>Fortgeschrittene analyse für skalare Variablen:</target>
+				<target state="final">Fortgeschrittene analyse für skalare Variablen:</target>
 			</trans-unit>
-			<trans-unit id="label.analyseTraversable">
+			<trans-unit id="label.analyseTraversable" approved="yes">
 				<source>Analyse traversable data:</source>
-				<target>Analyse von iterierbaren Klassendaten</target>
+				<target state="final">Analyse von iterierbaren Klassendaten</target>
 			</trans-unit>
-			<trans-unit id="label.debugMethods">
+			<trans-unit id="label.debugMethods" approved="yes">
 				<source>List of debug methods to poll for data:</source>
-				<target>Lise von verwendeten Debug Methoden:</target>
+				<target state="final">Lise von verwendeten Debug Methoden:</target>
 			</trans-unit>
-			<trans-unit id="label.level">
+			<trans-unit id="label.level" approved="yes">
 				<source>Maximum nesting level for objects and arrays:</source>
-				<target>Maximale Verschachtelungsebene für Objekte und Arrays:</target>
+				<target state="final">Maximale Verschachtelungsebene für Objekte und Arrays:</target>
 			</trans-unit>
-			<trans-unit id="label.analyseProtectedMethods">
+			<trans-unit id="label.analyseProtectedMethods" approved="yes">
 				<source>Analyse protected methods:</source>
-				<target>Analysiere Protected Methoden:</target>
+				<target state="final">Analysiere Protected Methoden:</target>
 			</trans-unit>
-			<trans-unit id="label.analysePrivateMethods">
+			<trans-unit id="label.analysePrivateMethods" approved="yes">
 				<source>Analyse private methods:</source>
-				<target>Analysiere Private Methoden:</target>
+				<target state="final">Analysiere Private Methoden:</target>
 			</trans-unit>
-			<trans-unit id="label.iprange">
+			<trans-unit id="label.iprange" approved="yes">
 				<source>IP Range:</source>
-				<target>IP Liste:</target>
+				<target state="final">IP Liste:</target>
 			</trans-unit>
-			<trans-unit id="label.analyseGetter">
+			<trans-unit id="label.analyseGetter" approved="yes">
 				<source>Analyse getter methods:</source>
-				<target>Analysiere Getter Methoden:</target>
+				<target state="final">Analysiere Getter Methoden:</target>
 			</trans-unit>
-			<trans-unit id="label.maxStepNumber">
+			<trans-unit id="label.maxStepNumber" approved="yes">
 				<source>Maximum steps in the backtrace:</source>
-				<target>Maximale Schritte in einem Backtrace:</target>
+				<target state="final">Maximale Schritte in einem Backtrace:</target>
 			</trans-unit>
-			<trans-unit id="label.arrayCountLimit">
+			<trans-unit id="label.arrayCountLimit" approved="yes">
 				<source>Maximum array size before fallback to simplified analysis:</source>
-				<target>Maximal Array Größe vor dem Fallback auf die vereinfachte Analyse:</target>
+				<target state="final">Maximal Array Größe vor dem Fallback auf die vereinfachte Analyse:</target>
 			</trans-unit>
-			<trans-unit id="label.activateT3FileWriter">
+			<trans-unit id="label.activateT3FileWriter" approved="yes">
 				<source>Activate the TYPO3 FileWriter:</source>
-				<target>Den TYPO3 FileWriter aktivieren:</target>
+				<target state="final">Den TYPO3 FileWriter aktivieren:</target>
 			</trans-unit>
-			<trans-unit id="label.loglevelT3FileWriter">
+			<trans-unit id="label.loglevelT3FileWriter" approved="yes">
 				<source>Log level of the FileWriter:</source>
-				<target>Loglevel für den FileWriter:</target>
+				<target state="final">Loglevel für den FileWriter:</target>
 			</trans-unit>
-			<trans-unit id="label.languageKey">
+			<trans-unit id="label.languageKey" approved="yes">
 				<source>Language</source>
-				<target>Sprache</target>
+				<target state="final">Sprache</target>
 			</trans-unit>
 
 			<!-- Content stuff  Edit Frontend Settings -->
-			<trans-unit id="editfeconfig.help.headline">
+			<trans-unit id="editfeconfig.help.headline" approved="yes">
 				<source>Here you can edit the frontend configuration form.</source>
-				<target>Hier kann die Frontend Konfiguration editiert werden.</target>
+				<target state="final">Hier kann die Frontend Konfiguration editiert werden.</target>
 			</trans-unit>
-			<trans-unit id="full.help">
-				<source> = The value can be edited in the frontend.</source>
-				<target> = Der Wert kann im Frontend editiert werden.</target>
+			<trans-unit id="full.help" approved="yes">
+				<source>= The value can be edited in the frontend.</source>
+				<target state="final">= Der Wert kann im Frontend editiert werden.</target>
 			</trans-unit>
-			<trans-unit id="display.help">
-				<source> = The value will only be displayed. kreXX will not accept any value for it.</source>
-				<target> = Der Wert wird lediglich angezeigt. kreXX wird keine Werte für diese Konfiguration akzeptieren oder anwenden.</target>
+			<trans-unit id="display.help" approved="yes">
+				<source>= The value will only be displayed. kreXX will not accept any value for it.</source>
+				<target state="final">= Der Wert wird lediglich angezeigt. kreXX wird keine Werte für diese Konfiguration akzeptieren oder anwenden.</target>
 			</trans-unit>
-			<trans-unit id="none.help">
-				<source> = kreXX will not display the value or accept any values for it.</source>
-				<target> = kreXX wird den Wert nicht anzeigen und auch keine Werte dafür akzeptieren oder anwenden.</target>
+			<trans-unit id="none.help" approved="yes">
+				<source>= kreXX will not display the value or accept any values for it.</source>
+				<target state="final">= kreXX wird den Wert nicht anzeigen und auch keine Werte dafür akzeptieren oder anwenden.</target>
 			</trans-unit>
-			<trans-unit id="logging.noteditable">
+			<trans-unit id="logging.noteditable" approved="yes">
 				<source>This setting is not editable on the frontend.</source>
-				<target>Dieses Setting ist im Frontend nicht editierbar.</target>
+				<target state="final">Dieses Setting ist im Frontend nicht editierbar.</target>
 			</trans-unit>
 
 			<!-- Usage help -->
-			<trans-unit id="usage.headline">
+			<trans-unit id="usage.headline" approved="yes">
 				<source>Usage PHP</source>
-				<target>Einsatz in PHP</target>
+				<target state="final">Einsatz in PHP</target>
 			</trans-unit>
-			<trans-unit id="usage.label.calling">
+			<trans-unit id="usage.label.calling" approved="yes">
 				<source>kreXX will be called in the PHP source code:</source>
-				<target>So wird kreXX im PHP Code aufgerufen:</target>
+				<target state="final">So wird kreXX im PHP Code aufgerufen:</target>
 			</trans-unit>
-			<trans-unit id="usage.features">
+			<trans-unit id="usage.features" approved="yes">
 				<source>Most of the time you will use this method. kreXX will analyse the $object and give you detailed information about it:</source>
-				<target>Meistens wird diese Methode genutzt. kreXX wird das $objct analysieren und detailierte Informationen dazu ausgeben:</target>
+				<target state="final">Meistens wird diese Methode genutzt. kreXX wird das $objct analysieren und detailierte Informationen dazu ausgeben:</target>
 			</trans-unit>
-			<trans-unit id="usage.features.1">
+			<trans-unit id="usage.features.1" approved="yes">
 				<source>Public properties of the object</source>
-				<target>Public Properties des Objektes</target>
+				<target state="final">Public Properties des Objektes</target>
 			</trans-unit>
-			<trans-unit id="usage.features.2">
+			<trans-unit id="usage.features.2" approved="yes">
 				<source>Protected properties of the object (can be toggled)</source>
-				<target>Protected Properties des Objektes (kann umgeschaltet werden)</target>
+				<target state="final">Protected Properties des Objektes (kann umgeschaltet werden)</target>
 			</trans-unit>
-			<trans-unit id="usage.features.3">
+			<trans-unit id="usage.features.3" approved="yes">
 				<source>Private properties of the object (can be toggled)</source>
-				<target>Private Properties eines Objektes (kann umgeschaltet werden)</target>
+				<target state="final">Private Properties eines Objektes (kann umgeschaltet werden)</target>
 			</trans-unit>
-			<trans-unit id="usage.features.4">
+			<trans-unit id="usage.features.4" approved="yes">
 				<source>Content of the traversable part of the object (can be toggled)</source>
-				<target>Inhalt des iterierbaren Teils des Objektes (kann umgeschaltet werden)</target>
+				<target state="final">Inhalt des iterierbaren Teils des Objektes (kann umgeschaltet werden)</target>
 			</trans-unit>
-			<trans-unit id="usage.features.5">
+			<trans-unit id="usage.features.5" approved="yes">
 				<source>Result of all configured debugging methods (can be configured)</source>
-				<target>Ergebnis aller konfigurierbaren Debug Methoden (kann umgeschaltet werden)</target>
+				<target state="final">Ergebnis aller konfigurierbaren Debug Methoden (kann umgeschaltet werden)</target>
 			</trans-unit>
-			<trans-unit id="usage.features.simple">
+			<trans-unit id="usage.features.simple" approved="yes">
 				<source>In case the variable is not an object, it will simply display its content.</source>
-				<target>Falls es sich nicht um ein Objekt handelt wird einfach der Inhalt ausgegeben.</target>
+				<target state="final">Falls es sich nicht um ein Objekt handelt wird einfach der Inhalt ausgegeben.</target>
 			</trans-unit>
-			<trans-unit id="usage.label.moment">
+			<trans-unit id="usage.label.moment" approved="yes">
 				<source>Define a "moment" during a benchmark test. The $string should be something meaningful, like "Model invoice db call":</source>
-				<target>Definiere einen "Moment" während eines Benchmark-Testes. Der $string sollte eine Bedeutung haben, z.B. "Model invoice db call".</target>
+				<target state="final">Definiere einen "Moment" während eines Benchmark-Testes. Der $string sollte eine Bedeutung haben, z.B. "Model invoice db call".</target>
 			</trans-unit>
-			<trans-unit id="usage.label.timerEnd">
+			<trans-unit id="usage.label.timerEnd" approved="yes">
 				<source>End the benchmark test and displays the result:</source>
-				<target>Ende des Benchmark-Testes und Ausgabe des Ergebnisses:</target>
+				<target state="final">Ende des Benchmark-Testes und Ausgabe des Ergebnisses:</target>
 			</trans-unit>
-			<trans-unit id="usage.label.backtrace">
+			<trans-unit id="usage.label.backtrace" approved="yes">
 				<source>Outputs backtrace with sourcecode. When kreXX finds objects inside the backtrace, it will analyse them:</source>
-				<target>Ausgabe eines Backtraces mit Quellcode. Wen kreXX Objekte im Backtracfe findet werden diese ebenfalls analysiert.</target>
+				<target state="final">Ausgabe eines Backtraces mit Quellcode. Wen kreXX Objekte im Backtracfe findet werden diese ebenfalls analysiert.</target>
 			</trans-unit>
-			<trans-unit id="usage.links.headline">
+			<trans-unit id="usage.links.headline" approved="yes">
 				<source>More datailed help</source>
-				<target>Ausführlichere Hilfe</target>
+				<target state="final">Ausführlichere Hilfe</target>
 			</trans-unit>
-			<trans-unit id="usage.links.typo3">
+			<trans-unit id="usage.links.typo3" approved="yes">
 				<source>Documentation at TYPO3 Docs</source>
-				<target>Dokumentation bei den TYPO3 Docs</target>
+				<target state="final">Dokumentation bei den TYPO3 Docs</target>
 			</trans-unit>
-			<trans-unit id="usage.links.github">
+			<trans-unit id="usage.links.github" approved="yes">
 				<source>Documentation at GitHub</source>
-				<target>Dokumentation auf GitHub</target>
+				<target state="final">Dokumentation auf GitHub</target>
 			</trans-unit>
-			<trans-unit id="usage.headline.fluid">
+			<trans-unit id="usage.headline.fluid" approved="yes">
 				<source>Usage Fluid</source>
-				<target>Einsatz in Fluid</target>
+				<target state="final">Einsatz in Fluid</target>
 			</trans-unit>
-			<trans-unit id="usage.label.fluidnormal">
+			<trans-unit id="usage.label.fluidnormal" approved="yes">
 				<source>Calling the ViewHelper is pretty much straight forward.</source>
-				<target>Der Aufruf des ViewHelpers ist relativ einfach.</target>
+				<target state="final">Der Aufruf des ViewHelpers ist relativ einfach.</target>
 			</trans-unit>
-			<trans-unit id="usage.label.fluidvalue">
+			<trans-unit id="usage.label.fluidvalue" approved="yes">
 				<source>Use this part if you don't want fluid to escape your string or if you are stitching together an array.</source>
-				<target>So kann verhindert werden dass Fluid einen String escaped, oder einen zusammengesetzten Array als Text rendert.</target>
+				<target state="final">So kann verhindert werden, dass Fluid einen String escaped, oder einen zusammengesetzten Array als Text rendert.</target>
 			</trans-unit>
-			<trans-unit id="usage.label.fluidmoment">
+			<trans-unit id="usage.label.fluidmoment" approved="yes">
 				<source>kreXX measures the time between every call, and then outputs it as a benchmark.</source>
-				<target>kreXX misst die Zeit zwischen jedem Aufruf und gibt sie als Benchmark aus.</target>
+				<target state="final">kreXX misst die Zeit zwischen jedem Aufruf und gibt sie als Benchmark aus.</target>
 			</trans-unit>
-			<trans-unit id="usage.code.fluidmoment">
+			<trans-unit id="usage.code.fluidmoment" approved="yes">
 				<source>Start the timer</source>
-				<target>Starte den Timer</target>
+				<target state="final">Starte den Timer</target>
 			</trans-unit>
-			<trans-unit id="usage.code.fluidmoment.1">
+			<trans-unit id="usage.code.fluidmoment.1" approved="yes">
 				<source>Start rendering</source>
-				<target>Starte das Rendering</target>
+				<target state="final">Starte das Rendering</target>
 			</trans-unit>
-			<trans-unit id="usage.code.fluidmoment.2">
+			<trans-unit id="usage.code.fluidmoment.2" approved="yes">
 				<source>A lot more template code</source>
-				<target>Einiges an Template Code</target>
+				<target state="final">Einiges an Template Code</target>
 			</trans-unit>
-			<trans-unit id="usage.code.fluidmoment.3">
+			<trans-unit id="usage.code.fluidmoment.3" approved="yes">
 				<source>Take another moment</source>
-				<target>Zwischenstop für den Timer festlegen</target>
+				<target state="final">Zwischenstop für den Timer festlegen</target>
 			</trans-unit>
-			<trans-unit id="usage.code.fluidmoment.4">
+			<trans-unit id="usage.code.fluidmoment.4" approved="yes">
 				<source>Start menu rendering</source>
-				<target>Starte das Menü Rendering</target>
+				<target state="final">Starte das Menü Rendering</target>
 			</trans-unit>
-			<trans-unit id="usage.code.fluidmoment.5">
+			<trans-unit id="usage.code.fluidmoment.5" approved="yes">
 				<source>Even more template code</source>
-				<target>Noch mehr Template Code</target>
+				<target state="final">Noch mehr Template Code</target>
 			</trans-unit>
-			<trans-unit id="usage.code.fluidmoment.6">
+			<trans-unit id="usage.code.fluidmoment.6" approved="yes">
 				<source>Output the benchmark</source>
-				<target>Beende den Timer, und gebe das ergebnis aus.</target>
+				<target state="final">Beende den Timer, und gebe das ergebnis aus.</target>
 			</trans-unit>
 
 			<!-- Logging -->
-			<trans-unit id="log.filename">
+			<trans-unit id="log.filename" approved="yes">
 				<source>Filename</source>
-				<target>Dateiname</target>
+				<target state="final">Dateiname</target>
 			</trans-unit>
-			<trans-unit id="log.time">
+			<trans-unit id="log.time" approved="yes">
 				<source>Last modified</source>
-				<target>Änd.-Datum</target>
+				<target state="final">Änd.-Datum</target>
 			</trans-unit>
-			<trans-unit id="log.size">
+			<trans-unit id="log.size" approved="yes">
 				<source>Size</source>
-				<target>Größe</target>
+				<target state="final">Größe</target>
 			</trans-unit>
-			<trans-unit id="log.fileerror">
+			<trans-unit id="log.fileerror" approved="yes">
 				<source>Error reading logfile</source>
-				<target>Fehler beim Lesen der Logdatei</target>
+				<target state="final">Fehler beim Lesen der Logdatei</target>
 			</trans-unit>
-			<trans-unit id="log.notreadable">
+			<trans-unit id="log.notreadable" approved="yes">
 				<source>File %1$s is not readable!</source>
-				<target>Datei %1$s ist nicht lesbar!</target>
+				<target state="final">Datei %1$s ist nicht lesbar!</target>
 			</trans-unit>
-			<trans-unit id="log.meta">
+			<trans-unit id="log.meta" approved="yes">
 				<source>Metadata</source>
-				<target>Metadaten</target>
+				<target state="final">Metadaten</target>
 			</trans-unit>
-			<trans-unit id="log.noresult">
+			<trans-unit id="log.noresult" approved="yes">
 				<source>Sorry, there are currently no logfiles.</source>
-				<target>Es gibt leider noch keine Logdateien.</target>
+				<target state="final">Es gibt leider noch keine Logdateien.</target>
 			</trans-unit>
 
 			<!-- AJAX feedback -->
-			<trans-unit id="ajax.delete.file">
+			<trans-unit id="ajax.delete.file" approved="yes">
 				<source>Delete this file?</source>
-				<target>Die Datei löschen?</target>
+				<target state="final">Die Datei löschen?</target>
 			</trans-unit>
-			<trans-unit id="ajax.error">
+			<trans-unit id="ajax.error" approved="yes">
 				<source>Error while parsing the server answer.</source>
-				<target>Die Serverantwort konnte nicht geparst werden.</target>
+				<target state="final">Die Serverantwort konnte nicht geparst werden.</target>
 			</trans-unit>
-			<trans-unit id="ajax.in">
+			<trans-unit id="ajax.in" approved="yes">
 				<source>in</source>
-				<target>in</target>
+				<target state="final">in</target>
 			</trans-unit>
-			<trans-unit id="ajax.line">
+			<trans-unit id="ajax.line" approved="yes">
 				<source>line</source>
-				<target>Zeile</target>
+				<target state="final">Zeile</target>
 			</trans-unit>
-			<trans-unit id="ajax.updated.loglist">
+			<trans-unit id="ajax.updated.loglist" approved="yes">
 				<source>Updated the log-list!</source>
-				<target>Die Logliste wurde aktualisiert.</target>
+				<target state="final">Die Logliste wurde aktualisiert.</target>
 			</trans-unit>
-			<trans-unit id="ajax.deleted.cookies">
+			<trans-unit id="ajax.deleted.cookies" approved="yes">
 				<source>All cookie settings were removed!</source>
-				<target>Alle Debug-Cookie Einstellungen wurden entfernt.</target>
+				<target state="final">Alle Debug-Cookie Einstellungen wurden entfernt.</target>
 			</trans-unit>
 		</body>
 	</file>
