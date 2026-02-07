@@ -5,7 +5,7 @@ Changelog
 =============================================================
 
 :Version: 6.1.4
-:Date: tbd
+:Date: 2025-02-07
 
 Changes:
     * [Feature] Added support for Domain Page objects in TYPO3 14.
