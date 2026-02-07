@@ -51,6 +51,7 @@ use Brainworxx\Krexx\View\Messages;
 #[CoversMethod(Model::class, 'renderMe')]
 #[CoversMethod(Model::class, 'addParameter')]
 #[CoversMethod(Model::class, 'setHelpid')]
+#[CoversMethod(Model::class, 'addJsonHint')]
 #[CoversMethod(Model::class, 'addToJson')]
 #[CoversMethod(Model::class, 'getJson')]
 #[CoversMethod(Model::class, 'setData')]
@@ -82,6 +83,7 @@ use Brainworxx\Krexx\View\Messages;
 #[CoversMethod(Model::class, 'getReturnType')]
 #[CoversMethod(Connectors::class, 'getReturnType')]
 #[CoversMethod(Connectors::class, 'setReturnType')]
+
 class ModelTest extends AbstractHelper
 {
     public const  SOME_STRING_TO_PASS_THROUGH = 'some string to pass through';
@@ -231,6 +233,39 @@ class ModelTest extends AbstractHelper
         //Remove the value. Should be empty now.
         $this->assertEquals($this->model, $this->model->addToJson($key, ''));
         $this->assertEquals([], $this->model->getJson());
+    }
+
+    /**
+     * Test if we can add hints to the json. Hints will be added to the existing hints with a line break.
+     */
+    public function testAddJsonHint()
+    {
+        $hint1 = "This is the first hint.";
+        $hint2 = "This is the second hint.";
+        $expected = [
+            'Hint' => $hint1 . '<br>' . $hint2
+        ];
+
+        // Mock the message class, which will provide the hint text.
+        $messageMock = $this->createMock(Messages::class);
+        $messageMock->expects($this->exactly(2))
+            ->method('getHelp')
+            ->with(...$this->withConsecutive(['metaHint'], ['metaHint']))
+            ->willReturnMap(
+                [
+                    ['metaHint', [], 'Hint'],
+                    ['metaHint', [], 'Hint']
+                ]
+            );
+        Krexx::$pool->messages = $messageMock;
+
+        // Add the first hint.
+        $this->assertEquals($this->model, $this->model->addJsonHint($hint1));
+        $this->assertEquals(['Hint' => $hint1], $this->model->getJson());
+
+        // Add the second hint, which should be added to the first one with a line break.
+        $this->assertEquals($this->model, $this->model->addJsonHint($hint2));
+        $this->assertEquals($expected, $this->model->getJson());
     }
 
     /**

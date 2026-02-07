@@ -173,10 +173,7 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface
                 if ($possibleResult === null) {
                     // A NULL value might mean that the values does not
                     // exist, until the getter computes it.
-                    $model->addToJson(
-                        $this->pool->messages->getHelp('metaHint'),
-                        $this->pool->messages->getHelp('getterNull')
-                    );
+                    $model->addJsonHint($this->pool->messages->getHelp('getterNull'));
                 }
 
                 break;

@@ -8,6 +8,7 @@ Changelog
 :Date: tbd
 
 Changes:
+    * [Bugfix] Prevent hints from overwriting themselves.
 
 -----
 

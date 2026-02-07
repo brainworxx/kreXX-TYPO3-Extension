@@ -262,7 +262,7 @@ class ThroughGetter extends AbstractCallback implements
                 __FUNCTION__ . static::EVENT_MARKER_END,
                 $model->setType($messages->getHelp('getterValueUnknown'))
                     ->setNormal($messages->getHelp('getterValueUnknown'))
-                    ->addToJson($messages->getHelp('metaHint'), $messages->getHelp('getterUnknown'))
+                    ->addJsonHint($messages->getHelp('getterUnknown'))
             ));
         }
 
@@ -285,10 +285,7 @@ class ThroughGetter extends AbstractCallback implements
         if ($value === null) {
             // A NULL value might mean that the values does not
             // exist, until the getter computes it.
-            $model->addToJson(
-                $this->pool->messages->getHelp('metaHint'),
-                $this->pool->messages->getHelp('getterNull')
-            );
+            $model->addJsonHint($this->pool->messages->getHelp('getterNull'));
         }
     }
 

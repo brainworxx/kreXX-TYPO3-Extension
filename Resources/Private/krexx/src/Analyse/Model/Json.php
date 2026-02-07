@@ -95,6 +95,18 @@ trait Json
         return $this;
     }
 
+    public function addJsonHint(string $hint): Model
+    {
+        $key = $this->pool->messages->getHelp('metaHint');
+        $hint = trim(str_replace(["\r", "\n"], ['', ''], $hint));
+        if (isset($this->json[$key])) {
+            $hint = $this->json[$key] . '<br>' . $hint;
+        }
+        $this->addToJson($key, $hint);
+
+        return $this;
+    }
+
     /**
      * Getter for json.
      *
