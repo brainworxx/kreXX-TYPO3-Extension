@@ -8,6 +8,7 @@ Changelog
 :Date: tbd
 
 Changes:
+    * [Feature] Fluid 5.1 support.
     * [Bugfix] Prevent hints from overwriting themselves.
 
 -----

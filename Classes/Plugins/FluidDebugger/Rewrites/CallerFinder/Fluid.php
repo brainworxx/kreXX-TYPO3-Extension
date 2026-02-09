@@ -38,7 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
 use ReflectionClass;
-use ReflectionException;
+use Throwable;
 use TYPO3Fluid\Fluid\View\TemplatePaths;
 
 /**
@@ -103,7 +103,7 @@ class Fluid extends AbstractFluid
                     $templatePath
                 );
             }
-        } catch (ReflectionException $e) {
+        } catch (Throwable $e) {
             // Do nothing. We return the already existing empty result.
         }
 
@@ -131,7 +131,21 @@ class Fluid extends AbstractFluid
         foreach ($resolvedIdentifiers['partials'] as $fileName => $realIdentifier) {
             if (strpos($realIdentifier, $hash) !== false) {
                 // We've got our filename!
-                return $templatePath->getPartialPathAndFilename($fileName);
+                // The filename is actually the path relative to the partials
+                // directory, so we need to resolve it via the template paths class.
+                // But: It ignorees file endings.
+                // Something like
+                // "partials/Deep/Blargh.html"
+                // might as well mean
+                // "partials/Deep/Blargh.fluid.html"
+                // And doing a lookup for "partials/Deep/Blargh.html" would fail
+                // because the file does not exist.
+                // We simply remove the file ending and let the template paths
+                // class do the rest.
+                $info = pathinfo($fileName);
+                return $templatePath->getPartialPathAndFilename(
+                    $info['dirname'] . '/' . $info['filename']
+                );
             }
         }
 
