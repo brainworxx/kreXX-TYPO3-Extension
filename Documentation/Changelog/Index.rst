@@ -5,7 +5,7 @@ Changelog
 =============================================================
 
 :Version: 6.1.5
-:Date: tbd
+:Date: 2026-02-12
 
 Changes:
     * [Feature] Fluid 5.1 support.
@@ -15,7 +15,7 @@ Changes:
 -----
 
 :Version: 6.1.4
-:Date: 2025-02-07
+:Date: 2026-02-07
 
 Changes:
     * [Feature] Added support for Domain Page objects in TYPO3 14.
