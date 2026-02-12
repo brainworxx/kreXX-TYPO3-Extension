@@ -368,6 +368,11 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
             $default = 'NULL';
         } elseif ($default instanceof UnitEnum) {
             $default = get_class($default) . '::' . $default->name;
+        } elseif (is_object($default)) {
+            $default = 'new \\' .  get_class($default) . '()';
+        } else {
+            // Not sure if this is even possible, but I'm not taking my chances.
+            $default = gettype($default);
         }
 
         return $default;

@@ -41,6 +41,7 @@ use Brainworxx\Krexx\Analyse\Code\Scope;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Fixtures\EnumFixture;
 use Brainworxx\Krexx\Tests\Fixtures\MethodParameterFixture;
+use Brainworxx\Krexx\Tests\Fixtures\Parameters;
 use Brainworxx\Krexx\Tests\Fixtures\UnionTypeFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
@@ -463,6 +464,25 @@ class CodegenTest extends AbstractHelper
 
         $this->assertEquals(
             '\DateTimeZone $object',
+            $this->codegenHandler->parameterToString($reflectionParameter)
+        );
+    }
+
+    /**
+     * Test the parameter analysis, with a default value which is an object.
+     * We use a special method from the Parameters fixture for this.
+     */
+    public function testParameterToStringWithObjects()
+    {
+        if (version_compare(phpversion(), '8.1.0', '<=')) {
+            $this->markTestSkipped('Wrong PHP version.');
+        }
+        $fixture = new Parameters();
+        $reflection = new \ReflectionClass($fixture);
+        $reflectionMethod = $reflection->getMethod('someMethod');
+        $reflectionParameter = $reflectionMethod->getParameters()[0];
+        $this->assertEquals(
+            '\stdClass $myParameter = new \stdClass()',
             $this->codegenHandler->parameterToString($reflectionParameter)
         );
     }

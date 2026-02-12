@@ -1,5 +1,7 @@
 6.0.6
 - Bugfix: Prevent hints from overwriting themselves.
+- Bugfix: Prevent a fatal when trying to analyse a class with
+  objects as default values in its methods.
 
 6.0.5
 - Bugfix: Do not trim quotes from the caller finder result.
