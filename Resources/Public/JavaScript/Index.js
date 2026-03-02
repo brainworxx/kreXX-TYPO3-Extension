@@ -121,7 +121,7 @@
 
             ajaxRefresh.message({
                 class: 'success',
-                text: 'All cookie settings were removed!'
+                text: ajaxRefresh.ajaxTranslate.deletedCookies
             })
         }, true);
     };

@@ -8,6 +8,7 @@ Changelog
 :Date: tbd
 
 Changes:
+    * [Bugfix] Fixed missing translation for the cookie reset.
 
 -----
 
