@@ -8,8 +8,9 @@ Changelog
 :Date: tbd
 
 Changes:
-    * [Bugfix] Bugfix: Render a trailing linebreak in the extra info correctly.
+    * [Bugfix] Render a trailing linebreak in the extra info correctly.
     * [Bugfix] Fixed missing translation for the cookie reset.
+    * [Bugfix] Added missing dependency to the composer.json file.
 
 -----
 

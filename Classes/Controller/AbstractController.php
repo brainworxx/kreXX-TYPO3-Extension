@@ -55,7 +55,6 @@ use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Response as MvcResponse;
-use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 
 /**
  * Hosting all those ugly workarounds to keep this extension compatible back to
