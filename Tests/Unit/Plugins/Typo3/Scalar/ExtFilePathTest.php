@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -43,10 +43,14 @@ use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Package\UnitTestPackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ExtFilePath::class, 'canHandle')]
 class ExtFilePathTest extends AbstractHelper
 {
-
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -59,8 +63,6 @@ class ExtFilePathTest extends AbstractHelper
 
     /**
      * Test the resolving of EXT: strings for their actual files.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath::canHandle
      */
     public function testCanHandle()
     {
@@ -90,7 +92,7 @@ class ExtFilePathTest extends AbstractHelper
             $packageManagerMock = $this->createMock(UnitTestPackageManager::class);
             $packageManagerMock->expects($this->any())
                 ->method('resolvePackagePath')
-                ->will($this->returnValue('includekrexx/Tests/Fixtures/123458.Krexx.html'));
+                ->willReturn('includekrexx/Tests/Fixtures/123458.Krexx.html');
             $this->setValueByReflection('packageManager', $packageManagerMock, ExtensionManagementUtility::class);
         }
 
@@ -99,23 +101,20 @@ class ExtFilePathTest extends AbstractHelper
             '\\Brainworxx\\Krexx\\Analyse\\Scalar\\String',
             'is_file'
         );
-        $isFileMock->expects($this->once())
-            ->with('includekrexx/Tests/Fixtures/123458.Krexx.html')
-            ->will($this->returnValue(true));
+        $isFileMock->expects($this->once())->willReturn(true);
 
         // Get the underlying class to provide some info and not throw an error.
         $finfoMock = $this->createMock(\finfo::class);
         $finfoMock->expects($this->once())
             ->method('file')
-            ->will($this->returnValue('just a file'));
+            ->willReturn('just a file');
         $this->setValueByReflection('bufferInfo', $finfoMock, $extFilePath);
 
         // Make sure that the resolved path gets filtered.
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->once())
             ->method('filterFilePath')
-            ->with('includekrexx/Tests/Fixtures/123458.Krexx.html')
-            ->will($this->returnValue('Tests/Fixtures/123458.Krexx.html'));
+            ->willReturn('Tests/Fixtures/123458.Krexx.html');
         \Krexx::$pool->fileService = $fileServiceMock;
 
         $this->assertFalse($extFilePath->canHandle($fixture, $model), 'Always false. We add the stuff to the model.');

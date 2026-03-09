@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -77,13 +77,17 @@ abstract class AbstractHelper extends TestCase
         // Reset the kreXX count.
         $emergencyRef = new \ReflectionClass(Krexx::$pool->emergencyHandler);
         $krexxCountRef = $emergencyRef->getProperty(KrexxTest::KREXX_COUNT);
-        $krexxCountRef->setAccessible(true);
+        if (version_compare(phpversion(), '8.1.0', '<')) {
+            $krexxCountRef->setAccessible(true);
+        }
         $krexxCountRef->setValue(Krexx::$pool->emergencyHandler, 0);
 
         // Reset the messages.
         $messageRef = new \ReflectionClass(Krexx::$pool->messages);
         $keysRef = $messageRef->getProperty('messages');
-        $keysRef->setAccessible(true);
+        if (version_compare(phpversion(), '8.1.0', '<')) {
+            $keysRef->setAccessible(true);
+        }
         $keysRef->setValue(Krexx::$pool->messages, []);
 
         // Remove possible logfiles.
@@ -119,9 +123,6 @@ abstract class AbstractHelper extends TestCase
         $this->setValueByReflection('newFallbackValues', [], Registration::class);
         $this->setValueByReflection('additionalLanguages', [], Registration::class);
         $this->setValueByReflection('newSettings', [], Registration::class);
-
-        // Reset the cache in the ReflectionClass.
-        $this->setValueByReflection('cache', [], ReflectionClass::class);
     }
 
     /**
@@ -140,7 +141,9 @@ abstract class AbstractHelper extends TestCase
         try {
             $reflectionClass = new \ReflectionClass($object);
             $reflectionProperty = $reflectionClass->getProperty($name);
-            $reflectionProperty->setAccessible(true);
+            if (version_compare(phpversion(), '8.1.0', '<')) {
+                $reflectionProperty->setAccessible(true);
+            }
 
             if (is_object($object)) {
                 $reflectionProperty->setValue($object, $value);
@@ -173,7 +176,9 @@ abstract class AbstractHelper extends TestCase
         try {
             $reflectionClass = new \ReflectionClass($object);
             $reflectionProperty = $reflectionClass->getProperty($name);
-            $reflectionProperty->setAccessible(true);
+            if (version_compare(phpversion(), '8.1.0', '<')) {
+                $reflectionProperty->setAccessible(true);
+            }
             if (is_object($object)) {
                 return $reflectionProperty->getValue($object);
             } else {
@@ -205,10 +210,10 @@ abstract class AbstractHelper extends TestCase
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->any())
             ->method('checkEmergencyBreak')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $emergencyMock->expects($this->any())
             ->method('getKrexxCount')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         Krexx::$pool->emergencyHandler = $emergencyMock;
     }
 
@@ -222,7 +227,7 @@ abstract class AbstractHelper extends TestCase
         $eventServiceMock = $this->createMock(Event::class);
         $invocationMocker = $eventServiceMock->expects($this->exactly(count($eventList)))
             ->method('dispatch')
-            ->will($this->returnValue(''));
+            ->willReturn('');
         $invocationMocker->with(...$this->withConsecutive(...$eventList));
 
         // Inject the mock.
@@ -258,10 +263,7 @@ abstract class AbstractHelper extends TestCase
     protected function mockPhpSapiNameStandard()
     {
         $phpSapiNameMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\View\\Output\\', 'php_sapi_name');
-        $phpSapiNameMock->expects($this->any())
-            ->will(
-                $this->returnValue('whatever')
-            );
+        $phpSapiNameMock->expects($this->any())->willReturn('whatever');
     }
 
     /**
@@ -279,7 +281,9 @@ abstract class AbstractHelper extends TestCase
         try {
             $reflection = new \ReflectionClass($object);
             $reflectionMethod = $reflection->getMethod('dispatchStartEvent');
-            $reflectionMethod->setAccessible(true);
+            if (version_compare(phpversion(), '8.1.0', '<')) {
+                $reflectionMethod->setAccessible(true);
+            }
             return $reflectionMethod->invoke($object);
         } catch (ReflectionException $e) {
             $this->fail($e->getMessage());

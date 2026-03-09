@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -61,13 +61,9 @@ class ThroughMetaReflections extends AbstractCallback implements CallbackConstIn
 
         /** @var  \ReflectionClass $ref */
         foreach ($this->parameters[static::PARAM_DATA] as $key => $ref) {
-            $parameters = [
-                static::PARAM_REF => $ref,
-                static::PARAM_META_NAME => $key
-            ];
             $output .= $this->pool
                 ->createClass(Meta::class)
-                ->setParameters($parameters)
+                ->setParameters([static::PARAM_REF => $ref, static::PARAM_META_NAME => $key])
                 ->callMe();
         }
 

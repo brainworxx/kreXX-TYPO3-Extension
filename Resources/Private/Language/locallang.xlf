@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="messages" product-name="includekrexx" date="2021-12-31T14:10:00+01:00">
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+	<file source-language="en" datatype="plaintext" original="EXT:includekrexx\Resources\Private\Language\locallang.xlf" product-name="includekrexx" date="2021-12-31T14:10:00+01:00">
 		<header/>
 		<body>
 
@@ -146,7 +146,7 @@
 				<source>There are different log levels. Depending on the setting, you may get a lot of output.</source>
 			</trans-unit>
 			<trans-unit id="languageKey">
-				<source>The language key from the help file(s). It will fallback to 'text' which is english. We provide kreXX in two language english as a fall back, and german (de).</source>
+				<source>The language key from the help file(s). We provide kreXX in two language english as a fallback, and german.</source>
 			</trans-unit>
 
 			<!-- Messages -->
@@ -169,7 +169,7 @@
 				<source>General error</source>
 			</trans-unit>
 			<trans-unit id="debugpreset.warning.title">
-				<source>Productive Debug Settings detected!</source>
+				<source>Productive Settings detected!</source>
 			</trans-unit>
 			<trans-unit id="debugpreset.warning.message">
 				<source>kreXX will function normally, but please do not debug a productive system.</source>
@@ -251,6 +251,13 @@
 			<trans-unit id="configErrorLangInvalid">
 				<source>Wrong configuration for: '%s => %s'! The language '%s' is not available. The configured setting was not applied!</source>
 			</trans-unit>
+			<trans-unit id="maximumLevelReached1">
+				<source>Maximum nesting level for the analysis was reached. I will not go any further.</source>
+			</trans-unit>
+			<trans-unit id="maximumLevelReached2">
+				<source>To increase this value, change the Prune output => level setting."</source>
+			</trans-unit>
+
 
 			<!-- Tabs -->
 			<trans-unit id="layout.edit.config.file">

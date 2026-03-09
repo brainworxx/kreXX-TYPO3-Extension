@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -41,12 +41,15 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
+use Brainworxx\Krexx\Analyse\Comment\Attributes;
 use Brainworxx\Krexx\Analyse\Comment\Properties;
 use Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use ReflectionProperty;
 use Throwable;
+use UnitEnum;
 
 /**
  * Class properties' analysis methods.
@@ -64,7 +67,17 @@ class ThroughProperties extends AbstractCallback implements
     /**
      * @var PropertyDeclaration
      */
-    protected $propertyDeclaration;
+    protected PropertyDeclaration $propertyDeclaration;
+
+    /**
+     * @var Properties
+     */
+    protected Properties $propertyComment;
+
+    /**
+     * @var \Brainworxx\Krexx\Analyse\Comment\Attributes
+     */
+    protected Attributes $attributes;
 
     /**
      * Renders the properties of a class.
@@ -81,6 +94,8 @@ class ThroughProperties extends AbstractCallback implements
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $this->parameters[static::PARAM_REF];
         $this->propertyDeclaration = $this->pool->createClass(PropertyDeclaration::class);
+        $this->propertyComment = $this->pool->createClass(Properties::class);
+        $this->attributes = $this->pool->createClass(Attributes::class);
 
         foreach ($this->parameters[static::PARAM_DATA] as $refProperty) {
             // Check memory and runtime.
@@ -113,29 +128,28 @@ class ThroughProperties extends AbstractCallback implements
     protected function prepareModel($value, ReflectionProperty $refProperty): Model
     {
         $messages = $this->pool->messages;
-
         return $this->pool->createClass(Model::class)
             ->setData($value)
             ->setName($this->retrievePropertyName($refProperty))
             ->addToJson(
                 $messages->getHelp('metaComment'),
-                $this->pool->createClass(Properties::class)->getComment($refProperty)
+                $this->propertyComment->getComment($refProperty)
+            )
+            ->addToJson(
+                $messages->getHelp('metaAttributes'),
+                // Meh, the addToJson method does not support real new lines.
+                nl2br($this->attributes->getAttributes($refProperty))
             )
             ->addToJson(
                 $messages->getHelp('metaDeclaredIn'),
                 $this->propertyDeclaration->retrieveDeclaration($refProperty)
             )
-            ->addToJson(
-                $messages->getHelp('metaDefaultValue'),
-                $this->retrieveDefaultValue($refProperty)
-            )
+            ->addToJson($messages->getHelp('metaDefaultValue'), $this->retrieveDefaultValue($refProperty))
             ->addToJson(
                 $messages->getHelp('metaTypedValue'),
                 $this->propertyDeclaration->retrieveNamedPropertyType($refProperty)
             )
-            ->setAdditional(
-                $this->getAdditionalData($refProperty, $this->parameters[static::PARAM_REF])
-            )
+            ->setAdditional($this->getAdditionalData($refProperty, $this->parameters[static::PARAM_REF]))
             ->setConnectorType($this->retrieveConnector($refProperty))
             ->setCodeGenType($refProperty->isPublic() ? static::CODEGEN_TYPE_PUBLIC : '');
     }
@@ -156,7 +170,9 @@ class ThroughProperties extends AbstractCallback implements
             // There is also a PHP 8.0 bug that may cause an
             // "Internal error: Failed to retrieve the reflection object"
             // That is not even a Reflection exception, it's an "Error".
-            $default = $property->getDefaultValue();
+            if ($property->hasDefaultValue()) {
+                $default = $property->getDefaultValue();
+            }
         } catch (Throwable $exception) {
             // Fallback to the 7.x way.
             // The values of static properties are stored in the default
@@ -178,7 +194,7 @@ class ThroughProperties extends AbstractCallback implements
     /**
      * Format the default value into something readable
      *
-     * @param string|int|float|array $default
+     * @param string|int|float|array|UnitEnum $default
      * @return string
      */
     protected function formatDefaultValue($default): string
@@ -191,7 +207,7 @@ class ThroughProperties extends AbstractCallback implements
         $result = '';
         if (is_string($default)) {
             $result = '\'' . $default . '\'';
-        } elseif (is_array($default)) {
+        } elseif (is_array($default) || $default instanceof UnitEnum) {
             $result = var_export($default, true);
         }
 
@@ -323,6 +339,8 @@ class ThroughProperties extends AbstractCallback implements
         // In a rather buggy state. When the property is not readonly, this may
         // trigger an
         // "Error : Internal error: Failed to retrieve the reflection object".
+        // It was later fixed in PHP 8.1.?.
+        // @deprecated The try catch will be removed.
         try {
             if ($refProperty->isReadOnly()) {
                 $additional .= $messages->getHelp('readonly') . ' ';
@@ -336,7 +354,7 @@ class ThroughProperties extends AbstractCallback implements
             return $additional;
         }
 
-        if (method_exists($refProperty, 'hasType') && $refProperty->hasType()) {
+        if ($refProperty->hasType()) {
             // Typed properties where introduced in 7.4.
             // This one was either unset, or never received a value in the
             // first place. Either way, it's status is uninitialized.
@@ -347,26 +365,6 @@ class ThroughProperties extends AbstractCallback implements
         // We need to tell the dev. Accessing an unset property may trigger
         // a warning.
         return $additional . $messages->getHelp('unset') . ' ';
-    }
-
-    /**
-     * Retrieve the declaration place of a property.
-     *
-     * @param \ReflectionProperty $refProperty
-     *   A reflection of the property we are analysing.
-     *
-     * @deprecated since 5.0.0
-     *   Will be removed. Use PropertyDeclaration instead.
-     * @codeCoverageIgnore
-     *   We do not test deprecated methods.
-     *
-     * @return string
-     *   Human-readable string, where the property was declared.
-     */
-    protected function retrieveDeclarationPlace(ReflectionProperty $refProperty): string
-    {
-        return $this->pool->createClass(PropertyDeclaration::class)
-            ->retrieveDeclaration($refProperty);
     }
 
     /**

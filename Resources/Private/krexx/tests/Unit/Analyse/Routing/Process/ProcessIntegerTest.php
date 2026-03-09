@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,19 +36,21 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ProcessInteger::class, 'handle')]
+#[CoversMethod(AbstractRouting::class, 'dispatchProcessEvent')]
+#[CoversMethod(ProcessInteger::class, 'canHandle')]
 class ProcessIntegerTest extends AbstractHelper
 {
     /**
      * Testing the integer value processing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessNormal()
     {
@@ -60,7 +62,8 @@ class ProcessIntegerTest extends AbstractHelper
         $this->mockEventService(
             [ProcessInteger::class . PluginConfigInterface::START_PROCESS, null, $model]
         );
-        $processor->handle($model);
+        $processor->canHandle($model);
+        $processor->handle();
 
         $this->assertEquals($fixture, $model->getData());
         $this->assertEquals($fixture, $model->getNormal());
@@ -69,9 +72,6 @@ class ProcessIntegerTest extends AbstractHelper
 
     /**
      * Testing the integer value with timestamp processing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessWithTimestamp()
     {
@@ -80,7 +80,8 @@ class ProcessIntegerTest extends AbstractHelper
         $model = new Model(Krexx::$pool);
         $model->setData($fixture);
         $processor = new ProcessInteger(Krexx::$pool);
-        $processor->handle($model);
+        $processor->canHandle($model);
+        $processor->handle();
 
         $this->assertStringStartsWith(
             '11.Mar 2020',
@@ -91,8 +92,6 @@ class ProcessIntegerTest extends AbstractHelper
 
     /**
      * Test the check if we can handle the array processing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger::canHandle
      */
     public function testCanHandle()
     {

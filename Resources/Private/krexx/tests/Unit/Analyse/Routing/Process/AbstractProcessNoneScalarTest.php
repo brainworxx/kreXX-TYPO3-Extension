@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,6 +36,8 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
+use Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Service\Flow\Emergency;
@@ -44,19 +46,16 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Krexx;
 use stdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
-/**
- * This is one huge class name.
- *
- * @package Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process
- */
+#[CoversMethod(AbstractProcessNoneScalar::class, 'handle')]
+#[CoversMethod(AbstractProcessNoneScalar::class, 'handleNestedTooDeep')]
+#[CoversMethod(AbstractProcessNoneScalar::class, 'handleRecursion')]
+#[CoversMethod(AbstractRouting::class, 'generateDomIdFromObject')]
 class AbstractProcessNoneScalarTest extends AbstractHelper
 {
     /**
      * Test the handling of a too deep nesting.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar::handleNestedTooDeep
      */
     public function testHandleNestedTooDeep()
     {
@@ -64,7 +63,7 @@ class AbstractProcessNoneScalarTest extends AbstractHelper
         $emergencyHandlerMock = $this->createMock(Emergency::class);
         $emergencyHandlerMock->expects($this->once())
             ->method('checkNesting')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->emergencyHandler = $emergencyHandlerMock;
         $renderNothing = new RenderNothing(Krexx::$pool);
         Krexx::$pool->render = $renderNothing;
@@ -76,7 +75,8 @@ class AbstractProcessNoneScalarTest extends AbstractHelper
 
         // Run the test.
         $objectProcessor = new ProcessObject(Krexx::$pool);
-        $objectProcessor->handle($model);
+        $objectProcessor->canHandle($model);
+        $objectProcessor->handle();
 
         // Check the model.
         $this->assertEquals(
@@ -93,17 +93,13 @@ class AbstractProcessNoneScalarTest extends AbstractHelper
 
     /**
      * Test the recursion handling of the none scalar routing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar::handleRecursion
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::generateDomIdFromObject
      */
     public function testHandleRecursionObject()
     {
         $recursionMock = $this->createMock(Recursion::class);
         $recursionMock->expects($this->once())
             ->method('isInHive')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->recursionHandler = $recursionMock;
         $renderNothing = new RenderNothing(Krexx::$pool);
         Krexx::$pool->render = $renderNothing;
@@ -115,7 +111,8 @@ class AbstractProcessNoneScalarTest extends AbstractHelper
 
         // Run the test.
         $objectProcessor = new ProcessObject(Krexx::$pool);
-        $objectProcessor->handle($model);
+        $objectProcessor->canHandle($model);
+        $objectProcessor->handle();
 
         $this->assertEquals('\\' . stdClass::class, $model->getNormal());
         $this->assertEquals(
@@ -126,16 +123,13 @@ class AbstractProcessNoneScalarTest extends AbstractHelper
 
     /**
      * Test the recursion handling of the globals array.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar::handleRecursion
      */
     public function testHandleGlobals()
     {
         $recursionMock = $this->createMock(Recursion::class);
         $recursionMock->expects($this->once())
             ->method('isInHive')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->recursionHandler = $recursionMock;
         $renderNothing = new RenderNothing(Krexx::$pool);
         Krexx::$pool->render = $renderNothing;
@@ -147,7 +141,8 @@ class AbstractProcessNoneScalarTest extends AbstractHelper
 
         // Run the test.
         $arrayProcessor = new ProcessArray(Krexx::$pool);
-        $arrayProcessor->handle($model);
+        $arrayProcessor->canHandle($model);
+        $arrayProcessor->handle();
 
         $this->assertEquals('$GLOBALS', $model->getNormal());
     }

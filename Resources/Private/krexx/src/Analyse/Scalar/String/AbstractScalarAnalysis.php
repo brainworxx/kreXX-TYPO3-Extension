@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -52,14 +52,14 @@ abstract class AbstractScalarAnalysis extends AbstractCallback implements Callba
      *
      * @var string
      */
-    protected $codeGenType = '';
+    protected string $codeGenType = '';
 
     /**
      * Classname that renders the data.
      *
      * @var string
      */
-    protected $iteratorRenderer = ThroughMeta::class;
+    protected string $iteratorRenderer = ThroughMeta::class;
 
     /**
      * The value that we are handling. Must be set by the canHandle method.
@@ -103,7 +103,7 @@ abstract class AbstractScalarAnalysis extends AbstractCallback implements Callba
 
         if (empty($meta)) {
             // Nothing to render.
-            return '';
+            return $output;
         }
 
         // Prepare the rendering.

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -50,7 +50,7 @@ class Json extends AbstractScalarAnalysis implements CodegenConstInterface
      *
      * @var string
      */
-    protected $codeGenType = self::CODEGEN_TYPE_JSON_DECODE;
+    protected string $codeGenType = self::CODEGEN_TYPE_JSON_DECODE;
 
     /**
      * What the variable name says.
@@ -64,7 +64,7 @@ class Json extends AbstractScalarAnalysis implements CodegenConstInterface
      *
      * @var Model
      */
-    protected $model;
+    protected Model $model;
 
     /**
      * {@inheritDoc}
@@ -93,7 +93,16 @@ class Json extends AbstractScalarAnalysis implements CodegenConstInterface
             return false;
         }
 
+        // @deprecated Will be removed once we drop 8.3 support.
+        if (function_exists('json_validate') && json_validate($string)) {
+            // Doing it the PHP 8.3 way.
+            $this->model = $model;
+            $this->handledValue = $string;
+            return true;
+        }
+
         // The only way to test a valid json, is to decode it.
+        // @deprecated This will be removed in PHP 8.3.
         $this->decodedJson = json_decode($string);
         if (json_last_error() === JSON_ERROR_NONE || $this->decodedJson !== null) {
             $this->model = $model;
@@ -112,6 +121,12 @@ class Json extends AbstractScalarAnalysis implements CodegenConstInterface
      */
     protected function handle(): array
     {
+        if (empty($this->decodedJson)) {
+            // We will not decode it again, if we already have a result.
+            // @deprecated The "if" will be removed in PHP 8.3.
+            $this->decodedJson = json_decode($this->handledValue);
+        }
+
         $messages = $this->pool->messages;
         $meta = [
             $messages->getHelp('metaDecodedJson') => $this->decodedJson,
@@ -124,8 +139,6 @@ class Json extends AbstractScalarAnalysis implements CodegenConstInterface
             $this->model->setHasExtra(false);
             $meta[$messages->getHelp('metaContent')] = $this->model->getData();
         }
-
-        unset($this->decodedJson, $this->model);
 
         return $meta;
     }

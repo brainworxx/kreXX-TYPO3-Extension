@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -39,13 +39,20 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Output\CheckOutput;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(CheckOutput::class, 'isAllowedIp')]
+#[CoversMethod(CheckOutput::class, 'checkWildcards')]
+#[CoversMethod(CheckOutput::class, 'isOutputHtml')]
+#[CoversMethod(CheckOutput::class, 'isCli')]
+#[CoversMethod(CheckOutput::class, 'isAjax')]
+#[CoversMethod(CheckOutput::class, '__construct')]
 class CheckOutputTest extends AbstractHelper
 {
-    const HTTP_X_REQUESTED_WITH = 'HTTP_X_REQUESTED_WITH';
-    const OUTPUT_NAMESPACE = '\\Brainworxx\\Krexx\\View\\Output\\';
-    const PHP_SAPI_NAME = 'php_sapi_name';
-    const HEADERS_LIST = 'headers_list';
+    public const  HTTP_X_REQUESTED_WITH = 'HTTP_X_REQUESTED_WITH';
+    public const  OUTPUT_NAMESPACE = '\\Brainworxx\\Krexx\\View\\Output\\';
+    public const  PHP_SAPI_NAME = 'php_sapi_name';
+    public const  HEADERS_LIST = 'headers_list';
 
     /**
      * Prevent the mocking of a browser output.
@@ -70,8 +77,6 @@ class CheckOutputTest extends AbstractHelper
 
     /**
      * Test the setting of the pool.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\CheckOutput::__construct
      */
     public function testConstruct()
     {
@@ -81,8 +86,6 @@ class CheckOutputTest extends AbstractHelper
 
     /**
      * Test the ajax detection.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\CheckOutput::isAjax
      */
     public function testIsAjax()
     {
@@ -97,14 +100,12 @@ class CheckOutputTest extends AbstractHelper
 
     /**
      * Test the cli detection, with a cli mock
-     *
-     * @covers \Brainworxx\Krexx\View\Output\CheckOutput::isCli
      */
     public function testIsCliCli()
     {
         $sapiMock = $this->getFunctionMock(static::OUTPUT_NAMESPACE, static::PHP_SAPI_NAME);
         $sapiMock->expects($this->once())
-            ->will($this->returnValue('cli'));
+            ->willReturn('cli');
 
         $checkOutput = new CheckOutput(Krexx::$pool);
         $this->assertTrue($checkOutput->isCli());
@@ -112,14 +113,12 @@ class CheckOutputTest extends AbstractHelper
 
     /**
      * Test the cli detection with something else  mock.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\CheckOutput::isCli
      */
     public function testIsCliOther()
     {
         $sapiMock = $this->getFunctionMock(static::OUTPUT_NAMESPACE, static::PHP_SAPI_NAME);
         $sapiMock->expects($this->once())
-            ->will($this->returnValue('not cli'));
+            ->willReturn('not cli');
 
         $checkOutput = new CheckOutput(Krexx::$pool);
         $this->assertFalse($checkOutput->isCli());
@@ -127,14 +126,12 @@ class CheckOutputTest extends AbstractHelper
 
     /**
      * Test the detection of already send HTML output.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\CheckOutput::isOutputHtml
      */
     public function testIsOutputHtmlHtml()
     {
         $headerMock = $this->getFunctionMock(static::OUTPUT_NAMESPACE, static::HEADERS_LIST);
         $headerMock->expects($this->once())
-            ->will($this->returnValue(['whatever: some header', 'content-type: html']));
+            ->willReturn(['whatever: some header', 'content-type: html']);
 
         $checkOutput = new CheckOutput(Krexx::$pool);
         $this->assertTrue($checkOutput->isOutputHtml());
@@ -142,14 +139,12 @@ class CheckOutputTest extends AbstractHelper
 
     /**
      * Test the detection of already send PDF output.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\CheckOutput::isOutputHtml
      */
     public function testIsOutputHtmlPdf()
     {
         $headerMock = $this->getFunctionMock(static::OUTPUT_NAMESPACE, static::HEADERS_LIST);
         $headerMock->expects($this->once())
-            ->will($this->returnValue(['whatever: some header', 'Content-type:application/pdf']));
+            ->willReturn(['whatever: some header', 'Content-type:application/pdf']);
 
         $checkOutput = new CheckOutput(Krexx::$pool);
         $this->assertFalse($checkOutput->isOutputHtml());
@@ -157,16 +152,13 @@ class CheckOutputTest extends AbstractHelper
 
     /**
      * Test if the remote address is allowed to trigger kreXX
-     *
-     * @covers \Brainworxx\Krexx\View\Output\CheckOutput::isAllowedIp
-     * @covers \Brainworxx\Krexx\View\Output\CheckOutput::checkWildcards
      */
     public function testIsAllowedIp()
     {
         // Disable CLI mode.
         $sapiMock = $this->getFunctionMock(static::OUTPUT_NAMESPACE, static::PHP_SAPI_NAME);
         $sapiMock->expects($this->any())
-            ->will($this->returnValue('browser'));
+            ->willReturn('browser');
         $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
         $checkOutput = new CheckOutput(Krexx::$pool);
 

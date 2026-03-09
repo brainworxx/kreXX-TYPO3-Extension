@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -41,13 +41,18 @@ use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Redners a recursion.
+ *
+ * @deprecated
+ *   Since 6.1.3, will be removed. Not sure why it was there in the first place.
+ * @codeCoverageIgnore
+ *  We are not testing deprecated code.
  */
 trait Recursion
 {
     /**
      * @var string
      */
-    private $markerRecursion = '{addjson}';
+    private string $markerRecursion = '{addjson}';
 
     /**
      * {@inheritDoc}

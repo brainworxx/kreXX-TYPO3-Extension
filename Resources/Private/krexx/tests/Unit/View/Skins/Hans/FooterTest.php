@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -40,7 +40,15 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use Brainworxx\Krexx\Tests\Helpers\PluginConfiguration;
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
+use Brainworxx\Krexx\View\Skins\Hans\ExpandableChild;
+use Brainworxx\Krexx\View\Skins\Hans\Footer;
+use Brainworxx\Krexx\View\Skins\Hans\PluginList;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Footer::class, 'renderFooter')]
+#[CoversMethod(ExpandableChild::class, 'renderExpandableChild')]
+#[CoversMethod(Footer::class, 'renderCaller')]
+#[CoversMethod(PluginList::class, 'renderPluginList')]
 class FooterTest extends AbstractRenderHans
 {
     /**
@@ -48,11 +56,6 @@ class FooterTest extends AbstractRenderHans
      *
      * We test the renderExpandableChild separately to keep this one at least
      * a little bit sane.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\Footer::renderFooter
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\ExpandableChild::renderExpandableChild
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\Footer::renderCaller
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\PluginList::renderPluginList
      */
     public function testRenderFooter()
     {
@@ -65,10 +68,10 @@ class FooterTest extends AbstractRenderHans
         ];
         Krexx::$pool->fileService->expects($this->any())
             ->method('filterFilePath')
-            ->will($this->returnValue(''));
+            ->willReturn('');
         Krexx::$pool->fileService->expects($this->any())
             ->method('fileIsReadable')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         // Mock the model for the renderExpandableChild, which we will not test
         // here.
@@ -77,24 +80,24 @@ class FooterTest extends AbstractRenderHans
         $configMock1 = $this->createMock(PluginConfiguration::class);
         $configMock1->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue('Plugin 1'));
+            ->willReturn('Plugin 1');
         $configMock1->expects($this->once())
             ->method('getVersion')
-            ->will($this->returnValue('1.0.0.'));
+            ->willReturn('1.0.0.');
         $configMock2 = $this->createMock(PluginConfiguration::class);
         $configMock2->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue('Plugin 2'));
+            ->willReturn('Plugin 2');
         $configMock2->expects($this->once())
             ->method('getVersion')
-            ->will($this->returnValue('2.0.0.'));
+            ->willReturn('2.0.0.');
         $configMock3 = $this->createMock(PluginConfiguration::class);
         $configMock3->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue('Plugin 3'));
+            ->willReturn('Plugin 3');
         $configMock3->expects($this->once())
             ->method('getVersion')
-            ->will($this->returnValue('3.0.0.'));
+            ->willReturn('3.0.0.');
 
         // Mock the plugin list.
         $pluginList = [
@@ -127,5 +130,24 @@ class FooterTest extends AbstractRenderHans
         $this->assertStringContainsString('filename', $result);
         $this->assertStringContainsString('line 123', $result);
         $this->assertStringContainsString('yesteryear', $result);
+    }
+
+    /**
+     * Test everything with an empty caller array.
+     */
+    public function testRenderFooterNoCaller()
+    {
+        // Mock the caller
+        $caller = [];
+        Krexx::$pool->fileService->expects($this->any())
+            ->method('filterFilePath')
+            ->willReturn('');
+        Krexx::$pool->fileService->expects($this->any())
+            ->method('fileIsReadable')
+            ->willReturn(true);
+
+        $model = new Model(Krexx::$pool);
+        $result = $this->renderHans->renderFooter($caller, $model);
+        $this->assertStringNotContainsString('Called from,', $result, 'We do not have any caller info.');
     }
 }

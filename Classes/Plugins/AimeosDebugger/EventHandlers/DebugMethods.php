@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -61,10 +61,8 @@ class DebugMethods extends AbstractEventHandler implements
      *
      * @var string[][]
      */
-    protected $methods = [
+    protected array $methods = [
             'getRefItems' => [
-                // Aimeos 2019 & 2020
-                \Aimeos\MShop\Common\Item\ListRef\Iface::class,
                 // Aimeos 2021
                 \Aimeos\MShop\Common\Item\ListsRef\Iface::class,
             ],
@@ -78,8 +76,6 @@ class DebugMethods extends AbstractEventHandler implements
                 \Aimeos\MShop\Common\Item\PropertyRef\Iface::class,
             ],
             'getListItems' => [
-                // Aimeos 2018 & 2019 & 2020
-                \Aimeos\MShop\Common\Item\ListRef\Iface::class,
                 // Aimeos 2021
                 \Aimeos\MShop\Common\Item\ListsRef\Iface::class
             ],
@@ -98,7 +94,7 @@ class DebugMethods extends AbstractEventHandler implements
      *
      * @var \Brainworxx\Krexx\Service\Factory\Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Inject the pool.
@@ -113,17 +109,16 @@ class DebugMethods extends AbstractEventHandler implements
     /**
      * Resolving the possible methods from the decorator pattern.
      *
-     * @param AbstractCallback $callback
+     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback|null $callback
      *   The original callback.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.
      *
-     * @throws \ReflectionException
-     *
      * @return string
      *   The generated markup.
+     * @throws \ReflectionException
      */
-    public function handle(AbstractCallback $callback, ?Model $model = null): string
+    public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
     {
         $output = '';
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflection */
@@ -164,7 +159,7 @@ class DebugMethods extends AbstractEventHandler implements
             return $this->pool->render->renderExpandableChild(
                 $this->pool->createClass(Model::class)
                     ->setName($methodName)
-                    ->setType(static::TYPE_DEBUG_METHOD)
+                    ->setType($this->pool->messages->getHelp('debugMethod'))
                     ->setNormal(static::UNKNOWN_VALUE)
                     ->setHelpid($methodName)
                     ->setConnectorType(static::CONNECTOR_METHOD)
@@ -193,10 +188,9 @@ class DebugMethods extends AbstractEventHandler implements
     {
         $paramList = '';
         foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
-            $paramList .= $this->pool->codegenHandler->parameterToString($reflectionParameter);
             // We add a comma to the parameter list, to separate them for a
             // better readability.
-            $paramList .= ', ';
+            $paramList .= $this->pool->codegenHandler->parameterToString($reflectionParameter) . ', ';
         }
 
         return trim($paramList, ', ');

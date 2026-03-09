@@ -28,6 +28,7 @@ var Draxx = (function () {
     function Draxx(selector, handle, callbackUp, callbackDrag) {
         var _this = this;
         this.startDraxx = function (event) {
+            var _a;
             var elContent = _this.kdt.getParents(event.target, _this.selector)[0];
             var offset = _this.getElementOffset(elContent);
             _this.offSetY = offset.top + elContent.offsetHeight - event.pageY - elContent.offsetHeight;
@@ -42,7 +43,7 @@ var Draxx = (function () {
                 if (relOffsetY > 0) {
                 }
                 else {
-                    var prev = elContent.previousElementSibling;
+                    var prev = (_a = elContent.previousElementSibling) !== null && _a !== void 0 ? _a : elContent.parentElement;
                     do {
                         relOffsetY = parseInt(getComputedStyle(prev).marginTop, 10);
                         prev = prev.previousElementSibling;

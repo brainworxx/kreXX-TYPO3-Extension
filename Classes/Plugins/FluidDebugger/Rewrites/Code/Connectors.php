@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -64,7 +64,7 @@ class Connectors extends OrgConnectors
     /**
      * {@inheritdoc}
      */
-    protected $language = 'fluid';
+    protected string $language = 'fluid';
 
     /**
      * Do nothing. There is no second connector in fluid.

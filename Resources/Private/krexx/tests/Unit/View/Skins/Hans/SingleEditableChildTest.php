@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -39,15 +39,20 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
+use Brainworxx\Krexx\View\AbstractRender;
+use Brainworxx\Krexx\View\Skins\Hans\Help;
+use Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(SingleEditableChild::class, 'renderSingleEditableChild')]
+#[CoversMethod(SingleEditableChild::class, 'renderSpecificEditableElement')]
+#[CoversMethod(SingleEditableChild::class, 'renderSelectOptions')]
+#[CoversMethod(AbstractRender::class, 'encodeJson')]
+#[CoversMethod(Help::class, 'renderHelp')]
 class SingleEditableChildTest extends AbstractRenderHans
 {
     /**
      * Test the rendering of a editable input field.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSingleEditableChild
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSpecificEditableElement
-     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderSingleEditableChildInput()
     {
@@ -58,7 +63,7 @@ class SingleEditableChildTest extends AbstractRenderHans
 
         $this->modelMock->expects($this->exactly(2))
             ->method(static::GET_TYPE)
-            ->will($this->returnValue('Input'));
+            ->willReturn('Input');
 
         // A single input field mus not ask for a skin list.
         $configMock = $this->createMock(Config::class);
@@ -76,11 +81,6 @@ class SingleEditableChildTest extends AbstractRenderHans
 
     /**
      * Test the rendering of an editable dropdown field, the skin list
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSingleEditableChild
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSpecificEditableElement
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSelectOptions
-     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderSingleEditableChildSelectSkin()
     {
@@ -90,21 +90,21 @@ class SingleEditableChildTest extends AbstractRenderHans
 
         $this->modelMock->expects($this->exactly(3))
             ->method(static::GET_NAME)
-            ->will($this->returnValue($selectedSkin));
+            ->willReturn($selectedSkin);
         $this->modelMock->expects($this->exactly(2))
             ->method(static::GET_DOMID)
-            ->will($this->returnValue(Fallback::SETTING_SKIN));
+            ->willReturn(Fallback::SETTING_SKIN);
         $this->modelMock->expects($this->exactly(2))
             ->method(static::GET_TYPE)
-            ->will($this->returnValue(Fallback::RENDER_TYPE_SELECT));
+            ->willReturn(Fallback::RENDER_TYPE_SELECT);
 
         $configMock = $this->createMock(Config::class);
         $configMock->expects($this->once())
             ->method('getSkinList')
-            ->will($this->returnValue([
+            ->willReturn([
                 $selectedSkin => $selectedSkin,
                 'Herbert' => 'Herbert'
-            ]));
+            ]);
         Krexx::$pool->config = $configMock;
 
         $result = $this->renderHans->renderSingleEditableChild($this->modelMock);
@@ -118,11 +118,6 @@ class SingleEditableChildTest extends AbstractRenderHans
 
     /**
      * Test the rendering of a simple boolean.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSingleEditableChild
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSpecificEditableElement
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSelectOptions
-     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderSingleEditableChildSelectBool()
     {
@@ -130,10 +125,10 @@ class SingleEditableChildTest extends AbstractRenderHans
         $this->mockModel(static::GET_NORMAL, 'totally normal');
         $this->modelMock->expects($this->exactly(3))
             ->method(static::GET_DOMID)
-            ->will($this->returnValue('barf!'));
+            ->willReturn('barf!');
         $this->modelMock->expects($this->exactly(2))
             ->method(static::GET_TYPE)
-            ->will($this->returnValue(Fallback::RENDER_TYPE_SELECT));
+            ->willReturn(Fallback::RENDER_TYPE_SELECT);
 
         $result = $this->renderHans->renderSingleEditableChild($this->modelMock);
         $this->assertStringContainsString('truetruefalsefalse', $result);
@@ -141,11 +136,6 @@ class SingleEditableChildTest extends AbstractRenderHans
 
     /**
      * Test the rendering of the language dropdown
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSingleEditableChild
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSpecificEditableElement
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSelectOptions
-     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderSingleEditableChildSelectLang()
     {
@@ -153,12 +143,12 @@ class SingleEditableChildTest extends AbstractRenderHans
         $this->mockModel(static::GET_NORMAL, 'totally normal');
         $this->modelMock->expects($this->exactly(3))
             ->method(static::GET_DOMID)
-            ->will($this->returnValue(Fallback::SETTING_LANGUAGE_KEY));
+            ->willReturn(Fallback::SETTING_LANGUAGE_KEY);
         $this->modelMock->expects($this->exactly(2))
             ->method(static::GET_TYPE)
-            ->will($this->returnValue(Fallback::RENDER_TYPE_SELECT));
+            ->willReturn(Fallback::RENDER_TYPE_SELECT);
 
         $result = $this->renderHans->renderSingleEditableChild($this->modelMock);
-        $this->assertStringContainsString('EnglishtextDeutschde', $result);
+        $this->assertStringContainsString('EnglishenDeutschde', $result);
     }
 }

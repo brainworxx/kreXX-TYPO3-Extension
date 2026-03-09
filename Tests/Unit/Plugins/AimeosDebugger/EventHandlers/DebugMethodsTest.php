@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,6 +38,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\EventHandler
 use Aimeos\Map;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods;
 use Brainworxx\Includekrexx\Tests\Fixtures\Aimeos20Item;
+use Brainworxx\Includekrexx\Tests\Fixtures\Aimeos24Item;
 use Brainworxx\Includekrexx\Tests\Fixtures\AimeosItem;
 use Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\AimeosTestTrait;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
@@ -49,7 +51,13 @@ use Brainworxx\Krexx\Tests\Fixtures\DebugMethodFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods as AnalyseDebugMethods;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
+use Aimeos\MShop\Product\Item\Standard as StandardProduct;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(DebugMethods::class, 'handle')]
+#[CoversMethod(DebugMethods::class, 'callDebugMethod')]
+#[CoversMethod(DebugMethods::class, 'retrieveParameters')]
+#[CoversMethod(DebugMethods::class, '__construct')]
 class DebugMethodsTest extends AbstractHelper implements CallbackConstInterface
 {
     use AimeosTestTrait;
@@ -73,8 +81,6 @@ class DebugMethodsTest extends AbstractHelper implements CallbackConstInterface
 
     /**
      * Test the assigning of the pool.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods::__construct
      */
     public function testConstruct()
     {
@@ -86,9 +92,6 @@ class DebugMethodsTest extends AbstractHelper implements CallbackConstInterface
 
     /**
      * Test the subscribing and then handling of the event, with the wrong object.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods::handle
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods::callDebugMethod
      */
     public function testHandleWrongObject()
     {
@@ -115,10 +118,6 @@ class DebugMethodsTest extends AbstractHelper implements CallbackConstInterface
 
     /**
      * Test the subscribing and then handling of the event, with the right object.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods::handle
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods::callDebugMethod
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods::retrieveParameters
      */
     public function testHandleNormal()
     {
@@ -129,9 +128,13 @@ class DebugMethodsTest extends AbstractHelper implements CallbackConstInterface
         // Short circuit the rendering process.
         Krexx::$pool->render = new RenderNothing(Krexx::$pool);
 
-        // Create the calling class an a fixture.
+        // Create the calling class in a fixture.
         $analyseDebugMethods = new AnalyseDebugMethods(\Krexx::$pool);
-        if (class_exists(Map::class)) {
+        $itemReflection = new ReflectionClass(StandardProduct::class);
+        $parameters = $itemReflection->getMethod('__construct')->getParameters();
+        if (count($parameters) === 2) {
+            $object = new Aimeos24Item();
+        } elseif (class_exists(Map::class)) {
             $object = new Aimeos20Item();
         } else {
             $object = new AimeosItem();
@@ -172,7 +175,7 @@ class DebugMethodsTest extends AbstractHelper implements CallbackConstInterface
         // Testing the standard values.
         /** @var \Brainworxx\Krexx\Analyse\Model $model */
         foreach ($models as $key => $model) {
-            $this->assertEquals(static::TYPE_DEBUG_METHOD, $model->getType());
+            $this->assertEquals('Debug method', $model->getType());
             $this->assertEquals(static::UNKNOWN_VALUE, $model->getNormal());
             $this->assertEquals('->', $model->getConnectorLeft());
             $this->assertEquals($connectorRight[$key], $model->getConnectorRight(), 'Method: ' . $mapping[$key]);

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -42,7 +42,10 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
 use stdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ThroughArray::class, 'callMe')]
+#[CoversMethod(ThroughArray::class, 'prepareModel')]
 class ThroughArrayTest extends AbstractHelper
 {
     /**
@@ -55,8 +58,7 @@ class ThroughArrayTest extends AbstractHelper
     }
 
     /**
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray::prepareModel
+     * Test the normal array iteration.
      */
     public function testCallMe()
     {
@@ -70,7 +72,7 @@ class ThroughArrayTest extends AbstractHelper
         $recursionHandler = $this->createMock(Recursion::class);
         $recursionHandler->expects($this->once())
             ->method('getMarker')
-            ->will($this->returnValue('recursion marker'));
+            ->willReturn('recursion marker');
         Krexx::$pool->recursionHandler = $recursionHandler;
 
 
@@ -107,9 +109,6 @@ class ThroughArrayTest extends AbstractHelper
 
     /**
      * Testing the special handling of a PHP bug.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray::prepareModel
      */
     public function testCallMeInaccessibleArray()
     {

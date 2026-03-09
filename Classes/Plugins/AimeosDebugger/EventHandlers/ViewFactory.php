@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -91,14 +91,14 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
      *
      * @var \Brainworxx\Krexx\Service\Factory\Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * List of all retrieved helper classes from the view.
      *
-     * @var object[]
+     * @var object[]|null
      */
-    protected $helpers = [];
+    protected ?array $helpers = [];
 
     /**
      * Inject the pool.
@@ -113,7 +113,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
     /**
      * Analysing the magical factory of the Aimeos view.
      *
-     * @param AbstractCallback $callback
+     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback|null $callback
      *   The calling class.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.
@@ -121,11 +121,10 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
      * @return string
      *   The generated markup.
      */
-    public function handle(AbstractCallback $callback, ?Model $model = null): string
+    public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
     {
-        $params = $callback->getParameters();
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
-        $ref = $params[static::PARAM_REF];
+        $ref = $callback->getParameters()[static::PARAM_REF];
         /** @var ViewInterface $data */
         $data = $ref->getData();
 
@@ -138,15 +137,13 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
 
         // Analyse the transform method of all possible view helpers.
         // Analyse the already existing view helpers.
-        $result = '';
         try {
-            $result = $this->retrieveHelpers($data, $ref);
-            $result .= $this->retrievePossibleOtherHelpers();
+            return $this->retrieveHelpers($data, $ref) . $this->retrievePossibleOtherHelpers();
         } catch (ReflectionException $e) {
             // Do nothing. We skip this step.
         }
 
-        return $result;
+        return '';
     }
 
     /**
@@ -163,7 +160,6 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
     protected function retrieveHelpers($data, ReflectionClass $ref): string
     {
         $result = '';
-
         if ($ref->hasProperty('helper')) {
             // Got our helpers right here.
             // Let's hope that other implementations use the same variable name.
@@ -175,7 +171,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
             if (is_array($this->helpers) && !empty($this->helpers)) {
                 // We got ourselves some classes to analyse.
                 $this->pool->codegenHandler->setCodegenAllowed(false);
-                $result .= $this->pool->render->renderExpandableChild(
+                $result = $this->pool->render->renderExpandableChild(
                     $this->pool->createClass(Model::class)
                         ->setName($this->pool->messages->getHelp('aimeosViewHelpers'))
                         ->setType('class internals magical factory')
@@ -221,7 +217,6 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
             $ref = new ReflectionClass(BaseHelperBase::class);
         }
 
-
         // Scan the main view helpers, to get a first impression.
         $reflectionList = $this->retrieveHelperList(dirname($ref->getFileName()));
 
@@ -252,6 +247,11 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
 
     /**
      * Retrieve all helper class reflections from a directory.
+     *
+     * @deprecated
+     *   Since 6.0.0. Will be removed as soon as we drop Aimeos 2021 support.
+     * @codeCoverageIgnore
+     *   We will not test deprecated code.
      *
      * @param string $directory
      *   The directory we re processing.

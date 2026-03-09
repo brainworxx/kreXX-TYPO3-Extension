@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,25 +37,28 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
+use Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\File as Fileservice;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ProcessClosure::class, 'handleNoneScalar')]
+#[CoversMethod(ProcessClosure::class, 'retrieveMetaData')]
+#[CoversMethod(AbstractProcessNoneScalar::class, 'handle')]
+#[CoversMethod(ProcessClosure::class, 'retrieveParameterList')]
+#[CoversMethod(ProcessClosure::class, 'retrieveSourceCode')]
+#[CoversMethod(AbstractRouting::class, 'dispatchProcessEvent')]
+#[CoversMethod(AbstractRouting::class, 'generateDomIdFromObject')]
+#[CoversMethod(ProcessClosure::class, 'canHandle')]
 class ProcessClosureTest extends AbstractHelper
 {
     /**
      * Test the processing of a closure.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::handleNoneScalar
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::retrieveMetaData
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::retrieveParameterList
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::retrieveSourceCode
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::generateDomIdFromObject
      */
     public function testProcess()
     {
@@ -72,7 +75,6 @@ class ProcessClosureTest extends AbstractHelper
             return strlen($someVar);
         };
         $containingCode = 'just some source code';
-        $filePath = 'some file in a directory';
         $parameter = 'string $someVar';
         $model = new Model(Krexx::$pool);
         $model->setData($fixture);
@@ -81,10 +83,7 @@ class ProcessClosureTest extends AbstractHelper
         $fileserviceMock = $this->createMock(Fileservice::class);
         $fileserviceMock->expects($this->once())
             ->method('readSourcecode')
-            ->will($this->returnValue($containingCode));
-        $fileserviceMock->expects($this->once())
-            ->method('filterFilePath')
-            ->will($this->returnValue($filePath));
+            ->willReturn($containingCode);
         $renderNothing = new RenderNothing(Krexx::$pool);
         Krexx::$pool->fileService = $fileserviceMock;
         Krexx::$pool->render = $renderNothing;
@@ -94,7 +93,8 @@ class ProcessClosureTest extends AbstractHelper
         $this->mockEventService(
             [ProcessClosure::class . PluginConfigInterface::START_PROCESS, null, $model]
         );
-        $processClosure->handle($model);
+        $processClosure->canHandle($model);
+        $processClosure->handle();
 
         // Run the tests, model.
         $this->assertEquals(ProcessClosure::TYPE_CLOSURE, $model->getType());
@@ -115,15 +115,20 @@ class ProcessClosureTest extends AbstractHelper
         // Meta data inside the callback parameters
         $this->assertStringContainsString('Just another fixture.', $parameters['Comment']);
         $this->assertEquals($containingCode, $parameters['Source']);
-        $this->assertStringContainsString($filePath, $parameters['Declared in']);
-        $this->assertEquals(__NAMESPACE__, $parameters['Namespace']);
+        $this->assertStringContainsString(__FILE__, $parameters['Declared in']);
+
+        // Closures can not get namespaced anymore in PHP 8.4.0 and beyond.
+        if (version_compare(phpversion(), '8.4.0', '<=')) {
+            $this->assertEquals(__NAMESPACE__, $parameters['Namespace']);
+        } else {
+            $this->assertArrayNotHasKey('Namespace', $parameters);
+        }
+
         $this->assertEquals($parameter, $parameters['Parameter #1']);
     }
 
     /**
      * Test the check if we can handle the array processing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::canHandle
      */
     public function testCanHandle()
     {

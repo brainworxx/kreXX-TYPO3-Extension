@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -46,6 +46,13 @@ use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 class ProcessNull extends AbstractRouting implements ProcessInterface, ProcessConstInterface
 {
     /**
+     * The model we are currently working on.
+     *
+     * @var Model
+     */
+    protected Model $model;
+
+    /**
      * Is this one null?
      *
      * @param Model $model
@@ -56,24 +63,22 @@ class ProcessNull extends AbstractRouting implements ProcessInterface, ProcessCo
      */
     public function canHandle(Model $model): bool
     {
+        $this->model = $model;
         return $model->getData() === null;
     }
 
     /**
      * Render a 'dump' for a NULL value.
      *
-     * @param Model $model
-     *   The model with the data for the output.
-     *
      * @return string
      *   The rendered markup.
      */
-    public function handle(Model $model): string
+    public function handle(): string
     {
         $data = 'NULL';
         return $this->pool->render->renderExpandableChild(
             $this->dispatchProcessEvent(
-                $model->setData($data)->setNormal($data)->setType(static::TYPE_NULL)
+                $this->model->setData($data)->setNormal($data)->setType(static::TYPE_NULL)
             )
         );
     }

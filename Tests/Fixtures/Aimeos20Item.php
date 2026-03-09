@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -39,7 +40,6 @@ use Aimeos\MShop\Product\Item\Standard as StandardProduct;
 
 class Aimeos20Item extends StandardProduct
 {
-
     /**
      * Short circuiting the original method, because I'm to lazy to really fill
      * it the fixture with "meaningfull" stuff for the tests.

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,14 +38,15 @@ namespace Brainworxx\Krexx\Tests\Unit\View;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use Brainworxx\Krexx\View\AbstractRender;
 use Brainworxx\Krexx\View\Skins\RenderHans;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(AbstractRender::class, '__construct')]
 class AbstractRenderTest extends AbstractHelper
 {
     /**
      * Test the initializing of the render class.
-     *
-     * @covers \Brainworxx\Krexx\View\AbstractRender::__construct
      */
     public function testConstruct()
     {
@@ -53,13 +54,12 @@ class AbstractRenderTest extends AbstractHelper
         $configMock = $this->createMock(Config::class);
         $configMock->expects($this->once())
             ->method('getSkinDirectory')
-            ->will($this->returnValue($skinDirectory));
+            ->willReturn($skinDirectory);
         Krexx::$pool->config = $configMock;
 
         $render = new RenderHans(Krexx::$pool);
 
         $this->assertSame(Krexx::$pool->render, $render);
         $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $render));
-        $this->assertEquals($skinDirectory, $this->retrieveValueByReflection('skinPath', $render));
     }
 }

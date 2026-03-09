@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,12 +37,15 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessString;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\From\File;
+use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Service\Misc\Encoding;
 use Brainworxx\Krexx\Service\Misc\FileinfoDummy;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
@@ -50,13 +53,20 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use finfo;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ProcessString::class, '__construct')]
+#[CoversMethod(ProcessString::class, 'canHandle')]
+#[CoversMethod(ProcessString::class, 'handle')]
+#[CoversMethod(ProcessString::class, 'retrieveLengthAndEncoding')]
+#[CoversMethod(AbstractRouting::class, 'dispatchProcessEvent')]
+#[CoversMethod(ProcessString::class, 'handleStringScalar')]
 class ProcessStringTest extends AbstractHelper
 {
 
-    const BUFFER_INFO = 'bufferInfo';
-    const ENCODING = 'some encoding';
-    const ENCODING_PREFIX = 'encoded ';
+    public const  BUFFER_INFO = 'bufferInfo';
+    public const  ENCODING = 'some encoding';
+    public const  ENCODING_PREFIX = 'encoded ';
 
     /**
      * @var ProcessString
@@ -73,15 +83,13 @@ class ProcessStringTest extends AbstractHelper
 
     /**
      * Testing the setting of the pool and of the file info class.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::__construct
      */
     public function testConstructWithoutFinfo()
     {
         // Mock the class_exists method, to return always false.
         $classExistMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'class_exists');
         $classExistMock->expects($this->once())
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $processor = new ProcessString(Krexx::$pool);
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $processor));
@@ -97,15 +105,13 @@ class ProcessStringTest extends AbstractHelper
 
     /**
      * Testing the setting of the pool and of the file info class.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::__construct
      */
     public function testConstructWithFinfo()
     {
         // Mock the class_exists method, to return always true.
         $classExistMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'class_exists');
         $classExistMock->expects($this->once())
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $processor = new ProcessString(Krexx::$pool);
         $this->assertInstanceOf(finfo::class, $this->retrieveValueByReflection(static::BUFFER_INFO, $processor));
@@ -113,52 +119,30 @@ class ProcessStringTest extends AbstractHelper
 
     /**
      * Testing with a normal short string.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handleStringScalar
      */
     public function testProcessNormal()
     {
         $fixture = 'short string';
-        $encoding = static::ENCODING;
-        $length = 12;
-        $model = $this->prepareMocksAndRunTest(
-            $fixture,
-            $encoding,
-            $length
-        );
+        $model = $this->prepareMocksAndRunTest($fixture . '<');
 
         $this->assertEquals(ProcessConstInterface::TYPE_STRING, $model->getType());
-        $this->assertEquals($length, $model->getJson()['Length']);
-        $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getNormal());
+        $this->assertEquals(13, $model->getJson()['Length']);
+        $this->assertEquals($fixture . '&lt;', $model->getNormal());
         $this->assertEquals(false, $model->hasExtra());
         $this->assertArrayNotHasKey('Mimetype', $model->getJson());
     }
 
     /**
      * Testing with broken encoding.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handleStringScalar
      */
     public function testProcessBrokenEncodung()
     {
         $fixture = 'short string';
-        $encoding = false;
-        $length = strlen($fixture);
-        $model = $this->prepareMocksAndRunTest(
-            $fixture,
-            $encoding,
-            $length
-        );
+        $model = $this->prepareMocksAndRunTest($fixture . substr('üä', 1));
 
         $this->assertEquals(ProcessConstInterface::TYPE_STRING, $model->getType());
-        $this->assertEquals($length, $model->getJson()['Length']);
-        $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getNormal());
+        $this->assertEquals(14, $model->getJson()['Length']);
+        $this->assertEquals('&#115;&#104;&#111;&#114;&#116;&#32;&#115;&#116;&#114;&#105;&#110;&#103;&#63;&#228;', $model->getNormal());
         $this->assertEquals('broken', $model->getJson()['Encoding']);
         $this->assertEquals(false, $model->hasExtra());
         $this->assertArrayNotHasKey('Mimetype', $model->getJson());
@@ -166,28 +150,17 @@ class ProcessStringTest extends AbstractHelper
 
     /**
      * Testing with a large string.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handleStringScalar
      */
     public function testProcessLargerString()
     {
         $fixture = 'a string larger than 20 chars';
-        $encoding = static::ENCODING;
         $length = strlen($fixture);
         $fileInfo = 'some mimetype';
-        $model = $this->prepareMocksAndRunTest(
-            $fixture,
-            $encoding,
-            $length,
-            $fileInfo
-        );
+        $model = $this->prepareMocksAndRunTest($fixture, $fileInfo);
 
         $this->assertEquals(ProcessConstInterface::TYPE_STRING, $model->getType());
         $this->assertEquals($length, $model->getJson()['Length']);
-        $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getNormal());
+        $this->assertEquals($fixture, $model->getNormal());
         $this->assertEquals($fileInfo, $model->getJson()['Mimetype string']);
         $this->assertEquals(false, $model->hasExtra());
         $this->assertArrayNotHasKey('Encoding', $model->getJson());
@@ -195,32 +168,21 @@ class ProcessStringTest extends AbstractHelper
 
     /**
      * Testing with a string larger than 50 characters.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handleStringScalar
      */
     public function testProcessHugeString()
     {
         $fixture = 'This is a very large string, bigger than 50 chars. Lorem ipsum and so on, just to fill it up.';
-        $encoding = static::ENCODING;
-        $length = strlen($fixture);
+        $length = strlen('>' . $fixture . '<');
         $fileInfo = 'some mimetype';
-        $model = $this->prepareMocksAndRunTest(
-            $fixture,
-            $encoding,
-            $length,
-            $fileInfo
-        );
+        $model = $this->prepareMocksAndRunTest('>' . $fixture . '<', $fileInfo);
 
         $this->assertEquals(ProcessConstInterface::TYPE_STRING, $model->getType());
         $this->assertEquals($length, $model->getJson()['Length']);
         $this->assertEquals(
-            static::ENCODING_PREFIX . substr($fixture, 0, 50) .  CallbackConstInterface::UNKNOWN_VALUE,
+            '&gt;' . substr($fixture, 0, 49) .  CallbackConstInterface::UNKNOWN_VALUE,
             $model->getNormal()
         );
-        $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getData());
+        $this->assertEquals('&gt;' . $fixture . '&lt;', $model->getData());
         $this->assertEquals($fileInfo, $model->getJson()['Mimetype string']);
         $this->assertEquals(true, $model->hasExtra());
         $this->assertArrayNotHasKey('Encoding', $model->getJson());
@@ -228,27 +190,16 @@ class ProcessStringTest extends AbstractHelper
 
     /**
      * Testing with linebreaks in the fixture.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handleStringScalar
      */
     public function testProcessWithLinebreaks()
     {
         $fixture = 'some' . PHP_EOL . 'string';
-        $encoding = static::ENCODING;
-        $length = 12;
-        $model = $this->prepareMocksAndRunTest(
-            $fixture,
-            $encoding,
-            $length
-        );
+        $model = $this->prepareMocksAndRunTest($fixture . '&');
 
         $this->assertEquals(ProcessConstInterface::TYPE_STRING, $model->getType());
-        $this->assertEquals($length, $model->getJson()['Length']);
+        $this->assertEquals(strlen($fixture . '&'), $model->getJson()['Length']);
         $this->assertEquals(
-            static::ENCODING_PREFIX . $fixture . CallbackConstInterface::UNKNOWN_VALUE,
+            $fixture . '&amp;' . CallbackConstInterface::UNKNOWN_VALUE,
             $model->getNormal()
         );
         $this->assertEquals(true, $model->hasExtra());
@@ -257,22 +208,9 @@ class ProcessStringTest extends AbstractHelper
 
     /**
      * Testing the triggering of the scalar analysis and its recursion handling.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handleStringScalar
      */
     public function testProcessWithScalar()
     {
-        // Activate the scalar analysis.
-        Krexx::$pool->rewrite[File::class] = ConfigSupplier::class;
-        ConfigSupplier::$overwriteValues[Fallback::SETTING_ANALYSE_SCALAR] = 'true';
-
-        // To prevent a bad rating, I have to do something with the newly
-        // instantiated configuration. If I don't, it's considered a bug.
-        // Hence, I do "something" with it.
-        $whatever = new Config(\Krexx::$pool);
-        $whatever->getLogDir();
-
         $fixture = '{"whatever": "okay"}';
         $renderNothing = new RenderNothing(Krexx::$pool);
         Krexx::$pool->render = $renderNothing;
@@ -280,18 +218,52 @@ class ProcessStringTest extends AbstractHelper
         // Normal.
         $model = new Model(Krexx::$pool);
         $model->setData($fixture);
-        $this->processString->handle($model);
+        $this->processString->canHandle($model);
+        $this->processString->handle();
 
         // And with a recursion.
         $model = new Model(Krexx::$pool);
         $model->setData($fixture);
-        $this->processString->handle($model);
+        $this->processString->canHandle($model);
+        $this->processString->handle();
 
         $this->assertCount(
             1,
             $renderNothing->model['renderRecursion'],
             'We should have something in the recursion array.'
         );
+        $this->assertCount(
+            1,
+            $renderNothing->model['renderExpandableChild'],
+            'The first one should be in the expandable child.'
+        );
+    }
+
+    public function testProcessWithoutScalar()
+    {
+        // Deactivate the scalar analysis.
+        Krexx::$pool->rewrite[File::class] = ConfigSupplier::class;
+        ConfigSupplier::$overwriteValues[ConfigConstInterface::SETTING_ANALYSE_SCALAR] = false;
+        new Config(\Krexx::$pool);
+
+        $fixture = '{"whatever": "okay"}';
+        $renderNothing = new RenderNothing(Krexx::$pool);
+        Krexx::$pool->render = $renderNothing;
+
+        $recursionHandlerMock = $this->createMock(Recursion::class);
+        $recursionHandlerMock->expects($this->never())
+            ->method('isInMetaHive');
+        $recursionHandlerMock->expects($this->never())
+            ->method('addToMetaHive');
+        Krexx::$pool->recursionHandler = $recursionHandlerMock;
+
+        $model = new Model(Krexx::$pool);
+        $model->setData($fixture);
+
+        $this->processString = new ProcessString(Krexx::$pool);
+        $this->processString->canHandle($model);
+        $this->processString->handle();
+
         $this->assertCount(
             1,
             $renderNothing->model['renderExpandableChild'],
@@ -310,44 +282,8 @@ class ProcessStringTest extends AbstractHelper
      *
      * @return \Brainworxx\Krexx\Analyse\Model
      */
-    protected function prepareMocksAndRunTest(string $fixture, $encoding, int $length, $bufferOutput = null): Model
+    protected function prepareMocksAndRunTest(string $fixture, $bufferOutput = null): Model
     {
-        $encodingMock = $this->createMock(Encoding::class);
-        $encodingMock->expects($this->once())
-            ->method('mbDetectEncoding')
-            ->with($fixture)
-            ->will($this->returnValue($encoding));
-        $encodingMock->expects($this->once())
-            ->method('mbStrLen')
-            ->with($fixture)
-            ->will($this->returnValue($length));
-        if ($length > 50 || strpos($fixture, PHP_EOL) !== false) {
-            $cut = substr($fixture, 0, 50);
-            $encodingMock->expects($this->exactly(2))
-                ->method('encodeString')
-                ->with(...$this->withConsecutive(
-                    [$cut],
-                    [$fixture]
-                ))->will($this->returnValueMap([
-                    [$cut, false, static::ENCODING_PREFIX . $cut],
-                    [$fixture, false, static::ENCODING_PREFIX . $fixture]
-                ]));
-
-            $encodingMock->expects($this->once())
-                ->method('mbSubStr')
-                ->with($fixture, 0, 50)
-                ->will($this->returnValue($cut));
-        } else {
-            $encodingMock->expects($this->never())
-                ->method('mbSubStr');
-
-            $encodingMock->expects($this->once())
-                ->method('encodeString')
-                ->with($fixture)
-                ->will($this->returnValue(static::ENCODING_PREFIX . $fixture));
-        }
-        Krexx::$pool->encodingService = $encodingMock;
-
         $fileinfoMock = $this->createMock(finfo::class);
         if (empty($bufferOutput)) {
              $fileinfoMock->expects($this->never())
@@ -356,7 +292,7 @@ class ProcessStringTest extends AbstractHelper
              $fileinfoMock->expects($this->once())
                 ->method('buffer')
                 ->with($fixture)
-                ->will($this->returnValue($bufferOutput));
+                ->willReturn($bufferOutput);
         }
 
         $model = new Model(Krexx::$pool);
@@ -366,15 +302,14 @@ class ProcessStringTest extends AbstractHelper
         $this->mockEventService(
             [ProcessString::class . PluginConfigInterface::START_PROCESS, null, $model]
         );
-        $this->processString->handle($model);
+        $this->processString->canHandle($model);
+        $this->processString->handle();
 
         return $model;
     }
 
     /**
      * Test the check if we can handle the array processing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::canHandle
      */
     public function testCanHandle()
     {

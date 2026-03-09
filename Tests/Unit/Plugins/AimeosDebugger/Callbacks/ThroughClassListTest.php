@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -43,15 +44,15 @@ use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use StdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ThroughClassList::class, 'callMe')]
 class ThroughClassListTest extends AbstractHelper
 {
     use AimeosTestTrait;
 
     /**
      * Test the passing of a bunch of objects into the analysis hub.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughClassList::callMe
      */
     public function testCallMe()
     {

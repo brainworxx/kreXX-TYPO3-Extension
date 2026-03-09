@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,24 +37,30 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Collectors;
 
 use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
+use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate;
 use Brainworxx\Krexx\Service\Config\Config;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Configuration::class, 'assignData')]
+#[CoversMethod(Configuration::class, 'retrieveConfiguration')]
+#[CoversMethod(Configuration::class, 'applyFallbackToConfig')]
+#[CoversMethod(Configuration::class, 'retrieveDropDowns')]
 class ConfigurationTest extends AbstractHelper
 {
     /**
-     * The the assigning of data to the view.
-     *
-     * @covers \Brainworxx\Includekrexx\Collectors\Configuration::assignData
-     * @covers \Brainworxx\Includekrexx\Collectors\Configuration::retrieveConfiguration
-     * @covers \Brainworxx\Includekrexx\Collectors\Configuration::applyFallbackToConfig
-     * @covers \Brainworxx\Includekrexx\Collectors\Configuration::retrieveDropDowns
+     * Test the assigning of data to the view.
      */
     public function testAssignData()
     {
         // No access.
         $configuration = new Configuration();
-        $viewMock = $this->createMock(AbstractTemplateView::class);
+        if (class_exists(AbstractTemplateView::class)) {
+            $viewMock = $this->createMock(AbstractTemplateView::class);
+        } else {
+            $viewMock = $this->createMock(ModuleTemplate::class);
+        }
+
         $viewMock->expects($this->never())
             ->method('assign');
         $configuration->assignData($viewMock);
@@ -72,7 +79,11 @@ class ConfigurationTest extends AbstractHelper
         $this->setValueByReflection('userUc', [Config::SETTING_MAX_FILES => '1000'], $configuration);
 
         // Mock the view.
-        $viewMock = $this->createMock(AbstractTemplateView::class);
+        if (class_exists(AbstractTemplateView::class)) {
+            $viewMock = $this->createMock(AbstractTemplateView::class);
+        } else {
+            $viewMock = $this->createMock(ModuleTemplate::class);
+        }
         $viewMock->expects($this->exactly(2))
             ->method('assign')
             ->with(...$this->withConsecutive(

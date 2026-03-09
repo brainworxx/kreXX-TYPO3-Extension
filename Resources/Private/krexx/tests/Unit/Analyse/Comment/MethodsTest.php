@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,13 +35,23 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Comment;
 
+use Brainworxx\Krexx\Analyse\Comment\AbstractComment;
 use Brainworxx\Krexx\Analyse\Comment\Methods;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\InheritDocFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Methods::class, 'getComment')]
+#[CoversMethod(Methods::class, 'getMethodComment')]
+#[CoversMethod(AbstractComment::class, 'prettifyComment')]
+#[CoversMethod(AbstractComment::class, 'checkComment')]
+#[CoversMethod(Methods::class, 'getInterfaceComment')]
+#[CoversMethod(Methods::class, 'getTraitComment')]
+#[CoversMethod(AbstractComment::class, 'replaceInheritComment')]
+#[CoversMethod(Methods::class, 'retrieveComment')]
 class MethodsTest extends AbstractHelper
 {
     /**
@@ -78,17 +88,6 @@ class MethodsTest extends AbstractHelper
      * Test the comment retrieval of class methods.
      *
      * Comment in plain sight above method.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Comment\Methods::getComment
-     * @covers \Brainworxx\Krexx\Analyse\Comment\Methods::getMethodComment
-     * @covers \Brainworxx\Krexx\Analyse\Comment\AbstractComment::prettifyComment
-     * @covers \Brainworxx\Krexx\Analyse\Comment\AbstractComment::checkComment
-     * @covers \Brainworxx\Krexx\Analyse\Comment\Methods::getInterfaceComment
-     * @covers \Brainworxx\Krexx\Analyse\Comment\Methods::getTraitComment
-     * @covers \Brainworxx\Krexx\Analyse\Comment\AbstractComment::replaceInheritComment
-     * @covers \Brainworxx\Krexx\Analyse\Comment\Methods::retrieveComment
-     *
-     * @throws \ReflectionException
      */
     public function testGetComment()
     {

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,22 +36,26 @@
 namespace Brainworxx\Krexx\Tests\Unit\View\Skins\SmokyGrey;
 
 use Brainworxx\Krexx\Analyse\Code\Codegen;
-use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
+use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderSmokyGrey;
+use Brainworxx\Krexx\View\AbstractRender;
+use Brainworxx\Krexx\View\Skins\SmokyGrey\ConnectorRight;
+use Brainworxx\Krexx\View\Skins\SmokyGrey\ExpandableChild;
+use Brainworxx\Krexx\View\Skins\SmokyGrey\Help;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ExpandableChild::class, 'renderExpandableChild')]
+#[CoversMethod(ExpandableChild::class, 'renderSourceButtonSg')]
+#[CoversMethod(ConnectorRight::class, 'renderConnectorRight')]
+#[CoversMethod(Help::class, 'renderHelp')]
+#[CoversMethod(AbstractRender::class, 'retrieveTypeClasses')]
+#[CoversMethod(AbstractRender::class, 'encodeJson')]
 class ExpandableChildTest extends AbstractRenderSmokyGrey
 {
     /**
      * Test the rendering of an expandable child.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\ExpandableChild::renderExpandableChild
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\ExpandableChild::renderSourceButtonSg
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\ConnectorRight::renderConnectorRight
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Help::renderHelp
-     * @covers \Brainworxx\Krexx\View\AbstractRender::retrieveTypeClasses
-     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderExpandableChild()
     {
@@ -65,28 +69,28 @@ class ExpandableChildTest extends AbstractRenderSmokyGrey
 
         $this->modelMock->expects($this->exactly(2))
             ->method(static::GET_TYPE)
-            ->will($this->returnValue('my type'));
+            ->willReturn('my type');
 
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
             ->method('checkEmergencyBreak')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         Krexx::$pool->emergencyHandler = $emergencyMock;
 
         $codegenMock = $this->createMock(Codegen::class);
         $codegenMock->expects($this->once())
             ->method('generateSource')
             ->with($this->modelMock)
-            ->will($this->returnValue('some meaningful code'));
+            ->willReturn('some meaningful code');
         $codegenMock->expects($this->once())
             ->method('generateWrapperLeft')
-            ->will($this->returnValue(''));
+            ->willReturn('');
         $codegenMock->expects($this->once())
             ->method('generateWrapperRight')
-            ->will($this->returnValue(''));
+            ->willReturn('');
         $codegenMock->expects($this->once())
             ->method('isCodegenAllowed')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->codegenHandler = $codegenMock;
 
         $result = $this->renderSmokyGrey->renderExpandableChild($this->modelMock);
@@ -99,5 +103,36 @@ class ExpandableChildTest extends AbstractRenderSmokyGrey
         $this->assertStringContainsString('noNose.', $result);
         $this->assertStringContainsString('passport', $result);
         $this->assertStringContainsString('birdnest', $result);
+    }
+
+    /**
+     * Test the rendering of an expandable child, but with a small connector.
+     */
+    public function testRenderExpandableChildSmallConnector()
+    {
+        $this->mockModel(static::GET_CONNECTOR_RIGHT, 'xx');
+        $this->mockModel(static::GET_RETURN_TYPE, '');
+        $emergencyMock = $this->createMock(Emergency::class);
+        $emergencyMock->expects($this->once())
+            ->method('checkEmergencyBreak')
+            ->willReturn(false);
+        Krexx::$pool->emergencyHandler = $emergencyMock;
+        $result = $this->renderSmokyGrey->renderExpandableChild($this->modelMock);
+        $this->assertStringNotContainsString('xx', $result, 'We do not render small connectors.');
+    }
+
+    public function testRenderExpandableChildEmergency()
+    {
+        $modelMock = $this->createMock(Model::class);
+        $modelMock->expects($this->never())
+            ->method('getName');
+        $emergencyMock = $this->createMock(Emergency::class);
+        $emergencyMock->expects($this->once())
+            ->method('checkEmergencyBreak')
+            ->willReturn(true);
+        Krexx::$pool->emergencyHandler = $emergencyMock;
+
+        $result = $this->renderSmokyGrey->renderExpandableChild($modelMock);
+        $this->assertEquals('', $result, 'An emergency break must not create any output.');
     }
 }

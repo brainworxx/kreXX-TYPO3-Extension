@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -42,6 +42,8 @@ use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
 use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionException;
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
+use ReflectionClass;
 
 /**
  * Contains all methods, that are used by the fluid caller finder classes.
@@ -68,7 +70,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
      *
      * @var \ReflectionClass
      */
-    protected $viewReflection;
+    protected ReflectionClass $viewReflection;
 
     /**
      * What we are currently rendering.
@@ -79,21 +81,21 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
      *
      * @var integer
      */
-    protected $renderingType;
+    protected int $renderingType;
 
     /**
      * Have we encountered an error during our initialization phase?
      *
      * @var bool
      */
-    protected $error = false;
+    protected bool $error = false;
 
     /**
      * The rendering context of the template.
      *
      * @var \TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface
      */
-    protected $renderingContext;
+    protected RenderingContextInterface $renderingContext;
 
     /**
      * @var mixed
@@ -103,7 +105,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
     /**
      * The line in the template file. that we were able to resolve.
      *
-     * @var string
+     * @var string|int
      */
     protected $line = self::FLUID_NOT_AVAILABLE;
 
@@ -112,25 +114,25 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
      *
      * @var string
      */
-    protected $varname;
+    protected string $varname;
 
     /**
      * The absolute path to the template file.
      *
      * @var string
      */
-    protected $path = self::FLUID_NOT_AVAILABLE;
+    protected string $path = self::FLUID_NOT_AVAILABLE;
 
     /**
      * The regex should look something like this:
      */
-     // \s*<krexx:debug value="{(.*)}"\/>\s*/u
+    // \s*<krexx:debug value="{(.*)}"\/>\s*/u
     /**
      * Meh, the regex un-comments the doc-comment.
      *
      * @var string[][]
      */
-    protected $callPattern = [
+    protected array $callPattern = [
         ['<krexx:debug>{', '}<\/krexx:debug>'],
         ['<krexx:debug value="{', '}" \/>'],
         ['<krexx:debug value="{', '}"\/>'],
@@ -171,7 +173,9 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
 
         try {
             $renderingStackRef = $this->viewReflection->getProperty('renderingStack');
-            $renderingStackRef->setAccessible(true);
+            if (version_compare(PHP_VERSION, '8.1.0', '<')) {
+                $renderingStackRef->setAccessible(true);
+            }
             $renderingStack = $renderingStackRef->getValue($this->view);
         } catch (ReflectionException $e) {
             $this->error = true;
@@ -179,11 +183,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
         }
 
         $pos = count($renderingStack) - 1;
-        if (
-            isset($renderingStack[$pos]) &&
-            isset($renderingStack[$pos]['parsedTemplate']) &&
-            isset($renderingStack[$pos]['type'])
-        ) {
+        if (isset($renderingStack[$pos]['parsedTemplate'], $renderingStack[$pos]['type'])) {
             $this->parsedTemplate = $renderingStack[$pos]['parsedTemplate'];
             $this->renderingType = $renderingStack[$pos]['type'];
             return;
@@ -198,6 +198,9 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
      */
     public function findCaller(string $headline, $data): array
     {
+        // Reset the varname from the last call.
+        $this->varname = static::FLUID_VARIABLE;
+
         $messages = $this->pool->messages;
         $helpKey = 'fluidAnalysis';
 
@@ -209,23 +212,67 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
                 static::TRACE_LINE => static::FLUID_NOT_AVAILABLE,
                 static::TRACE_VARNAME => static::FLUID_VARIABLE,
                 static::TRACE_TYPE => $this->getType($messages->getHelp($helpKey), static::FLUID_VARIABLE, $data),
-                static::TRACE_DATE => date('d-m-Y H:i:s', time()),
+                static::TRACE_DATE => date(static::TIME_FORMAT, time()),
                 static::TRACE_URL => $this->getCurrentUrl(),
             ];
         }
 
         // Trying to resolve the line as well as the variable name, if possible.
         $this->resolvePath();
-        $this->resolveVarname();
+        $this->resolveLineAndVarName();
 
         return [
             static::TRACE_FILE => $this->pool->fileService->filterFilePath($this->path),
             static::TRACE_LINE => $this->line,
             static::TRACE_VARNAME => $this->varname,
             static::TRACE_TYPE => $this->getType($messages->getHelp($helpKey), $this->varname, $data),
-            static::TRACE_DATE => date('d-m-Y H:i:s', time()),
+            static::TRACE_DATE => date(static::TIME_FORMAT, time()),
             static::TRACE_URL => $this->getCurrentUrl(),
         ];
+    }
+
+    /**
+     * Resolve the line in the template with the debug statement.
+     *
+     * @return void
+     */
+    protected function resolveLineAndVarName(): void
+    {
+        $template = $this->pool->fileService->getFileContents($this->path, false);
+        $counter = 0;
+        // Split the contents of the file into lines, disregarding the used
+        // line endings.
+        foreach (preg_split("/((\r?\n)|(\r\n?))/", $template) as $line => $content) {
+            foreach ($this->callPattern as $funcname) {
+                $name = [];
+                preg_match_all('/\s*' . $funcname[0] . '(.*)' . $funcname[1] . '\s*/u', $content, $name);
+                $this->retrieveNameLine($name, $line, $counter);
+            }
+        }
+    }
+
+    /**
+     * Retrieve the name and Line from, the regex result.
+     */
+    protected function retrieveNameLine($name, $line, &$counter)
+    {
+        if ($counter > 1) {
+            $this->varname =  self::FLUID_VARIABLE;
+            $this->line = self::FLUID_NOT_AVAILABLE;
+            return;
+        }
+
+        if (isset($name[1][0])) {
+            // Plus 1, because we start at 0.
+            $this->line = $line + 1;
+        }
+
+        if (count($name[1]) === 1) {
+            ++$counter;
+            $this->varname = $this->checkForComplicatedStuff(
+                $this->pool->encodingService->encodeString($name[1][0])
+            );
+        }
     }
 
     /**
@@ -273,39 +320,6 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
     }
 
     /**
-     * Resolve the variable name and the line number of the
-     * debug call from fluid.
-     */
-    protected function resolveVarname(): void
-    {
-        // Retrieve the call from the sourcecode file.
-        if (!$this->pool->fileService->fileIsReadable($this->path)) {
-            // File is not readable. We can not do this.
-            // Fallback to the standard values in the class header.
-            return ;
-        }
-
-        // Define the fallback.
-        $this->varname = static::FLUID_VARIABLE;
-
-        $fileContent = $this->pool->fileService->getFileContents($this->path, false);
-        foreach ($this->callPattern as $funcname) {
-            // This little baby tries to resolve everything inside the
-            // brackets of the kreXX call.
-            preg_match_all('/\s*' . $funcname[0] . '(.*)' . $funcname[1] . '\s*/u', $fileContent, $name);
-
-            // Found something!
-            // Check if we already have more than one.
-            if (isset($name[1][0]) && count($name[1]) === 1) {
-                $this->varname = $this->checkForComplicatedStuff(
-                    $this->pool->encodingService->encodeString(trim($name[1][0], ' {}'))
-                );
-                return;
-            }
-        }
-    }
-
-    /**
      * Check, if we have a varname, at all, or are looking at something more
      * complicated like: {val1: 'something', val2: 'something else'}
      *
@@ -323,7 +337,11 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
     {
         // We check for : and -> to see if we are facing some inline stuff
         if (strpos($varname, ':') !== false || strpos($varname, '->') !== false) {
-            $code = '<f:variable value="{' . $varname . '}" name="fluidvar" /> {';
+            // Double escaping for the JS insert.
+            // The things you have to do.
+            $code = htmlspecialchars(htmlspecialchars('<f:variable value="{')) .
+                $varname .
+                htmlspecialchars(htmlspecialchars('}" name="fluidvar" /> {'));
             $this->pool->codegenHandler->setComplicatedWrapperLeft($code);
             $varname = static::FLUID_VARIABLE;
         }

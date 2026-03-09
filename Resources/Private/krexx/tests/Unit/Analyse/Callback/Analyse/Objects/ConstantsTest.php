@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,14 +35,19 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Constants;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\View\Skins\RenderHans;
+use PHPUnit\Framework\Attributes\CoversMethod;
 use ReflectionClass;
 
+#[CoversMethod(Constants::class, 'callMe')]
+#[CoversMethod(AbstractCallback::class, 'dispatchStartEvent')]
+#[CoversMethod(AbstractCallback::class, 'dispatchEventWithModel')]
 class ConstantsTest extends AbstractHelper
 {
     protected function setUp(): void
@@ -58,9 +63,6 @@ class ConstantsTest extends AbstractHelper
 
     /**
      * Testing the analysis of constants (without any constants).
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Constants::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
      */
     public function testCallMeNoConstants()
     {
@@ -68,7 +70,7 @@ class ConstantsTest extends AbstractHelper
         $reflectionMock = $this->createMock(ReflectionClass::class);
         $reflectionMock->expects($this->once())
             ->method('getConstants')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $reflectionMock->expects($this->never())
             ->method('getName');
@@ -98,10 +100,6 @@ class ConstantsTest extends AbstractHelper
 
     /**
      * Testing the analysis of constants,
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Constants::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchEventWithModel
      */
     public function testCallMeWithConstants()
     {
@@ -110,11 +108,7 @@ class ConstantsTest extends AbstractHelper
         $reflectionMock = $this->createMock(ReflectionClass::class);
         $reflectionMock->expects($this->once())
             ->method('getConstants')
-            ->will($this->returnValue($returnConstants));
-
-        $reflectionMock->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue('some classname'));
+            ->willReturn($returnConstants);
 
         $fixture = [
             'ref' => $reflectionMock

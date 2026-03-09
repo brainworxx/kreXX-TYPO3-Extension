@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -47,16 +47,25 @@ use ReflectionGenerator;
 use Reflector;
 use stdClass;
 use SplObjectStorage;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Validation::class, 'evaluateSetting')]
+#[CoversMethod(Validation::class, 'evalBool')]
+#[CoversMethod(Validation::class, 'evalDebugMethods')]
+#[CoversMethod(Validation::class, 'evalDestination')]
+#[CoversMethod(Validation::class, 'evalInt')]
+#[CoversMethod(Validation::class, 'evalIpRange')]
+#[CoversMethod(Validation::class, 'evalMaxRuntime')]
+#[CoversMethod(Validation::class, 'evalSkin')]
+#[CoversMethod(Validation::class, 'evalLanguage')]
+#[CoversMethod(Validation::class, 'isAllowedDebugCall')]
+#[CoversMethod(Validation::class, '__construct')]
 class ValidationTest extends AbstractHelper
 {
-
-    const WHATEVER = 'whatever';
+    public const  WHATEVER = 'whatever';
 
     /**
      * Testing the setting of the pool and the merging of the method blacklist
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::__construct
      */
     public function testConstruct()
     {
@@ -91,8 +100,6 @@ class ValidationTest extends AbstractHelper
 
     /**
      * Testing, if a specific class is blacklisted for debug methods.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::isAllowedDebugCall
      */
     public function testIsAllowedDebugCall()
     {
@@ -111,23 +118,13 @@ class ValidationTest extends AbstractHelper
 
     /**
      * Testing the validation of settings.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evaluateSetting
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evalBool
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evalDebugMethods
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evalDestination
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evalInt
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evalIpRange
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evalMaxRuntime
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evalSkin
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evalLanguage
      */
     public function testEvaluateSetting()
     {
         $iniGet = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Config\\', 'ini_get');
         $iniGet->expects($this->any())
             ->with('max_execution_time')
-            ->will($this->returnValue('123'));
+            ->willReturn('123');
 
         Registration::addMethodToDebugBlacklist('forbiddenclass', 'forbiddenOne');
         $validation = new Validation(Krexx::$pool);
@@ -195,7 +192,7 @@ class ValidationTest extends AbstractHelper
                 '99999' => false
             ],
             'evalLanguage' => [
-                'text' => true,
+                'en' => true,
                 'de' => true,
                 'fr' => false
             ]
@@ -251,9 +248,27 @@ class ValidationTest extends AbstractHelper
     }
 
     /**
+     * We evaluate the max runtime with a simulated eternal runtime setting.
+     */
+    public function testEvalMaxRuntime()
+    {
+        $iniGetMock = $this->getFunctionMock('Brainworxx\\Krexx\\Service\\Config\\', 'ini_get');
+        $iniGetMock->expects($this->once())
+            ->with('max_execution_time')
+            ->willReturn(0);
+
+        $validation = new Validation(Krexx::$pool);
+        $result = $validation->evaluateSetting(
+            'I don\'t need no group!',
+            $validation::SETTING_MAX_RUNTIME,
+            'an invalid string'
+        );
+
+        $this->assertTrue($result, 'We do not check the value when there is no maximal execution time set.');
+    }
+
+    /**
      * Crete a custom setting, and then evaluate it.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evaluateSetting
      */
     public function testEvaluateSettingCustom()
     {

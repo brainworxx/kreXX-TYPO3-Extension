@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -47,7 +47,7 @@ trait ExpandableChild
     /**
      * @var string[]
      */
-    private $markerExpandableChild = [
+    private array $markerExpandableChild = [
         '{name}',
         '{type}',
         '{ktype}',
@@ -66,7 +66,7 @@ trait ExpandableChild
     /**
      * @var string[]
      */
-    private $markerNest = [
+    private array $markerNest = [
         '{style}',
         '{mainfunction}',
         '{domId}',
@@ -76,7 +76,7 @@ trait ExpandableChild
     /**
      * @var string
      */
-    private $markerSingleChildExtra = '{data}';
+    private string $markerSingleChildExtra = '{data}';
 
     /**
      * {@inheritdoc}
@@ -110,30 +110,6 @@ trait ExpandableChild
             ],
             $this->fileCache[static::FILE_EX_CHILD_NORMAL]
         );
-    }
-
-    /**
-     * Return 'kopened', if expanded.
-     *
-     * @param bool $isExpanded
-     *   Well? Is it?
-     *
-     * @deprecated since 5.0.0
-     *   Will be removed.
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated methods.
-     *
-     * @return string
-     *   The css class name.
-     */
-    protected function retrieveOpenedClass(bool $isExpanded): string
-    {
-        if ($isExpanded) {
-            return 'kopened';
-        }
-
-        return '';
     }
 
     /**
@@ -213,12 +189,34 @@ trait ExpandableChild
         if ($model->hasExtra()) {
             return str_replace(
                 $this->markerSingleChildExtra,
-                $model->getData(),
+                $this->prepareExtra($model->getData()),
                 $this->fileCache[static::FILE_SI_CHILD_EX]
             );
         }
 
         return '';
+    }
+
+    /**
+     * Prepare the extra for the single child output.
+     *
+     * The problem with the extra part is: a trailing linebreak is not rendered
+     * correctly. So we have to add the last linebreak again, if there is one.
+     * Otherwise, the output is correct.
+     *
+     * @param string $extra
+     *   The extra string.
+     * @return string
+     *   The prepared extra string.
+     */
+    protected function prepareExtra(string $extra): string
+    {
+        $lastChar = substr($extra, -1);
+        if ($lastChar === "\n" || $lastChar === "\r") {
+            return $extra . $lastChar;
+        }
+
+        return $extra;
     }
 
     /**

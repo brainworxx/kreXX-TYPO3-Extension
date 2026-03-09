@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -42,14 +42,18 @@ use Brainworxx\Krexx\Analyse\Routing\Routing;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Routing::class, '__construct')]
+#[CoversMethod(Routing::class, 'analysisHub')]
 class RoutingTest extends AbstractHelper
 {
-    const ROUTING_MOCK_RETURN_VALUE = 'routing mock success';
-    const IS_IN_HIVE = 'isInHive';
-    const ADD_TO_HIVE = 'addToHive';
-    const NO_ROUTE = 'no routing';
-    const PROCESSOR = 'processors';
+    public const  ROUTING_MOCK_RETURN_VALUE = 'routing mock success';
+    public const  IS_IN_HIVE = 'isInHive';
+    public const  ADD_TO_HIVE = 'addToHive';
+    public const  NO_ROUTE = 'no routing';
+    public const  PROCESSOR = 'processors';
 
     /**
      * @var \Brainworxx\Krexx\Analyse\Routing\Routing
@@ -84,18 +88,17 @@ class RoutingTest extends AbstractHelper
             if ($className === $allowedRoute) {
                 $mock->expects($this->once())
                     ->method('handle')
-                    ->with($model)
-                    ->will($this->returnValue(static::ROUTING_MOCK_RETURN_VALUE));
+                    ->willReturn(static::ROUTING_MOCK_RETURN_VALUE);
                 $mock->expects($this->once())
                     ->method('canHandle')
                     ->with($model)
-                    ->will($this->returnValue(true));
+                    ->willReturn(true);
             } else {
                 $mock->expects($this->never())
                     ->method('handle');
                 $mock->expects($this->any())
                     ->method('canHandle')
-                    ->will($this->returnValue(false));
+                    ->willReturn(false);
             }
             $processors[$className] = $mock;
         }
@@ -107,8 +110,6 @@ class RoutingTest extends AbstractHelper
     /**
      * Test if all processors will get set, and that the routing class gets
      * set in the pool.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::__construct
      */
     public function testConstruct()
     {
@@ -121,8 +122,6 @@ class RoutingTest extends AbstractHelper
 
     /**
      * Simply test, if an emergency break gets respected.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
      */
     public function testAnalysisHubEmergencyBreak()
     {
@@ -135,7 +134,7 @@ class RoutingTest extends AbstractHelper
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
             ->method('checkEmergencyBreak')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->emergencyHandler = $emergencyMock;
 
         $this->assertEquals('', $this->mockRouting('no route for you', $model));
@@ -143,8 +142,6 @@ class RoutingTest extends AbstractHelper
 
     /**
      * Simple routing of a string.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
      */
     public function testAnalysisHubString()
     {
@@ -154,5 +151,24 @@ class RoutingTest extends AbstractHelper
         $model->setData($parameter);
 
         $this->assertEquals(static::ROUTING_MOCK_RETURN_VALUE, $this->mockRouting(ProcessString::class, $model));
+    }
+
+    /**
+     * We test the final calling of the ProcessOther after everything else
+     * has failed.
+     */
+    public function testAnalysisHubOther()
+    {
+        $renderNothing = new RenderNothing(Krexx::$pool);
+        Krexx::$pool->render = $renderNothing;
+
+        // Create the model.
+        $model = new Model(Krexx::$pool);
+        $model->setData('some string');
+        $routing = new Routing(Krexx::$pool);
+        $this->setValueByReflection('processors', [], $routing);
+        $routing->analysisHub($model);
+
+        $this->assertTrue(in_array(Krexx::$pool->messages->getHelp('unhandedOtherHelp'), $model->getJson()));
     }
 }

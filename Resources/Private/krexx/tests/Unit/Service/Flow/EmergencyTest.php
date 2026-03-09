@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -40,24 +40,36 @@ use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Emergency::class, 'getKrexxCount')]
+#[CoversMethod(Emergency::class, 'checkMaxCall')]
+#[CoversMethod(Emergency::class, 'initTimer')]
+#[CoversMethod(Emergency::class, 'getNestingLevel')]
+#[CoversMethod(Emergency::class, 'checkNesting')]
+#[CoversMethod(Emergency::class, 'downOneNestingLevel')]
+#[CoversMethod(Emergency::class, 'upOneNestingLevel')]
+#[CoversMethod(Emergency::class, 'checkRuntime')]
+#[CoversMethod(Emergency::class, 'checkMemory')]
+#[CoversMethod(Emergency::class, 'checkEmergencyBreak')]
+#[CoversMethod(Emergency::class, 'setDisable')]
+#[CoversMethod(Emergency::class, '__construct')]
 class EmergencyTest extends AbstractHelper
 {
-
-    const ALL_IS_OK = 'allIsOk';
-    const MAX_RUNTIME = 'maxRuntime';
-    const MIN_MEMORY_LEFT = 'minMemoryLeft';
-    const MAX_CALL = 'maxCall';
-    const MAX_NESTING_LEVEL = 'maxNestingLevel';
-    const SERVER_MEMORY_LIMIT = 'serverMemoryLimit';
-    const NESTING_LEVEL = 'nestingLevel';
-    const MESSAGE_PARAMETERS = 'params';
-    const TIMER = 'timer';
-    const KREXX_COUNT = 'krexxCount';
-    const FLOW_NAMESPACE = '\\Brainworxx\\Krexx\\Service\\Flow\\';
-    const INI_GET = 'ini_get';
-    const MEMORY_GET_USAGE = 'memory_get_usage';
-    const PHP_SAPI_NAME = 'php_sapi_name';
+    public const  ALL_IS_OK = 'allIsOk';
+    public const  MAX_RUNTIME = 'maxRuntime';
+    public const  MIN_MEMORY_LEFT = 'minMemoryLeft';
+    public const  MAX_CALL = 'maxCall';
+    public const  MAX_NESTING_LEVEL = 'maxNestingLevel';
+    public const  SERVER_MEMORY_LIMIT = 'serverMemoryLimit';
+    public const  NESTING_LEVEL = 'nestingLevel';
+    public const  MESSAGE_PARAMETERS = 'params';
+    public const  TIMER = 'timer';
+    public const  KREXX_COUNT = 'krexxCount';
+    public const  FLOW_NAMESPACE = '\\Brainworxx\\Krexx\\Service\\Flow\\';
+    public const  INI_GET = 'ini_get';
+    public const  MEMORY_GET_USAGE = 'memory_get_usage';
+    public const  PHP_SAPI_NAME = 'php_sapi_name';
 
     /**
      * @var Emergency
@@ -87,20 +99,18 @@ class EmergencyTest extends AbstractHelper
                 [Fallback::SETTING_MEMORY_LEFT],
                 [Fallback::SETTING_MAX_CALL],
                 [Fallback::SETTING_NESTING_LEVEL]
-            ))->will($this->returnValueMap([
+            ))->willReturnMap([
                 [Fallback::SETTING_MAX_RUNTIME, '60'],
                 [Fallback::SETTING_MEMORY_LEFT, '64'],
                 [Fallback::SETTING_MAX_CALL, '10'],
                 [Fallback::SETTING_NESTING_LEVEL, '5']
-                ]));
+                ]);
         Krexx::$pool->config = $configMock;
     }
 
     /**
      * Test the caching of several settings, as well as retreating the memory
      * limit.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::__construct
      */
     public function testConstructWithKb()
     {
@@ -109,7 +119,7 @@ class EmergencyTest extends AbstractHelper
         // Mock kb memory limit
         $iniGet = $this->getFunctionMock(static::FLOW_NAMESPACE, static::INI_GET);
         $iniGet->expects($this->once())
-            ->will($this->returnValue('50k'));
+            ->willReturn('50k');
 
         $this->emergency = new Emergency(Krexx::$pool);
 
@@ -143,8 +153,6 @@ class EmergencyTest extends AbstractHelper
     /**
      * Test the caching of several settings, as well as retreating the memory
      * limit.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::__construct
      */
     public function testConstructWithMb()
     {
@@ -153,7 +161,7 @@ class EmergencyTest extends AbstractHelper
         // Mock MB memory limit.
         $iniGet = $this->getFunctionMock(static::FLOW_NAMESPACE, static::INI_GET);
         $iniGet->expects($this->once())
-            ->will($this->returnValue('50m'));
+            ->willReturn('50m');
 
         $this->emergency = new Emergency(Krexx::$pool);
         $this->assertEquals(
@@ -165,8 +173,6 @@ class EmergencyTest extends AbstractHelper
     /**
      * Test the caching of several settings, as well as retreating the memory
      * limit.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::__construct
      */
     public function testConstructWithNoLimit()
     {
@@ -175,7 +181,7 @@ class EmergencyTest extends AbstractHelper
         // No limit
         $iniGet = $this->getFunctionMock(static::FLOW_NAMESPACE, static::INI_GET);
         $iniGet->expects($this->once())
-            ->will($this->returnValue('nothing'));
+            ->willReturn('nothing');
 
         $this->emergency = new Emergency(Krexx::$pool);
         $this->assertEquals(0, $this->retrieveValueByReflection(static::SERVER_MEMORY_LIMIT, $this->emergency));
@@ -183,8 +189,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Test the disabling of the emergency break.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::setDisable
      */
     public function testDisable()
     {
@@ -197,8 +201,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Test disabled.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkEmergencyBreak
      */
     public function testCheckEmergencyBreakDisabled()
     {
@@ -209,8 +211,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Test failed before
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkEmergencyBreak
      */
     public function testCheckEmergencyBreakFailedBefore()
     {
@@ -220,9 +220,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Test failed memory limit.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkEmergencyBreak
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkMemory
      */
     public function testCheckEmergencyBreakFailedMemory()
     {
@@ -231,7 +228,7 @@ class EmergencyTest extends AbstractHelper
         $this->setValueByReflection(static::MIN_MEMORY_LEFT, 100, $this->emergency);
         $memoryGetUsage = $this->getFunctionMock(static::FLOW_NAMESPACE, static::MEMORY_GET_USAGE);
         $memoryGetUsage->expects($this->once())
-            ->will($this->returnValue(500));
+            ->willReturn(500);
         $this->assertEquals(true, $this->emergency->checkEmergencyBreak());
         $this->assertEquals(false, $this->retrieveValueByReflection(static::ALL_IS_OK, $this->emergency));
         $this->assertNotEmpty(Krexx::$pool->messages->getMessages()['emergencyMemory']);
@@ -240,10 +237,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Test with failed runtime check and successful memory check.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkEmergencyBreak
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkMemory
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkRuntime
      */
     public function testCheckEmergencyBreakFailedRuntime()
     {
@@ -254,17 +247,17 @@ class EmergencyTest extends AbstractHelper
         $this->setValueByReflection(static::MIN_MEMORY_LEFT, 100, $this->emergency);
         $memoryGetUsage = $this->getFunctionMock(static::FLOW_NAMESPACE, static::MEMORY_GET_USAGE);
         $memoryGetUsage->expects($this->once())
-            ->will($this->returnValue(500));
+            ->willReturn(500);
 
         $phpSapiName = $this->getFunctionMock(static::FLOW_NAMESPACE, static::PHP_SAPI_NAME);
         $phpSapiName->expects($this->once())
-            ->will($this->returnValue('brauser'));
+            ->willReturn('brauser');
 
         // Make sure the runtime check fails.
         $this->setValueByReflection(static::TIMER, 12345, $this->emergency);
         $time = $this->getFunctionMock(static::FLOW_NAMESPACE, 'time');
         $time->expects($this->once())
-            ->will($this->returnValue(92345));
+            ->willReturn(92345);
 
         $this->assertEquals(true, $this->emergency->checkEmergencyBreak());
         $this->assertEquals(false, $this->retrieveValueByReflection(static::ALL_IS_OK, $this->emergency));
@@ -274,10 +267,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Everything went better than expected.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkEmergencyBreak
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkMemory
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkRuntime
      */
     public function testCheckEmergencyBreakOk()
     {
@@ -286,12 +275,12 @@ class EmergencyTest extends AbstractHelper
         $this->setValueByReflection(static::MIN_MEMORY_LEFT, 100, $this->emergency);
         $memoryGetUsage = $this->getFunctionMock(static::FLOW_NAMESPACE, static::MEMORY_GET_USAGE);
         $memoryGetUsage->expects($this->once())
-            ->will($this->returnValue(500));
+            ->willReturn(500);
         // Make sure the runtime check succeeds.
         $this->setValueByReflection(static::TIMER, 92345, $this->emergency);
         $time = $this->getFunctionMock(static::FLOW_NAMESPACE, 'time');
         $time->expects($this->once())
-            ->will($this->returnValue(12345));
+            ->willReturn(12345);
 
         $this->assertEquals(false, $this->emergency->checkEmergencyBreak());
         $this->assertEquals(true, $this->retrieveValueByReflection(static::ALL_IS_OK, $this->emergency));
@@ -300,8 +289,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Going up one level.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::upOneNestingLevel
      */
     public function testUpOneNestingLevel()
     {
@@ -312,8 +299,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Going down one nesting level.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::downOneNestingLevel
      */
     public function testDownOneNestingLevel()
     {
@@ -324,8 +309,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Test the nesting level.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkNesting
      */
     public function testCheckNesting()
     {
@@ -340,8 +323,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Test the getter of the current nesting level.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::getNestingLevel
      */
     public function testGetNestingLevel()
     {
@@ -351,14 +332,12 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Test the timer initialization.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::initTimer
      */
     public function testInitTimer()
     {
         $time = $this->getFunctionMock(static::FLOW_NAMESPACE, 'time');
         $time->expects($this->once())
-            ->will($this->returnValue(5000));
+            ->willReturn(5000);
         $this->setValueByReflection(static::MAX_RUNTIME, 60, $this->emergency);
 
         $this->assertEquals(0, $this->retrieveValueByReflection(static::TIMER, $this->emergency));
@@ -367,7 +346,7 @@ class EmergencyTest extends AbstractHelper
 
         $phpSapiName = $this->getFunctionMock(static::FLOW_NAMESPACE, static::PHP_SAPI_NAME);
         $phpSapiName->expects($this->once())
-            ->will($this->returnValue('brauser'));
+            ->willReturn('brauser');
 
         // Re-initialize should not change the already existing value.
         $this->emergency->initTimer();
@@ -376,20 +355,18 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Test the re-initializing of the timer on cli.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::initTimer
      */
     public function testInitTimerOnCli()
     {
         $time = $this->getFunctionMock(static::FLOW_NAMESPACE, 'time');
         $time->expects($this->exactly(2))
-            ->will($this->returnValue(5000));
+            ->willReturn(5000);
 
         // The sapi gets only called once, because the timer value is empty
         // on the first run.
         $phpSapiName = $this->getFunctionMock(static::FLOW_NAMESPACE, static::PHP_SAPI_NAME);
         $phpSapiName->expects($this->exactly(1))
-            ->will($this->returnValue('cli'));
+            ->willReturn('cli');
 
         $this->emergency->initTimer();
         $this->emergency->initTimer();
@@ -397,8 +374,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Test the checking and up-counting of the krexx counts
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::checkMaxCall
      */
     public function testCheckMaxCall()
     {
@@ -421,8 +396,6 @@ class EmergencyTest extends AbstractHelper
 
     /**
      * Test the getter for the kreXX count
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::getKrexxCount
      */
     public function testGetKrexxCount()
     {

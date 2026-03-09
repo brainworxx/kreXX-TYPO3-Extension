@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,7 +35,6 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Iterate;
 
-use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray;
 use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Service\Factory\Event;
@@ -44,10 +43,14 @@ use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
 use stdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ThroughLargeArray::class, 'callMe')]
+#[CoversMethod(ThroughLargeArray::class, 'handleKey')]
+#[CoversMethod(ThroughLargeArray::class, 'handleValue')]
 class ThroughLargeArrayTest extends AbstractHelper
 {
-    const RENDER_EXPANDABLE_CHILD = 'renderExpandableChild';
+    public const  RENDER_EXPANDABLE_CHILD = 'renderExpandableChild';
 
     /**
      * @var ThroughLargeArray
@@ -74,7 +77,7 @@ class ThroughLargeArrayTest extends AbstractHelper
         $eventServiceMock->expects($this->exactly(1))
             ->method('dispatch')
             ->with(...$this->withConsecutive(['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughLargeArray::callMe::start', $this->throughLargeArray]))
-            ->will($this->returnValue(''));
+            ->willReturn('');
         Krexx::$pool->eventService = $eventServiceMock;
 
         // Mock the routing class.
@@ -95,11 +98,11 @@ class ThroughLargeArrayTest extends AbstractHelper
         // Test the types of the model
         $this->assertEquals('', $this->routingMock->model[0]->getType());
         $this->assertEquals(
-            CallbackConstInterface::TYPE_SIMPLE_ARRAY,
+            'Simplified array analysis',
             $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][0]->getType()
         );
         $this->assertEquals(
-            CallbackConstInterface::TYPE_SIMPLE_CLASS,
+            'Simplified class analysis',
             $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][1]->getType()
         );
 
@@ -110,10 +113,6 @@ class ThroughLargeArrayTest extends AbstractHelper
 
     /**
      * Testing the iteration through large arrays.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray::handleKey
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray::handleValue
      */
     public function testCallMeNormal()
     {
@@ -154,10 +153,6 @@ class ThroughLargeArrayTest extends AbstractHelper
 
     /**
      * Testing the iteration through large arrays.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray::handleKey
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray::handleValue
      */
     public function testCallMeMultiline()
     {

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -47,13 +47,16 @@ use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\View\Output\Browser;
+use Brainworxx\Krexx\View\Output\Chunks;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(BacktraceController::class, 'backtraceAction')]
+#[CoversMethod(BacktraceController::class, 'outputFooter')]
+#[CoversMethod(BacktraceController::class, 'outputCssAndJs')]
 class BacktraceControllerTest extends AbstractController
 {
     /**
      * Testing of the backtrace action, with too many calls before.
-     *
-     * @covers \Brainworxx\Krexx\Controller\BacktraceController::backtraceAction
      */
     public function testBacktraceActionWithMaxCall()
     {
@@ -63,7 +66,7 @@ class BacktraceControllerTest extends AbstractController
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
             ->method('checkMaxCall')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->emergencyHandler = $emergencyMock;
         $callerFinderMock = $this->createMock(CallerFinder::class);
         $callerFinderMock->expects($this->never())
@@ -74,11 +77,32 @@ class BacktraceControllerTest extends AbstractController
     }
 
     /**
+     * Test it with a triggered emergency break.
+     */
+    public function testBacktraceActionWithEmergency()
+    {
+        $backtraceController = new BacktraceController(Krexx::$pool);
+
+        // Mix it, this time with a different kind of mox.
+        $emergencyMock = $this->createMock(Emergency::class);
+        $emergencyMock->expects($this->once())
+            ->method('checkMaxCall')
+            ->willReturn(false);
+        $emergencyMock->expects($this->any())
+            ->method('checkEmergencyBreak')
+            ->willReturn(true);
+        Krexx::$pool->emergencyHandler = $emergencyMock;
+
+        $chunksMock = $this->createMock(Chunks::class);
+        $chunksMock->expects($this->never())
+            ->method('addMetadata');
+        Krexx::$pool->chunks = $chunksMock;
+
+        $this->assertEquals($backtraceController, $backtraceController->backtraceAction());
+    }
+
+    /**
      * Testing a simple backtrace.
-     *
-     * @covers \Brainworxx\Krexx\Controller\BacktraceController::backtraceAction
-     * @covers \Brainworxx\Krexx\Controller\BacktraceController::outputFooter
-     * @covers \Brainworxx\Krexx\Controller\BacktraceController::outputCssAndJs
      */
     public function testBacktraceAction()
     {
@@ -91,7 +115,7 @@ class BacktraceControllerTest extends AbstractController
         $proccessMock->expects($this->once())
             ->method('handle')
             ->with(null)
-            ->will($this->returnValue('generated HTML code'));
+            ->willReturn('generated HTML code');
 
         $poolMock->codegenHandler = $this->createMock(Codegen::class);
         $poolMock->codegenHandler->expects($this->once())
@@ -100,7 +124,7 @@ class BacktraceControllerTest extends AbstractController
 
         $poolMock->emergencyHandler->expects($this->once())
             ->method('checkEmergencyBreak')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $poolMock->eventService = $this->createMock(Event::class);
         $poolMock->eventService->expects($this->once())
@@ -120,13 +144,13 @@ class BacktraceControllerTest extends AbstractController
                 [Model::class],
                 [ThroughConfig::class],
                 [Model::class]
-            ))->will($this->returnValueMap(
+            ))->willReturnMap(
                 [
                     [ProcessBacktrace::class, $proccessMock],
                     [Model::class, new Model(Krexx::$pool)],
                     [ThroughConfig::class, new CallbackNothing(Krexx::$pool)]
                 ]
-            ));
+            );
 
         $this->mockFooterHeaderOutput($poolMock);
         $backtraceController->backtraceAction();

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,36 +36,38 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Scalar\String;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
+use Brainworxx\Krexx\Analyse\Declaration\FunctionDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Scalar\String\Callback;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Callback::class, 'canHandle')]
+#[CoversMethod(Callback::class, 'callMe')]
+#[CoversMethod(Callback::class, 'handle')]
+#[CoversMethod(Callback::class, 'isActive')]
+#[CoversMethod(FunctionDeclaration::class, 'retrieveDeclaration')]
+#[CoversMethod(Callback::class, 'insertParameters')]
 class CallbackTest extends AbstractHelper
 {
     /**
      * Test if the callback analyser can identify a callback.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Callback::canHandle
      */
     public function testCanHandle()
     {
         $stringCallback = new Callback(Krexx::$pool);
         $model = new Model(Krexx::$pool);
-        $this->assertTrue($stringCallback->canHandle('strpos', $model), 'This ia a predefined php function.');
-        $this->assertEquals('strpos', $this->retrieveValueByReflection('handledValue', $stringCallback));
+        $this->assertFalse($stringCallback->canHandle('strpos', $model), 'A predefined php function. We don\'t handle these');
+        $this->assertTrue($stringCallback->canHandle('krexx', $model), 'This is our shorthand, we handle it.');
+        $this->assertEquals('krexx', $this->retrieveValueByReflection('handledValue', $stringCallback));
         $this->assertFalse($stringCallback->canHandle('sdfsd dsf sdf ', $model), 'Just a random string.');
     }
 
     /**
      * Test the analysis of a callback.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Callback::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Callback::handle
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\FunctionDeclaration::retrieveDeclaration
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Callback::insertParameters
      */
     public function testCallMeNormal()
     {
@@ -102,20 +104,10 @@ class CallbackTest extends AbstractHelper
     }
 
     /**
-     * Test the error handling in the callMe.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Callback::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Callback::handle
+     * It is always active.
      */
-    public function testCallMeError()
+    public function testIsActive()
     {
-        // Create a fixture that is supposed to trigger a ReflectionException.
-        $stringCallback = new Callback(Krexx::$pool);
-
-        // Expect a start event, nothing more here.
-        // The callback should be null, triggering a TypeError.
-        $this->mockEventService([Callback::class . PluginConfigInterface::START_EVENT, $stringCallback]);
-
-        $stringCallback->callMe();
+        $this->assertTrue(Callback::isActive());
     }
 }

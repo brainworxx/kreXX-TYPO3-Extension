@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -50,14 +50,14 @@ abstract class AbstractOutput
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Deleting old chunks and logfiles.
      *
      * @var \Brainworxx\Krexx\Service\Misc\Cleanup
      */
-    protected $cleanupService;
+    protected Cleanup $cleanupService;
 
     /**
      * [0] -> The chunkedup string, that we intend to send to
@@ -73,7 +73,7 @@ abstract class AbstractOutput
      *   - footer
      *   This means, that every output is split in 4 parts
      */
-    protected $chunkStrings = [];
+    protected array $chunkStrings = [];
 
     /**
      * Injects the pool and register the shutdown function.

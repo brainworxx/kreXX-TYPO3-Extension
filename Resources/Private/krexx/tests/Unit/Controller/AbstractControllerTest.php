@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -41,37 +41,28 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\View\Output\Browser;
 use Brainworxx\Krexx\View\Output\BrowserImmediately;
 use Brainworxx\Krexx\View\Output\File;
 use Brainworxx\Krexx\Service\Misc\File as FileService;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use Brainworxx\Krexx\Controller\AbstractController;
 
+#[CoversMethod(AbstractController::class, '__construct')]
+#[CoversMethod(AbstractController::class, 'outputCssAndJs')]
 class AbstractControllerTest extends AbstractHelper
 {
     /**
      * Testing the construction phase of the controller
-     *
-     * @covers \Brainworxx\Krexx\Controller\AbstractController::__construct
      */
     public function testConstruct()
     {
-        // Mock the settings.
-        $configMock = $this->createMock(Config::class);
-        $configMock->expects($this->any())
-            ->method('getSetting')
-            ->will($this->returnValue(ConfigConstInterface::VALUE_FILE));
-        $browserMock = $this->createMock(Config::class);
-        $browserMock->expects($this->any())
-            ->method('getSetting')
-            ->will($this->returnValue(ConfigConstInterface::VALUE_BROWSER));
-        $immediateMock = $this->createMock(Config::class);
-        $immediateMock->expects($this->any())
-            ->method('getSetting')
-            ->will($this->returnValue(ConfigConstInterface::VALUE_BROWSER_IMMEDIATELY));
-
         // Test the file output
-        Krexx::$pool->config = $configMock;
+        ConfigSupplier::$overwriteValues[ConfigConstInterface::SETTING_DESTINATION] = ConfigConstInterface::VALUE_FILE;
+        Krexx::$pool->rewrite[\Brainworxx\Krexx\Service\Config\From\File::class] = ConfigSupplier::class;
+        new Config(\Krexx::$pool);
         $oldRecursionHandler = Krexx::$pool->recursionHandler;
         $dumpController = new DumpController(Krexx::$pool);
         $this->assertNotSame($oldRecursionHandler, Krexx::$pool->recursionHandler, 'Test the resetting of the pool');
@@ -79,13 +70,15 @@ class AbstractControllerTest extends AbstractHelper
         $this->assertInstanceOf(File::class, $this->retrieveValueByReflection('outputService', $dumpController));
 
         // Test the browser output
-        Krexx::$pool->config = $browserMock;
+        ConfigSupplier::$overwriteValues[ConfigConstInterface::SETTING_DESTINATION] = ConfigConstInterface::VALUE_BROWSER;
+        new Config(\Krexx::$pool);
         $dumpController = new DumpController(Krexx::$pool);
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $dumpController));
         $this->assertInstanceOf(Browser::class, $this->retrieveValueByReflection('outputService', $dumpController));
 
         // Test the immediate output.
-        Krexx::$pool->config = $immediateMock;
+        ConfigSupplier::$overwriteValues[ConfigConstInterface::SETTING_DESTINATION] = ConfigConstInterface::VALUE_BROWSER_IMMEDIATELY;
+        new Config(\Krexx::$pool);
         $dumpController = new DumpController(Krexx::$pool);
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $dumpController));
         $this->assertInstanceOf(BrowserImmediately::class, $this->retrieveValueByReflection('outputService', $dumpController));
@@ -93,28 +86,22 @@ class AbstractControllerTest extends AbstractHelper
 
     /**
      * We simply test the outputCssAndJs, with loading the un-minified files.
-     *
-     * @covers \Brainworxx\Krexx\Controller\AbstractController::outputCssAndJs
      */
     public function testOutputCssAndJsWithoutMinFiles()
     {
-        $skinDirectory = Krexx::$pool->config->getSkinDirectory();
         $fileMock = $this->createMock(FileService::class);
         $fileMock->expects($this->any())
             ->method('fileIsReadable')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $fileMock->expects($this->any())
             ->method('getFileContents')
-            ->will($this->returnValue('some content'));
-        $fileMock->expects($this->any())
-            ->method('filterFilePath')
-            ->will($this->returnValue('some filter path'));
+            ->willReturn('some content');
         Krexx::$pool->fileService = $fileMock;
 
         $outputServiceMock = $this->createMock(Browser::class);
         $outputServiceMock->expects($this->any())
             ->method('addChunkString')
-            ->will($this->returnValue($outputServiceMock));
+            ->willReturn($outputServiceMock);
 
         Krexx::$pool->render = new RenderNothing(Krexx::$pool);
 
@@ -122,17 +109,14 @@ class AbstractControllerTest extends AbstractHelper
         $this->setValueByReflection('outputService', $outputServiceMock, $editSettingscontroller);
         $editSettingscontroller->editSettingsAction();
 
-        // Lets do this a second time, and make sure that we do not send the
+        // Let's do this a second time, and make sure that we do not send the
         // css/js a second time.
         $fileMock = $this->createMock(FileService::class);
         $fileMock->expects($this->any())
             ->method('fileIsReadable')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $fileMock->expects($this->never())
             ->method('getFileContents');
-        $fileMock->expects($this->any())
-            ->method('filterFilePath')
-            ->will($this->returnValue('some filter path'));
         Krexx::$pool->fileService = $fileMock;
 
         $editSettingscontroller->editSettingsAction();

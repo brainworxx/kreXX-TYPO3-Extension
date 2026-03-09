@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,25 +37,30 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Collectors;
 
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
+use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(FormConfiguration::class, 'assignData')]
+#[CoversMethod(FormConfiguration::class, 'generateSingleSetting')]
+#[CoversMethod(FormConfiguration::class, 'convertKrexxFeSetting')]
+#[CoversMethod(FormConfiguration::class, 'generateDropdown')]
 class FormConfigurationTest extends AbstractHelper
 {
     /**
-     * The the assigning of data to the view.
-     *
-     * @covers \Brainworxx\Includekrexx\Collectors\FormConfiguration::assignData
-     * @covers \Brainworxx\Includekrexx\Collectors\FormConfiguration::generateSingleSetting
-     * @covers \Brainworxx\Includekrexx\Collectors\FormConfiguration::convertKrexxFeSetting
-     * @covers \Brainworxx\Includekrexx\Collectors\FormConfiguration::generateDropdown
+     * Test the assigning of data to the view.
      */
     public function testAssignData()
     {
         // No access.
         $configuration = new FormConfiguration();
-        $viewMock = $this->createMock(AbstractTemplateView::class);
+        if (class_exists(AbstractTemplateView::class)) {
+            $viewMock = $this->createMock(AbstractTemplateView::class);
+        } else {
+            $viewMock = $this->createMock(ModuleTemplate::class);
+        }
         $viewMock->expects($this->never())
             ->method('assign');
         $configuration->assignData($viewMock);
@@ -69,7 +75,11 @@ class FormConfigurationTest extends AbstractHelper
             \Krexx::$pool->config
         );
 
-        $viewMock = $this->createMock(AbstractTemplateView::class);
+        if (class_exists(AbstractTemplateView::class)) {
+            $viewMock = $this->createMock(AbstractTemplateView::class);
+        } else {
+            $viewMock = $this->createMock(ModuleTemplate::class);
+        }
         $viewMock->expects($this->once())
             ->method('assign')
             ->with(

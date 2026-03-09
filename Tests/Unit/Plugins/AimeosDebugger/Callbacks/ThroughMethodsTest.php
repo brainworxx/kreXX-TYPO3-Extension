@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -45,15 +46,15 @@ use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use ReflectionMethod;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ThroughMethods::class, 'callMe')]
 class ThroughMethodsTest extends AbstractHelper implements CallbackConstInterface
 {
     use AimeosTestTrait;
 
     /**
      * Test the preprocessing of methods.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughMethods::callMe
      */
     public function testCallMe()
     {

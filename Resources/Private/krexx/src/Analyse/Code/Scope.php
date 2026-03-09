@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -62,7 +62,7 @@ class Scope implements CallbackConstInterface
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * The "scope" we are starting with. When it is $this in combination with a
@@ -71,7 +71,7 @@ class Scope implements CallbackConstInterface
      *
      * @var string
      */
-    protected $scope = '';
+    protected string $scope = '';
 
     /**
      * Initializes the code generation.

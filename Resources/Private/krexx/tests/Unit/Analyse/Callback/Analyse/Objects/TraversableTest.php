@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -45,10 +45,14 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 use ArrayObject;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Traversable::class, 'callMe')]
+#[CoversMethod(Traversable::class, 'retrieveTraversableData')]
+#[CoversMethod(Traversable::class, 'analyseTraversableResult')]
 class TraversableTest extends AbstractHelper
 {
-    const CHECK_NESTING = 'checkNesting';
+    public const  CHECK_NESTING = 'checkNesting';
 
     /**
      * @var string
@@ -88,17 +92,13 @@ class TraversableTest extends AbstractHelper
 
     /**
      * Test, if we do not ignore the emergency handler.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::callMe
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeWithEmergency()
     {
         // Tell the emergency handler mock that we have a nesting level problem.
         Krexx::$pool->emergencyHandler->expects($this->once())
             ->method(static::CHECK_NESTING)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         // Listen for the start event.
         $this->mockEventService(
@@ -126,7 +126,7 @@ class TraversableTest extends AbstractHelper
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->any())
             ->method('checkEmergencyBreak')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         Krexx::$pool->emergencyHandler = $emergencyMock;
 
@@ -146,19 +146,13 @@ class TraversableTest extends AbstractHelper
 
     /**
      * Test, if the traversable analysis can handle some errors and warnings.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::retrieveTraversableData
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::analyseTraversableResult
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeWithErrors()
     {
         // Tell the emergency handler, that the nesting level is ok.
         Krexx::$pool->emergencyHandler->expects($this->once())
             ->method(static::CHECK_NESTING)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         // Listen for the start event.
         $this->mockEventService(
@@ -186,19 +180,13 @@ class TraversableTest extends AbstractHelper
 
     /**
      * Test, if the normal array analysis is called.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::retrieveTraversableData
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::analyseTraversableResult
-     *
-     * @throws \ReflectionException
      */
     public function testMeWithSmallArray()
     {
         // Tell the emergency handler, that the nesting level is ok.
         Krexx::$pool->emergencyHandler->expects($this->any())
             ->method(static::CHECK_NESTING)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         // Listen for the start and end event.
         $this->mockEventService(
@@ -243,19 +231,13 @@ class TraversableTest extends AbstractHelper
 
     /**
      * Test if the large array analysis is called.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::retrieveTraversableData
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::analyseTraversableResult
-     *
-     * @throws \ReflectionException
      */
     public function testMeWithLargeArray()
     {
         // Tell the emergency handler, that the nesting level is ok.
         Krexx::$pool->emergencyHandler->expects($this->any())
             ->method(static::CHECK_NESTING)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         // Listen for the start and end event.
         $this->mockEventService(

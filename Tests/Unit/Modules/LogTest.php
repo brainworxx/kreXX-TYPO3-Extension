@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,25 +38,38 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Modules;
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Collectors\LogfileList;
 use Brainworxx\Includekrexx\Modules\Log;
+use Brainworxx\Includekrexx\Modules\Log14;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
 use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\View\ViewFactoryInterface;
+use TYPO3\CMS\Core\View\ViewInterface;
 use TYPO3\CMS\Fluid\View\StandaloneView;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Log::class, 'getJavaScriptFiles')]
+#[CoversMethod(Log::class, 'getCssFiles')]
+#[CoversMethod(Log::class, 'getContent')]
+#[CoversMethod(Log::class, 'hasAccess')]
+#[CoversMethod(Log::class, 'retrieveKrexxMessages')]
+#[CoversMethod(Log::class, 'createView')]
+#[CoversMethod(Log::class, 'createView13')]
+#[CoversMethod(Log::class, 'renderMessage')]
+#[CoversMethod(Log::class, 'getDataToStore')]
+#[CoversMethod(Log::class, 'getLabel')]
+#[CoversMethod(Log::class, 'getIdentifier')]
 class LogTest extends AbstractHelper
 {
-    const WRONG_VERSION = 'Wrong TYPO3 version.';
-    const FILES = 'files';
-    const ASSIGN_MULTIPLE = 'assignMultiple';
-    const SEVERITY = 'severity';
-    const TEXT = 'text';
-    const RENDER = 'render';
+    protected const WRONG_VERSION = 'Wrong TYPO3 version.';
+    protected const FILES = 'files';
+    protected const ASSIGN_MULTIPLE = 'assignMultiple';
+    protected const SEVERITY = 'severity';
+    protected const TEXT = 'text';
+    protected const RENDER = 'render';
 
-    /**
-     * @var \Brainworxx\Includekrexx\Modules\Log
-     */
     protected $log;
 
     /**
@@ -63,37 +77,29 @@ class LogTest extends AbstractHelper
      */
     protected function setUp(): void
     {
-        if (class_exists(ModuleData::class) === false) {
-            return;
-        }
         parent::setUp();
         $this->simulatePackage('includekrexx', 'whatever');
-        $this->log = new Log();
+        $typo3Version = new Typo3Version();
+        if ($typo3Version->getMajorVersion() > 13) {
+            $this->log = new Log14();
+        } else {
+            $this->log = new Log();
+        }
     }
 
     /**
      * Testing the unique identifier.
-     *
-     * @covers \Brainworxx\Includekrexx\Modules\Log::getIdentifier
      */
     public function testGetIdentifier()
     {
-        if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped(static::WRONG_VERSION);
-        }
         $this->assertEquals(Bootstrap::KREXX, $this->log->getIdentifier());
     }
 
     /**
      * Test the 'translated' label getter.
-     *
-     * @covers \Brainworxx\Includekrexx\Modules\Log::getLabel
      */
     public function testGetLabel()
     {
-        if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped(static::WRONG_VERSION);
-        }
         $this->assertEquals(
             'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:mlang_tabs_tab',
             $this->log->getLabel()
@@ -102,50 +108,46 @@ class LogTest extends AbstractHelper
 
     /**
      * Test the retrieval of the log fil list class.
-     *
-     * @covers \Brainworxx\Includekrexx\Modules\Log::getDataToStore
      */
     public function testGetDataToStore()
     {
-        if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped(static::WRONG_VERSION);
-        }
+
         $fileList = ['file', 'list'];
         $expectations = new ModuleData([static::FILES => $fileList]);
 
         $logfileListMock = $this->createMock(LogfileList::class);
         $logfileListMock->expects($this->once())
             ->method('retrieveFileList')
-            ->will($this->returnValue($fileList));
+            ->willReturn($fileList);
         $this->injectIntoGeneralUtility(LogfileList::class, $logfileListMock);
 
         $request = new ServerRequest();
-        $this->assertEquals($expectations, $this->log->getDataToStore($request));
+
+        $typo3Version = new Typo3Version();
+        if ($typo3Version->getMajorVersion() > 13) {
+            $response = $this->createMock(\Psr\Http\Message\ResponseInterface::class);
+            $this->assertEquals($expectations, $this->log->getDataToStore($request, $response));
+        } else {
+            $this->assertEquals($expectations, $this->log->getDataToStore($request));
+        }
     }
 
     /**
      * Test the displaying of the file list, when having no access.
-     *
-     * @covers \Brainworxx\Includekrexx\Modules\Log::getContent
-     * @covers \Brainworxx\Includekrexx\Modules\Log::hasAccess
-     * @covers \Brainworxx\Includekrexx\Modules\Log::renderMessage
      */
     public function testGetContentNoAccess()
     {
-        if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped(static::WRONG_VERSION);
-        }
+        $mockview = $this->mockView();
         // Prepare the view for the messages.
-        $viewMock = $this->mockView();
-        $viewMock->expects($this->once())
+        $mockview->expects($this->once())
             ->method(static::ASSIGN_MULTIPLE)
             ->with([
                 static::TEXT => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:accessDenied',
                 static::SEVERITY => 'error',
             ]);
-        $viewMock->expects($this->once())
+        $mockview->expects($this->once())
             ->method(static::RENDER)
-            ->will($this->returnValue('Rendered Messages'));
+            ->willReturn('Rendered Messages');
 
         $moduleData = new ModuleData();
         $this->assertEquals('Rendered Messages', $this->log->getContent($moduleData));
@@ -153,25 +155,17 @@ class LogTest extends AbstractHelper
 
     /**
      * Test the display of the no-logfiles-available message and the display of
-     * kreXX messasges, complaining about stuff.
-     *
-     * @covers \Brainworxx\Includekrexx\Modules\Log::getContent
-     * @covers \Brainworxx\Includekrexx\Modules\Log::hasAccess
-     * @covers \Brainworxx\Includekrexx\Modules\Log::renderMessage
-     * @covers \Brainworxx\Includekrexx\Modules\Log::retrieveKrexxMessages
+     * kreXX messages, complaining about stuff.
      */
     public function testGetContentEmpty()
     {
-        if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped(static::WRONG_VERSION);
-        }
         $this->mockBeUser();
+        $mockview = $this->mockView(2);
 
         Krexx::$pool->messages->addMessage('translationkey');
         $moduleData = new ModuleData([static::FILES => []]);
 
-        $viewMock = $this->mockView();
-        $viewMock->expects($this->exactly(2))
+        $mockview->expects($this->exactly(2))
             ->method(static::ASSIGN_MULTIPLE)
             ->with(...$this->withConsecutive(
                 [
@@ -187,51 +181,39 @@ class LogTest extends AbstractHelper
                     ]
                 ]
             ));
-        $viewMock->expects($this->exactly(2))
+        $mockview->expects($this->exactly(2))
             ->method(static::RENDER)
-            ->will($this->returnValue('rendering'));
+            ->willReturn('rendering');
 
         $this->assertEquals('renderingrendering', $this->log->getContent($moduleData));
     }
 
     /**
-     * Test the normal diosplay of the file list and without any messages.
-     *
-     * @covers \Brainworxx\Includekrexx\Modules\Log::getContent
-     * @covers \Brainworxx\Includekrexx\Modules\Log::hasAccess
-     * @covers \Brainworxx\Includekrexx\Modules\Log::retrieveKrexxMessages
+     * Test the normal display of the file list and without any messages.
      */
     public function testGetContentNormal()
     {
-        if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped(static::WRONG_VERSION);
-        }
         $this->mockBeUser();
         $fileList = [static::FILES => ['just', 'some', 'files']];
         $expectations = 'list of files';
         $moduleData = new ModuleData($fileList);
 
-        $viewMock = $this->mockView();
-        $viewMock->expects($this->once())
+        $mockview = $this->mockView();
+        $mockview->expects($this->once())
             ->method(static::ASSIGN_MULTIPLE)
             ->with($fileList);
-        $viewMock->expects($this->once())
+        $mockview->expects($this->once())
             ->method(static::RENDER)
-            ->will($this->returnValue($expectations));
+            ->willReturn($expectations);
 
-         $this->assertEquals($expectations, $this->log->getContent($moduleData));
+        $this->assertEquals($expectations, $this->log->getContent($moduleData));
     }
 
     /**
      * Test the assigning of the css file.
-     *
-     * @covers \Brainworxx\Includekrexx\Modules\Log::getCssFiles
      */
     public function testGetCssFiles()
     {
-        if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped(static::WRONG_VERSION);
-        }
         $this->assertEquals(
             ['EXT:includekrexx/Resources/Public/Css/Adminpanel.css'],
             $this->log->getCssFiles()
@@ -240,14 +222,9 @@ class LogTest extends AbstractHelper
 
     /**
      * Test the not-assigning of any js files.
-     *
-     * @covers \Brainworxx\Includekrexx\Modules\Log::getJavaScriptFiles
      */
     public function testGetJavaScriptFiles()
     {
-        if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped(static::WRONG_VERSION);
-        }
         $this->assertEmpty($this->log->getJavaScriptFiles());
     }
 
@@ -256,17 +233,31 @@ class LogTest extends AbstractHelper
      *
      * @return \PHPUnit\Framework\MockObject\MockObject
      */
-    protected function mockView() : MockObject
+    protected function mockView(int $count = 1): MockObject
     {
-        // Prepare the view for the messages.
-        $viewMock = $this->createMock(StandaloneView::class);
-        $viewMock->expects($this->any())
-            ->method('setTemplatePathAndFilename');
-        $viewMock->expects($this->any())
-            ->method('setPartialRootPaths');
-        $viewMock->expects($this->any())
-            ->method('setLayoutRootPaths');
-        $this->injectIntoGeneralUtility(StandaloneView::class, $viewMock);
+        if (interface_exists(ViewFactoryInterface::class)) {
+            $viewFactoryMock = $this->createMock(ViewFactoryInterface::class);
+            $viewMock = $this->createMock(ViewInterface::class);
+            $viewFactoryMock->expects($this->exactly($count))
+                ->method('create')
+                ->willReturn($viewMock);
+            $this->injectIntoGeneralUtility(ViewFactoryInterface::class, $viewFactoryMock);
+        } else {
+            $viewMock = $this->createMock(StandaloneView::class);
+            $viewMock->expects($this->exactly($count))
+                ->method('setPartialRootPaths')
+                ->with(['EXT:includekrexx/Resources/Private/Partials']);
+            $viewMock->expects($this->exactly($count))
+                ->method('setLayoutRootPaths')
+                ->with(['EXT:includekrexx/Resources/Private/Layouts']);
+            $viewMock->expects($this->exactly($count))
+                ->method('setTemplatePathAndFilename');
+            $viewMock->expects($this->exactly($count))
+                ->method('setFormat')
+                ->with('html');
+
+            $this->injectIntoGeneralUtility(StandaloneView::class, $viewMock);
+        }
 
         return $viewMock;
     }

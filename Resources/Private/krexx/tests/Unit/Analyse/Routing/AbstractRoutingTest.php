@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,16 +35,17 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing;
 
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ProcessNothing;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(AbstractRouting::class, '__construct')]
 class AbstractRoutingTest extends AbstractHelper
 {
     /**
      * Test if we get the pool was set.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::__construct
      */
     public function testConstruct()
     {

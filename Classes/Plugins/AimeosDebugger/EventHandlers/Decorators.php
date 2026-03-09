@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -57,7 +57,7 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
      *
      * @var string[]
      */
-    protected $internalObjectNames = [
+    protected array $internalObjectNames = [
         'controller' => '$this->controller,',
         'manager' => '$this->manager,',
         'object' => '$this->object,',
@@ -69,7 +69,7 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
     /**
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Inject the pool.
@@ -84,7 +84,7 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
     /**
      * Resolving the possible methods from the decorator pattern.
      *
-     * @param AbstractCallback $callback
+     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback|null $callback
      *   The original callback.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.
@@ -92,7 +92,7 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
      * @return string
      *   The generated markup.
      */
-    public function handle(AbstractCallback $callback, ?Model $model = null): string
+    public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
     {
         $result = '';
         $params = $callback->getParameters();
@@ -283,9 +283,8 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
      */
     protected function retrievePublicMethods(ReflectionClass $ref): array
     {
-        $methods = $ref->getMethods(ReflectionMethod::IS_PUBLIC);
         $result = [];
-        foreach ($methods as $refMethod) {
+        foreach ($ref->getMethods(ReflectionMethod::IS_PUBLIC) as $refMethod) {
             $result[$refMethod->name] = $refMethod;
         }
 

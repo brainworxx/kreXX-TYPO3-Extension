@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,19 +38,29 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3\Scalar;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility;
+use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility12;
+use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility14;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\Registration;
-use TYPO3\CMS\Lang\LanguageService;
-use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
+use TYPO3\CMS\Core\Information\Typo3Version;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(LllString::class, 'canHandle')]
+#[CoversMethod(LllString::class, 'resolveExtPath')]
+#[CoversMethod(LllString::class, '__construct')]
+#[CoversMethod(LllString::class, 'handle')]
+#[CoversMethod(LllString::class, 'isActive')]
 class LllStringTest extends AbstractHelper
 {
-    const TSFE = 'TSFE';
-    const KREXX_DEBUGGER = 'kreXX Debugger';
+    protected const TSFE = 'TSFE';
+    protected const KREXX_DEBUGGER = 'kreXX Debugger';
 
     protected $originalLang;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -65,6 +75,9 @@ class LllStringTest extends AbstractHelper
         Krexx::$pool->messages->readHelpTexts();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function tearDown(): void
     {
         parent::tearDown();
@@ -76,8 +89,6 @@ class LllStringTest extends AbstractHelper
 
     /**
      * We test if the LocalizationUtility::translate still exists.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString::isActive
      */
     public function testIsActive()
     {
@@ -86,8 +97,6 @@ class LllStringTest extends AbstractHelper
 
     /**
      * Testing a method that only exists for the sake of the interface . . .
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString::handle
      */
     public function testHandle()
     {
@@ -97,18 +106,25 @@ class LllStringTest extends AbstractHelper
 
     /**
      * Testing the "glue" to the TYPO3 translation handling.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString::canHandle
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString::resolveExtPath
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString::__construct
      */
     public function testCanHandle()
     {
         $payload = 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:mlang_tabs_tab';
         $model = new Model(\Krexx::$pool);
         $lllString = new LllString(\Krexx::$pool);
-        $lllString->setLocalisationUtility(new LocalizationUtility());
-        LocalizationUtility::$values[$payload] = static::KREXX_DEBUGGER;
+
+        $typo3Version = new Typo3Version();
+        if ($typo3Version->getMajorVersion() > 13) {
+            $lllString->setLocalisationUtility(new LocalizationUtility14());
+            LocalizationUtility14::$values[$payload] = static::KREXX_DEBUGGER;
+        } elseif ($typo3Version->getMajorVersion() > 11) {
+            $lllString->setLocalisationUtility(new LocalizationUtility12());
+            LocalizationUtility12::$values[$payload] = static::KREXX_DEBUGGER;
+        } else {
+            $lllString->setLocalisationUtility(new LocalizationUtility());
+            LocalizationUtility::$values[$payload] = static::KREXX_DEBUGGER;
+        }
+
         $this->simulatePackage('includekrexx', 'some path');
 
         $lllString->canHandle($payload, $model);
@@ -121,5 +137,23 @@ class LllStringTest extends AbstractHelper
         $model = new Model(\Krexx::$pool);
         $lllString->canHandle($payload, $model);
         $this->assertEmpty($model->getJson(), 'Expecting an empty array.');
+    }
+
+    /**
+     * Just like the original test, but we expect the translation to throw an exception.
+     */
+    public function testCanHandleException()
+    {
+        $payload = 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:mlang_tabs_tab';
+        $model = new Model(\Krexx::$pool);
+        $lllString = new LllString(\Krexx::$pool);
+        // This should trigger a 'Static method "translate" cannot be invoked on mock object' exception.
+        $localisationUtility = $this->createMock(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::class);
+        $lllString->setLocalisationUtility($localisationUtility);
+
+        $this->assertFalse(
+            $lllString->canHandle($payload, $model),
+            'Expecting false, because the translation utility throws an exception.'
+        );
     }
 }

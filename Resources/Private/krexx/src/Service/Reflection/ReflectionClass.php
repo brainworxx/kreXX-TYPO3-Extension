@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -49,30 +49,37 @@ use Krexx;
 class ReflectionClass extends \ReflectionClass
 {
     /**
-     * static caching, to speed things up.
-     *
-     * @deprecated
-     *   Since 5.0.0. Will be removed.
-     *
-     * @var array
-     */
-    protected static $cache = [];
-
-    /**
      * The object, cast into an array.
      *
      * @var array
      */
-    protected $objectArray = [];
+    protected array $objectArray = [];
 
     /**
      * The object we are currently analysing.
      *
-     * @var object
+     * @var object|string
      */
     protected $data;
 
-    protected $unsetPropertyStorage;
+    /**
+     * Storage for unset properties.
+     *
+     * @var \SplObjectStorage
+     */
+    protected SplObjectStorage $unsetPropertyStorage;
+
+    /**
+     * Must we set the properties accessible?
+     *
+     * This is not necessarily in PHP 8.1 and higher.
+     *
+     * @deprecated
+     *   Will be removed as soon as we drop support for PHP 8.0.
+     *
+     * @var bool|null
+     */
+    protected static ?bool $mustSetAccessible = null;
 
     /**
      * ReflectionClass constructor.
@@ -84,8 +91,24 @@ class ReflectionClass extends \ReflectionClass
      */
     public function __construct($data)
     {
+        if (static::$mustSetAccessible === null) {
+            // Determine, if we must set the properties accessible.
+            static::$mustSetAccessible = version_compare(phpversion(), '8.1.0', '<');
+        }
         // Retrieve the class variables.
-        $this->objectArray = (array) $data;
+        if ($data instanceof \ArrayObject) {
+            try {
+                $flags = $data->getFlags();
+                $data->setFlags(\ArrayObject::STD_PROP_LIST);
+                $this->objectArray = (array) $data;
+                $data->setFlags($flags);
+            } catch (Throwable $throwable) {
+                // Do nothing.
+            }
+        } else {
+            $this->objectArray = (array) $data;
+        }
+
         // Remember the current object.
         $this->data = $data;
         // Init our unset object storage;
@@ -100,7 +123,7 @@ class ReflectionClass extends \ReflectionClass
      * @param \ReflectionProperty $refProperty
      *   The reflection of the property we are analysing.
      *
-     * @return mixed;
+     * @return mixed
      *   The retrieved value.
      */
     public function retrieveValue(ReflectionProperty $refProperty)
@@ -122,9 +145,11 @@ class ReflectionClass extends \ReflectionClass
         }
 
         try {
+            // Static values are not inside the value array.
             if ($refProperty->isStatic()) {
-                // Static values are not inside the value array.
-                $refProperty->setAccessible(true);
+                if (static::$mustSetAccessible) {
+                    $refProperty->setAccessible(true);
+                }
                 return $refProperty->getValue($this->data);
             }
         } catch (Throwable $throwable) {
@@ -159,7 +184,7 @@ class ReflectionClass extends \ReflectionClass
             // accessing the object directly.
             return array_values($this->objectArray)[
                 array_search($propName, array_keys($this->objectArray))
-            ];
+            ] ?? null;
         }
 
         if ($refProperty instanceof HiddenProperty) {
@@ -179,12 +204,25 @@ class ReflectionClass extends \ReflectionClass
             restore_error_handler();
         }
 
-        $this->unsetPropertyStorage->attach($refProperty);
+        $this->unsetPropertyStorage->offsetSet($refProperty);
         return null;
     }
 
     /**
-     * Was this propery unset?
+     * The original get_object_vars() is problematic, because it
+     * may fire PropertyHooks, LazyProxies or LazyGhosts.
+     *
+     * @return mixed[]
+     */
+    public function getObjectVars(): array
+    {
+        return array_filter($this->objectArray, function ($key) {
+            return strpos((string)$key, "\0") === false;
+        }, ARRAY_FILTER_USE_KEY);
+    }
+
+    /**
+     * Was this property unset?
      *
      * The info is only available if you retrieve the value beforehand.
      *
@@ -193,7 +231,7 @@ class ReflectionClass extends \ReflectionClass
      */
     public function isPropertyUnset(ReflectionProperty $reflectionProperty): bool
     {
-        return $this->unsetPropertyStorage->contains($reflectionProperty);
+        return $this->unsetPropertyStorage->offsetExists($reflectionProperty);
     }
 
     /**

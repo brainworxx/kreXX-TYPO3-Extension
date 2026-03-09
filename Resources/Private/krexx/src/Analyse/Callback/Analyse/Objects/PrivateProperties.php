@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -72,7 +72,7 @@ class PrivateProperties extends AbstractObjectAnalysis
         // We need to get all parent classes and then poll them for private
         // properties to get the whole picture.
         do {
-            $refProps = array_merge($refProps, $reflectionClass->getProperties(ReflectionProperty::IS_PRIVATE));
+            $refProps = [...$refProps, ...$reflectionClass->getProperties(ReflectionProperty::IS_PRIVATE)];
             // And now for the parent class.
             $reflectionClass = $reflectionClass->getParentClass();
         } while (is_object($reflectionClass));

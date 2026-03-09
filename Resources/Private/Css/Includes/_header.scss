@@ -6,8 +6,8 @@
     top: 0;
     left: 0;
     z-index: 300;
-    background-color: $grey-05;
-    border-bottom: 1px solid $grey-15;
+    background-color: var(--grey-05);
+    border-bottom: 1px solid var(--grey-15);
     padding-left: 24px;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -22,15 +22,15 @@
 
     button {
       margin-top: 7px;
-      color: $black;
-      background-color: $grey-05;
-      border-color: $grey-15;
+      color: var(--black);
+      background-color: var(--grey-05);
+      border-color: var(--grey-15);
       padding: 0 8px 0 24px;
 
       &:hover {
-        color: $black;
-        background-color: $grey-10;
-        border-color: $grey-20;
+        color: var(--black);
+        background-color: var(--grey-10);
+        border-color: var(--grey-20);
       }
     }
   }

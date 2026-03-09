@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -43,20 +43,20 @@ use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\View\Output\Browser;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(EditSettingsController::class, 'editSettingsAction')]
 class EditSettingsControllerTest extends AbstractController
 {
     /**
      * Call the action when the max call is already reached.
-     *
-     * @covers \Brainworxx\Krexx\Controller\EditSettingsController::editSettingsAction
      */
     public function testEditSettingsActionWithMaxCall()
     {
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
             ->method('checkMaxCall')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $emergencyMock->expects($this->never())
             ->method('setDisable');
         Krexx::$pool->emergencyHandler = $emergencyMock;
@@ -67,8 +67,6 @@ class EditSettingsControllerTest extends AbstractController
 
     /**
      * Normal call of the action, nothing special.
-     *
-     * @covers \Brainworxx\Krexx\Controller\EditSettingsController::editSettingsAction
      */
     public function testEditSettingsActionNormal()
     {
@@ -99,12 +97,12 @@ class EditSettingsControllerTest extends AbstractController
                 [Model::class],
                 [ThroughConfig::class],
                 [Model::class]
-            ))->will($this->returnValueMap(
+            ))->willReturnMap(
                 [
                     [Model::class, new Model(Krexx::$pool)],
                     [ThroughConfig::class, new CallbackNothing(Krexx::$pool)]
                 ]
-            ));
+            );
 
         $this->assertEquals($controller, $controller->editSettingsAction());
     }

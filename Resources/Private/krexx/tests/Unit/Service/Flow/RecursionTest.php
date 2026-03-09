@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -40,11 +40,19 @@ use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use SplObjectStorage;
 use StdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Recursion::class, 'addToMetaHive')]
+#[CoversMethod(Recursion::class, 'isInMetaHive')]
+#[CoversMethod(Recursion::class, 'getMarker')]
+#[CoversMethod(Recursion::class, 'isInHive')]
+#[CoversMethod(Recursion::class, 'addToHive')]
+#[CoversMethod(Recursion::class, '__destruct')]
+#[CoversMethod(Recursion::class, '__construct')]
 class RecursionTest extends AbstractHelper
 {
+    public const  RECURSION_HIVE = 'recursionHive';
 
-    const RECURSION_HIVE = 'recursionHive';
     /**
      * @var \Brainworxx\Krexx\Service\Flow\Recursion
      */
@@ -62,8 +70,6 @@ class RecursionTest extends AbstractHelper
 
     /**
      * Test the setting of the recursion marker and the creation of the hive.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Recursion::__construct
      */
     public function testConstruct()
     {
@@ -83,8 +89,6 @@ class RecursionTest extends AbstractHelper
 
     /**
      * Test the removal of the recursion marker in the globals.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Recursion::__destruct
      */
     public function testDestruct()
     {
@@ -92,14 +96,13 @@ class RecursionTest extends AbstractHelper
             $this->markTestSkipped('Wrong PHP version.');
         }
         $marker = $this->recursion->getMarker();
-        unset($this->recursion);
-        $this->assertTrue(isset($GLOBALS[$marker]));
+        $this->recursion->__destruct();
+        $this->assertFalse(isset($GLOBALS[$marker]));
+        $this->setValueByReflection('recursionMarker', $marker, $this->recursion);
     }
 
     /**
      * Test the adding of classes to the hive.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Recursion::addToHive
      */
     public function testAddToHive()
     {
@@ -107,7 +110,7 @@ class RecursionTest extends AbstractHelper
 
         $hiveMock = $this->createMock(SplObjectStorage::class);
         $hiveMock->expects($this->once())
-            ->method('attach')
+            ->method('offsetSet')
             ->with($fixture);
         $this->setValueByReflection(static::RECURSION_HIVE, $hiveMock, $this->recursion);
 
@@ -116,8 +119,6 @@ class RecursionTest extends AbstractHelper
 
     /**
      * Test the actual recursion handling.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Recursion::isInHive
      */
     public function testIsInHive()
     {
@@ -125,24 +126,33 @@ class RecursionTest extends AbstractHelper
 
         $hiveMock = $this->createMock(SplObjectStorage::class);
         $hiveMock->expects($this->once())
-            ->method('contains')
+            ->method('offsetExists')
             ->with($fixture)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->setValueByReflection(static::RECURSION_HIVE, $hiveMock, $this->recursion);
 
         $this->assertTrue($this->recursion->isInHive($fixture));
         $this->assertFalse($this->recursion->isInHive(['some', 'array']));
-
         if (version_compare(phpversion(), '8.1.0', '<=')) {
             $this->assertFalse($this->recursion->isInHive($GLOBALS));
             $this->assertTrue($this->recursion->isInHive($GLOBALS), 'Render them a second time');
+        }
+
+        // And now the same thing with an array.
+        $fixture = [];
+        $this->assertFalse($this->recursion->isInHive($fixture));
+        $this->assertFalse($this->recursion->isInHive($fixture), 'We do not track arrays');
+        $fixture[$this->recursion->getMarker()] = true;
+
+        if (version_compare(phpversion(), '8.1.0', '>=')) {
+            // 8.1.0 does not have globals anymore.
+            $this->assertFalse($this->recursion->isInHive($fixture), 'Pretend that this is the global array.');
+            $this->assertTrue($this->recursion->isInHive($fixture), 'We did track it.');
         }
     }
 
     /**
      * Test the geter for the marker
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Recursion::getMarker
      */
     public function testGetMarker()
     {
@@ -153,8 +163,6 @@ class RecursionTest extends AbstractHelper
 
     /**
      * Test the meta hive.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Recursion::isInMetaHive
      */
     public function testIsInMetaHive()
     {
@@ -166,8 +174,6 @@ class RecursionTest extends AbstractHelper
 
     /**
      * Test the adding of stuff to the meta hive.
-     *
-     * @covers \Brainworxx\Krexx\Service\Flow\Recursion::addToMetaHive
      */
     public function testAddToMetaHive()
     {

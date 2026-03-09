@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,25 +35,37 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Service\Plugin;
 
+use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Plugin\NewSetting;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
+use Brainworxx\Krexx\Tests\Fixtures\PluginConfigFixture;
 use Brainworxx\Krexx\View\Messages;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
-/**
- * Testing a static class . So. Much. Fun.
- *
- * @package Brainworxx\Krexx\Tests\Service\Plugin
- */
+#[CoversMethod(Registration::class, 'deactivatePlugin')]
+#[CoversMethod(Registration::class, 'register')]
+#[CoversMethod(Registration::class, 'activatePlugin')]
+#[CoversMethod(Registration::class, 'addLanguage')]
+#[CoversMethod(Config::class, 'getLanguageList')]
+#[CoversMethod(Registration::class, 'addNewFallbackValue')]
+#[CoversMethod(Registration::class, 'addNewSettings')]
+#[CoversMethod(Registration::class, 'addScalarStringAnalyser')]
+#[CoversMethod(Registration::class, 'registerAdditionalskin')]
+#[CoversMethod(Registration::class, 'registerAdditionalHelpFile')]
+#[CoversMethod(Registration::class, 'registerEvent')]
+#[CoversMethod(Registration::class, 'addRewrite')]
+#[CoversMethod(Registration::class, 'addClassToDebugBlacklist')]
+#[CoversMethod(Registration::class, 'addMethodToDebugBlacklist')]
+#[CoversMethod(Registration::class, 'setLogFolder')]
+#[CoversMethod(Registration::class, 'setChunksFolder')]
+#[CoversMethod(Registration::class, 'setConfigFile')]
 class RegistrationTest extends AbstractRegistration
 {
-
     /**
      * Test the setting of a specific configuration file.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::setConfigFile
      */
     public function testSetConfigFile()
     {
@@ -64,8 +76,6 @@ class RegistrationTest extends AbstractRegistration
 
     /**
      * Test the setting of the chunks folder.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::setChunksFolder
      */
     public function testSetChunksFolder()
     {
@@ -76,8 +86,6 @@ class RegistrationTest extends AbstractRegistration
 
     /**
      * Test the setting of the log folder.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::setLogFolder
      */
     public function testSetLogFolder()
     {
@@ -88,8 +96,6 @@ class RegistrationTest extends AbstractRegistration
 
     /**
      * Test the adding of blacklisted class / debug method combinations.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::addMethodToDebugBlacklist
      */
     public function testAddMethodToDebugBlacklist()
     {
@@ -108,8 +114,6 @@ class RegistrationTest extends AbstractRegistration
 
     /**
      * Test the adding of class names to the blacklisted debug class list.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::addClassToDebugBlacklist
      */
     public function testAddClassToDebugBlacklist()
     {
@@ -124,8 +128,6 @@ class RegistrationTest extends AbstractRegistration
 
     /**
      * Test the adding of class rewrites.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::addRewrite
      */
     public function testAddRewrite()
     {
@@ -140,8 +142,6 @@ class RegistrationTest extends AbstractRegistration
 
     /**
      * Test the registering of the event handlers
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::registerEvent
      */
     public function testRegisterEvent()
     {
@@ -162,8 +162,6 @@ class RegistrationTest extends AbstractRegistration
 
     /**
      * Test the registering of help files.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::registerAdditionalHelpFile
      */
     public function testRegisterAdditionalHelpFile()
     {
@@ -177,8 +175,6 @@ class RegistrationTest extends AbstractRegistration
 
     /**
      * Test the registering of an additional skin.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::registerAdditionalskin
      */
     public function testRegisterAdditionalskin()
     {
@@ -195,8 +191,6 @@ class RegistrationTest extends AbstractRegistration
 
     /**
      * Test the registration of additional string processors.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::addScalarStringAnalyser
      */
     public function testRegisterAdditionalScalarString()
     {
@@ -206,8 +200,6 @@ class RegistrationTest extends AbstractRegistration
 
     /**
      * Test the adding of new configuration definitions
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::addNewSettings
      */
     public function testAddNewSetting()
     {
@@ -218,8 +210,6 @@ class RegistrationTest extends AbstractRegistration
 
     /**
      * Test the adding of a new fallback value
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::addNewFallbackValue
      */
     public function testAddNewFallbackValue()
     {
@@ -229,9 +219,6 @@ class RegistrationTest extends AbstractRegistration
 
     /**
      * Test the adding of a language.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::addLanguage
-     * @covers \Brainworxx\Krexx\Service\Config\Config::getLanguageList
      */
     public function testAddLanguage()
     {
@@ -240,7 +227,7 @@ class RegistrationTest extends AbstractRegistration
 
         // Test the French is available in the config.
         $expectation = [
-            'text' => 'English',
+            'en' => 'English',
             'de' => 'Deutsch',
             'fr' => 'français'
         ];
@@ -257,22 +244,14 @@ class RegistrationTest extends AbstractRegistration
     {
         $pluginMock = $this->createMock(PluginConfigInterface::class);
         $pluginMock->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue('Mocked Plugin'));
-        $pluginMock->expects($this->once())
-            ->method('getVersion')
-            ->will($this->returnValue('v0.0.0'));
-        $pluginMock->expects($this->once())
             ->method('exec');
 
         /** @var PluginConfigInterface $pluginMock */
         return $pluginMock;
     }
+
     /**
      * Test the registering of a plugin.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::register
-     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::activatePlugin
      */
     public function testRegisterAndActivatePlugin()
     {
@@ -282,8 +261,6 @@ class RegistrationTest extends AbstractRegistration
             get_class($pluginMock) => [
                 Registration::CONFIG_CLASS => $pluginMock,
                 Registration::IS_ACTIVE => false,
-                Registration::PLUGIN_NAME => 'Mocked Plugin',
-                Registration::PLUGIN_VERSION => 'v0.0.0'
             ]
         ];
         $this->assertEquals($expectation, SettingsGetter::getPlugins());
@@ -295,8 +272,6 @@ class RegistrationTest extends AbstractRegistration
 
     /**
      * Test the early return when deactivating an alredy deactivated plugin.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::deactivatePlugin
      */
     public function testDeactivatePluginDeactivated()
     {
@@ -307,8 +282,6 @@ class RegistrationTest extends AbstractRegistration
 
     /**
      * Test the normal deactivation of a plugin.
-     *
-     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::deactivatePlugin
      */
     public function testDeactivatePluginNormal()
     {
@@ -317,6 +290,9 @@ class RegistrationTest extends AbstractRegistration
         Registration::register($pluginMock);
         $pluginMockClassName = get_class($pluginMock);
         Registration::activatePlugin($pluginMockClassName);
+        $pluginMock2 = new PluginConfigFixture();
+        Registration::register($pluginMock2);
+        Registration::activatePlugin(PluginConfigFixture::class);
 
         // Set some values and test if they got purged.
         $this->setValueByReflection(static::CHUNK_FOLDER, 'xxx', $this->registration);

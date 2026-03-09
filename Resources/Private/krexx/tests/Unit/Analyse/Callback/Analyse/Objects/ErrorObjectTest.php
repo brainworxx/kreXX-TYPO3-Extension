@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject;
 use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
@@ -42,8 +43,15 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
+use Brainworxx\Krexx\View\Messages;
 use Exception;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ErrorObject::class, 'callMe')]
+#[CoversMethod(ErrorObject::class, 'renderBacktrace')]
+#[CoversMethod(ErrorObject::class, 'addExceptionMessage')]
+#[CoversMethod(AbstractCallback::class, 'dispatchStartEvent')]
+#[CoversMethod(AbstractCallback::class, 'dispatchEventWithModel')]
 class ErrorObjectTest extends AbstractHelper
 {
     /**
@@ -61,12 +69,7 @@ class ErrorObjectTest extends AbstractHelper
     }
 
     /**
-     * Test with a 'real' error object.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject::renderBacktrace
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchEventWithModel
+     * Test with a real error object.
      */
     public function testCallMe()
     {
@@ -83,7 +86,7 @@ class ErrorObjectTest extends AbstractHelper
         $file = 'some file';
         $code = 'some code';
 
-        $exception = new Exception();
+        $exception = new Exception('Lorem ipsum dolor sit amet, in ubique everti vituperatoribus pro, ipsum oporteat consectetuer vel ne. Choro saepe tollit cu sit, mazim aperiri ex vim. Ne sit noluisse mnesarchum, eos verear vidisse aperiam ne. Ius an nostrud sensibus comprehensam. Vim dico tractatos te. Ne lorem persius per.');
         $this->setValueByReflection('trace', $backtrace, $exception);
         $this->setValueByReflection('line', $line, $exception);
         $this->setValueByReflection('file', $file, $exception);
@@ -97,20 +100,69 @@ class ErrorObjectTest extends AbstractHelper
             ));
         $codegenMock->expects($this->exactly(2))
             ->method('generateSource')
-            ->will($this->returnValue(''));
+            ->willReturn('');
         Krexx::$pool->codegenHandler = $codegenMock;
 
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->once())
             ->method('readSourcecode')
             ->with($file, ($line - 1), ($line - 6), ($line + 4))
-            ->will($this->returnValue($code));
+            ->willReturn($code);
+        Krexx::$pool->fileService = $fileServiceMock;
+
+        $messageMock = $this->createMock(Messages::class);
+        $messageMock->expects($this->once())
+            ->method('addMessage')
+            ->with(
+                'exceptionText',
+                [get_class($exception), 'Lorem ipsum dolor sit amet, in ubique everti vituperatoribus pro, ipsum opo ...'],
+                true
+            );
+        Krexx::$pool->messages = $messageMock;
+
+        Krexx::$pool->emergencyHandler->expects($this->once())
+            ->method('getNestingLevel')
+            ->willReturn(1);
+
+        $fixture = [
+            $this->errorObject::PARAM_DATA => $exception
+        ];
+
+        $this->errorObject->setParameters($fixture)->callMe();
+        $this->assertEquals($backtrace, CallbackCounter::$staticParameters[0][$this->errorObject::PARAM_DATA]);
+    }
+
+    /**
+     * Do not display the error message, when we are deeper into the object hive.
+     */
+    public function testCallMeNested()
+    {
+        $this->mockEmergencyHandler();
+        Krexx::$pool->emergencyHandler->expects($this->once())
+            ->method('getNestingLevel')
+            ->willReturn(2);
+
+        $exception = new Exception('This is exceptional!');
+
+        $messageMock = $this->createMock(Messages::class);
+        $messageMock->expects($this->never())
+            ->method('addMessage');
+        $messageMock->expects($this->exactly(4))
+            ->method('getHelp')
+            ->with(...$this->withConsecutive(['backTrace'], ['classInternals'], ['noSourceAvailable'], ['sourceCode']))
+            ->willReturn('something');
+        Krexx::$pool->messages = $messageMock;
+
+
+        $fileServiceMock = $this->createMock(File::class);
+        $fileServiceMock->expects($this->once())
+            ->method('readSourcecode')
+            ->willReturn('');
         Krexx::$pool->fileService = $fileServiceMock;
 
         $fixture = [
             $this->errorObject::PARAM_DATA => $exception
         ];
         $this->errorObject->setParameters($fixture)->callMe();
-        $this->assertEquals($backtrace, CallbackCounter::$staticParameters[0][$this->errorObject::PARAM_DATA]);
     }
 }

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,18 +35,21 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Caller;
 
+use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(AbstractCaller::class, '__construct')]
+#[CoversMethod(AbstractCaller::class, 'setPattern')]
+#[CoversMethod(AbstractCaller::class, 'getPattern')]
 class AbstractCallerTest extends AbstractHelper
 {
-    const TEST_PATTERN = 'some pattern';
+    public const TEST_PATTERN = 'some pattern';
 
     /**
      * Testing the setting of the pool
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Caller\AbstractCaller::__construct
      */
     public function testConstruct()
     {
@@ -56,8 +59,6 @@ class AbstractCallerTest extends AbstractHelper
 
     /**
      * Testing the setting of the pattern
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Caller\AbstractCaller::setPattern
      */
     public function testSetPattern()
     {
@@ -68,8 +69,6 @@ class AbstractCallerTest extends AbstractHelper
 
     /**
      * Test the getting of the pattern.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Caller\AbstractCaller::getPattern
      */
     public function testGetPattern()
     {

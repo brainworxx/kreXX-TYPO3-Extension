@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -43,13 +43,15 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Base64::class, 'isActive')]
+#[CoversMethod(Base64::class, 'canHandle')]
+#[CoversMethod(Base64::class, 'handle')]
 class Base64Test extends AbstractHelper
 {
     /**
      * Its always active
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Base64::isActive
      */
     public function testIsActive()
     {
@@ -58,9 +60,6 @@ class Base64Test extends AbstractHelper
 
     /**
      * Test the handling of a normal string and of a base64 string.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Base64::canHandle
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Base64::handle
      */
     public function testCanHandle()
     {
@@ -75,8 +74,6 @@ class Base64Test extends AbstractHelper
 
     /**
      * Test the handling of the json.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Base64::handle
      */
     public function testHandle()
     {

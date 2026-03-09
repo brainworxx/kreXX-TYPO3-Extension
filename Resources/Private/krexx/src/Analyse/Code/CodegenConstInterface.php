@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -96,6 +96,9 @@ interface CodegenConstInterface
 
     /**
      * "Additional" json key, that contains the source code type hint.
+     *
+     * @deprecated
+     *   Since 6.0.4, will be removed.
      *
      * @var string
      */

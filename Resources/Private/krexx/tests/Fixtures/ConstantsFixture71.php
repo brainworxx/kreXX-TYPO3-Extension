@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -46,6 +46,8 @@ class ConstantsFixture71
     public const CONST_2 = 'more values';
     protected const CONST_3 = 'string';
     private const CONST_4 = 21;
+
+    public const CONST_5 = 'Attributes!';
 
     /**
      * I'm supposed to do something with the CONST_4, to avoid a bad rating in

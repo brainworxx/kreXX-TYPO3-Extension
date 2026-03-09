@@ -2,21 +2,21 @@
   .button {
     display: inline-block;
     cursor: pointer;
-    border: 1px solid $grey-15;
+    border: 1px solid var(--grey-15);
     border-radius: 2px;
     width: 30px;
     height: 32px;
-    background-color: $grey-10;
+    background-color: var(--grey-10);
     vertical-align: unset;
     margin: 0;
     line-height: 25px;
 
     &.delete {
-      background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAYAAADAQbwGAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjEuNWRHWFIAAACPSURBVDhP7ZRBCsAgDAQFf+ND/IIHwf//InUDLSnZYml6aw8DcdyEXDSJyKtQGYHKCFRGoHJnjCE555lKCure+7zieUDlDgbccRYnSinHRitqrbPl3H86HFK195arjBMqTfhObXFC5T9wVVucUPm9gavnBa4yTgB8AGjAFgzctdZm1Pc6EYXKCFRGoPI5kjbnp6VyUKDE2QAAAABJRU5ErkJggg==) no-repeat center $grey-10;
+      background: var(--delete) no-repeat center var(--grey-10);
     }
 
     &.save {
-      background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAYAAADAQbwGAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjEuNWRHWFIAAADJSURBVDhP1ZSxDYQwDEUpImWDlHQUrJQ5MkoGYCiKbOMjPtnYloXQhYIrnvL/J/6IKGICgEdxwxHccAQ3HEGZlNKRTJeEECDnDK21Y0SXdbRBe2pCZn2ttcK6rm6pNmaYkBnpbdvcUhZozDAhM9KdUgp+vsxYoBED3nkuy8LPO/u+Q4xRZSzQoD39HewMCzR/VXh1J+VZdk8avTLiod0o6S8jbfexQHOzcJ7nY/lqu48FmtcX3vk5WOxlV4VP4IYjuOEIbvg7MH0AN7KFrfdtku0AAAAASUVORK5CYII=) no-repeat left;
+      background: var(--save) no-repeat left;
       padding-left: 24px;
       width: auto;
       height: auto;
@@ -25,7 +25,7 @@
     }
 
     &.cookies {
-      background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAYAAADAQbwGAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMS41ZEdYUgAAAJ9JREFUOE+tkbsNBCEQQ2mGDgjICa8GeqD/ZA6j8wmNHK13pacdvWEsPiUiXkVKBykdpHSQ0kFKBykdpARrrRhj7BXlQ4e6tRbo0WWkBBjcAdF7P6Gg1nocenk9kRLcAQhl/fv/d52RkmBwfycI5CtQSEleDcTgfUz7yHwUBgCGPnqUOecZvHeDGg49uoyUDlI6SOkgpYOUDlI6SPmcKF9ejLsanjQbyAAAAABJRU5ErkJggg==) no-repeat left;
+      background: var(--cookies) no-repeat left;
       width: auto;
       height: auto;
       margin: 0 0 0 5px;
@@ -37,8 +37,8 @@
     }
 
     &:hover {
-      background-color: $grey-15;
-      border-color: $grey-20;
+      background-color: var(--grey-15);
+      border-color: var(--grey-20);
     }
   }
 
@@ -46,15 +46,13 @@
     position: relative;
 
     .active {
-      color: $black;
+      color: var(--black);
     }
 
     &::after {
       content: '>';
       font: 17px "Consolas", monospace;
-      color: $grey-20;
-      -webkit-transform: rotate(90deg);
-      -moz-transform: rotate(90deg);
+      color: var(--grey-20);
       -ms-transform: rotate(90deg);
       transform: rotate(90deg);
       right: 8px;

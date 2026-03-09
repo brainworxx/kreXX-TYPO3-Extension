@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -72,7 +72,7 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
      *
      * @var string[]
      */
-    protected $standardDumper = [
+    protected array $standardDumper = [
         OpaqueRessource::class,
         Meta::class,
         Constants::class,
@@ -145,7 +145,7 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
         // Dumping all the property related stuff.
         $this->addPropertyDumper($stuffToDump);
 
-        return array_merge($stuffToDump, $this->standardDumper);
+        return [...$stuffToDump, ...$this->standardDumper];
     }
 
     /**

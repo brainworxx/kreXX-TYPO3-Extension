@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -58,7 +58,9 @@ class FlexFormParser implements EventHandlerInterface, CallbackConstInterface
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
+
+    protected FlexFromServiceCore $flexFormService;
 
     /**
      * {@inheritdoc}
@@ -66,25 +68,28 @@ class FlexFormParser implements EventHandlerInterface, CallbackConstInterface
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
+        $this->flexFormService = GeneralUtility::makeInstance(FlexFromServiceCore::class);
     }
 
     /**
      * Using the TYPO3 flexform parser to get data out of the xml structure.
      *
-     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback $callback
+     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback|null $callback
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      * @return string
      */
-    public function handle(AbstractCallback $callback, ?Model $model = null): string
+    public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
     {
-        $messages = $this->pool->messages;
         $parameters = $model->getParameters();
 
         try {
-            $flexFormService = GeneralUtility::makeInstance(FlexFromServiceCore::class);
-            $result = $flexFormService->convertFlexFormContentToArray($parameters[static::PARAM_VALUE]);
             $meta = $parameters[static::PARAM_DATA];
-            $meta[$messages->getHelp('metaDecodedXml')] = $result;
+            $result = $this->flexFormService->convertFlexFormContentToArray($parameters[static::PARAM_VALUE]);
+            if (empty($result)) {
+                return '';
+            }
+
+            $meta[$this->pool->messages->getHelp('TYPO3metaDecodedFlexform')] = $result;
             $model->addParameter(static::PARAM_DATA, $meta);
         } catch (Throwable $exception) {
             // Do nothing.

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -40,31 +40,58 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
+use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use TYPO3\CMS\Core\Service\FlexFormService as FlexFromServiceCore;
 use TYPO3\CMS\Extbase\Service\FlexFormService as FlexFromServiceExtbase;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(FlexFormParser::class, 'handle')]
+#[CoversMethod(FlexFormParser::class, 'handle')]
+#[CoversMethod(FlexFormParser::class, '__construct')]
 class FlexFormParserTest extends AbstractHelper
 {
     /**
      * Test the assigning of the pool
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\FlexFormParser::__construct
      */
     public function testConstruct()
     {
+        $flexFormServiceMock = $this->createMock(FlexFromServiceCore::class);
+        $this->injectIntoGeneralUtility(FlexFromServiceCore::class, $flexFormServiceMock);
         $flexFormParser = new FlexFormParser(Krexx::$pool);
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $flexFormParser));
     }
 
     /**
+     * Test the flex form parsing with a thrown error.
+     */
+    public function testHandleError()
+    {
+        $model = new Model(Krexx::$pool);
+        $meta = [];
+        $callback = new CallbackNothing(Krexx::$pool);
+        $fixture = '';
+        $model->addParameter(CallbackConstInterface::PARAM_VALUE, $fixture)
+            ->addParameter(CallbackConstInterface::PARAM_DATA, $meta);
+        $flexFormServiceMock = $this->createMock(FlexFromServiceCore::class);
+        $flexFormServiceMock->expects($this->once())
+            ->method('convertFlexFormContentToArray')
+            ->willThrowException(new \Exception());
+        $this->injectIntoGeneralUtility(FlexFromServiceCore::class, $flexFormServiceMock);
+        $flexFormParser = new FlexFormParser(Krexx::$pool);
+
+        $this->assertEquals(
+            '',
+            $flexFormParser->handle($callback, $model),
+            'When throwing an error, we expect no results.'
+        );
+    }
+
+    /**
      * Test the flex form parsing.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\FlexFormParser::handle
      */
     public function testHandle()
     {
-        $flexFormParser = new FlexFormParser(Krexx::$pool);
         $model = new Model(Krexx::$pool);
         $meta = [];
         $callback = new CallbackNothing(Krexx::$pool);
@@ -99,15 +126,18 @@ class FlexFormParserTest extends AbstractHelper
         $flexFormServiceMock->expects($this->once())
             ->method('convertFlexFormContentToArray')
             ->with($fixture)
-            ->will($this->returnValue($expectation));
+            ->willReturn($expectation);
         $this->injectIntoGeneralUtility(FlexFromServiceCore::class, $flexFormServiceMock);
+        // Load the TYPO3 language files
+        Registration::registerAdditionalHelpFile(KREXX_DIR . '..' .
+            DIRECTORY_SEPARATOR . 'Language' . DIRECTORY_SEPARATOR . 't3.kreXX.ini');
+        Krexx::$pool->messages->readHelpTexts();
+        $flexFormParser = new FlexFormParser(Krexx::$pool);
 
         // Run the test.
         $flexFormParser->handle($callback, $model);
         $result = $model->getParameters()[CallbackConstInterface::PARAM_DATA];
 
-
-        $this->assertEquals($result['Decoded xml'], $expectation, 'Should look the same');
-
+        $this->assertEquals($result['Decoded flexform data'], $expectation, 'Should look the same');
     }
 }

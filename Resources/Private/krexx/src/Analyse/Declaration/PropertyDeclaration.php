@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -71,7 +71,7 @@ class PropertyDeclaration extends AbstractDeclaration
         }
         $result = '';
         if ($reflectionClass !== null) {
-            $result = $this->pool->fileService->filterFilePath($reflectionClass->getFileName()) .
+            $result = $reflectionClass->getFileName() .
                 $this->pool->render->renderLinebreak() .
                 ($reflectionClass->isTrait() ? $messages->getHelp('metaInTrait') : $messages->getHelp('metaInClass')) .
                 $reflectionClass->name;
@@ -88,7 +88,7 @@ class PropertyDeclaration extends AbstractDeclaration
      */
     public function retrieveNamedPropertyType(ReflectionProperty $refProperty): string
     {
-        if (method_exists($refProperty, 'hasType') && $refProperty->hasType()) {
+        if ($refProperty->hasType()) {
             return trim($this->retrieveNamedType($refProperty->getType()));
         }
 

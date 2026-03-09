@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -52,7 +52,7 @@ class InlineJsCssDispatcher implements EventHandlerInterface, ConfigConstInterfa
      *
      * @var \Brainworxx\Krexx\Service\Factory\Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     public function __construct(Pool $pool)
     {
@@ -81,6 +81,12 @@ class InlineJsCssDispatcher implements EventHandlerInterface, ConfigConstInterfa
                 $collector->addInlineJavaScript(
                     'krexxDomTools',
                     '(function(){' . $jsSources . '})();',
+                    [],
+                    ['priority' => false, 'useNonce' => true]
+                );
+                $collector->addInlineStyleSheet(
+                    'krexxInlineCss',
+                    $model->getNormal(),
                     [],
                     ['priority' => false, 'useNonce' => true]
                 );

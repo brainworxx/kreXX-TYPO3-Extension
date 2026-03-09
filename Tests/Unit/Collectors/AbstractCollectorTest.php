@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,13 +39,13 @@ use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(AbstractCollector::class, '__construct')]
 class AbstractCollectorTest extends AbstractHelper
 {
     /**
      * Test, if the current BE user has access and test the retrieval of the uc.
-     *
-     * @covers \Brainworxx\Includekrexx\Collectors\AbstractCollector::__construct
      */
     public function testConstruct()
     {
@@ -60,7 +61,7 @@ class AbstractCollectorTest extends AbstractHelper
         $userMock->expects($this->once())
             ->method('check')
             ->with('modules', 'tools_IncludekrexxKrexxConfiguration')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $GLOBALS['BE_USER'] = $userMock;
         $collector = new Configuration();
         $this->assertFalse(
@@ -77,7 +78,7 @@ class AbstractCollectorTest extends AbstractHelper
         $userMock->expects($this->once())
             ->method('check')
             ->with('modules', 'tools_IncludekrexxKrexxConfiguration')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $userMock->uc = $uc;
         $GLOBALS['BE_USER'] = $userMock;
         $collector = new Configuration();

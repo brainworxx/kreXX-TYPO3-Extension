@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -39,14 +39,21 @@ use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Code\Scope;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Flow\Emergency;
+use Brainworxx\Krexx\Tests\Fixtures\PublicFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use stdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Scope::class, '__construct')]
+#[CoversMethod(Scope::class, 'setScope')]
+#[CoversMethod(Scope::class, 'getScope')]
+#[CoversMethod(Scope::class, 'testModelForCodegen')]
+#[CoversMethod(Scope::class, 'isInScope')]
 class ScopeTest extends AbstractHelper
 {
-    const SCOPE_ATTRIBUTE_NAME = 'scope';
-    const TEST_STRING = 'some scope';
+    public const  SCOPE_ATTRIBUTE_NAME = 'scope';
+    public const  TEST_STRING = 'some scope';
 
     /**
      * @var Scope
@@ -62,8 +69,6 @@ class ScopeTest extends AbstractHelper
 
     /**
      * Testing the pool handling.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Scope::__construct
      */
     public function testConstruct()
     {
@@ -73,8 +78,6 @@ class ScopeTest extends AbstractHelper
 
     /**
      * Test the setting of the scope
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Scope::setScope
      */
     public function testSetScope()
     {
@@ -98,8 +101,6 @@ class ScopeTest extends AbstractHelper
 
     /**
      * Test the scope getting
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Scope::getScope
      */
     public function testGetScope()
     {
@@ -114,8 +115,6 @@ class ScopeTest extends AbstractHelper
      * We test the tests of the test of the tests.
      * Are there unit tests for unit test?
      * Is this the ultimate test for our not-so-young hero?
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Scope::testModelForCodegen
      */
     public function testTestModelForCodegen()
     {
@@ -123,8 +122,9 @@ class ScopeTest extends AbstractHelper
         $object = new stdClass();
         $array = [];
         $string = 'whatever';
+        $objectWithPrivate = new PublicFixture();
 
-        // No genereation for 'some' scope.
+        // No generation for 'some' scope.
         $this->setNestingLevel(1);
         $this->scope->setScope('some');
         $model = new Model(Krexx::$pool);
@@ -146,6 +146,17 @@ class ScopeTest extends AbstractHelper
         $model->setData($object);
         $this->assertTrue($this->scope->testModelForCodegen($model));
 
+        // Code generation with a real class on level 1
+        $messages = Krexx::$pool->messages;
+        $this->setNestingLevel(1);
+        $model->setData($objectWithPrivate)
+            ->setType(
+                $messages->getHelp('private') . ' ' . $messages->getHelp('inherited')
+            );
+        $this->scope->setScope('$this');
+        $this->assertFalse($this->scope->testModelForCodegen($model));
+        $model->setType('');
+
         // Code generation for a level 2 array.
         $this->setNestingLevel(2);
         $model->setData($array);
@@ -163,6 +174,24 @@ class ScopeTest extends AbstractHelper
     }
 
     /**
+     * Testing the Scope "analysis".
+     */
+    public function testIsInScope()
+    {
+        $this->setNestingLevel(1);
+
+        $this->scope->setScope('$this');
+        $this->assertTrue($this->scope->isInScope());
+
+        $this->scope->setScope('$that');
+        $this->assertFalse($this->scope->isInScope());
+
+        $this->setNestingLevel(5);
+        $this->scope->setScope('$this');
+        $this->assertFalse($this->scope->isInScope());
+    }
+
+    /**
      * Set the nesting level in the emergengcy handler moch
      *
      * @param int $level
@@ -172,7 +201,7 @@ class ScopeTest extends AbstractHelper
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
             ->method('getNestingLevel')
-            ->will($this->returnValue($level));
+            ->willReturn($level);
         Krexx::$pool->emergencyHandler = $emergencyMock;
     }
 }

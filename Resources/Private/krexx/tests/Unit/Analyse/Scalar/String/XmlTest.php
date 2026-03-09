@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -41,69 +41,51 @@ use Brainworxx\Krexx\Analyse\Scalar\String\Xml;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Xml::class, '__construct')]
+#[CoversMethod(Xml::class, 'handle')]
+#[CoversMethod(Xml::class, 'canHandle')]
+#[CoversMethod(Xml::class, 'errorCallback')]
+#[CoversMethod(Xml::class, 'isActive')]
 class XmlTest extends AbstractHelper
 {
-    const SCALAR_NAMESPACE = '\\Brainworxx\\Krexx\\Analyse\\Scalar\\String\\';
-    const TEXT_XML = 'text/xml;';
-    const ATTRIBUTES = 'attributes';
-    const CHILDREN = 'children';
+    public const  SCALAR_NAMESPACE = '\\Brainworxx\\Krexx\\Analyse\\Scalar\\String\\';
+    public const  TEXT_XML = 'text/xml;';
+    public const  ATTRIBUTES = 'attributes';
+    public const  CHILDREN = 'children';
 
     /**
      * Test the disabling of the XML analysis.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::isActive
      */
     public function testIsActiveNot()
     {
-        $functionExistsMock = $this->getFunctionMock(
-            static::SCALAR_NAMESPACE,
-            'function_exists'
-        );
-        // The first false should prevent thge other tests from getting called.
-        $functionExistsMock->expects($this->once())
-            ->will($this->returnValue(false));
-
-        $classExistsMock = $this->getFunctionMock(
-            static::SCALAR_NAMESPACE,
-            'class_exists'
-        );
-        $classExistsMock->expects($this->never());
+        $classExistsMock = $this->getFunctionMock(static::SCALAR_NAMESPACE, 'class_exists');
+        $classExistsMock->expects($this->exactly(1))
+            ->willReturn(false);
 
         $this->assertFalse(Xml::isActive());
     }
 
     /**
      * Test the enabling of the XML analysis.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::isActive
      */
     public function testIsActive()
     {
-        $functionExistsMock = $this->getFunctionMock(
-            static::SCALAR_NAMESPACE,
-            'function_exists'
-        );
-        // The first false should prevent thge other tests from getting called.
-        $functionExistsMock->expects($this->exactly(2))
-            ->will($this->returnValue(true));
-
         $classExistsMock = $this->getFunctionMock(
             static::SCALAR_NAMESPACE,
             'class_exists'
         );
-        $classExistsMock->expects($this->exactly(2))
-            ->will($this->returnValue(true));
+        $classExistsMock->expects($this->exactly(1))
+            ->willReturn(true);
 
         $this->assertTrue(Xml::isActive());
     }
 
     /**
      * Test the handling of strings.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::canHandle
      */
-    public function testcanHandle()
+    public function testCanHandle()
     {
         $string = 'lacking the xml finfo info';
         $model = new Model(Krexx::$pool);
@@ -114,7 +96,7 @@ class XmlTest extends AbstractHelper
         $model = new Model(Krexx::$pool);
         $model->addToJson('Mimetype string', static::TEXT_XML);
         $xml = new Xml(Krexx::$pool);
-        $this->assertTrue($xml->canHandle($string, $model), $string);
+        $this->assertFalse($xml->canHandle($string, $model), $string);
 
         $string = '<?xml version="1.0" encoding="utf-8"?><node><yxcv qwer="asdf" /></node>';
         $model = new Model(Krexx::$pool);
@@ -125,19 +107,11 @@ class XmlTest extends AbstractHelper
     }
 
     /**
-     * Test the actual handling of a XML string.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::handle
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::parseXml
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::tagOpen
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::tagClosed
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::tagData
+     * Test the actual handling of an XML string.
      */
     public function testHandle()
     {
-        Krexx::$pool->rewrite = [
-            ThroughMeta::class => CallbackCounter::class
-        ];
+        Krexx::$pool->rewrite = [ThroughMeta::class => CallbackCounter::class];
 
         $string = '<?xml version="1.0" encoding="utf-8"?><root><node>rogue text<yxcv qwer="asdf"><![CDATA[content]]></yxcv><yxcv qwer="yxcv" /></node></root>';
         $model = new Model(Krexx::$pool);
@@ -154,5 +128,18 @@ class XmlTest extends AbstractHelper
         $this->assertEquals(1, CallbackCounter::$counter);
         $result = CallbackCounter::$staticParameters[0][XML::PARAM_DATA];
         $this->assertEquals($prettyPrint, $result['Pretty print']);
+    }
+
+    /**
+     * Test with a broken XML structure.
+     */
+    public function testHandleBrokenXml()
+    {
+        $string = '<?xml version="1.0" encoding="utf-8"?><root><node>rogue text<yxcv qwer="asdf"><![CDATA[content]]></yxcv><yxcv qwer="yxcv" /></root>';
+        $model = new Model(Krexx::$pool);
+        $model->addToJson('Mimetype string', static::TEXT_XML);
+        $xml = new Xml(Krexx::$pool);
+        $this->assertFalse($xml->canHandle($string, $model), 'We do not handle a broken XML structure.');
+        $this->assertNotEmpty($model->getJson()['XML Error:']);
     }
 }

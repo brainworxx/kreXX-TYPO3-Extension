@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,8 +38,8 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Scalar\String;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use DOMDocument;
-use finfo;
 
 /**
  * Doing a deep XML analysis.
@@ -49,51 +49,57 @@ use finfo;
 class Xml extends AbstractScalarAnalysis
 {
     /**
-     * @var string
-     */
-    protected const XML_CHILDREN = 'children';
-
-    /**
-     * @deprecated since 5.0.0
-     *   Will be removed
-     *
-     * @var array|bool
-     */
-    protected $decodedXml;
-
-    /**
      * The model, so far.
      *
      * @var Model
      */
-    protected $model;
-
-    /**
-     * Is there currently a node open?
-     *
-     * @deprecated since 5.0.0
-     *   Will be removed.
-     *
-     * @var bool
-     */
-    protected $tnodeOpen = false;
+    protected Model $model;
 
     /**
      * Was the decoding of the XML successful?
+     *
+     * @deprecated
+     *   Since 6.0.0. Will be removed.
      *
      * @var bool
      */
     protected $hasErrors = false;
 
     /**
+     * Was the decoding of the XML successful?
+     *
+     * @var string
+     */
+    protected string $error = '';
+
+    /**
+     * The "xml" parser.
+     *
+     * @var \DOMDocument
+     */
+    protected DOMDocument $DOMDocument;
+
+    /**
+     * Inject the pool, initialize the parser.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     */
+    public function __construct(Pool $pool)
+    {
+        parent::__construct($pool);
+
+        $this->DOMDocument = new DOMDocument("1.0");
+        // The pretty print done by a dom parser.
+        $this->DOMDocument->preserveWhiteSpace = false;
+        $this->DOMDocument->formatOutput = true;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public static function isActive(): bool
     {
-        return function_exists('xml_parser_create') &&
-            class_exists(DOMDocument::class) &&
-            class_exists(finfo::class) &&
-            function_exists('xml_parser_create');
+        return class_exists(DOMDocument::class);
     }
 
     /**
@@ -120,10 +126,21 @@ class Xml extends AbstractScalarAnalysis
             // Early return.
             return false;
         }
+        $this->error = '';
+        $this->hasErrors = false;
+
+        // Load the document.
+        set_error_handler([$this, 'errorCallback']);
+        $this->DOMDocument->loadXML($string);
+        restore_error_handler();
+
+        if (!empty($this->error)) {
+            $model->addToJson($this->pool->messages->getHelp('xmlError'), $this->error);
+            return false;
+        }
 
         $this->model = $model;
         $this->handledValue = $string;
-        $this->hasErrors = false;
 
         return true;
     }
@@ -137,125 +154,32 @@ class Xml extends AbstractScalarAnalysis
     {
         $meta = [];
         $messages = $this->pool->messages;
-        // The pretty print done by a dom parser.
-        $dom = new DOMDocument("1.0");
-        $dom->preserveWhiteSpace = false;
-        $dom->formatOutput = true;
 
-        set_error_handler($this->pool->retrieveErrorCallback());
-        $dom->loadXML($this->handledValue);
-        restore_error_handler();
+        $meta[$messages->getHelp('metaPrettyPrint')] = $this->pool
+            ->encodingService
+            ->encodeString($this->DOMDocument->saveXML());
 
-        if ($this->hasErrors) {
-            $meta[$messages->getHelp('metaDecodedXml')] = $this->pool->messages->getHelp('metaNoXml');
-        } else {
-            $meta[$messages->getHelp('metaPrettyPrint')] = $this->pool
-                ->encodingService
-                ->encodeString($dom->saveXML());
-            // Move the extra part into a nest, for better readability.
-            $this->model->setHasExtra(false);
-            $meta[$messages->getHelp('metaContent')] = $this->model->getData();
-        }
-
-        $this->hasErrors = false;
+        // Move the extra part into a nest, for better readability.
+        $this->model->setHasExtra(false);
+        $meta[$messages->getHelp('metaContent')] = $this->pool
+            ->encodingService
+            ->encodeString($this->handledValue);
 
         return $meta;
     }
 
     /**
-     * Parse an XML string into an array structure.
+     * Error callback in case something is wrong when decoding the XML.
      *
-     * @deprecated since 5.0.0
-     *   Will be removed
+     * @param int $errno
+     * @param string $errstr
      *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
-     * @param string $strInputXML
-     *   The string we want to parse.
+     * @return bool
      */
-    protected function parseXml(string $strInputXML): void
+    public function errorCallback(int $errno, string $errstr): bool
     {
-        $resParser = xml_parser_create();
-        xml_set_object($resParser, $this);
-        xml_set_element_handler($resParser, "tagOpen", "tagClosed");
-        xml_set_character_data_handler($resParser, "tagData");
-        xml_parse($resParser, $strInputXML);
-        xml_parser_free($resParser);
-    }
-
-    /**
-     * Handle the opening of a tag.
-     *
-     * @deprecated since 5.0.0
-     *   Will be removed
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
-     * @param resource $parser
-     *   The parser resource.
-     * @param string $name
-     *   The name of the tag we are opening.
-     * @param array $attributes
-     *   The attributes of the tag we are opening.
-     */
-    protected function tagOpen($parser, string $name, array $attributes): void
-    {
-        $this->tnodeOpen = false;
-        if (empty($attributes)) {
-            $this->decodedXml[] = ["name" => $name];
-        } else {
-            $this->decodedXml[] = ["name" => $name, "attributes" => $attributes];
-        }
-    }
-
-    /**
-     * Retrieve the tag data.
-     *
-     * @deprecated since 5.0.0
-     *   Will be removed
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
-     * @param resource $parser
-     *   The parser resource.
-     * @param string $tagData
-     *   The tag data.
-     */
-    protected function tagData($parser, string $tagData): void
-    {
-        $count = count($this->decodedXml) - 1;
-        if ($this->tnodeOpen) {
-            $this->decodedXml[$count][static::XML_CHILDREN][] = array_pop(
-                $this->decodedXml[$count][static::XML_CHILDREN]
-            ) . $tagData;
-        } elseif (trim($tagData) !== '') {
-            $this->decodedXml[$count][static::XML_CHILDREN][] = $tagData;
-            $this->tnodeOpen = true;
-        }
-    }
-
-    /**
-     * Handle the closing of a tag.
-     *
-     * @deprecated since 5.0.0
-     *   Will be removed
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
-     * @param resource $parser
-     *   The parser resource.
-     * @param string $name
-     *   The name of the tag we are handling.
-     */
-    protected function tagClosed($parser, string $name): void
-    {
-        $count = count($this->decodedXml);
-        $this->tnodeOpen = false;
-        $this->decodedXml[$count - 2][static::XML_CHILDREN][] = $this->decodedXml[$count - 1];
-        array_pop($this->decodedXml);
+        $this->error = $this->pool->encodingService->encodeString($errstr);
+        $this->hasErrors = true;
+        return true;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,50 +37,56 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger\Rewrites\Call
 
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid;
+use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContext;
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(AbstractFluid::class, '__construct')]
+#[CoversMethod(AbstractFluid::class, 'assignParsedTemplateRenderType')]
 class AbstractCallerFinderTest extends AbstractHelper
 {
-    const PARSED_TEMPLATE = 'parsedTemplate';
-    const HAS_PROPERTY = 'hasProperty';
-    const RENDERING_STACK = 'renderingStack';
-    const VIEW_REFLECTION = 'viewReflection';
-    const RENDERING_CONTEXT = 'renderingContext';
-    const ERROR = 'error';
+    public const PARSED_TEMPLATE = 'parsedTemplate';
+    protected const HAS_PROPERTY = 'hasProperty';
+    protected const RENDERING_STACK = 'renderingStack';
+    protected const VIEW_REFLECTION = 'viewReflection';
+    protected const RENDERING_CONTEXT = 'renderingContext';
+    protected const ERROR = 'error';
 
     /**
      * Test the retrieval of all necessary objects from the ViewHelper.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::__construct
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::assignParsedTemplateRenderType
      */
     public function testConstructNormal()
     {
         $renderingStack = [[static::PARSED_TEMPLATE => new \StdClass(), 'type' => 5]];
 
         // Mock the view
-        $viewMock = $this->createMock(StandaloneView::class);
+        if (class_exists(StandaloneView::class)) {
+            $viewMock = $this->createMock(StandaloneView::class);
+        } else {
+            $viewMock = $this->createMock(ModuleTemplate::class);
+        }
         $renderingStackRefMock = $this->createMock(\ReflectionProperty::class);
         // Mock the property reflection of the rendering context.
-        $renderingStackRefMock->expects($this->once())
+        $renderingStackRefMock->expects($this->any())
             ->method('setAccessible')
             ->with(true);
         $renderingStackRefMock->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue($renderingStack));
+            ->willReturn($renderingStack);
         // Mock the reflection of the view
         $reflectionMock = $this->createMock(\ReflectionClass::class);
         $reflectionMock->expects($this->once())
             ->method(static::HAS_PROPERTY)
             ->with(static::RENDERING_STACK)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $reflectionMock->expects($this->once())
             ->method('getProperty')
             ->with(static::RENDERING_STACK)
-            ->will($this->returnValue($renderingStackRefMock));
+            ->willReturn($renderingStackRefMock);
 
         // Mock the rendering context
         $contextMock = $this->createMock(RenderingContext::class);
@@ -99,25 +106,22 @@ class AbstractCallerFinderTest extends AbstractHelper
             $this->retrieveValueByReflection(static::PARSED_TEMPLATE, $newFluid),
             $renderingStack[0][static::PARSED_TEMPLATE]
         );
-        $this->assertEquals($this->retrieveValueByReflection('renderingType', $newFluid), 5);
+        $this->assertEquals(5, $this->retrieveValueByReflection('renderingType', $newFluid));
         $this->assertFalse($this->retrieveValueByReflection(static::ERROR, $newFluid));
     }
 
     /**
      * Test the error handling during construct.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::__construct
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::assignParsedTemplateRenderType
      */
     public function testConstructError()
     {
         $viewMock = 'do not look at me';
-        $contextMock = 'taken out of context';
+        $contextMock = $this->createMock(RenderingContextInterface::class);
         $reflectionMock = $this->createMock(\ReflectionClass::class);
         $reflectionMock->expects($this->once())
             ->method(static::HAS_PROPERTY)
             ->with(static::RENDERING_STACK)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $reflectionMock->expects($this->once())
             ->method('getProperty')
             ->with(static::RENDERING_STACK)
@@ -135,7 +139,7 @@ class AbstractCallerFinderTest extends AbstractHelper
         $reflectionMock->expects($this->once())
             ->method(static::HAS_PROPERTY)
             ->with(static::RENDERING_STACK)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         Krexx::$pool->registry->set(static::VIEW_REFLECTION, $reflectionMock);
 
         $newFluid = new Fluid(Krexx::$pool);

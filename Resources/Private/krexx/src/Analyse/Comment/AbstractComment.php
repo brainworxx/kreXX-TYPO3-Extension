@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -49,14 +49,14 @@ abstract class AbstractComment
     /**
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Pattern for the finding of inherited comments.
      *
      * @var string[]
      */
-    protected $inheritdocPattern = [
+    protected array $inheritdocPattern = [
         '{@inheritDoc}',
         '{@inheritdoc}',
         '@inheritDoc',

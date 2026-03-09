@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -44,17 +44,33 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Config::class, 'getLanguageList')]
+#[CoversMethod(Config::class, 'setPathToConfigFile')]
+#[CoversMethod(Config::class, 'getPathToConfigFile')]
+#[CoversMethod(Config::class, 'getSkinClass')]
+#[CoversMethod(Config::class, 'getSkinDirectory')]
+#[CoversMethod(Config::class, 'getSkinList')]
+#[CoversMethod(Config::class, 'loadConfigValue')]
+#[CoversMethod(Config::class, 'prepareModelWithFeSettings')]
+#[CoversMethod(Config::class, 'isCookieValueAllowed')]
+#[CoversMethod(Config::class, 'getSetting')]
+#[CoversMethod(Config::class, 'setDisabled')]
+#[CoversMethod(Config::class, '__construct')]
+#[CoversMethod(Config::class, 'getChunkDir')]
+#[CoversMethod(Config::class, 'getLogDir')]
+#[CoversMethod(Config::class, 'getPathToConfigFile')]
+#[CoversMethod(Config::class, 'checkEnabledStatus')]
 class ConfigTest extends AbstractHelper
 {
-
-    const NOT_CLI = 'not cli';
-    const FILE_CONFIG = 'fileConfig';
-    const COOKIE_CONFIG = 'cookieConfig';
-    const GET_CONFIG_FROM_COOKIES = 'getConfigFromCookies';
-    const GET_CONFIG_FROM_FILE = 'getConfigFromFile';
-    const KREXX_CONFIG_SETTINGS = 'Configuration file settings';
-    const FALSE_STRING = 'false';
+    public const  NOT_CLI = 'not cli';
+    public const  FILE_CONFIG = 'fileConfig';
+    public const  COOKIE_CONFIG = 'cookieConfig';
+    public const  GET_CONFIG_FROM_COOKIES = 'getConfigFromCookies';
+    public const  GET_CONFIG_FROM_FILE = 'getConfigFromFile';
+    public const  KREXX_CONFIG_SETTINGS = 'Configuration file settings';
+    public const  FALSE_STRING = 'false';
 
     /**
      * @return \PHPUnit\Framework\MockObject\MockObject
@@ -72,6 +88,9 @@ class ConfigTest extends AbstractHelper
         Pool::createPool();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function tearDown(): void
     {
         parent::tearDown();
@@ -81,12 +100,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Test the initialisation of the configuration class.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::__construct
-     * @covers \Brainworxx\Krexx\Service\Config\Config::getChunkDir
-     * @covers \Brainworxx\Krexx\Service\Config\Config::getLogDir
-     * @covers \Brainworxx\Krexx\Service\Config\Config::getPathToConfigFile
-     * @covers \Brainworxx\Krexx\Service\Config\Config::checkEnabledStatus
      */
     public function testConstructNormal()
     {
@@ -108,7 +121,7 @@ class ConfigTest extends AbstractHelper
         // Simulate a normal call (not cli or ajax).
         $this->mockSapi()
             ->expects($this->exactly(2))
-            ->will($this->returnValue(static::NOT_CLI));
+            ->willReturn(static::NOT_CLI);
 
         // Create the test subject.
         $config = new Config(Krexx::$pool);
@@ -135,20 +148,17 @@ class ConfigTest extends AbstractHelper
         $this->assertEquals(false, $config->getSetting($config::SETTING_DISABLED));
 
         // Test the selected language. Should be the fallback,
-        $this->assertEquals('text', $config->getSetting($config::SETTING_LANGUAGE_KEY));
+        $this->assertEquals('en', $config->getSetting($config::SETTING_LANGUAGE_KEY));
     }
 
     /**
      * Test the browser output on cli.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::__construct
-     * @covers \Brainworxx\Krexx\Service\Config\Config::checkEnabledStatus
      */
     public function testConstructCliBrowser()
     {
         $this->mockSapi()
             ->expects($this->exactly(2))
-            ->will($this->returnValue('cli'));
+            ->willReturn('cli');
         $config = new Config(Krexx::$pool);
         $this->assertEquals(
             true,
@@ -159,15 +169,12 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Test the browser output on ajax.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::__construct
-     * @covers \Brainworxx\Krexx\Service\Config\Config::checkEnabledStatus
      */
     public function testConstructAjaxBrowser()
     {
         $this->mockSapi()
             ->expects($this->exactly(1))
-            ->will($this->returnValue(static::NOT_CLI));
+            ->willReturn(static::NOT_CLI);
         $_SERVER['HTTP_X_REQUESTED_WITH'] = 'xmlhttprequest';
         $config = new Config(Krexx::$pool);
         $this->assertEquals(
@@ -179,15 +186,12 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Test the file output on cli.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::__construct
-     * @covers \Brainworxx\Krexx\Service\Config\Config::checkEnabledStatus
      */
     public function testConstructCliFile()
     {
         $this->mockSapi()
             ->expects($this->exactly(1))
-            ->will($this->returnValue('cli'));
+            ->willReturn('cli');
         ConfigSupplier::$overwriteValues = [
             Config::SETTING_DESTINATION => 'file'
         ];
@@ -202,9 +206,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Test the access from different ips.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::__construct
-     * @covers \Brainworxx\Krexx\Service\Config\Config::checkEnabledStatus
      */
     public function testConstructIpRange()
     {
@@ -214,7 +215,7 @@ class ConfigTest extends AbstractHelper
         Krexx::$pool->rewrite[File::class] = ConfigSupplier::class;
         $this->mockSapi()
             ->expects($this->exactly(4))
-            ->will($this->returnValue(static::NOT_CLI));
+            ->willReturn(static::NOT_CLI);
 
         // Testing coming from the wrong ip
         $_SERVER['REMOTE_ADDR'] = '5.4.3.2.1';
@@ -239,8 +240,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Test the disabling, directly in the configuration.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::setDisabled
      */
     public function testSetDisabled()
     {
@@ -254,8 +253,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Test setting getter.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::getSetting
      */
     public function testGetSetting()
     {
@@ -266,10 +263,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Test the loading of a config value from fallback.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::loadConfigValue
-     * @covers \Brainworxx\Krexx\Service\Config\Config::prepareModelWithFeSettings
-     * @covers \Brainworxx\Krexx\Service\Config\Config::isCookieValueAllowed
      */
     public function testLoadConfigValueFromFallback()
     {
@@ -278,18 +271,18 @@ class ConfigTest extends AbstractHelper
         $iniMock->expects($this->once())
             ->method(static::GET_CONFIG_FROM_FILE)
             ->with($config::SECTION_METHODS, $config::SETTING_ANALYSE_GETTER)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         // No values from the ini file.
         $iniMock->expects($this->once())
             ->method('getFeConfigFromFile')
             ->with($config::SETTING_ANALYSE_GETTER)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $cookieMock = $this->createMock(Cookie::class);
         $cookieMock->expects($this->once())
             ->method(static::GET_CONFIG_FROM_COOKIES)
             ->with($config::SECTION_METHODS, $config::SETTING_ANALYSE_GETTER)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         // Inject them.
         $this->setValueByReflection(static::FILE_CONFIG, $iniMock, $config);
@@ -305,10 +298,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Test the loading of a config value from ini.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::loadConfigValue
-     * @covers \Brainworxx\Krexx\Service\Config\Config::prepareModelWithFeSettings
-     * @covers \Brainworxx\Krexx\Service\Config\Config::isCookieValueAllowed
      */
     public function testLoadConfigValueFromIni()
     {
@@ -319,13 +308,13 @@ class ConfigTest extends AbstractHelper
         $iniMock->expects($this->exactly(2))
             ->method(static::GET_CONFIG_FROM_FILE)
             ->with($config::SECTION_METHODS, $config::SETTING_ANALYSE_GETTER)
-            ->will($this->returnValue($someMethods));
+            ->willReturn($someMethods);
 
         $cookieMock = $this->createMock(Cookie::class);
         $cookieMock->expects($this->once())
             ->method(static::GET_CONFIG_FROM_COOKIES)
             ->with($config::SECTION_METHODS, $config::SETTING_ANALYSE_GETTER)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         // Inject them.
         $this->setValueByReflection(static::FILE_CONFIG, $iniMock, $config);
@@ -341,10 +330,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Test the loading of a config value from cookies.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::loadConfigValue
-     * @covers \Brainworxx\Krexx\Service\Config\Config::prepareModelWithFeSettings
-     * @covers \Brainworxx\Krexx\Service\Config\Config::isCookieValueAllowed
      */
     public function testLoadConfigValueFromCookies()
     {
@@ -359,7 +344,7 @@ class ConfigTest extends AbstractHelper
         $cookieMock->expects($this->once())
             ->method(static::GET_CONFIG_FROM_COOKIES)
             ->with($config::SECTION_METHODS, $config::SETTING_ANALYSE_GETTER)
-            ->will($this->returnValue(static::FALSE_STRING));
+            ->willReturn(static::FALSE_STRING);
 
         // Inject them.
         $this->setValueByReflection(static::FILE_CONFIG, $iniMock, $config);
@@ -375,10 +360,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Ignoring the cookie config, because the demanded value is uneditable.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::loadConfigValue
-     * @covers \Brainworxx\Krexx\Service\Config\Config::prepareModelWithFeSettings
-     * @covers \Brainworxx\Krexx\Service\Config\Config::isCookieValueAllowed
      */
     public function testLoadConfigValueUneditable()
     {
@@ -389,12 +370,12 @@ class ConfigTest extends AbstractHelper
         $iniMock->expects($this->exactly(2))
             ->method(static::GET_CONFIG_FROM_FILE)
             ->with($config::SECTION_METHODS, $config::SETTING_DEBUG_METHODS)
-            ->will($this->returnValue($someMethods));
+            ->willReturn($someMethods);
 
         $cookieMock = $this->createMock(Cookie::class);
         $cookieMock->expects($this->exactly(1))
             ->method(static::GET_CONFIG_FROM_COOKIES)
-            ->will($this->returnValue('read mail, real fast'));
+            ->willReturn('read mail, real fast');
 
         // Inject them.
         $this->setValueByReflection(static::FILE_CONFIG, $iniMock, $config);
@@ -410,10 +391,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Testing that re-enabling kreXX with cookies does not work.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::loadConfigValue
-     * @covers \Brainworxx\Krexx\Service\Config\Config::prepareModelWithFeSettings
-     * @covers \Brainworxx\Krexx\Service\Config\Config::isCookieValueAllowed
      */
     public function testLoadConfigValueReEnableWithCookies()
     {
@@ -423,13 +400,13 @@ class ConfigTest extends AbstractHelper
         $iniMock->expects($this->exactly(2))
             ->method(static::GET_CONFIG_FROM_FILE)
             ->with($config::SECTION_OUTPUT, $config::SETTING_DISABLED)
-            ->will($this->returnValue('true'));
+            ->willReturn('true');
 
         $cookieMock = $this->createMock(Cookie::class);
         $cookieMock->expects($this->once())
             ->method(static::GET_CONFIG_FROM_COOKIES)
             ->with($config::SECTION_OUTPUT, $config::SETTING_DISABLED)
-            ->will($this->returnValue(static::FALSE_STRING));
+            ->willReturn(static::FALSE_STRING);
 
         // Inject them.
         $this->setValueByReflection(static::FILE_CONFIG, $iniMock, $config);
@@ -445,9 +422,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Testing the overwriting of factory settings.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::loadConfigValue
-     * @covers \Brainworxx\Krexx\Service\Config\Config::isCookieValueAllowed
      */
     public function testLoadConfigValueWithPluginOverwrite()
     {
@@ -460,10 +434,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Testing all the skin related getters.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::getSkinClass
-     * @covers \Brainworxx\Krexx\Service\Config\Config::getSkinDirectory
-     * @covers \Brainworxx\Krexx\Service\Config\Config::getSkinList
      */
     public function testSkinStuff()
     {
@@ -489,9 +459,6 @@ class ConfigTest extends AbstractHelper
 
     /**
      * Test the feedback setter from the file loader.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::setPathToConfigFile
-     * @covers \Brainworxx\Krexx\Service\Config\Config::getPathToConfigFile
      */
     public function testSetPathToConfigFile()
     {
@@ -502,14 +469,12 @@ class ConfigTest extends AbstractHelper
     }
 
     /**
-     * Test the retrieval of the language list
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::getLanguageList
+     * Test the retrieval of the language listst
      */
     public function testGetLanguageList()
     {
         $expectations = [
-            'text' => 'English',
+            'en' => 'English',
             'de' => 'Deutsch'
         ];
         $config = new Config(Krexx::$pool);

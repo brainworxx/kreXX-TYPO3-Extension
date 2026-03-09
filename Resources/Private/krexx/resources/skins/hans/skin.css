@@ -16,7 +16,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,6 +36,7 @@ html {
 }
 
 .kwrapper * {
+    all: revert-layer;
     box-sizing: content-box;
     opacity: 1;
     position: initial;
@@ -209,7 +210,7 @@ div.kwrapper {
     cursor: default;
     display: block;
     clear: both;
-    padding: 2px 0 3px 15px;
+    padding: 2px 0 3px 17px;
     margin: 0 0 5px;
     background: #444444 5px center;
     position: relative;
@@ -369,21 +370,9 @@ div.kwrapper {
 }
 
 .kwrapper .klogo {
-    background-color: #ffcd00;
-    border-radius: 50%;
-    color: black;
     float: left;
-    font-size: 12px;
-    font-weight: bold;
     height: 24px;
     width: 24px;
-    /*position: relative;*/
-}
-
-.kwrapper .klogo-xx {
-    /* Klo go XX? Really? */
-    margin-left: 4px;
-    line-height: 22px;
 }
 
 .kwrapper .kheadnote-wrapper {

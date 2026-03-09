@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -41,13 +41,19 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughResource;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
-use CurlHandle;
 
 /**
  * Processing of resources.
  */
 class ProcessResource extends AbstractRouting implements ProcessInterface, CallbackConstInterface, ProcessConstInterface
 {
+    /**
+     * The model we are currently working on.
+     *
+     * @var Model
+     */
+    protected Model $model;
+
     /**
      * Is this one a resource?
      *
@@ -59,36 +65,20 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
      */
     public function canHandle(Model $model): bool
     {
-        $possibleResource = $model->getData();
-        $isObject = is_object($possibleResource);
-
-        return
-            (
-                // First impression.
-                is_resource($possibleResource)
-                || (
-                    // A ressource is never one of these.
-                    !is_scalar($possibleResource)
-                    && !is_array($possibleResource)
-                    && !$isObject
-                    && $possibleResource !== null
-                )
-            );
+        $this->model = $model;
+        return is_resource($model->getData()) || gettype($model->getData()) === 'resource (closed)';
     }
 
     /**
      * Analyses a resource.
      *
-     * @param Model $model
-     *   The data we are analysing.
-     *
      * @return string
      *   The rendered markup.
      */
-    public function handle(Model $model): string
+    public function handle(): string
     {
-        $resource = $model->getData();
-        $typeString = $this->retrieveTypeString($resource);
+        $resource = $this->model->getData();
+        $typeString = $this->pool->messages->getHelp('resource') . ' (' . get_resource_type($resource) . ')';
         $transRes = $this->pool->messages->getHelp('resource');
 
         switch ($typeString) {
@@ -107,13 +97,13 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
                 break;
 
             default:
-                return $this->renderUnknownOrClosed($model, $resource, $typeString);
+                return $this->renderUnknownOrClosed($this->model, $resource);
         }
 
         // Output metadata from the class.
         return $this->pool->render->renderExpandableChild(
             $this->dispatchProcessEvent(
-                $model->setType(static::TYPE_RESOURCE)
+                $this->model->setType(static::TYPE_RESOURCE)
                     ->addParameter(static::PARAM_DATA, $meta)
                     ->setNormal($typeString)
                     ->injectCallback($this->pool->createClass(ThroughResource::class))
@@ -126,6 +116,11 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
      *
      * @param resource|object $resource
      *   The ressource
+     *
+     * @deprecated
+     *   Since 6.0.0 will be removed.
+     * @codeCoverageIgnore
+     *   We will not test deprecated stuff.
      *
      * @return string
      *   The type string.
@@ -146,13 +141,11 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
      *   The model, so far.
      * @param resource $resource
      *   The resource, that we are analysing.
-     * @param string $typeString
-     *   Deprecated since 5.0.0. Will be removed.
      *
      * @return string
      *   The rendered HTML.
      */
-    protected function renderUnknownOrClosed(Model $model, $resource, string $typeString): string
+    protected function renderUnknownOrClosed(Model $model, $resource): string
     {
         return $this->pool->render->renderExpandableChild(
             $this->dispatchNamedEvent(

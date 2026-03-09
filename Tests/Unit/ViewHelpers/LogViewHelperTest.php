@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -43,27 +44,32 @@ use Brainworxx\Krexx\Service\Config\Config;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\ViewHelperVariableContainer;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use TYPO3Fluid\Fluid\View\ViewInterface;
 
+#[CoversMethod(LogViewHelper::class, 'analysis')]
 class LogViewHelperTest extends AbstractHelper
 {
     /**
      * Test the logging part of the log ViewHelper.
-     *
-     * @covers \Brainworxx\Includekrexx\ViewHelpers\LogViewHelper::analysis
      */
     public function testRender()
     {
         $logViewHelper = new LogViewHelper();
         // Inject the view and the rendering context.
-        $view = $this->createMock(StandaloneView::class);
+        if (class_exists(StandaloneView::class)) {
+            $view = $this->createMock(StandaloneView::class);
+        } else {
+            $view = $this->createMock(ViewInterface::class);
+        }
         $variableContainer = $this->createMock(ViewHelperVariableContainer::class);
         $variableContainer->expects($this->once())
             ->method('getView')
-            ->will($this->returnValue($view));
+            ->willReturn($view);
         $renderingContext = $this->createMock(RenderingContextInterface::class);
         $renderingContext->expects($this->once())
             ->method('getViewHelperVariableContainer')
-            ->will($this->returnValue($variableContainer));
+            ->willReturn($variableContainer);
         $logViewHelper->setRenderingContext($renderingContext);
 
         // Inject the children closure.
@@ -79,7 +85,7 @@ class LogViewHelperTest extends AbstractHelper
         $configMock = $this->createMock(Config::class);
         $configMock->expects($this->exactly(1))
             ->method('getSetting')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->config = $configMock;
 
         // Make sure we are actually trying to log.
@@ -87,7 +93,7 @@ class LogViewHelperTest extends AbstractHelper
         $settingsDestination->expects($this->once())
             ->method('setSource')
             ->with('Forced logging')
-            ->will($this->returnValue($settingsDestination));
+            ->willReturn($settingsDestination);
         $settingsDestination->expects($this->once())
             ->method('setValue')
             ->with(Fallback::VALUE_FILE);
@@ -95,7 +101,7 @@ class LogViewHelperTest extends AbstractHelper
         $settingsAjax->expects($this->once())
             ->method('setSource')
             ->with('Forced logging')
-            ->will($this->returnValue($settingsAjax));
+            ->willReturn($settingsAjax);
         $settingsAjax->expects($this->once())
             ->method('setValue')
             ->with(false);

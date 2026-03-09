@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -39,13 +39,13 @@ use Brainworxx\Krexx\Analyse\Comment\Classes;
 use Brainworxx\Krexx\Krexx;
 use ReflectionClass;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Classes::class, 'getComment')]
 class ClassesTest extends AbstractHelper
 {
     /**
      * Test the retrieval of a class comment from a class reflection
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Comment\Classes::getComment
      */
     public function testGetComment()
     {
@@ -57,7 +57,7 @@ class ClassesTest extends AbstractHelper
         $reflectionMock = $this->createMock(ReflectionClass::class);
         $reflectionMock->expects($this->once())
             ->method('getDocComment')
-            ->will($this->returnValue($cachedComment));
+            ->willReturn($cachedComment);
 
         $classComment = new Classes(Krexx::$pool);
         $this->assertEquals($prettifiedComment, $classComment->getComment($reflectionMock));

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -65,7 +65,7 @@ class MethodDeclaration extends AbstractDeclaration
             return $messages->getHelp('metaPredeclared');
         }
 
-        $filename = $this->pool->fileService->filterFilePath((string)$reflection->getFileName());
+        $filename = (string)$reflection->getFileName();
         if (empty($filename)) {
             // Not sure, if this is possible.
             return $this->pool->messages->getHelp('unknownDeclaration');
@@ -93,7 +93,7 @@ class MethodDeclaration extends AbstractDeclaration
     /**
      * Retrieve the return type by the reflection.
      *
-     * @param \Reflector $reflection
+     * @param \ReflectionMethod $reflection
      * @return string
      */
     public function retrieveReturnType(Reflector $reflection): string
@@ -132,7 +132,7 @@ class MethodDeclaration extends AbstractDeclaration
      * @param \ReflectionClass $declaringClass
      *   The original declaring class, the one with the traits.
      *
-     * @return bool|\ReflectionClass
+     * @return null|\ReflectionClass
      *   false = unable to retrieve something.
      *   Otherwise, return a reflection class.
      */

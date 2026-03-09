@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -50,14 +50,14 @@ class Cleanup implements ConfigConstInterface
      *
      * @var \Brainworxx\Krexx\Service\Factory\Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * We only do a chunks cleanup once.
      *
      * @var bool
      */
-    protected static $chunksDone = false;
+    protected static bool $chunksDone = false;
 
     /**
      * Assigning the pool.
@@ -124,13 +124,8 @@ class Cleanup implements ConfigConstInterface
 
         static::$chunksDone = true;
         // Clean up leftover files.
-        $chunkList = glob($this->pool->config->getChunkDir() . '*.Krexx.tmp');
-        if (empty($chunkList)) {
-            return $this;
-        }
-
         $now = time();
-        foreach ($chunkList as $file) {
+        foreach ((array)glob($this->pool->config->getChunkDir() . '*.Krexx.tmp') as $file) {
             // We delete everything that is older than 15 minutes.
             if (($this->pool->fileService->filetime($file) + 900) < $now) {
                 $this->pool->fileService->deleteFile($file);

@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions: read-all
+
+env:
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+
 jobs:
   build:
 
@@ -13,16 +18,17 @@ jobs:
     strategy:
       matrix:
         env:
-          - { php: 7.2, composer: 1, TYPO3: ^10.4, Aimeos: ^20, CodeClimate: no  }
-          - { php: 7.3, composer: 1, TYPO3: ^10.4, Aimeos: ^20, CodeClimate: no  }
-          - { php: 7.4, composer: 1, TYPO3: ^10.4, Aimeos: ^21, CodeClimate: no  }
-          - { php: 8.0, composer: 2, TYPO3: ^11.5, Aimeos: ^21, CodeClimate: no  }
-          - { php: 8.1, composer: 2, TYPO3: ^11.5, Aimeos: ^22, CodeClimate: no  }
-          - { php: 8.2, composer: 2, TYPO3: ^11.5, Aimeos: ^22, CodeClimate: no  }
-          - { php: 8.2, composer: 2, TYPO3: ^12.4, Aimeos: ^23, CodeClimate: no  }
-          - { php: 8.3, composer: 2, TYPO3: ^12.4, Aimeos: ^23, CodeClimate: no  }
-          - { php: 8.3, composer: 2, TYPO3: ^12.4, Aimeos: ^24, CodeClimate: yes }
-          - { php: 8.3, composer: 2, TYPO3: ^13.3, Aimeos: no,  CodeClimate: no  }
+          - { php: 7.4, TYPO3: ^10.4, Aimeos: ^21, CodeClimate: no, ContentBlocks: no }
+          - { php: 8.0, TYPO3: ^11.5, Aimeos: ^21, CodeClimate: no, ContentBlocks: no }
+          - { php: 8.1, TYPO3: ^11.5, Aimeos: ^22, CodeClimate: no, ContentBlocks: no }
+          - { php: 8.2, TYPO3: ^11.5, Aimeos: ^22, CodeClimate: no, ContentBlocks: no }
+          - { php: 8.1, TYPO3: ^12.4, Aimeos: ^23, CodeClimate: no, ContentBlocks: no }
+          - { php: 8.2, TYPO3: ^12.4, Aimeos: ^23, CodeClimate: no, ContentBlocks: no }
+          - { php: 8.3, TYPO3: ^12.4, Aimeos: ^24, CodeClimate: no, ContentBlocks: no }
+          - { php: 8.3, TYPO3: ^13.4, Aimeos: ^24, CodeClimate: no, ContentBlocks: yes }
+          - { php: 8.4, TYPO3: ^13.4, Aimeos: ^24, CodeClimate: no, ContentBlocks: yes }
+          - { php: 8.4, TYPO3: ^13.4, Aimeos: ^25, CodeClimate: yes, ContentBlocks: yes }
+          - { php: 8.5, TYPO3: ^14.0, Aimeos: 'no', CodeClimate: no, ContentBlocks: yes }
 
     steps:
     - name: Checkout
@@ -32,11 +38,6 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.env.php }}
-
-    - name: Update Composer
-      run: |
-        sudo composer self-update --${{ matrix.env.composer }}
-        sudo chown $USER $HOME/.composer
 
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
@@ -48,14 +49,31 @@ jobs:
       run: composer require --no-update "aimeos/aimeos-typo3:${{ matrix.env.Aimeos }}"
       if: ${{ matrix.env.Aimeos != 'no' }}
 
+    - name: Remove Aimeos
+      run: composer remove --dev --no-update "aimeos/aimeos-typo3"
+      if: ${{ matrix.env.Aimeos == 'no' }}
+
+    - name: Remove ContentBlocks
+      run: composer remove --dev --no-update "friendsoftypo3/content-blocks"
+      if: ${{ matrix.env.ContentBlocks == 'no' }}
+
+    - name: Allow old versions
+      run: composer config -jm audit.block-insecure false
+
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
-    - name: Build
+    - name: Build without coverage
+      if: ${{ matrix.env.CodeClimate == 'no' }}
       run: composer test
 
-    - name: Publish code coverage
-      uses: paambaati/codeclimate-action@v8.0.0
+    - name: Build
       if: ${{ matrix.env.CodeClimate == 'yes' }}
-      env:
-        CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATEKEY }}
+      run: composer test-coverage
+
+    - name: Publish code coverage
+      uses: qltysh/qlty-action/coverage@v1
+      if: ${{ matrix.env.CodeClimate == 'yes' }}
+      with:
+        token: ${{secrets.QLTY_COVERAGE_TOKEN}}
+        files: clover.xml

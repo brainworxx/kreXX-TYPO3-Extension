@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,12 +36,17 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Scalar\AbstractScalar;
 use Brainworxx\Krexx\Analyse\Scalar\ScalarString;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ScalarNothing;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(AbstractScalar::class, 'generateDomId')]
+#[CoversMethod(ScalarString::class, 'handle')]
+#[CoversMethod(ScalarString::class, '__construct')]
 class ScalarStringTest extends AbstractHelper
 {
     /**
@@ -68,28 +73,37 @@ class ScalarStringTest extends AbstractHelper
 
         $this->scalarString = new ScalarString(Krexx::$pool);
         // Inject the scalar helper, to track the processing.
-        $this->setValueByReflection('classList', [ScalarNothing::class], $this->scalarString);
+        $this->setValueByReflection(
+            'classList',
+            [ScalarNothing::class => new ScalarNothing(Krexx::$pool)],
+            $this->scalarString
+        );
     }
 
     /**
      * Test the retrieval of the plugin scalar string analysis classes.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\ScalarString::__construct
      */
     public function testConstruct()
     {
         Registration::addScalarStringAnalyser(ScalarNothing::class);
         $this->scalarString = new ScalarString(Krexx::$pool);
 
+        $analyserList = $this->retrieveValueByReflection('classList', $this->scalarString);
         $this->assertTrue(
-            in_array(ScalarNothing::class, $this->retrieveValueByReflection('classList', $this->scalarString))
+            array_key_exists(
+                ScalarNothing::class,
+                $analyserList
+            )
+        );
+        $this->assertInstanceOf(
+            ScalarNothing::class,
+            $analyserList[ScalarNothing::class],
+            'The class was not instantiated correctly.'
         );
     }
 
     /**
      * Test the scalar deep analysis, without any fitting callback.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\ScalarString::handle
      */
     public function testHandleNoHandle()
     {
@@ -112,9 +126,6 @@ class ScalarStringTest extends AbstractHelper
     /**
      * Test the handling with a handler that handles the handling with a handle
      * Meh, the puns are killing me.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\ScalarString::handle
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\AbstractScalar::generateDomId
      */
     public function testHandleNormal()
     {

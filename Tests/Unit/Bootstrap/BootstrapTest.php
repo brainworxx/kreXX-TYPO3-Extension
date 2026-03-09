@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -39,11 +40,19 @@ use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration as AimeosConfiguration;
+use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Package\Package;
+use TYPO3\CMS\Core\Package\UnitTestPackageManager;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Bootstrap::class, 'run')]
+#[CoversMethod(Bootstrap::class, 'loadKrexx')]
 class BootstrapTest extends AbstractHelper
 {
-    const BOOTSTRAP_NAMESPACE = '\\Brainworxx\\Includekrexx\\Bootstrap\\';
-    const DEFINED = 'defined';
+    protected const BOOTSTRAP_NAMESPACE = '\\Brainworxx\\Includekrexx\\Bootstrap\\';
+    protected const DEFINED = 'defined';
 
     /**
      * @var \Brainworxx\Includekrexx\Bootstrap\Bootstrap
@@ -56,11 +65,14 @@ class BootstrapTest extends AbstractHelper
         $this->bootstrap = new Bootstrap();
     }
 
+    protected function tearDown(): void
+    {
+        unset($GLOBALS[$this->bootstrap::TYPO3_CONF_VARS][$this->bootstrap::SYS][$this->bootstrap::FLUID][$this->bootstrap::FLUID_NAMESPACE][$this->bootstrap::KREXX]);
+        parent::tearDown();
+    }
+
     /**
      * Testing the early failing of the bootstrapping.
-     *
-     * @covers \Brainworxx\Includekrexx\Bootstrap\Bootstrap::run
-     * @covers \Brainworxx\Includekrexx\Bootstrap\Bootstrap::loadKrexx
      */
     public function testRunEarlyFail()
     {
@@ -68,13 +80,52 @@ class BootstrapTest extends AbstractHelper
         $definedMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, static::DEFINED);
         $definedMock->expects($this->once())
             ->with('KREXX_DIR')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         // And the kreXX bootstrap script is not available.
         $fileExistsMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, 'file_exists');
         $fileExistsMock->expects($this->once())
             ->with($this->anything())
-            ->will($this->returnValue(false));
+            ->willReturn(true);
+
+        // Should lead to an early return.
+        // Retrieving a standard class here would cause the test to fail.
+        $t3ConfigMock = $this->createMock(T3configuration::class);
+        $this->injectIntoGeneralUtility(T3configuration::class, $t3ConfigMock);
+
+        // Since we as retrieving the extension path, we need to simulate the
+        // existing of the includekrexx package.
+        $packageManagerMock = $this->createMock(UnitTestPackageManager::class);
+        $packageManagerMock->expects($this->any())
+            ->method('isPackageActive')
+            ->willReturn(true);
+        $this->setValueByReflection('packageManager', $packageManagerMock, ExtensionManagementUtility::class);
+
+        $packageMock = $this->createMock(Package::class);
+        $packageMock->expects($this->any())
+            ->method('getPackagePath')
+            ->willReturn(KREXX_DIR. '/../../../');
+
+        $packageManagerMock->expects($this->any())
+            ->method('getPackage')
+            ->willReturn($packageMock);
+
+        $this->bootstrap->run();
+    }
+
+    /**
+     * We test the historical inclusion of kreXX, which is now the autoloader
+     * provided by kreXX.
+     *
+     * We expect that there will be no exception when doing it.
+     */
+    public function testRunInlcudeKrexx()
+    {
+        // The kreXX directory is not defined . . .
+        $definedMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, static::DEFINED);
+        $definedMock->expects($this->once())
+            ->with('KREXX_DIR')
+            ->willReturn(false);
 
         // Should lead to an early return.
         // Retrieving a standard class here would cause the test to fail.
@@ -88,11 +139,14 @@ class BootstrapTest extends AbstractHelper
         $this->bootstrap->run();
     }
 
+    /**
+     * The normal bootstrapping.
+     */
     public function testRunNormal()
     {
         $definedMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, static::DEFINED);
         $definedMock->expects($this->once())
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $t3ConfigMock = $this->createMock(T3configuration::class);
         $fluidConfigMock = $this->createMock(FluidConfiguration::class);
@@ -104,10 +158,20 @@ class BootstrapTest extends AbstractHelper
 
         $this->bootstrap->run();
 
-        $this->assertEquals(
-            [0 => 'Brainworxx\\Includekrexx\\ViewHelpers'],
-            $GLOBALS[$this->bootstrap::TYPO3_CONF_VARS][$this->bootstrap::SYS][$this->bootstrap::FLUID][$this->bootstrap::FLUID_NAMESPACE][$this->bootstrap::KREXX],
-            'Registering of the krexx fluid namespace'
-        );
+        $typo3Version = new Typo3Version();
+        if (version_compare('14.0', $typo3Version->getVersion(), '>')) {
+            $this->assertEquals(
+                [0 => 'Brainworxx\\Includekrexx\\ViewHelpers'],
+                $GLOBALS[$this->bootstrap::TYPO3_CONF_VARS][$this->bootstrap::SYS][$this->bootstrap::FLUID][$this->bootstrap::FLUID_NAMESPACE][$this->bootstrap::KREXX],
+                'Registering of the krexx fluid namespace'
+            );
+        }
+
+        // We test for the registration of the plugins.
+        $registrations = SettingsGetter::getPlugins();
+        $this->assertCount(3, $registrations, 'Number of registered plugins');
+        $this->assertArrayHasKey(get_class($t3ConfigMock), $registrations, 'Registration of the TYPO3 plugin');
+        $this->assertArrayHasKey(get_class($fluidConfigMock), $registrations, 'Registration of the Fluid plugin');
+        $this->assertArrayHasKey(get_class($aimeosConfigMock), $registrations, 'Registration of the Aimeos plugin');
     }
 }

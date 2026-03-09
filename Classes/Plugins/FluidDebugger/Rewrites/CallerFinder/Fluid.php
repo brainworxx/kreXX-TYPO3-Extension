@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,7 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
 use ReflectionClass;
-use ReflectionException;
+use Throwable;
 use TYPO3Fluid\Fluid\View\TemplatePaths;
 
 /**
@@ -51,11 +51,12 @@ class Fluid extends AbstractFluid
      */
     protected function getTemplatePath(): string
     {
-        $controllerName = $this->renderingContext->getControllerName();
-        $actionName = $this->renderingContext->getControllerAction();
-        $format = $this->renderingContext->getTemplatePaths()->getFormat();
         return $this->renderingContext->getTemplatePaths()
-            ->resolveTemplateFileForControllerAndActionAndFormat($controllerName, $actionName, $format);
+            ->resolveTemplateFileForControllerAndActionAndFormat(
+                $this->renderingContext->getControllerName(),
+                $this->renderingContext->getControllerAction(),
+                $this->renderingContext->getTemplatePaths()->getFormat()
+            );
     }
 
     /**
@@ -64,9 +65,8 @@ class Fluid extends AbstractFluid
     protected function getLayoutPath(): string
     {
         // Resolve the layout file without any hacks by the framework.
-        $fileName = $this->parsedTemplate->getLayoutName($this->renderingContext);
         return $this->renderingContext->getTemplatePaths()
-            ->getLayoutPathAndFilename($fileName);
+            ->getLayoutPathAndFilename((string)$this->parsedTemplate->getLayoutName($this->renderingContext));
     }
 
     /**
@@ -87,18 +87,23 @@ class Fluid extends AbstractFluid
             // No hash, no filename!
             return $result;
         }
-        $hash = $identifier[count($identifier) - 1];
         $templatePath = $this->renderingContext->getTemplatePaths();
 
         try {
             $templatePathRef = new ReflectionClass($templatePath);
             if ($templatePathRef->hasProperty('resolvedIdentifiers')) {
                 $resolvedIdentifiersRef = $templatePathRef->getProperty('resolvedIdentifiers');
-                $resolvedIdentifiersRef->setAccessible(true);
+                if (version_compare(PHP_VERSION, '8.1.0', '<')) {
+                    $resolvedIdentifiersRef->setAccessible(true);
+                }
                 $resolvedIdentifiers = $resolvedIdentifiersRef->getValue($templatePath);
-                $result = $this->resolveTemplateName($resolvedIdentifiers, $hash, $templatePath);
+                $result = $this->resolveTemplateName(
+                    $resolvedIdentifiers,
+                    $identifier[count($identifier) - 1],
+                    $templatePath
+                );
             }
-        } catch (ReflectionException $e) {
+        } catch (Throwable $e) {
             // Do nothing. We return the already existing empty result.
         }
 
@@ -126,7 +131,21 @@ class Fluid extends AbstractFluid
         foreach ($resolvedIdentifiers['partials'] as $fileName => $realIdentifier) {
             if (strpos($realIdentifier, $hash) !== false) {
                 // We've got our filename!
-                return $templatePath->getPartialPathAndFilename($fileName);
+                // The filename is actually the path relative to the partials
+                // directory, so we need to resolve it via the template paths class.
+                // But: It ignorees file endings.
+                // Something like
+                // "partials/Deep/Blargh.html"
+                // might as well mean
+                // "partials/Deep/Blargh.fluid.html"
+                // And doing a lookup for "partials/Deep/Blargh.html" would fail
+                // because the file does not exist.
+                // We simply remove the file ending and let the template paths
+                // class do the rest.
+                $info = pathinfo($fileName);
+                return $templatePath->getPartialPathAndFilename(
+                    $info['dirname'] . '/' . $info['filename']
+                );
             }
         }
 

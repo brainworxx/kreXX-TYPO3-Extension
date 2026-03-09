@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -76,14 +76,14 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface
      *
      * @var \Brainworxx\Krexx\Service\Factory\Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * The names of the internal storages if Aimeos items.
      *
      * @var string[]
      */
-    protected $aimeosDataStorages = [
+    protected array $aimeosDataStorages = [
         AimeosConstInterface::AIMEOS_B_DATA,
         AimeosConstInterface::AIMEOS_DATA,
         AimeosConstInterface::AIMEOS_VALUES
@@ -102,7 +102,7 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface
     /**
      * Some special resolving of Aimeos getter
      *
-     * @param AbstractCallback $callback
+     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback|null $callback
      *   The calling class.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.
@@ -110,17 +110,15 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface
      * @return string
      *   The generated markup.
      */
-    public function handle(AbstractCallback $callback, ?Model $model = null): string
+    public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
     {
         // We will only act, if we have no value so far.
         // Also, we only do this for Aimeos items.
         $params = $callback->getParameters();
-        $data = $params[static::PARAM_REF]->getData();
-
         if (
-            $params[static::PARAM_ADDITIONAL][static::PARAM_NOTHING_FOUND] === false ||
-            $params[ThroughGetter::CURRENT_PREFIX] !== 'get' ||
-            !($data instanceof Iface)
+            $params[static::PARAM_ADDITIONAL][static::PARAM_NOTHING_FOUND] === false
+            || $params[ThroughGetter::CURRENT_PREFIX] !== 'get'
+            || !($params[static::PARAM_REF]->getData() instanceof Iface)
         ) {
             // Early return.
             return '';
@@ -175,10 +173,7 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface
                 if ($possibleResult === null) {
                     // A NULL value might mean that the values does not
                     // exist, until the getter computes it.
-                    $model->addToJson(
-                        $this->pool->messages->getHelp('metaHint'),
-                        $this->pool->messages->getHelp('getterNull')
-                    );
+                    $model->addJsonHint($this->pool->messages->getHelp('getterNull'));
                 }
 
                 break;
@@ -234,6 +229,23 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface
             if (is_array($value)) {
                 $result = array_merge($result, $value);
             }
+        }
+
+        // Read the sourcecode into a string.
+        // Clean it up.
+        $sourcecode = str_replace(
+            ['(int)', '(string)', '(float)', '(bool)'],
+            '',
+            $this->pool->fileService->readFile(
+                $reflectionMethod->getFileName(),
+                $reflectionMethod->getStartLine(),
+                $reflectionMethod->getEndLine()
+            )
+        );
+        // Parse the code via regex, and retrieve default values.
+        preg_match("/this->get\(\s*'([^']*)',\s*([0-9]+)\s*\);/", $sourcecode, $matches);
+        if (count($matches) === 3 && empty($result[$matches[1]])) {
+            $result[$matches[1]] = trim($matches[2], '"\'');
         }
 
         return $result;

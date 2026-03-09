@@ -1,6 +1,6 @@
 .krexx-backend {
   .tooltip-hover {
-    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAYAAADAQbwGAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjEuNWRHWFIAAABmSURBVDhP7dExCgAhDAXRgF3uf9+sFgEJwy7rT2nxQCYSEC0iWmFUYFRgVGBUYKzGGOHu88jzHcaqfeEfGBUYd+u5Nq+1PTkXLnVGMFZ34SuMaf+Q9PXbGFP7whMYFRgVGBUYz4U9yHjoHbzM2h0AAAAASUVORK5CYII=) no-repeat center $grey-10;
+    background: var(--tooltip) no-repeat center var(--grey-10);
     cursor: help;
 
     .toolwrapper {
@@ -9,8 +9,8 @@
       .tooltip-text {
         display: none;
         position: absolute;
-        background-color: $black;
-        color: $grey-05;
+        background-color: var(--black);
+        color: var(--grey-05);
         z-index: 1;
         padding: 8px;
         min-width: 350px;
@@ -26,7 +26,7 @@
           height: 0;
           border-style: solid;
           border-width: 6px 3px 0 3px;
-          border-color: $black transparent transparent transparent;
+          border-color: var(--black) transparent transparent transparent;
           content: "";
           bottom: -6px;
           position: absolute;

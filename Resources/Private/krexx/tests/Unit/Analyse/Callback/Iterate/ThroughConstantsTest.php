@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -41,12 +41,16 @@ use Brainworxx\Krexx\Tests\Fixtures\ConstantsFixture71;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ThroughConstants::class, 'callMe')]
+#[CoversMethod(ThroughConstants::class, 'canDump')]
+#[CoversMethod(ThroughConstants::class, 'retrieveAdditionalData')]
 class ThroughConstantsTest extends AbstractHelper
 {
-    const SKIPPED_REASON = 'Skipped due to wrong PHP version.';
-    const PUBLIC_CONSTANT = 'Public constant ';
-    const STATIC_COLON_COLON = 'static::';
+    public const  SKIPPED_REASON = 'Skipped due to wrong PHP version.';
+    public const  PUBLIC_CONSTANT = 'Public constant ';
+    public const  STATIC_COLON_COLON = 'static::';
 
     /**
      * Run the test with the provided class name.
@@ -84,10 +88,6 @@ class ThroughConstantsTest extends AbstractHelper
 
     /**
      * Testing the PHP 7.1 plus constants handling.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::canDump
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::retrieveAdditionalData
      */
     public function testCallMe()
     {
@@ -99,7 +99,7 @@ class ThroughConstantsTest extends AbstractHelper
         // in scope.
         /** @var \Brainworxx\Krexx\Analyse\Model[] $models */
         $models = Krexx::$pool->routing->model;
-        $this->assertCount(2, $models);
+        $this->assertCount(3, $models);
         $this->assertEquals(ConstantsFixture71::CONST_1, $models[0]->getData());
         $this->assertEquals(ConstantsFixture71::CONST_2, $models[1]->getData());
         $this->assertEquals(static::PUBLIC_CONSTANT, $models[0]->getAdditional());
@@ -108,14 +108,12 @@ class ThroughConstantsTest extends AbstractHelper
         $this->assertEquals('CONST_2', $models[1]->getName());
         $this->assertEquals('\\' . ConstantsFixture71::class . '::', $models[0]->getConnectorLeft());
         $this->assertEquals('\\' . ConstantsFixture71::class . '::', $models[1]->getConnectorLeft());
+        $this->assertEquals([], $models[0]->getJson());
+        $this->assertEquals([], $models[1]->getJson());
     }
 
     /**
      * And now the same thing while coming from the inside.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::canDump
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::retrieveAdditionalData
      */
     public function testCallMe71InScope()
     {
@@ -126,7 +124,7 @@ class ThroughConstantsTest extends AbstractHelper
         // We are expecting an analysis of all of them because they are in scope.
         /** @var \Brainworxx\Krexx\Analyse\Model[] $models */
         $models = Krexx::$pool->routing->model;
-        $this->assertCount(4, $models);
+        $this->assertCount(5, $models);
         $this->assertEquals(ConstantsFixture71::CONST_1, $models[0]->getData());
         $this->assertEquals(ConstantsFixture71::CONST_2, $models[1]->getData());
         $this->assertEquals('string', $models[2]->getData());
@@ -143,5 +141,9 @@ class ThroughConstantsTest extends AbstractHelper
         $this->assertEquals(static::STATIC_COLON_COLON, $models[1]->getConnectorLeft());
         $this->assertEquals(static::STATIC_COLON_COLON, $models[2]->getConnectorLeft());
         $this->assertEquals(static::STATIC_COLON_COLON, $models[3]->getConnectorLeft());
+        $this->assertEquals([], $models[0]->getJson());
+        $this->assertEquals([], $models[1]->getJson());
+        $this->assertEquals([], $models[2]->getJson());
+        $this->assertEquals([], $models[3]->getJson());
     }
 }

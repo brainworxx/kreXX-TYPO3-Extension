@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -42,13 +42,15 @@ use Brainworxx\Krexx\Service\Config\Model;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ThroughConfig::class, 'callMe')]
+#[CoversMethod(ThroughConfig::class, 'renderAllSections')]
+#[CoversMethod(ThroughConfig::class, 'hasSomethingToRender')]
 class ThroughConfigTest extends AbstractHelper
 {
     /**
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig::renderAllSections
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig::hasSomethingToRender
+     * Test the configuration iteration.
      */
     public function testCallMe()
     {
@@ -59,26 +61,26 @@ class ThroughConfigTest extends AbstractHelper
         $settingOne = $this->createMock(Model::class);
         $settingOne->expects($this->once())
             ->method($methodName)
-            ->will($this->returnValue('section one'));
+            ->willReturn('section one');
         $settingTwo = $this->createMock(Model::class);
         $settingTwo->expects($this->once())
             ->method($methodName)
-            ->will($this->returnValue('section one'));
+            ->willReturn('section one');
         $settingThree = $this->createMock(Model::class);
         $settingThree->expects($this->once())
             ->method($methodName)
-            ->will($this->returnValue('section two'));
+            ->willReturn('section two');
         $settingFour = $this->createMock(Model::class);
         $settingFour->expects($this->once())
             ->method($methodName)
-            ->will($this->returnValue('section two'));
+            ->willReturn('section two');
         $settingFive = $this->createMock(Model::class);
         $settingFive->expects($this->once())
             ->method($methodName)
-            ->will($this->returnValue('section three'));
+            ->willReturn('section three');
         $settingFive->expects($this->once())
             ->method('getType')
-            ->will($this->returnValue(ConfigConstInterface::RENDER_TYPE_NONE));
+            ->willReturn(ConfigConstInterface::RENDER_TYPE_NONE);
 
         $fixture = [
             'settingOne' => $settingOne,

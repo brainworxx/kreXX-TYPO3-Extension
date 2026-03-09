@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -71,13 +71,14 @@ class ReturnType extends AbstractComment
         'false',
         'never',
         'static',
-        'iterable'
+        'iterable',
+        'self'
     ];
 
     /**
      * Retrieve the return type from a method. Comment parsing as a fallback
      *
-     * @param \Reflector $reflection
+     * @param \ReflectionMethod $reflection
      *   The reflection of the method we are analysing.
      * @param \ReflectionClass|null $reflectionClass
      *   Reflection of the hosting class. A lot of return types are $this, so
@@ -138,26 +139,5 @@ class ReturnType extends AbstractComment
         }
 
         return $result;
-    }
-
-    /**
-     * Simply ask the reflection method for it's return value.
-     *
-     * @param \Reflector $refMethod
-     *   The reflection of the method we are analysing
-     *
-     * @deprecated since 5.0.0
-     *   Was moved to the MethodDeclaration class.
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated methods.
-     *
-     * @return string
-     *   The return type if possible, an empty string if not.
-     */
-    protected function retrieveTypeByReflection(Reflector $refMethod): string
-    {
-        return $this->pool->createClass(MethodDeclaration::class)
-            ->retrieveNamedType($refMethod);
     }
 }

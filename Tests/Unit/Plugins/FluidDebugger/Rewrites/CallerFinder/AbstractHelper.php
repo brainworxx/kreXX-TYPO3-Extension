@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -34,6 +35,7 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
+use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper as AbstractKrexxTest;
 use TYPO3\CMS\Fluid\View\StandaloneView;
@@ -51,25 +53,29 @@ abstract class AbstractHelper extends AbstractKrexxTest
     protected function createInstance(array $renderingStack, $classname)
     {
         // Mock the view
-        $view = $this->createMock(StandaloneView::class);
+        if (class_exists(StandaloneView::class)) {
+            $view = $this->createMock(StandaloneView::class);
+        } else {
+            $view = $this->createMock(ModuleTemplate::class);
+        }
         $renderingStackRefMock = $this->createMock(\ReflectionProperty::class);
         // Mock the property reflection of the rendering context.
-        $renderingStackRefMock->expects($this->once())
+        $renderingStackRefMock->expects($this->any())
             ->method('setAccessible')
             ->with(true);
         $renderingStackRefMock->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue($renderingStack));
+            ->willReturn($renderingStack);
         // Mock the reflection of the view
         $viewReflection = $this->createMock(\ReflectionClass::class);
         $viewReflection->expects($this->once())
             ->method('hasProperty')
             ->with('renderingStack')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $viewReflection->expects($this->once())
             ->method('getProperty')
             ->with('renderingStack')
-            ->will($this->returnValue($renderingStackRefMock));
+            ->willReturn($renderingStackRefMock);
 
         // Mock the rendering context
         $renderingContext = $this->createMock(RenderingContext::class);

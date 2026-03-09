@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,12 +37,17 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger;
 
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\DynamicGetter;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Analyse\Objects as ObjectsFluid;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterWithoutGet;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\VhsMethods;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Getter as GetterFluid;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid as CallerFinderFluid;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen as FluidCodegen;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Connectors as FluidConnectors;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface as Typo3ConstInterface;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
@@ -82,16 +87,15 @@ class Configuration implements PluginConfigInterface, Typo3ConstInterface
     public function exec(): void
     {
         // Registering the fluid connector class.
-        Registration::addRewrite(
-            Connectors::class,
-            FluidConnectors::class
-        );
-
+        Registration::addRewrite(Connectors::class, FluidConnectors::class);
         // Registering the special source generation for methods.
         Registration::addRewrite(Codegen::class, FluidCodegen::class);
         // Special caller finder for Fluid.
         Registration::addRewrite(CallerFinder::class, CallerFinderFluid::class);
-
+        // Move the getter to the same level as the public properties.
+        Registration::addRewrite(Getter::class, GetterFluid::class);
+        // Remove the constants-analysis.
+        Registration::addRewrite(Objects::class, ObjectsFluid::class);
 
         // The code generation class is a singleton.
         // We need to reset the pool.
@@ -99,15 +103,11 @@ class Configuration implements PluginConfigInterface, Typo3ConstInterface
 
         // Register our event handler, to remove the 'get' from the getter
         // method names. Fluid does not use these.
-        Registration::registerEvent(
-            ThroughGetter::class . '::goThroughMethodList::end',
-            GetterWithoutGet::class
-        );
+        Registration::registerEvent(ThroughGetter::class . '::goThroughMethodList::end', GetterWithoutGet::class);
         // Another event switches to VHS code generation.
-        Registration::registerEvent(
-            ThroughMethods::class . static::END_EVENT,
-            VhsMethods::class
-        );
+        Registration::registerEvent(ThroughMethods::class . static::END_EVENT, VhsMethods::class);
+        // Special analysis for the ContentBlocks objects.
+        Registration::registerEvent(ThroughGetter::class . static::START_EVENT, DynamicGetter::class);
 
         // Adding additional texts.
         $extPath = ExtensionManagementUtility::extPath(static::EXT_KEY);

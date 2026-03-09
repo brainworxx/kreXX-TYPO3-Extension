@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,13 +38,16 @@ namespace Brainworxx\Krexx\Tests\Unit\Service\Misc;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\Registry;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Registry::class, 'get')]
+#[CoversMethod(Registry::class, 'has')]
+#[CoversMethod(Registry::class, 'set')]
+#[CoversMethod(Registry::class, '__construct')]
 class RegistryTest extends AbstractHelper
 {
     /**
      * Test the setting of itself in the pool.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Registry::__construct
      */
     public function testConstruct()
     {
@@ -54,15 +57,12 @@ class RegistryTest extends AbstractHelper
 
     /**
      * What the method name says.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Registry::set
      */
     public function testSet()
     {
         $registry = new Registry(Krexx::$pool);
         $key = 'key';
         $value = 'value';
-
         $registry->set($key, $value);
         $this->assertEquals($value, $registry->get($key));
         $registry->set($key, null);
@@ -71,9 +71,6 @@ class RegistryTest extends AbstractHelper
 
     /**
      * What the method name says.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Registry::get
-     * @covers \Brainworxx\Krexx\Service\Misc\Registry::has
      */
     public function testGetHas()
     {
@@ -81,7 +78,6 @@ class RegistryTest extends AbstractHelper
         $key = 'key';
         $value = 'value';
         $this->setValueByReflection('data', [$key => $value], $registry);
-
         $this->assertEquals($value, $registry->get($key));
         $this->assertNull($registry->get($value));
         $this->assertTrue($registry->has($key));

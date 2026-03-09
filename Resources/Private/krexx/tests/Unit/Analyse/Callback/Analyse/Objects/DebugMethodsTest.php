@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Debug;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods;
 use Brainworxx\Krexx\Service\Config\Fallback;
@@ -43,7 +44,13 @@ use Brainworxx\Krexx\Tests\Fixtures\DebugMethodFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(DebugMethods::class, 'callMe')]
+#[CoversMethod(DebugMethods::class, 'checkIfAccessible')]
+#[CoversMethod(DebugMethods::class, 'retrieveValue')]
+#[CoversMethod(AbstractCallback::class, 'dispatchStartEvent')]
+#[CoversMethod(AbstractCallback::class, 'dispatchEventWithModel')]
 class DebugMethodsTest extends AbstractHelper
 {
     /**
@@ -98,15 +105,10 @@ class DebugMethodsTest extends AbstractHelper
     /**
      * Testing the not-existing debug method, the one throwing a exception and
      * the one with the parameters. None of these must get thorough.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::checkIfAccessible
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::retrieveValue
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
      */
     public function testCallMeNothing()
     {
-        // Setup the start events
+        // Set up the start events
         $this->mockEventService(
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\DebugMethods::callMe::start', $this->debugMethods]
         );
@@ -125,14 +127,39 @@ class DebugMethodsTest extends AbstractHelper
         $this->assertEquals([], CallbackCounter::$staticParameters);
     }
 
+    public function testCallMeError()
+    {
+
+        $fixtureClass = new DebugMethodFixture();
+        $reflectionMock = $this->createMock(ReflectionClass::class);
+        $reflectionMock->expects($this->any())
+            ->method('getMethod')
+            ->willThrowException(new \ReflectionException());
+        $reflectionMock->expects($this->once())
+            ->method('getData')
+            ->willReturn($fixtureClass);
+
+        $fixture = [
+            'data' => $fixtureClass,
+            'name' => 'some name,',
+            'ref' => $reflectionMock
+        ];
+        $this->debugMethods = new DebugMethods(Krexx::$pool);
+        $this->debugMethods->setParameters($fixture);
+
+        // Configure the debug method we want to run.
+        $this->setConfigValue(Fallback::SETTING_DEBUG_METHODS, 'goodDebugMethod,uglyDebugMethod');
+
+        // Set up the start events
+        $this->mockEventService(
+            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\DebugMethods::callMe::start', $this->debugMethods]
+        );
+
+        $this->assertEquals('', $this->debugMethods->callMe());
+    }
+
     /**
      * Testing the "good" and "ugly" debug methods.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::checkIfAccessible
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::retrieveValue
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchEventWithModel
      */
     public function testCallMeNormal()
     {

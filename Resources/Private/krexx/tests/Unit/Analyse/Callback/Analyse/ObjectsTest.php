@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse;
 
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Constants;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods;
@@ -48,8 +49,13 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\OpaqueRessource;
+use Brainworxx\Krexx\Analyse\Code\Scope;
 use Brainworxx\Krexx\Logging\Model;
+use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
+use Brainworxx\Krexx\Service\Factory\Event;
+use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
@@ -57,8 +63,15 @@ use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Tests\Fixtures\TraversableFixture;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Exception;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Objects::class, 'callMe')]
+#[CoversMethod(Objects::class, 'generateDumperList')]
+#[CoversMethod(Objects::class, 'addPropertyDumper')]
+#[CoversMethod(AbstractCallback::class, 'dispatchStartEvent')]
+#[CoversMethod(Objects::class, 'setParameters')]
 class ObjectsTest extends AbstractHelper
 {
     /**
@@ -123,13 +136,6 @@ class ObjectsTest extends AbstractHelper
     /**
      * Testing the start event and if other analysis classes are getting used,
      * according to the configuration.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeEvent()
     {
@@ -144,12 +150,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test, if the public properties are getting analysed.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMePublic()
     {
@@ -167,12 +167,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test, if the getter get analysed.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeGetter()
     {
@@ -200,8 +194,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test, if the meta stuff is analysed.
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeMeta()
     {
@@ -214,12 +206,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test, if the protected properties are analysed.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeProtected()
     {
@@ -246,12 +232,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test, if the private properties are analysed.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMePrivate()
     {
@@ -280,12 +260,6 @@ class ObjectsTest extends AbstractHelper
      * Test, if the scope analysis is used.
      *
      * Pun not intended.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeConstants()
     {
@@ -301,12 +275,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test, if the method analysis is used.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeMethods()
     {
@@ -322,12 +290,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test with traversable deactivated and with a traversable class
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeTraversableDeactivatedTraversable()
     {
@@ -340,12 +302,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test with traversable deactivated and with a normal class
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeTraversableDeactivatedNormal()
     {
@@ -357,12 +313,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test with traversable activated and with a normal class
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeTraversableActivatedTraversable()
     {
@@ -374,12 +324,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test, if the traversable part is called.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeTraversableActivated()
     {
@@ -395,12 +339,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test, if the debug methods analysis is triggered.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeDebugMethods()
     {
@@ -413,12 +351,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test, if the analysis of an error object works.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeException()
     {
@@ -432,12 +364,6 @@ class ObjectsTest extends AbstractHelper
 
     /**
      * Test the handling of the log model.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeLogModel()
     {
@@ -459,11 +385,6 @@ class ObjectsTest extends AbstractHelper
      * Test the handling of incomplete objects.
      *
      * Wasn't there a Swing Out Sister song about this?
-     *
-     * @throws \ReflectionException
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
      */
     public function testCallMeIncomplete()
     {
@@ -477,5 +398,69 @@ class ObjectsTest extends AbstractHelper
         $this->assertEquals(1, CallbackCounter::$counter);
         // All parameters set?
         $this->parametersTest(CallbackCounter::$staticParameters[0]);
+    }
+
+    /**
+     * Test the order of the in scope analysis.
+     */
+    public function testCallMeInScope()
+    {
+        // Test analyse getter true
+        Krexx::$pool->rewrite[Getter::class] = CallbackCounter::class;
+        // This one is depending on settings.
+        $this->setConfigValue(Fallback::SETTING_ANALYSE_GETTER, true);
+        $scopeMock = $this->createMock(Scope::class);
+        $scopeMock->expects($this->once())
+            ->method('isInScope')
+            ->willReturn(true);
+
+        $poolMock = $this->createMock(Pool::class);
+        $poolMock->scope = $scopeMock;
+        $poolMock->render = new RenderNothing(Krexx::$pool);
+        $eventMock = $this->createMock(Event::class);
+        $eventMock->expects($this->once())
+            ->method('dispatch')
+            ->with(Objects::class . PluginConfigInterface::START_EVENT);
+        $poolMock->eventService = $eventMock;
+        $configMock = $this->createMock(Config::class);
+        $configMock->expects($this->exactly(2))
+            ->method('getSetting')
+            ->with(...$this->withConsecutive(
+                [Fallback::SETTING_ANALYSE_TRAVERSABLE],
+                [Fallback::SETTING_ANALYSE_GETTER]
+            ))->willReturnMap([
+                [Fallback::SETTING_ANALYSE_TRAVERSABLE, false],
+                [Fallback::SETTING_ANALYSE_GETTER, true]
+            ]);
+        $poolMock->config = $configMock;
+
+        $callbackNothing = new CallbackNothing(Krexx::$pool);
+
+        $poolMock->expects($this->exactly(9))
+            ->method('createClass')
+            ->with(...$this->withConsecutive(
+                [PublicProperties::class],
+                [ProtectedProperties::class],
+                [PrivateProperties::class],
+                [Getter::class],
+                [OpaqueRessource::class],
+                [Meta::class],
+                [Constants::class],
+                [Methods::class],
+                [DebugMethods::class],
+            ))->willReturnMap([
+                [PublicProperties::class, $callbackNothing],
+                [ProtectedProperties::class, $callbackNothing],
+                [PrivateProperties::class, $callbackNothing],
+                [Getter::class, $callbackNothing],
+                [OpaqueRessource::class, $callbackNothing],
+                [Meta::class, $callbackNothing],
+                [Constants::class, $callbackNothing],
+                [Methods::class, $callbackNothing],
+                [DebugMethods::class, $callbackNothing]
+            ]);
+
+        $this->objects = new Objects($poolMock);
+        $this->objects->setParameters($this->fixture)->callMe();
     }
 }

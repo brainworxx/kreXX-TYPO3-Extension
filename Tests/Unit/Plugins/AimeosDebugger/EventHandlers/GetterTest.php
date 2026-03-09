@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -34,16 +35,26 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\EventHandlers;
 
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\AbstractEventHandler;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter;
 use Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\AimeosTestTrait;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
+use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Getter::class, 'handle')]
+#[CoversMethod(Getter::class, 'assignResultsToModel')]
+#[CoversMethod(Getter::class, 'retrieveValueArray')]
+#[CoversMethod(AbstractEventHandler::class, 'retrieveProperty')]
+#[CoversMethod(Getter::class, 'retrievePossibleKey')]
+#[CoversMethod(Getter::class, '__construct')]
 class GetterTest extends AbstractHelper
 {
     use AimeosTestTrait;
@@ -67,8 +78,6 @@ class GetterTest extends AbstractHelper
 
     /**
      * Test the assigning of the pool.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter::__construct
      */
     public function testConstruct()
     {
@@ -79,13 +88,39 @@ class GetterTest extends AbstractHelper
     }
 
     /**
-     * Test the analysis of an 'Aimeos item.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter::handle
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter::assignResultsToModel
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter::retrieveValueArray
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\AbstractEventHandler::retrieveProperty
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter::retrievePossibleKey
+     * Test the analysis of something else.
+     */
+    public function testHandleEmpty()
+    {
+        $this->skipIfAimeosIsNotInstalled();
+        $this->mockEmergencyHandler();
+        $params = [];
+
+        // We already have a result.
+        $params[Getter::PARAM_ADDITIONAL][Getter::PARAM_NOTHING_FOUND] = false;
+        $getter = new Getter(Krexx::$pool);
+        $callback = new CallbackNothing(Krexx::$pool);
+        $callback->setParameters($params);
+        $this->assertEquals('', $getter->handle($callback), 'We already have a result.');
+
+        // Test with an empty item.
+        // Create a simple log item.
+        $item = new \Aimeos\MAdmin\Log\Item\Standard([]);
+        $ref = new ReflectionClass($item);
+        $params[Getter::PARAM_ADDITIONAL][Getter::PARAM_NOTHING_FOUND] = true;
+        $params[ThroughGetter::CURRENT_PREFIX] = 'get';
+        $params[Getter::PARAM_REF] = $ref;
+        $params[Getter::PARAM_ADDITIONAL][Getter::PARAM_REFLECTION_METHOD] = new \ReflectionMethod($item, 'getPriority');
+        $callback = new CallbackNothing(Krexx::$pool);
+        $callback->setParameters($params);
+        /** @var Model $model */
+        $model = \Krexx::$pool->createClass(Model::class);
+        $getter->handle($callback, $model);
+        $this->assertEquals(0, $model->getData(), '0 is the default value.');
+    }
+
+    /**
+     * Test the analysis of an Aimeos item.
      */
     public function testHandle()
     {
@@ -101,6 +136,8 @@ class GetterTest extends AbstractHelper
             'log.timestamp' => null,
             // Standard class (values)
             'log.facility' => 'kreXX',
+            // Funfact: The priority should be a number, but we use a string here.
+            // evilGrin();
             'log.priority' => 'high',
             'log.message' => 'testing',
             'log.request' => 'please'

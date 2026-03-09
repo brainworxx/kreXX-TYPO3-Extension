@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -49,21 +49,21 @@ class NewSetting implements ConfigConstInterface
      *
      * @var string
      */
-    protected $name = '';
+    protected string $name = '';
 
     /**
      * The default value.
      *
      * @var string
      */
-    protected $defaultValue = '';
+    protected string $defaultValue = '';
 
     /**
      * The name of the section, where the setting will be stored.
      *
      * @var string
      */
-    protected $section = '';
+    protected string $section = '';
 
     /**
      * Method name of the validation class that is used to validate this setting.
@@ -77,21 +77,21 @@ class NewSetting implements ConfigConstInterface
      *
      * @var string
      */
-    protected $renderType = '';
+    protected string $renderType = '';
 
     /**
      * Is this setting editable?
      *
      * @var bool
      */
-    protected $isEditable = true;
+    protected bool $isEditable = true;
 
     /**
      * Is it protected on the frontend from changes?
      *
      * @var bool
      */
-    protected $isFeProtected = true;
+    protected bool $isFeProtected = true;
 
     /**
      * Can this setting ever get edited on the frontend?
@@ -286,8 +286,8 @@ class NewSetting implements ConfigConstInterface
         return [
             static::VALUE => $this->defaultValue,
             static::RENDER => [
-                self::RENDER_TYPE => $this->renderType,
-                self::RENDER_EDITABLE => $this->isEditable ? self::VALUE_TRUE : self::VALUE_FALSE,
+                static::RENDER_TYPE => $this->renderType,
+                static::RENDER_EDITABLE => $this->isEditable ? static::VALUE_TRUE : static::VALUE_FALSE,
             ],
             static::EVALUATE => $this->validation,
             static::SECTION => $this->section

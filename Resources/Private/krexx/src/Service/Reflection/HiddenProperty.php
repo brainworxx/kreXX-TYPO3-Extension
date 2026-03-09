@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Reflection;
 
+use DateTimeImmutable;
 use DOMDocument;
 use DOMAttr;
 use DOMCdataSection;
@@ -120,7 +121,7 @@ class HiddenProperty extends UndeclaredProperty
             'textContent',
         ],
         DOMCharacterData::class => [
-           'data',
+            'data',
             'length',
         ],
         DOMDocumentType::class => [
@@ -188,7 +189,12 @@ class HiddenProperty extends UndeclaredProperty
             'date',
             'timezone',
             'timezone_type'
-        ]
+        ],
+        DateTimeImmutable::class => [
+            'date',
+            'timezone',
+            'timezone_type'
+        ],
     ];
 
     /**
@@ -196,7 +202,7 @@ class HiddenProperty extends UndeclaredProperty
      *
      * @var bool
      */
-    public $isUndeclared = false;
+    public bool $isUndeclared = false;
 
     /**
      * {@inheritDoc}
@@ -205,7 +211,8 @@ class HiddenProperty extends UndeclaredProperty
     {
         parent::__construct($ref, $name);
 
-        if ($ref->getName() === DateTime::class) {
+        $name = $ref->getName();
+        if ($name === DateTime::class || $name === DateTimeImmutable::class) {
             $this->isPublic = false;
             $this->isProtected = true;
         }

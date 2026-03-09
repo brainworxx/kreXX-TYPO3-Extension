@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -48,9 +48,9 @@ trait Callback
     /**
      * Callback for the renderMe() method.
      *
-     * @var \Brainworxx\Krexx\Analyse\Callback\AbstractCallback
+     * @var \Brainworxx\Krexx\Analyse\Callback\AbstractCallback|null
      */
-    protected $callback;
+    protected ?AbstractCallback $callback = null;
 
     /**
      * Parameters for the renderMe method.
@@ -59,7 +59,7 @@ trait Callback
      *
      * @var array
      */
-    protected $parameters = [];
+    protected array $parameters = [];
 
     /**
      * Inject the callback for the renderer

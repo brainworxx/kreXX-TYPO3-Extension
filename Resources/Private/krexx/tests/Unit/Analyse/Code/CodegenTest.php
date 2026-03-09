@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -39,21 +39,36 @@ use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Code\Scope;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Tests\Fixtures\EnumFixture;
 use Brainworxx\Krexx\Tests\Fixtures\MethodParameterFixture;
+use Brainworxx\Krexx\Tests\Fixtures\Parameters;
 use Brainworxx\Krexx\Tests\Fixtures\UnionTypeFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use ReflectionParameter;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Codegen::class, '__construct')]
+#[CoversMethod(Codegen::class, 'translateDefaultValue')]
+#[CoversMethod(Codegen::class, 'generateWrapperLeft')]
+#[CoversMethod(Codegen::class, 'generateWrapperRight')]
+#[CoversMethod(Codegen::class, 'setCodegenAllowed')]
+#[CoversMethod(Codegen::class, 'isCodegenAllowed')]
+#[CoversMethod(Codegen::class, 'generateSource')]
+#[CoversMethod(Codegen::class, 'generateComplicatedStuff')]
+#[CoversMethod(Codegen::class, 'concatenation')]
+#[CoversMethod(Codegen::class, 'addTypeHint')]
+#[CoversMethod(Codegen::class, 'parameterToString')]
 class CodegenTest extends AbstractHelper
 {
-    const FIRST_RUN = 'firstRun';
-    const DISABLE_COUNT = 'disableCount';
-    const GET_CONNECTOR_LEFT = 'getConnectorLeft';
-    const GET_CONNECTOR_RIGHT = 'getConnectorRight';
-    const CONCATENATED_CONNECTORS = 'getConnectorLeftnamegetConnectorRight';
+    public const  FIRST_RUN = 'firstRun';
+    public const  DISABLE_COUNT = 'disableCount';
+    public const  GET_CONNECTOR_LEFT = 'getConnectorLeft';
+    public const  GET_CONNECTOR_RIGHT = 'getConnectorRight';
+    public const  CONCATENATED_CONNECTORS = 'getConnectorLeftnamegetConnectorRight';
+    public const  CODEGEN_TYPE_HINT = 'Type hint';
 
     /**
      * Our test subject
@@ -101,16 +116,14 @@ class CodegenTest extends AbstractHelper
     {
         $this->connectorMock->expects($this->exactly($left))
             ->method(static::GET_CONNECTOR_LEFT)
-            ->will($this->returnValue(static::GET_CONNECTOR_LEFT));
+            ->willReturn(static::GET_CONNECTOR_LEFT);
         $this->connectorMock->expects($this->exactly($right))
             ->method(static::GET_CONNECTOR_RIGHT)
-            ->will($this->returnValue(static::GET_CONNECTOR_RIGHT));
+            ->willReturn(static::GET_CONNECTOR_RIGHT);
     }
 
     /**
      * Test the pool handling.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::__construct
      */
     public function testConstruct()
     {
@@ -120,9 +133,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the forbidden code generation.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      */
     public function testGenerateSourceNoGen()
     {
@@ -134,11 +144,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the concatenation of the first run.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::addTypeHint
      */
     public function testGenerateSourceFirstRun()
     {
@@ -155,21 +160,16 @@ class CodegenTest extends AbstractHelper
         $this->assertEquals(false, $this->retrieveValueByReflection(static::FIRST_RUN, $this->codegenHandler));
         // Check the type hint value.
         $json = $this->fixture->getJson();
-        $this->assertArrayHasKey(Codegen::CODEGEN_TYPE_HINT, $json);
+        $this->assertArrayHasKey(static::CODEGEN_TYPE_HINT, $json);
         $this->assertEquals(
             '/** @var ' . static::class . ' $name */',
-            $json[Codegen::CODEGEN_TYPE_HINT],
+            $json[static::CODEGEN_TYPE_HINT],
             'Test the typehint'
         );
     }
 
     /**
      * Test the type hint with a more complicated varname from the source.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::addTypeHint
      */
     public function testGenerateSourceFirstRunNoTypeHint()
     {
@@ -180,30 +180,25 @@ class CodegenTest extends AbstractHelper
 
         $this->codegenHandler->generateSource($this->fixture);
         $json = $this->fixture->getJson();
-        $this->assertArrayNotHasKey(Codegen::CODEGEN_TYPE_HINT, $json, 'Type hint is not set.');
+        $this->assertArrayNotHasKey(static::CODEGEN_TYPE_HINT, $json, 'Type hint is not set.');
 
         // do it again, with another name.
         $this->setValueByReflection(static::FIRST_RUN, true, $this->codegenHandler);
         $this->fixture->setNormal(static::class)->setName('justastring');
         $this->codegenHandler->generateSource($this->fixture);
         $json = $this->fixture->getJson();
-        $this->assertArrayNotHasKey(Codegen::CODEGEN_TYPE_HINT, $json, 'Do not add a typehint ot a none variable');
+        $this->assertArrayNotHasKey(static::CODEGEN_TYPE_HINT, $json, 'Do not add a typehint ot a none variable');
 
         // And again.
         $this->setValueByReflection(static::FIRST_RUN, true, $this->codegenHandler);
         $this->fixture->setNormal(static::class)->setName('$justastring . \'wasGehtAb\'');
         $this->codegenHandler->generateSource($this->fixture);
         $json = $this->fixture->getJson();
-        $this->assertArrayNotHasKey(Codegen::CODEGEN_TYPE_HINT, $json, 'Do not add a typehint ot a none variable');
+        $this->assertArrayNotHasKey(static::CODEGEN_TYPE_HINT, $json, 'Do not add a typehint ot a none variable');
     }
 
     /**
      * Test an empty run, something like krexx(), without any variable.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::addTypeHint
      */
     public function testGenerateSourceEmptyFirstRunNoTypeHint()
     {
@@ -211,16 +206,11 @@ class CodegenTest extends AbstractHelper
         $this->setValueByReflection(static::FIRST_RUN, true, $this->codegenHandler);
         $this->codegenHandler->generateSource($this->fixture);
         $json = $this->fixture->getJson();
-        $this->assertArrayNotHasKey(Codegen::CODEGEN_TYPE_HINT, $json, 'Type hint is not set.');
+        $this->assertArrayNotHasKey(static::CODEGEN_TYPE_HINT, $json, 'Type hint is not set.');
     }
 
     /**
-     * Test the type hint with a more complitated varname from t he source.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::addTypeHint
+     * Test the type hint with a more complitated varname from the source.
      */
     public function testGenerateSourceFirstRunTypeHintScalar()
     {
@@ -233,19 +223,16 @@ class CodegenTest extends AbstractHelper
 
         $this->codegenHandler->generateSource($this->fixture);
         $json = $this->fixture->getJson();
-        $this->assertArrayHasKey(Codegen::CODEGEN_TYPE_HINT, $json);
+        $this->assertArrayHasKey(static::CODEGEN_TYPE_HINT, $json);
         $this->assertEquals(
             '/** @var array $variable */',
-            $json[Codegen::CODEGEN_TYPE_HINT],
+            $json[static::CODEGEN_TYPE_HINT],
             'Test the typehint'
         );
     }
 
     /**
      * Test the stop return, in case of constants.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      */
     public function testGenerateSourceMetaConstants()
     {
@@ -259,18 +246,15 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test an empty return value, in case of empty connectors.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      */
     public function testGenerateSourceEmpty()
     {
         $this->connectorMock->expects($this->exactly(1))
             ->method(static::GET_CONNECTOR_LEFT)
-            ->will($this->returnValue(''));
+            ->willReturn('');
         $this->connectorMock->expects($this->exactly(1))
             ->method(static::GET_CONNECTOR_RIGHT)
-            ->will($this->returnValue(''));
+            ->willReturn('');
 
         $this->assertEquals(
             '',
@@ -280,16 +264,12 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the concatenation in case of debug methods.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
      */
     public function testGenerateSourceIsDebug()
     {
         $this->expectConnectorCalls(1, 1);
         $this->fixture
-            ->setType($this->codegenHandler::TYPE_DEBUG_METHOD)
+            ->setType('Debug method')
             ->setCodeGenType(Codegen::CODEGEN_TYPE_PUBLIC);
         $this->assertEquals(
             static::CONCATENATED_CONNECTORS,
@@ -299,10 +279,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the concatenation in case of debug methods.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
      */
     public function testGenerateSourceIteratorToArray()
     {
@@ -316,9 +292,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the meta json code generation.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      */
     public function testGenerateSourceMetaDecodedJson()
     {
@@ -332,9 +305,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the meta Base64 code generation.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      */
     public function testGenerateMetaDecodedBase64()
     {
@@ -347,10 +317,7 @@ class CodegenTest extends AbstractHelper
     }
 
     /**
-     * Test the coegeneration for unaccessible array values.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
+     * Test the code generation for inaccessible array values.
      */
     public function testGenerateSourceArrayValueAccess()
     {
@@ -360,7 +327,7 @@ class CodegenTest extends AbstractHelper
             ->with('0');
         $this->connectorMock->expects($this->once())
             ->method('getParameters')
-            ->will($this->returnValue('0'));
+            ->willReturn('0');
 
         $this->fixture
             ->setCodeGenType($this->codegenHandler::CODEGEN_TYPE_ARRAY_VALUES_ACCESS)
@@ -373,10 +340,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the concatenation in case of public access.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
      */
     public function testGenerateSourceIsPublic()
     {
@@ -390,10 +353,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the concatenation in case that the model is in the scope.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
      */
     public function testGenerateSourceInScope()
     {
@@ -404,7 +363,7 @@ class CodegenTest extends AbstractHelper
         $scopeMock->expects($this->once())
             ->method('testModelForCodegen')
             ->with($this->fixture)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->scope = $scopeMock;
 
         $this->assertEquals(
@@ -415,9 +374,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the '. . .' when out of scope.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      */
     public function testGenerateSourceNotInScope()
     {
@@ -428,7 +384,7 @@ class CodegenTest extends AbstractHelper
         $scopeMock->expects($this->once())
             ->method('testModelForCodegen')
             ->with($this->fixture)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         Krexx::$pool->scope = $scopeMock;
 
         $this->assertEquals('. . .', $this->codegenHandler->generateSource($this->fixture));
@@ -436,10 +392,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the special handling of special chars in the parameters.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::translateDefaultValue
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
      */
     public function testGenerateSourceWithEscaping()
     {
@@ -460,11 +412,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the small ones.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateWrapperLeft
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateWrapperRight
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::setCodegenAllowed
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::isCodegenAllowed
      */
     public function testSimpleGetterandSetter()
     {
@@ -477,8 +424,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the multiple enabling / disabling of the code generation.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::setCodegenAllowed
      */
     public function testSetAllowCodegen()
     {
@@ -510,9 +455,6 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the parameter analysis, with a required parameter.
      * We use a special DateTime parameter as a fixture.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::parameterToString
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::translateDefaultValue
      */
     public function testParameterToString()
     {
@@ -527,24 +469,39 @@ class CodegenTest extends AbstractHelper
     }
 
     /**
+     * Test the parameter analysis, with a default value which is an object.
+     * We use a special method from the Parameters fixture for this.
+     */
+    public function testParameterToStringWithObjects()
+    {
+        if (version_compare(phpversion(), '8.1.0', '<=')) {
+            $this->markTestSkipped('Wrong PHP version.');
+        }
+        $fixture = new Parameters();
+        $reflection = new \ReflectionClass($fixture);
+        $reflectionMethod = $reflection->getMethod('someMethod');
+        $reflectionParameter = $reflectionMethod->getParameters()[0];
+        $this->assertEquals(
+            '\stdClass $myParameter = new \stdClass()',
+            $this->codegenHandler->parameterToString($reflectionParameter)
+        );
+    }
+
+    /**
      * Test the parameter analysis, with a special default value.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::parameterToString
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::retrieveParameterType
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::translateDefaultValue
      */
     public function testParameterToStringWithQuotationMarks()
     {
         $refParamMock = $this->createMock(ReflectionParameter::class);
         $refParamMock->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue('greg'));
+            ->willReturn('greg');
         $refParamMock->expects($this->once())
             ->method('isDefaultValueAvailable')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $refParamMock->expects($this->once())
             ->method('getDefaultValue')
-            ->will($this->returnValue("some 'string'"));
+            ->willReturn("some 'string'");
 
         $this->assertEquals(
             '$greg = &#039;some \&#039;string\&#039;&#039;',
@@ -554,10 +511,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test with a bunch of real parameters.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::parameterToString
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::translateDefaultValue
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::retrieveParameterType
      */
     public function testDefaultValueTranslation()
     {
@@ -590,6 +543,13 @@ class CodegenTest extends AbstractHelper
             $this->codegenHandler->parameterToString($reflectionParameter)
         );
 
+        $reflectionMethod = $reflection->getMethod('byRef');
+        $reflectionParameter = $reflectionMethod->getParameters()[0];
+        $this->assertEquals(
+            'string &amp;$reference = &#039;&#039;',
+            $this->codegenHandler->parameterToString($reflectionParameter)
+        );
+
         if (version_compare(phpversion(), '8.0.0', '>=')) {
             // Test for union types.
             $reflection = new \ReflectionClass(UnionTypeFixture::class);
@@ -600,5 +560,23 @@ class CodegenTest extends AbstractHelper
                 $this->codegenHandler->parameterToString($reflectionParameter)
             );
         }
+    }
+
+    /**
+     * Test stuff with a Enum parameter.
+     */
+    public function testDefaultValueEnum()
+    {
+        if (version_compare(phpversion(), '8.0.99', '<=')) {
+            $this->markTestSkipped('Wrong PHP version.');
+        }
+
+        $reflection = new \ReflectionClass(EnumFixture::class);
+        $reflectionMethod = $reflection->getMethod('useEnums');
+        $reflectionParameter = $reflectionMethod->getParameters()[0];
+        $this->assertEquals(
+            '\Brainworxx\Krexx\Tests\Fixtures\SuitEnumFixture $cardDeck = Brainworxx\Krexx\Tests\Fixtures\SuitEnumFixture::Hearts',
+            $this->codegenHandler->parameterToString($reflectionParameter)
+        );
     }
 }

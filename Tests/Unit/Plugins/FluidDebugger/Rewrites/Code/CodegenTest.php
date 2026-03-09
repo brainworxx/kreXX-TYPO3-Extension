@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -40,17 +41,20 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
-use Brainworxx\Krexx\View\Messages;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Codegen::class, 'setComplicatedWrapperRight')]
+#[CoversMethod(Codegen::class, 'generateWrapperRight')]
+#[CoversMethod(Codegen::class, 'setComplicatedWrapperLeft')]
+#[CoversMethod(Codegen::class, 'generateWrapperLeft')]
+#[CoversMethod(Codegen::class, 'generateSource')]
+#[CoversMethod(Codegen::class, 'generateAll')]
+#[CoversMethod(Codegen::class, 'generateVhsCall')]
+#[CoversMethod(Codegen::class, 'isUnknownType')]
 class CodegenTest extends AbstractHelper
 {
     /**
      * Testing the source code generation for fluid.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::generateSource
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::generateAll
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::generateVhsCall
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::isUnknownType
      */
     public function testGenerateSource()
     {
@@ -64,8 +68,6 @@ class CodegenTest extends AbstractHelper
         $codeGen->setCodegenAllowed(true);
         $model = new Model(Krexx::$pool);
         $model->setName('dotty.dot');
-        $helpMock = $this->createMock(Messages::class);
-        Krexx::$pool->messages = $helpMock;
         $this->assertEquals($codeGen::UNKNOWN_VALUE, $codeGen->generateSource($model));
 
         // The configured debug method.
@@ -73,7 +75,7 @@ class CodegenTest extends AbstractHelper
         $codeGen->setCodegenAllowed(true);
         $model = new Model(Krexx::$pool);
         $model->setName('debugmethod');
-        $model->setType($codeGen::TYPE_DEBUG_METHOD);
+        $model->setType('Debug method');
         $this->assertEquals($codeGen::UNKNOWN_VALUE, $codeGen->generateSource($model));
 
         // The special debug method getProperties
@@ -81,7 +83,7 @@ class CodegenTest extends AbstractHelper
         $codeGen->setCodegenAllowed(true);
         $model = new Model(Krexx::$pool);
         $model->setName('getProperties');
-        $model->setType($codeGen::TYPE_DEBUG_METHOD);
+        $model->setType('Debug method');
         $this->assertEquals('properties', $codeGen->generateSource($model));
 
         // The VHS version.
@@ -128,7 +130,7 @@ class CodegenTest extends AbstractHelper
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
             ->method('getNestingLevel')
-            ->will($this->returnValue(2));
+            ->willReturn(2);
         Krexx::$pool->emergencyHandler = $emergencyMock;
         $this->assertEquals('child', $codeGen->generateSource($model));
 
@@ -158,9 +160,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the setter / getter
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::setComplicatedWrapperLeft
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::generateWrapperLeft
      */
     public function testSetGenerateComplicatedWrapperLeft()
     {
@@ -172,9 +171,6 @@ class CodegenTest extends AbstractHelper
 
     /**
      * Test the setter / getter
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::setComplicatedWrapperRight
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::generateWrapperRight
      */
     public function testSetGenerateComplicatedWrapperRight()
     {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,7 +39,9 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(CheckOutput::class, 'isAllowedIp')]
 class CheckOutputTest extends AbstractHelper
 {
     public function tearDown(): void
@@ -50,8 +53,6 @@ class CheckOutputTest extends AbstractHelper
 
     /**
      * Test the calling of the general utility class. Sort of.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput::isAllowedIp
      */
     public function testIsAllowedIp()
     {

@@ -1,7 +1,7 @@
 {
   "name": "brainworxx/includekrexx",
   "type": "typo3-cms-extension",
-  "description": "Fluid and PHP debugger with backend access to logfiles, code generation to reach the displayed values and much more. We added some special stuff for Aimeos.",
+  "description": "kreXX Debugger - Alternative for `f:debug` (fluid) and `debug();` (PHP) with additional analysis features and logging options.",
   "homepage": "https://github.com/brainworxx/kreXX-TYPO3-Extension",
   "license": [
     "LGPL-2.1-or-later"
@@ -13,19 +13,24 @@
     "log"
   ],
   "require": {
-    "typo3/cms-core": "^10.4 || ^11 || ^12 || ^13",
-    "php": "^7.2 || ^7.3 || ^7.4 || ^8.0 || ^8.1 || ^8.2 || ^8.3",
+    "typo3/cms-core": "^10.4 || ^11 || ^12 || ^13 || ^14",
+    "typo3/cms-extbase": "^10.4 || ^11 || ^12 || ^13 || ^14",
+    "php": "^7.4 || ^8.0 || ^8.1 || ^8.2 || ^8.3 || ^8.4 || ^8.5",
     "ext-json": "*"
   },
   "require-dev": {
-    "typo3/cms-base-distribution": "^10.4 || ^11 || ^12 || ^13",
-    "phpunit/phpunit": "^8.5 || ^9.5 || ^10.5",
+    "typo3/cms-base-distribution": "^10.4 || ^11 || ^12 || ^13 || ^14",
+    "phpunit/phpunit": "^9.5 || ^10.5 || ^11.5",
     "php-mock/php-mock-phpunit": "^2",
-    "typo3/cms-adminpanel": "^10.4 || ^11 || ^12 || ^13"
+    "typo3/cms-adminpanel": "^10.4 || ^11 || ^12 || ^13 || ^14",
+    "aimeos/aimeos-typo3": "^21.10 || ^22.10 || ^23.10 || ^24.10 || ^25.10",
+    "friendsoftypo3/content-blocks": "^1.0 || ^2.0"
   },
   "suggest": {
     "fluidtypo3/vhs": "Allows calling of methods in Fluid templates.",
-    "aimeos/aimeos-typo3": "We offer advanced debugging for Aimeos."
+    "aimeos/aimeos-typo3": "We offer advanced debugging for Aimeos.",
+    "typo3/cms-adminpanel": "Offers an additional way to access the logfiles.",
+    "friendsoftypo3/content-blocks": "Additional analysis for content block objects."
   },
   "authors": [
     {
@@ -60,10 +65,12 @@
     }
   },
   "support": {
-    "issues": "https://github.com/brainworxx/kreXX-TYPO3-Extension/issues"
+    "issues": "https://github.com/brainworxx/kreXX-TYPO3-Extension/issues",
+    "docs": "https://docs.typo3.org/p/brainworxx/includekrexx/main/en-us/"
   },
   "scripts": {
-    "test": "./vendor/bin/phpunit --coverage-clover=./clover.xml --color -d memory_limit=-1 -c Build/phpunit.xml"
+    "test": "./vendor/bin/phpunit --color -d memory_limit=-1 -c Build/phpunit.xml",
+    "test-coverage": "./vendor/bin/phpunit --coverage-clover=./clover.xml --color -d memory_limit=-1 -c Build/phpunit.xml"
   },
   "config": {
     "allow-plugins": {

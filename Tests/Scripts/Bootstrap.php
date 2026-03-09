@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -43,5 +44,6 @@ AbstractHelper::defineFunctionMock(
     '\\Brainworxx\\Includekrexx\\Plugins\\Typo3\\EventHandlers\\QueryParser',
     'method_exists'
 );
+AbstractHelper::defineFunctionMock('\\Brainworxx\\Includekrexx\\Collectors\\', 'glob');
 
 include_once __DIR__ . '/../../Resources/Private/krexx/tests/Scripts/Bootstrap.php';

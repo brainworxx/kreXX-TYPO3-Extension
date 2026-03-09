@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -41,21 +41,28 @@ use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\InheritDocFixture;
 use Brainworxx\Krexx\Tests\Fixtures\InterfaceFixture;
+use Brainworxx\Krexx\Tests\Fixtures\MagicMethods;
 use Brainworxx\Krexx\Tests\Fixtures\PublicFixture;
 use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use ReflectionClass as OriginalReflectionClass;
 use stdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ReflectionClass::class, 'getParentClass')]
+#[CoversMethod(ReflectionClass::class, 'getTraits')]
+#[CoversMethod(ReflectionClass::class, 'getInterfaces')]
+#[CoversMethod(ReflectionClass::class, 'retrieveValue')]
+#[CoversMethod(ReflectionClass::class, 'retrieveEsotericValue')]
+#[CoversMethod(ReflectionClass::class, 'isPropertyUnset')]
+#[CoversMethod(ReflectionClass::class, 'getData')]
+#[CoversMethod(ReflectionClass::class, '__construct')]
+#[CoversMethod(ReflectionClass::class, 'getObjectVars')]
 class ReflectionClassTest extends AbstractHelper
 {
     /**
      * Testing the array casting of an object as well as creating the actual
      * reflection.
-     *
-     * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::__construct
-     *
-     * @throws \ReflectionException
      */
     public function testConstruct()
     {
@@ -75,11 +82,28 @@ class ReflectionClassTest extends AbstractHelper
     }
 
     /**
+     * Testing the array casting of an ArrayObject as well as creating the actual
+     * reflection.
+     */
+    public function testConstructWithArrayObject()
+    {
+        $fixture = new \ArrayObject(['key1' => 'value1', 'key2' => 'value2']);
+        set_error_handler(function (){});
+        // This is actually deprecated as of PHP 8.2, hence the error handler.
+        $fixture->someProperty = 'someValue';
+        restore_error_handler();
+        $reflection = new ReflectionClass($fixture);
+        $this->assertEquals(
+            ['someProperty' => 'someValue'],
+            $this->retrieveValueByReflection('objectArray', $reflection),
+            'ArrayObject does not expose its properties when cast to array.'
+        );
+        $this->assertInstanceOf(OriginalReflectionClass::class, $reflection);
+        $this->assertSame($fixture, $reflection->getData());
+    }
+
+    /**
      * Simple getter tester.
-     *
-     * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::getData
-     *
-     * @throws \ReflectionException
      */
     public function testGetData()
     {
@@ -92,12 +116,6 @@ class ReflectionClassTest extends AbstractHelper
     /**
      * It may not look like it, but this is the most important part of kreXX.
      * Here we retrieve the values from objects.
-     *
-     * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::retrieveValue
-     * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::retrieveEsotericValue
-     * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::isPropertyUnset
-     *
-     * @throws \ReflectionException
      */
     public function testRetrieveValue()
     {
@@ -148,11 +166,47 @@ class ReflectionClassTest extends AbstractHelper
     }
 
     /**
+     * We deliberately throw an error when retrieving the value.
+     */
+    public function testRetrieveValueWithErrors()
+    {
+        // Doing it with an undeclared property.
+        $reflectionMock = $this->createMock(UndeclaredProperty::class);
+        $reflectionMock->expects($this->exactly(2))
+            ->method('getName')
+            ->willReturn('5');
+        $reflectionMock->expects($this->once())
+            ->method('isStatic')
+            ->willThrowException(new \Exception());
+        $reflection = new ReflectionClass(new \stdClass());
+
+        $this->assertNull(
+            $reflection->retrieveValue($reflectionMock),
+            'There never was a value in the first place.'
+        );
+
+        // Again, but with a hidden property.
+        $reflectionMock = $this->createMock(HiddenProperty::class);
+        $reflectionMock->expects($this->exactly(2))
+            ->method('getName')
+            ->willReturn('Tobi');
+        $reflectionMock->expects($this->once())
+            ->method('isStatic')
+            ->willThrowException(new \Exception());
+        $fixture = $this->createMock(MagicMethods::class);
+        $fixture->expects($this->once())
+            ->method('__get')
+            ->willThrowException(new \Exception());
+
+        $reflection = new ReflectionClass($fixture);
+        $this->assertNull(
+            $reflection->retrieveValue($reflectionMock),
+            'There never was a value in the first place.'
+        );
+    }
+
+    /**
      * Test the retrieval of the actually implemented interfaces of this class.
-     *
-     * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::getInterfaces
-     *
-     * @throws \ReflectionException
      */
     public function testGetInterfaces()
     {
@@ -173,10 +227,6 @@ class ReflectionClassTest extends AbstractHelper
 
     /**
      * Test the retrieval of the traits.
-     *
-     * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::getTraits
-     *
-     * @throws \ReflectionException
      */
     public function testGetTraits()
     {
@@ -193,10 +243,6 @@ class ReflectionClassTest extends AbstractHelper
 
     /**
      * Test the retrieval and caching of the parent class.
-     *
-     * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::getParentClass
-     *
-     * @throws \ReflectionException
      */
     public function testGetParentClass()
     {
@@ -208,5 +254,29 @@ class ReflectionClassTest extends AbstractHelper
         $reflection = new ReflectionClass($fixture);
         $result = $reflection->getParentClass();
         $this->assertInstanceOf(ReflectionClass::class, $result);
+    }
+
+    /**
+     * Test the retrieval of the object vars.
+     */
+    public function testGetObjectVars()
+    {
+        $simple = new SimpleFixture();
+        $reflection = new ReflectionClass($simple);
+        $vars = $reflection->getObjectVars();
+        $this->assertCount(2, $vars);
+        $this->assertArrayHasKey('value1', $vars);
+        $this->assertArrayHasKey('value2', $vars);
+
+        $public = new PublicFixture();
+        $public->notSoSpecial = 'normal';
+
+        $reflection = new ReflectionClass($public);
+        $vars = $reflection->getObjectVars();
+        $this->assertCount(4, $vars);
+        $this->assertArrayHasKey('value1', $vars);
+        $this->assertArrayHasKey('value2', $vars);
+        $this->assertArrayHasKey('someValue', $vars);
+        $this->assertArrayHasKey('notSoSpecial', $vars);
     }
 }

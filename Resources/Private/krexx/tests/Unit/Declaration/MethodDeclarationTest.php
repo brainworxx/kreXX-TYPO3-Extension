@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,7 +35,9 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Declaration;
 
+use Brainworxx\Krexx\Analyse\Declaration\AbstractDeclaration;
 use Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration;
+use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\LoggerCallerFixture;
 use Brainworxx\Krexx\Tests\Fixtures\MethodParameterFixture;
@@ -44,14 +46,18 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Fixtures\ReturnTypeFixture;
 use Brainworxx\Krexx\Tests\Fixtures\UnionTypeFixture;
 use ReflectionClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(MethodDeclaration::class, 'retrieveReturnType')]
+#[CoversMethod(AbstractDeclaration::class, 'retrieveNamedType')]
+#[CoversMethod(AbstractDeclaration::class, 'formatNamedType')]
+#[CoversMethod(MethodDeclaration::class, 'retrieveDeclaration')]
+#[CoversMethod(MethodDeclaration::class, 'retrieveDeclaringReflection')]
+#[CoversMethod(MethodDeclaration::class, 'retrieveParameterType')]
 class MethodDeclarationTest extends AbstractHelper
 {
     /**
      * Test the retrieval of declaration of simple functions.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration::retrieveDeclaration
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration::retrieveDeclaringReflection
      */
     public function testRetrieveDeclaration()
     {
@@ -78,11 +84,31 @@ class MethodDeclarationTest extends AbstractHelper
     }
 
     /**
+     * Test the retrieval of an unknown declaration.
+     */
+    public function testRetrieveDeclarationUnknown()
+    {
+        $reflectionMethodMock = $this->createMock(\ReflectionMethod::class);
+        $reflectionClassMock = $this->createMock(\ReflectionClass::class);
+        $reflectionMethodMock->expects($this->once())
+            ->method('getDeclaringClass')
+            ->willReturn($reflectionClassMock);
+        $reflectionMethodMock->expects($this->once())
+            ->method('getFileName')
+            ->willReturn('');
+        $reflectionClassMock->expects($this->once())
+            ->method('isInternal')
+            ->willReturn(false);
+        $reflectionClassMock->expects($this->never())
+            ->method('getFileName');
+
+        $methodDeclaration = new MethodDeclaration(\Krexx::$pool);
+        $result = $methodDeclaration->retrieveDeclaration($reflectionMethodMock);
+        $this->assertEquals(Krexx::$pool->messages->getHelp('unknownDeclaration'), $result);
+    }
+
+    /**
      * Testing the retrieval of the return type by reflections.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration::retrieveReturnType
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\AbstractDeclaration::retrieveNamedType
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\AbstractDeclaration::formatNamedType
      */
     public function testRetrieveReturnType()
     {
@@ -91,6 +117,10 @@ class MethodDeclarationTest extends AbstractHelper
         $refClass = new ReflectionClass($fixture);
         $refMethod = $refClass->getMethod('returnBool');
         $this->assertEquals('bool', $returnType->retrieveReturnType($refMethod));
+
+        // Doing a not typed.
+        $refMethod = $refClass->getMethod('returnThis');
+        $this->assertEquals('', $returnType->retrieveReturnType($refMethod));
 
         // Doing PHP 8+ specific tests.
         if (version_compare(phpversion(), '8.0.0', '>=')) {
@@ -103,10 +133,6 @@ class MethodDeclarationTest extends AbstractHelper
 
     /**
      * Testing the retrieval of a declared parameter type.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration::retrieveParameterType
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\AbstractDeclaration::retrieveNamedType
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\AbstractDeclaration::formatNamedType
      */
     public function testRetrieveParameterType()
     {

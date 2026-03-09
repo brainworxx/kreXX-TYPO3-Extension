@@ -1,4 +1,3 @@
-@charset "UTF-8";
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +16,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,28 +34,8 @@
  * Variables
  *
  */
-.kwrapper, .kfatalwrapper-outer {
-  position: absolute !important;
-  z-index: 10000;
-  text-align: left;
-  color: #555555;
-  min-width: 620px;
-  -webkit-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
-  -webkit-border-bottom-right-radius: 2px;
-  -webkit-border-bottom-left-radius: 2px;
-  -moz-border-radius-bottomright: 2px;
-  -moz-border-radius-bottomleft: 2px;
-  border-bottom-right-radius: 2px;
-  border-bottom-left-radius: 2px;
-  -webkit-border-top-left-radius: 2px;
-  -webkit-border-top-right-radius: 2px;
-  -moz-border-radius-topleft: 2px;
-  -moz-border-radius-topright: 2px;
-  border-top-left-radius: 2px;
-  border-top-right-radius: 2px;
-  overflow: hidden;
+.kwrapper *, .kfatalwrapper-outer * {
+  all: revert-layer;
 }
 .kwrapper div, .kwrapper span, .kwrapper em, .kwrapper ul, .kwrapper li, .kwrapper a, .kwrapper input, .kwrapper table, .kwrapper caption, .kwrapper tbody, .kwrapper tr, .kwrapper td, .kwrapper strong, .kwrapper hr, .kwrapper select, .kwrapper option, .kwrapper label, .kfatalwrapper-outer div, .kfatalwrapper-outer span, .kfatalwrapper-outer em, .kfatalwrapper-outer ul, .kfatalwrapper-outer li, .kfatalwrapper-outer a, .kfatalwrapper-outer input, .kfatalwrapper-outer table, .kfatalwrapper-outer caption, .kfatalwrapper-outer tbody, .kfatalwrapper-outer tr, .kfatalwrapper-outer td, .kfatalwrapper-outer strong, .kfatalwrapper-outer hr, .kfatalwrapper-outer select, .kfatalwrapper-outer option, .kfatalwrapper-outer label {
   padding: 0;
@@ -115,6 +94,29 @@
 .kwrapper option, .kfatalwrapper-outer option {
   padding-left: 5px;
   padding-right: 5px;
+}
+.kwrapper, .kfatalwrapper-outer {
+  position: absolute !important;
+  z-index: 10000;
+  text-align: left;
+  color: #555555;
+  min-width: 620px;
+  -webkit-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
+  -webkit-border-bottom-right-radius: 2px;
+  -webkit-border-bottom-left-radius: 2px;
+  -moz-border-radius-bottomright: 2px;
+  -moz-border-radius-bottomleft: 2px;
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 2px;
+  -webkit-border-top-left-radius: 2px;
+  -webkit-border-top-right-radius: 2px;
+  -moz-border-radius-topleft: 2px;
+  -moz-border-radius-topright: 2px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  overflow: hidden;
 }
 .kwrapper *, .kfatalwrapper-outer * {
   box-sizing: content-box;
@@ -203,21 +205,11 @@
 }
 .kwrapper .knode .ktool-tabs .klogo, .kfatalwrapper-outer .knode .ktool-tabs .klogo {
   display: inline-block;
-  background-color: #FED300;
-  border-radius: 50%;
-  color: #555555;
-  font-size: 16px;
-  font-weight: bold;
   height: 20px;
   width: 20px;
-  vertical-align: -2px;
-}
-.kwrapper .knode .ktool-tabs .klogo .klogo-xx, .kfatalwrapper-outer .knode .ktool-tabs .klogo .klogo-xx {
-  /* Klo go XX? Really? */
-  margin-left: 3px;
-  margin-top: 4px;
-  position: absolute;
-  font-size: 9px;
+  vertical-align: -3px;
+  font-size: initial;
+  font-weight: initial;
 }
 .kwrapper .knode .ktool-tabs .ktext, .kfatalwrapper-outer .knode .ktool-tabs .ktext {
   display: inline-block;
@@ -278,7 +270,7 @@
   width: 150px;
 }
 .kwrapper .knode.kadditional table td.kdesc, .kfatalwrapper-outer .knode.kadditional table td.kdesc {
-  max-width: 50px;
+  max-width: 1000px;
   word-wrap: break-word;
 }
 .kwrapper .knode.kpayload, .kfatalwrapper-outer .knode.kpayload {
@@ -295,12 +287,14 @@
   font: bold 12px tahoma, verdana;
 }
 .kwrapper .kmessage::before, .kfatalwrapper-outer .kmessage::before {
-  content: "  !  ";
+  content: "\00a0\00a0!\00a0\00a0";
   font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
   background-color: #FED300;
   border: 1px solid #555555;
   font-size: small;
   margin-right: 5px;
+  padding-left: 0;
+  padding-right: 0;
 }
 .kwrapper .kconfiguration, .kfatalwrapper-outer .kconfiguration {
   padding: 0;
@@ -350,7 +344,7 @@
 .kwrapper .kchild .kname.keystring::before,
 .kwrapper .kchild .kname.keystring::after, .kfatalwrapper-outer .kchild .kname.keystring::before,
 .kfatalwrapper-outer .kchild .kname.keystring::after {
-  content: "'";
+  content: "\27";
   background: transparent;
 }
 .kwrapper .kchild .kel, .kfatalwrapper-outer .kchild .kel {
@@ -360,7 +354,7 @@
   margin: 0 0 5px;
   background-color: #ffffff;
   line-height: 13px;
-  padding-left: 15px;
+  padding-left: 24px;
   -webkit-border-top-left-radius: 1px;
   -webkit-border-top-right-radius: 1px;
   -moz-border-radius-topleft: 1px;
@@ -410,7 +404,7 @@
   padding-left: 2px;
 }
 .kwrapper .kchild .kel.kexpand::before, .kfatalwrapper-outer .kchild .kel.kexpand::before {
-  content: " ▶  ";
+  content: "\00a0\25B6\00a0\00a0";
   font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
 }
 .kwrapper .kchild .kel.kexpand .kel-bg, .kfatalwrapper-outer .kchild .kel.kexpand .kel-bg {
@@ -420,7 +414,7 @@
   background-image: none;
 }
 .kwrapper .kchild .kel.kopened::before, .kfatalwrapper-outer .kchild .kel.kopened::before {
-  content: " ▼  ";
+  content: "\00a0\25BC\00a0\00a0";
   font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
 }
 .kwrapper .kchild .kel:not(.kexpand), .kfatalwrapper-outer .kchild .kel:not(.kexpand) {
@@ -430,7 +424,7 @@
   /* grey line */
   width: 3px;
   background: #919191 none repeat scroll 0 0;
-  content: " ";
+  content: "\00a0";
   margin-left: 5px;
   display: inline-block;
   margin-right: 13px;
@@ -526,7 +520,7 @@
   cursor: pointer;
 }
 .kwrapper .kchild .kolps::before, .kfatalwrapper-outer .kchild .kolps::before {
-  content: "⇔";
+  content: "\21D4";
   font-weight: bolder;
   font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
 }
@@ -537,7 +531,7 @@
   color: #FED300;
 }
 .kwrapper .kchild .kolps.kcollapsed::before, .kfatalwrapper-outer .kchild .kolps.kcollapsed::before {
-  content: "⇕";
+  content: "\21D5";
   font-weight: bolder;
   font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
 }
@@ -587,7 +581,7 @@
 .kwrapper .kchild .kstring .kshort::before,
 .kwrapper .kchild .kstring .kshort::after, .kfatalwrapper-outer .kchild .kstring .kshort::before,
 .kfatalwrapper-outer .kchild .kstring .kshort::after {
-  content: "'";
+  content: "\27";
 }
 .kwrapper .kchild .kclass::before, .kfatalwrapper-outer .kchild .kclass::before {
   color: #00AD00;
@@ -730,7 +724,7 @@
   color: #ffffff;
 }
 .kwrapper .kclose.knormal::before, .kfatalwrapper-outer .kclose.knormal::before {
-  content: "✕";
+  content: "\2715";
 }
 .kwrapper .kclose.knormal:hover, .kfatalwrapper-outer .kclose.knormal:hover {
   color: #B2B2B2;
@@ -790,7 +784,7 @@
   cursor: pointer;
 }
 .kwrapper .search-wrapper .ksearch .koptions::before, .kfatalwrapper-outer .search-wrapper .ksearch .koptions::before {
-  content: "☼";
+  content: "\263C";
   font-weight: bolder;
   font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
 }

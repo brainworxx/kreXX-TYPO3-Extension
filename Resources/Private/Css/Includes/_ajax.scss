@@ -9,7 +9,7 @@
 
   .ajax-msg {
     float: right;
-    box-shadow: $box-shadow;
+    box-shadow: var(--box-shadow);
     border: 0;
     padding: 11px;
     margin-bottom: 18px;
@@ -24,7 +24,9 @@
     .text {
       display: inline-block;
       font-size: 15px;
-      max-width: 343px;
+      max-width: 335px;
+      color: var(--ajax-font-color);
+      vertical-align: -6px;
     }
 
     &.fade {
@@ -41,10 +43,14 @@
     .icon {
       border-radius: 20px;
       display: inline-block;
-      height: 25px;
-      width: 25px;
+      height: 30px;
+      width: 30px;
       margin-right: 10px;
       vertical-align: top;
+
+      .icon-markup {
+        padding: 5px;
+      }
 
       &::after {
         color: white;
@@ -57,28 +63,20 @@
     }
 
     &.success {
-      background-color: $green-success-bg;
-      color: $white;
+      background-color: var(--green-success-bg);
+      color: var(--white);
 
       .icon {
-        background-color: $green-success-icon;
-
-        &::after {
-          content: "\2713";
-        }
+        background-color: var(--green-success-icon);
       }
     }
 
     &.error {
-      background-color: $red-error-bg;
-      color: $white;
+      background-color: var(--red-error-bg);
+      color: var(--white);
 
       .icon {
-        background-color: $red-error-icon;
-
-        &::after {
-          content: "\2716";
-        }
+        background-color: var(--red-error-icon);
       }
     }
   }

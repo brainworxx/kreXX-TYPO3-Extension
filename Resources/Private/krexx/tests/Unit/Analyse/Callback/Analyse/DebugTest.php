@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,19 +35,20 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse;
 
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Debug;
 use Brainworxx\Krexx\Analyse\Routing\Routing;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Debug::class, 'callMe')]
+#[CoversMethod(AbstractCallback::class, 'dispatchStartEvent')]
+#[CoversMethod(AbstractCallback::class, 'dispatchEventWithModel')]
 class DebugTest extends AbstractHelper
 {
     /**
      * Testing if the debug method output gets routed.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Debug
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchEventWithModel
      */
     public function testCallMe()
     {
@@ -66,7 +67,7 @@ class DebugTest extends AbstractHelper
         $routingMock->expects($this->once())
             ->method('analysisHub')
             ->with($this->anything())
-            ->will($this->returnValue('some markup'));
+            ->willReturn('some markup');
         Krexx::$pool->routing = $routingMock;
 
         // Run the test.

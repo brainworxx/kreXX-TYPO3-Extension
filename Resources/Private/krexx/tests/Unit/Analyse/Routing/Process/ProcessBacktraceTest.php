@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -41,19 +41,24 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ProcessBacktrace::class, '__construct')]
+#[CoversMethod(ProcessBacktrace::class, 'callMe')]
+#[CoversMethod(ProcessBacktrace::class, 'handle')]
+#[CoversMethod(ProcessBacktrace::class, 'getBacktrace')]
 class ProcessBacktraceTest extends AbstractHelper
 {
-
-    protected function setUp(): void
+    /**
+     * Mock the debug backtrace, to provide a fixture.
+     */
+    protected function mockDebugBacktrace()
     {
-        parent::setUp();
-
         $data = 'data';
         $someFile = 'some file';
         $debugBacktrace = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'debug_backtrace');
         $debugBacktrace->expects($this->any())
-            ->will($this->returnValue(
+            ->willReturn(
                 [
                     [
                         BacktraceConstInterface::TRACE_FILE => KREXX_DIR . 'src' . DIRECTORY_SEPARATOR . 'blargh',
@@ -72,13 +77,11 @@ class ProcessBacktraceTest extends AbstractHelper
                         $data => 'Step 4',
                     ],
                 ]
-            ));
+            );
     }
 
     /**
      * Test the setting of the pool.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace::__construct
      */
     public function testConstruct()
     {
@@ -88,13 +91,11 @@ class ProcessBacktraceTest extends AbstractHelper
 
     /**
      * Create a mock backtrace, and see if it is processed.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace::handle
      */
     public function testProcessNormal()
     {
         $this->mockEmergencyHandler();
+        $this->mockDebugBacktrace();
 
         // Inject the RenderNothing.
         $renderNothing = new RenderNothing(Krexx::$pool);
@@ -155,14 +156,11 @@ class ProcessBacktraceTest extends AbstractHelper
 
     /**
      * Testing the backtrace processing, without a backtrace.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace::getBacktrace
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace::filterFilePath
      */
     public function testProcessEmpty()
     {
         $this->mockEmergencyHandler();
+        $this->mockDebugBacktrace();
 
         // Inject the RenderNothing.
         $renderNothing = new RenderNothing(Krexx::$pool);
@@ -186,22 +184,20 @@ class ProcessBacktraceTest extends AbstractHelper
 
         // Check the parameters
         $data = 'data';
-        $someFile = $orgPath = 'some file';
+        $orgPath = 'some file';
         for ($i = 0; $i <= 2; $i++) {
             /** @var \Brainworxx\Krexx\Analyse\Model $model */
             $model = $renderNothing->model['renderExpandableChild'][$i];
 
             if ($i === 2) {
-                $someFile = '...' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'whatever';
                 $orgPath = KREXX_DIR . 'src' . DIRECTORY_SEPARATOR . 'whatever';
             }
 
             $result = $model->getParameters()[CallbackCounter::PARAM_DATA];
             $this->assertEquals(
                 [
-                    BacktraceConstInterface::TRACE_FILE => $someFile,
+                    BacktraceConstInterface::TRACE_FILE => $orgPath,
                     $data => 'Step ' . ($i + 2),
-                    BacktraceConstInterface::TRACE_ORG_FILE => $orgPath
                 ],
                 $result,
                 'Checking the steps, the first one should be omitted.'
@@ -218,5 +214,24 @@ class ProcessBacktraceTest extends AbstractHelper
                 'The name is the step number, starting with 1'
             );
         }
+    }
+
+    /**
+     * We mock the debug_backtrace, and make it return an empty value to
+     * simulate a tiny backtrace.
+     */
+    public function testProcessReallyEmpty()
+    {
+        $this->mockEmergencyHandler();
+
+        $backtraceMock = $this->getFunctionMock(
+            '\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\',
+            'debug_backtrace'
+        );
+        $backtraceMock->expects($this->once())
+            ->willReturn([]);
+
+        $processBacktrace = new ProcessBacktrace(Krexx::$pool);
+        $this->assertEquals('', $processBacktrace->handle());
     }
 }

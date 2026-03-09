@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -76,8 +76,6 @@ class RenderHans extends AbstractRender implements
     use ConnectorRight;
     use CssJs;
     use ExpandableChild;
-    use FatalHeader;
-    use FatalMain;
     use Footer;
     use Header;
     use Help;
@@ -88,6 +86,9 @@ class RenderHans extends AbstractRender implements
     use Search;
     use SingeChildHr;
     use SingleEditableChild;
+
+    use FatalHeader;
+    use FatalMain;
 
     /**
      * Template file name.

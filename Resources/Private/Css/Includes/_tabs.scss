@@ -1,11 +1,12 @@
 .krexx-backend {
   .tabpanel {
     max-width: 1200px;
+    box-shadow: 0 0 100px 0 var(--grey-05);
 
     .nav-tabs {
       border-radius: 2px 2px 0 0;
-      background-color: $grey-05;
-      border-bottom: 1px solid $grey-15;
+      background-color: var(--grey-05);
+      border-bottom: 1px solid var(--grey-15);
       margin-bottom: 0;
       padding-left: 0;
       list-style: none;
@@ -22,10 +23,10 @@
           cursor: default;
 
           > a {
-            border: 1px solid $grey-15;
-            border-bottom-color: $white;
-            background-color: $white;
-            color: $black;
+            border: 1px solid var(--grey-15);
+            border-bottom-color: var(--white);
+            background-color: var(--white);
+            color: var(--black);
             cursor: default;
             margin-right: 0;
 
@@ -41,12 +42,12 @@
           position: relative;
           display: block;
           padding: 6px 12px;
-          color: $black;
+          color: var(--black);
           text-decoration: none;
 
           &:hover {
-            border-color: $grey-15 $grey-15 $white $grey-15;
-            background: $white;
+            border-color: var(--grey-15) var(--grey-15) var(--white) var(--grey-15);
+            background: var(--white);
             text-decoration: none;
             cursor: pointer;
           }
@@ -65,14 +66,14 @@
       height: 0;
       width: 0;
       overflow: hidden;
-      background-color: $white;
+      background-color: var(--white);
 
       &.active {
         height: auto;
         width: auto;
         overflow: visible;
         padding: 15px 12px;
-        border: 1px solid $grey-15;
+        border: 1px solid var(--grey-15);
         border-top: none;
       }
     }

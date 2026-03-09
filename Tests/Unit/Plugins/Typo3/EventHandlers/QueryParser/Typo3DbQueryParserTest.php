@@ -39,25 +39,40 @@ use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQuery
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Messages;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser as OriginalParser;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Typo3DbQueryParser::class, 'convertQueryToDoctrineQueryBuilder')]
+#[CoversMethod(Typo3DbQueryParser::class, '__construct')]
 class Typo3DbQueryParserTest extends AbstractHelper
 {
     /**
      * Test the creation of the query parser with nd without dependency injection
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQueryParser::__construct
      */
     public function testConstruct()
     {
         new Typo3DbQueryParser();
+        $typo3Version = new Typo3Version();
+
         if (method_exists(OriginalParser::class, '__construct')) {
-            $dataMapperMock = $this->createMock(DataMapper::class);
-            new Typo3DbQueryParser($dataMapperMock);
+            if ($typo3Version->getMajorVersion() < 14) {
+                $dataMapperMock = $this->createMock(DataMapper::class);
+                new Typo3DbQueryParser($dataMapperMock);
+            } else {
+                // 14 and beyond.
+                $dataMapperMock = $this->createMock(DataMapper::class);
+                $schemaFactoryMock = $this->createMock(TcaSchemaFactory::class);
+                $connectionPoolMock = $this->createMock(ConnectionPool::class);
+                new Typo3DbQueryParser($dataMapperMock, $schemaFactoryMock, $connectionPoolMock);
+            }
         }
 
         // We simply assert that this part is still reached, without throwing
@@ -71,8 +86,6 @@ class Typo3DbQueryParserTest extends AbstractHelper
      * We are actually somewhat supposed to test the part where the DI works.
      * The bad thing here is that this part has changed much since 8.7.
      * And testing the parent method across all LTS versions is a very bad idea.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQueryParser::convertQueryToDoctrineQueryBuilder
      */
     public function testConvertQueryToDoctrineQueryBuilderNoDi()
     {
@@ -80,16 +93,17 @@ class Typo3DbQueryParserTest extends AbstractHelper
         $parser = new Typo3DbQueryParser();
 
         if (class_exists(ObjectManager::class)) {
+            $queryBuilderMock = $this->createMock(QueryBuilder::class);
             $originalParserMock = $this->createMock(OriginalParser::class);
             $originalParserMock->expects($this->once())
                 ->method('convertQueryToDoctrineQueryBuilder')
                 ->with($fixture)
-                ->will($this->returnValue('some sql'));
+                ->willReturn($queryBuilderMock);
             $objectManagerMock = $this->createMock(ObjectManager::class);
             $objectManagerMock->expects($this->once())
                 ->method('get')
                 ->with(OriginalParser::class)
-                ->will($this->returnValue($originalParserMock));
+                ->willReturn($originalParserMock);
             GeneralUtility::setSingletonInstance(ObjectManager::class, $objectManagerMock);
         } else {
             $this->expectException(\Exception::class);
@@ -104,8 +118,6 @@ class Typo3DbQueryParserTest extends AbstractHelper
      * I'm not really sure if this is possible in TYPO3 12, because development
      * has just begun. When DI is not available, the QueryBuilder should not be
      * available, but that does not stop me from actually testing it.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQueryParser::convertQueryToDoctrineQueryBuilder
      */
     public function testConvertQueryToDoctrineQueryBuilderFailedDi()
     {
@@ -115,12 +127,12 @@ class Typo3DbQueryParserTest extends AbstractHelper
         );
         $methodExistsMock->expects($this->once())
             ->with(ObjectManager::class, 'get')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $messageMock = $this->createMock(Messages::class);
         $messageMock->expects($this->once())
             ->method('getHelp')
             ->with('TYPO3DiNotReady')
-            ->will($this->returnValue('text'));
+            ->willReturn('text');
         Krexx::$pool->messages = $messageMock;
 
         $parser = new Typo3DbQueryParser();

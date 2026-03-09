@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -46,12 +46,16 @@ use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 use Brainworxx\Krexx\View\Output\Chunks;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Cleanup::class, 'cleanupOldChunks')]
+#[CoversMethod(Cleanup::class, 'cleanupOldLogs')]
+#[CoversMethod(Cleanup::class, '__construct')]
 class CleanupTest extends AbstractHelper
 {
-    const CHUNKS_DONE = 'chunksDone';
-    const MISC_NAMESPACE = '\\Brainworxx\\Krexx\\Service\\Misc\\';
-    const GET_LOGGING_IS_ALLOWED = 'isLoggingAllowed';
+    public const  CHUNKS_DONE = 'chunksDone';
+    public const  MISC_NAMESPACE = '\\Brainworxx\\Krexx\\Service\\Misc\\';
+    public const  GET_LOGGING_IS_ALLOWED = 'isLoggingAllowed';
 
     protected $cleanup;
 
@@ -67,18 +71,11 @@ class CleanupTest extends AbstractHelper
     {
         parent::setUp();
         $this->cleanup = new Cleanup(Krexx::$pool);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
         $this->setValueByReflection(static::CHUNKS_DONE, false, $this->cleanup);
     }
 
     /**
      * Test the setting of the pool
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Cleanup::__construct
      */
     public function testConstruct()
     {
@@ -87,8 +84,6 @@ class CleanupTest extends AbstractHelper
 
     /**
      * Test the cleanup of log folders, when logging is not allowed.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Cleanup::cleanupOldLogs
      */
     public function testCleanupOldLogsNoLogging()
     {
@@ -96,7 +91,7 @@ class CleanupTest extends AbstractHelper
         $chunksMock = $this->createMock(Chunks::class);
         $chunksMock->expects($this->once())
             ->method(static::GET_LOGGING_IS_ALLOWED)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         Krexx::$pool->chunks = $chunksMock;
 
         // The log directory will not get globbed.
@@ -107,8 +102,6 @@ class CleanupTest extends AbstractHelper
 
     /**
      * Test the cleanup of the log folder, when it is empty.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Cleanup::cleanupOldLogs
      */
     public function testCleanupOldLogsNoLogs()
     {
@@ -118,13 +111,13 @@ class CleanupTest extends AbstractHelper
         $chunksMock = $this->createMock(Chunks::class);
         $chunksMock->expects($this->once())
             ->method(static::GET_LOGGING_IS_ALLOWED)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->chunks = $chunksMock;
 
         // No logs stored.
         $this->mockGlob()->expects($this->once())
             ->with($logDir . '*.Krexx.html')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         // Nothing to sort, because of an early return.
         $configMock = $this->createMock(Config::class);
@@ -132,7 +125,7 @@ class CleanupTest extends AbstractHelper
             ->method('getSetting');
         $configMock->expects($this->once())
             ->method('getLogDir')
-            ->will($this->returnValue($logDir));
+            ->willReturn($logDir);
         Krexx::$pool->config = $configMock;
 
         $this->cleanup->cleanupOldLogs();
@@ -140,8 +133,6 @@ class CleanupTest extends AbstractHelper
 
     /**
      * Test the cleanup of old logfiles, with mocked up files.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Cleanup::cleanupOldLogs
      */
     public function testCleanupOldLogsNormal()
     {
@@ -152,7 +143,7 @@ class CleanupTest extends AbstractHelper
 
         $this->mockGlob()->expects($this->once())
             ->with($logDir . '*.Krexx.html')
-            ->will($this->returnValue([$file1, $file2, $file3]));
+            ->willReturn([$file1, $file2, $file3]);
 
         // Prepare the configuration
         ConfigSupplier::$overwriteValues[Fallback::SETTING_MAX_FILES] = '1';
@@ -165,7 +156,7 @@ class CleanupTest extends AbstractHelper
         $chunksMock = $this->createMock(Chunks::class);
         $chunksMock->expects($this->once())
             ->method(static::GET_LOGGING_IS_ALLOWED)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->chunks = $chunksMock;
 
         // Test the retrieval of the file time.
@@ -176,14 +167,12 @@ class CleanupTest extends AbstractHelper
                 [$file1],
                 [$file2],
                 [$file3]
-            ))->will(
-                $this->returnValueMap(
-                    [
-                        [$file1, 999],
-                        [$file2, 123],
-                        [$file3, 789]
-                    ]
-                )
+            ))->willReturnMap(
+                [
+                    [$file1, 999],
+                    [$file2, 123],
+                    [$file3, 789]
+                ]
             );
 
         // Test the deleting of the two oldest files (2 and 3).
@@ -206,15 +195,13 @@ class CleanupTest extends AbstractHelper
 
     /**
      * Test the cleanup of old chunks, when we have no write access.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Cleanup::cleanupOldChunks
      */
     public function testCleanupOldChunksNoWriteAccess()
     {
         $chunksMock = $this->createMock(Chunks::class);
         $chunksMock->expects($this->once())
             ->method('isChunkAllowed')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         Krexx::$pool->chunks = $chunksMock;
 
         $this->cleanup->cleanupOldChunks();
@@ -227,8 +214,6 @@ class CleanupTest extends AbstractHelper
 
     /**
      * Test the cleanup of old chunks, when we have no write access.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Cleanup::cleanupOldChunks
      */
     public function testCleanupOldChunksNormal()
     {
@@ -240,21 +225,21 @@ class CleanupTest extends AbstractHelper
         $chunksMock = $this->createMock(Chunks::class);
         $chunksMock->expects($this->once())
             ->method('isChunkAllowed')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->chunks = $chunksMock;
 
         $configMock = $this->createMock(Config::class);
         $configMock->expects($this->once())
             ->method('getChunkDir')
-            ->will($this->returnValue($chunkDir));
+            ->willReturn($chunkDir);
         Krexx::$pool->config = $configMock;
 
         $this->mockGlob()->expects($this->once())
             ->with($chunkDir . '*.Krexx.tmp')
-            ->will($this->returnValue([$file1, $file2, $file3]));
+            ->willReturn([$file1, $file2, $file3]);
         $time = $this->getFunctionMock(static::MISC_NAMESPACE, 'time');
         $time->expects($this->once())
-            ->will($this->returnValue(10000));
+            ->willReturn(10000);
 
         // Test the retrieval of the file time.
         $fileServiceMock = $this->createMock(File::class);
@@ -264,14 +249,12 @@ class CleanupTest extends AbstractHelper
                 [$file1],
                 [$file2],
                 [$file3]
-            ))->will(
-                $this->returnValueMap(
-                    [
-                        [$file1, 999999],
-                        [$file2, 100],
-                        [$file3, 200]
-                    ]
-                )
+            ))->willReturnMap(
+                [
+                    [$file1, 999999],
+                    [$file2, 100],
+                    [$file3, 200]
+                ]
             );
 
         // Test the deleting of the two oldest files 2 and 3, while 1 is too new.

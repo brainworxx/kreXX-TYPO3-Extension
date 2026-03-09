@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,8 +38,15 @@ namespace Brainworxx\Krexx\Tests\Unit\Service\Misc;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\Encoding;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
-use phpmock\generator\MockFunctionGenerator;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Encoding::class, 'mbStrLen')]
+#[CoversMethod(Encoding::class, 'encodeStringForCodeGeneration')]
+#[CoversMethod(Encoding::class, 'encodeString')]
+#[CoversMethod(Encoding::class, 'arrayMapCallbackCode')]
+#[CoversMethod(Encoding::class, 'arrayMapCallbackNormal')]
+#[CoversMethod(Encoding::class, 'encodeCompletely')]
+#[CoversMethod(Encoding::class, '__construct')]
 class EncodingTest extends AbstractHelper
 {
     /**
@@ -57,8 +64,6 @@ class EncodingTest extends AbstractHelper
      * Testing the setting of the pool annd the assigning of the string encoder.
      *
      * We will not test the cheap mb_string polyfills.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::__construct
      */
     public function testConstruct()
     {
@@ -68,9 +73,6 @@ class EncodingTest extends AbstractHelper
 
     /**
      * Testing the early return with an empty string.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::encodeString
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::encodeCompletely
      */
     public function testEncodeStringEmpty()
     {
@@ -80,9 +82,6 @@ class EncodingTest extends AbstractHelper
 
     /**
      * Testing the encoding of strings, also with some special stuff.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::encodeString
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::encodeCompletely
      */
     public function testEncodeStringNormal()
     {
@@ -93,15 +92,29 @@ class EncodingTest extends AbstractHelper
         $fixture = 'just another string <div> { @' . chr(9);
         $expected = 'just another string &lt;div&gt; &#123; &#64;&nbsp;&nbsp;';
         $this->assertEquals($expected, $this->encoding->encodeString($fixture, true));
+
+        $fixture = random_bytes(102401);
+        $expected = Krexx::$pool->messages->getHelp('stringTooLarge');
+        $this->assertEquals($expected, $this->encoding->encodeString($fixture));
     }
 
     /**
-     * Testing the encoding of strings, where htmlentities fail.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::encodeString
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::arrayMapCallbackCode
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::arrayMapCallbackNormal
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::encodeCompletely
+     * We test it with a completely broken string.
+     */
+    public function testEncodeStringCompletelyBroken()
+    {
+        $mbConvertEncodingMock = $this->getFunctionMock(
+            '\\Brainworxx\\Krexx\\Service\\Misc\\',
+            'mb_convert_encoding'
+        );
+        $mbConvertEncodingMock->expects($this->once())->willReturn('');
+        $fixture = random_bytes(50);
+        $expected = '';
+        $this->assertEquals($expected, $this->encoding->encodeString($fixture));
+    }
+
+    /**
+     * Testing the encoding of strings, where html entities fail.
      */
     public function testEncodeStringBroken()
     {
@@ -115,9 +128,17 @@ class EncodingTest extends AbstractHelper
     }
 
     /**
-     * Testing the preparation of striong as code connectors.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::encodeStringForCodeGeneration
+     * Testing the encoding of normal string when they are larger than 3 MB.
+     */
+    public function testEncodeStringNormalHuge()
+    {
+        $fixture = str_pad('', 3072001, 'just another string <div> { @ ');
+        $expected = Krexx::$pool->messages->getHelp('stringTooLargeNormal');
+        $this->assertEquals($expected, $this->encoding->encodeString($fixture));
+    }
+
+    /**
+     * Testing the preparation of string as code connectors.
      */
     public function testEncodeStringForCodeGeneration()
     {
@@ -138,12 +159,15 @@ class EncodingTest extends AbstractHelper
                 $this->encoding->encodeStringForCodeGeneration($fixture . $original)
             );
         }
+
+        $this->assertSame(
+            42,
+            $this->encoding->encodeStringForCodeGeneration(42)
+        );
     }
 
     /**
      * Testing the wrapper around the mb_strlen.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::mbStrLen
      */
     public function testMbStrLen()
     {
@@ -152,7 +176,7 @@ class EncodingTest extends AbstractHelper
             ->with(...$this->withConsecutive(
                 ['string'],
                 ['another string', 'some encoding']
-            ))->will($this->returnValue(42));
+            ))->willReturn(42);
 
         $this->assertEquals(42, $this->encoding->mbStrLen('string'));
         $this->assertEquals(42, $this->encoding->mbStrLen('another string', 'some encoding'));

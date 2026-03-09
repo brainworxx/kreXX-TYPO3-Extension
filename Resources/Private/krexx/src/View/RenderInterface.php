@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,21 +38,12 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\View;
 
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Interface for the render class, defining all public methods.
  */
 interface RenderInterface
 {
-    /**
-     * Injects the pool and initialize the skin path.
-     *
-     * @param Pool $pool
-     *   The pool, where we store the classes we need.
-     */
-    public function __construct(Pool $pool);
-
     /**
      * Render a block of a detected recursion.
      *
@@ -156,6 +147,13 @@ interface RenderInterface
      *
      * @return string
      *   The template file, with all markers replaced.
+     *
+     * @deprecated
+     *   Since 6.0.0
+     *   Will be removed.
+     *   Has anybody used this one since PHP 7.0 anyway?
+     * @codeCoverageIgnore
+     *   We will not test deprecated code.
      */
     public function renderFatalMain(string $errstr, string $errfile, int $errline): string;
 
@@ -169,6 +167,13 @@ interface RenderInterface
      *
      * @return string
      *   The template file, with all markers replaced.
+     *
+     * @deprecated
+     *   Since 6.0.0
+     *   Will be removed.
+     *   Has anybody used this one since PHP 7.0 anyway?
+     * @codeCoverageIgnore
+     *   We will not test deprecated code.
      */
     public function renderFatalHeader(string $cssJs, string $errorType): string;
 

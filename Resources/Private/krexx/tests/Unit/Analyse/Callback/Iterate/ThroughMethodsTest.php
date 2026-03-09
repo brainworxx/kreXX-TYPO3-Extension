@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,7 +38,9 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Iterate;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Analyse\Comment\Methods;
+use Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Tests\Fixtures\AttributeFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
@@ -47,7 +49,16 @@ use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Krexx;
 use ReflectionMethod;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ThroughMethods::class, '__construct')]
+#[CoversMethod(ThroughMethods::class, 'callMe')]
+#[CoversMethod(ThroughMethods::class, 'retrieveConnectorType')]
+#[CoversMethod(ThroughMethods::class, 'retrieveParameters')]
+#[CoversMethod(MethodDeclaration::class, 'retrieveDeclaration')]
+#[CoversMethod(MethodDeclaration::class, 'retrieveDeclaringReflection')]
+#[CoversMethod(ThroughMethods::class, 'getDeclarationKeywords')]
+#[CoversMethod(ThroughMethods::class, 'retrieveMethodData')]
 class ThroughMethodsTest extends AbstractHelper
 {
     /**
@@ -79,8 +90,6 @@ class ThroughMethodsTest extends AbstractHelper
 
     /**
      * Testing the creation of the comment analysis.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::__construct
      */
     public function testConstruct()
     {
@@ -92,8 +101,6 @@ class ThroughMethodsTest extends AbstractHelper
 
     /**
      * Testing an analysis without any methods to look at.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::callMe
      */
     public function testCallMeEmpty()
     {
@@ -116,14 +123,6 @@ class ThroughMethodsTest extends AbstractHelper
 
     /**
      * Normal testrun for the method analysis.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::retrieveConnectorType
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::retrieveParameters
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration::retrieveDeclaration
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration::retrieveDeclaringReflection
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::getDeclarationKeywords
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::retrieveMethodData
      */
     public function testCallMeNormal()
     {
@@ -184,7 +183,7 @@ class ThroughMethodsTest extends AbstractHelper
             '',
             'Some comment.',
             $methodFixtureFile,
-            $methodFixtureClass
+            $methodFixtureClass,
         );
 
         // protectedMethod
@@ -197,7 +196,7 @@ class ThroughMethodsTest extends AbstractHelper
             '',
             'More comments',
             $methodFixtureFile,
-            $methodFixtureClass
+            $methodFixtureClass,
         );
 
         // privateMethod
@@ -211,7 +210,7 @@ class ThroughMethodsTest extends AbstractHelper
             '',
             'Private function',
             $complexMethodFixtureFile,
-            $complexMethodFixtureClass
+            $complexMethodFixtureClass,
         );
 
         // privateMethod
@@ -225,7 +224,7 @@ class ThroughMethodsTest extends AbstractHelper
             '',
             'Private method. Duh.',
             $methodFixtureFile,
-            $methodFixtureClass
+            $methodFixtureClass,
         );
 
         // troublesomeMethod
@@ -238,7 +237,7 @@ class ThroughMethodsTest extends AbstractHelper
             '\someNotExistingClass $parameter',
             'Asking politely for trouble here',
             $methodFixtureFile,
-            $methodFixtureClass
+            $methodFixtureClass,
         );
 
         // finalMethod
@@ -251,7 +250,7 @@ class ThroughMethodsTest extends AbstractHelper
             '',
             'Final function',
             $complexMethodFixtureFile,
-            $complexMethodFixtureClass
+            $complexMethodFixtureClass,
         );
 
         // parameterizedMethod
@@ -264,7 +263,7 @@ class ThroughMethodsTest extends AbstractHelper
             '$parameter',
             '&#64;param $parameter',
             $complexMethodFixtureFile,
-            $complexMethodFixtureClass
+            $complexMethodFixtureClass,
         );
 
         // traitFunction
@@ -277,7 +276,49 @@ class ThroughMethodsTest extends AbstractHelper
             '',
             'Do something.',
             'TraitFixture.php',
-            'Brainworxx\\Krexx\\Tests\\Fixtures\\TraitFixture'
+            'Brainworxx\\Krexx\\Tests\\Fixtures\\TraitFixture',
+        );
+    }
+
+    /**
+     * Testing the method analysis with attributes.
+     */
+    public function testCallMeAttributes()
+    {
+        if (version_compare(PHP_VERSION, '8.1.0', '<')) {
+            $this->markTestSkipped('Wrong PHP version.');
+        }
+
+        // Test the event calling.
+        $this->mockEventService(
+            [$this->startEvent, $this->throughMethods],
+            [$this->endEvent, $this->throughMethods]
+        );
+
+        $fixture = [
+            $this->throughMethods::PARAM_REF => new ReflectionClass(AttributeFixture::class),
+            $this->throughMethods::PARAM_DATA => [
+                new ReflectionMethod(AttributeFixture::class, 'getFoo'),
+            ]
+        ];
+
+        // Inject the render nothing.
+        $renderNothing = new RenderNothing(Krexx::$pool);
+        Krexx::$pool->render = $renderNothing;
+        // Overwrite the callback.
+        Krexx::$pool->rewrite[ThroughMeta::class] = CallbackNothing::class;
+
+        // Run the test.
+        $this->throughMethods
+            ->setParameters($fixture)
+            ->callMe();
+
+        // Check the result
+        /** @var Model $model */
+        $model = $renderNothing->model['renderExpandableChild'][0];
+        $this->assertStringContainsString(
+            "#[Brainworxx\Krexx\Tests\Fixtures\Phobject\Attributes\Stuff(",
+            $model->getParameters()[$this->throughMethods::PARAM_DATA]['Attributes']
         );
     }
 
@@ -312,6 +353,7 @@ class ThroughMethodsTest extends AbstractHelper
             $comment,
             $model->getParameters()[$this->throughMethods::PARAM_DATA]['Comment']
         );
+
         $this->assertStringContainsString(
             $declaredInFile,
             $model->getParameters()[$this->throughMethods::PARAM_DATA]['Declared in']

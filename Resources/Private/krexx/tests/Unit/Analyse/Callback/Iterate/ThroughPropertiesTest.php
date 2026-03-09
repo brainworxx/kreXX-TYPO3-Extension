@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,36 +36,57 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties;
+use Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
+use Brainworxx\Krexx\Tests\Fixtures\AttributeFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesInheritanceFixture;
+use Brainworxx\Krexx\Tests\Fixtures\EnumFixture;
 use Brainworxx\Krexx\Tests\Fixtures\PublicFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ReadOnlyFixture;
+use Brainworxx\Krexx\Tests\Fixtures\SuitEnumFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
 use ReflectionProperty;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ThroughProperties::class, 'callMe')]
+#[CoversMethod(ThroughProperties::class, 'prepareModel')]
+#[CoversMethod(ThroughProperties::class, 'retrieveConnector')]
+#[CoversMethod(ThroughProperties::class, 'retrievePropertyName')]
+#[CoversMethod(PropertyDeclaration::class, 'retrieveDeclaration')]
+#[CoversMethod(PropertyDeclaration::class, 'retrieveDeclaringClassFromTraits')]
+#[CoversMethod(ThroughProperties::class, 'getAdditionalData')]
+#[CoversMethod(ThroughProperties::class, 'retrieveDefaultValue')]
+#[CoversMethod(ThroughProperties::class, 'formatDefaultValue')]
+#[CoversMethod(ThroughProperties::class, 'retrieveValueStatus')]
+#[CoversMethod(PropertyDeclaration::class, 'retrieveNamedPropertyType')]
+#[CoversMethod(ThroughProperties::class, 'isPropertyNameNormal')]
 class ThroughPropertiesTest extends AbstractHelper
 {
-    const PUBLIC_STRING_PROPERTY = 'publicStringProperty';
-    const PUBLIC_INT_PROPERTY = 'publicIntProperty';
-    const PUBLIC_FLOAT_PROPERTY = 'publicFloatProperty';
-    const UNSET_PROPERTY = 'unsetProperty';
-    const PROTECTED_PROPERTY = 'protectedProperty';
-    const MY_PROPERTY = 'myProperty';
-    const LONG_STRING = 'longString';
-    const PUBLIC_STATIC = 'publicStatic';
-    const INHERITED_PUBLIC = 'inheritedPublic';
-    const INHERITED_NULL = 'inheritedNull';
-    const TRAIT_PROPERTY = 'traitProperty';
-    const JSON_COMMENT_KEY = 'Comment';
-    const JSON_DECLARED_KEY = 'Declared in';
-    const JSON_DEFAULT_VALUE = 'Default value';
-    const PUBLIC_ARRAY_DEFAULT = 'array';
-    const READ_ONLY_STRING = 'readOnyString';
+    public const PUBLIC_STRING_PROPERTY = 'publicStringProperty';
+    public const PUBLIC_INT_PROPERTY = 'publicIntProperty';
+    public const PUBLIC_FLOAT_PROPERTY = 'publicFloatProperty';
+    public const UNSET_PROPERTY = 'unsetProperty';
+    public const PROTECTED_PROPERTY = 'protectedProperty';
+    public const MY_PROPERTY = 'myProperty';
+    public const LONG_STRING = 'longString';
+    public const PUBLIC_STATIC = 'publicStatic';
+    public const INHERITED_PUBLIC = 'inheritedPublic';
+    public const INHERITED_NULL = 'inheritedNull';
+    public const TRAIT_PROPERTY = 'traitProperty';
+    public const JSON_COMMENT_KEY = 'Comment';
+    public const JSON_DECLARED_KEY = 'Declared in';
+    public const JSON_DEFAULT_VALUE = 'Default value';
+    public const ATTRIBUTES_KEY = 'Attributes';
+    public const PUBLIC_ARRAY_DEFAULT = 'array';
+    public const READ_ONLY_STRING = 'readOnyString';
+    public const ENUM_VALUE = 'enumValue';
+    public const PROPERTY = 'property';
 
     /**
      * @var \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties
@@ -93,9 +114,6 @@ class ThroughPropertiesTest extends AbstractHelper
 
     /**
      * Testing an analysis without any methods to look at.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::prepareModel
      */
     public function testCallMeEmpty()
     {
@@ -118,19 +136,6 @@ class ThroughPropertiesTest extends AbstractHelper
 
     /**
      * Normal test run for the property analysis.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::prepareModel
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveConnector
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrievePropertyName
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaration
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaringClassFromTraits
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::getAdditionalData
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveDefaultValue
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::formatDefaultValue
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveValueStatus
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeNormal()
     {
@@ -173,7 +178,7 @@ class ThroughPropertiesTest extends AbstractHelper
                 new ReflectionProperty(ComplexPropertiesFixture::class, static::TRAIT_PROPERTY),
                 new UndeclaredProperty(new ReflectionClass($subject), $undeclaredProp),
                 new ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_ARRAY_DEFAULT),
-                new ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_FLOAT_PROPERTY),
+                new ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_FLOAT_PROPERTY)
             ]
         ];
 
@@ -410,19 +415,65 @@ class ThroughPropertiesTest extends AbstractHelper
     }
 
     /**
+     * Provoke an error when getting the default value.
+     */
+    public function testCallMeError()
+    {
+        if (version_compare(phpversion(), '7.4.99', '<')) {
+            $this->markTestSkipped('Wrong PHP Version');
+        }
+
+        // Create a fixture.
+        $refPropertyMock = $this->createMock(ReflectionProperty::class);
+        $refPropertyMock->expects($this->any())
+            ->method('hasDefaultValue')
+            ->willReturn(true);
+        $refPropertyMock->expects($this->any())
+            ->method('getDefaultValue')
+            ->willThrowException(new \Exception());
+        $refPropertyMock->expects($this->any())
+            ->method('getName')
+            ->willReturn('someValue');
+        $refPropertyMock->expects($this->any())
+            ->method('isStatic')
+            ->willReturn(false);
+        $refPropertyMock->expects($this->any())
+            ->method('isProtected')
+            ->willReturn(false);
+        $refPropertyMock->expects($this->any())
+            ->method('isPrivate')
+            ->willReturn(false);
+        $refPropertyMock->expects($this->any())
+            ->method('getDeclaringClass')
+            ->willReturn(new \ReflectionClass(PublicFixture::class));
+        $refPropertyMock->expects($this->any())
+            ->method('getDocComment')
+            ->willReturn('');
+
+
+        $subject = new ComplexPropertiesFixture();
+        $fixture = [
+            $this->throughProperties::PARAM_REF => new ReflectionClass($subject),
+            $this->throughProperties::PARAM_DATA => [$refPropertyMock]
+        ];
+
+        // Inject the nothing-router.
+        $routeNothing = new RoutingNothing(Krexx::$pool);
+        Krexx::$pool->routing = $routeNothing;
+        $this->mockEmergencyHandler();
+
+        // Run the test
+        $this->throughProperties
+            ->setParameters($fixture)
+            ->callMe();
+
+        $model = $routeNothing->model[0];
+
+        $this->assertSame('&#039;whatever&#039;', $model->getJson()['Default value']);
+    }
+
+    /**
      * Special tests for PHP 8, actually with some 7.4'er stuff.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::prepareModel
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveConnector
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrievePropertyName
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaration
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaringClassFromTraits
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveNamedPropertyType
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::getAdditionalData
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveDefaultValue
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::formatDefaultValue
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveValueStatus
      */
     public function testCallMePhpEight()
     {
@@ -471,6 +522,99 @@ class ThroughPropertiesTest extends AbstractHelper
     }
 
     /**
+     * Testing the default enum value.
+     */
+    public function testCallMeDefaultEnum()
+    {
+        if (version_compare(phpversion(), '8.0.99', '<')) {
+            $this->markTestSkipped('Wrong PHP Version');
+        }
+
+        // Test the events.
+        $this->mockEventService(
+            [$this->startEvent, $this->throughProperties],
+            [$this->endEvent, $this->throughProperties]
+        );
+
+        $subject = new EnumFixture();
+        $fixture = [
+            $this->throughProperties::PARAM_REF => new ReflectionClass($subject),
+            $this->throughProperties::PARAM_DATA => [
+                new ReflectionProperty(EnumFixture::class, static::ENUM_VALUE),
+            ]
+        ];
+
+        // Inject the nothing-router.
+        $routeNothing = new RoutingNothing(Krexx::$pool);
+        Krexx::$pool->routing = $routeNothing;
+        $this->mockEmergencyHandler();
+
+        $this->throughProperties
+            ->setParameters($fixture)
+            ->callMe();
+        $model = $routeNothing->model[0];
+
+        $this->assertModelValues(
+            $model,
+            SuitEnumFixture::Hearts,
+            static::ENUM_VALUE,
+            [
+                static::JSON_COMMENT_KEY => '&#64;var SuitEnumFixture',
+                static::JSON_DECLARED_KEY => 'EnumFixture.php<br />in class: Brainworxx\Krexx\Tests\Fixtures\EnumFixture',
+                'Default value' => var_export(SuitEnumFixture::Hearts, true),
+            ],
+            '->',
+            '',
+            'Public '
+        );
+    }
+
+    public function testCallMeAttribute()
+    {
+        if (version_compare(phpversion(), '8.0.99', '<')) {
+            $this->markTestSkipped('Wrong PHP Version');
+        }
+
+        // Test the events.
+        $this->mockEventService(
+            [$this->startEvent, $this->throughProperties],
+            [$this->endEvent, $this->throughProperties]
+        );
+
+        $subject = new AttributeFixture();
+        $fixture = [
+            $this->throughProperties::PARAM_REF => new ReflectionClass($subject),
+            $this->throughProperties::PARAM_DATA => [
+                new ReflectionProperty(AttributeFixture::class, 'foo'),
+            ]
+        ];
+
+        // Inject the nothing-router.
+        $routeNothing = new RoutingNothing(Krexx::$pool);
+        Krexx::$pool->routing = $routeNothing;
+        $this->mockEmergencyHandler();
+
+        $this->throughProperties
+            ->setParameters($fixture)
+            ->callMe();
+        $model = $routeNothing->model[0];
+
+        $this->assertModelValues(
+            $model,
+            'bar',
+            'foo',
+            [
+                static::JSON_DECLARED_KEY => 'AttributeFixture.php<br />in class: Brainworxx\Krexx\Tests\Fixtures\AttributeFixture',
+                'Attributes' => "#[Brainworxx\Krexx\Tests\Fixtures\Phobject\Attributes\Stuff(<br />    'foo',<br />    'bar',<br />)]",
+                'Typed as' => 'string'
+            ],
+            '->',
+            '',
+            'Public '
+        );
+    }
+
+    /**
      * Simply assert the stuff inside the model.
      *
      * @param \Brainworxx\Krexx\Analyse\Model $model
@@ -511,8 +655,6 @@ class ThroughPropertiesTest extends AbstractHelper
 
     /**
      * Testing the property name analysis.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::isPropertyNameNormal
      */
     public function testIsPropertyNameNormal()
     {

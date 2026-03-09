@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -61,7 +61,7 @@ class Routing extends AbstractRouting
     /**
      * @var ProcessInterface[]
      */
-    protected $processors = [];
+    protected array $processors = [];
 
     /**
      * Inject the pool and create all the routing classes.
@@ -81,7 +81,6 @@ class Routing extends AbstractRouting
         $this->processors[ProcessFloat::class] = $pool->createClass(ProcessFloat::class);
         $this->processors[ProcessNull::class] = $pool->createClass(ProcessNull::class);
         $this->processors[ProcessResource::class] = $pool->createClass(ProcessResource::class);
-        $this->processors[ProcessOther::class] = $pool->createClass(ProcessOther::class);
 
         $pool->routing = $this;
     }
@@ -107,11 +106,15 @@ class Routing extends AbstractRouting
 
         foreach ($this->processors as $processor) {
             if ($processor->canHandle($model)) {
-                return $processor->handle($model);
+                return $processor->handle();
             }
         }
 
-        // The ProcessOther should prevent this.
-        return '';
+        // Looks like we ran out of processors.
+        /** @var ProcessOther $processOther */
+        $processOther = $this->pool->createClass(ProcessOther::class);
+        $processOther->canHandle($model);
+
+        return $processOther->handle();
     }
 }

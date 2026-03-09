@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,20 +37,21 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Collectors;
 
 use Brainworxx\Includekrexx\Collectors\LogfileList;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
+use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(LogfileList::class, 'assignData')]
+#[CoversMethod(LogfileList::class, 'retrieveFileList')]
+#[CoversMethod(LogfileList::class, 'retrieveFileInfo')]
+#[CoversMethod(LogfileList::class, 'addMetaToFileInfo')]
+#[CoversMethod(LogfileList::class, 'fileSizeConvert')]
+#[CoversMethod(LogfileList::class, 'getRoute')]
 class LogfileListTest extends AbstractHelper
 {
     /**
      * Test the retrieval of logfile infos.
-     *
-     * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::assignData
-     * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::retrieveFileList
-     * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::retrieveFileInfo
-     * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::addMetaToFileInfo
-     * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::fileSizeConvert
-     * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::getRoute
      */
     public function testAssignData()
     {
@@ -61,7 +63,11 @@ class LogfileListTest extends AbstractHelper
 
         // No access. Show no files at all.
         $logLister = new LogfileList();
-        $viewMock = $this->createMock(AbstractTemplateView::class);
+        if (class_exists(AbstractTemplateView::class)) {
+            $viewMock = $this->createMock(AbstractTemplateView::class);
+        } else {
+            $viewMock = $this->createMock(ModuleTemplate::class);
+        }
         $viewMock->expects($this->once())
             ->method($assign)
             ->with($fileList, []);
@@ -83,7 +89,7 @@ class LogfileListTest extends AbstractHelper
         $beUriBuilderMock = $this->createMock(UriBuilder::class);
         $beUriBuilderMock->expects($this->exactly(3))
             ->method('buildUriFromRoute')
-            ->will($this->returnValue($someBeUrl));
+            ->willReturn($someBeUrl);
 
         $this->injectIntoGeneralUtility(UriBuilder::class, $beUriBuilderMock);
 
@@ -136,10 +142,29 @@ class LogfileListTest extends AbstractHelper
                 'meta' => []
             ]
         ];
-        $viewMock = $this->createMock(AbstractTemplateView::class);
+        if (class_exists(AbstractTemplateView::class)) {
+            $viewMock = $this->createMock(AbstractTemplateView::class);
+        } else {
+            $viewMock = $this->createMock(ModuleTemplate::class);
+        }
         $viewMock->expects($this->once())
             ->method($assign)
             ->with($fileList, $expectation);
         $logLister->assignData($viewMock);
+    }
+
+    /**
+     * Test the retrieval of an empty file list.
+     */
+    public function testRetrieveFileListEmpty()
+    {
+        // Normal access.
+        $logLister = new LogfileList();
+        $this->setValueByReflection('hasAccess', true, $logLister);
+        $globMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Collectors\\', 'glob');
+        $globMock->expects($this->once())
+            ->willReturn([]);
+
+        $this->assertSame([], $logLister->retrieveFileList(), 'There should be no files.');
     }
 }

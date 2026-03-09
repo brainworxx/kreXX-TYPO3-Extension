@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Controller;
 
-use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
@@ -45,11 +44,10 @@ use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use stdClass;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\HtmlResponse;
-use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Page\PageRenderer;
@@ -57,7 +55,6 @@ use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Response as MvcResponse;
-use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 
 /**
  * Hosting all those ugly workarounds to keep this extension compatible back to
@@ -66,6 +63,7 @@ use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 abstract class AbstractController extends ActionController implements ConstInterface, ControllerConstInterface
 {
     use LanguageTrait;
+    use AccessTrait;
 
     /**
      * @var string
@@ -92,37 +90,34 @@ abstract class AbstractController extends ActionController implements ConstInter
      *
      * @var \Brainworxx\Krexx\Service\Factory\Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
-     /**
+    /**
      * @var \Brainworxx\Includekrexx\Collectors\Configuration
      */
-    protected $configuration;
+    protected Configuration $configuration;
 
     /**
      * @var \Brainworxx\Includekrexx\Collectors\FormConfiguration
      */
-    protected $formConfiguration;
+    protected FormConfiguration $formConfiguration;
 
     /**
      * @var \Brainworxx\Includekrexx\Domain\Model\Settings
      */
-    protected $settingsModel;
-
-    /**
-     * @var LivePreset
-     */
-    protected $livePreset;
+    protected Settings $settingsModel;
 
     /**
      * @var \TYPO3\CMS\Backend\Template\ModuleTemplate
+     *
+     * Add typing as soon as we drop TYPO3 11 compatibility.
      */
     protected $moduleTemplate;
 
     /**
      * @var \TYPO3\CMS\Core\Page\PageRenderer
      */
-    protected $pageRenderer;
+    protected PageRenderer $pageRenderer;
 
     /**
      * @var int|\TYPO3\CMS\Core\Type\ContextualFeedbackSeverity
@@ -144,7 +139,7 @@ abstract class AbstractController extends ActionController implements ConstInter
      *
      * @var int
      */
-    protected $typo3Version;
+    protected int $typo3Version;
 
 
     /**
@@ -171,14 +166,30 @@ abstract class AbstractController extends ActionController implements ConstInter
             $this->flashMessageOk = ContextualFeedbackSeverity::OK;
             $this->flashMessageWarning = ContextualFeedbackSeverity::WARNING;
         } else {
-            $this->flashMessageError = AbstractMessage::ERROR;
-            $this->flashMessageOk = AbstractMessage::OK;
-            $this->flashMessageWarning = AbstractMessage::WARNING;
+            $this->prepare11Flashmessages();
         }
     }
 
     /**
-     * Trying to get the ModuleTemplate from TYPO3 7 to 12.
+     * Prepare the flash message severity for 11 and lower
+     *
+     * @deprecated
+     *   Will be removed as soon as we drop TYPO3 11 support
+     *
+     * @codeCoverageIgnore
+     *   We do not cover deprecated code.
+     *
+     * @return void
+     */
+    protected function prepare11Flashmessages(): void
+    {
+        $this->flashMessageError = AbstractMessage::ERROR;
+        $this->flashMessageOk = AbstractMessage::OK;
+        $this->flashMessageWarning = AbstractMessage::WARNING;
+    }
+
+    /**
+     * Trying to get the ModuleTemplate from TYPO3 10 to 13.
      *
      * @return void
      */
@@ -197,23 +208,13 @@ abstract class AbstractController extends ActionController implements ConstInter
     }
 
     /**
-     * Inject the private LivePreset.
-     *
-     * @param \TYPO3\CMS\Install\Configuration\Context\LivePreset $livePreset
-     */
-    public function injectLivePreset(LivePreset $livePreset): void
-    {
-        $this->livePreset = $livePreset;
-    }
-
-    /**
      * We check if we are running with a productive preset. If we do, we
      * will display a warning.
      */
     protected function checkProductiveSetting(): void
     {
-        if ($this->livePreset->isActive()) {
-            //Display a warning, if we are in Productive / Live settings.
+        if (Environment::getContext()->isProduction()) {
+            // Display a warning, if we are in Productive / Live settings.
             $this->addFlashMessage(
                 static::translate('debugpreset.warning.message'),
                 static::translate('debugpreset.warning.title'),
@@ -233,7 +234,7 @@ abstract class AbstractController extends ActionController implements ConstInter
         foreach ($messages as $message) {
             // And translate them.
             $this->addFlashMessage(
-                static::translate($message->getKey(), $message->getArguments()),
+                static::translate($message->getKey(), $message->getArguments()) ?? $message->getText(),
                 static::translate('general.error.title'),
                 $this->flashMessageError
             );
@@ -242,6 +243,9 @@ abstract class AbstractController extends ActionController implements ConstInter
 
     /**
      * Dispatches a file, using output buffering.
+     *
+     * We can not (ab)use the TYPO3 for dispatching, because we have inline
+     * JS in that file.
      *
      * @param string $path
      *   The path of the file we want to dispatch to the browser.
@@ -261,38 +265,6 @@ abstract class AbstractController extends ActionController implements ConstInter
             }
             fclose($res);
         }
-    }
-
-    /**
-     * Additional check, if the current Backend user has access to the extension.
-     *
-     * @return bool
-     *   The result of the check.
-     */
-    protected function hasAccess(): bool
-    {
-        return isset($GLOBALS[static::BE_USER]) &&
-            $GLOBALS[static::BE_USER]->check(static::BE_MODULES, AbstractCollector::PLUGIN_NAME);
-    }
-
-    /**
-     * Create the response, depending on the calling context.
-     *
-     * @deprecated
-     *   Since 5.0.0. Will be removed.
-     *
-     * @codeCoverageIgnore
-     *   We will not test deprecated functions.
-     *
-     * @return MvcResponse|NullResponse
-     */
-    protected function createResponse()
-    {
-        if (class_exists(NullResponse::class)) {
-            return GeneralUtility::makeInstance(NullResponse::class);
-        }
-
-        return GeneralUtility::makeInstance(MvcResponse::class);
     }
 
     /**
@@ -323,14 +295,27 @@ abstract class AbstractController extends ActionController implements ConstInter
         } else {
             // @deprecated
             // Will be removed as soon as we drop TYPO3 11 support.
-            $jsPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/JavaScript/Index.js');
-            $this->pageRenderer->addJsInlineCode('krexxjs', file_get_contents($jsPath));
-            $this->pageRenderer->addJsInlineCode('krexxajaxtrans', $this->generateAjaxTranslations());
+            $this->assignCssJs11Style();
         }
 
         $cssPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Private/Css/Index.css');
-        $this->pageRenderer->addCssInlineBlock('krexxcss', file_get_contents($cssPath));
+        $this->pageRenderer->addCssInlineBlock('krexxBeCss', file_get_contents($cssPath), false, false, true);
         $this->moduleTemplate->setModuleName('tx_includekrexx');
+    }
+
+    /**
+     * Assign the css and js TYPO3 11 style.
+     * @deprecated
+     *   Will be removed as soon as we drop TYPO3 11 support
+     *
+     * @codeCoverageIgnore
+     *   We do not cover deprecated code.
+     */
+    protected function assignCssJs11Style(): void
+    {
+        $jsPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/JavaScript/Index.js');
+        $this->pageRenderer->addJsInlineCode('krexxjs', file_get_contents($jsPath));
+        $this->pageRenderer->addJsInlineCode('krexxajaxtrans', $this->generateAjaxTranslations());
     }
 
     /**
@@ -342,13 +327,14 @@ abstract class AbstractController extends ActionController implements ConstInter
      */
     protected function generateAjaxTranslations(): string
     {
-        $translation = new stdClass();
-        $translation->deletefile = static::translate('ajax.delete.file');
-        $translation->error = static::translate('ajax.error');
-        $translation->in = static::translate('ajax.in');
-        $translation->line = static::translate('ajax.line');
-        $translation->updatedLoglist = static::translate('ajax.updated.loglist');
-        $translation->deletedCookies = static::translate('ajax.deleted.cookies');
+        $translation = [
+            'deletefile' => static::translate('ajax.delete.file'),
+            'error' => static::translate('ajax.error'),
+            'in' => static::translate('ajax.in'),
+            'line' => static::translate('ajax.line'),
+            'updatedLoglist' => static::translate('ajax.updated.loglist'),
+            'deletedCookies' => static::translate('ajax.deleted.cookies'),
+        ];
 
         return 'window.ajaxTranslate = ' .  json_encode($translation) . ';';
     }
@@ -370,9 +356,24 @@ abstract class AbstractController extends ActionController implements ConstInter
             // 12'er style.
             $this->configuration->assignData($this->moduleTemplate);
             $this->formConfiguration->assignData($this->moduleTemplate);
-            return $this->moduleTemplate->renderResponse();
+            return $this->moduleTemplate->renderResponse('Index/Index');
         }
 
+        // 10'er and 11'er style.
+        return $this->moduleTemplateRenderOld();
+    }
+
+    /**
+     * Rendering the backend module 10'er and 11'er style.
+     *
+     * @codeCoverageIgnore
+     *   This is TYPO3 10 and 11 stuff.
+     *   We test it, but the report is not submitted to Codeclimate.
+     *
+     * @return \Psr\Http\Message\ResponseInterface|string
+     */
+    protected function moduleTemplateRenderOld()
+    {
         // 10'er and 11'er style.
         $this->configuration->assignData($this->view);
         $this->formConfiguration->assignData($this->view);

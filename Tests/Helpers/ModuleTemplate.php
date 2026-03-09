@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,26 +35,43 @@
 
 namespace Brainworxx\Includekrexx\Tests\Helpers;
 
+use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Core\Http\Response;
+use TYPO3\CMS\Core\View\ViewInterface;
+
+/**
+ * The things you do, because some classes are final.
+ */
 class ModuleTemplate
 {
-    public function setModuleName($whatever)
+    public function setModuleName(string $moduleName)
+    {
+        return $this;
+    }
+
+    public function renderResponse(string $templateFileName = ''): ResponseInterface
+    {
+        return new Response();
+    }
+
+    public function assignMultiple(array $stuff): ViewInterface
     {
     }
 
-    public function setContent($whatever)
+    public function setContent()
     {
     }
 
     public function renderContent()
     {
-        return 'stuff';
     }
 
-    public function assignMultiple($values)
+    public function assign(string $key, $value): ViewInterface
     {
     }
 
-    public function renderResponse()
+    public function render(string $templateFileName = ''): string
     {
+        // TODO: Implement render() method.
     }
 }

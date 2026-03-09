@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -46,7 +47,11 @@ use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use TYPO3\CMS\Core\Package\MetaData;
 use Aimeos\MW\DB\Statement\Base as StatementBase;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Configuration::class, 'exec')]
+#[CoversMethod(Configuration::class, 'getVersion')]
+#[CoversMethod(Configuration::class, 'getName')]
 class ConfigurationTest extends AbstractHelper
 {
     use AimeosTestTrait;
@@ -67,8 +72,6 @@ class ConfigurationTest extends AbstractHelper
 
     /**
      * Test the getting of the name of the Aimeos Debugger.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration::getName
      */
     public function testGetName()
     {
@@ -79,8 +82,6 @@ class ConfigurationTest extends AbstractHelper
 
     /**
      * Test the getting of the version, which is the same as the extension.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration::getVersion
      */
     public function testGetVersion()
     {
@@ -89,19 +90,17 @@ class ConfigurationTest extends AbstractHelper
         $metaData = $this->createMock(MetaData::class);
         $metaData->expects($this->once())
             ->method('getVersion')
-            ->will($this->returnValue(AbstractHelper::TYPO3_VERSION));
+            ->willReturn(AbstractHelper::TYPO3_VERSION);
         $packageMock = $this->simulatePackage(Bootstrap::EXT_KEY, 'whatever');
         $packageMock->expects($this->once())
             ->method('getPackageMetaData')
-            ->will($this->returnValue($metaData));
+            ->willReturn($metaData);
 
         $this->assertEquals(AbstractHelper::TYPO3_VERSION, $this->configuraton->getVersion());
     }
 
     /**
      * Test the registering of the events and all the other stuff for this plugin.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration::exec
      */
     public function testExec()
     {

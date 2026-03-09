@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,19 +36,22 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ProcessFloat::class, 'handle')]
+#[CoversMethod(AbstractRouting::class, 'dispatchProcessEvent')]
+#[CoversMethod(ProcessFloat::class, 'formatFloat')]
+#[CoversMethod(ProcessFloat::class, 'canHandle')]
 class ProcessFloatTest extends AbstractHelper
 {
     /**
      * Testing the float value processing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcess()
     {
@@ -60,7 +63,8 @@ class ProcessFloatTest extends AbstractHelper
         $this->mockEventService(
             [ProcessFloat::class . PluginConfigInterface::START_PROCESS, null, $model]
         );
-        $processor->handle($model);
+        $processor->canHandle($model);
+        $processor->handle();
 
         $this->assertEquals($fixture, $model->getData());
         $this->assertEquals($fixture, $model->getNormal());
@@ -68,8 +72,6 @@ class ProcessFloatTest extends AbstractHelper
 
     /**
      * Testing the float value processing, with a micro time
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat::handle
      */
     public function testProcessWithMicrotime()
     {
@@ -78,8 +80,8 @@ class ProcessFloatTest extends AbstractHelper
         $model = new Model(Krexx::$pool);
         $model->setData($fixture);
         $processor = new ProcessFloat(Krexx::$pool);
-
-        $processor->handle($model);
+        $processor->canHandle($model);
+        $processor->handle();
 
         $result = $model->getJson();
         $this->assertArrayHasKey('Timestamp', $result);
@@ -87,8 +89,6 @@ class ProcessFloatTest extends AbstractHelper
 
     /**
      * Test the check if we can handle the array processing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat::canHandle
      */
     public function testCanHandle()
     {
@@ -102,10 +102,7 @@ class ProcessFloatTest extends AbstractHelper
     }
 
     /**
-     *
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat::formatFloat
+     * Test the special formatting.
      */
     public function testProcessFormat()
     {
@@ -115,7 +112,7 @@ class ProcessFloatTest extends AbstractHelper
         $fixture = 5.123456789E-10;
         $model->setData($fixture);
         $this->assertTrue($processor->canHandle($model));
-        $processor->handle($model);
+        $processor->handle();
         $this->assertEquals('0.000000000512345679', $model->getNormal());
         $this->assertEquals(['Unformatted float value' => '5.123456789E-10'], $model->getJson());
 
@@ -124,7 +121,7 @@ class ProcessFloatTest extends AbstractHelper
         $fixture = 5.123456789E+10;
         $model->setData($fixture);
         $this->assertTrue($processor->canHandle($model));
-        $processor->handle($model);
+        $processor->handle();
         $this->assertEquals('51234567890', $model->getNormal());
         $this->assertEquals([], $model->getJson());
 
@@ -133,7 +130,7 @@ class ProcessFloatTest extends AbstractHelper
         $fixture = 5.123456789E+40;
         $model->setData($fixture);
         $this->assertTrue($processor->canHandle($model));
-        $processor->handle($model);
+        $processor->handle();
         $this->assertEquals('5.123456789E+40', $model->getNormal());
         $this->assertEquals([], $model->getJson());
     }

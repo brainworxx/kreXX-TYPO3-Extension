@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -46,11 +47,17 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Package\MetaData;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Settings::class, 'generateContent')]
+#[CoversMethod(Settings::class, 'processGroups')]
+#[CoversMethod(Settings::class, 'processFeEditing')]
+#[CoversMethod(Settings::class, 'prepareFileName')]
+#[CoversMethod(Settings::class, 'setFactory')]
+#[CoversMethod(Settings::class, '__construct')]
 class SettingsTest extends AbstractHelper implements ConstInterface
 {
-
-    const REVERSE_PROXY = 'reverseProxyIP';
+    protected const REVERSE_PROXY = 'reverseProxyIP';
 
     protected const TYPO3_TEMP = 'typo3temp';
 
@@ -88,72 +95,22 @@ class SettingsTest extends AbstractHelper implements ConstInterface
                 [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'log'],
                 [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'chunks'],
                 [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'config']
-            ))->will($this->returnValue(true));
+            ))->willReturn(true);
 
         // Simulating the package
         $metaData = $this->createMock(MetaData::class);
-        $metaData->expects($this->once())
+        $metaData->expects($this->any())
             ->method('getVersion')
-            ->will($this->returnValue(AbstractHelper::TYPO3_VERSION));
+            ->willReturn(AbstractHelper::TYPO3_VERSION);
         $this->simulatePackage(Bootstrap::EXT_KEY, 'what/ever/')
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getPackageMetaData')
-            ->will($this->returnValue($metaData));
+            ->willReturn($metaData);
     }
 
     /**
      * There are no getter implemented. Hence, we set a value for each property
      * and then test the ini.
-     *
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::generateContent
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::processGroups
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::processFeEditing
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setAnalyseGetter
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setAnalysePrivate
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setAnalysePrivateMethods
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setAnalyseProtected
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setAnalyseProtectedMethods
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setAnalyseTraversable
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setArrayCountLimit
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setDebugMethods
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setDestination
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setDetectAjax
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setAnalyseScalar
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setDisabled
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormanalyseGetter
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormanalysePrivate
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormanalysePrivateMethods
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormanalyseProtected
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormanalyseProtectedMethods
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormanalyseTraversable
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormarrayCountLimit
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormdebugMethods
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormdestination
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormdetectAjax
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormdisabled
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormiprange
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormlevel
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormmaxCall
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormmaxfiles
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormmaxRuntime
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormmaxStepNumber
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormmemoryLeft
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormskin
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormanalyseScalar
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setIprange
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setLevel
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setMaxCall
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setMaxfiles
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setMaxRuntime
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setMaxStepNumber
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setMemoryLeft
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setSkin
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setActivateT3FileWriter
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setLoglevelT3FileWriter
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormactivateT3FileWriter
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormloglevelT3FileWriter
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setLanguageKey
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormlanguageKey
      *
      * There is a point where we needed to stop and we have clearly passed it
      * but let's keep going and see what happens.
@@ -168,33 +125,61 @@ class SettingsTest extends AbstractHelper implements ConstInterface
         Krexx::$pool = null;
         Pool::createPool();
 
-        $settingsModel = new Settings();
         $validationMock = $this->createMock(Validation::class);
         $validationMock->expects($this->exactly(23))
             ->method('evaluateSetting')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->config->validation = $validationMock;
 
         $this->mockBeUser();
 
-        // Fill this one, according to the fallback settings.
-        foreach (Krexx::$pool->config->configFallback as $settings) {
-            foreach ($settings as $settingName) {
-                $settingsModel->{'set' . $settingName}($settingName);
-            }
-        }
-        foreach (Krexx::$pool->config->feConfigFallback as $settingName => $settings) {
-            if ($settingName === 'devHandle') {
-                // This one is not part of the settings file.
-                continue;
-            }
-            if ($settingName === 'skin') {
-                // We let this one fail on purpose.
-                $settingsModel->{'setForm' . $settingName}('blargh');
-            } else {
-                $settingsModel->{'setForm' . $settingName}(Fallback::RENDER_TYPE_CONFIG_FULL);
-            }
-        }
+        // Fill this one with teir own name as a value, so we can test it.
+        $settingsModel = new Settings(
+            Fallback::SETTING_ANALYSE_GETTER,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_ANALYSE_PRIVATE,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_ANALYSE_PRIVATE_METHODS,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_ANALYSE_PROTECTED,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_ANALYSE_PROTECTED_METHODS,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_ANALYSE_SCALAR,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_ANALYSE_TRAVERSABLE,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_ARRAY_COUNT_LIMIT,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_DEBUG_METHODS,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_DESTINATION,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_DETECT_AJAX,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_DISABLED,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_IP_RANGE,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_LANGUAGE_KEY,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_NESTING_LEVEL,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            static::ACTIVATE_T3_FILE_WRITER,
+            static::LOG_LEVEL_T3_FILE_WRITER,
+            Fallback::SETTING_MAX_CALL,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_MAX_FILES,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_MAX_RUNTIME,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_MAX_STEP_NUMBER,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_MEMORY_LEFT,
+            Fallback::RENDER_TYPE_CONFIG_FULL,
+            Fallback::SETTING_SKIN,
+            'blargh', // Invalid value, so we can test the fallback.
+        );
 
         $expectation = [
             Fallback::SECTION_OUTPUT => [
@@ -264,7 +249,7 @@ class SettingsTest extends AbstractHelper implements ConstInterface
     }
 
     /**
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFactory
+     * Test the factory settings.
      */
     public function testSetFactory()
     {
@@ -284,7 +269,7 @@ class SettingsTest extends AbstractHelper implements ConstInterface
         $fileExistsMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Domain\\Model', 'file_exists');
         $fileExistsMock->expects($this->once())
             ->with($path . '.ini')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $unLinkMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Domain\\Model', 'unlink');
         $unLinkMock->expects($this->once())
             ->with($path . '.ini');

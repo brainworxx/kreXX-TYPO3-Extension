@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -39,20 +39,20 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughResource;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ThroughResource::class, 'callMe')]
 class ThroughResourceTest extends AbstractHelper
 {
-    const SOME_KEY = 'some_key';
-    const SOME_VALUE = 'some_value';
-    const ANOTHER_KEY = 'another key';
-    const ANOTHER_VALUE = 'another value';
-    const SOME_ARRAY = 'array';
+    public const  SOME_KEY = 'some_key';
+    public const  SOME_VALUE = 'some_value';
+    public const  ANOTHER_KEY = 'another key';
+    public const  ANOTHER_VALUE = 'another value';
+    public const  SOME_ARRAY = 'array';
 
 
     /**
      * Testing the analysis of a resource stream.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughResource::callMe
      */
     public function testCallMe()
     {

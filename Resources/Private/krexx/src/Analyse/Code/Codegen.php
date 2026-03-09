@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -51,25 +51,32 @@ use UnitEnum;
 class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessConstInterface
 {
     /**
+     * The whitelist to decide if we are displaying type hints.
+     *
+     * @var string[]
+     */
+    protected const TYPE_HINT_WHITE_LIST = ['->', '::', '[', ']', '(', ')', '.'];
+
+    /**
      * Here we store all relevant data.
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Retrieves the declared method parameters from the declaration.
      *
      * @var \Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration
      */
-    protected $methodDeclaration;
+    protected MethodDeclaration $methodDeclaration;
 
     /**
      * Is the code generation allowed? We only allow it during a normal analysis.
      *
      * @var bool
      */
-    protected $codegenAllowed = false;
+    protected bool $codegenAllowed = false;
 
     /**
      * We treat the first run of the code generation different, because then we
@@ -77,7 +84,18 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
      *
      * @var bool
      */
-    protected $firstRun = true;
+    protected bool $firstRun = true;
+
+    /**
+     * Code generation lookup table with a static instruction.
+     *
+     * @var array
+     */
+    protected array $codegenLookup = [
+        self::CODEGEN_TYPE_META_CONSTANTS => self::CODEGEN_STOP_BIT,
+        self::CODEGEN_TYPE_JSON_DECODE => 'json_decode(;firstMarker;)',
+        self::CODEGEN_TYPE_BASE64_DECODE => 'base64_decode(;firstMarker;)'
+    ];
 
     /**
      * Here we count haw often the code generation was disabled.
@@ -91,7 +109,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
      *
      * @var int
      */
-    protected $disableCount = 0;
+    protected int $disableCount = 0;
 
     /**
      * Initializes the code generation.
@@ -169,7 +187,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
         }
 
         $type = $model->getType() === static::TYPE_CLASS ? $model->getNormal() : $model->getType();
-        foreach (['->', '::', '[', ']', '(', ')', '.'] as $value) {
+        foreach (static::TYPE_HINT_WHITE_LIST as $value) {
             if (strpos($name, $value) !== false) {
                 // We are analysing something like:
                 // $this->getWhatever();
@@ -178,7 +196,10 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
             }
         }
 
-        $model->addToJson(static::CODEGEN_TYPE_HINT, '/** @var ' . $type . ' ' . $name . ' */');
+        $model->addToJson(
+            $this->pool->messages->getHelp('metaTypeHint'),
+            '/** @var ' . $type . ' ' . $name . ' */'
+        );
     }
 
     /**
@@ -192,34 +213,22 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
      */
     protected function generateComplicatedStuff(Model $model): string
     {
+        $type = $model->getCodeGenType();
+        if (isset($this->codegenLookup[$type])) {
+            return $this->codegenLookup[$type];
+        }
+
         // Define a fallback value.
         $result = static::UNKNOWN_VALUE;
 
         // And now for the more serious stuff.
-        switch ($model->getCodeGenType()) {
-            case static::CODEGEN_TYPE_META_CONSTANTS:
-                // Test for constants.
-                // They have no connectors, but are marked as such.
-                // although this is meta stuff, we need to add the stop info here.
-                $result = static::CODEGEN_STOP_BIT;
-                break;
-
+        switch ($type) {
             case static::CODEGEN_TYPE_ITERATOR_TO_ARRAY:
                 $result = 'iterator_to_array(;firstMarker;)' . $this->concatenation($model);
                 break;
 
             case static::CODEGEN_TYPE_ARRAY_VALUES_ACCESS:
                 $result = 'array_values(;firstMarker;)[' . $model->getConnectorParameters() . ']';
-                break;
-
-            case static::CODEGEN_TYPE_JSON_DECODE:
-                // Meta json decoding.
-                $result = 'json_decode(;firstMarker;)';
-                break;
-
-            case static::CODEGEN_TYPE_BASE64_DECODE:
-                // Meta Base64 decoding
-                $result = 'base64_decode(;firstMarker;)';
                 break;
 
             default:
@@ -273,22 +282,6 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
     }
 
     /**
-     * Gets set, as soon as we have a scope to come from.
-     *
-     * @deprecated
-     *   Since 5.0.0. Use setCodegenAllowed() instead.
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
-     * @param bool $bool
-     */
-    public function setAllowCodegen(bool $bool): void
-    {
-        $this->setCodegenAllowed($bool);
-    }
-
-    /**
      * Set, if we are allowed to generate code to reach the stuff inside
      * the analysis.
      *
@@ -311,22 +304,6 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
         if ($this->disableCount < 0) {
             $this->disableCount = 0;
         }
-    }
-
-    /**
-     * Getter for the allowance of the code generation.
-     *
-     * @deprecated
-     *   Since 5.0.0. Use isCodegenAllowed() instead.
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
-     * @return bool
-     */
-    public function getAllowCodegen(): bool
-    {
-        return $this->isCodegenAllowed();
     }
 
     /**
@@ -370,28 +347,6 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
     }
 
     /**
-     * Retrieve the parameter type.
-     *
-     * Depending on the available PHP version, we need to take different measures.
-     *
-     * @param \ReflectionParameter $reflectionParameter
-     *   The reflection parameter, what the variable name says.
-     *
-     * @deprecated since 5.0.0
-     *   Will be removed. Use $this->methodDeclaration->retrieveParameterType().
-     *
-     * @codeCoverageIgnore
-     *   We will not test deprecated code.
-     *
-     * @return string
-     *   The parameter type, if available.
-     */
-    protected function retrieveParameterType(ReflectionParameter $reflectionParameter): string
-    {
-        return $this->methodDeclaration->retrieveParameterType($reflectionParameter);
-    }
-
-    /**
      * Translate the default value into something human-readable.
      *
      * @param mixed $default
@@ -413,6 +368,11 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
             $default = 'NULL';
         } elseif ($default instanceof UnitEnum) {
             $default = get_class($default) . '::' . $default->name;
+        } elseif (is_object($default)) {
+            $default = 'new \\' .  get_class($default) . '()';
+        } else {
+            // Not sure if this is even possible, but I'm not taking my chances.
+            $default = gettype($default);
         }
 
         return $default;

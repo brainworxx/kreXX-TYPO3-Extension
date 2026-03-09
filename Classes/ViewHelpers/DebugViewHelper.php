@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use ReflectionClass;
+use Throwable;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
@@ -95,7 +96,14 @@ class DebugViewHelper extends AbstractViewHelper
      *
      * @var string
      */
-    protected $analysisType = 'open';
+    protected string $analysisType = 'open';
+
+    /**
+     * The rendered children.
+     *
+     * @var mixed
+     */
+    protected $children;
 
     /**
      * {@inheritdoc}
@@ -115,12 +123,17 @@ class DebugViewHelper extends AbstractViewHelper
      */
     public function render(): string
     {
+        try {
+            $this->children = $this->renderChildren();
+        } catch (Throwable $e) {
+        }
+
         Pool::createPool();
         $view = $this->viewHelperVariableContainer->getView();
-        $pool = Krexx::$pool;
-        $pool->registry->set(static::REGISTRY_VIEW, $view);
-        $pool->registry->set(static::REGISTRY_VIEW_REFLECTION, new ReflectionClass($view));
-        $pool->registry->set(static::REGISTRY_RENDERING_CONTEXT, $this->renderingContext);
+        $registry = Krexx::$pool->registry;
+        $registry->set(static::REGISTRY_VIEW, $view);
+        $registry->set(static::REGISTRY_VIEW_REFLECTION, new ReflectionClass($view));
+        $registry->set(static::REGISTRY_RENDERING_CONTEXT, $this->renderingContext);
         Registration::activatePlugin(
             FluidConfiguration::class
         );
@@ -130,9 +143,9 @@ class DebugViewHelper extends AbstractViewHelper
         Registration::deactivatePlugin(
             FluidConfiguration::class
         );
-        $pool->registry->set(static::REGISTRY_VIEW, null);
-        $pool->registry->set(static::REGISTRY_VIEW_REFLECTION, null);
-        $pool->registry->set(static::REGISTRY_RENDERING_CONTEXT, null);
+        $registry->set(static::REGISTRY_VIEW, null);
+        $registry->set(static::REGISTRY_VIEW_REFLECTION, null);
+        $registry->set(static::REGISTRY_RENDERING_CONTEXT, null);
 
         return '';
     }
@@ -144,14 +157,13 @@ class DebugViewHelper extends AbstractViewHelper
     {
         $type = $this->analysisType;
         $found  = false;
-        if (!is_null($this->arguments[static::ARGUMENT_VALUE])) {
+        if (isset($this->arguments[static::ARGUMENT_VALUE])) {
             Krexx::$type($this->arguments[static::ARGUMENT_VALUE]);
             $found = true;
         }
 
-        $children = $this->renderChildren();
-        if (!is_null($children)) {
-            Krexx::$type($children);
+        if ($this->children !== null) {
+            Krexx::$type($this->children);
             $found = true;
         }
 

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -42,17 +42,28 @@ use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Fixtures\TraversableFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Skins\RenderHans;
+use PHPUnit\Framework\Attributes\CoversMethod;
 use ReflectionClass;
 
+#[CoversMethod(File::class, '__construct')]
+#[CoversMethod(File::class, 'readSourcecode')]
+#[CoversMethod(File::class, 'getFileContentsArray')]
+#[CoversMethod(File::class, 'fileIsReadable')]
+#[CoversMethod(File::class, 'realpath')]
+#[CoversMethod(File::class, 'readFile')]
+#[CoversMethod(File::class, 'getFileContents')]
+#[CoversMethod(File::class, 'putFileContents')]
+#[CoversMethod(File::class, 'deleteFile')]
+#[CoversMethod(File::class, 'filetime')]
 class FileTest extends AbstractHelper
 {
-    const DOC_ROOT = 'docRoot';
-    const IS_READABLE_CACHE = 'isReadableCache';
-    const FILE_NAME = 'some file';
-    const MISC_NAMESPACE = '\\Brainworxx\\Krexx\\Service\\Misc\\';
-    const CHMOD = 'chmod';
-    const UNLINK = 'unlink';
-    const IS_FILE = 'is_file';
+    public const DOC_ROOT = 'docRoot';
+    public const IS_READABLE_CACHE = 'isReadableCache';
+    public const FILE_NAME = 'some file';
+    public const MISC_NAMESPACE = '\\Brainworxx\\Krexx\\Service\\Misc\\';
+    public const CHMOD = 'chmod';
+    public const UNLINK = 'unlink';
+    public const IS_FILE = 'is_file';
 
     /**
      * @var \Brainworxx\Krexx\Service\Misc\File
@@ -73,13 +84,11 @@ class FileTest extends AbstractHelper
         // Mock the realpath of the not existing files.
         $realpath = $this->getFunctionMock(static::MISC_NAMESPACE, 'realpath');
         $realpath->expects($this->any())
-            ->will($this->returnArgument(1));
+            ->willReturnArgument(1);
     }
 
     /**
      * Setting of the pool and assigning itself to the pool.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::__construct
      */
     public function testConstruct()
     {
@@ -89,10 +98,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Test the reading of source code from a fixture file.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::readSourcecode
-     * @covers \Brainworxx\Krexx\Service\Misc\File::getFileContentsArray
-     * @covers \Brainworxx\Krexx\Service\Misc\File::fileIsReadable
      */
     public function testReadSourcecodeNormal()
     {
@@ -115,7 +120,7 @@ class FileTest extends AbstractHelper
                 [$source, 51, $returnValue],
                 [$source, 52, $returnValue],
                 [$source, 53, $returnValue]
-            ))->will($this->returnValue(''));
+            ))->willReturn('');
         Krexx::$pool->render = $renderMock;
 
         // Mock the string encoder.
@@ -134,7 +139,7 @@ class FileTest extends AbstractHelper
                 ["\n", true],
                 ['    /**' . "\n", true],
                 ['     * Value 2' . "\n", true]
-            ))->will($this->returnValue($returnValue));
+            ))->willReturn($returnValue);
         Krexx::$pool->encodingService = $encoderMock;
 
         $simpleReflection = new ReflectionClass(SimpleFixture::class);
@@ -149,10 +154,6 @@ class FileTest extends AbstractHelper
     /**
      * Test the reading of source code from a cached fixture file, with messed
      * up parameters.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::readSourcecode
-     * @covers \Brainworxx\Krexx\Service\Misc\File::getFileContentsArray
-     * @covers \Brainworxx\Krexx\Service\Misc\File::fileIsReadable
      */
     public function testReadSourcecodeMessedUp()
     {
@@ -184,10 +185,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Test the reading of a fixture file into a string.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::readFile
-     * @covers \Brainworxx\Krexx\Service\Misc\File::getFileContentsArray
-     * @covers \Brainworxx\Krexx\Service\Misc\File::fileIsReadable
      */
     public function testReadFile()
     {
@@ -211,13 +208,22 @@ class FileTest extends AbstractHelper
             $this->file->readFile($reflection->getFileName(), -41, -45),
             'Test it with nonsense from to stuff.'
         );
+
+        $this->assertEquals(
+            '',
+            $this->file->readFile('NoFile', 42, 48),
+            'Test it with a none existing file.'
+        );
+
+        $this->assertEquals(
+            '',
+            $this->file->readFile($reflection->getFileName(), 85, 999),
+            'Read more than the file has to offer. We expect the last line which is empty.'
+        );
     }
 
     /**
      * Test the direct reading of a file into a string.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::getFileContents
-     * @covers \Brainworxx\Krexx\Service\Misc\File::filterFilePath
      */
     public function testGetFileContents()
     {
@@ -228,14 +234,12 @@ class FileTest extends AbstractHelper
 
     /**
      * Test the reading of a file that we can not open (for whatever reason.)
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::getFileContents
      */
     public function testGetFileContentsWithfailedFile()
     {
         $fOpenMock = $this->getFunctionMock(static::MISC_NAMESPACE, 'fopen');
         $fOpenMock->expects($this->once())
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->setValueByReflection(static::IS_READABLE_CACHE, ['someFile' => true], $this->file);
         $result = $this->file->getFileContents('someFile', false);
@@ -243,21 +247,19 @@ class FileTest extends AbstractHelper
         $this->assertCount(
             1,
             Krexx::$pool->messages->getMessages(),
-            'We get a message that says thata reding the file failed.'
+            'We get a message that says that reading the file failed.'
         );
     }
 
     /**
      * Test the wrapper around the file_put_contents in the file handler.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::putFileContents
      */
     public function testPutFileContents()
     {
         // We will not really write a file here.
         $filePutContents = $this->getFunctionMock(static::MISC_NAMESPACE, 'file_put_contents');
         $filePutContents->expects($this->once())
-            ->will($this->returnValue(42));
+            ->willReturn(42);
 
         $path = 'some file.html';
         $this->file->putFileContents($path, 'some text');
@@ -266,8 +268,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Test the deleting of a registered file.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::deleteFile
      */
     public function testDeleteFileRegistered()
     {
@@ -279,7 +279,7 @@ class FileTest extends AbstractHelper
         $unlink = $this->getFunctionMock(static::MISC_NAMESPACE, static::UNLINK);
         $unlink->expects($this->once())
             ->with($payload)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         // Execute the test.
         $fileService = new File(Krexx::$pool);
@@ -292,8 +292,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Test the deleting of a not existing file.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::deleteFile
      */
     public function testDeleteFileNotExisting()
     {
@@ -319,8 +317,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Test the deleting of a unregistered file.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::deleteFile
      */
     public function testDeleteFileUnRegistered()
     {
@@ -329,14 +325,14 @@ class FileTest extends AbstractHelper
         $unlink = $this->getFunctionMock(static::MISC_NAMESPACE, static::UNLINK);
         $unlink->expects($this->once())
             ->with($payload)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $chmod = $this->getFunctionMock(static::MISC_NAMESPACE, static::CHMOD);
         $chmod->expects($this->once())
             ->with($payload);
 
         $isFile = $this->getFunctionMock(static::MISC_NAMESPACE, static::IS_FILE);
         $isFile->expects($this->once())
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         // Execute the test.
         $fileService = new File(Krexx::$pool);
@@ -348,14 +344,12 @@ class FileTest extends AbstractHelper
 
     /**
      * Test the deleting of a problematic file.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::deleteFile
      */
     public function testDeleteFileWithProblems()
     {
         $isFile = $this->getFunctionMock(static::MISC_NAMESPACE, static::IS_FILE);
         $isFile->expects($this->once())
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $payload = 'unregistered_file.txt';
         $chmod = $this->getFunctionMock(static::MISC_NAMESPACE, static::CHMOD);
@@ -379,31 +373,7 @@ class FileTest extends AbstractHelper
     }
 
     /**
-     * Test the filepath filter
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::filterFilePath
-     */
-    public function testFilterFilePath()
-    {
-        // Set the stage.
-        $docRoot = 'somewhere on the server';
-        $filename = static::FILE_NAME;
-        $payload = $docRoot . DIRECTORY_SEPARATOR . $filename;
-        $fileService = new File(Krexx::$pool);
-        $this->setValueByReflection(static::DOC_ROOT, $docRoot, $fileService);
-
-        // Run the test
-        $this->assertEquals('...' . DIRECTORY_SEPARATOR . $filename, $fileService->filterFilePath($payload));
-
-        // And now without a identifiable docroot.
-        $this->setValueByReflection(static::DOC_ROOT, false, $fileService);
-        $this->assertEquals($payload, $fileService->filterFilePath($payload));
-    }
-
-    /**
      * Test, if an already registered file is readable.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::fileIsReadable
      */
     public function testFileIsReadableRegistered()
     {
@@ -418,19 +388,17 @@ class FileTest extends AbstractHelper
 
     /**
      * Test, if an already registered file is readable.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::fileIsReadable
      */
     public function testFileIsReadableUnregistered()
     {
         $isFile = $this->getFunctionMock(static::MISC_NAMESPACE, static::IS_FILE);
         $isFile->expects($this->once())
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $filename = static::FILE_NAME;
         $isReadable = $this->getFunctionMock(static::MISC_NAMESPACE, 'is_readable');
         $isReadable->expects($this->once())
             ->with($filename)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $fileService = new File(Krexx::$pool);
 
@@ -439,8 +407,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Test if a not existing file is readable.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::fileIsReadable
      */
     public function testFileIsReadableNotExisting()
     {
@@ -450,8 +416,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Test the getting of a file stamp from an "existing" file.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::filetime
      */
     public function testFileTimeExisting()
     {
@@ -463,15 +427,13 @@ class FileTest extends AbstractHelper
         $filemtime = $this->getFunctionMock(static::MISC_NAMESPACE, 'filemtime');
         $filemtime->expects($this->once())
             ->with($filename)
-            ->will($this->returnValue(42));
+            ->willReturn(42);
 
         $this->assertEquals(42, $fileService->filetime($filename));
     }
 
     /**
      * Test the getting of a file stamp from a not "existing" file.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\File::filetime
      */
     public function testFileTimeNotExisting()
     {
@@ -479,7 +441,7 @@ class FileTest extends AbstractHelper
         $filePath = 'I am not here';
         $time = $this->getFunctionMock(static::MISC_NAMESPACE, 'time');
         $time->expects($this->once())
-            ->will($this->returnValue(41));
+            ->willReturn(41);
 
         $this->assertEquals(41, $fileService->filetime($filePath));
     }

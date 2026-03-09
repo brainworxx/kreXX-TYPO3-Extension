@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -42,12 +42,22 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Message;
 use Brainworxx\Krexx\View\Messages;
 use Brainworxx\Krexx\View\Skins\RenderHans;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Messages::class, 'setLanguageKey')]
+#[CoversMethod(Messages::class, 'readHelpTexts')]
+#[CoversMethod(Messages::class, 'getHelp')]
+#[CoversMethod(Messages::class, '__construct')]
+#[CoversMethod(Messages::class, 'removeKey')]
+#[CoversMethod(Messages::class, 'outputMessages')]
+#[CoversMethod(Messages::class, 'getHelp')]
+#[CoversMethod(Messages::class, 'getMessages')]
+#[CoversMethod(Messages::class, 'addMessage')]
+#[CoversMethod(Messages::class, 'readHelpTexts')]
 class MessagesTest extends AbstractHelper
 {
-
-    const KEY_VARIABLE_NAME = 'messages';
-    const PARAMS = 'params';
+    public const  KEY_VARIABLE_NAME = 'messages';
+    public const  PARAMS = 'params';
 
     /**
      * @var Messages
@@ -62,6 +72,7 @@ class MessagesTest extends AbstractHelper
         parent::setUp();
 
         $this->messagesClass = new Messages(Krexx::$pool);
+        $this->messagesClass->readHelpTexts();
     }
 
     /**
@@ -76,8 +87,6 @@ class MessagesTest extends AbstractHelper
 
     /**
      * Test the initializing of the messages class.
-     *
-     * @covers \Brainworxx\Krexx\View\Messages::__construct
      */
     public function testConstruct()
     {
@@ -87,8 +96,6 @@ class MessagesTest extends AbstractHelper
 
     /**
      * Test the removing od message keys.
-     *
-     * @covers \Brainworxx\Krexx\View\Messages::removeKey
      */
     public function testRemoveKey()
     {
@@ -101,19 +108,17 @@ class MessagesTest extends AbstractHelper
 
     /**
      * Testing the outputting of messages.
-     *
-     * @covers \Brainworxx\Krexx\View\Messages::outputMessages
      */
     public function testOutputMessages()
     {
         // Simulate a cli request. Actually, it already is a cli request, we
         // test the checking of it.
         $sapiMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\View', 'php_sapi_name');
-        $sapiMock->expects($this->once())->will($this->returnValue('cli'));
+        $sapiMock->expects($this->once())->willReturn('cli');
 
         // We pretend as if this is not a test.
         $definedMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\View', 'defined');
-        $definedMock->expects($this->once())->will($this->returnValue(false));
+        $definedMock->expects($this->once())->willReturn(false);
 
         $messages = [];
         $message = new Message(\Krexx::$pool);
@@ -130,7 +135,7 @@ class MessagesTest extends AbstractHelper
         $rendermock->expects($this->once())
             ->method('renderMessages')
             ->with($messages)
-            ->will($this->returnValue(''));
+            ->willReturn('');
         Krexx::$pool->render = $rendermock;
         $this->setValueByReflection('messages', $messages, $this->messagesClass);
 
@@ -148,8 +153,6 @@ class MessagesTest extends AbstractHelper
 
     /**
      * Seriously, get help!
-     *
-     * @covers \Brainworxx\Krexx\View\Messages::getHelp
      */
     public function testGetHelp()
     {
@@ -162,9 +165,6 @@ class MessagesTest extends AbstractHelper
 
     /**
      * Test a simple getter.
-     *
-     * @covers \Brainworxx\Krexx\View\Messages::getMessages
-     * @covers \Brainworxx\Krexx\View\Messages::addMessage
      */
     public function testGetMessages()
     {
@@ -190,18 +190,17 @@ class MessagesTest extends AbstractHelper
     /**
      * Purging of the already read stuff, and read it again.
      *
-     * @covers \Brainworxx\Krexx\View\Messages::readHelpTexts
      */
     public function testReadHelpTexts()
     {
-        $iniContents = '[text]' . "\n" .
+        $iniContents = '[en]' . "\n" .
             'someKey = "a string"';
 
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->once())
             ->method('getFileContents')
             ->with(KREXX_DIR . 'resources/language/Help.ini')
-            ->will($this->returnValue($iniContents));
+            ->willReturn($iniContents);
         Krexx::$pool->fileService = $fileServiceMock;
 
         $this->messagesClass->readHelpTexts();
@@ -213,10 +212,6 @@ class MessagesTest extends AbstractHelper
 
     /**
      * Test the assignment of the language key.
-     *
-     * @covers \Brainworxx\Krexx\View\Messages::setLanguageKey
-     * @covers \Brainworxx\Krexx\View\Messages::readHelpTexts
-     * @covers \Brainworxx\Krexx\View\Messages::getHelp
      */
     public function testSetLanguageKey()
     {

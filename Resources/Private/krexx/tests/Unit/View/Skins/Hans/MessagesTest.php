@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,14 +37,15 @@ namespace Brainworxx\Krexx\Tests\Unit\View\Skins\Hans;
 
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
 use Brainworxx\Krexx\View\Message;
+use Brainworxx\Krexx\View\Skins\Hans\Messages;
 use Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Messages::class, 'renderMessages')]
 class MessagesTest extends AbstractRenderHans
 {
     /**
      * Test the message rendering.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\Messages::renderMessages
      */
     public function testRenderMessages()
     {

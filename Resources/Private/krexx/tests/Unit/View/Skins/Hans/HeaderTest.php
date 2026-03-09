@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -39,43 +39,46 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
-use Brainworxx\Krexx\View\Messages;
 use Brainworxx\Krexx\View\Output\Chunks;
+use Brainworxx\Krexx\View\Skins\Hans\Header;
+use Brainworxx\Krexx\View\Skins\Hans\Messages;
+use Brainworxx\Krexx\View\Messages as ViewMessages;
+use Brainworxx\Krexx\View\Skins\Hans\Search;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Header::class, 'renderHeader')]
+#[CoversMethod(Search::class, 'renderSearch')]
+#[CoversMethod(Messages::class, 'renderMessages')]
 class HeaderTest extends AbstractRenderHans
 {
     /**
      * Test the rendering of the kreXX header.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\Header::renderHeader
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\Search::renderSearch
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\Messages::renderMessages
      */
     public function testRenderHeader()
     {
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
             ->method('getKrexxCount')
-            ->will($this->returnValue(42));
+            ->willReturn(42);
         Krexx::$pool->emergencyHandler = $emergencyMock;
 
         $recursionMock = $this->createMock(Recursion::class);
         // Two times fro msearch and header itself.
         $recursionMock->expects($this->exactly(2))
             ->method('getMarker')
-            ->will($this->returnValue('recursion Marker'));
+            ->willReturn('recursion Marker');
         Krexx::$pool->recursionHandler = $recursionMock;
 
-        $messageMock = $this->createMock(Messages::class);
+        $messageMock = $this->createMock(ViewMessages::class);
         $messageMock->expects($this->once())
             ->method('outputMessages')
-            ->will($this->returnValue('mess ages'));
+            ->willReturn('mess ages');
         Krexx::$pool->messages = $messageMock;
 
         $chunkMock = $this->createMock(Chunks::class);
         $chunkMock->expects($this->once())
             ->method('getOfficialEncoding')
-            ->will($this->returnValue('encoding'));
+            ->willReturn('encoding');
         krexx::$pool->chunks = $chunkMock;
 
         // Run the test.

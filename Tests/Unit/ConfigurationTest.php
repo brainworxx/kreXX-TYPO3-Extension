@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -43,7 +44,6 @@ class ConfigurationTest extends AbstractHelper
      * version numbers, namely:
      *   - ext_emconf.php
      *   - changelog.rst
-     *   - settings.cfg
      *
      * All of them contain the same fu**ing data!
      */
@@ -54,28 +54,25 @@ class ConfigurationTest extends AbstractHelper
         $composerJsonPath = $dir . 'composer.json';
         $extEmConfPath = $dir . 'ext_emconf.php';
         $changelogPath = $dir . 'Documentation/Changelog/Index.rst';
-        $docSettingsPath = $dir . 'Documentation/Settings.cfg';
         $extLocalConfPath = $dir . 'ext_localconf.php';
 
         $this->assertFileExists($composerJsonPath);
         $this->assertFileExists($extEmConfPath);
         $this->assertFileExists($changelogPath);
-        $this->assertFileExists($docSettingsPath);
         $this->assertFileExists($extLocalConfPath);
 
         // The stuff from the configuration files.
         $composer = json_decode(file_get_contents($composerJsonPath));
         $_EXTKEY = 'includekrexx';
         include $extEmConfPath;
-        $docSettings = parse_ini_file($docSettingsPath);
-        $changelogContent = file($changelogPath)[14];
+        $changelogContent = file($changelogPath)[6];
 
         // Our expectations.
-        $versionNumber = '5.0.6';
-        $t3EmConstraint = '10.4.0-13.4.99';
-        $phpEmConstraint = '7.2.0-8.3.99';
-        $t3ComposerConstraint = '^10.4 || ^11 || ^12 || ^13.3';
-        $phpComposerConstraint = '^7.2 || ^7.3 || ^7.4 || ^8.0 || ^8.1 || ^8.2 || ^8.3';
+        $versionNumber = '6.1.6';
+        $t3EmConstraint = '10.4.0-14.1.99';
+        $phpEmConstraint = '7.4.0-8.5.99';
+        $t3ComposerConstraint = '^10.4 || ^11 || ^12 || ^13 || ^14';
+        $phpComposerConstraint = '^7.4 || ^8.0 || ^8.1 || ^8.2 || ^8.3 || ^8.4 || ^8.5';
 
         // Test the EM configuration.
         $this->assertEquals($versionNumber, $EM_CONF[$_EXTKEY]['version']);
@@ -88,10 +85,6 @@ class ConfigurationTest extends AbstractHelper
             $this->assertEquals($t3ComposerConstraint, $composer->require->{'typo3/cms-core'});
             $this->assertEquals($phpComposerConstraint, $composer->require->php);
         }
-
-        // Test the doc settings.
-        $this->assertEquals($versionNumber, $docSettings['release']);
-        $this->assertEquals($versionNumber, $docSettings['version']);
 
         // Test the changelog.
         $this->assertStringContainsString($versionNumber, $changelogContent);

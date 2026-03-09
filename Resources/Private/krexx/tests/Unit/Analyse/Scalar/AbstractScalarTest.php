@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,16 +35,17 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Scalar;
 
+use Brainworxx\Krexx\Analyse\Scalar\AbstractScalar;
 use Brainworxx\Krexx\Analyse\Scalar\ScalarString;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(AbstractScalar::class, '__construct')]
 class AbstractScalarTest extends AbstractHelper
 {
     /**
      * Simple test the setting of the pool.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\AbstractScalar::__construct
      */
     public function testConstruct()
     {

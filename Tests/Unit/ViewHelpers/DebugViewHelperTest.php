@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -34,20 +35,25 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\ViewHelpers;
 
+use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3Fluid\Fluid\Core\Parser\SyntaxTree\ViewHelperNode;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\ViewHelperVariableContainer;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use TYPO3Fluid\Fluid\View\ViewInterface;
 
+#[CoversMethod(DebugViewHelper::class, 'render')]
+#[CoversMethod(DebugViewHelper::class, 'analysis')]
+#[CoversMethod(DebugViewHelper::class, 'initializeArguments')]
 class DebugViewHelperTest extends AbstractHelper
 {
     /**
      * Testing the initializing of our single argument.
-     *
-     * @covers \Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper::initializeArguments
      */
     public function testInitializeArguments()
     {
@@ -62,23 +68,25 @@ class DebugViewHelperTest extends AbstractHelper
 
     /**
      * Test the rendering of the debug ViewHelper.
-     *
-     * @covers \Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper::render
-     * @covers \Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper::analysis
      */
     public function testRender()
     {
         $debugViewHelper = new DebugViewHelper();
         // Inject the view and the rendering context.
-        $view = $this->createMock(StandaloneView::class);
+        // Mock the view
+        if (class_exists(StandaloneView::class)) {
+            $view = $this->createMock(StandaloneView::class);
+        } else {
+            $view = $this->createMock(ViewInterface::class);
+        }
         $variableContainer = $this->createMock(ViewHelperVariableContainer::class);
         $variableContainer->expects($this->once())
             ->method('getView')
-            ->will($this->returnValue($view));
+            ->willReturn($view);
         $renderingContext = $this->createMock(RenderingContextInterface::class);
         $renderingContext->expects($this->once())
             ->method('getViewHelperVariableContainer')
-            ->will($this->returnValue($variableContainer));
+            ->willReturn($variableContainer);
         $debugViewHelper->setRenderingContext($renderingContext);
 
         // Inject the children closure.
@@ -94,9 +102,63 @@ class DebugViewHelperTest extends AbstractHelper
         $configMock = $this->createMock(Config::class);
         $configMock->expects($this->exactly(2))
             ->method('getSetting')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->config = $configMock;
 
+        $debugViewHelper->render();
+
+        // Analyse nothing at all.
+        $configMock = $this->createMock(Config::class);
+        $configMock->expects($this->exactly(1))
+            ->method('getSetting')
+            ->willReturn(true);
+        Krexx::$pool->config = $configMock;
+        $debugViewHelper = new DebugViewHelper();
+        if (class_exists(StandaloneView::class)) {
+            $view = $this->createMock(StandaloneView::class);
+        } else {
+            $view = $this->createMock(ViewInterface::class);
+        }
+        $variableContainer = $this->createMock(ViewHelperVariableContainer::class);
+        $variableContainer->expects($this->once())
+            ->method('getView')
+            ->willReturn($view);
+        $renderingContext = $this->createMock(RenderingContextInterface::class);
+        $renderingContext->expects($this->any())
+            ->method('getViewHelperVariableContainer')
+            ->willReturn($variableContainer);
+        $debugViewHelper->setRenderingContext($renderingContext);
+        $reflection = new \ReflectionClass(ViewHelperNode::class);
+        $viewHelperNode = $reflection->newInstanceWithoutConstructor();
+        $debugViewHelper->setViewHelperNode($viewHelperNode);
+
+        $debugViewHelper->render();
+
+        // Analyse something that jumps at the debuggers face like an alien facehugger!
+        // I mean, we throw an expected exception in the renderChildrenClosure.
+        $configMock = $this->createMock(Config::class);
+        $configMock->expects($this->exactly(1))
+            ->method('getSetting')
+            ->willReturn(true);
+        Krexx::$pool->config = $configMock;
+        $debugViewHelper = new DebugViewHelper();
+        if (class_exists(StandaloneView::class)) {
+            $view = $this->createMock(StandaloneView::class);
+        } else {
+            $view = $this->createMock(ViewInterface::class);
+        }
+        $variableContainer = $this->createMock(ViewHelperVariableContainer::class);
+        $variableContainer->expects($this->once())
+            ->method('getView')
+            ->willReturn($view);
+        $renderingContext = $this->createMock(RenderingContextInterface::class);
+        $renderingContext->expects($this->any())
+            ->method('getViewHelperVariableContainer')
+            ->willReturn($variableContainer);
+        $debugViewHelper->setRenderingContext($renderingContext);
+        $debugViewHelper->setRenderChildrenClosure(function () {
+            throw new \RuntimeException('This is an expected exception.');
+        });
         $debugViewHelper->render();
     }
 }

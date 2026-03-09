@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -40,6 +40,8 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Tests\Fixtures\AbstractFixture;
+use Brainworxx\Krexx\Tests\Fixtures\AttributeFixture;
+use Brainworxx\Krexx\Tests\Fixtures\AttributesFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\EmptyInterfaceFixture;
 use Brainworxx\Krexx\Tests\Fixtures\FinalFixture;
@@ -51,10 +53,15 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use DateTime;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Meta::class, 'callMe')]
+#[CoversMethod(Meta::class, 'generateDomIdFromClassname')]
+#[CoversMethod(Meta::class, 'analyseMeta')]
+#[CoversMethod(Meta::class, 'generateMetaData')]
+#[CoversMethod(Meta::class, 'generateName')]
 class MetaTest extends AbstractHelper
 {
-
     /**
      * @var string
      */
@@ -72,9 +79,6 @@ class MetaTest extends AbstractHelper
 
     /**
      * Test the recursion handling.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::generateDomIdFromClassname
      */
     public function testCallMeRecursion()
     {
@@ -94,7 +98,7 @@ class MetaTest extends AbstractHelper
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
             ->method('getKrexxCount')
-            ->will($this->returnValue(42));
+            ->willReturn(42);
         Krexx::$pool->emergencyHandler = $emergencyMock;
 
         // Make sure that we are testing a recursion.
@@ -102,7 +106,7 @@ class MetaTest extends AbstractHelper
         $recursionMock->expects($this->once())
             ->method('isInMetaHive')
             ->with($expectedDomId)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         Krexx::$pool->recursionHandler = $recursionMock;
 
         // Short circuit the rendering process.
@@ -122,17 +126,11 @@ class MetaTest extends AbstractHelper
         $this->assertEquals($expectedDomId, $model->getDomid());
         $this->assertEquals($metaName, $model->getName());
         $this->assertEquals($metaName, $model->getNormal());
-        $this->assertEquals($meta::TYPE_INTERNALS, $model->getType());
+        $this->assertEquals(Krexx::$pool->messages->getHelp('classInternals'), $model->getType());
     }
 
     /**
      * Test the start of the meta analysis.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::generateDomIdFromClassname
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::analyseMeta
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::generateMetaData
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::generateName
      */
     public function testCallMe()
     {
@@ -152,7 +150,7 @@ class MetaTest extends AbstractHelper
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
             ->method('getKrexxCount')
-            ->will($this->returnValue(42));
+            ->willReturn(42);
         Krexx::$pool->emergencyHandler = $emergencyMock;
 
         // Make sure that we are not testing a recursion.
@@ -160,7 +158,7 @@ class MetaTest extends AbstractHelper
         $recursionMock->expects($this->once())
             ->method('isInMetaHive')
             ->with($expectedDomId)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         Krexx::$pool->recursionHandler = $recursionMock;
 
         // Short circuit the rendering process.
@@ -177,7 +175,7 @@ class MetaTest extends AbstractHelper
         $model = $renderNothing->model['renderExpandableChild'][0];
         $this->assertEquals($expectedDomId, $model->getDomid());
         $this->assertEquals('Meta class data', $model->getName());
-        $this->assertEquals($meta::TYPE_INTERNALS, $model->getType());
+        $this->assertEquals(Krexx::$pool->messages->getHelp('classInternals'), $model->getType());
 
         // Retrieve the parameters and test them.
         $data = $model->getParameters()[$meta::PARAM_DATA];
@@ -203,12 +201,6 @@ class MetaTest extends AbstractHelper
 
     /**
      * Test the meta analysis with other class types.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::generateDomIdFromClassname
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::analyseMeta
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::generateMetaData
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::generateName
      */
     public function testCallMeOthers()
     {
@@ -216,7 +208,7 @@ class MetaTest extends AbstractHelper
         $recursionMock = $this->createMock(Recursion::class);
         $recursionMock->expects($this->any())
             ->method('isInMetaHive')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         Krexx::$pool->recursionHandler = $recursionMock;
 
         // Short circuit the rendering process.
@@ -245,5 +237,82 @@ class MetaTest extends AbstractHelper
             $metaResult = $model->getParameters();
             $this->assertEquals($expectation, $metaResult['data']['Classname']);
         }
+    }
+
+    /**
+     * Test attributes with enums in them. and lots of other stuff in there.
+     */
+    public function testCallMeWithAttributes()
+    {
+        if (version_compare(phpversion(), '8.0.99', '<')) {
+            $this->markTestSkipped('Wrong PHP Version');
+        }
+
+        // Make sure that we are not testing a recursion.
+        $recursionMock = $this->createMock(Recursion::class);
+        $recursionMock->expects($this->any())
+            ->method('isInMetaHive')
+            ->willReturn(false);
+        Krexx::$pool->recursionHandler = $recursionMock;
+
+        // Short circuit the rendering process.
+        $renderNothing = new RenderNothing(Krexx::$pool);
+        Krexx::$pool->render = $renderNothing;
+
+        // Set up the fixture.
+        $meta = new Meta(Krexx::$pool);
+        $ref = new ReflectionClass(AttributeFixture::class);
+        $parameters = [
+            $meta::PARAM_REF => $ref,
+        ];
+        $meta->setParameters($parameters)->callMe();
+
+        /** @var \Brainworxx\Krexx\Analyse\Model $model */
+        $model = $renderNothing->model['renderExpandableChild'][0];
+        $metaResult = $model->getParameters();
+
+        $expectations = "#[someAttribute]
+#[Phobject(
+    [
+        'validation' => [
+            'required' => FALSE,
+            'maxFiles' => 1,
+            'fileSize' => [
+                'minimum' => '0K',
+                'maximum' => '2M'
+            ],
+            'allowedMimeTypes' => [
+                0 => 'image/jpeg',
+                1 => 'image/png',
+                2 => 'image/gif'
+            ],
+            'imageDimensions' => [
+                'maxWidth' => 4096,
+                'maxHeight' => 4096
+            ]
+        ],
+        'uploadFolder' => '1:/user_upload/',
+        'addRandomSuffix' => TRUE,
+        'duplicationBehavior' => 'myInterface',
+        'enum' => Brainworxx\Krexx\Tests\Fixtures\SuitEnumFixture::Clubs
+    ],
+)]
+#[Brainworxx\Krexx\Tests\Fixtures\Phobject\Attributes\Stuff(
+    'beep',
+    NULL,
+    123,
+    4.56,
+    TRUE,
+    FALSE,
+    [
+        0 => 'foo',
+        1 => 'bar'
+    ],
+    'stdClass',
+    'DateTime',
+    [],
+    stdClass::class,
+)]";
+        $this->assertEquals($expectations, $metaResult['data']['Attributes']);
     }
 }

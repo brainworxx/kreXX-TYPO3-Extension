@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -33,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Includekrexx\Plugins\Typo3\Scalar;
 
 use Brainworxx\Krexx\Analyse\Model;
@@ -41,6 +43,9 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use Throwable;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility as UnitLocalizationUtility;
+use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility12 as UnitLocalizationUtility12;
+use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility14 as UnitLocalizationUtility14;
 
 /**
  * LLL string parser.
@@ -52,7 +57,7 @@ class LllString extends AbstractScalarAnalysis
      *
      * @var LocalizationUtility
      */
-    protected $localisationUtility;
+    protected LocalizationUtility $localisationUtility;
 
     /**
      * Inject the pool.
@@ -144,10 +149,10 @@ class LllString extends AbstractScalarAnalysis
      * @codeCoverageIgnore
      *   Who tests the tests?
      *
-     * @param \Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility $object
+     * @param UnitLocalizationUtility|UnitLocalizationUtility12|UnitLocalizationUtility14 $object
      *   The name of the localisation utility.
      */
-    public function setLocalisationUtility(\Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility $object): void
+    public function setLocalisationUtility($object): void
     {
         $this->localisationUtility = $object;
     }

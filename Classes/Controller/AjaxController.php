@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Controller;
 
-use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Collectors\LogfileList;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
@@ -54,27 +53,23 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class AjaxController implements ConstInterface, ControllerConstInterface
 {
     use LanguageTrait;
+    use AccessTrait;
 
     /**
      * List the logfiles with their corresponding metadata.
      *
      * @param \TYPO3\CMS\Core\Http\ServerRequest $serverRequest
      *   The current server request.
-     * @param \TYPO3\CMS\Core\Http\Response|null $response
-     *   The prepared response object. Since 10.0, we need to create this one
-     *   by ourselves.
      *
      * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
      *
      * @return \TYPO3\CMS\Core\Http\Response
      *   The response with the json string.
      */
-    public function refreshLoglistAction(ServerRequest $serverRequest, ?Response $response = null): Response
+    public function refreshLoglistAction(ServerRequest $serverRequest): Response
     {
-        if ($response === null) {
-            /** @var Response $response */
-            $response = GeneralUtility::makeInstance(Response::class);
-        }
+        /** @var Response $response */
+        $response = GeneralUtility::makeInstance(Response::class);
 
         // There is already an access check in the LogfileList.
         // We will not check twice.
@@ -152,17 +147,5 @@ class AjaxController implements ConstInterface, ControllerConstInterface
         } else {
             return false;
         }
-    }
-
-    /**
-     * Additional check, if the current Backend user has access to the extension.
-     *
-     * @return bool
-     *   The result of the check.
-     */
-    protected function hasAccess(): bool
-    {
-        return isset($GLOBALS[static::BE_USER]) &&
-            $GLOBALS[static::BE_USER]->check(static::BE_MODULES, AbstractCollector::PLUGIN_NAME);
     }
 }

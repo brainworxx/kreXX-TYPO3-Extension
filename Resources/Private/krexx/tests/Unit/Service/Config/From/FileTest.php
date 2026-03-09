@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,12 +38,18 @@ namespace Brainworxx\Krexx\Tests\Unit\Service\Config\From;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\From\File as ConfigFromFile;
 use Brainworxx\Krexx\Service\Config\Validation;
-use Brainworxx\Krexx\Service\Misc\File;
+use Brainworxx\Krexx\Service\Config\From\File;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use Brainworxx\Krexx\Service\Misc\File as FileService;
 
+#[CoversMethod(File::class, 'getConfigFromFile')]
+#[CoversMethod(File::class, 'getFeConfigFromFile')]
+#[CoversMethod(File::class, 'loadFile')]
+#[CoversMethod(File::class, '__construct')]
 class FileTest extends AbstractHelper
 {
-    const SETTINGS = 'settings';
+    public const  SETTINGS = 'settings';
 
     /**
      * Fixture for injection in the configuration class.
@@ -68,8 +74,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Testing the setting of the validation class.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\From\File::__construct
      */
     public function testConstruct()
     {
@@ -79,8 +83,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Test the loading of an ini file into the settings.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\From\File::loadFile
      */
     public function testLoadFileIni()
     {
@@ -100,25 +102,23 @@ class FileTest extends AbstractHelper
         $garbageFileJson = 'garbage file.json';
         $notExistingFileIni = 'not existing file.ini';
         $notExistingFileJson = 'not existing file.json';
-        $fileServiceMock = $this->createMock(File::class);
+        $fileServiceMock = $this->createMock(FileService::class);
         $fileServiceMock->expects($this->exactly(1))
             ->method('getFileContents')
             ->with($somePathIni, false)
-            ->will($this->returnValue($this->fixture));
+            ->willReturn($this->fixture);
 
         $fileServiceMock->expects($this->any())
             ->method('fileIsReadable')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        [$somePathIni, true],
-                        [$somePathJson, false],
-                        [$garbageFileIni, false],
-                        [$garbageFileJson, false],
-                        [$notExistingFileIni, false],
-                        [$notExistingFileJson, false]
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    [$somePathIni, true],
+                    [$somePathJson, false],
+                    [$garbageFileIni, false],
+                    [$garbageFileJson, false],
+                    [$notExistingFileIni, false],
+                    [$notExistingFileJson, false]
+                ]
             );
 
         Krexx::$pool->fileService = $fileServiceMock;
@@ -143,8 +143,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Test the loading of an json file into the settings.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\From\File::loadFile
      */
     public function testLoadFileJson()
     {
@@ -153,16 +151,16 @@ class FileTest extends AbstractHelper
         $somePathIni = 'some path.ini';
         $somePathJson = 'some path.json';
 
-        $fileServiceMock = $this->createMock(File::class);
+        $fileServiceMock = $this->createMock(FileService::class);
         $fileServiceMock->expects($this->exactly(2))
             ->method('fileIsReadable')
             ->with(...$this->withConsecutive([$somePathIni], [$somePathJson]))
-            ->will($this->returnValueMap([[$somePathIni, false], [$somePathJson, true]]));
+            ->willReturnMap([[$somePathIni, false], [$somePathJson, true]]);
 
         $fileServiceMock->expects($this->once())
             ->method('getFileContents')
             ->with($somePathJson)
-            ->will($this->returnValue($this->fixture));
+            ->willReturn($this->fixture);
 
 
         Krexx::$pool->fileService = $fileServiceMock;
@@ -177,8 +175,6 @@ class FileTest extends AbstractHelper
     /**
      * Test the translating from the more human readable into the stuff for
      * the skin "engine".
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\From\File::getFeConfigFromFile
      */
     public function testGetFeConfigFromFile()
     {
@@ -217,8 +213,6 @@ class FileTest extends AbstractHelper
 
     /**
      * Testing the retrival and validation from the settings array.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\From\File::getConfigFromFile
      */
     public function testGetConfigFromFile()
     {
@@ -235,10 +229,10 @@ class FileTest extends AbstractHelper
             ->with(...$this->withConsecutive(
                 [$anotherGroup, $knownSetting, $whatever],
                 [$groupy, $wrongSetting, $wrongValue]
-            ))->will($this->returnValueMap([
+            ))->willReturnMap([
                 [$anotherGroup, $knownSetting, $whatever, true],
                 [$groupy, $wrongSetting, $wrongValue, false]
-            ]));
+            ]);
         Krexx::$pool->config->validation = $validationMock;
 
         $this->fixture = [

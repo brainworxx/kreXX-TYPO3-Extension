@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,6 +37,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Modules\Log;
+use Brainworxx\Includekrexx\Modules\Log14;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
@@ -48,7 +50,7 @@ use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Scalar\String\Xml;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
-use Brainworxx\Krexx\Controller\AbstractController;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Analyse\Objects as FluidObjects;
 use Brainworxx\Krexx\Controller\BacktraceController;
 use Brainworxx\Krexx\Controller\DumpController;
 use Brainworxx\Krexx\Controller\EditSettingsController;
@@ -58,17 +60,29 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Package\MetaData;
 use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput as T3CheckOutput;
 use Brainworxx\Krexx\View\Output\CheckOutput;
 use Krexx;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Configuration::class, 'exec')]
+#[CoversMethod(Configuration::class, 'registerBlacklisting')]
+#[CoversMethod(Configuration::class, 'createWorkingDirectories')]
+#[CoversMethod(Configuration::class, 'registerVersionDependantStuff')]
+#[CoversMethod(Configuration::class, 'registerFileWriterSettings')]
+#[CoversMethod(Configuration::class, 'registerFileWriter')]
+#[CoversMethod(Configuration::class, 'createFileWriterValidator')]
+#[CoversMethod(Configuration::class, 'generateTempPaths')]
+#[CoversMethod(Configuration::class, 'getVersion')]
+#[CoversMethod(Configuration::class, 'getName')]
 class ConfigurationTest extends AbstractHelper implements ConstInterface
 {
 
-    const REVERSE_PROXY = 'reverseProxyIP';
+    protected const REVERSE_PROXY = 'reverseProxyIP';
     protected const TYPO3_TEMP = 'typo3temp';
 
     /**
@@ -119,8 +133,6 @@ class ConfigurationTest extends AbstractHelper implements ConstInterface
 
     /**
      * Simple string contains assertion.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::getName
      */
     public function testGetName()
     {
@@ -129,34 +141,23 @@ class ConfigurationTest extends AbstractHelper implements ConstInterface
 
     /**
      * Test the getting of the version, which is the same as the extension.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::getVersion
      */
     public function testGetVersion()
     {
         $metaData = $this->createMock(MetaData::class);
         $metaData->expects($this->once())
             ->method('getVersion')
-            ->will($this->returnValue(AbstractHelper::TYPO3_VERSION));
+            ->willReturn(AbstractHelper::TYPO3_VERSION);
         $packageMock = $this->simulatePackage(Bootstrap::EXT_KEY, 'whatever');
         $packageMock->expects($this->once())
             ->method('getPackageMetaData')
-            ->will($this->returnValue($metaData));
+            ->willReturn($metaData);
 
         $this->assertEquals(AbstractHelper::TYPO3_VERSION, $this->configuration->getVersion());
     }
 
     /**
      * Test the adjustments done by the TYPO3 plugin.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::exec
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::registerBlacklisting
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::createWorkingDirectories
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::registerVersionDependantStuff
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::registerFileWriterSettings
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::registerFileWriter
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::createFileWriterValidator
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::generateTempPaths
      */
     public function testExec()
     {
@@ -166,7 +167,7 @@ class ConfigurationTest extends AbstractHelper implements ConstInterface
         $pathSite = 'somePath';
         $this->setValueByReflection('varPath', $pathSite, Environment::class);
 
-        $typo3Namespace = '\Brainworxx\\Includekrexx\\Plugins\\Typo3\\';
+        $typo3Namespace = '\\Brainworxx\\Includekrexx\\Plugins\\Typo3\\';
 
         // Mock the is_dir method. We will not create any files.
         $isDirMock = $this->getFunctionMock($typo3Namespace, 'is_dir');
@@ -181,7 +182,12 @@ class ConfigurationTest extends AbstractHelper implements ConstInterface
                 [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . $log],
                 [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'chunks'],
                 [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'config']
-            ))->will($this->returnValue(true));
+            ))->willReturn(false);
+
+        $mkDir = $this->getFunctionMock('\\TYPO3\\CMS\\Core\\Utility\\', 'mkDir');
+        $mkDir->expects($this->any())->willReturn(false);
+        $pathinfo = $this->getFunctionMock('\\TYPO3\\CMS\\Core\\Utility\\', 'pathinfo');
+        $pathinfo->expects($this->any())->willReturn(['dirname' => '', 'basename' => false]);
 
         // Simulating the package
         $this->simulatePackage(Bootstrap::EXT_KEY, 'what/ever/');
@@ -190,12 +196,20 @@ class ConfigurationTest extends AbstractHelper implements ConstInterface
             $typo3Namespace,
             'array_replace_recursive'
         );
+
+        $typo3Version = new Typo3Version();
+        if ($typo3Version->getMajorVersion() > 13) {
+            $logClass = Log14::class;
+        } else {
+            $logClass = Log::class;
+        }
+
         $arrayReplaceRecursiveMock->expects($this->any())
-            ->with($this->anything(), [Configuration::KREXX => ['module' => Log::class, 'before' => [$log]]]);
+            ->with($this->anything(), [Configuration::KREXX => ['module' => $logClass, 'before' => [$log]]]);
         // You just have to love these large arrays inside the globals.
         $GLOBALS[Configuration::TYPO3_CONF_VARS][Configuration::EXTCONF]
             [Configuration::ADMIN_PANEL][Configuration::MODULES][Configuration::DEBUG]
-            [Configuration::SUBMODULES] = ['module' => Log::class, 'after' => [$log]];
+            [Configuration::SUBMODULES] = ['module' => $logClass, 'after' => [$log]];
 
         $this->configuration->exec();
 
@@ -207,7 +221,8 @@ class ConfigurationTest extends AbstractHelper implements ConstInterface
                 EditSettingsController::class . '::outputCssAndJs' => [InlineJsCssDispatcher::class => InlineJsCssDispatcher::class],
                 ExceptionController::class . '::outputCssAndJs' => [InlineJsCssDispatcher::class => InlineJsCssDispatcher::class],
                 BacktraceController::class . '::outputCssAndJs' => [InlineJsCssDispatcher::class => InlineJsCssDispatcher::class],
-                DumpController::class . '::outputCssAndJs' => [InlineJsCssDispatcher::class => InlineJsCssDispatcher::class]
+                DumpController::class . '::outputCssAndJs' => [InlineJsCssDispatcher::class => InlineJsCssDispatcher::class],
+                FluidObjects::class . '::callMe::start' => [QueryDebugger::class => QueryDebugger::class],
             ],
             SettingsGetter::getEventList()
         );

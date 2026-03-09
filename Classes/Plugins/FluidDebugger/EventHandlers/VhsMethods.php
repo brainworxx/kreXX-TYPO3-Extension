@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -56,7 +56,7 @@ class VhsMethods implements EventHandlerInterface, CallbackConstInterface, Fluid
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * {@inheritdoc}
@@ -70,7 +70,7 @@ class VhsMethods implements EventHandlerInterface, CallbackConstInterface, Fluid
      * We set the multiline code generation to VHS, and we add the name of the
      * parameter for the VHS code generation into the 'paramArray'
      *
-     * @param AbstractCallback $callback
+     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback|null $callback
      *   The calling class.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model so far.
@@ -78,11 +78,10 @@ class VhsMethods implements EventHandlerInterface, CallbackConstInterface, Fluid
      * @return string
      *   Return an empty string.
      */
-    public function handle(AbstractCallback $callback, ?Model $model = null): string
+    public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
     {
-        $params = $callback->getParameters();
         /** @var \ReflectionMethod $reflectionMethod */
-        $reflectionMethod = $params[static::PARAM_REFLECTION_METHOD];
+        $reflectionMethod = $callback->getParameters()[static::PARAM_REFLECTION_METHOD];
 
         $paramArray = [];
         foreach ($reflectionMethod->getParameters() as $reflectionParameter) {

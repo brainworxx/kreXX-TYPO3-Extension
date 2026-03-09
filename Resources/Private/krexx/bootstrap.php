@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -59,9 +59,6 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Callback/CallbackConstInterface.php';
         include_once KREXX_DIR . 'src/Analyse/Routing/Process/ProcessConstInterface.php';
         include_once KREXX_DIR . 'src/Analyse/Caller/BacktraceConstInterface.php';
-        // deprecated
-        include_once KREXX_DIR . 'src/Controller/ControllerConstInterface.php';
-        // deprecated
         include_once KREXX_DIR . 'src/Service/Config/ConfigConstInterface.php';
         include_once KREXX_DIR . 'src/Analyse/Code/CodegenConstInterface.php';
         include_once KREXX_DIR . 'src/Analyse/Code/ConnectorsConstInterface.php';
@@ -112,11 +109,18 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Comment/Properties.php';
         include_once KREXX_DIR . 'src/Analyse/Comment/Classes.php';
         include_once KREXX_DIR . 'src/Analyse/Comment/ReturnType.php';
+        include_once KREXX_DIR . 'src/Analyse/Comment/Attributes.php';
 
         include_once KREXX_DIR . 'src/Analyse/Declaration/AbstractDeclaration.php';
         include_once KREXX_DIR . 'src/Analyse/Declaration/FunctionDeclaration.php';
         include_once KREXX_DIR . 'src/Analyse/Declaration/MethodDeclaration.php';
         include_once KREXX_DIR . 'src/Analyse/Declaration/PropertyDeclaration.php';
+
+        include_once KREXX_DIR . 'src/Analyse/Getter/AbstractGetter.php';
+        include_once KREXX_DIR . 'src/Analyse/Getter/ByMethodName.php';
+        include_once KREXX_DIR . 'src/Analyse/Getter/ByRegExProperty.php';
+        include_once KREXX_DIR . 'src/Analyse/Getter/ByRegExContainer.php';
+        include_once KREXX_DIR . 'src/Analyse/Getter/ByRegExDelegate.php';
 
         include_once KREXX_DIR . 'src/Analyse/Routing/AbstractRouting.php';
         include_once KREXX_DIR . 'src/Analyse/Routing/Routing.php';
@@ -145,15 +149,7 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Scalar/String/TimeStamp.php';
         include_once KREXX_DIR . 'src/Analyse/Scalar/String/Serialized.php';
         include_once KREXX_DIR . 'src/Analyse/Scalar/String/Base64.php';
-        // @deprecated
-        include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/AbstractScalarAnalysis.php';
-        include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/Callback.php';
-        include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/FilePath.php';
-        include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/Json.php';
-        include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/Xml.php';
-        include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/TimeStamp.php';
-        include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/Serialized.php';
-        // @deprecated
+        include_once KREXX_DIR . 'src/Analyse/Scalar/String/ClassName.php';
 
         include_once KREXX_DIR . 'src/Analyse/Model/ConnectorService.php';
         include_once KREXX_DIR . 'src/Analyse/Model/Callback.php';
@@ -165,7 +161,6 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Model/DomId.php';
         include_once KREXX_DIR . 'src/Analyse/Model/HasExtra.php';
         include_once KREXX_DIR . 'src/Analyse/Model/CodeGenType.php';
-        include_once KREXX_DIR . 'src/Analyse/Model/KeyType.php';
         include_once KREXX_DIR . 'src/Analyse/Model.php';
 
         include_once KREXX_DIR . 'src/Controller/AbstractController.php';
@@ -243,7 +238,9 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/FatalMain.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Footer.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Header.php';
+        // @deprecated
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Recursion.php';
+        // @deprecated
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/SingleEditableChild.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/ConnectorRight.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Help.php';
@@ -258,7 +255,7 @@ call_user_func(function () {
     // When it does something stupid, krexxLoader will handle the rest.
     set_error_handler($krexxLoader);
     try {
-        if (class_exists(\Brainworxx\Krexx\Krexx::class) === false) {
+        if (!class_exists(\Brainworxx\Krexx\Krexx::class)) {
             $krexxLoader();
         }
     } catch (\Throwable $e) {

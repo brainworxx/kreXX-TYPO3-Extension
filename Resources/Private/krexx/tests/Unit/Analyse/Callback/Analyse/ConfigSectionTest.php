@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse;
 
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\Model;
@@ -42,16 +43,16 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Messages;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\View\Skins\RenderHans;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ConfigSection::class, 'callMe')]
+#[CoversMethod(ConfigSection::class, 'generateOutput')]
+#[CoversMethod(ConfigSection::class, 'prepareValue')]
+#[CoversMethod(AbstractCallback::class, 'dispatchStartEvent')]
 class ConfigSectionTest extends AbstractHelper
 {
     /**
      * Testing if the configuration is rendered correctly.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection::generateOutput
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection::prepareValue
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
      */
     public function testCallMe()
     {
@@ -59,6 +60,7 @@ class ConfigSectionTest extends AbstractHelper
         $noRender = new Model();
         $renderEditable = new Model();
         $renderNotEditable = new Model();
+        $stringSetting = new Model();
 
         $sectionString = 'some Section';
         $sourceString = 'some source';
@@ -82,11 +84,18 @@ class ConfigSectionTest extends AbstractHelper
             ->setType(Fallback::RENDER_TYPE_INPUT)
             ->setValue(false);
 
+        $stringSetting->setSection($sectionString)
+            ->setEditable(false)
+            ->setSource($sourceString)
+            ->setType(Fallback::RENDER_TYPE_INPUT)
+            ->setValue('just a string');
+
         $data = ['data' =>
             [
                 'noRender' => $noRender,
                 'renderEditable' => $renderEditable,
-                'renderNotEditable' => $renderNotEditable
+                'renderNotEditable' => $renderNotEditable,
+                'stringSetting' => $stringSetting
             ]
         ];
 
@@ -100,7 +109,7 @@ class ConfigSectionTest extends AbstractHelper
 
         // Test Render Type None
         $messageMock = $this->createMock(Messages::class);
-        $messageMock->expects($this->exactly(6))
+        $messageMock->expects($this->exactly(9))
             ->method('getHelp')
             ->with(...$this->withConsecutive(
                 ['metaHelp'],
@@ -108,8 +117,11 @@ class ConfigSectionTest extends AbstractHelper
                 ['renderEditableReadable'],
                 ['metaHelp'],
                 ['renderNotEditableHelp'],
-                ['renderNotEditableReadable']
-            ))->will($this->returnValue('some help text'));
+                ['renderNotEditableReadable'],
+                ['metaHelp'],
+                ['stringSettingHelp'],
+                ['stringSettingReadable'],
+            ))->willReturn('some help text');
         Krexx::$pool->messages = $messageMock;
 
         // Test if editable or not
@@ -117,11 +129,11 @@ class ConfigSectionTest extends AbstractHelper
         $renderMock->expects($this->once())
             ->method('renderSingleEditableChild')
             ->with($this->anything())
-            ->will($this->returnValue('some string'));
-        $renderMock->expects($this->once())
+            ->willReturn('some string');
+        $renderMock->expects($this->exactly(2))
             ->method('renderExpandableChild')
             ->with($this->anything())
-            ->will($this->returnValue('some string'));
+            ->willReturn('some string');
         Krexx::$pool->render = $renderMock;
 
         // Run it!

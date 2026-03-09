@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -39,35 +39,40 @@ use Brainworxx\Krexx\Service\Reflection\HiddenProperty;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use DateTime;
 use ReflectionClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(HiddenProperty::class, 'hasType')]
+#[CoversMethod(HiddenProperty::class, '__construct')]
 class HiddenPropertyTest extends AbstractHelper
 {
     /**
      * Test the setting of the class reflection as well as the
      * special handling of the DateTime anomaly.
-     *
-     * @covers \Brainworxx\Krexx\Service\Reflection\HiddenProperty::__construct
      */
     public function testConstruct()
     {
         $fixture = new ReflectionClass($this);
         $justaName = 'whatever';
-
         $hiddenProperty = new HiddenProperty($fixture, $justaName);
         $this->assertTrue($hiddenProperty->isPublic(), 'Nearly all hidden propeties are public.');
+
 
         $reflectionClassMock = $this->createMock(ReflectionClass::class);
         $reflectionClassMock->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue(DateTime::class));
-
+            ->willReturn(DateTime::class);
         $hiddenProperty = new HiddenProperty($reflectionClassMock, $justaName);
         $this->assertFalse($hiddenProperty->isPublic(), 'The DateTime properties are not public.');
+
+
+        $reflectionClassMock = $this->createMock(ReflectionClass::class);
+        $reflectionClassMock->expects($this->once())
+            ->method('getName')
+            ->willReturn(\DateTimeImmutable::class);
+        $hiddenProperty = new HiddenProperty($reflectionClassMock, $justaName);
+        $this->assertFalse($hiddenProperty->isPublic(), 'The DateTimeImmutable properties are not public.');
     }
 
-    /**
-     * @covers \Brainworxx\Krexx\Service\Reflection\HiddenProperty::hasType
-     */
     public function testHasType()
     {
         $fixture = new ReflectionClass($this);

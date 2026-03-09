@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -48,7 +48,7 @@ class Functions extends AbstractComment
     /**
      * Get the prettified comment from a function.
      *
-     * @param \Reflector $reflection
+     * @param \ReflectionFunction $reflection
      *   The reflection of the function with the comment.
      * @param \ReflectionClass|null $reflectionClass
      *   Nothing, null. We do not have a hosting class.

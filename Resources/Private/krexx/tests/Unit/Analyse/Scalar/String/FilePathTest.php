@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -43,13 +43,18 @@ use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use finfo;
 use Krexx;
 use TypeError;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(FilePath::class, '__construct')]
+#[CoversMethod(FilePath::class, 'isActive')]
+#[CoversMethod(FilePath::class, 'canHandle')]
+#[CoversMethod(FilePath::class, 'retrieveFileInfo')]
+#[CoversMethod(FilePath::class, 'callMe')]
+#[CoversMethod(FilePath::class, 'handle')]
 class FilePathTest extends AbstractHelper
 {
     /**
      * Test the assigning of the finfo class.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\FilePath::__construct
      */
     public function testConstruct()
     {
@@ -59,8 +64,6 @@ class FilePathTest extends AbstractHelper
 
     /**
      * Test the recognition of the finfo class in the system.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\FilePath::isActive
      */
     public function testIsActive()
     {
@@ -86,9 +89,6 @@ class FilePathTest extends AbstractHelper
 
     /**
      * Test, if we can identify a file path.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\FilePath::canHandle
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\FilePath::retrieveFileInfo
      */
     public function testCanHandle()
     {
@@ -104,7 +104,7 @@ class FilePathTest extends AbstractHelper
         $finfoMock = $this->createMock(finfo::class);
         $finfoMock->expects($this->once())
             ->method('file')
-            ->will($this->returnValue($mimeInfo));
+            ->willReturn($mimeInfo);
         $filePath = new FilePath(Krexx::$pool);
         $this->setValueByReflection('bufferInfo', $finfoMock, $filePath);
 
@@ -136,9 +136,6 @@ class FilePathTest extends AbstractHelper
 
     /**
      * Test the adding of the realpath, if it differs.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\FilePath::canHandle
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\FilePath::retrieveFileInfo
      */
     public function testCanHandleRealpath()
     {
@@ -150,7 +147,7 @@ class FilePathTest extends AbstractHelper
         $myPath = __DIR__ . '/XmlTest.php';
         $realpathMock->expects($this->once())
             ->with($myPath)
-            ->will($this->returnValue('theRealPath'));
+            ->willReturn('theRealPath');
         $model = new Model(Krexx::$pool);
         $filePath->canHandle($myPath, $model);
         $result = $model->getJson();
@@ -163,9 +160,6 @@ class FilePathTest extends AbstractHelper
 
     /**
      * Test, if we can handle some errors.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\FilePath::canHandle
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\FilePath::retrieveFileInfo
      */
     public function testCanHandleErrors()
     {
@@ -183,9 +177,6 @@ class FilePathTest extends AbstractHelper
 
     /**
      * We literally expect it to do nothing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\FilePath::callMe()
-     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\FilePath::handle()
      */
     public function testCallMe()
     {

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,14 +37,16 @@ namespace Brainworxx\Krexx\Tests\Unit\View\Skins\SmokyGrey;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderSmokyGrey;
+use Brainworxx\Krexx\View\Skins\SmokyGrey\Footer;
+use Brainworxx\Krexx\View\Skins\SmokyGrey\Help;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Footer::class, 'renderFooter')]
+#[CoversMethod(Help::class, 'renderHelp')]
 class FooterTest extends AbstractRenderSmokyGrey
 {
     /**
      * Test the removal of the debug tab, when we are in config mode.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Footer::renderFooter
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Help::renderHelp
      */
     public function testRenderFooter()
     {
@@ -52,13 +54,13 @@ class FooterTest extends AbstractRenderSmokyGrey
         $model = $this->createMock(Model::class);
         $model->expects($this->exactly(2))
             ->method('getJson')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $model->expects($this->any())
             ->method('getType')
-            ->will($this->returnValue(''));
+            ->willReturn('');
         $model->expects($this->any())
             ->method('getConnectorRight')
-            ->will($this->returnValue(''));
+            ->willReturn('');
 
         $result = $this->renderSmokyGrey->renderFooter([], $model, true);
         $this->assertStringNotContainsString('khidden', $result);

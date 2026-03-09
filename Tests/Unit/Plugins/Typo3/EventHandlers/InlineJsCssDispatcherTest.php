@@ -42,13 +42,14 @@ use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use TYPO3\CMS\Core\Page\AssetCollector;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(InlineJsCssDispatcher::class, 'handle')]
+#[CoversMethod(InlineJsCssDispatcher::class, '__construct')]
 class InlineJsCssDispatcherTest extends AbstractHelper implements ConfigConstInterface
 {
     /**
      * Test the assigning of the pool.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\InlineJsCssDispatcher::__construct
      */
     public function testConstuct()
     {
@@ -58,8 +59,6 @@ class InlineJsCssDispatcherTest extends AbstractHelper implements ConfigConstInt
 
     /**
      * Test with logging on.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\InlineJsCssDispatcher::handle
      */
     public function testHandleLogging()
     {
@@ -67,7 +66,7 @@ class InlineJsCssDispatcherTest extends AbstractHelper implements ConfigConstInt
         $configMock->expects($this->once())
             ->method('getSetting')
             ->with(static::SETTING_DESTINATION)
-            ->will($this->returnValue(static::VALUE_FILE));
+            ->willReturn(static::VALUE_FILE);
         $pool = \Krexx::$pool;
         $pool->config = $configMock;
 
@@ -85,8 +84,6 @@ class InlineJsCssDispatcherTest extends AbstractHelper implements ConfigConstInt
 
     /**
      * Test with normal output.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\InlineJsCssDispatcher::handle
      */
     public function testHandleNormal()
     {
@@ -94,7 +91,7 @@ class InlineJsCssDispatcherTest extends AbstractHelper implements ConfigConstInt
         $configMock->expects($this->once())
             ->method('getSetting')
             ->with(static::SETTING_DESTINATION)
-            ->will($this->returnValue(static::VALUE_BROWSER));
+            ->willReturn(static::VALUE_BROWSER);
         $pool = \Krexx::$pool;
         $pool->config = $configMock;
 
@@ -108,21 +105,35 @@ class InlineJsCssDispatcherTest extends AbstractHelper implements ConfigConstInt
                 [],
                 ['priority' => false, 'useNonce' => true]
             );
+        $css = 'body {background-color: red;}';
+        $collectorMock->expects($this->once())
+            ->method('addInlineStyleSheet')
+            ->with(
+                'krexxInlineCss',
+                $css,
+                [],
+                ['priority' => false, 'useNonce' => true]
+            );
+
         $this->injectIntoGeneralUtility(AssetCollector::class, $collectorMock);
 
         $dispatcher = new InlineJsCssDispatcher($pool);
         $model = new Model($pool);
         $model->setData($payload);
+        $model->setNormal($css);
         $dispatcher->handle(null, $model);
     }
 
+    /**
+     * Test without any JS dispatching.
+     */
     public function testHandleEmpty()
     {
         $configMock = $this->createMock(Config::class);
         $configMock->expects($this->once())
             ->method('getSetting')
             ->with(static::SETTING_DESTINATION)
-            ->will($this->returnValue(static::VALUE_BROWSER));
+            ->willReturn(static::VALUE_BROWSER);
         $pool = \Krexx::$pool;
         $pool->config = $configMock;
 

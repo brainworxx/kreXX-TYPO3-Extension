@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,6 +35,8 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Caller;
 
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
 use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -43,11 +45,19 @@ use Brainworxx\Krexx\Tests\Fixtures\LoggerCallerFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use ReflectionClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(CallerFinder::class, '__construct')]
+#[CoversMethod(CallerFinder::class, 'findCaller')]
+#[CoversMethod(CallerFinder::class, 'getVarName')]
+#[CoversMethod(CallerFinder::class, 'getType')]
+#[CoversMethod(CallerFinder::class, 'identifyCaller')]
+#[CoversMethod(CallerFinder::class, 'removeKrexxPartFromCommand')]
+#[CoversMethod(AbstractCaller::class, 'getCurrentUrl')]
 class CallerFinderTest extends AbstractHelper
 {
-    const FUNCTION_TO_TRACE = 'krexx';
-    const HEADLINE_STRING = 'A headline';
+    public const  FUNCTION_TO_TRACE = 'krexx';
+    public const  HEADLINE_STRING = 'A headline';
 
     /**
      * @var \Brainworxx\Krexx\Analyse\Caller\CallerFinder
@@ -85,13 +95,13 @@ class CallerFinderTest extends AbstractHelper
         $poolMock = $this->createMock(Pool::class);
         $poolMock->expects($this->any())
             ->method('getServer')
-            ->will($this->returnValue([
+            ->willReturn([
                 'SERVER_PROTOCOL' => 'abcd/',
                 'SERVER_PORT' => 123,
                 'SERVER_NAME' => 'localhorst',
                 'HTTPS' => 'on',
                 'REQUEST_URI' => 'some/uri'
-            ]));
+            ]);
         $poolMock->fileService = Krexx::$pool->fileService;
         $poolMock->encodingService = Krexx::$pool->encodingService;
         $poolMock->config = Krexx::$pool->config;
@@ -99,9 +109,9 @@ class CallerFinderTest extends AbstractHelper
         $poolMock->messages = Krexx::$pool->messages;
         $poolMock->expects($this->any())
             ->method('createClass')
-            ->will($this->returnCallback(function ($classname) {
+            ->willReturnCallback(function ($classname) {
                 return Krexx::$pool->createClass($classname);
-            }));
+            });
 
         // Create our test subject.
         $this->callerFinder = new CallerFinder($poolMock);
@@ -134,9 +144,7 @@ class CallerFinderTest extends AbstractHelper
     }
 
     /**
-     * Test the setting of the call pattern and the pattern itself.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::__construct
+     * Test the setting of the call pattern and the pattern itself.´ß
      */
     public function testConstruct()
     {
@@ -159,16 +167,7 @@ class CallerFinderTest extends AbstractHelper
 
     /**
      * Test normally, without any outside iterference, the way it is normally
-     * exrcuted
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::findCaller
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getVarName
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getType
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::identifyCaller
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::removeKrexxPartFromCommand
-     * @covers \Brainworxx\Krexx\Analyse\Caller\AbstractCaller::getCurrentUrl
-     *
-     * @throws \ReflectionException
+     * executed.
      */
     public function testFindCallerNormal()
     {
@@ -190,11 +189,6 @@ class CallerFinderTest extends AbstractHelper
 
     /**
      * Test the resolving of inline calles of kreXX.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::findCaller
-     * @covers \Brainworxx\Krexx\Analyse\Caller\AbstractCaller::getType
-     *
-     * @throws \ReflectionException
      */
     public function testFindCallerInline()
     {
@@ -218,14 +212,6 @@ class CallerFinderTest extends AbstractHelper
 
     /**
      * Test with an externally set headline.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::findCaller
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getVarName
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getType
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::identifyCaller
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::removeKrexxPartFromCommand
-     *
-     * @throws \ReflectionException
      */
     public function testFindCallerHeadline()
     {
@@ -246,15 +232,7 @@ class CallerFinderTest extends AbstractHelper
     }
 
     /**
-     * Test with an source file, that is not readable.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::findCaller
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getVarName
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getType
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::identifyCaller
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::removeKrexxPartFromCommand
-     *
-     * @throws \ReflectionException
+     * Test with a source file, that is not readable.
      */
     public function testFindCallerUnreadableSource()
     {
@@ -278,13 +256,65 @@ class CallerFinderTest extends AbstractHelper
     }
 
     /**
+     * Test the finding without a valid url.
+     */
+    public function testFindCallerNoUrl()
+    {
+        $this->mockDebugBacktrace()
+            ->expects($this->once())
+            ->willReturn($this->createFixture(75));
+
+        // We need a different pool mock.
+        $poolMock = $this->createMock(Pool::class);
+        $poolMock->expects($this->any())
+            ->method('getServer')
+            ->willReturn([
+                'SERVER_PROTOCOL' => 'abcd/',
+                'SERVER_PORT' => 123,
+                'SERVER_NAME' => 'localhorst',
+                'HTTPS' => 'on'
+            ]);
+        $poolMock->fileService = Krexx::$pool->fileService;
+        $poolMock->encodingService = Krexx::$pool->encodingService;
+        $poolMock->config = Krexx::$pool->config;
+        $poolMock->emergencyHandler = Krexx::$pool->emergencyHandler;
+        $poolMock->messages = Krexx::$pool->messages;
+        $poolMock->expects($this->any())
+            ->method('createClass')
+            ->willReturnCallback(function ($classname) {
+                return Krexx::$pool->createClass($classname);
+            });
+        $this->callerFinder = new CallerFinder($poolMock);
+
+        // Run the test
+        $result = $this->callerFinder->findCaller('', $this->subjectVar);
+        $this->assertEquals('n/a', $result[BacktraceConstInterface::TRACE_URL]);
+    }
+
+    /**
+     * Manipulate the lookup array to prevent finding anything.
+     */
+    public function testFindCallerNoResult()
+    {
+        $this->mockDebugBacktrace()
+            ->expects($this->once())
+            ->willReturn($this->createFixture(75));
+        $this->setValueByReflection('callPattern', [], $this->callerFinder);
+
+        // Run the test
+        $result = $this->callerFinder->findCaller('', $this->subjectVar);
+        $this->assertEquals(
+            CallbackConstInterface::UNKNOWN_VALUE,
+            $result[BacktraceConstInterface::TRACE_VARNAME]
+        );
+        $this->assertEquals(
+            'Analysis of ' . CallbackConstInterface::UNKNOWN_VALUE . ', string',
+            $result[BacktraceConstInterface::TRACE_TYPE]
+        );
+    }
+
+    /**
      * Test the caller finder with the forced logger.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::findCaller
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getVarName
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getType
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::identifyCaller
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::removeKrexxPartFromCommand
      */
     public function testFindCallerLogging()
     {
@@ -309,6 +339,6 @@ class CallerFinderTest extends AbstractHelper
         // Run the test
         $result = $this->callerFinder->findCaller('', $this->subjectVar);
         $this->assertEquals(47, $result[BacktraceConstInterface::TRACE_LINE]);
-        $this->assertEquals('some value', $result[BacktraceConstInterface::TRACE_VARNAME]);
+        $this->assertEquals('&#039;some value&#039;', $result[BacktraceConstInterface::TRACE_VARNAME]);
     }
 }

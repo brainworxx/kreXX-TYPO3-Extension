@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Service\Config\Fallback;
@@ -45,15 +46,20 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 use ReflectionMethod;
+use stdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Methods::class, 'callMe')]
+#[CoversMethod(Methods::class, 'analyseMethods')]
+#[CoversMethod(Methods::class, 'generateDomIdFromClassname')]
+#[CoversMethod(AbstractObjectAnalysis::class, 'reflectionSorting')]
 class MethodsTest extends AbstractHelper
 {
-
-    const PRIVATE_METHOD = 'privateMethod';
-    const PROTECTED_METHOD = 'protectedMethod';
-    const PUBLIC_METHOD = 'publicMethod';
-    const TROUBLESOME_METHOD = 'troublesomeMethod';
-    const CLASS_METHOD = 'classMethod';
+    public const  PRIVATE_METHOD = 'privateMethod';
+    public const  PROTECTED_METHOD = 'protectedMethod';
+    public const  PUBLIC_METHOD = 'publicMethod';
+    public const  TROUBLESOME_METHOD = 'troublesomeMethod';
+    public const  CLASS_METHOD = 'classMethod';
 
     /**
      * @var string
@@ -117,11 +123,6 @@ class MethodsTest extends AbstractHelper
 
     /**
      * Testing the methods analysis recursion.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::analyseMethods
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::generateDomIdFromClassname
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
      */
     public function testCallMeRecursion()
     {
@@ -145,13 +146,6 @@ class MethodsTest extends AbstractHelper
 
     /**
      * Testing the analysis for public methods only.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::analyseMethods
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::generateDomIdFromClassname
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
-     *
-     * @throws \ReflectionException
      */
     public function testCallMePublic()
     {
@@ -184,13 +178,6 @@ class MethodsTest extends AbstractHelper
 
     /**
      * Testing the analysis for public and protected methods.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::analyseMethods
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::generateDomIdFromClassname
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
-     *
-     * @throws \ReflectionException
      */
     public function testCallMeProtected()
     {
@@ -224,13 +211,6 @@ class MethodsTest extends AbstractHelper
 
     /**
      * Testing the analysis for public and private methods.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::analyseMethods
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::generateDomIdFromClassname
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
-     *
-     * @throws \ReflectionException
      */
     public function testCallMePrivate()
     {
@@ -264,13 +244,6 @@ class MethodsTest extends AbstractHelper
 
     /**
      * Testing the analysis for public and private methods.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::analyseMethods
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::generateDomIdFromClassname
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
-     *
-     * @throws \ReflectionException
      */
     public function testCallMePrivateProtected()
     {
@@ -304,6 +277,27 @@ class MethodsTest extends AbstractHelper
     }
 
     /**
+     * Testing the analysis with an empty stdClass
+     */
+    public function testCallMePrivateEmpty()
+    {
+        // Set up the events
+        $this->mockEventService([$this->startEvent, $this->methods]);
+
+        $testClass = new stdClass();
+        $this->fixture = [
+            'data' => $testClass,
+            'name' => 'The "sdt" means "standard", and not what you think it does.',
+            'ref' => new ReflectionClass($testClass)
+        ];
+        $this->methods->setParameters($this->fixture);
+        $this->md5Hash = '09a15e9660c1ebc6f429d818825ce0c6';
+
+        // The is no result to be expected, whatsoever.
+        $this->runAndAssertResults('k1_m_', false, 0, []);
+    }
+
+    /**
      * @param string $metaHiveKey
      * @param bool $isInHive
      * @param int $counter
@@ -320,7 +314,7 @@ class MethodsTest extends AbstractHelper
         $recursionMock->expects($this->once())
             ->method('isInMetaHive')
             ->with($metaHiveKey . $this->md5Hash)
-            ->will($this->returnValue($isInHive));
+            ->willReturn($isInHive);
         // Inject it.
         Krexx::$pool->recursionHandler = $recursionMock;
 
@@ -328,7 +322,7 @@ class MethodsTest extends AbstractHelper
         $this->methods->callMe();
 
         // Test the callback counter for it's parameters.
-        $this->assertEquals($counter, CallbackCounter::$counter);
+        $this->assertEquals($counter, CallbackCounter::$counter, 'Asserting counter');
         $this->assertEquals($expectation, CallbackCounter::$staticParameters);
     }
 }

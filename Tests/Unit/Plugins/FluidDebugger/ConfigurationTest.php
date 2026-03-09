@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,6 +37,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\DynamicGetter;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterWithoutGet;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\VhsMethods;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
@@ -47,7 +49,15 @@ use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen as FluidCodegen;
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid as CallerFinderFluid;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Getter as GetterFluid;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Analyse\Objects as ObjectsFluid;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
+#[CoversMethod(Configuration::class, 'exec')]
+#[CoversMethod(Configuration::class, 'getVersion')]
+#[CoversMethod(Configuration::class, 'getName')]
 class ConfigurationTest extends AbstractHelper
 {
     /**
@@ -62,6 +72,8 @@ class ConfigurationTest extends AbstractHelper
         Connectors::class => FluidConnectors::class,
         Codegen::class => FluidCodegen::class,
         CallerFinder::class => CallerFinderFluid::class,
+        Getter::class => GetterFluid::class,
+        Objects::class => ObjectsFluid::class
     ];
 
     /**
@@ -73,6 +85,9 @@ class ConfigurationTest extends AbstractHelper
         ],
         'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethods::callMe::end' => [
             VhsMethods::class => VhsMethods::class
+        ],
+        'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter::callMe::start' => [
+            DynamicGetter::class => DynamicGetter::class
         ]
     ];
 
@@ -94,8 +109,6 @@ class ConfigurationTest extends AbstractHelper
 
     /**
      * Simple string contains assertion.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration::getName
      */
     public function testGetName()
     {
@@ -104,27 +117,23 @@ class ConfigurationTest extends AbstractHelper
 
     /**
      * Test the getting of the version, which is the same as the extension.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration::getVersion
      */
     public function testGetVersion()
     {
         $metaData = $this->createMock(MetaData::class);
         $metaData->expects($this->once())
             ->method('getVersion')
-            ->will($this->returnValue(AbstractHelper::TYPO3_VERSION));
+            ->willReturn(AbstractHelper::TYPO3_VERSION);
         $packageMock = $this->simulatePackage(Bootstrap::EXT_KEY, 'whatever');
         $packageMock->expects($this->once())
             ->method('getPackageMetaData')
-            ->will($this->returnValue($metaData));
+            ->willReturn($metaData);
 
         $this->assertEquals(AbstractHelper::TYPO3_VERSION, $this->configuration->getVersion());
     }
 
     /**
      * Test the registration of all necessary adjustments to the kreXX lib.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration::exec
      */
     public function testExec()
     {

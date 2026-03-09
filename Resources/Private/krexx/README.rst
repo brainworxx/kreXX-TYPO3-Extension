@@ -1,13 +1,14 @@
-.. image:: https://github.com/brainworxx/kreXX/actions/workflows/php.yml/badge.svg?branch=master
+.. image:: https://github.com/brainworxx/kreXX/actions/workflows/php.yml/badge.svg?branch=main
    :target: https://github.com/brainworxx/kreXX/actions/workflows/php.yml
-.. image:: https://api.codeclimate.com/v1/badges/c9d414a09928ede869c7/maintainability
-   :target: https://codeclimate.com/github/brainworxx/kreXX/maintainability
-.. image:: https://api.codeclimate.com/v1/badges/c9d414a09928ede869c7/test_coverage.svg
-   :target: https://codeclimate.com/github/brainworxx/kreXX/test_coverage
+.. image:: https://qlty.sh/badges/2d6ba77e-92e3-43af-b954-85041ce2664e/maintainability.svg
+   :target: https://qlty.sh/gh/brainworxx/projects/kreXX
+.. image:: https://qlty.sh/badges/2d6ba77e-92e3-43af-b954-85041ce2664e/test_coverage.svg
+   :target: https://qlty.sh/gh/brainworxx/projects/kreXX
 .. image:: https://poser.pugx.org/brainworxx/krexx/v/stable
    :target: https://packagist.org/packages/brainworxx/krexx
 .. image:: https://poser.pugx.org/brainworxx/krexx/license
    :target: https://packagist.org/packages/brainworxx/krexx
+
 
 ==============
 kreXX Debugger
@@ -41,7 +42,7 @@ Key features:
   :alt: Analysis of an extbase query result
 
   Analysis of an extbase query result
-  
+
 Installation
 ============
 
@@ -50,7 +51,7 @@ Manual installation
 
 1) Upload the whole kreXX directory to your webserver. Put it somewhere, where you are able to include it to your project.
 2) Include as early as possible the file bootstrap.php into your project. Normally this is the index.php.
-    
+
 Using composer
 ^^^^^^^^^^^^^^
 

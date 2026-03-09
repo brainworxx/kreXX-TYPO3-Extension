@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -43,6 +43,7 @@ use Aimeos\MW\Tree\Node\Iface as NodeIface;
 use Aimeos\MW\View\Iface as ViewIface;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
@@ -68,7 +69,7 @@ class Properties extends AbstractEventHandler implements
      *
      * @var \Brainworxx\Krexx\Service\Factory\Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Inject the pool.
@@ -84,7 +85,7 @@ class Properties extends AbstractEventHandler implements
      * We add our magical properties right before the normal
      * public properties.
      *
-     * @param AbstractCallback $callback
+     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback|null $callback
      *   The calling class.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.
@@ -92,7 +93,7 @@ class Properties extends AbstractEventHandler implements
      * @return string
      *   The generated markup.
      */
-    public function handle(AbstractCallback $callback, ?Model $model = null): string
+    public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
     {
         $params = $callback->getParameters();
         $data = $params[static::PARAM_DATA];
@@ -124,19 +125,17 @@ class Properties extends AbstractEventHandler implements
     protected function extractValues(string $name, array $params): string
     {
         $result = [];
-        $data = $params[static::PARAM_DATA];
-        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
-        $ref = $params[static::PARAM_REF];
 
         // The property is a private property somewhere deep withing the
         // object inheritance. We might need to go deep into the rabbit hole
         // to actually get it.
-        $parentReflection = $ref;
+        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $parentReflection */
+        $parentReflection = $params[static::PARAM_REF];
         while (
             $parentReflection !== false
             && empty($result)
         ) {
-            $result = $this->retrieveProperty($parentReflection, $name, $data);
+            $result = $this->retrieveProperty($parentReflection, $name, $params[static::PARAM_DATA]);
             $parentReflection = $parentReflection->getParentClass();
         }
 
@@ -164,7 +163,7 @@ class Properties extends AbstractEventHandler implements
         foreach ($array as $key => $value) {
             // Could be anything.
             // We need to route it though the analysis hub.
-            if ($this->pool->encodingService->isPropertyNameNormal($key)) {
+            if ($this->pool->createClass(ThroughProperties::class)->isPropertyNameNormal($key)) {
                 $connectorType = static::CONNECTOR_NORMAL_PROPERTY;
             } else {
                 $connectorType = static::CONNECTOR_SPECIAL_CHARS_PROP;
@@ -176,10 +175,7 @@ class Properties extends AbstractEventHandler implements
                     ->setName($key)
                     ->setConnectorType($connectorType)
                     ->setCodegenType(static::CODEGEN_TYPE_PUBLIC)
-                    ->addToJson(
-                        $this->pool->messages->getHelp('metaHint'),
-                        $this->pool->messages->getHelp('aimeosMagicProp')
-                    )
+                    ->addJsonHint($this->pool->messages->getHelp('aimeosMagicProp'))
             );
         }
 

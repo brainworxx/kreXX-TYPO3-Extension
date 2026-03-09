@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -47,7 +47,7 @@ class Serialized extends AbstractScalarAnalysis
      *
      * @var Model
      */
-    protected $model;
+    protected Model $model;
 
     /**
      * Works only when hte multibyte extension is installed.
@@ -72,17 +72,6 @@ class Serialized extends AbstractScalarAnalysis
      */
     public function canHandle($string, Model $model): bool
     {
-        $jsonData = $model->getJson();
-        $jsonKey = $this->pool->messages->getHelp('metaMimeTypeString');
-        if (
-            !isset($jsonData[$jsonKey])
-            || strpos($jsonData[$jsonKey], 'binary') === false
-        ) {
-            // A serialised string is always binary.
-            // This should sort out 99% of our contestants.
-            return false;
-        }
-
         // We only handle objects and arrays.
         // Everything else is not really pretty print worthy.
         if (in_array(substr($string, 0, 2), ['o:', 'O:','a:', 'C:'], true)) {

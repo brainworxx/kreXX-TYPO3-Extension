@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -40,7 +40,6 @@ namespace Brainworxx\Includekrexx\Collectors;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\From\File;
-use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 
 /**
  * Collect the current configuration for the frontend option editing.
@@ -52,7 +51,7 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
     /**
      * @var File
      */
-    protected $fileReader;
+    protected File $fileReader;
 
     /**
      * Assigning the form configuration to the view.
@@ -67,10 +66,9 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
         }
 
         $pathParts = pathinfo($this->pool->config->getPathToConfigFile());
-        $filePath = $pathParts[static::PATHINFO_DIRNAME] . DIRECTORY_SEPARATOR .
-            $pathParts[static::PATHINFO_FILENAME] . '.';
-
-        $this->fileReader = $this->pool->createClass(File::class)->loadFile($filePath);
+        $this->fileReader = $this->pool->createClass(File::class)
+            ->loadFile($pathParts[static::PATHINFO_DIRNAME] . DIRECTORY_SEPARATOR .
+                $pathParts[static::PATHINFO_FILENAME] . '.');
         $config = [];
         foreach ($this->pool->config->feConfigFallback as $settingsName => $fallback) {
             $this->generateSingleSetting($settingsName, $config, $this->generateDropdown($fallback));
@@ -91,20 +89,20 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
      */
     protected function generateSingleSetting(string $settingsName, array &$config, array $dropdown): void
     {
-        $config[$settingsName] = [];
-        $config[$settingsName][static::SETTINGS_NAME] = $settingsName;
-        $config[$settingsName][static::SETTINGS_OPTIONS] = $dropdown;
-        $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = false;
-        $config[$settingsName][static::SETTINGS_VALUE] = $this->convertKrexxFeSetting(
-            $this->fileReader->getFeConfigFromFile($settingsName)
-        );
-        reset($dropdown);
-        $config[$settingsName][static::SETTINGS_FALLBACK] = key($dropdown);
+        $config[$settingsName] = [
+            static::SETTINGS_NAME => $settingsName,
+            static::SETTINGS_OPTIONS => $dropdown,
+            static::SETTINGS_USE_FACTORY_SETTINGS => false,
+            static::SETTINGS_VALUE => $this->convertKrexxFeSetting(
+                $this->fileReader->getFeConfigFromFile($settingsName)
+            ),
+            static::SETTINGS_FALLBACK => array_key_first($dropdown)
+        ];
 
         // Check if we have a value. If not, we need to load the
         // factory settings. We also need to set the info, if we
         // are using the factory settings, at all.
-        if (is_null($config[$settingsName][static::SETTINGS_VALUE])) {
+        if ($config[$settingsName][static::SETTINGS_VALUE] === null) {
             $config[$settingsName][static::SETTINGS_VALUE] = $this->convertKrexxFeSetting(
                 $this->fileReader->feConfigFallback[$settingsName][$this->fileReader::RENDER]
             );

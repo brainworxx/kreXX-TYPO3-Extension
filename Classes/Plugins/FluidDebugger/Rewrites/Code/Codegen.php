@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -52,21 +52,21 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
      *
      * @var string
      */
-    protected $wrapperLeft = '{';
+    protected string $wrapperLeft = '{';
 
     /**
      * We wrap this one around the fluid code generation, on the right.
      *
      * @var string
      */
-    protected $wrapperRight = '}';
+    protected string $wrapperRight = '}';
 
     /**
      * Are we analysing the dreaded {_all}?
      *
      * @var bool
      */
-    protected $isAll = false;
+    protected bool $isAll = false;
 
     /**
      * We are only handling the VHS Call ViewHelper generation here.
@@ -81,7 +81,10 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
             return '';
         }
 
-        if ($model->getType() === static::TYPE_DEBUG_METHOD && $model->getName() === 'getProperties') {
+        if (
+            $model->getType() === $this->pool->messages->getHelp('debugMethod')
+            && $model->getName() === 'getProperties'
+        ) {
             // Doing special treatment for the getProperties debug method.
             // This one is directly callable in fluid.
             $model->setName('properties');
@@ -114,10 +117,10 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
     {
         $name = $model->getName();
         return
-            (is_string($name) &&  strpos($name, '.') !== false && $this->pool->scope->getScope() !== $name) ||
-            $model->getType() === static::TYPE_DEBUG_METHOD ||
-            $model->getCodeGenType() === static::CODEGEN_TYPE_ITERATOR_TO_ARRAY ||
-            $model->getCodeGenType() === static::CODEGEN_TYPE_JSON_DECODE;
+            (is_string($name) &&  strpos($name, '.') !== false && $this->pool->scope->getScope() !== $name)
+            || $model->getType() === $this->pool->messages->getHelp('debugMethod')
+            || $model->getCodeGenType() === static::CODEGEN_TYPE_ITERATOR_TO_ARRAY
+            || $model->getCodeGenType() === static::CODEGEN_TYPE_JSON_DECODE;
     }
 
     /**
@@ -184,11 +187,8 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
         }
 
         $firstPart = ' -> v:call(method: \'';
-        $secondPart = '\', arguments: {';
-        $lastPart = '})';
-
         if (count($data[static::PARAM_ARRAY]) >= 1) {
-            return $firstPart . $model->getName() . $secondPart . rtrim($args, ', ') . $lastPart;
+            return $firstPart . $model->getName() . '\', arguments: {' . rtrim($args, ', ') . '})';
         }
 
         return $firstPart . $model->getName() . '\')';

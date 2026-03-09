@@ -4,11 +4,169 @@
 Changelog
 =============================================================
 
-:Version: 5.1.5
+:Version: 6.1.6
 :Date: tbd
 
 Changes:
+    * [Change] Move the audit config to the github actions.
+    * [Bugfix] Render a trailing linebreak in the extra info correctly.
+    * [Bugfix] Fixed missing translation for the cookie reset.
+    * [Bugfix] Added missing dependency to the composer.json file.
+
+-----
+
+:Version: 6.1.5
+:Date: 2026-02-12
+
+Changes:
+    * [Feature] Fluid 5.1 support.
+    * [Bugfix] Prevent hints from overwriting themselves.
+    * [Bugfix] Prevent a fatal when trying to analyse a class with objects as default values in its methods.
+
+-----
+
+:Version: 6.1.4
+:Date: 2026-02-07
+
+Changes:
+    * [Feature] Added support for Domain Page objects in TYPO3 14.
+    * [Feature] Updated to TYPO3 14.1.
+    * [Bugfix] Populate extension title from composer.json
+    * [Bugfix] Fixed the access definition in the modules configuration.
+    * [Bugfix] Do not trim quotes from the caller finder result.
+    * [Bugfix] Do not add strings to the recursion hive that were not analysed because they were internal callables.
+    * [Bugfix] Do not add the internal array of an ArrayObject to the list of public undeclared properties.
+    * [Bugfix] Prevent a fatal when analysing a class with broken attributes.
+
+-----
+
+:Version: 6.1.3
+:Date: 2025-12-06
+
+Changes:
+    * [Feature] Updated to TYPO3 14.0.
+    * [Feature] Updated to PHP 8.5.
+    * [Bugfix] Added the missing 'Type hint' to the translation.
+    * [Bugfix] More space for the additional data in the SmokyGrey skin.
+    * [Bugfix] TYPO3 Exceptions after update “symfony/dependency-injection” to "7.4.0"
+
+-----
+
+:Version: 6.1.2
+:Date: 2025-11-18
+
+Changes:
+    * [Feature] Updated to Aimeos 2025.10.
+    * [Feature] Added support for FlexFormFieldValues objects.
+    * [Change] Deprecated the Smokey Grey recursion special handling. Not sure why it was there in the first place.
+    * [Bugfix] Removed the last deprecation in the unit tests.
+    * [Bugfix] Do not clutter up the output by analysing internal callables in the string analysis.
+    * [Bugfix] Closed ressources are not recognised as a ressource by the resource analysis.
+    * [Bugfix] Do not add an empty flexform analysis to the meta data.
+    * [Bugfix] Use a better meta translation for the flexform analysis.
+    * [Bugfix] The values from the RawRecord are overwriting the values from the properties in the DomainRecord analysis.
+    * [Bugfix] The Fluid caller finder does not reset its state between multiple calls.
+
+-----
+
+:Version: 6.1.1
+:Date: 2025-10-03
+
+Changes:
+    * [Feature] Added support for the \GdImage analysis.
+    * [Feature] Added support for ContentBlockGridData objects.
+    * [Bugfix] Do not trigger PropertyHooks, LazyProxies und LazyGhosts when analysing properties.
+    * [Bugfix] Do not add double entries to the hidden properties list.
+    * [Bugfix] The backtrace analysis is using the right color for strings again.
+    * [Bugfix] Do not withhold empty metadata.
+    * [Bugfix] Added missing line breaks to the changelog.
+    * [Bugfix] Resolve the RecordPropertyClosure in all Fluid GetterRetrievers.
+
+-----
+
+:Version: 6.1.0
+:Date: 2025-08-23
+
+Changes:
+    * [Feature] Added support for Emun default values.
+    * [Feature] Added flattened attribute analysis.
+    * [Feature] Added support for Domain Record objects.
+    * [Feature] Added support for Raw Record objects.
+    * [Feature] Added support for Settings objects.
+    * [Feature] Added documentation link to the composer.json.
+    * [Change] Moved the comment retrieval class in the properties iterator to the class variables.
+    * [Change] Better and more clear extension description.
+    * [Bugfix] Use the same translation for "Prune output" in the backend module as in the debugger itself.
+    * [Bugfix] Fixed the contact link in the documentation.
+
+-----
+
+:Version: 6.0.0
+:Date: 2025-07-29
+
+Changes:
+    * [Feature] Added class meta analysis for class names in strings.
+    * [Feature] Added a hint to the 'unknown' getter analysis result.
+    * [Feature] Added container handling to the getter analysis.
+    * [Feature] Added a unit of measurement to the benchmarking.
+    * [Feature] Added better readability to the exception analysis.
+    * [Feature] Added the declaration place to the getter analysis.
+    * [Feature] Added error info when analysing an XML string.
+    * [Feature] Added delegate handling to the getter analysis.
+    * [Feature] Refactored and extended the getter analysis, for better results.
+    * [Feature] Added code parsing to the Aimeos getter analysis to retrieve the default value.
+    * [Feature] Added ContentBlock support.
+    * [Change] The scalar analysis classes are now reused.
+    * [Change] Renamed the language fallback key from 'text' to 'en'.
+    * [Change] Dropped PHP 7.2 and 7.3 support.
+    * [Change] Removed deprecated code.
+    * [Change] Use json_validate() if available to determine if a string is a json string.
+    * [Change] Simplified the routing process.
+    * [Change] Removed some literals.
+    * [Change] Some deprecations.
+    * [Change] Only use byRef when absolutely necessary.
+    * [Change] We do not filter the file path anymore.
+    * [Change] Moved some frontend literals to the translations.
+    * [Change] Removed deprecations from the unit tests.
+    * [Change] Deprecated the exception handler.
+    * [Change] Updated the unit tests to 11.
+    * [Change] Dropped Aimeos 20 Support due to Composer 1 eol.
+    * [Change] Use the encoding service to encode comments.
+    * [Change] Introduced a static cache to the string mimetype analysis.
+    * [Change] Simplified the TYPO3 backend modul settings model.
+    * [Change] Use an SVG in both skins for the kreXX logo.
+    * [Change] Both skins have the child nodes aligned for better readability.
+
+-----
+
+:Version: 5.1.7
+:Date: 2025-07-29
+
+Changes:
+    * [Bugfix] The query debugger does not fire anymore in fluid context.
+    * [Bugfix] The backend layout may break when the analysis meta data is too long.
+    * [Bugfix] The backend usage help contains a wrong closing tag.
+    * [Bugfix] Prevent get_object_vars() from triggering a fatal in a faulty property hook.
+
+-----
+
+:Version: 5.1.6
+:Date: 2025-07-08
+
+Changes:
+    * [Bugfix] The query debugger creates gibberish when there are more than 10 parameters in the query.
+    * [Bugfix] Do not run out of memory when escaping very large strings.
+    * [Bugfix] Minimise the interference from the hosting CMS styles.
+    * [Bugfix] Missing hidden property support for DatetimeImmutable.
+
+-----
+
+:Version: 5.1.5
+:Date: 2025-05-17
+
+Changes:
     * [Change] Updated the documentation.
+    * [Bugfix] Remove all Unicode chars from the generated CSS for the smokygrey skin, because the TYPO3 asset collector does not support them anymore.
 
 -----
 

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,26 +36,28 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessOther;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use stdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(ProcessOther::class, 'canHandle')]
+#[CoversMethod(ProcessOther::class, 'handle')]
+#[CoversMethod(AbstractRouting::class, 'dispatchProcessEvent')]
 class ProcessOtherTest extends AbstractHelper
 {
     /**
      * Testing of not yet handled stuff, aka 'other'.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessOther::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcess()
     {
         Krexx::$pool->render = new RenderNothing(Krexx::$pool);
         // How does one create a variable of the "unknown" kind?
-        // We use a simple sting instead.
+        // We use a simple string instead.
         $fixture = 'some string';
         $model = new Model(Krexx::$pool);
         $model->setData($fixture);
@@ -63,7 +65,8 @@ class ProcessOtherTest extends AbstractHelper
         $this->mockEventService(
             [ProcessOther::class . PluginConfigInterface::START_PROCESS, null, $model]
         );
-        $processor->handle($model);
+        $this->setValueByReflection('model', $model, $processor);
+        $processor->handle();
 
         $this->assertEquals('string', $model->getType());
         $this->assertEquals('Unhandled type: string', $model->getNormal());
@@ -72,8 +75,6 @@ class ProcessOtherTest extends AbstractHelper
 
     /**
      * Test the check if we can handle the array processing.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessOther::canHandle
      */
     public function testCanHandle()
     {

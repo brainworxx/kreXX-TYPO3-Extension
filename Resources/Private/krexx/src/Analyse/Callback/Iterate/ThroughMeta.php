@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -58,12 +59,21 @@ class ThroughMeta extends AbstractCallback implements CallbackConstInterface
      *
      * @var string[]
      */
-    protected $keysWithExtra = [];
+    protected array $keysWithExtra = [];
 
     /**
+     * Normal meta rendering without extra.
+     *
      * @var string[]
      */
-    protected $stuffToProcess = [];
+    protected array $stuffToProcess = [];
+
+    /**
+     * We pass these to the routing.
+     *
+     * @var array
+     */
+    protected array $simpleAnalysisRouting = [];
 
     /**
      * Inject the pool and init the workflow.
@@ -81,13 +91,19 @@ class ThroughMeta extends AbstractCallback implements CallbackConstInterface
             $messages->getHelp('metaDeclaredIn'),
             $messages->getHelp('metaSource'),
             $messages->getHelp('metaPrettyPrint'),
-            $messages->getHelp('metaContent')
+            $messages->getHelp('metaContent'),
+            $messages->getHelp('metaAttributes'),
         ];
 
         $this->stuffToProcess = [
             $messages->getHelp('metaInheritedClass'),
             $messages->getHelp('metaInterfaces'),
-            $messages->getHelp('metaTraits')
+            $messages->getHelp('metaTraits'),
+        ];
+
+        $this->simpleAnalysisRouting = [
+            $messages->getHelp('metaDecodedJson'),
+            $messages->getHelp('metaDecodedBase64'),
         ];
     }
 
@@ -109,14 +125,14 @@ class ThroughMeta extends AbstractCallback implements CallbackConstInterface
                         $key,
                         $this->pool->createClass(Model::class)
                             ->setName($key)
-                            ->setType(static::TYPE_INTERNALS)
+                            ->setType($this->pool->messages->getHelp('classInternals'))
                             ->addParameter(static::PARAM_DATA, $metaData)
                             ->injectCallback(
                                 $this->pool->createClass(ThroughMetaReflections::class)
                             )
                     )
                 );
-            } elseif (!empty($metaData)) {
+            } else {
                 $output .= $this->handleNoneReflections($this->prepareModel($key, $metaData));
             }
         }
@@ -125,7 +141,7 @@ class ThroughMeta extends AbstractCallback implements CallbackConstInterface
     }
 
     /**
-     * Prepare the model for the noe reflection rendering.
+     * Prepare the model for the no reflection rendering.
      *
      * @param string $key
      *   The key in the output list.
@@ -171,12 +187,15 @@ class ThroughMeta extends AbstractCallback implements CallbackConstInterface
     {
         $key = $model->getName();
 
-        if (
-            $key === $this->pool->messages->getHelp('metaDecodedJson')
-            || $key === $this->pool->messages->getHelp('metaDecodedBase64')
-        ) {
-            // Prepare the json code generation.
+        if (in_array($key, $this->simpleAnalysisRouting, true)) {
+            // Prepare the json/ base64 code generation.
             return $this->pool->routing->analysisHub($model);
+        }
+
+        if ($key === $this->pool->messages->getHelp('metaReflection')) {
+            return $this->pool->createClass(Meta::class)
+                ->setParameters([static::PARAM_REF => $model->getNormal()])
+                ->callMe();
         }
 
         // Sorry, no code generation for you guys.

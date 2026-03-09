@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -44,13 +45,14 @@ use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\GetterFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(GetterWithoutGet::class, 'handle')]
+#[CoversMethod(GetterWithoutGet::class, '__construct')]
 class GetterWithoutGetTest extends AbstractHelper implements CallbackConstInterface
 {
     /**
      * Test the setting of the pool.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterWithoutGet::__construct
      */
     public function testConstruct()
     {

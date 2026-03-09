@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -45,7 +46,11 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
 use TYPO3\CMS\Extbase\Persistence\Generic\Exception\TooDirtyException;
 use StdClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(DirtyModels::class, 'handle')]
+#[CoversMethod(DirtyModels::class, 'createReadableBoolean')]
+#[CoversMethod(DirtyModels::class, '__construct')]
 class DirtyModelsTest extends AbstractHelper
 {
     /**
@@ -72,8 +77,6 @@ class DirtyModelsTest extends AbstractHelper
 
     /**
      * Test the assigning of the pool.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels::__construct
      */
     public function testConstruct()
     {
@@ -83,9 +86,6 @@ class DirtyModelsTest extends AbstractHelper
 
     /**
      * Test the additional stuff.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels::handle
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels::createReadableBoolean
      */
     public function testHandle()
     {
@@ -96,10 +96,10 @@ class DirtyModelsTest extends AbstractHelper
             ->will($this->throwException(new TooDirtyException()));
         $modelMock->expects($this->once())
             ->method('_isClone')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $modelMock->expects($this->once())
             ->method('_isNew')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $model = new Model(Krexx::$pool);
         $model->setData($modelMock);
@@ -121,5 +121,26 @@ class DirtyModelsTest extends AbstractHelper
 
         Krexx::$pool->routing->analysisHub($model);
         $this->assertEquals([], $model->getJson());
+    }
+
+    /**
+     * Test the exception handling
+     */
+    public function testHandleException()
+    {
+        $this->mockEmergencyHandler();
+        $modelMock = $this->createMock(AbstractDomainObject::class);
+        $modelMock->expects($this->once())
+            ->method('_isDirty')
+            ->will($this->throwException(new \Exception()));
+        $modelMock->expects($this->never())
+            ->method('_isClone');
+        $modelMock->expects($this->never())
+            ->method('_isNew');
+        $model = new Model(Krexx::$pool);
+        $model->setData($modelMock);
+
+        Krexx::$pool->routing->analysisHub($model);
+        $this->assertEquals([], $model->getJson(), 'It si empty, because the exception was thrown.');
     }
 }

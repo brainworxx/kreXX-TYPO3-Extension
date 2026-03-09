@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,26 +36,43 @@
 namespace Brainworxx\Krexx\Tests\Unit\View\Skins\SmokyGrey;
 
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderSmokyGrey;
+use Brainworxx\Krexx\View\AbstractRender;
+use Brainworxx\Krexx\View\Skins\SmokyGrey\Button;
+use Brainworxx\Krexx\View\Skins\SmokyGrey\Help;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Button::class, 'renderButton')]
+#[CoversMethod(Help::class, 'renderHelp')]
+#[CoversMethod(AbstractRender::class, 'encodeJson')]
 class ButtonTest extends AbstractRenderSmokyGrey
 {
     /**
      * Test the rendering of a button. Again we test only the additional stuff.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Button::renderButton
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Help::renderHelp
-     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderButton()
     {
         $this->mockModel(static::GET_JSON, ['buttonJson' => 'isFun']);
         $this->modelMock->expects($this->exactly(2))
             ->method(static::GET_NAME)
-            ->will($this->returnValue('sayMyName'));
+            ->willReturn('sayMyName');
 
         $result = $this->renderSmokyGrey->renderButton($this->modelMock);
         $this->assertStringContainsString('sayMyName', $result);
         $this->assertStringContainsString('buttonJson', $result);
         $this->assertStringContainsString('isFun', $result);
+    }
+
+    /**
+     * Test the rendering of a button, buth without the json.
+     */
+    public function testRenderButtonWithoutJson()
+    {
+        $this->mockModel(static::GET_JSON, []);
+        $this->modelMock->expects($this->exactly(2))
+            ->method(static::GET_NAME)
+            ->willReturn('sayMyName');
+
+        $result = $this->renderSmokyGrey->renderButton($this->modelMock);
+        $this->assertStringContainsString('sayMyName', $result);
     }
 }

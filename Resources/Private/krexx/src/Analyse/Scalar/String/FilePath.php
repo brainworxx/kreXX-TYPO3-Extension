@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -52,7 +52,7 @@ class FilePath extends AbstractScalarAnalysis
     /**
      * @var \finfo
      */
-    protected $bufferInfo;
+    protected finfo $bufferInfo;
 
     /**
      * @var string
@@ -155,7 +155,7 @@ class FilePath extends AbstractScalarAnalysis
         $realPath = realpath($string);
         if ($string !== $realPath && is_string($realPath)) {
             // We only add the realpath, if it differs from the string
-            $result[static::REAL_PATH] = $this->pool->fileService->filterFilePath($realPath);
+            $result[static::REAL_PATH] = $realPath;
         }
         $result[static::MIME_TYPE] = $this->bufferInfo->file($string);
 

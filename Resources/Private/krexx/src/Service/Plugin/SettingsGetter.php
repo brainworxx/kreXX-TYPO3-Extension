@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -49,7 +49,7 @@ class SettingsGetter extends Registration
      */
     public static function getNewFallbackValues(): array
     {
-        return self::$newFallbackValues;
+        return static::$newFallbackValues;
     }
 
     /**
@@ -206,6 +206,6 @@ class SettingsGetter extends Registration
      */
     public static function getAdditionalLanguages(): array
     {
-        return self::$additionalLanguages;
+        return static::$additionalLanguages;
     }
 }

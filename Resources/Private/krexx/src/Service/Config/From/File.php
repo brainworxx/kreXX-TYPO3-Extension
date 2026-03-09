@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Service\Config\From;
 
 use Brainworxx\Krexx\Service\Config\Fallback;
+use Brainworxx\Krexx\Service\Config\Validation;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -50,14 +51,14 @@ class File extends Fallback
      *
      * @var \Brainworxx\Krexx\Service\Config\Validation
      */
-    protected $validation;
+    protected Validation $validation;
 
     /**
      * The content of the file we have loaded.
      *
      * @var string[][]
      */
-    protected $settings = [];
+    protected array $settings = [];
 
     /**
      * Inject the pool, create the security handler, load the file.

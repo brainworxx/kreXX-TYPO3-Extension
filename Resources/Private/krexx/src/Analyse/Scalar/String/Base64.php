@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,7 +37,6 @@ namespace Brainworxx\Krexx\Analyse\Scalar\String;
 
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Analyse\Scalar\String\AbstractScalarAnalysis;
 
 class Base64 extends AbstractScalarAnalysis implements CodegenConstInterface
 {
@@ -46,21 +45,21 @@ class Base64 extends AbstractScalarAnalysis implements CodegenConstInterface
      *
      * @var string
      */
-    protected $codeGenType = self::CODEGEN_TYPE_BASE64_DECODE;
+    protected string $codeGenType = self::CODEGEN_TYPE_BASE64_DECODE;
 
     /**
      * The decoded string.
      *
      * @var string
      */
-    protected $decodedString;
+    protected string $decodedString;
 
     /**
      * The model, so far.
      *
      * @var Model
      */
-    protected $model;
+    protected Model $model;
 
     /**
      * Is's always active.
@@ -114,8 +113,6 @@ class Base64 extends AbstractScalarAnalysis implements CodegenConstInterface
             $this->model->setHasExtra(false);
             $meta[$messages->getHelp('metaContent')] = $this->model->getData();
         }
-
-        unset($this->decodedString, $this->model);
 
         return $meta;
     }

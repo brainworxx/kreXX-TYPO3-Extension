@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -50,28 +50,28 @@ class Messages
      *
      * @var Message[]
      */
-    protected $messages = [];
+    protected array $messages = [];
 
     /**
      * A simple array to hold the values.
      *
      * @var string[]
      */
-    protected $helpArray = [];
+    protected array $helpArray = [];
 
     /**
      * Here we store all relevant data.
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * The language key where the texts are stored.
      *
      * @var string
      */
-    protected $languageKey = 'text';
+    protected string $languageKey = 'en';
 
     /**
      * Injects the pool and reads the language file.
@@ -163,10 +163,10 @@ class Messages
             !defined('KREXX_TEST_IN_PROGRESS')
         ) {
             // Output the messages on the shell.
-            $result = "\n\nkreXX messages\n";
+             $result = "\n\n" . $this->getHelp('shellFeedbackHeadline') . "\n";
             $result .= "==============\n";
             foreach ($this->messages as $message) {
-                $result .= $message->getText() . "\n";
+                $result .= strip_tags($message->getText()) . "\n";
             }
 
             echo $result . "\n\n";
@@ -199,10 +199,7 @@ class Messages
     {
         $helpArray = [];
 
-        $fileList = array_merge(
-            [KREXX_DIR . 'resources/language/Help.ini'],
-            SettingsGetter::getAdditionalHelpFiles()
-        );
+        $fileList = [KREXX_DIR . 'resources/language/Help.ini', ...SettingsGetter::getAdditionalHelpFiles()];
 
         foreach ($fileList as $filename) {
             $helpArray = array_replace_recursive(
@@ -211,6 +208,6 @@ class Messages
             );
         }
 
-        $this->helpArray = array_merge($helpArray['text'], $helpArray[$this->languageKey] ?? []);
+        $this->helpArray = array_merge($helpArray['en'], $helpArray[$this->languageKey] ?? []);
     }
 }

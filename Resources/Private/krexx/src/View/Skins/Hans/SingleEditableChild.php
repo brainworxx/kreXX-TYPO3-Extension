@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -49,7 +49,7 @@ trait SingleEditableChild
     /**
      * @var string[]
      */
-    private $markerSingleEditableChild = [
+    private array $markerSingleEditableChild = [
         '{name}',
         '{source}',
         '{normal}',
@@ -60,12 +60,12 @@ trait SingleEditableChild
     /**
      * @var string
      */
-    private $markerDropdownOptions = '{options}';
+    private string $markerDropdownOptions = '{options}';
 
     /**
      * @var string[]
      */
-    private $markerSelectOption = [
+    private array $markerSelectOption = [
         '{text}',
         '{value}',
         '{selected}'
@@ -74,7 +74,7 @@ trait SingleEditableChild
     /**
      * @var string[]
      */
-    private $markerSingleInput = [
+    private array $markerSingleInput = [
         '{id}',
         '{value}',
     ];

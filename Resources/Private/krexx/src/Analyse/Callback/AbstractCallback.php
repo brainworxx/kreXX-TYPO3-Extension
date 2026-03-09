@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -51,14 +51,14 @@ abstract class AbstractCallback
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * The parameters for the callback.
      *
      * @var array
      */
-    protected $parameters = [];
+    protected array $parameters = [];
 
     /**
      * The actual callback function for the renderer.
@@ -88,9 +88,9 @@ abstract class AbstractCallback
      * @return $this
      *   Return $this, for chaining.
      */
-    public function setParameters(array &$parameters): AbstractCallback
+    public function setParameters(array $parameters): AbstractCallback
     {
-        $this->parameters = &$parameters;
+        $this->parameters = $parameters;
         return $this;
     }
 

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -42,7 +42,6 @@ use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 
 /**
  * General stuff for all data collectors.
@@ -96,28 +95,29 @@ abstract class AbstractCollector implements ControllerConstInterface, ConfigCons
      *
      * @var \Brainworxx\Krexx\Service\Factory\Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * The current backend user
      *
      * @var array
      */
-    protected $userUc = [];
+    protected array $userUc = [];
 
     /**
      * List of options, that are 'expert' only.
      *
      * @var string[]
      */
-    protected $expertOnly = [
+    protected array $expertOnly = [
         self::SETTING_DETECT_AJAX,
-        self::SETTING_MAX_STEP_NUMBER,
         self::SETTING_ARRAY_COUNT_LIMIT,
         self::SETTING_DEBUG_METHODS,
         self::SETTING_MAX_RUNTIME,
         self::SETTING_MEMORY_LEFT,
-        self::SETTING_MAX_FILES
+        self::SETTING_ANALYSE_SCALAR,
+        self::SETTING_ANALYSE_TRAVERSABLE,
+        self::SETTING_ANALYSE_GETTER,
     ];
 
     /**
@@ -125,7 +125,7 @@ abstract class AbstractCollector implements ControllerConstInterface, ConfigCons
      *
      * @var bool
      */
-    protected $hasAccess = false;
+    protected bool $hasAccess = false;
 
     /**
      * Inject the pool.

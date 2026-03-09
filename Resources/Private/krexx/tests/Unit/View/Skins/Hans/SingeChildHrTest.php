@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,13 +36,14 @@
 namespace Brainworxx\Krexx\Tests\Unit\View\Skins\Hans;
 
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
+use Brainworxx\Krexx\View\Skins\Hans\SingeChildHr;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(SingeChildHr::class, 'renderSingeChildHr')]
 class SingeChildHrTest extends AbstractRenderHans
 {
     /**
      * Test the rendering of a HR tag.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingeChildHr::renderSingeChildHr
      */
     public function testRenderSingeChildHr()
     {

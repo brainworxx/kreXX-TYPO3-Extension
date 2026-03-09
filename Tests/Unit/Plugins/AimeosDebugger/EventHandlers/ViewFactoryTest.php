@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -34,6 +35,7 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\EventHandlers;
 
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\AbstractEventHandler;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory;
 use Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\AimeosTestTrait;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
@@ -44,21 +46,26 @@ use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods as AnalyseMethods;
+use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Aimeos\MW\View\Standard as StandardView;
 use Aimeos\Base\View\Standard as BaseView;
 use Aimeos\MW\View\Helper\Csrf\Standard as CsrfHelper;
 use Aimeos\Base\View\Helper\Csrf\Standard as BaseCsrfHelper;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
-
+#[CoversMethod(ViewFactory::class, 'handle')]
+#[CoversMethod(ViewFactory::class, 'retrieveHelperList')]
+#[CoversMethod(ViewFactory::class, 'retrieveHelpers')]
+#[CoversMethod(AbstractEventHandler::class, 'retrieveProperty')]
+#[CoversMethod(ViewFactory::class, 'retrievePossibleOtherHelpers')]
+#[CoversMethod(ViewFactory::class, '__construct')]
 class ViewFactoryTest extends AbstractHelper
 {
     use AimeosTestTrait;
 
     /**
      * Test the handling of the pool.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory::__construct
      */
     public function testConstruct()
     {
@@ -70,12 +77,6 @@ class ViewFactoryTest extends AbstractHelper
 
     /**
      * Test the analysis of the view factory helper classes.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory::handle
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory::retrieveHelperList
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory::retrieveHelpers
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\AbstractEventHandler::retrieveProperty
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory::retrievePossibleOtherHelpers
      */
     public function testHandle()
     {
@@ -127,5 +128,55 @@ class ViewFactoryTest extends AbstractHelper
             $this->assertInstanceOf(\ReflectionMethod::class, $reflectionMethod);
         }
         $this->assertTrue($viewFactory->getParameters()[ViewFactory::PARAM_IS_FACTORY_METHOD]);
+    }
+
+    /**
+     * Test the analysis of the view factory helper classes.
+     */
+    public function testHandleEarlyReturn()
+    {
+        $this->skipIfAimeosIsNotInstalled();
+
+        // Subscribing.
+        Registration::registerEvent(
+            AnalyseMethods::class . PluginConfigInterface::START_EVENT,
+            ViewFactory::class
+        );
+        Krexx::$pool->eventService = new Event(Krexx::$pool);
+
+        $data = new \stdClass();
+        $fixture = [
+            CallbackConstInterface::PARAM_DATA => $data,
+            CallbackConstInterface::PARAM_NAME => 'viewFactory',
+            CallbackConstInterface::PARAM_REF => new ReflectionClass($data)
+        ];
+
+        $viewFactory = new ViewFactory(Krexx::$pool);
+        $callbackNothing = new CallbackNothing(Krexx::$pool);
+        $callbackNothing->setParameters($fixture);
+        $this->assertEquals('', $viewFactory->handle($callbackNothing), 'Early return due to wrong data class.');
+
+
+        $reflectionMock = $this->createMock(ReflectionClass::class);
+        $reflectionMock->expects($this->once())
+            ->method('hasProperty')
+            ->willThrowException(new \ReflectionException());
+        // Create the fixture.
+        if (class_exists(StandardView::class)) {
+            $aimeosView = new StandardView();
+        } else {
+            $aimeosView = new BaseView();
+        }
+        $reflectionMock->expects($this->once())
+            ->method('getData')
+            ->willReturn($aimeosView);
+        $fixture = [
+            CallbackConstInterface::PARAM_DATA => $aimeosView,
+            CallbackConstInterface::PARAM_NAME => 'viewFactory',
+            CallbackConstInterface::PARAM_REF => $reflectionMock
+        ];
+        $callbackNothing = new CallbackNothing(Krexx::$pool);
+        $callbackNothing->setParameters($fixture);
+        $this->assertEquals('', $viewFactory->handle($callbackNothing), 'Early return thrown exception.');
     }
 }

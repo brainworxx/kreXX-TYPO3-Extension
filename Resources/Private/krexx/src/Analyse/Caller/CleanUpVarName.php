@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,8 +36,6 @@
 declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Caller;
-
-
 
 /**
  * When used inline, may have some trailing ')' at the end.
@@ -60,21 +58,21 @@ class CleanUpVarName
      *
      * @var int
      */
-    protected $level = -1;
+    protected int $level = -1;
 
     /**
      * What the variable name says.
      *
      * @var bool
      */
-    protected $singleQuoteInactive = true;
+    protected bool $singleQuoteInactive = true;
 
     /**
      * What the variable name says.
      *
      * @var bool
      */
-    protected $doubleQuoteInactive = true;
+    protected bool $doubleQuoteInactive = true;
 
     /**
      * Was the last char an escape character?
@@ -82,7 +80,7 @@ class CleanUpVarName
      *
      * @var bool
      */
-    protected $lastCharWasEscape = false;
+    protected bool $lastCharWasEscape = false;
 
     /**
      * What the method name says.

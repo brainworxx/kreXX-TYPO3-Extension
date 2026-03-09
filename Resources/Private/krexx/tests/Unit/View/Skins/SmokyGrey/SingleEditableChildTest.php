@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,22 +36,25 @@
 namespace Brainworxx\Krexx\Tests\Unit\View\Skins\SmokyGrey;
 
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderSmokyGrey;
+use Brainworxx\Krexx\View\AbstractRender;
+use Brainworxx\Krexx\View\Skins\SmokyGrey\Help;
+use Brainworxx\Krexx\View\Skins\SmokyGrey\SingleEditableChild;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(SingleEditableChild::class, 'renderSingleEditableChild')]
+#[CoversMethod(Help::class, 'renderHelp')]
+#[CoversMethod(AbstractRender::class, 'encodeJson')]
 class SingleEditableChildTest extends AbstractRenderSmokyGrey
 {
     /**
      * Test the additional stuff of the single editable child rendering.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\SingleEditableChild::renderSingleEditableChild
-     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Help::renderHelp
-     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderSingleEditableChild()
     {
         $this->mockModel(static::GET_JSON, ['formless' => 'forming']);
         $this->modelMock->expects($this->any())
             ->method('getType')
-            ->will($this->returnValue('Input'));
+            ->willReturn('Input');
         $result = $this->renderSmokyGrey->renderSingleEditableChild($this->modelMock);
         $this->assertStringContainsString('formless', $result);
         $this->assertStringContainsString('forming', $result);

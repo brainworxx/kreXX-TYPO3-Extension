@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -50,31 +50,11 @@ use ReflectionUnionType;
 abstract class AbstractDeclaration
 {
     /**
-     * We will not root-namespace these.
-     *
-     * @deprecated Since 5.0.2
-     *   Will be removed.
-     *
-     * @var string[]
-     */
-    protected const ALLOWED_TYPES = [
-        'int',
-        'string',
-        'mixed',
-        'void',
-        'resource',
-        'bool',
-        'array',
-        'null',
-        'float',
-    ];
-
-    /**
      * Here we store all relevant data.
      *
      * @var \Brainworxx\Krexx\Service\Factory\Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Injects the pool.

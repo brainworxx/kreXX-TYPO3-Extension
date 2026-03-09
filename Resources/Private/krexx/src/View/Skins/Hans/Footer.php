@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -47,7 +47,7 @@ trait Footer
     /**
      * @var string[]
      */
-    private $markerFooter = [
+    private array $markerFooter = [
         '{configInfo}',
         '{caller}',
         '{pluginList}',
@@ -57,7 +57,7 @@ trait Footer
     /**
      * @var string[]
      */
-    private $markerCaller = [
+    private array $markerCaller = [
         '{calledFromTxt}',
         '{calledFromLine}',
         '{calledFromAt}',
@@ -93,7 +93,7 @@ trait Footer
     }
 
     /**
-     * Renders the footer part, where we display from where krexx was called.
+     * Renders the footer part, where we display from where kreXX was called.
      *
      * @param string[] $caller
      *

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -56,7 +56,7 @@ class CheckOutput
      *
      * @var \Brainworxx\Krexx\Service\Factory\Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * Injects the pool.
@@ -89,7 +89,7 @@ class CheckOutput
      * Check for a cli request, simple wrapper around php_sapi_name.
      *
      * @return bool
-     *   Well? Is it an cli request?
+     *   Well? Is it a cli request?
      */
     public function isCli(): bool
     {

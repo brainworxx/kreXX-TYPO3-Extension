@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -51,7 +51,7 @@ trait Json
      *
      * @var string[]
      */
-    protected $json = [];
+    protected array $json = [];
 
     /**
      * Setter for the $helpId.
@@ -91,6 +91,18 @@ trait Json
             $value = trim(str_replace(["\r", "\n"], ['', ''], $value));
             $this->json[$key] = $value;
         }
+
+        return $this;
+    }
+
+    public function addJsonHint(string $hint): Model
+    {
+        $key = $this->pool->messages->getHelp('metaHint');
+        $hint = trim(str_replace(["\r", "\n"], ['', ''], $hint));
+        if (isset($this->json[$key])) {
+            $hint = $this->json[$key] . '<br>' . $hint;
+        }
+        $this->addToJson($key, $hint);
 
         return $this;
     }

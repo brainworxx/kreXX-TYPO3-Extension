@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,14 +35,24 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse;
 
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\BacktraceStep;
+use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ProcessNothing;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(BacktraceStep::class, 'callMe')]
+#[CoversMethod(BacktraceStep::class, 'lineToOutput')]
+#[CoversMethod(BacktraceStep::class, 'outputProcessor')]
+#[CoversMethod(BacktraceStep::class, 'outputSingleChild')]
+#[CoversMethod(BacktraceStep::class, 'retrieveSource')]
+#[CoversMethod(AbstractCallback::class, 'dispatchStartEvent')]
+#[CoversMethod(AbstractCallback::class, 'dispatchEventWithModel')]
 class BacktraceStepTest extends AbstractHelper
 {
     /**
@@ -62,14 +72,6 @@ class BacktraceStepTest extends AbstractHelper
 
     /**
      * Testing, if all events got fired.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\BacktraceStep::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\BacktraceStep::lineToOutput
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\BacktraceStep::outputProcessor
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\BacktraceStep::outputSingleChild
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\BacktraceStep::retrieveSource
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchEventWithModel
      */
     public function testCallMe()
     {
@@ -87,5 +89,25 @@ class BacktraceStepTest extends AbstractHelper
         $singleStep = ['data' => debug_backtrace()[5]];
         $backtraceStep->setParameters($singleStep);
         $backtraceStep->callMe();
+    }
+
+    /**
+     * Test everything, but some data is missing.
+     */
+    public function testCallMeEmpty()
+    {
+        $backtraceStep = new BacktraceStep(Krexx::$pool);
+        $singleStep = ['data' => debug_backtrace()[5]];
+
+        unset($singleStep['data'][BacktraceConstInterface::TRACE_LINE]);
+        unset($singleStep['data'][BacktraceConstInterface::TRACE_OBJECT]);
+        unset($singleStep['data'][BacktraceConstInterface::TRACE_FUNCTION]);
+        $backtraceStep->setParameters($singleStep);
+        $result = $backtraceStep->callMe();
+
+        $this->assertStringContainsString(
+            Krexx::$pool->messages->getHelp('noSourceAvailable'),
+            $result
+        );
     }
 }

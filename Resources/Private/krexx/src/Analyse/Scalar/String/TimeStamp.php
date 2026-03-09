@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -67,18 +67,18 @@ class TimeStamp extends AbstractScalarAnalysis
     public function canHandle($string, Model $model): bool
     {
         // Get a first impression.
-        $int  = (int) $string;
-        if ($int < 946681200) {
+        $float  = (float) $string;
+        if ($float < 946681200) {
             // We'll not treat it like a timestamp.
             return false;
         }
 
         // Might be a regular time stamp, get a second impression.
         $metaTimestamp = $this->pool->messages->getHelp('metaTimestamp');
-        if ((string)$int === $string) {
+        if ((string)$float === $string && strpos($string, '.') === false) {
             $model->addToJson(
                 $metaTimestamp,
-                (new DateTime('@' . $int))->format('d.M Y H:i:s')
+                (new DateTime('@' . $float))->format('d.M Y H:i:s')
             );
             return false;
         }

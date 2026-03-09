@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,24 +37,30 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Controller;
 
 use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
+use Brainworxx\Includekrexx\Controller\AbstractController;
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
-use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplateFactory;
-use Brainworxx\Krexx\Krexx;
+use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate as ModuleTemplateUnit;
+use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate14 as ModuleTemplateUnit14;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplateFactory as ModuleTemplateFactoryUnit;
+use Brainworxx\Krexx\Krexx;
 use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\View\ViewInterface;
 use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Core\Page\PageRenderer;
-use TYPO3\CMS\Install\Configuration\Context\LivePreset;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(AbstractController::class, 'initializeAction')]
+#[CoversMethod(AbstractController::class, '__construct')]
+#[CoversMethod(AbstractController::class, 'prepare11Flashmessages')]
 class AbstractControllerTest extends AbstractHelper
 {
     /**
      * Test the creation of the pool and its assigning to the class.
-     *
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::__construct
      */
     public function testConstruct()
     {
@@ -74,8 +81,6 @@ class AbstractControllerTest extends AbstractHelper
 
     /**
      * Test if the initialize action can produce the module template
-     *
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::initializeAction
      */
     public function testInitializeAction()
     {
@@ -87,47 +92,32 @@ class AbstractControllerTest extends AbstractHelper
 
         $indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer, $typo3Version);
 
-        $mtMock = $this->createMock(\stdClass::class);
+        if (class_exists(ViewInterface::class)) {
+            $mtMock = $this->createMock(ModuleTemplateUnit14::class);
+        } else {
+            $mtMock = $this->createMock(ModuleTemplateUnit::class);
+        }
+
         if (method_exists($indexController, 'injectObjectManager')) {
             // TYPO3 11 style
             $objectManagerMock = $this->createMock(ObjectManager::class);
             $objectManagerMock->expects($this->once())
                 ->method('get')
                 ->with(ModuleTemplate::class)
-                ->will($this->returnValue($mtMock));
+                ->willReturn($mtMock);
             $this->setValueByReflection('objectManager', $objectManagerMock, $indexController);
         } else {
             // TYPO3 12 style.
             // We are using the ModuleTemplateFactory.
-            $mtFactoryMock = $this->createMock(ModuleTemplateFactory::class);
+            $mtFactoryMock = $this->createMock(ModuleTemplateFactoryUnit::class);
             $mtFactoryMock->expects($this->once())
                 ->method('create')
-                ->will($this->returnValue($mtMock));
-            $this->injectIntoGeneralUtility(\TYPO3\CMS\Backend\Template\ModuleTemplateFactory::class , $mtFactoryMock);
+                ->willReturn($mtMock);
+            $this->injectIntoGeneralUtility(ModuleTemplateFactory::class, $mtFactoryMock);
             $requestMock = $this->createMock(RequestInterface::class);
             $this->setValueByReflection('request', $requestMock, $indexController);
         }
 
         $indexController->initializeAction();
-    }
-
-    /**
-     * Test the injection of the live preset.
-     *
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::injectLivePreset
-     */
-    public function testInjectLivePreset()
-    {
-        $configMock = $this->createMock(Configuration::class);
-        $formConfigMock = $this->createMock(FormConfiguration::class);
-        $settings = $this->createMock(Settings::class);
-        $pageRenderer = $this->createMock(PageRenderer::class);
-        $typo3Version = new Typo3Version();
-
-        $indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer, $typo3Version);
-
-        $preset = $this->createMock(LivePreset::class);
-        $indexController->injectLivePreset($preset);
-        $this->assertSame($preset, $this->retrieveValueByReflection('livePreset', $indexController));
     }
 }

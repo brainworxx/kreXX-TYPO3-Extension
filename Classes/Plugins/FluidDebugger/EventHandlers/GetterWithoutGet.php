@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -55,7 +55,7 @@ class GetterWithoutGet implements EventHandlerInterface
      *
      * @var Pool
      */
-    protected $pool;
+    protected Pool $pool;
 
     /**
      * {@inheritdoc}
@@ -68,7 +68,7 @@ class GetterWithoutGet implements EventHandlerInterface
     /**
      * We simply remove the 'get' from the method name in the model.
      *
-     * @param AbstractCallback $callback
+     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback|null $callback
      *   The calling class.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model so far.
@@ -76,12 +76,13 @@ class GetterWithoutGet implements EventHandlerInterface
      * @return string
      *   Return an empty string.
      */
-    public function handle(AbstractCallback $callback, ?Model $model = null): string
+    public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
     {
-        $params = $callback->getParameters();
-        $methodName = lcfirst(substr($model->getName(), strlen($params[ThroughGetter::CURRENT_PREFIX])));
         $model->addToJson($this->pool->messages->getHelp('fluidMethodName'), $model->getName() . '()')
-            ->setName($methodName);
+            ->setName(lcfirst(substr(
+                $model->getName(),
+                strlen($callback->getParameters()[ThroughGetter::CURRENT_PREFIX])
+            )));
 
         return '';
     }

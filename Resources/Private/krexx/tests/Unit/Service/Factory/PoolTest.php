@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -54,17 +54,20 @@ use Brainworxx\Krexx\View\AbstractRender;
 use Brainworxx\Krexx\View\Messages;
 use Brainworxx\Krexx\View\Output\Chunks;
 use Brainworxx\Krexx\View\Skins\RenderHans;
-use stdClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
+#[CoversMethod(Pool::class, 'reset')]
+#[CoversMethod(Pool::class, 'checkEnvironment')]
+#[CoversMethod(File::class, 'isDirectoryWritable')]
+#[CoversMethod(Pool::class, '__construct')]
+#[CoversMethod(Pool::class, 'checkEnvironment')]
 class PoolTest extends AbstractHelper
 {
-    const MISC_NAMESPACE = '\\Brainworxx\\Krexx\\Service\\Misc\\';
+    public const  MISC_NAMESPACE = '\\Brainworxx\\Krexx\\Service\\Misc\\';
 
     /**
      * Testing the creation of all neccessary classes.
-     *
-     * @covers \Brainworxx\Krexx\Service\Factory\Pool::__construct
-     * @covers \Brainworxx\Krexx\Service\Factory\Pool::checkEnvironment
      */
     public function testConstruct()
     {
@@ -98,9 +101,6 @@ class PoolTest extends AbstractHelper
 
     /**
      * Test the checking of the environment, where kreXX is running.
-     *
-     * @covers \Brainworxx\Krexx\Service\Factory\Pool::checkEnvironment
-     * @covers \Brainworxx\Krexx\Service\Misc\File::isDirectoryWritable
      */
     public function testCheckEnvironmentIsWritable()
     {
@@ -110,10 +110,10 @@ class PoolTest extends AbstractHelper
         /** @var \PHPUnit\Framework\MockObject\MockObject $filePutContents */
         $filePutContents = $this->getFunctionMock(static::MISC_NAMESPACE, 'file_put_contents');
         $filePutContents->expects($this->exactly(2))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $unlink = $this->getFunctionMock(static::MISC_NAMESPACE, 'unlink');
         $unlink->expects($this->exactly(2))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         Krexx::$pool = null;
         Pool::createPool();
@@ -124,9 +124,6 @@ class PoolTest extends AbstractHelper
 
     /**
      * Test the checking of the environment, where kreXX is running.
-     *
-     * @covers \Brainworxx\Krexx\Service\Factory\Pool::checkEnvironment
-     * @covers \Brainworxx\Krexx\Service\Misc\File::isDirectoryWritable
      */
     public function testCheckEnvironmentIsNotWritable()
     {
@@ -135,12 +132,10 @@ class PoolTest extends AbstractHelper
         // Log folder is not writable
         $filePutContents = $this->getFunctionMock(static::MISC_NAMESPACE, 'file_put_contents');
         $filePutContents->expects($this->exactly(2))
-            ->will(
-                $this->returnValueMap([
-                    [Krexx::$pool->config->getChunkDir() . $filename, 'x', false],
-                    [Krexx::$pool->config->getLogDir() . $filename, 'x', false]
-                ])
-            );
+            ->willReturnMap([
+                [Krexx::$pool->config->getChunkDir() . $filename, 'x', false],
+                [Krexx::$pool->config->getLogDir() . $filename, 'x', false]
+            ]);
         $unlink = $this->getFunctionMock(static::MISC_NAMESPACE, 'unlink');
         // Ther was no file "created", hence there is no unlink'ing done.
         $unlink->expects($this->never());
@@ -154,37 +149,33 @@ class PoolTest extends AbstractHelper
 
     /**
      * Test the renewal of the "semi-singletons" after an analysis.
-     *
-     * @covers \Brainworxx\Krexx\Service\Factory\Pool::reset
      */
     public function testReset()
     {
-        Krexx::$pool->recursionHandler = new stdClass();
-        Krexx::$pool->codegenHandler = new stdClass();
-        Krexx::$pool->scope = new stdClass();
-        Krexx::$pool->routing = new stdClass();
+        Krexx::$pool->recursionHandler = $this->createMock(Recursion::class);
+        Krexx::$pool->codegenHandler = $this->createMock(Codegen::class);
+        Krexx::$pool->scope = $this->createMock(Scope::class);
+        Krexx::$pool->routing = $this->createMock(Routing::class);
         Krexx::$pool->reset();
 
-        $this->assertNotInstanceOf(stdClass::class, Krexx::$pool->recursionHandler);
-        $this->assertNotInstanceOf(stdClass::class, Krexx::$pool->codegenHandler);
-        $this->assertNotInstanceOf(stdClass::class, Krexx::$pool->scope);
-        $this->assertNotInstanceOf(stdClass::class, Krexx::$pool->routing);
+        $this->assertNotInstanceOf(MockObject::class, Krexx::$pool->recursionHandler);
+        $this->assertNotInstanceOf(MockObject::class, Krexx::$pool->codegenHandler);
+        $this->assertNotInstanceOf(MockObject::class, Krexx::$pool->scope);
+        $this->assertNotInstanceOf(MockObject::class, Krexx::$pool->routing);
     }
 
     /**
      * Test the renewal of the "semi-singletons" after an analysis, with
      * simulating a new process fork.
-     *
-     * @covers \Brainworxx\Krexx\Service\Factory\Pool::reset
      */
     public function testResetWithNewFork()
     {
         $getmypidMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Factory', 'getmypid');
         $getmypidMock->expects($this->exactly(2))
-            ->will($this->returnValue(12345));
-        Krexx::$pool->chunks = new stdClass();
+            ->willReturn(12345);
+        Krexx::$pool->chunks = $this->createMock(Chunks::class);
 
         Krexx::$pool->reset();
-        $this->assertNotInstanceOf(stdClass::class, Krexx::$pool->chunks);
+        $this->assertNotInstanceOf(MockObject::class, Krexx::$pool->chunks);
     }
 }

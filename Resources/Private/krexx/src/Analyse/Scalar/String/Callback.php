@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2026 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -53,6 +53,13 @@ use TypeError;
 class Callback extends AbstractScalarAnalysis
 {
     /**
+     * The reflection function we are analysing.
+     *
+     * @var \ReflectionFunction
+     */
+    protected ReflectionFunction $reflectionFunction;
+
+    /**
      * Is always active, because there are no system dependencies.
      *
      * @return bool
@@ -75,17 +82,25 @@ class Callback extends AbstractScalarAnalysis
      */
     public function canHandle($string, Model $model): bool
     {
-        try {
-            if (is_callable($string)) {
-                $this->handledValue = $string;
-                return true;
-            }
-        } catch (\Throwable $exception) {
-            // Do nothing.
-            // The autoload just failed.
+        if (!is_callable($string)) {
+            return false;
         }
 
-        return false;
+        try {
+            $this->reflectionFunction = new ReflectionFunction($string);
+        } catch (ReflectionException | TypeError $e) {
+            // Huh, we were unable to retrieve the reflection.
+            // Nothing left to do here.
+            return false;
+        }
+
+        if ($this->reflectionFunction->isInternal()) {
+            // We do not analyse internal functions.
+            return false;
+        }
+
+        $this->handledValue = $string;
+        return true;
     }
 
     /**
@@ -93,46 +108,18 @@ class Callback extends AbstractScalarAnalysis
      */
     protected function handle(): array
     {
-        try {
-            $reflectionFunction = new ReflectionFunction($this->handledValue);
-        } catch (ReflectionException | TypeError $e) {
-            // Huh, we were unable to retrieve the reflection.
-            // Nothing left to do here.
-            return [];
-        }
-
         // Stitching together the main analysis.
         /** @var FunctionDeclaration $functionDeclaration */
         $functionDeclaration = $this->pool->createClass(FunctionDeclaration::class);
         $messages = $this->pool->messages;
         $meta = [
             $messages->getHelp('metaComment') => $this->pool
-                ->createClass(Functions::class)->getComment($reflectionFunction),
-            $messages->getHelp('metaDeclaredIn') => $functionDeclaration->retrieveDeclaration($reflectionFunction)
+                ->createClass(Functions::class)->getComment($this->reflectionFunction),
+            $messages->getHelp('metaDeclaredIn') => $functionDeclaration->retrieveDeclaration($this->reflectionFunction)
         ];
-        $this->insertParameters($reflectionFunction, $meta);
+        $this->insertParameters($meta);
 
         return $meta;
-    }
-
-    /**
-     * Retrieve the declaration place, if possible.
-     *
-     * @param \ReflectionFunction $reflectionFunction
-     *   The reflection function.
-     *
-     * @deprecated Since 5.0.0
-     *   Will be removed use the FunctionDeclaration class instead.
-     * @codeCoverageIgnore
-     *   We do not test deprecated methods.
-     *
-     * @return string
-     *   The declaration place.
-     */
-    protected function retrieveDeclarationPlace(ReflectionFunction $reflectionFunction): string
-    {
-        return $this->pool->createClass(FunctionDeclaration::class)
-            ->retrieveDeclaration($reflectionFunction);
     }
 
     /**
@@ -143,9 +130,9 @@ class Callback extends AbstractScalarAnalysis
      * @param string[] $meta
      *   The meta array, so far.
      */
-    protected function insertParameters(ReflectionFunction $reflectionFunction, array &$meta): void
+    protected function insertParameters(array &$meta): void
     {
-        foreach ($reflectionFunction->getParameters() as $key => $reflectionParameter) {
+        foreach ($this->reflectionFunction->getParameters() as $key => $reflectionParameter) {
             ++$key;
             $meta[$this->pool->messages->getHelp('metaParamNo') . $key] = $this->pool
                 ->codegenHandler
