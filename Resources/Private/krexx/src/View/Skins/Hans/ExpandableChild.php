@@ -189,12 +189,34 @@ trait ExpandableChild
         if ($model->hasExtra()) {
             return str_replace(
                 $this->markerSingleChildExtra,
-                $model->getData(),
+                $this->prepareExtra($model->getData()),
                 $this->fileCache[static::FILE_SI_CHILD_EX]
             );
         }
 
         return '';
+    }
+
+    /**
+     * Prepare the extra for the single child output.
+     *
+     * The problem with the extra part is: a trailing linebreak is not rendered
+     * correctly. So we have to add the last linebreak again, if there is one.
+     * Otherwise, the output is correct.
+     *
+     * @param string $extra
+     *   The extra string.
+     * @return string
+     *   The prepared extra string.
+     */
+    protected function prepareExtra(string $extra): string
+    {
+        $lastChar = substr($extra, -1);
+        if ($lastChar === "\n" || $lastChar === "\r") {
+            return $extra . $lastChar;
+        }
+
+        return $extra;
     }
 
     /**

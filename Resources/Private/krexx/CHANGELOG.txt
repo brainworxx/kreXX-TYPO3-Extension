@@ -1,3 +1,6 @@
+6.0.7
+- Bugfix: Render a trailing linebreak in the extra info correctly.
+
 6.0.6
 - Bugfix: Prevent hints from overwriting themselves.
 - Bugfix: Prevent a fatal when trying to analyse a class with

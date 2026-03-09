@@ -50,6 +50,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(ExpandableChild::class, 'renderSourceButtonWithStop')]
 #[CoversMethod(ExpandableChild::class, 'renderNest')]
 #[CoversMethod(ExpandableChild::class, 'renderExtra')]
+#[CoversMethod(ExpandableChild::class, 'prepareExtra')]
 #[CoversMethod(AbstractRender::class, 'retrieveTypeClasses')]
 #[CoversMethod(AbstractRender::class, 'encodeJson')]
 #[CoversMethod(ConnectorRight::class, 'renderConnectorRight')]
@@ -111,6 +112,24 @@ class ExpandableChildTest extends AbstractRenderHans
         $this->assertStringContainsString('model html', $result);
         $this->assertStringContainsString('x12345', $result);
         $this->assertStringNotContainsString('khidden', $result);
+    }
+
+    /**
+     * Test the rendering of an expandable child with line breaks in the extra.
+     */
+    public function testRenderExpandableChildLinebreaks()
+    {
+        $emergencyMock = $this->createMock(Emergency::class);
+        $emergencyMock->expects($this->once())
+            ->method('checkEmergencyBreak')
+            ->willReturn(false);
+        Krexx::$pool->emergencyHandler = $emergencyMock;
+        $fixture = "eXXtra\n";
+        $this->mockModel(static::GET_DATA, $fixture);
+        $this->mockModel(static::GET_HAS_EXTRAS, true);
+
+        $result = $this->renderHans->renderExpandableChild($this->modelMock, true);
+        $this->assertStringContainsString($fixture . "\n", $result);
     }
 
     /**
