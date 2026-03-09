@@ -8,6 +8,7 @@ Changelog
 :Date: tbd
 
 Changes:
+    * [Change] Move the audit config to the github actions.
     * [Bugfix] Render a trailing linebreak in the extra info correctly.
     * [Bugfix] Fixed missing translation for the cookie reset.
     * [Bugfix] Added missing dependency to the composer.json file.

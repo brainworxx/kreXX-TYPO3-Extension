@@ -57,6 +57,9 @@ jobs:
       run: composer remove --dev --no-update "friendsoftypo3/content-blocks"
       if: ${{ matrix.env.ContentBlocks == 'no' }}
 
+    - name: Allow old versions
+      run: composer config -jm audit.block-insecure false
+
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
