@@ -5,7 +5,7 @@ Changelog
 =============================================================
 
 :Version: 6.1.6
-:Date: tbd
+:Date: 2026-04-25
 
 Changes:
     * [Feature] Updated to TYPO3 14.3.
