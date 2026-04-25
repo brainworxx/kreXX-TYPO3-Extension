@@ -789,7 +789,7 @@ var Hans = (function () {
         }
     };
     Hans.prototype.disableForms = function () {
-        var elements = document.querySelectorAll('.kwrapper .keditable input, .kwrapper .keditable select');
+        var elements = document.querySelectorAll('.kwrapper .kconfiguration .keditable input, .kwrapper .kconfiguration .keditable select');
         for (var i = 0; i < elements.length; i++) {
             elements[i].disabled = true;
         }

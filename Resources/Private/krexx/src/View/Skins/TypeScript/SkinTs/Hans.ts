@@ -394,7 +394,7 @@ class Hans
      */
     protected disableForms(): void
     {
-        let elements:NodeList = document.querySelectorAll('.kwrapper .keditable input, .kwrapper .keditable select');
+        let elements:NodeList = document.querySelectorAll('.kwrapper .kconfiguration .keditable input, .kwrapper .kconfiguration .keditable select');
         for (let i = 0; i < elements.length; i++) {
             (elements[i] as HTMLInputElement).disabled = true;
         }

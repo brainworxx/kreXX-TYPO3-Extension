@@ -1,5 +1,7 @@
 6.0.7
 - Bugfix: Render a trailing linebreak in the extra info correctly.
+- Bugfix: Do not disable the search in the SmokyGrey skin, when the
+  kreXX output is loaded from the file protocol into the browser.
 
 6.0.6
 - Bugfix: Prevent hints from overwriting themselves.

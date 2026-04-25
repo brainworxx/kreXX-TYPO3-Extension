@@ -12,6 +12,7 @@ Changes:
     * [Bugfix] Render a trailing linebreak in the extra info correctly.
     * [Bugfix] Fixed missing translation for the cookie reset.
     * [Bugfix] Added missing dependency to the composer.json file.
+    * [Bugfix] Do not disable the search in the SmokyGrey skin, when the kreXX output is loaded from the file protocol into the browser.
 
 -----
 
