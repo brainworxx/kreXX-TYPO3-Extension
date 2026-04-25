@@ -8,6 +8,7 @@ Changelog
 :Date: tbd
 
 Changes:
+    * [Feature] Updated to TYPO3 14.3.
     * [Change] Move the audit config to the github actions.
     * [Bugfix] Render a trailing linebreak in the extra info correctly.
     * [Bugfix] Fixed missing translation for the cookie reset.
