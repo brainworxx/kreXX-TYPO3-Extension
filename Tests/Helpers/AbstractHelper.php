@@ -45,6 +45,7 @@ use phpmock\phpunit\PHPMock;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Http\NormalizedParams;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Package\Package;
@@ -285,6 +286,16 @@ abstract class AbstractHelper extends KrexxAbstractHelper
             ->method('getControllerName')
             ->willReturn('meier');
         $this->setValueByReflection('request', $request, $controller);
+        if (method_exists(Request::class, 'getAttribute')) {
+            $attribute = $this->createMock(NormalizedParams::class);
+            $attribute->expects($this->any())
+                ->method('isHttps')
+                ->willReturn(false);
+            $request->expects($this->any())
+                ->method('getAttribute')
+                ->willReturn($attribute);
+            $this->setValueByReflection('request', $request, $this->indexController);
+        }
 
         $uriBuilder = $this->createMock(UriBuilder::class);
         $uriBuilder->expects($this->any())
