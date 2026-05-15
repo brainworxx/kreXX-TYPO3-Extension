@@ -16,10 +16,12 @@
    :target: https://get.typo3.org/version/12
 .. |t313| image:: https://img.shields.io/badge/TYPO3-13-orange.svg?style=flat-square
    :target: https://get.typo3.org/version/13
+.. |t314| image:: https://img.shields.io/badge/TYPO3-14-orange.svg?style=flat-square
+   :target: https://get.typo3.org/version/14
 
 |build| |maintainability| |coverage|
 
-|stable| |t310| |t311| |t312| |t313| |license|
+|stable| |t310| |t311| |t312| |t313| |t314| |license|
 
 ========================================
 kreXX Debugger - TYPO3 Backend Extension
