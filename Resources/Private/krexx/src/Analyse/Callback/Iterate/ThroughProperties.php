@@ -204,6 +204,10 @@ class ThroughProperties extends AbstractCallback implements
             return (string)$default;
         }
 
+        if (is_bool($default)) {
+            return $default ? 'TRUE' : 'FALSE';
+        }
+
         $result = '';
         if (is_string($default)) {
             $result = '\'' . $default . '\'';

@@ -921,6 +921,7 @@ div.kwrapper {
     border: 1px solid rgba(0, 0, 0, 0.1);
     line-height: normal;
     font-size: 13px;
+    white-space: pre;
 }
 
 .kwrapper .khelp .khelprow .khelptitle {

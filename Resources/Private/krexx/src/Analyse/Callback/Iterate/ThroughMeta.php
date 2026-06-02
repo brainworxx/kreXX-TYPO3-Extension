@@ -153,12 +153,13 @@ class ThroughMeta extends AbstractCallback implements CallbackConstInterface
      */
     protected function prepareModel(string $key, $meta): Model
     {
+        $messages = $this->pool->messages;
         /** @var Model $model */
         $model = $this->pool->createClass(Model::class)
             ->setData($meta)
             ->setName($key)
             ->setType(
-                $key === $this->pool->messages->getHelp('metaPrettyPrint') ? $key : static::TYPE_REFLECTION
+                $key === $messages->getHelp('metaPrettyPrint') ? $key : $messages->getHelp('reflectionType')
             );
 
         if (isset($this->parameters[static::PARAM_CODE_GEN_TYPE])) {

@@ -87,6 +87,7 @@ class ThroughPropertiesTest extends AbstractHelper
     public const READ_ONLY_STRING = 'readOnyString';
     public const ENUM_VALUE = 'enumValue';
     public const PROPERTY = 'property';
+    public const BOOLEAN = 'boolean';
 
     /**
      * @var \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties
@@ -155,6 +156,7 @@ class ThroughPropertiesTest extends AbstractHelper
             [$this->endEvent, $this->throughProperties],
             [$this->endEvent, $this->throughProperties],
             [$this->endEvent, $this->throughProperties],
+            [$this->endEvent, $this->throughProperties],
             [$this->endEvent, $this->throughProperties]
         );
 
@@ -178,7 +180,8 @@ class ThroughPropertiesTest extends AbstractHelper
                 new ReflectionProperty(ComplexPropertiesFixture::class, static::TRAIT_PROPERTY),
                 new UndeclaredProperty(new ReflectionClass($subject), $undeclaredProp),
                 new ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_ARRAY_DEFAULT),
-                new ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_FLOAT_PROPERTY)
+                new ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_FLOAT_PROPERTY),
+                new ReflectionProperty(ComplexPropertiesFixture::class, static::BOOLEAN),
             ]
         ];
 
@@ -411,6 +414,21 @@ class ThroughPropertiesTest extends AbstractHelper
             '->',
             '',
             'Public '
+        );
+
+        // A boolean default value.
+        $this->assertModelValues(
+            $models[14],
+            true,
+            static::BOOLEAN,
+            [
+                static::JSON_DECLARED_KEY => 'Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesFixture',
+                static::JSON_COMMENT_KEY => 'Boolean default value.<br /><br />&#64;var bool',
+                static::JSON_DEFAULT_VALUE => true
+            ],
+            '->',
+            '',
+            'Protected '
         );
     }
 

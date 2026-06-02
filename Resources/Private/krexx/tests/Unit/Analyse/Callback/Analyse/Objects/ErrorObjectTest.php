@@ -147,9 +147,9 @@ class ErrorObjectTest extends AbstractHelper
         $messageMock = $this->createMock(Messages::class);
         $messageMock->expects($this->never())
             ->method('addMessage');
-        $messageMock->expects($this->exactly(4))
+        $messageMock->expects($this->exactly(5))
             ->method('getHelp')
-            ->with(...$this->withConsecutive(['backTrace'], ['classInternals'], ['noSourceAvailable'], ['sourceCode']))
+            ->with(...$this->withConsecutive(['backTrace'], ['classInternals'], ['noSourceAvailable'], ['sourceCode'], ['phpType']))
             ->willReturn('something');
         Krexx::$pool->messages = $messageMock;
 

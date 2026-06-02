@@ -78,6 +78,13 @@ class ComplexPropertiesFixture extends ComplexPropertiesInheritanceFixture
     protected $protectedProperty = 'pro tected';
 
     /**
+     * Boolean default value.
+     *
+     * @var bool
+     */
+    protected $boolean = true;
+
+    /**
      * Re-Declaration of a 'inherited' private property
      *
      * @var string

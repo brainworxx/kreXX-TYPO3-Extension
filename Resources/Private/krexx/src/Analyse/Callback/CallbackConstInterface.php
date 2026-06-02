@@ -193,6 +193,9 @@ interface CallbackConstInterface
     /**
      * Frontend literal.
      *
+     * @deprecated
+     *   Since 6.0.8. Will be removed.
+     *
      * @var string
      */
     public const TYPE_PHP = 'PHP';
@@ -220,12 +223,18 @@ interface CallbackConstInterface
     /**
      * Frontend literal.
      *
+     * @deprecated
+     *   Since 6.0.8. Will be removed.
+     *
      * @var string
      */
     public const TYPE_FOREACH = 'foreach';
 
     /**
      * Frontend literal.
+     *
+     * @deprecated
+     *   Since 6.0.8. Will be removed.
      *
      * @var string
      */
@@ -264,12 +273,18 @@ interface CallbackConstInterface
     /**
      * Frontend literal.
      *
+     * @deprecated
+     *   Since 6.0.8. Will be removed.
+     *
      * @var string
      */
     public const TYPE_REFLECTION = 'reflection';
 
     /**
      * Frontend literal.
+     *
+     * @deprecated
+     *   Since 6.0.8. Will be removed.
      *
      * @var string
      */

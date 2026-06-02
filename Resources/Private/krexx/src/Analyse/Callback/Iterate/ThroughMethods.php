@@ -117,6 +117,7 @@ class ThroughMethods extends AbstractCallback implements
         $result = $this->dispatchStartEvent();
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $refClass */
         $refClass = $this->parameters[static::PARAM_REF];
+        $messages = $this->pool->messages;
 
         // Deep analysis of the methods.
         /** @var \ReflectionMethod $refMethod */
@@ -136,7 +137,8 @@ class ThroughMethods extends AbstractCallback implements
                     // Remove the ',' after the last char.
                     ->setConnectorParameters(rtrim($this->retrieveParameters($refMethod, $methodData), ', '))
                     ->setType(
-                        $this->getDeclarationKeywords($refMethod, $declaringClass, $refClass) . static::TYPE_METHOD
+                        $this->getDeclarationKeywords($refMethod, $declaringClass, $refClass) .
+                        $messages->getHelp('methodType')
                     )->setConnectorType($this->retrieveConnectorType($refMethod))
                     ->addParameter(static::PARAM_DATA, $methodData)
                     ->setCodeGenType($refMethod->isPublic() ? static::CODEGEN_TYPE_PUBLIC : '')

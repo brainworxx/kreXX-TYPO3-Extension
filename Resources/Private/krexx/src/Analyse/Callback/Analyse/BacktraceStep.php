@@ -107,7 +107,7 @@ class BacktraceStep extends AbstractCallback implements
             ->setName($this->pool->messages->getHelp('sourceCode'))
             ->setNormal(static::UNKNOWN_VALUE)
             ->setHasExtra(true)
-            ->setType(static::TYPE_PHP);
+            ->setType($this->pool->messages->getHelp('phpType'));
 
         return $this->retrieveSource($model) . $this->pool->render->renderExpandableChild(
             $this->dispatchEventWithModel(

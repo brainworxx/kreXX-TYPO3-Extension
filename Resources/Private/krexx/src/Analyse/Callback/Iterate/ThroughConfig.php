@@ -90,7 +90,7 @@ class ThroughConfig extends AbstractCallback implements CallbackConstInterface, 
                 $configOutput .= $this->pool->render->renderExpandableChild(
                     $this->pool->createClass(Model::class)
                         ->setName($this->pool->messages->getHelp($sectionName . 'Readable'))
-                        ->setType(static::TYPE_CONFIG)
+                        ->setType($this->pool->messages->getHelp('configType'))
                         ->setNormal(static::UNKNOWN_VALUE)
                         ->addParameter(static::PARAM_DATA, $sectionData)
                         ->injectCallback(
