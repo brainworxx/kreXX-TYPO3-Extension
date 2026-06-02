@@ -8,11 +8,14 @@ Changelog
 :Date: tbd
 
 Changes:
+    * [Feature] Added Translation Domain Mapping analysis support for TYPO3 14.3.
     * [Bugfix] Render a trailing linebreak in the extra info correctly.
     * [Bugfix] Do not disable the search in the SmokyGrey skin, when the kreXX output is loaded from the file protocol into the browser.
     * [Bugfix] The help info text display of the Hans skin is respecting the whitespace formatting now.
     * [Bugfix] Do not omit a bool default value for properties.
     * [Bugfix] Removed some frontend literals.
+
+-----
 
 :Version: 6.1.6
 :Date: 2026-04-25

@@ -176,6 +176,10 @@ abstract class AbstractHelper extends KrexxAbstractHelper
             ->method('getPackage')
             ->willReturn($packageMock);
 
+        $packageManagerMock->expects($this->any())
+            ->method('getActivePackages')
+            ->willReturn([$extensionKey => $packageMock]);
+
         ExtensionManagementUtility::setPackageManager($packageManagerMock);
 
         return $packageMock;

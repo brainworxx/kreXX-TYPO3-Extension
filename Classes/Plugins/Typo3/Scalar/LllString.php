@@ -41,6 +41,8 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Scalar\String\AbstractScalarAnalysis;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Throwable;
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility as UnitLocalizationUtility;
@@ -60,6 +62,13 @@ class LllString extends AbstractScalarAnalysis
     protected LocalizationUtility $localisationUtility;
 
     /**
+     * A list of all installed extensions in TYPO4 14.0
+     *
+     * @var array
+     */
+    protected array $extensionKeys = [];
+
+    /**
      * Inject the pool.
      *
      * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
@@ -67,6 +76,17 @@ class LllString extends AbstractScalarAnalysis
     public function __construct(Pool $pool)
     {
         $this->localisationUtility = new LocalizationUtility();
+        $typo3Version = new Typo3Version();
+        if ($typo3Version->getMajorVersion() > 13) {
+            try {
+                $this->extensionKeys = ExtensionManagementUtility::getLoadedExtensionListArray();
+            } catch (Throwable $e) {
+                // Do nothing.
+                // Unable to retrieve the extension keys.Maybe we are running in a context where this is not possible.
+                // Or someone messed with the installation.
+                // This is a debugger after all.
+            }
+        }
         parent::__construct($pool);
     }
 
@@ -82,6 +102,27 @@ class LllString extends AbstractScalarAnalysis
     }
 
     /**
+     * Test the string for domain translation.
+     *
+     * It looks like this:
+     * "some_extension.something:some_string"
+     *
+     * @param string $string
+     * @return bool
+     */
+    protected function isDomainTranslation(string $string): bool
+    {
+        // Get a first impression.
+        if (strpos($string, ':') === false && strpos($string, '.') === false) {
+            // We need a ":" and a "." in there somewhere.
+            return false;
+        }
+
+        $parts = explode('.', $string);
+        return (!empty($parts[0]) && in_array($parts[0], $this->extensionKeys));
+    }
+
+    /**
      * @param string $string
      *   The string we try to translate.
      * @param \Brainworxx\Krexx\Analyse\Model $model
@@ -93,7 +134,7 @@ class LllString extends AbstractScalarAnalysis
      */
     public function canHandle($string, Model $model): bool
     {
-        if (strpos($string, 'LLL:') === false) {
+        if (strpos($string, 'LLL:') === false && !$this->isDomainTranslation($string)) {
             // Early return. Not much to do here.
             return false;
         }

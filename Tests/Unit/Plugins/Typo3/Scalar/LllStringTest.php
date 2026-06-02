@@ -51,6 +51,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(LllString::class, '__construct')]
 #[CoversMethod(LllString::class, 'handle')]
 #[CoversMethod(LllString::class, 'isActive')]
+#[CoversMethod(LllString::class, 'isDomainTranslation')]
 class LllStringTest extends AbstractHelper
 {
     protected const TSFE = 'TSFE';
@@ -155,5 +156,23 @@ class LllStringTest extends AbstractHelper
             $lllString->canHandle($payload, $model),
             'Expecting false, because the translation utility throws an exception.'
         );
+    }
+
+    public function testCanHandleDomainTranslation()
+    {
+        $typo3Version = new Typo3Version();
+        if ($typo3Version->getMajorVersion() < 14) {
+            $this->markTestSkipped('Domain translations are only supported in TYPO3 14.0 and above.');
+        }
+
+        $this->simulatePackage('includekrexx', 'some path');
+        $payload = 'includekrexx.messages:mlang_tabs_tab';
+        $model = new Model(\Krexx::$pool);
+        $lllString = new LllString(\Krexx::$pool);
+        $lllString->setLocalisationUtility(new LocalizationUtility14());
+        LocalizationUtility14::$values[$payload] = static::KREXX_DEBUGGER;
+        $lllString->canHandle($payload, $model);
+        $result = $model->getJson();
+        $this->assertEquals(static::KREXX_DEBUGGER, $result['Translation']);
     }
 }
