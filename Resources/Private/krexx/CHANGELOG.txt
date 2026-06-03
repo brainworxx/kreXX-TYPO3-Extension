@@ -1,11 +1,13 @@
-6.0.7
-- Bugfix: Render a trailing linebreak in the extra info correctly.
-- Bugfix: Do not disable the search in the SmokyGrey skin, when the
-  kreXX output is loaded from the file protocol into the browser.
+6.0.8
 - Bugfix: The help info text display of the Hans skin is respecting
   the whitespace formatting now.
 - Bugfix: Do not omit a bool default value for properties.
 - Bugfix: Removed some frontend literals.
+
+6.0.7
+- Bugfix: Render a trailing linebreak in the extra info correctly.
+- Bugfix: Do not disable the search in the SmokyGrey skin, when the
+  kreXX output is loaded from the file protocol into the browser.
 
 6.0.6
 - Bugfix: Prevent hints from overwriting themselves.
