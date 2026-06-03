@@ -47,7 +47,7 @@ trait AimeosTestTrait
      */
     protected function skipIfAimeosIsNotInstalled()
     {
-        if (class_exists(AimeosException::class) === false) {
+        if (!class_exists(AimeosException::class)) {
             $this->markTestSkipped('Aimeos is not installed.');
         }
     }

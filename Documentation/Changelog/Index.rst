@@ -9,6 +9,7 @@ Changelog
 
 Changes:
     * [Feature] Added Translation Domain Mapping analysis support for TYPO3 14.3.
+    * [Feature] Updated to Aimeos 26.07.
     * [Bugfix] The help info text display of the Hans skin is respecting the whitespace formatting now.
     * [Bugfix] Do not omit a bool default value for properties.
     * [Bugfix] Removed some frontend literals.
