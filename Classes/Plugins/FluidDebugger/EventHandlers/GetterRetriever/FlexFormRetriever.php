@@ -46,6 +46,8 @@ use TYPO3\CMS\Core\Domain\FlexFormFieldValues;
  *
  * @deprecated
  *   Will be removed as soon as we drop support for TYPO3 13.
+ * @codeCoverageIgnore
+ *   The tests are still there, but be only upload 14'er tests.
  */
 class FlexFormRetriever extends AbstractGetterRetriever
 {
