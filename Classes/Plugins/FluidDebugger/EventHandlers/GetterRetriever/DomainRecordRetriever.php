@@ -80,7 +80,7 @@ class DomainRecordRetriever extends RawRecordRetriever
         }
         try {
             $rawRecordType = $rawRecord->getFullType();
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
             // This should not have happened.
             // Someone messed with a core class.
             return $result;
