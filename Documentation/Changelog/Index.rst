@@ -13,6 +13,7 @@ Changes:
     * [Bugfix] The help info text display of the Hans skin is respecting the whitespace formatting now.
     * [Bugfix] Do not omit a bool default value for properties.
     * [Bugfix] Removed some frontend literals.
+    * [Bugfix] The raw record analysis now collects additional data in TYPO3 14 as well.
 
 -----
 

@@ -82,8 +82,6 @@ use TYPO3\CMS\Core\Settings\Settings;
 #[CoversMethod(FlexFormRetriever::class, 'canHandle')]
 #[CoversMethod(FlexformRetriever::class, 'handle')]
 #[CoversMethod(AbstractGetterRetriever::class, 'processObjectValues')]
-#[CoversMethod(DomainRecordRetriever::class, 'canHandle')]
-#[CoversMethod(DomainRecordRetriever::class, 'handle')]
 class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface, CodegenConstInterface
 {
     /**

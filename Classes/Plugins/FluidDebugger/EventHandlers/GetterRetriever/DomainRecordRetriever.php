@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever;
 
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
+use Throwable;
 use TYPO3\CMS\Core\Domain\Record;
 
 /**
@@ -73,11 +74,18 @@ class DomainRecordRetriever extends RawRecordRetriever
         /** @var \TYPO3\CMS\Core\Domain\RawRecord $rawRecord */
         $rawRecord = $ref->retrieveValue($rawRecordPropertyRef);
         $rawRecordRef = new ReflectionClass($rawRecord);
-        if (!$rawRecordRef->hasProperty('type')) {
+        if (!method_exists($rawRecord, 'getFullType')) {
             // Huh, not what I expected.
             return $result;
         }
-        $rawRecordType = $rawRecordRef->retrieveValue($rawRecordRef->getProperty('type'));
+        try {
+            $rawRecordType = $rawRecord->getFullType();
+        } catch (Throwable) {
+            // This should not have happened.
+            // Someone messed with a core class.
+            return $result;
+        }
+
         $rawRecordValues = $this->processObjectValues(parent::handle($rawRecordRef));
         if (strpos($rawRecordType, '.') !== false) {
             // If the type contains a dot, we only merge the uid and pid.
