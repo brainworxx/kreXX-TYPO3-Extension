@@ -43,11 +43,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-/**
- * @codeCoverageIgnore
- *   We ignore the coverage for now. This will be changed as soon as the 14 lts
- *   is our main target.
- */
 class Log14 extends AbstractLog
 {
     /**

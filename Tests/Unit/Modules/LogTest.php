@@ -50,17 +50,17 @@ use TYPO3\CMS\Core\View\ViewInterface;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
-#[CoversMethod(Log::class, 'getJavaScriptFiles')]
-#[CoversMethod(Log::class, 'getCssFiles')]
-#[CoversMethod(Log::class, 'getContent')]
-#[CoversMethod(Log::class, 'hasAccess')]
-#[CoversMethod(Log::class, 'retrieveKrexxMessages')]
-#[CoversMethod(Log::class, 'createView')]
-#[CoversMethod(Log::class, 'createView13')]
-#[CoversMethod(Log::class, 'renderMessage')]
-#[CoversMethod(Log::class, 'getDataToStore')]
-#[CoversMethod(Log::class, 'getLabel')]
-#[CoversMethod(Log::class, 'getIdentifier')]
+#[CoversMethod(Log14::class, 'getJavaScriptFiles')]
+#[CoversMethod(Log14::class, 'getCssFiles')]
+#[CoversMethod(Log14::class, 'getContent')]
+#[CoversMethod(Log14::class, 'hasAccess')]
+#[CoversMethod(Log14::class, 'retrieveKrexxMessages')]
+#[CoversMethod(Log14::class, 'createView')]
+#[CoversMethod(Log14::class, 'createView13')]
+#[CoversMethod(Log14::class, 'renderMessage')]
+#[CoversMethod(Log14::class, 'getDataToStore')]
+#[CoversMethod(Log14::class, 'getLabel')]
+#[CoversMethod(Log14::class, 'getIdentifier')]
 class LogTest extends AbstractHelper
 {
     protected const WRONG_VERSION = 'Wrong TYPO3 version.';
@@ -111,7 +111,6 @@ class LogTest extends AbstractHelper
      */
     public function testGetDataToStore()
     {
-
         $fileList = ['file', 'list'];
         $expectations = new ModuleData([static::FILES => $fileList]);
 

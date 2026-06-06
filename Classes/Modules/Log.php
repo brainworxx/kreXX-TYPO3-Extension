@@ -42,11 +42,14 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-
-
 /**
  * @deprecated
  *   Since 6.1.0, will be removed when we drop support for TYPO3 v13 LTS.
+ * @codeCoverageIgnore
+ *   Do do not add the coverage of this class to the overall coverage, because
+ *   we only upload TYPO3 v14 LTS. Also, there is a problem with unit tests,
+ *   which tries to load none compatible classes in 14.
+ *   Nevertheless, it's actually covered.
  */
 class Log extends AbstractLog
 {
