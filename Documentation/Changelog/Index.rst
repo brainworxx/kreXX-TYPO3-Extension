@@ -5,7 +5,7 @@ Changelog
 =============================================================
 
 :Version: 6.1.7
-:Date: tbd
+:Date: 2026-06-27
 
 Changes:
     * [Feature] Added Translation Domain Mapping analysis support for TYPO3 14.3.
