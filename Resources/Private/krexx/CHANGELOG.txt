@@ -3,6 +3,8 @@
   the whitespace formatting now.
 - Bugfix: Do not omit a bool default value for properties.
 - Bugfix: Removed some frontend literals.
+- Bugfix: Reset the JSON analysis result before analysing a new string,
+  to prevent showing the previous result.
 
 6.0.7
 - Bugfix: Render a trailing linebreak in the extra info correctly.

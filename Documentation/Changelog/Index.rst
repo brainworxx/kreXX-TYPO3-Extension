@@ -14,6 +14,7 @@ Changes:
     * [Bugfix] Do not omit a bool default value for properties.
     * [Bugfix] Removed some frontend literals.
     * [Bugfix] The raw record analysis now collects additional data in TYPO3 14 as well.
+    * [Bugfix] Reset the JSON analysis result before analysing a new string, to prevent showing the previous result.
 
 -----
 

@@ -93,6 +93,9 @@ class Json extends AbstractScalarAnalysis implements CodegenConstInterface
             return false;
         }
 
+        // Reset the decoded json
+        $this->decodedJson = null;
+
         // @deprecated Will be removed once we drop 8.3 support.
         if (function_exists('json_validate') && json_validate($string)) {
             // Doing it the PHP 8.3 way.
