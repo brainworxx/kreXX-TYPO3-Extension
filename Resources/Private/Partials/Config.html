@@ -13,7 +13,6 @@
     <f:render section="table" arguments="{headline: 'subhead.pruneOutput',   payload: 'pruneOutput',   config: config, dropdown: dropdown}" />
     <f:render section="table" arguments="{headline: 'subhead.properties',    payload: 'properties',    config: config, dropdown: dropdown}" />
     <f:render section="table" arguments="{headline: 'subhead.methods',       payload: 'methods',       config: config, dropdown: dropdown}" />
-    <f:render section="table" arguments="{headline: 'subhead.emergencystop', payload: 'emergencystop', config: config, dropdown: dropdown}" />
     <f:render section="table" arguments="{headline: 'subhead.typo3',         payload: 'TYPO3',         config: config, dropdown: dropdown}" />
 </f:section>
 
@@ -59,7 +58,6 @@
 <f:section name="output">
     <f:render section="dropdown" arguments="{config: config.disabled, options: dropdown.bool}" />
     <f:render section="input"    arguments="{config: config.iprange}" />
-    <f:render section="dropdown" arguments="{config: config.detectAjax, options: dropdown.bool}" />
 </f:section>
 <f:section name="behavior">
     <f:render section="dropdown" arguments="{config: config.skin, options: dropdown.skins}" />
@@ -71,11 +69,11 @@
     <f:render section="input"    arguments="{config: config.maxStepNumber}" />
     <f:render section="input"    arguments="{config: config.arrayCountLimit}" />
     <f:render section="input"    arguments="{config: config.level}" />
+    <f:render section="input"    arguments="{config: config.maxCall}" />
 </f:section>
 <f:section name="properties">
     <f:render section="dropdown" arguments="{config: config.analyseProtected, options: dropdown.bool}" />
     <f:render section="dropdown" arguments="{config: config.analysePrivate, options: dropdown.bool}" />
-    <f:render section="dropdown" arguments="{config: config.analyseScalar, options: dropdown.bool}" />
     <f:render section="dropdown" arguments="{config: config.analyseTraversable, options: dropdown.bool}" />
 </f:section>
 <f:section name="methods">
@@ -83,11 +81,6 @@
     <f:render section="dropdown" arguments="{config: config.analysePrivateMethods, options: dropdown.bool}" />
     <f:render section="dropdown" arguments="{config: config.analyseGetter, options: dropdown.bool}" />
     <f:render section="input"    arguments="{config: config.debugMethods}" />
-</f:section>
-<f:section name="emergencystop">
-    <f:render section="input"    arguments="{config: config.maxCall}" />
-    <f:render section="input"    arguments="{config: config.maxRuntime}" />
-    <f:render section="input"    arguments="{config: config.memoryLeft}" />
 </f:section>
 <f:section name="TYPO3">
     <f:render section="dropdown" arguments="{config: config.activateT3FileWriter, options: dropdown.bool}" />
