@@ -48,16 +48,16 @@ interface EventHandlerInterface
     /**
      * Inject the pool.
      *
-     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     * @param Pool $pool
      */
     public function __construct(Pool $pool);
 
     /**
      * Blueprint for the event handler.
      *
-     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback|null $callback
+     * @param AbstractCallback|null $callback
      *   The original callback. Or null, when coming from the processing.
-     * @param \Brainworxx\Krexx\Analyse\Model|null $model
+     * @param Model|null $model
      *   The model, if available, so far.
      *
      * @return string

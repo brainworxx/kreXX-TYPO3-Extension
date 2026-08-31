@@ -48,6 +48,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(ThroughLargeArray::class, 'callMe')]
 #[CoversMethod(ThroughLargeArray::class, 'handleKey')]
 #[CoversMethod(ThroughLargeArray::class, 'handleValue')]
+#[CoversMethod(ThroughLargeArray::class, '__construct')]
 class ThroughLargeArrayTest extends AbstractHelper
 {
     public const  RENDER_EXPANDABLE_CHILD = 'renderExpandableChild';
@@ -116,6 +117,10 @@ class ThroughLargeArrayTest extends AbstractHelper
      */
     public function testCallMeNormal()
     {
+        $object = new ThroughLargeArray(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+
         // The fist fixture is not multiline.
         $fixture = [
             'multiline' => false,

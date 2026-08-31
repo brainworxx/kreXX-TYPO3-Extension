@@ -37,10 +37,12 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionClassConstant;
 
 /**
@@ -61,6 +63,15 @@ class ThroughConstants extends AbstractCallback implements CallbackConstInterfac
     protected bool $isInScope = false;
 
     /**
+     * Inject the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
+    /**
      * Simply iterate though object constants.
      *
      * @return string
@@ -69,7 +80,7 @@ class ThroughConstants extends AbstractCallback implements CallbackConstInterfac
     public function callMe(): string
     {
         $output = $this->dispatchStartEvent();
-        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
+        /** @var ReflectionClass $ref */
         $ref = $this->parameters[static::PARAM_REF];
 
         // Setting the prefix, depending on the scope.
@@ -79,15 +90,15 @@ class ThroughConstants extends AbstractCallback implements CallbackConstInterfac
         // Dump them with visibility infos.
         foreach ($this->parameters[static::PARAM_DATA] as $constantName => $constantValue) {
             /** @var ReflectionClassConstant $reflectionConstant */
-            $reflectionConstant = $this->parameters[static::PARAM_REF]->getReflectionConstant($constantName);
-            if ($this->canDump($reflectionConstant)) {
+            $reflectionConstant = $this->parameters[static::PARAM_REF]->getReflectionConstant(name: $constantName);
+            if ($this->canDump(reflectionConstant: $reflectionConstant)) {
                 $output .= $this->pool->routing->analysisHub(
-                    $this->pool->createClass(Model::class)
-                        ->setData($constantValue)
-                        ->setAdditional($this->retrieveAdditionalData($reflectionConstant))
-                        ->setName($constantName)
-                        ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
-                        ->setCustomConnectorLeft($prefix . '::')
+                    model: $this->pool->createClass(classname: Model::class)
+                        ->setData(data: $constantValue)
+                        ->setAdditional(additional: $this->retrieveAdditionalData($reflectionConstant))
+                        ->setName(name: $constantName)
+                        ->setCodeGenType(codeGenType: static::CODEGEN_TYPE_PUBLIC)
+                        ->setCustomConnectorLeft(customConnectorLeft: $prefix . '::')
                 );
             }
         }
@@ -107,15 +118,15 @@ class ThroughConstants extends AbstractCallback implements CallbackConstInterfac
     protected function retrieveAdditionalData(ReflectionClassConstant $reflectionConstant): string
     {
         if ($reflectionConstant->isPublic()) {
-            return $this->pool->messages->getHelp('publicConstant');
+            return $this->pool->messages->getHelp(key: 'publicConstant');
         }
 
         if ($reflectionConstant->isProtected()) {
-            return $this->pool->messages->getHelp('protectedConstant');
+            return $this->pool->messages->getHelp(key: 'protectedConstant');
         }
 
         // It either is public, protected or private, and nothing else.
-        return $this->pool->messages->getHelp('privateConstant');
+        return $this->pool->messages->getHelp(key: 'privateConstant');
     }
 
     /**
@@ -129,14 +140,10 @@ class ThroughConstants extends AbstractCallback implements CallbackConstInterfac
      */
     protected function canDump(ReflectionClassConstant $reflectionConstant): bool
     {
-        if ($reflectionConstant->isPublic() || $this->isInScope) {
-            // It's either public or inside the scope.
-            // This includes also some private classes from the highest levels of
-            // the class.
-            return true;
-        }
-
         // Either a deep private or out of scope.
-        return false;
+        // It's either public or inside the scope.
+        // This includes also some private classes from the highest levels of
+        // the class.
+        return $reflectionConstant->isPublic() || $this->isInScope;
     }
 }

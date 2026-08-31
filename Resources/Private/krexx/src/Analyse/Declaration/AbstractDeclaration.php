@@ -50,21 +50,13 @@ use ReflectionUnionType;
 abstract class AbstractDeclaration
 {
     /**
-     * Here we store all relevant data.
-     *
-     * @var \Brainworxx\Krexx\Service\Factory\Pool
-     */
-    protected Pool $pool;
-
-    /**
      * Injects the pool.
      *
-     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     * @param Pool $pool
      *   The pool, where we store the classes we need.
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
     }
 
     /**
@@ -93,13 +85,13 @@ abstract class AbstractDeclaration
 
         // Handling the normal types.
         if ($namedType instanceof ReflectionNamedType) {
-            $result = $this->formatNamedType($namedType);
+            $result = $this->formatNamedType(namedType: $namedType);
         } elseif ($namedType instanceof ReflectionUnionType) {
             // Union types have several types in them.
             foreach ($namedType->getTypes() as $singleNamedType) {
-                $result .=  $this->formatNamedType($singleNamedType) . '|';
+                $result .=  $this->formatNamedType(namedType: $singleNamedType) . '|';
             }
-            $result = trim($result, '|');
+            $result = trim(string: $result, characters: '|');
         }
 
         return ($namedType->allowsNull() ? '?' : '') . $result;
@@ -117,7 +109,10 @@ abstract class AbstractDeclaration
     protected function formatNamedType(ReflectionNamedType $namedType): string
     {
         $result = $namedType->getName();
-        if (!in_array($result, ReturnType::ALLOWED_TYPES, true) && strpos($result, '\\') !== 0) {
+        if (
+            !in_array(needle: $result, haystack: ReturnType::ALLOWED_TYPES, strict: true)
+            && !str_starts_with(haystack: $result, needle: '\\')
+        ) {
             // Must be e un-namespaced class name.
             $result = '\\' . $result;
         }

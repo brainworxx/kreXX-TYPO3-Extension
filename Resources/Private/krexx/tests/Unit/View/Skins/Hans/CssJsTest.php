@@ -45,7 +45,7 @@ class CssJsTest extends AbstractRenderHans
     /**
      * Testing the inserting of css and js.
      */
-    public function testRenderCssJs()
+    public function testRenderCssJs(): void
     {
         $css = 'soem styles';
         $javaScript = 'onClick="alert(\'xss\');"';

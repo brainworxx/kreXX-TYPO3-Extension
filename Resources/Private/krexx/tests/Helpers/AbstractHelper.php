@@ -53,7 +53,6 @@ use ReflectionException;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Constraint\Constraint;
 use PHPUnit\Framework\Constraint\IsEqual;
-use RuntimeException;
 
 abstract class AbstractHelper extends TestCase
 {
@@ -77,23 +76,17 @@ abstract class AbstractHelper extends TestCase
         // Reset the kreXX count.
         $emergencyRef = new \ReflectionClass(Krexx::$pool->emergencyHandler);
         $krexxCountRef = $emergencyRef->getProperty(KrexxTest::KREXX_COUNT);
-        if (version_compare(phpversion(), '8.1.0', '<')) {
-            $krexxCountRef->setAccessible(true);
-        }
         $krexxCountRef->setValue(Krexx::$pool->emergencyHandler, 0);
 
         // Reset the messages.
         $messageRef = new \ReflectionClass(Krexx::$pool->messages);
         $keysRef = $messageRef->getProperty('messages');
-        if (version_compare(phpversion(), '8.1.0', '<')) {
-            $keysRef->setAccessible(true);
-        }
         $keysRef->setValue(Krexx::$pool->messages, []);
 
         // Remove possible logfiles.
-        if (strpos(Krexx::$pool->config->getLogDir(), 'Fixtures') === false) {
+        if (!str_contains(Krexx::$pool->config->getLogDir(), 'Fixtures')) {
             $logList = glob(Krexx::$pool->config->getLogDir() . '*.Krexx.html');
-            if (!empty($logList)) {
+            if ($logList !== [] && $logList !== false) {
                 foreach ($logList as $file) {
                     unlink($file);
                     unlink($file . '.json');
@@ -141,18 +134,13 @@ abstract class AbstractHelper extends TestCase
         try {
             $reflectionClass = new \ReflectionClass($object);
             $reflectionProperty = $reflectionClass->getProperty($name);
-            if (version_compare(phpversion(), '8.1.0', '<')) {
-                $reflectionProperty->setAccessible(true);
-            }
 
             if (is_object($object)) {
                 $reflectionProperty->setValue($object, $value);
+            } elseif (version_compare(phpversion(), '8.3.0', '>=')) {
+                $reflectionClass->setStaticPropertyValue($name, $value);
             } else {
-                if (version_compare(phpversion(), '8.3.0', '>=')) {
-                    $reflectionClass->setStaticPropertyValue($name, $value);
-                } else {
-                    $reflectionProperty->setValue($value);
-                }
+                $reflectionProperty->setValue($value);
             }
         } catch (ReflectionException $e) {
             $this->fail($e->getMessage());
@@ -176,9 +164,6 @@ abstract class AbstractHelper extends TestCase
         try {
             $reflectionClass = new \ReflectionClass($object);
             $reflectionProperty = $reflectionClass->getProperty($name);
-            if (version_compare(phpversion(), '8.1.0', '<')) {
-                $reflectionProperty->setAccessible(true);
-            }
             if (is_object($object)) {
                 return $reflectionProperty->getValue($object);
             } else {
@@ -270,7 +255,7 @@ abstract class AbstractHelper extends TestCase
      * Trigger the start event in a class object, without the actual hostig
      * object interference.
      *
-     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback $object
+     * @param AbstractCallback $object
      *   The object, triggering the event.
      *
      * @return string
@@ -281,9 +266,6 @@ abstract class AbstractHelper extends TestCase
         try {
             $reflection = new \ReflectionClass($object);
             $reflectionMethod = $reflection->getMethod('dispatchStartEvent');
-            if (version_compare(phpversion(), '8.1.0', '<')) {
-                $reflectionMethod->setAccessible(true);
-            }
             return $reflectionMethod->invoke($object);
         } catch (ReflectionException $e) {
             $this->fail($e->getMessage());
@@ -309,7 +291,7 @@ abstract class AbstractHelper extends TestCase
 
         foreach ($parameterGroups as $index => $parameters) {
             // initial
-            $parametersCount = $parametersCount ?? count($parameters);
+            $parametersCount ??= count($parameters);
 
             // prepare parameters
             foreach ($parameters as $parameter) {
@@ -332,11 +314,11 @@ abstract class AbstractHelper extends TestCase
         for ($index = 0; $index < $parametersCount; ++$index) {
             $result[$index] = Assert::callback(static function ($value) use ($values, $index) {
                 static $map = null;
-                $map = $map ?? $values[$index];
+                $map ??= $values[$index];
 
                 $expectedArg = array_shift($map);
                 if ($expectedArg === null) {
-                    throw new AssertionFailedError('No more expected calls');
+                    throw new AssertionFailedError('No more expected calls', 6366729430);
                 }
                 $expectedArg->evaluate($value);
 

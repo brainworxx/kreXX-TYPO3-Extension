@@ -238,7 +238,7 @@ class ThroughMetaTest extends AbstractHelper
         $model = $this->renderNothing->model[static::RENDER_EXPANDABLE_CHILD][0];
         $this->assertEquals($payload, $model->getData());
         $this->assertEquals($key, $model->getName());
-        $this->assertEquals($this->throughMeta::TYPE_REFLECTION, $model->getType());
+        $this->assertEquals('reflection', $model->getType());
         $this->assertEquals($this->throughMeta::UNKNOWN_VALUE, $model->getNormal());
         $this->assertTrue($model->hasExtra());
     }

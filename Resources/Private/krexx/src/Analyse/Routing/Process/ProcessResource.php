@@ -41,6 +41,7 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughResource;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Processing of resources.
@@ -55,6 +56,15 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
     protected Model $model;
 
     /**
+     * Inject the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
+    /**
      * Is this one a resource?
      *
      * @param Model $model
@@ -66,7 +76,7 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
     public function canHandle(Model $model): bool
     {
         $this->model = $model;
-        return is_resource($model->getData()) || gettype($model->getData()) === 'resource (closed)';
+        return is_resource($model->getData()) || gettype(value: $model->getData()) === 'resource (closed)';
     }
 
     /**
@@ -78,66 +88,44 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
     public function handle(): string
     {
         $resource = $this->model->getData();
-        $typeString = $this->pool->messages->getHelp('resource') . ' (' . get_resource_type($resource) . ')';
-        $transRes = $this->pool->messages->getHelp('resource');
+        $typeString = $this->pool->messages->getHelp(key: 'resource') . ' (' .
+            get_resource_type(resource: $resource) . ')';
+        $transRes = $this->pool->messages->getHelp(key: 'resource');
 
         switch ($typeString) {
             case $transRes . ' (stream)':
-                $meta = stream_get_meta_data($resource);
+                $meta = stream_get_meta_data(stream: $resource);
                 break;
 
             case $transRes . ' (curl)':
                 // No need to check for a curl installation, because we are
                 // facing a curl instance right here.
-                $meta = curl_getinfo($resource);
+                $meta = curl_getinfo(handle: $resource);
                 break;
 
             case $transRes . ' (process)':
-                $meta = proc_get_status($resource);
+                $meta = proc_get_status(process: $resource);
                 break;
 
             default:
-                return $this->renderUnknownOrClosed($this->model, $resource);
+                return $this->renderUnknownOrClosed(model: $this->model, resource: $resource);
         }
 
         // Output metadata from the class.
         return $this->pool->render->renderExpandableChild(
-            $this->dispatchProcessEvent(
-                $this->model->setType(static::TYPE_RESOURCE)
-                    ->addParameter(static::PARAM_DATA, $meta)
-                    ->setNormal($typeString)
-                    ->injectCallback($this->pool->createClass(ThroughResource::class))
+            model: $this->dispatchProcessEvent(
+                model: $this->model->setType(type: static::TYPE_RESOURCE)
+                    ->addParameter(name: static::PARAM_DATA, value: $meta)
+                    ->setNormal(normal: $typeString)
+                    ->injectCallback(object: $this->pool->createClass(classname: ThroughResource::class))
             )
         );
     }
 
     /**
-     * Retrieve the ressource type string.
-     *
-     * @param resource|object $resource
-     *   The ressource
-     *
-     * @deprecated
-     *   Since 6.0.0 will be removed.
-     * @codeCoverageIgnore
-     *   We will not test deprecated stuff.
-     *
-     * @return string
-     *   The type string.
-     */
-    protected function retrieveTypeString($resource): string
-    {
-        if (is_object($resource)) {
-            return get_class($resource);
-        }
-
-        return $this->pool->messages->getHelp('resource') . ' (' . get_resource_type($resource) . ')';
-    }
-
-    /**
      * Render an unknown or closed resource.
      *
-     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @param Model $model
      *   The model, so far.
      * @param resource $resource
      *   The resource, that we are analysing.
@@ -145,13 +133,13 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
      * @return string
      *   The rendered HTML.
      */
-    protected function renderUnknownOrClosed(Model $model, $resource): string
+    protected function renderUnknownOrClosed(Model $model, mixed $resource): string
     {
         return $this->pool->render->renderExpandableChild(
-            $this->dispatchNamedEvent(
-                __FUNCTION__,
-                $model->setNormal(gettype($resource))
-                    ->setType(static::TYPE_RESOURCE)
+            model: $this->dispatchNamedEvent(
+                name: __FUNCTION__,
+                model: $model->setNormal(normal: gettype(value: $resource))
+                    ->setType(type: static::TYPE_RESOURCE)
             )
         );
     }

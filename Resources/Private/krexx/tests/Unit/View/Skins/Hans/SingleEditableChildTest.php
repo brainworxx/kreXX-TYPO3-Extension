@@ -54,7 +54,7 @@ class SingleEditableChildTest extends AbstractRenderHans
     /**
      * Test the rendering of a editable input field.
      */
-    public function testRenderSingleEditableChildInput()
+    public function testRenderSingleEditableChildInput(): void
     {
         $this->mockModel(static::GET_DOMID, 'nullachtwhatever');
         $this->mockModel(static::GET_NAME, 'myinputvalue');
@@ -82,7 +82,7 @@ class SingleEditableChildTest extends AbstractRenderHans
     /**
      * Test the rendering of an editable dropdown field, the skin list
      */
-    public function testRenderSingleEditableChildSelectSkin()
+    public function testRenderSingleEditableChildSelectSkin(): void
     {
         $selectedSkin = 'selectedSkin';
         $this->mockModel(static::GET_DATA, 'more data');
@@ -119,7 +119,7 @@ class SingleEditableChildTest extends AbstractRenderHans
     /**
      * Test the rendering of a simple boolean.
      */
-    public function testRenderSingleEditableChildSelectBool()
+    public function testRenderSingleEditableChildSelectBool(): void
     {
         $this->mockModel(static::GET_DATA, 'some data');
         $this->mockModel(static::GET_NORMAL, 'totally normal');
@@ -137,7 +137,7 @@ class SingleEditableChildTest extends AbstractRenderHans
     /**
      * Test the rendering of the language dropdown
      */
-    public function testRenderSingleEditableChildSelectLang()
+    public function testRenderSingleEditableChildSelectLang(): void
     {
         $this->mockModel(static::GET_DATA, 'some data');
         $this->mockModel(static::GET_NORMAL, 'totally normal');

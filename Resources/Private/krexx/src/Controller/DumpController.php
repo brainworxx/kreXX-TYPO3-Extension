@@ -63,7 +63,7 @@ class DumpController extends AbstractController implements BacktraceConstInterfa
      * @return $this
      *   Return $this for chaining.
      */
-    public function dumpAction(&$data, string $message = '', string $level = 'debug'): DumpController
+    public function dumpAction(mixed &$data, string $message = '', string $level = 'debug'): DumpController
     {
         if ($this->pool->emergencyHandler->checkMaxCall()) {
             // Called too often, we might get into trouble here!
@@ -72,24 +72,26 @@ class DumpController extends AbstractController implements BacktraceConstInterfa
 
         // Find caller.
         if ($data instanceof LogModel) {
-            $this->callerFinder = $this->pool->createClass(ExceptionCallerFinder::class);
+            $this->callerFinder = $this->pool->createClass(classname: ExceptionCallerFinder::class);
         }
-        $caller = $this->callerFinder->findCaller($message, $data);
+        $caller = $this->callerFinder->findCaller(headline: $message, data: $data);
         $caller[static::TRACE_LEVEL] = $level;
 
         // We will only allow code generation, if we were able to determine the
         // variable name or if we are not in logging mode.
-        $message === '' ? $this->pool->scope->setScope($caller[static::TRACE_VARNAME]) :
-            $this->pool->codegenHandler->setCodegenAllowed(false);
+        $message === '' ? $this->pool->scope->setScope(scope: $caller[static::TRACE_VARNAME]) :
+            $this->pool->codegenHandler->setCodegenAllowed(bool: false);
 
         // Start the magic.
         $analysis = $this->pool->routing->analysisHub(
-            $this->pool->createClass(Model::class)->setData($data)->setName($caller[static::TRACE_VARNAME])
+            model: $this->pool->createClass(classname: Model::class)
+                ->setData(data: $data)
+                ->setName(name: $caller[static::TRACE_VARNAME])
         );
 
         // Detect the encoding on the start-chunk-string of the analysis
         // for a complete encoding picture.
-        $this->pool->chunks->detectEncoding($analysis);
+        $this->pool->chunks->detectEncoding(string: $analysis);
 
         // Now that our analysis is done, we must check if there was an emergency
         // break.
@@ -99,16 +101,19 @@ class DumpController extends AbstractController implements BacktraceConstInterfa
 
         // Add the caller as metadata to the chunks class. It will be saved as
         // additional info, in case we are logging to a file.
-        $this->pool->chunks->addMetadata($caller);
+        $this->pool->chunks->addMetadata(caller: $caller);
 
         // We need to get the footer before the generating of the header,
         // because we need to display messages in the header from the configuration.
-        $footer = $this->outputFooter($caller);
+        $footer = $this->outputFooter(caller: $caller);
 
         $this->outputService
-            ->addChunkString($this->pool->render->renderHeader($caller[static::TRACE_TYPE], $this->outputCssAndJs()))
-            ->addChunkString($analysis)
-            ->addChunkString($footer)
+            ->addChunkString(chunkString: $this->pool->render->renderHeader(
+                headline: $caller[static::TRACE_TYPE],
+                cssJs: $this->outputCssAndJs()
+            ))
+            ->addChunkString(chunkString: $analysis)
+            ->addChunkString(chunkString: $footer)
             ->finalize();
 
         return $this;

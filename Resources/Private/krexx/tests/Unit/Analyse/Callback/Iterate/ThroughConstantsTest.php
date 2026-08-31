@@ -46,11 +46,22 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(ThroughConstants::class, 'callMe')]
 #[CoversMethod(ThroughConstants::class, 'canDump')]
 #[CoversMethod(ThroughConstants::class, 'retrieveAdditionalData')]
+#[CoversMethod(ThroughConstants::class, '__construct')]
 class ThroughConstantsTest extends AbstractHelper
 {
     public const  SKIPPED_REASON = 'Skipped due to wrong PHP version.';
     public const  PUBLIC_CONSTANT = 'Public constant ';
     public const  STATIC_COLON_COLON = 'static::';
+
+    /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new ThroughConstants(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
 
     /**
      * Run the test with the provided class name.

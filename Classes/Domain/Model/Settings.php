@@ -68,7 +68,7 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
      */
     protected ?string $formanalysePrivate = null;
 
-     /**
+    /**
      * @var null|string
      */
     protected ?string $analysePrivateMethods = null;
@@ -97,16 +97,6 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
      * @var null|string
      */
     protected ?string $formanalyseProtectedMethods = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $analyseScalar = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $formanalyseScalar = null;
 
     /**
      * @var null|string
@@ -147,16 +137,6 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
      * @var null|string
      */
     protected ?string $formdestination = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $detectAjax = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $formdetectAjax = null;
 
     /**
      * @var null|string
@@ -231,32 +211,12 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
     /**
      * @var null|string
      */
-    protected ?string $maxRuntime = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $formmaxRuntime = null;
-
-    /**
-     * @var null|string
-     */
     protected ?string $maxStepNumber = null;
 
     /**
      * @var null|string
      */
     protected ?string $formmaxStepNumber = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $memoryLeft = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $formmemoryLeft = null;
 
     /**
      * @var null|string
@@ -286,8 +246,6 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
      * @param string|null $formanalyseProtected
      * @param string|null $analyseProtectedMethods
      * @param string|null $formanalyseProtectedMethods
-     * @param string|null $analyseScalar
-     * @param string|null $formanalyseScalar
      * @param string|null $analyseTraversable
      * @param string|null $formanalyseTraversable
      * @param string|null $arrayCountLimit
@@ -296,8 +254,6 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
      * @param string|null $formdebugMethods
      * @param string|null $destination
      * @param string|null $formdestination
-     * @param string|null $detectAjax
-     * @param string|null $formdetectAjax
      * @param string|null $disabled
      * @param string|null $formdisabled
      * @param string|null $iprange
@@ -312,12 +268,8 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
      * @param string|null $formmaxCall
      * @param string|null $maxfiles
      * @param string|null $formmaxfiles
-     * @param string|null $maxRuntime
-     * @param string|null $formmaxRuntime
      * @param string|null $maxStepNumber
      * @param string|null $formmaxStepNumber
-     * @param string|null $memoryLeft
-     * @param string|null $formmemoryLeft
      * @param string|null $skin
      * @param string|null $formskin
      */
@@ -332,8 +284,6 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
         ?string $formanalyseProtected = null,
         ?string $analyseProtectedMethods = null,
         ?string $formanalyseProtectedMethods = null,
-        ?string $analyseScalar = null,
-        ?string $formanalyseScalar = null,
         ?string $analyseTraversable = null,
         ?string $formanalyseTraversable = null,
         ?string $arrayCountLimit = null,
@@ -342,8 +292,6 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
         ?string $formdebugMethods = null,
         ?string $destination = null,
         ?string $formdestination = null,
-        ?string $detectAjax = null,
-        ?string $formdetectAjax = null,
         ?string $disabled = null,
         ?string $formdisabled = null,
         ?string $iprange = null,
@@ -358,12 +306,8 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
         ?string $formmaxCall = null,
         ?string $maxfiles = null,
         ?string $formmaxfiles = null,
-        ?string $maxRuntime = null,
-        ?string $formmaxRuntime = null,
         ?string $maxStepNumber = null,
         ?string $formmaxStepNumber = null,
-        ?string $memoryLeft = null,
-        ?string $formmemoryLeft = null,
         ?string $skin = null,
         ?string $formskin = null
     ) {
@@ -377,8 +321,6 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
         $this->formanalyseProtected = $formanalyseProtected;
         $this->analyseProtectedMethods = $analyseProtectedMethods;
         $this->formanalyseProtectedMethods = $formanalyseProtectedMethods;
-        $this->analyseScalar = $analyseScalar;
-        $this->formanalyseScalar = $formanalyseScalar;
         $this->analyseTraversable = $analyseTraversable;
         $this->formanalyseTraversable = $formanalyseTraversable;
         $this->arrayCountLimit = $arrayCountLimit;
@@ -387,8 +329,6 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
         $this->formdebugMethods = $formdebugMethods;
         $this->destination = $destination;
         $this->formdestination = $formdestination;
-        $this->detectAjax = $detectAjax;
-        $this->formdetectAjax = $formdetectAjax;
         $this->disabled = $disabled;
         $this->formdisabled = $formdisabled;
         $this->iprange = $iprange;
@@ -403,12 +343,8 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
         $this->formmaxCall = $formmaxCall;
         $this->maxfiles = $maxfiles;
         $this->formmaxfiles = $formmaxfiles;
-        $this->maxRuntime = $maxRuntime;
-        $this->formmaxRuntime = $formmaxRuntime;
         $this->maxStepNumber = $maxStepNumber;
         $this->formmaxStepNumber = $formmaxStepNumber;
-        $this->memoryLeft = $memoryLeft;
-        $this->formmemoryLeft = $formmemoryLeft;
         $this->skin = $skin;
         $this->formskin = $formskin;
     }

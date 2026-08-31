@@ -63,9 +63,8 @@ class TimerController extends AbstractController
      *
      * @param Pool $pool
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
     }
 
     /**
@@ -102,11 +101,15 @@ class TimerController extends AbstractController
      */
     public function timerEndAction(): TimerController
     {
-        $this->timerAction($this->pool->messages->getHelp('end'));
+        $this->timerAction(string: $this->pool->messages->getHelp(key: 'end'));
         // And we are done. Feedback to the user.
-        $miniBench = $this->miniBenchTo(static::$timekeeping);
-        $this->pool->createClass(DumpController::class)
-            ->dumpAction($miniBench, $this->pool->messages->getHelp('headlineTimer'), 'timer');
+        $miniBench = $this->miniBenchTo(timeKeeping: static::$timekeeping);
+        $this->pool->createClass(classname: DumpController::class)
+            ->dumpAction(
+                data: $miniBench,
+                message: $this->pool->messages->getHelp(key: 'headlineTimer'),
+                level: 'timer'
+            );
         // Reset the timer vars.
         static::$timekeeping = [];
         static::$counterCache = [];
@@ -129,16 +132,19 @@ class TimerController extends AbstractController
     protected function miniBenchTo(array $timeKeeping): array
     {
         // Get the very first key.
-        $momentName = key($timeKeeping);
-        $totalTime = round((end($timeKeeping) - $timeKeeping[$momentName]) * 1000, 4);
-        $result[$this->pool->messages->getHelp('metaTotalTime')] = $totalTime . 'ms';
+        $momentName = key(array: $timeKeeping);
+        $totalTime = round(num: (end(array: $timeKeeping) - $timeKeeping[$momentName]) * 1000, precision: 4);
+        $result[$this->pool->messages->getHelp(key: 'metaTotalTime')] = $totalTime . 'ms';
         $prevMomentName = $momentName;
         $prevMomentStart = $timeKeeping[$momentName];
 
         foreach ($timeKeeping as $moment => $time) {
             if ($moment !== $momentName) {
                 // Calculate the time.
-                $percentageTime = round(((round(($time - $prevMomentStart) * 1000, 4) / $totalTime) * 100), 1);
+                $percentageTime = round(
+                    num: ((round(num:($time - $prevMomentStart) * 1000, precision: 4) / $totalTime) * 100),
+                    precision: 1
+                );
                 $result[$prevMomentName . '->' . $moment] = $percentageTime . '%';
                 $prevMomentStart = $time;
                 $prevMomentName = $moment;

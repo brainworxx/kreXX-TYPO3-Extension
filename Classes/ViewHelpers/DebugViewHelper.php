@@ -103,7 +103,7 @@ class DebugViewHelper extends AbstractViewHelper
      *
      * @var mixed
      */
-    protected $children;
+    protected mixed $children;
 
     /**
      * {@inheritdoc}
@@ -125,7 +125,7 @@ class DebugViewHelper extends AbstractViewHelper
     {
         try {
             $this->children = $this->renderChildren();
-        } catch (Throwable $e) {
+        } catch (Throwable) {
         }
 
         Pool::createPool();
@@ -162,7 +162,7 @@ class DebugViewHelper extends AbstractViewHelper
             $found = true;
         }
 
-        if ($this->children !== null) {
+        if (isset($this->children)) {
             Krexx::$type($this->children);
             $found = true;
         }

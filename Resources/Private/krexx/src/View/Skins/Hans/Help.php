@@ -71,7 +71,7 @@ trait Help
         $data = $model->getJson();
 
         // Test if we have anything to display at all.
-        if (empty($data)) {
+        if ($data === []) {
             return '';
         }
 
@@ -81,14 +81,18 @@ trait Help
         // Add the stuff from the json after the help text, if any.
         foreach ($data as $title => $text) {
             $helpContent .= str_replace(
-                $this->markerHelpRow,
-                [$title, $text],
-                $this->fileCache[static::FILE_HELPROW]
+                search: $this->markerHelpRow,
+                replace: [$title, $text],
+                subject: $this->fileCache[static::FILE_HELPROW]
             );
         }
 
         // Add it into the wrapper.
-        return str_replace($this->markerHelp, $helpContent, $this->fileCache[static::FILE_HELP]);
+        return str_replace(
+            search: $this->markerHelp,
+            replace: $helpContent,
+            subject: $this->fileCache[static::FILE_HELP]
+        );
     }
 
     /**

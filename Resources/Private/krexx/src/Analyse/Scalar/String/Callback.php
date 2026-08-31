@@ -37,9 +37,10 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Scalar\String;
 
-use Brainworxx\Krexx\Analyse\Comment\Functions;
+use Brainworxx\Krexx\Analyse\Comment\Comment;
 use Brainworxx\Krexx\Analyse\Declaration\FunctionDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionException;
 use ReflectionFunction;
 use TypeError;
@@ -60,6 +61,15 @@ class Callback extends AbstractScalarAnalysis
     protected ReflectionFunction $reflectionFunction;
 
     /**
+     * Inject the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
+    /**
      * Is always active, because there are no system dependencies.
      *
      * @return bool
@@ -72,7 +82,7 @@ class Callback extends AbstractScalarAnalysis
     /**
      * Is this actually a callback? Simple wrapper around is_callable().
      *
-     * @param string $string
+     * @param string|int|bool $string
      *   The string to test.
      * @param Model $model
      *   What the variable name says.
@@ -80,15 +90,15 @@ class Callback extends AbstractScalarAnalysis
      * @return bool
      *   The result, if it's callable.
      */
-    public function canHandle($string, Model $model): bool
+    public function canHandle(string|int|bool $string, Model $model): bool
     {
-        if (!is_callable($string)) {
+        if (!is_callable(value: $string)) {
             return false;
         }
 
         try {
-            $this->reflectionFunction = new ReflectionFunction($string);
-        } catch (ReflectionException | TypeError $e) {
+            $this->reflectionFunction = new ReflectionFunction(function: $string);
+        } catch (ReflectionException | TypeError) {
             // Huh, we were unable to retrieve the reflection.
             // Nothing left to do here.
             return false;
@@ -110,14 +120,15 @@ class Callback extends AbstractScalarAnalysis
     {
         // Stitching together the main analysis.
         /** @var FunctionDeclaration $functionDeclaration */
-        $functionDeclaration = $this->pool->createClass(FunctionDeclaration::class);
+        $functionDeclaration = $this->pool->createClass(classname: FunctionDeclaration::class);
         $messages = $this->pool->messages;
         $meta = [
-            $messages->getHelp('metaComment') => $this->pool
-                ->createClass(Functions::class)->getComment($this->reflectionFunction),
-            $messages->getHelp('metaDeclaredIn') => $functionDeclaration->retrieveDeclaration($this->reflectionFunction)
+            $messages->getHelp(key: 'metaComment') => $this->pool
+                ->createClass(classname: Comment::class)->getComment(reflection: $this->reflectionFunction),
+            $messages->getHelp(key: 'metaDeclaredIn') => $functionDeclaration
+                ->retrieveDeclaration(reflection: $this->reflectionFunction)
         ];
-        $this->insertParameters($meta);
+        $this->insertParameters(meta: $meta);
 
         return $meta;
     }
@@ -125,8 +136,6 @@ class Callback extends AbstractScalarAnalysis
     /**
      * We insert the parameters into the meta array.
      *
-     * @param \ReflectionFunction $reflectionFunction
-     *   The reflection of the function that we are analysing.
      * @param string[] $meta
      *   The meta array, so far.
      */
@@ -134,9 +143,8 @@ class Callback extends AbstractScalarAnalysis
     {
         foreach ($this->reflectionFunction->getParameters() as $key => $reflectionParameter) {
             ++$key;
-            $meta[$this->pool->messages->getHelp('metaParamNo') . $key] = $this->pool
-                ->codegenHandler
-                ->parameterToString($reflectionParameter);
+            $meta[$this->pool->messages->getHelp(key: 'metaParamNo') . $key] = $this->pool
+                ->codegenHandler->parameterToString(reflectionParameter: $reflectionParameter);
         }
     }
 }

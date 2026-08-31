@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Model as SettingModel;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Configuration "analysis" methods. Meh, naming conventions suck sometimes.
@@ -51,6 +52,15 @@ use Brainworxx\Krexx\Service\Config\Model as SettingModel;
  */
 class ConfigSection extends AbstractCallback implements CallbackConstInterface, ConfigConstInterface
 {
+    /**
+     * Inject the pool.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
     /**
      * Renders each section of the footer.
      *
@@ -70,7 +80,7 @@ class ConfigSection extends AbstractCallback implements CallbackConstInterface, 
                 continue;
             }
 
-            $sectionOutput .= $this->generateOutput($setting, $id);
+            $sectionOutput .= $this->generateOutput(setting: $setting, id: $id);
         }
 
         return $sectionOutput;
@@ -90,20 +100,23 @@ class ConfigSection extends AbstractCallback implements CallbackConstInterface, 
     protected function generateOutput(SettingModel $setting, string $id): string
     {
         /** @var Model $model */
-        $model = $this->pool->createClass(Model::class)->setHelpid($id . 'Help');
-        $name = $this->pool->messages->getHelp($id . 'Readable');
-        $value = $this->prepareValue($setting);
+        $model = $this->pool->createClass(classname: Model::class)->setHelpid(helpId: $id . 'Help');
+        $name = $this->pool->messages->getHelp(key: $id . 'Readable');
+        $value = $this->prepareValue(setting: $setting);
         if ($setting->isEditable()) {
             return $this->pool->render->renderSingleEditableChild(
-                $model->setData($name)
-                    ->setName($value)
-                    ->setNormal($setting->getSource())
-                    ->setType($setting->getType())->setDomid($id)
+                model: $model->setData(data: $name)
+                    ->setName(name: $value)
+                    ->setNormal(normal: $setting->getSource())
+                    ->setType(type: $setting->getType())->setDomid(domid: $id)
             );
         }
 
         return $this->pool->render->renderExpandableChild(
-            $model->setData($value)->setName($name)->setNormal($value)->setType($setting->getSource())
+            model: $model->setData(data: $value)
+                ->setName(name: $name)
+                ->setNormal(normal: $value)
+                ->setType(type: $setting->getSource())
         );
     }
 
@@ -116,11 +129,11 @@ class ConfigSection extends AbstractCallback implements CallbackConstInterface, 
      * @return int|string|null
      *   The prepared value.
      */
-    protected function prepareValue(SettingModel $setting)
+    protected function prepareValue(SettingModel $setting): int|string|null
     {
         $value = $setting->getValue();
 
-        if (!is_bool($value)) {
+        if (!is_bool(value: $value)) {
             // Early return.
             return $value;
         }

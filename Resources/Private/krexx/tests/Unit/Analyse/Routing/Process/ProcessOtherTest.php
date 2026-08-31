@@ -48,8 +48,19 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(ProcessOther::class, 'canHandle')]
 #[CoversMethod(ProcessOther::class, 'handle')]
 #[CoversMethod(AbstractRouting::class, 'dispatchProcessEvent')]
+#[CoversMethod(ProcessOther::class, '__construct')]
 class ProcessOtherTest extends AbstractHelper
 {
+    /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new ProcessOther(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
     /**
      * Testing of not yet handled stuff, aka 'other'.
      */

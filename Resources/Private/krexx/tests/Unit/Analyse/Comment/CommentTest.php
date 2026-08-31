@@ -36,34 +36,77 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Comment;
 
 use Brainworxx\Krexx\Analyse\Comment\AbstractComment;
-use Brainworxx\Krexx\Analyse\Comment\Properties;
-use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
+use Brainworxx\Krexx\Analyse\Comment\Comment;
+use Brainworxx\Krexx\Krexx;
+use ReflectionClass;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use ReflectionFunction;
 use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
 use Brainworxx\Krexx\Tests\Fixtures\PrivateFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
-use Brainworxx\Krexx\Krexx;
 use ReflectionProperty;
-use PHPUnit\Framework\Attributes\CoversMethod;
 
-#[CoversMethod(Properties::class, 'getComment')]
+#[CoversMethod(Comment::class, 'getComment')]
 #[CoversMethod(AbstractComment::class, 'prettifyComment')]
-class PropertiesTest extends AbstractHelper
+#[CoversMethod(AbstractComment::class, 'checkComment')]
+#[CoversMethod(AbstractComment::class, 'replaceInheritComment')]
+class CommentTest extends AbstractHelper
 {
+    /**
+     * Test the retrieval of a class comment from a class reflection
+     */
+    public function testGetCommentClass(): void
+    {
+        $cachedComment = '/**' . PHP_EOL;
+        $cachedComment .= ' * was geht ab?' . PHP_EOL;
+        $cachedComment .= ' */';
+        $prettifiedComment = 'was geht ab?';
+        $comment = new Comment(Krexx::$pool);
+
+        $reflectionMock = $this->createMock(ReflectionClass::class);
+        $reflectionMock->expects($this->once())
+            ->method('getDocComment')
+            ->willReturn($cachedComment);
+        $this->assertEquals($prettifiedComment, $comment->getComment($reflectionMock));
+    }
+
+    /**
+     * Test the getting of a comment from a closure.
+     */
+    public function testGetCommentFunction(): void
+    {
+        /**
+         * Do something.
+         */
+        $fixture =
+            // Do something in here, to prevent a code smell.
+            (fn() => 1);
+        $comment = new Comment(Krexx::$pool);
+        $reflection = new ReflectionFunction($fixture);
+        $this->assertEquals('Do something.', $comment->getComment($reflection));
+
+        $fixture =
+            // Doing something else.
+            (fn() => 2);
+        $reflection = new ReflectionFunction($fixture);
+        $this->assertEquals('', $comment->getComment($reflection));
+    }
+
     /**
      * Testing the comment retrieval for properties.
      */
-    public function testGetComment()
+    public function testGetCommentProperty(): void
     {
-        $propertiesComment = new Properties(Krexx::$pool);
+        $comment = new Comment(Krexx::$pool);
         $reflectionProperty = new ReflectionProperty(PrivateFixture::class, 'value5');
 
         $this->assertStringContainsString(
             'A private that overwrites a property from the SimpleFixture',
-            $propertiesComment->getComment($reflectionProperty)
+            $comment->getComment($reflectionProperty)
         );
 
         $reflectionClass = new ReflectionClass(PrivateFixture::class);
         $reflectionProperty = new UndeclaredProperty($reflectionClass, 'value5');
-        $this->assertEquals('', $propertiesComment->getComment($reflectionProperty));
+        $this->assertEquals('', $comment->getComment($reflectionProperty));
     }
 }

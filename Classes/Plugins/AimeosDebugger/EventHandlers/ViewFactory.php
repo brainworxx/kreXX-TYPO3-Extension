@@ -217,9 +217,6 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
             $ref = new ReflectionClass(BaseHelperBase::class);
         }
 
-        // Scan the main view helpers, to get a first impression.
-        $reflectionList = $this->retrieveHelperList(dirname($ref->getFileName()));
-
         // Replace the ones in there with the already instantiated ones from the
         // helper array.
         foreach ($this->helpers as $key => $helperObject) {
@@ -243,44 +240,5 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
                 ->setHelpid('aimeosViewInfo')
                 ->injectCallback($this->pool->createClass(ThroughMethods::class))
         );
-    }
-
-    /**
-     * Retrieve all helper class reflections from a directory.
-     *
-     * @deprecated
-     *   Since 6.0.0. Will be removed as soon as we drop Aimeos 2021 support.
-     * @codeCoverageIgnore
-     *   We will not test deprecated code.
-     *
-     * @param string $directory
-     *   The directory we re processing.
-     *
-     * @throws \ReflectionException
-     *
-     * @return \ReflectionMethod[]
-     *   The list with the reflections.
-     */
-    protected function retrieveHelperList(string $directory): array
-    {
-        $iface = static::AI_NAMESPACE . 'Iface';
-        if (!class_exists($iface)) {
-            // Since 2022, all view helpers are present in the view, so we do not need
-            // to scan for them anymore.
-            // Early return.
-            return [];
-        }
-
-        $reflectionList = [];
-        foreach (scandir($directory) as $dir) {
-            $className = static::AI_NAMESPACE . $dir . static::STANDARD;
-            if (empty($this->helpers[$dir]) && is_a($className, $iface, true)) {
-                // We did not process this one before.
-                $reflectionList[lcfirst($dir)] = (new ReflectionClass($className))
-                    ->getMethod(static::METHOD);
-            }
-        }
-
-        return $reflectionList;
     }
 }

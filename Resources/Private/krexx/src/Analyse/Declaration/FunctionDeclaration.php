@@ -53,10 +53,10 @@ class FunctionDeclaration extends AbstractDeclaration
     public function retrieveDeclaration(Reflector $reflection): string
     {
         if ($reflection->isInternal()) {
-            return $this->pool->messages->getHelp('metaPredeclared');
+            return $this->pool->messages->getHelp(key: 'metaPredeclared');
         }
 
         return $reflection->getFileName() . "\n" .
-            $this->pool->messages->getHelp('metaInLine') . $reflection->getStartLine();
+            $this->pool->messages->getHelp(key: 'metaInLine') . $reflection->getStartLine();
     }
 }

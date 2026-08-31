@@ -29,6 +29,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Service\Misc;
 
 use Exception;
+use Throwable;
 
 /**
  * Format a serialized string into a human-readable form.
@@ -74,7 +75,7 @@ class FormatSerialize
 
         try {
             return $this->parse();
-        } catch (Exception $exception) {
+        } catch (Throwable) {
             // Could not format the string.
             return null;
         }
@@ -91,7 +92,7 @@ class FormatSerialize
      */
     protected function read(int $length): string
     {
-        $result = substr($this->string, $this->offset, $length);
+        $result = substr(string: $this->string, offset: $this->offset, length: $length);
         $this->offset += $length;
 
         return $result;
@@ -111,13 +112,13 @@ class FormatSerialize
      */
     protected function readTo(string $stopSting): string
     {
-        $position = strpos($this->string, $stopSting, $this->offset);
+        $position = strpos(haystack: $this->string, needle: $stopSting, offset: $this->offset);
 
         if ($position === false) {
-            throw new Exception(__FUNCTION__);
+            throw new Exception(6886257481, message: __FUNCTION__);
         }
 
-        return $this->read($position - $this->offset);
+        return $this->read(length: $position - $this->offset);
     }
 
     /**
@@ -135,8 +136,8 @@ class FormatSerialize
      */
     protected function assert(string $string): string
     {
-        if ($this->read(strlen($string)) !== $string) {
-            throw new Exception(__FUNCTION__);
+        if ($this->read(length: strlen(string: $string)) !== $string) {
+            throw new Exception(5130580481, message: __FUNCTION__);
         }
 
         return $string;
@@ -156,16 +157,16 @@ class FormatSerialize
      */
     protected function parseArrayOrObject(string $string): string
     {
-        $result = $this->assert(':');
-        $arrayLength = (int)$this->readTo(':');
-        $result .= $arrayLength . $this->assert(':{') . $string;
+        $result = $this->assert(string: ':');
+        $arrayLength = (int)$this->readTo(stopSting: ':');
+        $result .= $arrayLength . $this->assert(string: ':{') . $string;
 
         for ($i = 0; $i < $arrayLength; $i++) {
-            $result .= '    ' . $this->parse($string . '    ') . ' ' .
-                $this->parse($string . '    ') . $string;
+            $result .= '    ' . $this->parse(string: $string . '    ') . ' ' .
+                $this->parse(string: $string . '    ') . $string;
         }
 
-        return $result . $this->assert('}');
+        return $result . $this->assert(string: '}');
     }
 
     /**
@@ -180,11 +181,11 @@ class FormatSerialize
      */
     protected function parseString(): string
     {
-        $result = $this->assert(':');
-        $length = (int)$this->readTo(':');
+        $result = $this->assert(string: ':');
+        $length = (int)$this->readTo(stopSting: ':');
 
-        return $result . $length . $this->assert(':"') . $this->read($length) .
-            $this->assert('"');
+        return $result . $length . $this->assert(string: ':"') . $this->read(length: $length) .
+            $this->assert(string: '"');
     }
 
     /**
@@ -203,11 +204,11 @@ class FormatSerialize
      */
     protected function parseSerializableObject(): string
     {
-        $result = $this->parseString() . $this->assert(':');
-        $length = (int) $this->readTo(':');
+        $result = $this->parseString() . $this->assert(string: ':');
+        $length = (int) $this->readTo(stopSting: ':');
 
-        return $result . $length . $this->assert(':{') . $this->read($length) .
-            $this->assert('}');
+        return $result . $length . $this->assert(string: ':{') . $this->read(length: $length) .
+            $this->assert(string: '}');
     }
 
     /**
@@ -224,32 +225,14 @@ class FormatSerialize
      */
     protected function parse(string $string = "\n"): string
     {
-        switch ($result = $this->read(1)) {
-            case 'N':
-                // Null handling.
-                $result .= $this->assert(';');
-                break;
-            case 'O':
-                // Object handling.
-                $result .= $this->parseString() . $this->parseArrayOrObject($string);
-                break;
-            case 's':
-                // String handling.
-                $result .= $this->parseString() . $this->assert(';');
-                break;
-            case 'a':
-                // Array handling.
-                $result .= $this->parseArrayOrObject($string);
-                break;
-            case 'C':
-                // Serializable object handling.
-                $result .= $this->parseSerializableObject();
-                break;
-            default:
-                // Boolean, float, integer.
-                $result .= $this->assert(':') . $this->readTo(';') . $this->assert(';');
-                break;
-        }
+        $result .= match ($result = $this->read(length: 1)) {
+            'N' => $this->assert(string: ';'),
+            'O' => $this->parseString() . $this->parseArrayOrObject(string: $string),
+            's' => $this->parseString() . $this->assert(string: ';'),
+            'a' => $this->parseArrayOrObject(string: $string),
+            'C' => $this->parseSerializableObject(),
+            default => $this->assert(string: ':') . $this->readTo(stopSting: ';') . $this->assert(string: ';'),
+        };
 
         return $result;
     }

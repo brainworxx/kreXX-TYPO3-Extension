@@ -41,6 +41,7 @@ use Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods as IterateThroughMethods;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Simple wrapper around the original class.
@@ -53,6 +54,10 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods as IterateThroughMe
  */
 class ThroughMethods extends AbstractCallback implements ConstInterface, CallbackConstInterface
 {
+    public function __construct(protected Pool $pool)
+    {
+    }
+
     /**
      * Pre-processing parameters before using the original ThroughMethods analysis.
      *

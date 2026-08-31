@@ -6,6 +6,7 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use CurlHandle;
 use GdImage;
 use OpenSSLCertificate;
@@ -31,6 +32,15 @@ class OpaqueRessource extends AbstractCallback implements CallbackConstInterface
     ];
 
     /**
+     * Inject the pool.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
+    /**
      * Retrieve information about a GD image resource.
      *
      * @param \GdImage $image
@@ -41,7 +51,7 @@ class OpaqueRessource extends AbstractCallback implements CallbackConstInterface
      */
     protected function gdImageHandler(GdImage $image): array
     {
-        if (!function_exists('image_type_to_mime_type')) {
+        if (!function_exists(function: 'image_type_to_mime_type')) {
             return ['error' => static::UNKNOWN_VALUE];
         }
         return [
@@ -66,7 +76,7 @@ class OpaqueRessource extends AbstractCallback implements CallbackConstInterface
      */
     protected function socketAddressHandler(AddressInfo $address): array
     {
-        if (!function_exists('socket_addrinfo_explain')) {
+        if (!function_exists(function: 'socket_addrinfo_explain')) {
             return ['error' => static::UNKNOWN_VALUE];
         }
         return socket_addrinfo_explain($address);
@@ -83,7 +93,7 @@ class OpaqueRessource extends AbstractCallback implements CallbackConstInterface
      */
     protected function openSslCertHandler(OpenSSLCertificate $certificate): array
     {
-        if (!function_exists('openssl_x509_parse')) {
+        if (!function_exists(function: 'openssl_x509_parse')) {
             return ['error' => static::UNKNOWN_VALUE];
         }
         return openssl_x509_parse($certificate);
@@ -100,10 +110,10 @@ class OpaqueRessource extends AbstractCallback implements CallbackConstInterface
      */
     protected function curlHandler(CurlHandle $curlHandle): array
     {
-        if (!function_exists('curl_getinfo')) {
+        if (!function_exists(function: 'curl_getinfo')) {
             return ['error' => static::UNKNOWN_VALUE];
         }
-        return curl_getinfo($curlHandle);
+        return curl_getinfo(handle: $curlHandle);
     }
 
     /**
@@ -114,12 +124,8 @@ class OpaqueRessource extends AbstractCallback implements CallbackConstInterface
     public function callMe(): string
     {
         $output = $this->dispatchStartEvent();
-        if (version_compare(phpversion(), '8.0.0', '<=')) {
-            // Wrong PHP version.
-            return $output;
-        }
 
-        $this->pool->codegenHandler->setCodegenAllowed(false);
+        $this->pool->codegenHandler->setCodegenAllowed(bool: false);
         $data = $this->parameters[static::PARAM_DATA];
 
         // We iterate through the class list.
@@ -128,19 +134,19 @@ class OpaqueRessource extends AbstractCallback implements CallbackConstInterface
         foreach ($this->analysesCallbacks as $className => $callback) {
             if ($data instanceof $className) {
                 $output .= $this->pool->render->renderExpandableChild(
-                    $this->dispatchEventWithModel(
-                        static::EVENT_MARKER_ANALYSES_END,
-                        $this->pool->createClass(Model::class)
-                            ->setName($this->pool->messages->getHelp('metaRessourceAnalysis'))
-                            ->setType($this->pool->messages->getHelp('classInternals'))
-                            ->addParameter(static::PARAM_DATA, $this->$callback($data))
-                            ->injectCallback($this->pool->createClass(ThroughMeta::class))
+                    model: $this->dispatchEventWithModel(
+                        name: static::EVENT_MARKER_ANALYSES_END,
+                        model: $this->pool->createClass(classname: Model::class)
+                            ->setName(name: $this->pool->messages->getHelp(key: 'metaRessourceAnalysis'))
+                            ->setType(type: $this->pool->messages->getHelp(key: 'classInternals'))
+                            ->addParameter(name: static::PARAM_DATA, value: $this->$callback($data))
+                            ->injectCallback(object: $this->pool->createClass(classname: ThroughMeta::class))
                     )
                 );
             }
         }
 
-        $this->pool->codegenHandler->setCodegenAllowed(true);
+        $this->pool->codegenHandler->setCodegenAllowed(bool: true);
         return $output;
     }
 }

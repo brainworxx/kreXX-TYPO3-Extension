@@ -62,7 +62,7 @@ class ExpandableChildTest extends AbstractRenderHans
      * On hindsight, these names are just silly. Then again, we do have a skin
      * with the name 'Hans'.
      */
-    public function testRenderExpandableChild()
+    public function testRenderExpandableChild(): void
     {
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
@@ -117,7 +117,7 @@ class ExpandableChildTest extends AbstractRenderHans
     /**
      * Test the rendering of an expandable child with line breaks in the extra.
      */
-    public function testRenderExpandableChildLinebreaks()
+    public function testRenderExpandableChildLinebreaks(): void
     {
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
@@ -135,7 +135,7 @@ class ExpandableChildTest extends AbstractRenderHans
     /**
      * Test everything with an active emergency break.
      */
-    public function testRenderExpandableChildEmergency()
+    public function testRenderExpandableChildEmergency(): void
     {
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
@@ -151,7 +151,7 @@ class ExpandableChildTest extends AbstractRenderHans
     /**
      * Test the rendering without any connectors on the right.
      */
-    public function testRenderExpandableChildNoConnector()
+    public function testRenderExpandableChildNoConnector(): void
     {
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
@@ -172,7 +172,7 @@ class ExpandableChildTest extends AbstractRenderHans
     /**
      * Test it with a source code button and expanded.
      */
-    public function testRenderExpandableChildCollapsed()
+    public function testRenderExpandableChildCollapsed(): void
     {
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())

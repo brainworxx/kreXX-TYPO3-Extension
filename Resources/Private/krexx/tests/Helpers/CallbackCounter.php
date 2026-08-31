@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,7 +34,6 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 namespace Brainworxx\Krexx\Tests\Helpers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
@@ -57,9 +58,9 @@ class CallbackCounter extends AbstractCallback implements ProcessConstInterface,
         return '';
     }
 
-    public function setParameters(array $params): AbstractCallback
+    public function setParameters(array $parameters): AbstractCallback
     {
-        static::$staticParameters[static::$counter] = $params;
-        return parent::setParameters($params);
+        static::$staticParameters[static::$counter] = $parameters;
+        return parent::setParameters($parameters);
     }
 }

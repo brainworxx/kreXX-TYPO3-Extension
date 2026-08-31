@@ -55,7 +55,6 @@ use Aimeos\Base\View\Helper\Csrf\Standard as BaseCsrfHelper;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(ViewFactory::class, 'handle')]
-#[CoversMethod(ViewFactory::class, 'retrieveHelperList')]
 #[CoversMethod(ViewFactory::class, 'retrieveHelpers')]
 #[CoversMethod(AbstractEventHandler::class, 'retrieveProperty')]
 #[CoversMethod(ViewFactory::class, 'retrievePossibleOtherHelpers')]

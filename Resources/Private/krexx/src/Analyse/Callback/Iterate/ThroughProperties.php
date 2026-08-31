@@ -42,7 +42,7 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Comment\Attributes;
-use Brainworxx\Krexx\Analyse\Comment\Properties;
+use Brainworxx\Krexx\Analyse\Comment\Comment;
 use Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -72,12 +72,21 @@ class ThroughProperties extends AbstractCallback implements
     /**
      * @var Properties
      */
-    protected Properties $propertyComment;
+    protected Comment $propertyComment;
 
     /**
-     * @var \Brainworxx\Krexx\Analyse\Comment\Attributes
+     * @var Attributes
      */
     protected Attributes $attributes;
+
+    /**
+     * Inject the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
 
     /**
      * Renders the properties of a class.
@@ -91,11 +100,11 @@ class ThroughProperties extends AbstractCallback implements
 
         // I need to preprocess them, since I do not want to render a
         // reflection property.
-        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
+        /** @var ReflectionClass $ref */
         $ref = $this->parameters[static::PARAM_REF];
-        $this->propertyDeclaration = $this->pool->createClass(PropertyDeclaration::class);
-        $this->propertyComment = $this->pool->createClass(Properties::class);
-        $this->attributes = $this->pool->createClass(Attributes::class);
+        $this->propertyDeclaration = $this->pool->createClass(classname: PropertyDeclaration::class);
+        $this->propertyComment = $this->pool->createClass(classname: Comment::class);
+        $this->attributes = $this->pool->createClass(classname: Attributes::class);
 
         foreach ($this->parameters[static::PARAM_DATA] as $refProperty) {
             // Check memory and runtime.
@@ -104,9 +113,12 @@ class ThroughProperties extends AbstractCallback implements
             }
 
             $output .= $this->pool->routing->analysisHub(
-                $this->dispatchEventWithModel(
-                    __FUNCTION__ . static::EVENT_MARKER_END,
-                    $this->prepareModel($ref->retrieveValue($refProperty), $refProperty)
+                model: $this->dispatchEventWithModel(
+                    name: __FUNCTION__ . static::EVENT_MARKER_END,
+                    model: $this->prepareModel(
+                        value: $ref->retrieveValue(refProperty: $refProperty),
+                        refProperty: $refProperty
+                    )
                 )
             );
         }
@@ -122,36 +134,37 @@ class ThroughProperties extends AbstractCallback implements
      * @param \ReflectionProperty $refProperty
      *   The reflection of the property we are analysing.
      *
-     * @return \Brainworxx\Krexx\Analyse\Model
+     * @return Model
      *   The prepared model.
      */
-    protected function prepareModel($value, ReflectionProperty $refProperty): Model
+    protected function prepareModel(mixed $value, ReflectionProperty $refProperty): Model
     {
         $messages = $this->pool->messages;
-        return $this->pool->createClass(Model::class)
-            ->setData($value)
-            ->setName($this->retrievePropertyName($refProperty))
+        return $this->pool->createClass(classname: Model::class)
+            ->setData(data: $value)
+            ->setName(name: $this->retrievePropertyName(refProperty: $refProperty))
             ->addToJson(
-                $messages->getHelp('metaComment'),
-                $this->propertyComment->getComment($refProperty)
-            )
-            ->addToJson(
-                $messages->getHelp('metaAttributes'),
+                key: $messages->getHelp(key: 'metaComment'),
+                value: nl2br($this->propertyComment->getComment(reflection: $refProperty))
+            )->addToJson(
+                key: $messages->getHelp(key: 'metaAttributes'),
                 // Meh, the addToJson method does not support real new lines.
-                nl2br($this->attributes->getAttributes($refProperty))
+                value: nl2br(string: $this->attributes->getAttributes(reflection: $refProperty))
+            )->addToJson(
+                key: $messages->getHelp(key: 'metaDeclaredIn'),
+                value: $this->propertyDeclaration->retrieveDeclaration(reflection: $refProperty)
+            )->addToJson(
+                key: $messages->getHelp(key: 'metaDefaultValue'),
+                value: $this->retrieveDefaultValue(property: $refProperty)
+            )->addToJson(
+                key: $messages->getHelp(key: 'metaTypedValue'),
+                value: $this->propertyDeclaration->retrieveNamedPropertyType($refProperty)
             )
-            ->addToJson(
-                $messages->getHelp('metaDeclaredIn'),
-                $this->propertyDeclaration->retrieveDeclaration($refProperty)
-            )
-            ->addToJson($messages->getHelp('metaDefaultValue'), $this->retrieveDefaultValue($refProperty))
-            ->addToJson(
-                $messages->getHelp('metaTypedValue'),
-                $this->propertyDeclaration->retrieveNamedPropertyType($refProperty)
-            )
-            ->setAdditional($this->getAdditionalData($refProperty, $this->parameters[static::PARAM_REF]))
-            ->setConnectorType($this->retrieveConnector($refProperty))
-            ->setCodeGenType($refProperty->isPublic() ? static::CODEGEN_TYPE_PUBLIC : '');
+            ->setAdditional(additional: $this->getAdditionalData(
+                refProperty: $refProperty,
+                ref: $this->parameters[static::PARAM_REF]
+            ))->setConnectorType(type: $this->retrieveConnector(refProperty: $refProperty))
+            ->setCodeGenType(codeGenType: $refProperty->isPublic() ? static::CODEGEN_TYPE_PUBLIC : '');
     }
 
     /**
@@ -166,20 +179,13 @@ class ThroughProperties extends AbstractCallback implements
         $default = null;
 
         try {
-            // The 8.0 way of getting the default value.
-            // There is also a PHP 8.0 bug that may cause an
-            // "Internal error: Failed to retrieve the reflection object"
-            // That is not even a Reflection exception, it's an "Error".
             if ($property->hasDefaultValue()) {
                 $default = $property->getDefaultValue();
             }
-        } catch (Throwable $exception) {
-            // Fallback to the 7.x way.
+        } catch (Throwable) {
             // The values of static properties are stored in the default
             // properties of the class reflection.
             // And we do not want these here.
-            // @deprecated
-            //   Will be removed as soon als we drop php 8.0 support.
             if (!$property->isStatic()) {
                 // We also need to get the class that actually declared this
                 // value. The default values can only be found in there.
@@ -188,34 +194,34 @@ class ThroughProperties extends AbstractCallback implements
             }
         }
 
-        return $default === null ? '' : $this->formatDefaultValue($default);
+        return $default === null ? '' : $this->formatDefaultValue(default: $default);
     }
 
     /**
      * Format the default value into something readable
      *
-     * @param string|int|float|array|UnitEnum $default
+     * @param bool|string|int|float|array|UnitEnum $default
      * @return string
      */
-    protected function formatDefaultValue($default): string
+    protected function formatDefaultValue(bool|string|int|float|array|UnitEnum $default): string
     {
-        if (is_int($default) || is_float($default)) {
+        if (is_int(value: $default) || is_float(value: $default)) {
             // We do not need to escape an integer or a float,
             return (string)$default;
         }
 
-        if (is_bool($default)) {
+        if (is_bool(value: $default)) {
             return $default ? 'TRUE' : 'FALSE';
         }
 
         $result = '';
-        if (is_string($default)) {
+        if (is_string(value: $default)) {
             $result = '\'' . $default . '\'';
-        } elseif (is_array($default) || $default instanceof UnitEnum) {
-            $result = var_export($default, true);
+        } elseif (is_array(value: $default) || $default instanceof UnitEnum) {
+            $result = var_export(value: $default, return: true);
         }
 
-        return nl2br($this->pool->encodingService->encodeString($result));
+        return nl2br(string: $this->pool->encodingService->encodeString(data: $result));
     }
 
     /**
@@ -235,7 +241,7 @@ class ThroughProperties extends AbstractCallback implements
             $connectorType = static::CONNECTOR_STATIC_PROPERTY;
         } elseif (
             !empty($refProperty->isUndeclared) &&
-            !$this->isPropertyNameNormal($refProperty->getName())
+            !$this->isPropertyNameNormal(propName: $refProperty->getName())
         ) {
             // This one was undeclared and does not follow the standard naming
             // conventions of PHP. Maybe something for a rest service?
@@ -263,11 +269,11 @@ class ThroughProperties extends AbstractCallback implements
             $propName = '$' . $propName;
         } elseif (
             !empty($refProperty->isUndeclared) &&
-            !$this->isPropertyNameNormal($refProperty->getName())
+            !$this->isPropertyNameNormal(propName: $refProperty->getName())
         ) {
             // There can be anything in there. We must take special preparations
             // for the code generation.
-            $propName = $this->pool->encodingService->encodeString($propName);
+            $propName = $this->pool->encodingService->encodeString(data: $propName);
         }
 
         return $propName;
@@ -286,37 +292,37 @@ class ThroughProperties extends AbstractCallback implements
     protected function getAdditionalData(ReflectionProperty $refProperty, ReflectionClass $ref): string
     {
         $messages = $this->pool->messages;
-        $additional = $messages->getHelp('public') . ' ';
+        $additional = $messages->getHelp(key: 'public') . ' ';
 
         if (!empty($refProperty->isUndeclared)) {
             // The property 'isUndeclared' is not a part of the reflectionProperty.
             // @see \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
             // A dynamically declared property is always public, and nothing else.
-            return $additional . $messages->getHelp('dynamic') . ' ';
+            return $additional . $messages->getHelp(key: 'dynamic') . ' ';
         }
 
         // Now that we have the key and the value, we can analyse it.
         // Stitch together our additional info about the data:
         // public access, protected access, private access, static declaration.
         if ($refProperty->isProtected()) {
-            $additional = $messages->getHelp('protected') . ' ';
+            $additional = $messages->getHelp(key: 'protected') . ' ';
         } elseif ($refProperty->isPrivate()) {
-            $additional = $messages->getHelp('private') . ' ';
+            $additional = $messages->getHelp(key: 'private') . ' ';
         }
 
         // Retrieve the value status of the property.
-        $additional .= $this->retrieveValueStatus($refProperty, $ref);
+        $additional .= $this->retrieveValueStatus(refProperty: $refProperty, ref: $ref);
 
         // Test if the property is inherited or not by testing the
         // declaring class
         if ($refProperty->getDeclaringClass()->getName() !== $ref->getName()) {
             // This one got inherited fom a lower level.
-            $additional .= $messages->getHelp('inherited') . ' ';
+            $additional .= $messages->getHelp(key: 'inherited') . ' ';
         }
 
         // Add the info, if this is static.
         if ($refProperty->isStatic()) {
-            $additional .= $messages->getHelp('static') . ' ';
+            $additional .= $messages->getHelp(key: 'static') . ' ';
         }
 
         return $additional;
@@ -339,22 +345,15 @@ class ThroughProperties extends AbstractCallback implements
         $additional = '';
         $messages = $this->pool->messages;
 
-        // There are readonly properties since PHP 8.1 available.
-        // In a rather buggy state. When the property is not readonly, this may
-        // trigger an
-        // "Error : Internal error: Failed to retrieve the reflection object".
-        // It was later fixed in PHP 8.1.?.
-        // @deprecated The try catch will be removed.
         try {
             if ($refProperty->isReadOnly()) {
-                $additional .= $messages->getHelp('readonly') . ' ';
+                $additional .= $messages->getHelp(key: 'readonly') . ' ';
             }
-        } catch (Throwable $exception) {
-            // Do nothing.
-            // We ignore this one.
+        } catch (Throwable) {
+            // Do nothing. We ignore this one.
         }
 
-        if (!$ref->isPropertyUnset($refProperty)) {
+        if (!$ref->isPropertyUnset(reflectionProperty: $refProperty)) {
             return $additional;
         }
 
@@ -362,13 +361,13 @@ class ThroughProperties extends AbstractCallback implements
             // Typed properties where introduced in 7.4.
             // This one was either unset, or never received a value in the
             // first place. Either way, it's status is uninitialized.
-            return $additional . $messages->getHelp('uninitialized') . ' ';
+            return $additional . $messages->getHelp(key: 'uninitialized') . ' ';
         }
 
         // This one was unset during runtime.
         // We need to tell the dev. Accessing an unset property may trigger
         // a warning.
-        return $additional . $messages->getHelp('unset') . ' ';
+        return $additional . $messages->getHelp(key: 'unset') . ' ';
     }
 
     /**
@@ -385,19 +384,15 @@ class ThroughProperties extends AbstractCallback implements
      * @return bool
      *   Whether we have a special char in there, or not.
      */
-    public function isPropertyNameNormal($propName): bool
+    public function isPropertyNameNormal(string|int $propName): bool
     {
         static $cache = [];
 
-        if (isset($cache[$propName])) {
-            return $cache[$propName];
-        }
-
         // The first regex detects all allowed characters.
         // For some reason, they also allow BOM characters.
-        return $cache[$propName] = (bool) preg_match(
-            "/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/",
-            (string)$propName
-        ) && !(bool) preg_match("/\xEF\xBB\xBF/", $propName);
+        return $cache[$propName] ?? $cache[$propName] = (bool) preg_match(
+            pattern: "/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/",
+            subject: (string)$propName
+        ) && !(bool) preg_match(pattern: "/\xEF\xBB\xBF/", subject: (string) $propName);
     }
 }

@@ -51,7 +51,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
     /**
      * The registered plugin configuration files as class names.
      *
-     * @var \Brainworxx\Krexx\Service\Plugin\PluginConfigInterface[][]
+     * @var PluginConfigInterface[][]
      */
     protected static array $plugins = [];
 
@@ -60,21 +60,21 @@ class Registration implements ConfigConstInterface, PluginConstInterface
      *
      * @var string
      */
-    protected static string $chunkFolder;
+    protected static string $chunkFolder = '';
 
     /**
      * The configures log folder from the plugin.
      *
      * @var string
      */
-    protected static string $logFolder;
+    protected static string $logFolder = '';
 
     /**
      * The configured configuration file from the plugin.
      *
      * @var string
      */
-    protected static string $configFile;
+    protected static string $configFile = '';
 
     /**
      * Blacklist of forbidden debug methods.
@@ -128,7 +128,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
     /**
      * Additional configuration for the plugin.
      *
-     * @var \Brainworxx\Krexx\Service\Plugin\NewSetting[]
+     * @var NewSetting[]
      */
     protected static array $newSettings = [];
 
@@ -154,7 +154,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
      * @param string|int|null $value
      *   The new value.
      */
-    public static function addNewFallbackValue(string $name, $value): void
+    public static function addNewFallbackValue(string $name, string|int|null $value): void
     {
         static::$newFallbackValues[$name] = $value;
     }
@@ -162,7 +162,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
     /**
      * Add a new setting that is used by your plugin.
      *
-     * @param \Brainworxx\Krexx\Service\Plugin\NewSetting $newSetting
+     * @param NewSetting $newSetting
      *   A class instance containing your new setting.
      */
     public static function addNewSettings(NewSetting $newSetting): void
@@ -216,7 +216,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
      */
     public static function addScalarStringAnalyser(string $class): void
     {
-        if (!in_array($class, static::$additionalScalarString, true)) {
+        if (!in_array(needle: $class, haystack: static::$additionalScalarString, strict: true)) {
             static::$additionalScalarString[] = $class;
         }
     }
@@ -237,7 +237,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
             static::$blacklistDebugMethods[$className] = [];
         }
 
-        if (!in_array($methodName, static::$blacklistDebugMethods[$className], true)) {
+        if (!in_array(needle: $methodName, haystack: static::$blacklistDebugMethods[$className], strict: true)) {
             static::$blacklistDebugMethods[$className][] = $methodName;
         }
     }
@@ -252,7 +252,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
      */
     public static function addClassToDebugBlacklist(string $class): void
     {
-        if (!in_array($class, static::$blacklistDebugClass, true)) {
+        if (!in_array(needle: $class, haystack: static::$blacklistDebugClass, strict: true)) {
             static::$blacklistDebugClass[] = $class;
         }
     }
@@ -350,7 +350,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
      */
     public static function register(PluginConfigInterface $configClass): void
     {
-        static::$plugins[get_class($configClass)] = [
+        static::$plugins[$configClass::class] = [
             static::CONFIG_CLASS => $configClass,
             static::IS_ACTIVE => false,
         ];
@@ -411,7 +411,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
         if (isset(Krexx::$pool)) {
             Krexx::$pool->rewrite = static::$rewriteList;
             Krexx::$pool->eventService->register = static::$eventList;
-            Krexx::$pool->config = Krexx::$pool->createClass(Config::class);
+            Krexx::$pool->config = Krexx::$pool->createClass(classname: Config::class);
             Krexx::$pool->messages->readHelpTexts();
         }
     }

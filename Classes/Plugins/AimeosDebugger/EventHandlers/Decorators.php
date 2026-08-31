@@ -185,7 +185,7 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
     {
         // We only check Aimeos classes.
         do {
-            if (strpos($reflectionClass->getNamespaceName(), 'Aimeos') === 0) {
+            if (str_starts_with($reflectionClass->getNamespaceName(), 'Aimeos')) {
                 return true;
             }
             $reflectionClass = $reflectionClass->getParentClass();
@@ -220,13 +220,13 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
         );
 
         // Check if we are passing methods, at all.
-        if (strpos($source, 'call_user_func') === false) {
+        if (!str_contains($source, 'call_user_func')) {
             return '';
         }
 
         // Still here? Now for the serious stuff.
         foreach ($this->internalObjectNames as $name => $needle) {
-            if (strpos($source, $needle) !== false) {
+            if (str_contains($source, $needle)) {
                 return $name;
             }
         }
@@ -245,7 +245,7 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
      * @return false|object
      *   Either a false, or the object that receives all method calls.
      */
-    protected function retrieveReceiverObject($data, ReflectionClass $ref)
+    protected function retrieveReceiverObject(mixed $data, ReflectionClass $ref): object|false
     {
         $objectName = $this->retrieveReceiverObjectName($ref);
         if (empty($objectName)) {

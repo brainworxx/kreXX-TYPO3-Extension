@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Service\Plugin;
 
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
+use Closure;
 
 /**
  * Use this call to register a plugin specific new setting.
@@ -70,7 +71,7 @@ class NewSetting implements ConfigConstInterface
      *
      * @var string|\Closure
      */
-    protected $validation = '';
+    protected string|Closure $validation = '';
 
     /**
      * Render type of this setting.
@@ -143,7 +144,7 @@ class NewSetting implements ConfigConstInterface
      * @return $this
      *   $this for chaining.
      */
-    public function setValidation($validation): NewSetting
+    public function setValidation(string|Closure $validation): NewSetting
     {
         $this->validation = $validation;
         return $this;

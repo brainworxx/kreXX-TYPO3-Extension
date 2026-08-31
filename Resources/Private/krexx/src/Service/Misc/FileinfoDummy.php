@@ -49,13 +49,13 @@ class FileinfoDummy
      * Do nothing. Without the fileinfo module we can not provide any info, at
      * least for now.
      *
-     * @param string $file
+     * @param string $string
      *   THe file we want to get the mime type of.
      *
      * @return string
      *   An empty sting. nothing to do here.
      */
-    public function buffer($file): string
+    public function buffer($string): string
     {
         return '';
     }

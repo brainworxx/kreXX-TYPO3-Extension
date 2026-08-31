@@ -40,6 +40,7 @@ namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Dump all Receiver classes inside the decorator.
@@ -51,6 +52,13 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 class ThroughClassList extends AbstractCallback implements CallbackConstInterface
 {
+    /**
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
     /**
      * Dumps the receiver classes.
      *

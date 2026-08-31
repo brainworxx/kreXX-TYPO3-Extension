@@ -79,7 +79,7 @@ class Emergency implements ConfigConstInterface
      *
      * @var int
      */
-    protected int $maxRuntime = 0;
+    protected int $maxRuntime = 60;
 
     /**
      * The server memory limit, coming from the php.ini.
@@ -93,7 +93,7 @@ class Emergency implements ConfigConstInterface
      *
      * @var int
      */
-    protected int $minMemoryLeft = 0;
+    protected int $minMemoryLeft = 64;
 
     /**
      * The level inside the object/array hierarchy we are in.
@@ -110,13 +110,6 @@ class Emergency implements ConfigConstInterface
     protected int $maxNestingLevel;
 
     /**
-     * The pool, where we store the classes we need.
-     *
-     * @var Pool
-     */
-    protected Pool $pool;
-
-    /**
      * Configured maximum amount of calls.
      *
      * @var int
@@ -129,12 +122,11 @@ class Emergency implements ConfigConstInterface
      * @param Pool $pool
      *   The pool, where we store the classes we need.
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
-
         // Cache the server memory limit.
-        if (preg_match('/^(\d+)(.)$/', strtoupper(ini_get('memory_limit')), $matches)) {
+        $memoryLimit = strtoupper(string: ini_get(option: 'memory_limit'));
+        if (preg_match(pattern: '/^(\d+)(.)$/', subject: $memoryLimit, matches: $matches)) {
             if ($matches[2] === 'M') {
                 // Megabyte.
                 $this->serverMemoryLimit = $matches[1] * 1024 * 1024;
@@ -145,10 +137,8 @@ class Emergency implements ConfigConstInterface
         }
 
         // Cache some settings.
-        $this->maxRuntime = (int) $pool->config->getSetting(static::SETTING_MAX_RUNTIME);
-        $this->minMemoryLeft = ((int) $pool->config->getSetting(static::SETTING_MEMORY_LEFT))  * 1024 * 1024;
-        $this->maxCall = (int) $this->pool->config->getSetting(static::SETTING_MAX_CALL);
-        $this->maxNestingLevel = (int) $this->pool->config->getSetting(static::SETTING_NESTING_LEVEL);
+        $this->maxCall = (int) $this->pool->config->getSetting(name: static::SETTING_MAX_CALL);
+        $this->maxNestingLevel = (int) $this->pool->config->getSetting(name: static::SETTING_NESTING_LEVEL);
 
         $pool->emergencyHandler = $this;
     }
@@ -201,7 +191,7 @@ class Emergency implements ConfigConstInterface
         // Check Runtime.
         if ($this->timer < time()) {
             // This is taking longer than expected.
-            $this->pool->messages->addMessage('emergencyTimer');
+            $this->pool->messages->addMessage(key: 'emergencyTimer');
             Krexx::editSettings();
             Krexx::disable();
             $this->allIsOk = false;
@@ -223,16 +213,14 @@ class Emergency implements ConfigConstInterface
     {
         // We will only check, if we were able to determine a memory limit
         // in the first place.
-        if ($this->serverMemoryLimit > 2) {
-            // Is more left than is configured?
-            if (($this->serverMemoryLimit - memory_get_usage()) < $this->minMemoryLeft) {
-                $this->pool->messages->addMessage('emergencyMemory');
-                // Show settings to give the dev to repair the situation.
-                Krexx::editSettings();
-                Krexx::disable();
-                $this->allIsOk = false;
-                return true;
-            }
+        // Is more left than is configured?
+        if ($this->serverMemoryLimit > 2 && $this->serverMemoryLimit - memory_get_usage() < $this->minMemoryLeft) {
+            $this->pool->messages->addMessage(key: 'emergencyMemory');
+            // Show settings to give the dev to repair the situation.
+            Krexx::editSettings();
+            Krexx::disable();
+            $this->allIsOk = false;
+            return true;
         }
 
         return false;
@@ -287,7 +275,7 @@ class Emergency implements ConfigConstInterface
      */
     public function initTimer(): void
     {
-        if (empty($this->timer) || php_sapi_name() === 'cli') {
+        if ($this->timer === 0 || php_sapi_name() === 'cli') {
             $this->timer = time() + $this->maxRuntime;
         }
     }
@@ -307,7 +295,7 @@ class Emergency implements ConfigConstInterface
 
         // Give feedback if this is our last call.
         if ($this->krexxCount === ($this->maxCall - 1)) {
-            $this->pool->messages->addMessage('maxCallReached');
+            $this->pool->messages->addMessage(key: 'maxCallReached');
         }
 
         // Count goes up.

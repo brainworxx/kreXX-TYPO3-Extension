@@ -77,7 +77,7 @@ class CleanupTest extends AbstractHelper
     /**
      * Test the setting of the pool
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $this->cleanup));
     }
@@ -85,7 +85,7 @@ class CleanupTest extends AbstractHelper
     /**
      * Test the cleanup of log folders, when logging is not allowed.
      */
-    public function testCleanupOldLogsNoLogging()
+    public function testCleanupOldLogsNoLogging(): void
     {
         // Logging is not allowed.
         $chunksMock = $this->createMock(Chunks::class);
@@ -103,7 +103,7 @@ class CleanupTest extends AbstractHelper
     /**
      * Test the cleanup of the log folder, when it is empty.
      */
-    public function testCleanupOldLogsNoLogs()
+    public function testCleanupOldLogsNoLogs(): void
     {
         $logDir = 'some dir';
 
@@ -134,7 +134,7 @@ class CleanupTest extends AbstractHelper
     /**
      * Test the cleanup of old logfiles, with mocked up files.
      */
-    public function testCleanupOldLogsNormal()
+    public function testCleanupOldLogsNormal(): void
     {
         $logDir = 'some dir';
         $file1 = 'file 1';
@@ -196,7 +196,7 @@ class CleanupTest extends AbstractHelper
     /**
      * Test the cleanup of old chunks, when we have no write access.
      */
-    public function testCleanupOldChunksNoWriteAccess()
+    public function testCleanupOldChunksNoWriteAccess(): void
     {
         $chunksMock = $this->createMock(Chunks::class);
         $chunksMock->expects($this->once())
@@ -215,7 +215,7 @@ class CleanupTest extends AbstractHelper
     /**
      * Test the cleanup of old chunks, when we have no write access.
      */
-    public function testCleanupOldChunksNormal()
+    public function testCleanupOldChunksNormal(): void
     {
         $chunkDir = 'extra chunky';
         $file1 = 'file 1';

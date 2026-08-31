@@ -72,7 +72,7 @@ class Connectors implements ConnectorsConstInterface
      *
      * @var string|int
      */
-    protected $params;
+    protected string|int $params;
 
     /**
      * The type of connectors we are rendering.
@@ -104,7 +104,7 @@ class Connectors implements ConnectorsConstInterface
      * @param string|int $params
      *   The parameters as a sting.
      */
-    public function setParameters($params): void
+    public function setParameters(string|int $params): void
     {
         $this->params = $params;
     }
@@ -115,7 +115,7 @@ class Connectors implements ConnectorsConstInterface
      * @return string|int
      *   The connection parameters.
      */
-    public function getParameters()
+    public function getParameters(): string|int
     {
         return $this->params;
     }
@@ -158,15 +158,15 @@ class Connectors implements ConnectorsConstInterface
     public function getConnectorRight(int $cap): string
     {
         if (
-            empty($this->params) ||
+            !isset($this->params) || in_array($this->params, ['', '0', 0], true) ||
             ($this->type !== static::CONNECTOR_METHOD && $this->type !== static::CONNECTOR_STATIC_METHOD)
         ) {
             return $this->connectorArray[$this->type][1];
         }
 
         // Capping the parameters for a better readability.
-        if ($cap > 0 && strlen($this->params) > $cap) {
-            return '(' . substr($this->params, 0, $cap) . ' . . . )';
+        if ($cap > 0 && strlen(string: (string) $this->params) > $cap) {
+            return '(' . substr(string: (string) $this->params, offset: 0, length: $cap) . ' . . . )';
         }
 
         return '(' . $this->params . ')';

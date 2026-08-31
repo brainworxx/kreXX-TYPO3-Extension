@@ -49,7 +49,7 @@ class ButtonTest extends AbstractRenderSmokyGrey
     /**
      * Test the rendering of a button. Again we test only the additional stuff.
      */
-    public function testRenderButton()
+    public function testRenderButton(): void
     {
         $this->mockModel(static::GET_JSON, ['buttonJson' => 'isFun']);
         $this->modelMock->expects($this->exactly(2))
@@ -65,7 +65,7 @@ class ButtonTest extends AbstractRenderSmokyGrey
     /**
      * Test the rendering of a button, buth without the json.
      */
-    public function testRenderButtonWithoutJson()
+    public function testRenderButtonWithoutJson(): void
     {
         $this->mockModel(static::GET_JSON, []);
         $this->modelMock->expects($this->exactly(2))

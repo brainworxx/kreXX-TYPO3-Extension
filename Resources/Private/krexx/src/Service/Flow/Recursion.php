@@ -74,44 +74,19 @@ class Recursion
     protected array $metaRecursionHive = [];
 
     /**
-     * Here we store, if we have rendered the $GLOBALS array so far.
-     *
-     * @var bool
-     */
-    protected bool $globalsWereRendered = false;
-
-    /**
      * Generate the recursion marker during class construction.
      *
      * @param Pool $pool
      */
     public function __construct(Pool $pool)
     {
-        $this->recursionMarker = 'Krexx' . substr(str_shuffle(md5(microtime())), 0, 10);
-        if (version_compare(phpversion(), '8.1.0', '<=')) {
-            // Mark the $GLOBALS array.
-            $GLOBALS[$this->recursionMarker] = true;
-        }
+        $this->recursionMarker = 'Krexx' . substr(
+            string: str_shuffle(string: md5(string: microtime())),
+            offset: 0,
+            length: 10
+        );
         $this->recursionHive = new SplObjectStorage();
-
         $pool->recursionHandler = $this;
-    }
-
-    /**
-     * Resets all Arrays inside the recursion array.
-     *
-     * @deprecated
-     *   Will be removed as soon as we drop PHP 8.0 support.
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
-     */
-    public function __destruct()
-    {
-        // Remove our mark from the $GLOBALS.
-        if (isset($this->recursionMarker)) {
-            unset($GLOBALS[$this->recursionMarker]);
-        }
     }
 
     /**
@@ -122,7 +97,7 @@ class Recursion
      */
     public function addToHive(object $bee): void
     {
-        $this->recursionHive->offsetSet($bee);
+        $this->recursionHive->offsetSet(object: $bee);
     }
 
     /**
@@ -134,21 +109,11 @@ class Recursion
      * @return bool
      *   Boolean which shows whether we are facing a recursion.
      */
-    public function isInHive($bee): bool
+    public function isInHive(object|array $bee): bool
     {
         // Check objects.
-        if (is_object($bee)) {
-            return $this->recursionHive->offsetExists($bee);
-        }
-
-        // Check arrays (only the $GLOBAL array may apply).
-        if (isset($bee[$this->recursionMarker])) {
-            // We render the $GLOBALS only once.
-            if ($this->globalsWereRendered) {
-                return true;
-            }
-
-            $this->globalsWereRendered = true;
+        if (is_object(value: $bee)) {
+            return $this->recursionHive->offsetExists(object: $bee);
         }
 
         // Should be a normal array. We do not track these, because we can not

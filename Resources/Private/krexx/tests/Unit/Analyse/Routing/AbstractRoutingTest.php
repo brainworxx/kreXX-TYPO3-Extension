@@ -47,7 +47,7 @@ class AbstractRoutingTest extends AbstractHelper
     /**
      * Test if we get the pool was set.
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $processor = new ProcessNothing(Krexx::$pool);
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $processor));

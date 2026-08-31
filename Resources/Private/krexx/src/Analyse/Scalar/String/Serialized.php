@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Scalar\String;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Misc\FormatSerialize;
 
 class Serialized extends AbstractScalarAnalysis
@@ -48,6 +49,15 @@ class Serialized extends AbstractScalarAnalysis
      * @var Model
      */
     protected Model $model;
+
+    /**
+     * Inject the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
 
     /**
      * Works only when hte multibyte extension is installed.
@@ -62,7 +72,7 @@ class Serialized extends AbstractScalarAnalysis
     /**
      * Test if this one looks like a serialized whatever.
      *
-     * @param string $string
+     * @param string|int|bool $string $string
      *   The string we want to take a look at.
      * @param Model $model
      *   The model, so far.
@@ -70,11 +80,12 @@ class Serialized extends AbstractScalarAnalysis
      * @return bool
      *   Well? Can we handle it?
      */
-    public function canHandle($string, Model $model): bool
+    public function canHandle(string|int|bool $string, Model $model): bool
     {
         // We only handle objects and arrays.
         // Everything else is not really pretty print worthy.
-        if (in_array(substr($string, 0, 2), ['o:', 'O:','a:', 'C:'], true)) {
+        $needle = substr(string: $string, offset: 0, length: 2);
+        if (in_array(needle: $needle, haystack: ['o:', 'O:','a:', 'C:'], strict: true)) {
             $this->handledValue = $string;
             $this->model = $model;
             return true;
@@ -92,14 +103,14 @@ class Serialized extends AbstractScalarAnalysis
     {
         $messages = $this->pool->messages;
         $meta = [];
-        $result = $this->pool->createClass(FormatSerialize::class)
-            ->prettyPrint($this->handledValue);
+        $result = $this->pool->createClass(classname: FormatSerialize::class)
+            ->prettyPrint(string: $this->handledValue);
 
         if ($result !== null) {
-            $meta[$messages->getHelp('metaPrettyPrint')] = $this->pool
-                ->encodingService->encodeString($result);
-            $this->model->setHasExtra(false);
-            $meta[$messages->getHelp('metaContent')] = $this->model->getData();
+            $meta[$messages->getHelp(key: 'metaPrettyPrint')] = $this->pool
+                ->encodingService->encodeString(data: $result);
+            $this->model->setHasExtra(value: false);
+            $meta[$messages->getHelp(key: 'metaContent')] = $this->model->getData();
         }
 
         return $meta;

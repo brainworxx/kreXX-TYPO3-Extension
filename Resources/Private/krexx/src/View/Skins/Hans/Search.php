@@ -65,17 +65,17 @@ trait Search
     {
         $messages = $this->pool->messages;
         return str_replace(
-            $this->markerSearch,
-            [
+            search: $this->markerSearch,
+            replace: [
                 $this->pool->recursionHandler->getMarker(),
-                $messages->getHelp('searchHeadline'),
-                $messages->getHelp('searchCaseSensitive'),
-                $messages->getHelp('searchShortResults'),
-                $messages->getHelp('searchKeys'),
-                $messages->getHelp('searchLongResults'),
-                $messages->getHelp('searchWholeValues'),
+                $messages->getHelp(key: 'searchHeadline'),
+                $messages->getHelp(key: 'searchCaseSensitive'),
+                $messages->getHelp(key: 'searchShortResults'),
+                $messages->getHelp(key: 'searchKeys'),
+                $messages->getHelp(key: 'searchLongResults'),
+                $messages->getHelp(key: 'searchWholeValues'),
             ],
-            $this->fileCache[static::FILE_SEARCH]
+            subject: $this->fileCache[static::FILE_SEARCH]
         );
     }
 

@@ -51,10 +51,11 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(PrivateProperties::class, 'callMe')]
 #[CoversMethod(AbstractObjectAnalysis::class, 'getReflectionPropertiesData')]
 #[CoversMethod(AbstractObjectAnalysis::class, 'reflectionSorting')]
+#[CoversMethod(PrivateProperties::class, '__construct')]
 class PrivatePropertiesTest extends AbstractHelper
 {
     /**
-     * @var \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PrivateProperties
+     * @var PrivateProperties
      */
     protected $privateProperties;
 
@@ -79,10 +80,20 @@ class PrivatePropertiesTest extends AbstractHelper
     }
 
     /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new PrivateProperties(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
+    /**
      * Test the private property analysis, without any private ones in the
      * fixture.
      */
-    public function testCallMeNoPrivates()
+    public function testCallMeNoPrivates(): void
     {
         // Test start event
         // Set up the events
@@ -114,7 +125,7 @@ class PrivatePropertiesTest extends AbstractHelper
      * Test, if the private analysis gets all privates, including the
      * "inherited"  ones.
      */
-    public function testCallMeWithPrivates()
+    public function testCallMeWithPrivates(): void
     {
         // Set up the events
         $this->mockEventService(

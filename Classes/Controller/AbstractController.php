@@ -44,21 +44,19 @@ use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Information\Typo3Version;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Mvc\Response as MvcResponse;
 
 /**
  * Hosting all those ugly workarounds to keep this extension compatible back to
- * 10.4. This  makes the other controllers (hopefully) more readable.
+ * 13.4. This  makes the other controllers (hopefully) more readable.
  */
 abstract class AbstractController extends ActionController implements ConstInterface, ControllerConstInterface
 {
@@ -93,99 +91,21 @@ abstract class AbstractController extends ActionController implements ConstInter
     protected Pool $pool;
 
     /**
-     * @var \Brainworxx\Includekrexx\Collectors\Configuration
-     */
-    protected Configuration $configuration;
-
-    /**
-     * @var \Brainworxx\Includekrexx\Collectors\FormConfiguration
-     */
-    protected FormConfiguration $formConfiguration;
-
-    /**
-     * @var \Brainworxx\Includekrexx\Domain\Model\Settings
-     */
-    protected Settings $settingsModel;
-
-    /**
      * @var \TYPO3\CMS\Backend\Template\ModuleTemplate
-     *
-     * Add typing as soon as we drop TYPO3 11 compatibility.
      */
     protected $moduleTemplate;
-
-    /**
-     * @var \TYPO3\CMS\Core\Page\PageRenderer
-     */
-    protected PageRenderer $pageRenderer;
-
-    /**
-     * @var int|\TYPO3\CMS\Core\Type\ContextualFeedbackSeverity
-     */
-    protected $flashMessageWarning;
-
-    /**
-     * @var int|\TYPO3\CMS\Core\Type\ContextualFeedbackSeverity
-     */
-    protected $flashMessageError;
-
-    /**
-     * @var int|\TYPO3\CMS\Core\Type\ContextualFeedbackSeverity
-     */
-    protected $flashMessageOk;
-
-    /**
-     * The TYPO3 major version.
-     *
-     * @var int
-     */
-    protected int $typo3Version;
-
 
     /**
      * Set the pool and do the parent constructor.
      */
     public function __construct(
-        Configuration $configuration,
-        FormConfiguration $formConfiguration,
-        Settings $settings,
-        PageRenderer $pageRenderer,
-        Typo3Version $typo3Version
+        protected Configuration $configuration,
+        protected FormConfiguration $formConfiguration,
+        protected Settings $settingsModel,
+        protected PageRenderer $pageRenderer
     ) {
-        $this->configuration = $configuration;
-        $this->formConfiguration = $formConfiguration;
-        $this->settingsModel = $settings;
-        $this->pageRenderer = $pageRenderer;
-        $this->typo3Version = $typo3Version->getMajorVersion();
-
         Pool::createPool();
         $this->pool = Krexx::$pool;
-
-        if ($this->typo3Version > 11) {
-            $this->flashMessageError = ContextualFeedbackSeverity::ERROR;
-            $this->flashMessageOk = ContextualFeedbackSeverity::OK;
-            $this->flashMessageWarning = ContextualFeedbackSeverity::WARNING;
-        } else {
-            $this->prepare11Flashmessages();
-        }
-    }
-
-    /**
-     * Prepare the flash message severity for 11 and lower
-     *
-     * @deprecated
-     *   Will be removed as soon as we drop TYPO3 11 support
-     *
-     * @codeCoverageIgnore
-     *   We do not cover deprecated code.
-     *
-     * @return void
-     */
-    protected function prepare11Flashmessages(): void
-    {
-        $this->flashMessageError = AbstractMessage::ERROR;
-        $this->flashMessageOk = AbstractMessage::OK;
-        $this->flashMessageWarning = AbstractMessage::WARNING;
     }
 
     /**
@@ -196,15 +116,8 @@ abstract class AbstractController extends ActionController implements ConstInter
     public function initializeAction(): void
     {
         parent::initializeAction();
-
-        if ($this->typo3Version > 11) {
-            // 12'er style
-            $this->moduleTemplate = GeneralUtility::makeInstance(ModuleTemplateFactory::class)
-                ->create($this->request);
-        } else {
-            // 11'er style
-            $this->moduleTemplate = $this->objectManager->get(ModuleTemplate::class);
-        }
+        $this->moduleTemplate = GeneralUtility::makeInstance(ModuleTemplateFactory::class)
+            ->create($this->request);
     }
 
     /**
@@ -218,7 +131,7 @@ abstract class AbstractController extends ActionController implements ConstInter
             $this->addFlashMessage(
                 static::translate('debugpreset.warning.message'),
                 static::translate('debugpreset.warning.title'),
-                $this->flashMessageWarning
+                ContextualFeedbackSeverity::WARNING
             );
         }
     }
@@ -236,7 +149,7 @@ abstract class AbstractController extends ActionController implements ConstInter
             $this->addFlashMessage(
                 static::translate($message->getKey(), $message->getArguments()) ?? $message->getText(),
                 static::translate('general.error.title'),
-                $this->flashMessageError
+                ContextualFeedbackSeverity::ERROR
             );
         }
     }
@@ -282,40 +195,18 @@ abstract class AbstractController extends ActionController implements ConstInter
      */
     protected function assignCssJs(): void
     {
-        if (method_exists($this->pageRenderer, 'loadJavaScriptModule')) {
-            // Doing this the TYPO3 12 way.
-            $this->pageRenderer->loadJavaScriptModule('@brainworxx/includekrexx/Index.js');
-            $this->pageRenderer->addJsInlineCode(
-                'krexxajaxtrans',
-                $this->generateAjaxTranslations(),
-                false,
-                false,
-                true
-            );
-        } else {
-            // @deprecated
-            // Will be removed as soon as we drop TYPO3 11 support.
-            $this->assignCssJs11Style();
-        }
+        $this->pageRenderer->loadJavaScriptModule('@brainworxx/includekrexx/Index.js');
+        $this->pageRenderer->addJsInlineCode(
+            'krexxajaxtrans',
+            $this->generateAjaxTranslations(),
+            false,
+            false,
+            true
+        );
 
         $cssPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Private/Css/Index.css');
         $this->pageRenderer->addCssInlineBlock('krexxBeCss', file_get_contents($cssPath), false, false, true);
         $this->moduleTemplate->setModuleName('tx_includekrexx');
-    }
-
-    /**
-     * Assign the css and js TYPO3 11 style.
-     * @deprecated
-     *   Will be removed as soon as we drop TYPO3 11 support
-     *
-     * @codeCoverageIgnore
-     *   We do not cover deprecated code.
-     */
-    protected function assignCssJs11Style(): void
-    {
-        $jsPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/JavaScript/Index.js');
-        $this->pageRenderer->addJsInlineCode('krexxjs', file_get_contents($jsPath));
-        $this->pageRenderer->addJsInlineCode('krexxajaxtrans', $this->generateAjaxTranslations());
     }
 
     /**
@@ -342,54 +233,15 @@ abstract class AbstractController extends ActionController implements ConstInter
     /**
      * Compatibility wrapper around the rendering of the module template.
      *
-     * @return \Psr\Http\Message\ResponseInterface|string
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function moduleTemplateRender()
+    protected function moduleTemplateRender(): ResponseInterface
     {
         $this->assignCssJs();
-
-        if ($this->typo3Version > 11) {
-            // @deprecated
-            // Hardcode these as soon as we drop TYPO3 10 compatibility.
-            $this->assignMultiple(['compatibilityClasses' => 'module-body t3js-module-body']);
-
-            // 12'er style.
-            $this->configuration->assignData($this->moduleTemplate);
-            $this->formConfiguration->assignData($this->moduleTemplate);
-            return $this->moduleTemplate->renderResponse('Index/Index');
-        }
-
-        // 10'er and 11'er style.
-        return $this->moduleTemplateRenderOld();
-    }
-
-    /**
-     * Rendering the backend module 10'er and 11'er style.
-     *
-     * @codeCoverageIgnore
-     *   This is TYPO3 10 and 11 stuff.
-     *   We test it, but the report is not submitted to Codeclimate.
-     *
-     * @return \Psr\Http\Message\ResponseInterface|string
-     */
-    protected function moduleTemplateRenderOld()
-    {
-        // 10'er and 11'er style.
-        $this->configuration->assignData($this->view);
-        $this->formConfiguration->assignData($this->view);
-        $this->moduleTemplate->setContent($this->view->render());
-
-        if ($this->typo3Version > 10) {
-            // 11'er style.
-            return GeneralUtility::makeInstance(
-                HtmlResponse::class,
-                $this->moduleTemplate->renderContent()
-            );
-        }
-
-        // 10'er style.
-        // We let the view render the template.
-        return $this->moduleTemplate->renderContent();
+        $this->assignMultiple(['compatibilityClasses' => 'module-body t3js-module-body']);
+        $this->configuration->assignData($this->moduleTemplate);
+        $this->formConfiguration->assignData($this->moduleTemplate);
+        return $this->moduleTemplate->renderResponse('Index/Index');
     }
 
     /**
@@ -399,11 +251,6 @@ abstract class AbstractController extends ActionController implements ConstInter
      */
     protected function assignMultiple(array $values): void
     {
-        if ($this->typo3Version > 11) {
-            $this->moduleTemplate->assignMultiple($values);
-            return;
-        }
-
-        $this->view->assignMultiple($values);
+        $this->moduleTemplate->assignMultiple($values);
     }
 }

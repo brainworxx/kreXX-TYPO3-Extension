@@ -66,6 +66,6 @@ class Browser extends AbstractOutput
      */
     public function finalize(): void
     {
-        register_shutdown_function([$this, 'shutdownCallback']);
+        register_shutdown_function(callback: [$this, 'shutdownCallback']);
     }
 }

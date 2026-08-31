@@ -66,20 +66,6 @@ class UndeclaredProperty extends ReflectionProperty
     public bool $isUndeclared = true;
 
     /**
-     * The name of the property.
-     *
-     * @var string|int
-     */
-    public $propertyName;
-
-    /**
-     * A reflection of the class, where the property was declared.
-     *
-     * @var \ReflectionClass
-     */
-    protected ReflectionClass $declaringClass;
-
-    /**
      * Is this value actually reachable?
      *
      * The DateTime object has those. Undeclared and not reachable.
@@ -98,24 +84,31 @@ class UndeclaredProperty extends ReflectionProperty
     /**
      * Setting the necessary property's constructor.
      *
-     * @param \ReflectionClass $ref
+     * @param \ReflectionClass $declaringClass
      *   The instance of the class with the property.
-     * @param string|int $name
+     * @param string|int $propertyName
      *   The name of the property.
      */
-    public function __construct(ReflectionClass $ref, $name)
+    public function __construct(
+        /**
+         * A reflection of the class, where the property was declared.
+         */
+        protected ReflectionClass $declaringClass,
+        /**
+         * The name of the property.
+         */
+        public string|int $propertyName
+    )
     {
-        $this->declaringClass = $ref;
-        $this->propertyName = $name;
     }
 
     /**
      * A dynamically declared property can never be static.
      *
-     * @return bool
+     * @return false
      *   Always false.
      */
-    public function isStatic(): bool
+    public function isStatic(): false
     {
         return false;
     }
@@ -134,10 +127,10 @@ class UndeclaredProperty extends ReflectionProperty
     /**
      * A dynamically declared property can never have a default value.
      *
-     * @return bool
+     * @return false
      *   Always false.
      */
-    public function isDefault(): bool
+    public function isDefault(): false
     {
         return false;
     }
@@ -145,10 +138,10 @@ class UndeclaredProperty extends ReflectionProperty
     /**
      * A dynamically declared property can never be private.
      *
-     * @return bool
+     * @return false
      *   Always false.
      */
-    public function isPrivate(): bool
+    public function isPrivate(): false
     {
         return false;
     }
@@ -157,7 +150,7 @@ class UndeclaredProperty extends ReflectionProperty
      * A dynamically declared property can never be protected.
      *
      * @return bool
-     *   Always false.
+     *   Is it protected?
      */
     public function isProtected(): bool
     {
@@ -215,9 +208,9 @@ class UndeclaredProperty extends ReflectionProperty
     /**
      * Undeclared properties are not typed.
      *
-     * @return bool
+     * @return false
      */
-    public function hasType(): bool
+    public function hasType(): false
     {
         return false;
     }
@@ -227,8 +220,7 @@ class UndeclaredProperty extends ReflectionProperty
      *
      * @return null
      */
-    #[\ReturnTypeWillChange]
-    public function getDefaultValue()
+    public function getDefaultValue(): null
     {
         return null;
     }

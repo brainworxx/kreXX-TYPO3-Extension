@@ -37,6 +37,8 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionProperty;
 
 /**
@@ -50,6 +52,15 @@ use ReflectionProperty;
 class ProtectedProperties extends AbstractObjectAnalysis
 {
     /**
+     * Inject the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
+    /**
      * Dump all protected properties.
      *
      * @return string
@@ -59,20 +70,20 @@ class ProtectedProperties extends AbstractObjectAnalysis
     {
         $output = $this->dispatchStartEvent();
 
-        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
+        /** @var ReflectionClass $ref */
         $ref = $this->parameters[static::PARAM_REF];
-        $refProps = $ref->getProperties(ReflectionProperty::IS_PROTECTED);
+        $refProps = $ref->getProperties(filter: ReflectionProperty::IS_PROTECTED);
         if (empty($refProps)) {
             return $output;
         }
 
-        usort($refProps, [$this, static::REFLECTION_SORTING]);
+        usort(array: $refProps, callback: [$this, static::REFLECTION_SORTING]);
 
         return $output .
             $this->getReflectionPropertiesData(
-                $refProps,
-                $ref,
-                $this->pool->messages->getHelp('protectedProperties')
+                refProps: $refProps,
+                ref: $ref,
+                label: $this->pool->messages->getHelp(key: 'protectedProperties')
             );
     }
 }

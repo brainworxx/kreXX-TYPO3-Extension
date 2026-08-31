@@ -159,8 +159,8 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
         $get = (string)GeneralUtility::getIndpEnv('REQUEST_URI');
 
         if (
-            strpos($get, '/ajax/refreshLoglist') !== false
-            || strpos($get, '/ajax/delete') !== false
+            str_contains($get, '/ajax/refreshLoglist')
+            || str_contains($get, '/ajax/delete')
         ) {
             // Do nothing.
             // We will not spam the log folder with debug calls from the kreXX

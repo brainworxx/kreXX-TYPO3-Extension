@@ -60,7 +60,7 @@ abstract class AbstractEventHandler implements EventHandlerInterface, AimeosCons
      * @return mixed
      *   The property, if successful, or NULL if not successful.
      */
-    protected function retrieveProperty(ReflectionClass $reflectionClass, string $objectName, object $object)
+    protected function retrieveProperty(ReflectionClass $reflectionClass, string $objectName, object $object): mixed
     {
         static $setAccessible = null;
 

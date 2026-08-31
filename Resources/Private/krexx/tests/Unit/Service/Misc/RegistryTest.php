@@ -49,7 +49,7 @@ class RegistryTest extends AbstractHelper
     /**
      * Test the setting of itself in the pool.
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $registry = new Registry(Krexx::$pool);
         $this->assertSame($registry, Krexx::$pool->registry);
@@ -58,7 +58,7 @@ class RegistryTest extends AbstractHelper
     /**
      * What the method name says.
      */
-    public function testSet()
+    public function testSet(): void
     {
         $registry = new Registry(Krexx::$pool);
         $key = 'key';
@@ -72,7 +72,7 @@ class RegistryTest extends AbstractHelper
     /**
      * What the method name says.
      */
-    public function testGetHas()
+    public function testGetHas(): void
     {
         $registry = new Registry(Krexx::$pool);
         $key = 'key';

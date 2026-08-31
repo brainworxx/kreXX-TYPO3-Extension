@@ -155,7 +155,7 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
      * @return string|null
      *   The converted values.
      */
-    protected function convertKrexxFeSetting($values): ?string
+    protected function convertKrexxFeSetting(array|string|int|null $values): ?string
     {
         if (!is_array($values)) {
             return null;

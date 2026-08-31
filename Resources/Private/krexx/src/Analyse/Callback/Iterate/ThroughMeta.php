@@ -78,32 +78,30 @@ class ThroughMeta extends AbstractCallback implements CallbackConstInterface
     /**
      * Inject the pool and init the workflow.
      *
-     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     * @param Pool $pool
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        parent::__construct($pool);
-
         $messages = $pool->messages;
 
         $this->keysWithExtra = [
-            $messages->getHelp('metaComment'),
-            $messages->getHelp('metaDeclaredIn'),
-            $messages->getHelp('metaSource'),
-            $messages->getHelp('metaPrettyPrint'),
-            $messages->getHelp('metaContent'),
-            $messages->getHelp('metaAttributes'),
+            $messages->getHelp(key: 'metaComment'),
+            $messages->getHelp(key: 'metaDeclaredIn'),
+            $messages->getHelp(key: 'metaSource'),
+            $messages->getHelp(key: 'metaPrettyPrint'),
+            $messages->getHelp(key: 'metaContent'),
+            $messages->getHelp(key: 'metaAttributes'),
         ];
 
         $this->stuffToProcess = [
-            $messages->getHelp('metaInheritedClass'),
-            $messages->getHelp('metaInterfaces'),
-            $messages->getHelp('metaTraits'),
+            $messages->getHelp(key: 'metaInheritedClass'),
+            $messages->getHelp(key: 'metaInterfaces'),
+            $messages->getHelp(key: 'metaTraits'),
         ];
 
         $this->simpleAnalysisRouting = [
-            $messages->getHelp('metaDecodedJson'),
-            $messages->getHelp('metaDecodedBase64'),
+            $messages->getHelp(key: 'metaDecodedJson'),
+            $messages->getHelp(key: 'metaDecodedBase64'),
         ];
     }
 
@@ -119,16 +117,16 @@ class ThroughMeta extends AbstractCallback implements CallbackConstInterface
         $output = $this->dispatchStartEvent();
 
         foreach ($this->parameters[static::PARAM_DATA] as $key => $metaData) {
-            if (in_array($key, $this->stuffToProcess, true)) {
+            if (in_array(needle: $key, haystack: $this->stuffToProcess, strict: true)) {
                 $output .= $this->pool->render->renderExpandableChild(
-                    $this->dispatchEventWithModel(
-                        $key,
-                        $this->pool->createClass(Model::class)
-                            ->setName($key)
-                            ->setType($this->pool->messages->getHelp('classInternals'))
-                            ->addParameter(static::PARAM_DATA, $metaData)
+                    model: $this->dispatchEventWithModel(
+                        name: $key,
+                        model: $this->pool->createClass(classname: Model::class)
+                            ->setName(name: $key)
+                            ->setType(type: $this->pool->messages->getHelp(key: 'classInternals'))
+                            ->addParameter(name: static::PARAM_DATA, value: $metaData)
                             ->injectCallback(
-                                $this->pool->createClass(ThroughMetaReflections::class)
+                                object: $this->pool->createClass(classname: ThroughMetaReflections::class)
                             )
                     )
                 );
@@ -148,28 +146,29 @@ class ThroughMeta extends AbstractCallback implements CallbackConstInterface
      * @param mixed $meta
      *   The data to display.
      *
-     * @return \Brainworxx\Krexx\Analyse\Model
+     * @return Model
      *   The prepared model.
      */
-    protected function prepareModel(string $key, $meta): Model
+    protected function prepareModel(string $key, mixed $meta): Model
     {
         $messages = $this->pool->messages;
         /** @var Model $model */
-        $model = $this->pool->createClass(Model::class)
-            ->setData($meta)
-            ->setName($key)
+        $model = $this->pool->createClass(classname: Model::class)
+            ->setData(data: $meta)
+            ->setName(name: $key)
             ->setType(
-                $key === $messages->getHelp('metaPrettyPrint') ? $key : $messages->getHelp('reflectionType')
+                type: $key === $messages->getHelp(key: 'metaPrettyPrint') ?
+                    $key : $messages->getHelp('reflectionType')
             );
 
         if (isset($this->parameters[static::PARAM_CODE_GEN_TYPE])) {
-            $model->setCodeGenType($this->parameters[static::PARAM_CODE_GEN_TYPE]);
+            $model->setCodeGenType(codeGenType: $this->parameters[static::PARAM_CODE_GEN_TYPE]);
         }
 
-        if (in_array($key, $this->keysWithExtra, true)) {
-            $model->setNormal(static::UNKNOWN_VALUE)->setHasExtra(true);
+        if (in_array(needle: $key, haystack: $this->keysWithExtra, strict: true)) {
+            $model->setNormal(normal: static::UNKNOWN_VALUE)->setHasExtra(value: true);
         } else {
-            $model->setNormal($meta);
+            $model->setNormal(normal: $meta);
         }
 
         return $model;
@@ -188,30 +187,33 @@ class ThroughMeta extends AbstractCallback implements CallbackConstInterface
     {
         $key = $model->getName();
 
-        if (in_array($key, $this->simpleAnalysisRouting, true)) {
+        if (in_array(needle: $key, haystack: $this->simpleAnalysisRouting, strict: true)) {
             // Prepare the json/ base64 code generation.
-            return $this->pool->routing->analysisHub($model);
+            return $this->pool->routing->analysisHub(model: $model);
         }
 
-        if ($key === $this->pool->messages->getHelp('metaReflection')) {
-            return $this->pool->createClass(Meta::class)
-                ->setParameters([static::PARAM_REF => $model->getNormal()])
+        if ($key === $this->pool->messages->getHelp(key: 'metaReflection')) {
+            return $this->pool->createClass(classname: Meta::class)
+                ->setParameters(parameters: [static::PARAM_REF => $model->getNormal()])
                 ->callMe();
         }
 
         // Sorry, no code generation for you guys.
-        $this->pool->codegenHandler->setCodegenAllowed(false);
-        if (is_string($model->getData())) {
+        $this->pool->codegenHandler->setCodegenAllowed(bool: false);
+        if (is_string(value: $model->getData())) {
             // Render a single data point.
             $result = $this->pool->render->renderExpandableChild(
-                $this->dispatchEventWithModel(__FUNCTION__ . $key . static::EVENT_MARKER_END, $model)
+                model: $this->dispatchEventWithModel(
+                    name: __FUNCTION__ . $key . static::EVENT_MARKER_END,
+                    model: $model
+                )
             );
         } else {
             // Fallback to whatever-rendering.
-            $result = $this->pool->routing->analysisHub($model);
+            $result = $this->pool->routing->analysisHub(model: $model);
         }
 
-        $this->pool->codegenHandler->setCodegenAllowed(true);
+        $this->pool->codegenHandler->setCodegenAllowed(bool: true);
         return $result;
     }
 }

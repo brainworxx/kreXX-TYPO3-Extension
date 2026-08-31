@@ -54,7 +54,7 @@ class RecursionTest extends AbstractRenderHans
     /**
      * Test the rendering of a recursion.
      */
-    public function testRenderRecursion()
+    public function testRenderRecursion(): void
     {
         // Prepare the model
         $this->mockModel(static::GET_NAME, 'some name');

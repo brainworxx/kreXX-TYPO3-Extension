@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,7 +34,6 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 namespace Brainworxx\Krexx\Tests\Helpers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
@@ -65,7 +66,7 @@ class EventHandler implements EventHandlerInterface
     /**
      * Setting the pool.
      *
-     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     * @param Pool $pool
      */
     public function __construct(Pool $pool)
     {
@@ -75,8 +76,8 @@ class EventHandler implements EventHandlerInterface
     /**
      * Setting the stuff from the event.
      *
-     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback $callback
-     * @param \Brainworxx\Krexx\Analyse\Model|null $model
+     * @param AbstractCallback $callback
+     * @param Model|null $model
      * @return string
      */
     public function handle(?AbstractCallback $callback = null, ?Model $model = null): string

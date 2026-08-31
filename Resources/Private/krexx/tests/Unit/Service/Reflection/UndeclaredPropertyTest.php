@@ -59,7 +59,7 @@ class UndeclaredPropertyTest extends AbstractHelper
      * This one is too simple and I'm too lazy to write test methods for
      * everything. So we test everything at once.
      */
-    public function testThemAll()
+    public function testThemAll(): void
     {
         $fixture = new stdClass();
         $reflectionClass = new ReflectionClass($fixture);

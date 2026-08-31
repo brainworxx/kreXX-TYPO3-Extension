@@ -73,7 +73,7 @@ class Methods extends AbstractComment
         $this->methodName = $reflection->getName();
 
         return $this->pool->encodingService->encodeString(
-            $this->getMethodComment($reflection, $reflectionClass)
+            data: $this->getMethodComment(reflectionMethod:  $reflection, reflectionClass: $reflectionClass)
         );
     }
 
@@ -94,27 +94,33 @@ class Methods extends AbstractComment
         // Check for interfaces.
         // Check for traits.
         $comment = $this->getTraitComment(
-            $this->getInterfaceComment(
-                $this->prettifyComment($reflectionMethod->getDocComment()),
-                $reflectionClass
+            originalComment: $this->getInterfaceComment(
+                originalComment: $this->prettifyComment(comment: $reflectionMethod->getDocComment()),
+                reflectionClass: $reflectionClass
             ),
-            $reflectionClass
+            reflection: $reflectionClass
         );
 
         // Nothing on this level, we need to take a look at the parents.
         $reflectionClass = $reflectionClass->getParentClass();
         if (
             $reflectionClass !== false
-            && $reflectionClass->hasMethod($this->methodName)
+            && $reflectionClass->hasMethod(name: $this->methodName)
         ) {
             $comment = $this->replaceInheritComment(
-                $comment,
-                $this->getMethodComment($reflectionClass->getMethod($this->methodName), $reflectionClass)
+                originalComment: $comment,
+                comment: $this->getMethodComment(
+                    reflectionMethod: $reflectionClass->getMethod(name: $this->methodName),
+                    reflectionClass: $reflectionClass
+                )
             );
         }
 
         // Tell the dev that we could not resolve the comment.
-        return $this->replaceInheritComment($comment, $this->pool->messages->getHelp('commentResolvingFail'));
+        return $this->replaceInheritComment(
+            originalComment: $comment,
+            comment: $this->pool->messages->getHelp(key: 'commentResolvingFail')
+        );
     }
 
     /**
@@ -139,8 +145,8 @@ class Methods extends AbstractComment
         // Now we should have an array with reflections of all
         // traits in the class we are currently looking at.
         foreach ($reflection->getTraits() as $trait) {
-            $originalComment = $this->retrieveComment($originalComment, $trait);
-            if ($this->checkComment($originalComment)) {
+            $originalComment = $this->retrieveComment(originalComment: $originalComment, reflection: $trait);
+            if ($this->checkComment(comment: $originalComment)) {
                 // Looks like we've resolved them all.
                 return $originalComment;
             }
@@ -167,8 +173,8 @@ class Methods extends AbstractComment
     protected function getInterfaceComment(string $originalComment, ReflectionClass $reflectionClass): string
     {
         foreach ($reflectionClass->getInterfaces() as $interface) {
-            $originalComment = $this->retrieveComment($originalComment, $interface);
-            if ($this->checkComment($originalComment)) {
+            $originalComment = $this->retrieveComment(originalComment: $originalComment, reflection: $interface);
+            if ($this->checkComment(comment: $originalComment)) {
                 // Looks like we've resolved them all.
                 return $originalComment;
             }
@@ -189,10 +195,12 @@ class Methods extends AbstractComment
      */
     protected function retrieveComment(string $originalComment, ReflectionClass $reflection): string
     {
-        if ($reflection->hasMethod($this->methodName)) {
-            $newComment = $this->prettifyComment($reflection->getMethod($this->methodName)->getDocComment());
+        if ($reflection->hasMethod(name: $this->methodName)) {
+            $newComment = $this->prettifyComment(
+                comment: $reflection->getMethod(name: $this->methodName)->getDocComment()
+            );
             // Replace it.
-            $originalComment = $this->replaceInheritComment($originalComment, $newComment);
+            $originalComment = $this->replaceInheritComment(originalComment: $originalComment, comment: $newComment);
         }
 
         return $originalComment;

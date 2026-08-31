@@ -39,6 +39,7 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use DateTime;
 use Throwable;
 
@@ -55,6 +56,15 @@ class ProcessFloat extends AbstractRouting implements ProcessInterface, ProcessC
     protected Model $model;
 
     /**
+     * Inject the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
+    /**
      * Is this one a float?
      *
      * @param Model $model
@@ -66,7 +76,7 @@ class ProcessFloat extends AbstractRouting implements ProcessInterface, ProcessC
     public function canHandle(Model $model): bool
     {
         $this->model = $model;
-        return is_float($model->getData());
+        return is_float(value: $model->getData());
     }
 
     /**
@@ -83,17 +93,21 @@ class ProcessFloat extends AbstractRouting implements ProcessInterface, ProcessC
         if ($float > 946681200) {
             try {
                 $this->model->addToJson(
-                    $this->pool->messages->getHelp('metaTimestamp'),
-                    (DateTime::createFromFormat('U.u', (string)$float))->format('d.M Y H:i:s.u')
+                    key: $this->pool->messages->getHelp(key: 'metaTimestamp'),
+                    value: (DateTime::createFromFormat(
+                        format: 'U.u',
+                        datetime: (string)$float
+                    ))->format(format: 'd.M Y H:i:s.u')
                 );
-            } catch (Throwable $exception) {
+            } catch (Throwable) {
                 // Do nothing
             }
         }
 
         return $this->pool->render->renderExpandableChild(
-            $this->dispatchProcessEvent(
-                $this->model->setNormal($this->formatFloat($float))->setType(static::TYPE_FLOAT)
+            model: $this->dispatchProcessEvent(
+                model: $this->model->setNormal(normal: $this->formatFloat(float: $float))
+                    ->setType(type: static::TYPE_FLOAT)
             )
         );
     }
@@ -111,18 +125,18 @@ class ProcessFloat extends AbstractRouting implements ProcessInterface, ProcessC
         $stringFloat = (string)$float;
 
         // We only care about negative formatted floats.
-        if (!strpos($stringFloat, 'E-')) {
+        if (!strpos(haystack: $stringFloat, needle: 'E-')) {
             return $stringFloat;
         }
-        list($beforeE, $afterE) = explode("E", $stringFloat);
+        [$beforeE, $afterE] = explode(separator: "E", string: $stringFloat);
 
         $this->model->addToJson(
-            $this->pool->messages->getHelp('metaUnformattedFloat'),
-            (string)$float
+            key: $this->pool->messages->getHelp(key: 'metaUnformattedFloat'),
+            value: (string)$float
         );
 
         $format = "%." .
-            (strlen(explode(".", $beforeE)[1]) + (abs((int)$afterE)) - 1)
+            (strlen(string: explode(separator: ".", string: $beforeE)[1]) + (abs((int)$afterE)) - 1)
             . "f";
         return sprintf($format, $float);
     }

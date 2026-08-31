@@ -71,7 +71,7 @@ class ByRegExDelegate extends ByRegExContainer
     protected string $secondPattern = '->';
 
     /**
-     * @var \Brainworxx\Krexx\Analyse\Getter\AbstractGetter[]
+     * @var AbstractGetter[]
      */
     protected array $getterAnalyser;
 
@@ -92,14 +92,13 @@ class ByRegExDelegate extends ByRegExContainer
     /**
      * Inject the pool.
      *
-     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     * @param Pool $pool
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        parent::__construct($pool);
-        $this->getterAnalyser[] = $this->pool->createClass(ByMethodName::class);
-        $this->getterAnalyser[] = $this->pool->createClass(ByRegExProperty::class);
-        $this->getterAnalyser[] = $this->pool->createClass(ByRegExContainer::class);
+        $this->getterAnalyser[] = $this->pool->createClass(classname: ByMethodName::class);
+        $this->getterAnalyser[] = $this->pool->createClass(classname: ByRegExProperty::class);
+        $this->getterAnalyser[] = $this->pool->createClass(classname: ByRegExContainer::class);
         $this->getterAnalyser[] = $this;
     }
 
@@ -110,9 +109,13 @@ class ByRegExDelegate extends ByRegExContainer
         ReflectionMethod $reflectionMethod,
         ReflectionClass $reflectionClass,
         string $currentPrefix
-    ) {
+    ): mixed {
         $this->currentPrefix = $currentPrefix;
-        return parent::retrieveIt($reflectionMethod, $reflectionClass, $currentPrefix);
+        return parent::retrieveIt(
+            reflectionMethod: $reflectionMethod,
+            reflectionClass: $reflectionClass,
+            currentPrefix: $currentPrefix
+        );
     }
 
     /**
@@ -124,7 +127,7 @@ class ByRegExDelegate extends ByRegExContainer
      *
      * {@inheritDoc}
      */
-    protected function extractValue(array $parts, ReflectionClass $reflectionClass)
+    protected function extractValue(array $parts, ReflectionClass $reflectionClass): mixed
     {
         ++$this->deep;
         if ($this->deep > 10) {
@@ -136,25 +139,29 @@ class ByRegExDelegate extends ByRegExContainer
         // $this->myObject?->getStuff();
         // We need to remove the question mark, since it is not part of the
         // object name.
-        $parts[0] = trim($parts[0], '?');
+        $parts[0] = trim(string: (string) $parts[0], characters: '?');
         try {
-            $delegateReflection = $this->retrieveReflectionClass($parts, $reflectionClass);
-            if ($delegateReflection === null) {
+            $delegateReflection = $this->retrieveReflectionClass(parts: $parts, reflectionClass: $reflectionClass);
+            if (!$delegateReflection instanceof ReflectionClass) {
                 $this->deep = 0;
                 return null;
             }
 
             // Now, let's ask the others.
-            $reflectionMethod = $delegateReflection->getMethod($parts[1]);
+            $reflectionMethod = $delegateReflection->getMethod(name: $parts[1]);
             foreach ($this->getterAnalyser as $analyser) {
-                $value = $analyser->retrieveIt($reflectionMethod, $delegateReflection, $this->currentPrefix);
+                $value = $analyser->retrieveIt(
+                    reflectionMethod: $reflectionMethod,
+                    reflectionClass: $delegateReflection,
+                    currentPrefix: $this->currentPrefix
+                );
                 if ($analyser->hasResult()) {
                     $this->foundSomething = true;
                     $this->deep = 0;
                     return $value;
                 }
             }
-        } catch (ReflectionException $exception) {
+        } catch (ReflectionException) {
         }
 
         return null;
@@ -165,12 +172,12 @@ class ByRegExDelegate extends ByRegExContainer
      *
      * @param array $parts
      *   The parts from the regex scanner.
-     * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflectionClass
+     * @param ReflectionClass $reflectionClass
      *   The reflection of the class that we are analysing
      *
      * @throws \ReflectionException
      *
-     * @return \Brainworxx\Krexx\Service\Reflection\ReflectionClass|null
+     * @return ReflectionClass|null
      *   Reflection of the class that is getting called inside the class that we
      *   are analysing.
      */
@@ -181,20 +188,20 @@ class ByRegExDelegate extends ByRegExContainer
         // The propertyName now may look like this:
         // myObject->getStuff()
         if (
-            count($parts) !== 2
-            || !$reflectionClass->hasProperty($parts[0])
+            count(value: $parts) !== 2
+            || !$reflectionClass->hasProperty(name: $parts[0])
         ) {
             // This is not the code I am looking for.
             return null;
         }
 
-        $object = $reflectionClass->retrieveValue($reflectionClass->getProperty($parts[0]));
-        if (!is_object($object)) {
+        $object = $reflectionClass->retrieveValue(refProperty: $reflectionClass->getProperty(name: $parts[0]));
+        if (!is_object(value: $object)) {
             return null;
         }
 
-        $delegateReflection = new ReflectionClass($object);
-        if (!$delegateReflection->hasMethod($parts[1])) {
+        $delegateReflection = new ReflectionClass(data: $object);
+        if (!$delegateReflection->hasMethod(name: $parts[1])) {
             return null;
         }
 

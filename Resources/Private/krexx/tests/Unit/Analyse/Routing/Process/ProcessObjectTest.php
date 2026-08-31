@@ -53,8 +53,19 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(AbstractProcessNoneScalar::class, 'handle')]
 #[CoversMethod(AbstractRouting::class, 'dispatchProcessEvent')]
 #[CoversMethod(AbstractRouting::class, 'generateDomIdFromObject')]
+#[CoversMethod(ProcessObject::class, '__construct')]
 class ProcessObjectTest extends AbstractHelper
 {
+    /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new ProcessObject(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
     /**
      * Testing the initial object processing.
      */

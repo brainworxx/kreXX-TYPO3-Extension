@@ -40,6 +40,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Class Constants analysis.
@@ -49,6 +50,15 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 class Constants extends AbstractObjectAnalysis implements CodegenConstInterface
 {
+    /**
+     * Inject the pool.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
     /**
      * Dumps the constants of a class,
      *
@@ -74,16 +84,16 @@ class Constants extends AbstractObjectAnalysis implements CodegenConstInterface
 
         // We've got some values, we will dump them.
         return $output . $this->pool->render->renderExpandableChild(
-            $this->dispatchEventWithModel(
-                static::EVENT_MARKER_ANALYSES_END,
-                $this->pool->createClass(Model::class)
-                    ->setName($this->pool->messages->getHelp('metaConstants'))
-                    ->setType($this->pool->messages->getHelp('classInternals'))
-                    ->setCodeGenType(static::CODEGEN_TYPE_META_CONSTANTS)
-                    ->addParameter(static::PARAM_DATA, $listOfConstants)
-                    ->addParameter(static::PARAM_REF, $ref)
+            model: $this->dispatchEventWithModel(
+                name: static::EVENT_MARKER_ANALYSES_END,
+                model: $this->pool->createClass(classname: Model::class)
+                    ->setName(name: $this->pool->messages->getHelp(key: 'metaConstants'))
+                    ->setType(type: $this->pool->messages->getHelp(key: 'classInternals'))
+                    ->setCodeGenType(codeGenType: static::CODEGEN_TYPE_META_CONSTANTS)
+                    ->addParameter(name: static::PARAM_DATA, value: $listOfConstants)
+                    ->addParameter(name: static::PARAM_REF, value: $ref)
                     ->injectCallback(
-                        $this->pool->createClass(ThroughConstants::class)
+                        object: $this->pool->createClass(classname: ThroughConstants::class)
                     )
             )
         );

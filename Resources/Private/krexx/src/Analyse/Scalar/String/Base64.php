@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Analyse\Scalar\String;
 
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 class Base64 extends AbstractScalarAnalysis implements CodegenConstInterface
 {
@@ -62,6 +63,15 @@ class Base64 extends AbstractScalarAnalysis implements CodegenConstInterface
     protected Model $model;
 
     /**
+     * Inject the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
+    /**
      * Is's always active.
      *
      * @inheritDoc
@@ -79,12 +89,15 @@ class Base64 extends AbstractScalarAnalysis implements CodegenConstInterface
      *
      * @inheritDoc
      */
-    public function canHandle($string, Model $model): bool
+    public function canHandle(string|int|bool $string, Model $model): bool
     {
         if (
-            strlen($string) > 36
-            && preg_match('^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$^', $string)
-            && base64_encode($this->decodedString = base64_decode($string, true)) === $string
+            strlen(string: $string) > 36
+            && preg_match(
+                pattern: '^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$^',
+                subject: $string
+            )
+            && base64_encode($this->decodedString = base64_decode(string: $string, strict: true)) === $string
         ) {
             $this->model = $model;
             $this->handledValue = $string;
@@ -105,13 +118,13 @@ class Base64 extends AbstractScalarAnalysis implements CodegenConstInterface
     {
         $messages = $this->pool->messages;
         $meta = [
-            $messages->getHelp('metaDecodedBase64') => $this->decodedString,
+            $messages->getHelp(key: 'metaDecodedBase64') => $this->decodedString,
         ];
 
         // Move the extra part into a nest, for better readability.
         if ($this->model->hasExtra()) {
-            $this->model->setHasExtra(false);
-            $meta[$messages->getHelp('metaContent')] = $this->model->getData();
+            $this->model->setHasExtra(value: false);
+            $meta[$messages->getHelp(key: 'metaContent')] = $this->model->getData();
         }
 
         return $meta;

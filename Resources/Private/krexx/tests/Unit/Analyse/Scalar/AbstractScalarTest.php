@@ -47,7 +47,7 @@ class AbstractScalarTest extends AbstractHelper
     /**
      * Simple test the setting of the pool.
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $scalarString = new ScalarString(Krexx::$pool);
 

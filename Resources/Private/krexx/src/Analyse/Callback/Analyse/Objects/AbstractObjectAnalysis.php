@@ -77,20 +77,20 @@ abstract class AbstractObjectAnalysis extends AbstractCallback implements Callba
         // We are dumping public properties direct into the main-level, without
         // any "abstraction level", because they can be accessed directly.
         /** @var Model $model */
-        $model = $this->pool->createClass(Model::class)
-            ->addParameter(static::PARAM_DATA, $refProps)
-            ->addParameter(static::PARAM_REF, $ref)
+        $model = $this->pool->createClass(classname: Model::class)
+            ->addParameter(name: static::PARAM_DATA, value: $refProps)
+            ->addParameter(name: static::PARAM_REF, value: $ref)
             ->injectCallback(
-                $this->pool->createClass(ThroughProperties::class)
+                object: $this->pool->createClass(classname: ThroughProperties::class)
             );
 
         if (isset($label)) {
             // Protected or private properties.
             return $this->pool->render->renderExpandableChild(
-                $this->dispatchEventWithModel(
-                    static::EVENT_MARKER_ANALYSES_END,
-                    $model->setName($label)
-                        ->setType($this->pool->messages->getHelp('classInternals'))
+                model: $this->dispatchEventWithModel(
+                    name: static::EVENT_MARKER_ANALYSES_END,
+                    model: $model->setName(name: $label)
+                        ->setType(type: $this->pool->messages->getHelp(key: 'classInternals'))
                 )
             );
         }
@@ -99,8 +99,8 @@ abstract class AbstractObjectAnalysis extends AbstractCallback implements Callba
         // We render them directly in the object "root", so we call
         // the render directly.
         return $this->dispatchEventWithModel(
-            static::EVENT_MARKER_ANALYSES_END,
-            $model
+            name: static::EVENT_MARKER_ANALYSES_END,
+            model: $model
         )->renderMe();
     }
 
@@ -117,6 +117,6 @@ abstract class AbstractObjectAnalysis extends AbstractCallback implements Callba
     {
         /** @var \ReflectionMethod | \ReflectionProperty $reflectionA */
         /** @var \ReflectionMethod | \ReflectionProperty $reflectionB */
-        return strcmp($reflectionA->getName(), $reflectionB->getName());
+        return strcmp(string1: $reflectionA->getName(), string2: $reflectionB->getName());
     }
 }

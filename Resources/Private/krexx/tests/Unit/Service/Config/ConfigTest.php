@@ -101,7 +101,7 @@ class ConfigTest extends AbstractHelper
     /**
      * Test the initialisation of the configuration class.
      */
-    public function testConstructNormal()
+    public function testConstructNormal(): void
     {
         // Setup some fixtures.
         $chunkPath = 'chunks' . DIRECTORY_SEPARATOR . 'path';
@@ -154,7 +154,7 @@ class ConfigTest extends AbstractHelper
     /**
      * Test the browser output on cli.
      */
-    public function testConstructCliBrowser()
+    public function testConstructCliBrowser(): void
     {
         $this->mockSapi()
             ->expects($this->exactly(2))
@@ -170,7 +170,7 @@ class ConfigTest extends AbstractHelper
     /**
      * Test the browser output on ajax.
      */
-    public function testConstructAjaxBrowser()
+    public function testConstructAjaxBrowser(): void
     {
         $this->mockSapi()
             ->expects($this->exactly(1))
@@ -187,7 +187,7 @@ class ConfigTest extends AbstractHelper
     /**
      * Test the file output on cli.
      */
-    public function testConstructCliFile()
+    public function testConstructCliFile(): void
     {
         $this->mockSapi()
             ->expects($this->exactly(1))
@@ -207,7 +207,7 @@ class ConfigTest extends AbstractHelper
     /**
      * Test the access from different ips.
      */
-    public function testConstructIpRange()
+    public function testConstructIpRange(): void
     {
         ConfigSupplier::$overwriteValues = [
             Config::SETTING_IP_RANGE => '1.2.3.4.5, 127.0.0.1'
@@ -241,7 +241,7 @@ class ConfigTest extends AbstractHelper
     /**
      * Test the disabling, directly in the configuration.
      */
-    public function testSetDisabled()
+    public function testSetDisabled(): void
     {
         $config = new Config(Krexx::$pool);
         $config->setDisabled(true);
@@ -254,7 +254,7 @@ class ConfigTest extends AbstractHelper
     /**
      * Test setting getter.
      */
-    public function testGetSetting()
+    public function testGetSetting(): void
     {
         $config = new Config(Krexx::$pool);
         $config->settings[$config::SETTING_DESTINATION]->setValue('nowhere');
@@ -264,7 +264,7 @@ class ConfigTest extends AbstractHelper
     /**
      * Test the loading of a config value from fallback.
      */
-    public function testLoadConfigValueFromFallback()
+    public function testLoadConfigValueFromFallback(): void
     {
         $config = new Config(Krexx::$pool);
         $iniMock = $this->createMock(File::class);
@@ -299,7 +299,7 @@ class ConfigTest extends AbstractHelper
     /**
      * Test the loading of a config value from ini.
      */
-    public function testLoadConfigValueFromIni()
+    public function testLoadConfigValueFromIni(): void
     {
         $config = new Config(Krexx::$pool);
         $someMethods = static::FALSE_STRING;
@@ -331,7 +331,7 @@ class ConfigTest extends AbstractHelper
     /**
      * Test the loading of a config value from cookies.
      */
-    public function testLoadConfigValueFromCookies()
+    public function testLoadConfigValueFromCookies(): void
     {
         $config = new Config(Krexx::$pool);
 
@@ -361,7 +361,7 @@ class ConfigTest extends AbstractHelper
     /**
      * Ignoring the cookie config, because the demanded value is uneditable.
      */
-    public function testLoadConfigValueUneditable()
+    public function testLoadConfigValueUneditable(): void
     {
         $config = new Config(Krexx::$pool);
         $someMethods = 'some methods';
@@ -392,7 +392,7 @@ class ConfigTest extends AbstractHelper
     /**
      * Testing that re-enabling kreXX with cookies does not work.
      */
-    public function testLoadConfigValueReEnableWithCookies()
+    public function testLoadConfigValueReEnableWithCookies(): void
     {
         $config = new Config(Krexx::$pool);
 
@@ -423,7 +423,7 @@ class ConfigTest extends AbstractHelper
     /**
      * Testing the overwriting of factory settings.
      */
-    public function testLoadConfigValueWithPluginOverwrite()
+    public function testLoadConfigValueWithPluginOverwrite(): void
     {
         $config = new Config(Krexx::$pool);
         Registration::addNewFallbackValue($config::SETTING_SKIN, 'noskin');
@@ -435,7 +435,7 @@ class ConfigTest extends AbstractHelper
     /**
      * Testing all the skin related getters.
      */
-    public function testSkinStuff()
+    public function testSkinStuff(): void
     {
         $skinName = 'some skin';
         $skinRenderClass = 'some class';
@@ -460,7 +460,7 @@ class ConfigTest extends AbstractHelper
     /**
      * Test the feedback setter from the file loader.
      */
-    public function testSetPathToConfigFile()
+    public function testSetPathToConfigFile(): void
     {
         $fixture = 'whatever';
         $config = new Config(Krexx::$pool);
@@ -471,7 +471,7 @@ class ConfigTest extends AbstractHelper
     /**
      * Test the retrieval of the language listst
      */
-    public function testGetLanguageList()
+    public function testGetLanguageList(): void
     {
         $expectations = [
             'en' => 'English',

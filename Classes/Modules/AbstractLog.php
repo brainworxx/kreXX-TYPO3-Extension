@@ -86,46 +86,11 @@ abstract class AbstractLog extends AbstractSubModule implements
     protected const TRANSLATION_PREFIX = 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:';
 
     /**
-     * Createing the views for the frontend.
+     * Creating the views for the frontend.
      *
      * The StandaloneView got itself deprecated, so we need to mitigate this.
      */
-    protected function createView(string $templateName)
-    {
-        if (interface_exists(ViewFactoryInterface::class)) {
-            return $this->createView13($templateName);
-        }
-
-        return $this->createView12($templateName);
-    }
-
-    /**
-     * Create the views, TYPO3 12 style
-     *
-     * @deprecated
-     *   Will be removed as sooon as we drop TYPO3 12 support
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated stuff.
-     *   (Well, actually we do, but we do not send these data to CodeClimate)
-     */
-    protected function createView12(string $template): StandaloneView
-    {
-        $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setPartialRootPaths(['EXT:includekrexx/Resources/Private/Partials']);
-        $view->setLayoutRootPaths(['EXT:includekrexx/Resources/Private/Layouts']);
-        $view->setTemplatePathAndFilename(
-            'EXT:includekrexx/Resources/Private/Templates/Modules/' . $template . '.html'
-        );
-        $view->setFormat('html');
-
-        return $view;
-    }
-
-    /**
-     * Create the views, TYPO3 12 style
-     */
-    protected function createView13(string $template): ViewInterface
+    protected function createView(string $template): ViewInterface
     {
         /** @var ViewFactoryInterface $viewFactory */
         $viewFactory = GeneralUtility::makeInstance(ViewFactoryInterface::class);

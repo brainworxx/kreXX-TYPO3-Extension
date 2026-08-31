@@ -47,20 +47,20 @@ trait Normal
     /**
      * The short result of the analysis.
      *
-     * @var string|int
+     * @var mixed
      */
-    protected $normal = '';
+    protected mixed $normal = '';
 
     /**
      * Setter for normal.
      *
-     * @param string|int $normal
+     * @param mixed $normal
      *   The short result of the analysis.
      *
      * @return Model
      *   $this, for chaining.
      */
-    public function setNormal($normal): Model
+    public function setNormal(mixed $normal): Model
     {
         $this->normal = $normal;
         return $this;
@@ -69,10 +69,10 @@ trait Normal
     /**
      * Getter for normal.
      *
-     * @return string|int
+     * @return mixed
      *   The short result of the analysis.
      */
-    public function getNormal()
+    public function getNormal(): mixed
     {
         return $this->normal;
     }

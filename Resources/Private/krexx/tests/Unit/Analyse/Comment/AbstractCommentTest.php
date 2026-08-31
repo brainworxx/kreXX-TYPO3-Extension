@@ -47,7 +47,7 @@ class AbstractCommentTest extends AbstractHelper
     /**
      * Testing the setting of the pool.
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $methodTest = new Methods(Krexx::$pool);
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $methodTest));

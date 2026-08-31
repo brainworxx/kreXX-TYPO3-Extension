@@ -1,3 +1,14 @@
+7.0.0
+- Change: Dropped support for PHP 7.4, 8.0 and 8.1.
+- Change: Removed deprecations.
+- Change: removed the following configuration settings:
+  - [output]detectAjax
+  - [properties]analyseScalar
+  - [emergency]maxRuntime
+  - [emergency]memoryLeft
+- Change: Moved the maxCall setting from [emergency] to [prune].
+  Removed the now empty [emergency] section.
+
 6.0.8
 - Bugfix: The help info text display of the Hans skin is respecting
   the whitespace formatting now.

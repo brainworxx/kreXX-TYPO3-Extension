@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Scalar;
 
+use Brainworxx\Krexx\Analyse\Scalar\String\AbstractScalarAnalysis;
 use Brainworxx\Krexx\Analyse\Scalar\String\Base64;
 use Brainworxx\Krexx\Analyse\Scalar\String\Callback;
 use Brainworxx\Krexx\Analyse\Scalar\String\ClassName;
@@ -63,16 +64,16 @@ class ScalarString extends AbstractScalar
     /**
      * The list of analysis classes, that we use.
      *
-     * @var \Brainworxx\Krexx\Analyse\Scalar\String\AbstractScalarAnalysis[]
+     * @var AbstractScalarAnalysis[]
      */
     protected array $classList = [];
 
     /**
      * Get the additional analysis classes from the plugins.
      *
-     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     * @param Pool $pool
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
         $classList = [
             Callback::class,
@@ -89,11 +90,9 @@ class ScalarString extends AbstractScalar
 
         foreach ($classList as $className) {
             if ($className::isActive()) {
-                $this->classList[$className] = $pool->createClass($className);
+                $this->classList[$className] = $pool->createClass(classname: $className);
             }
         }
-
-        parent::__construct($pool);
     }
 
     /**
@@ -111,9 +110,9 @@ class ScalarString extends AbstractScalar
     public function handle(Model $model, string $originalData): Model
     {
         foreach ($this->classList as $className => $analyser) {
-            if ($analyser->canHandle($originalData, $model)) {
-                return $model->injectCallback($analyser)
-                    ->setDomid($this->generateDomId($originalData, $className));
+            if ($analyser->canHandle(string: $originalData, model: $model)) {
+                return $model->injectCallback(object: $analyser)
+                    ->setDomid(domid: $this->generateDomId(string: $originalData, className: $className));
             }
         }
 

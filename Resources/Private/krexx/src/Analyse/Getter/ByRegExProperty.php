@@ -61,9 +61,13 @@ class ByRegExProperty extends ByMethodName
         ReflectionMethod $reflectionMethod,
         ReflectionClass $reflectionClass,
         string $currentPrefix
-    ) {
+    ): mixed {
         $this->deep = 0;
-        return parent::retrieveIt($reflectionMethod, $reflectionClass, $currentPrefix);
+        return parent::retrieveIt(
+            reflectionMethod: $reflectionMethod,
+            reflectionClass: $reflectionClass,
+            currentPrefix: $currentPrefix
+        );
     }
 
     /**
@@ -94,18 +98,22 @@ class ByRegExProperty extends ByMethodName
         }
         // Read the sourcecode into a string.
         $sourcecode = $this->pool->fileService->readFile(
-            $reflectionMethod->getFileName(),
-            $reflectionMethod->getStartLine(),
-            $reflectionMethod->getEndLine()
+            filePath: $reflectionMethod->getFileName(),
+            readFrom: $reflectionMethod->getStartLine(),
+            readTo: $reflectionMethod->getEndLine()
         );
 
         // Execute our search pattern.
         // We are looking for something like;
         // return->myProperty;
         $result = null;
-        foreach ($this->findIt(['return $this->', ';'], $sourcecode) as $propertyName) {
+        foreach ($this->findIt(searchArray: ['return $this->', ';'], haystack: $sourcecode) as $propertyName) {
             // Check if this is a property and return the last we find.
-            $result = $this->analyseRegexResult($propertyName, $reflectionClass, $currentPrefix);
+            $result = $this->analyseRegexResult(
+                propertyName: $propertyName,
+                reflectionClass: $reflectionClass,
+                currentPrefix: $currentPrefix
+            );
         }
 
         // Nothing?
@@ -131,18 +139,18 @@ class ByRegExProperty extends ByMethodName
         string $currentPrefix
     ): ?ReflectionProperty {
         // Check if this is a property and return the first we find.
-        $result = $this->retrievePropertyByName($propertyName, $reflectionClass);
-        if ($result !== null) {
+        $result = $this->retrievePropertyByName(propertyName: $propertyName, parentClass: $reflectionClass);
+        if ($result instanceof \ReflectionProperty) {
             return $result;
         }
 
         // Check if this is a method and go deeper!
-        $methodName = rtrim($propertyName, '()');
-        if ($reflectionClass->hasMethod($methodName) && ++$this->deep < 3) {
+        $methodName = rtrim(string: $propertyName, characters: '()');
+        if ($reflectionClass->hasMethod(name: $methodName) && ++$this->deep < 3) {
             return $this->retrieveReflectionProperty(
-                $reflectionClass->getMethod($methodName),
-                $reflectionClass,
-                $currentPrefix
+                reflectionMethod: $reflectionClass->getMethod(name: $methodName),
+                reflectionClass: $reflectionClass,
+                currentPrefix: $currentPrefix
             );
         }
 
@@ -165,8 +173,8 @@ class ByRegExProperty extends ByMethodName
         while ($parentClass !== false) {
             // Check if it was declared somewhere deeper in the
             // class structure.
-            if ($parentClass->hasProperty($propertyName)) {
-                return $parentClass->getProperty($propertyName);
+            if ($parentClass->hasProperty(name: $propertyName)) {
+                return $parentClass->getProperty(name: $propertyName);
             }
             $parentClass = $parentClass->getParentClass();
         }

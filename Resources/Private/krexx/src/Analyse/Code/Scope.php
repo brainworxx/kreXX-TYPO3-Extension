@@ -58,13 +58,6 @@ class Scope implements CallbackConstInterface
     protected const THIS_SCOPE = '$this';
 
     /**
-     * Here we store all relevant data.
-     *
-     * @var Pool
-     */
-    protected Pool $pool;
-
-    /**
      * The "scope" we are starting with. When it is $this in combination with a
      * nesting level of 1, we treat protected and private variables and functions
      * as public, because they are reachable from the current scope.
@@ -79,10 +72,8 @@ class Scope implements CallbackConstInterface
      * @param Pool $pool
      *   The pool, where we store the classes we need.
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
-
         $pool->scope = $this;
     }
 
@@ -98,7 +89,7 @@ class Scope implements CallbackConstInterface
             $this->scope = $scope;
             // Now that we have a scope, we can actually generate code to
             // reach the variables inside the analysis.
-            $this->pool->codegenHandler->setCodegenAllowed(true);
+            $this->pool->codegenHandler->setCodegenAllowed(bool: true);
         }
     }
 
@@ -145,15 +136,15 @@ class Scope implements CallbackConstInterface
         }
 
         $messages = $this->pool->messages;
-        $privateInherited = $messages->getHelp('private') . ' ' . $messages->getHelp('inherited');
-        if (strpos($model->getType(), $privateInherited) !== false) {
+        $privateInherited = $messages->getHelp(key: 'private') . ' ' . $messages->getHelp(key: 'inherited');
+        if (str_contains(haystack: $model->getType(), needle:  $privateInherited)) {
             // Inherited private properties or methods are not accessible from the
             // $this scope. We need to make sure that we do not generate any code
             // for them.
             return false;
         }
 
-        if (is_object($model->getData()) || is_array($model->getData())) {
+        if (is_object(value: $model->getData()) || is_array(value: $model->getData())) {
             // When analysing a class or array, we have + 1 on our nesting level, when
             // coming from the code generation. That is, because that class is currently
             // being analysed.

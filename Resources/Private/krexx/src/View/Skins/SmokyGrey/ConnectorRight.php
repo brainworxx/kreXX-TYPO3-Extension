@@ -47,10 +47,10 @@ trait ConnectorRight
      */
     protected function renderConnectorRight(string $connector, string $returnType = ''): string
     {
-        if (strlen($connector) > 2 || $returnType !== '') {
+        if (strlen(string: $connector) > 2 || $returnType !== '') {
             // Something big, we should display it.
             // Most likely the parameters of a method.
-            return parent::renderConnectorRight($connector, $returnType);
+            return parent::renderConnectorRight(connector: $connector, returnType: $returnType);
         }
 
         return '';

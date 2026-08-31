@@ -74,21 +74,21 @@ trait Footer
     public function renderFooter(array $caller, Model $model, bool $configOnly = false): string
     {
         if (isset($caller[static::TRACE_FILE])) {
-            $callerString = $this->renderCaller($caller);
+            $callerString = $this->renderCaller(caller: $caller);
         } else {
              // When we have no caller, we will not render it.
             $callerString = '';
         }
 
         return str_replace(
-            $this->markerFooter,
-            [
-                $this->renderExpandableChild($model, $configOnly),
+            search: $this->markerFooter,
+            replace: [
+                $this->renderExpandableChild(model: $model, isExpanded: $configOnly),
                 $callerString,
-                $this->pool->messages->getHelp('pluginList'),
+                $this->pool->messages->getHelp(key: 'pluginList'),
                 $this->renderPluginList(),
             ],
-            $this->fileCache[static::FILE_FOOTER]
+            subject: $this->fileCache[static::FILE_FOOTER]
         );
     }
 
@@ -105,18 +105,18 @@ trait Footer
         $messages = $this->pool->messages;
 
         return str_replace(
-            $this->markerCaller,
-            [
-                $messages->getHelp('calledFromTxt'),
-                $messages->getHelp('calledFromLine'),
-                $messages->getHelp('calledFromAt'),
-                $messages->getHelp('calledFromUrl'),
+            search: $this->markerCaller,
+            replace: [
+                $messages->getHelp(key: 'calledFromTxt'),
+                $messages->getHelp(key: 'calledFromLine'),
+                $messages->getHelp(key: 'calledFromAt'),
+                $messages->getHelp(key: 'calledFromUrl'),
                 $caller[static::TRACE_FILE],
                 $caller[static::TRACE_LINE],
                 $caller[static::TRACE_DATE],
                 $caller[static::TRACE_URL],
             ],
-            $this->fileCache[static::FILE_CALLER]
+            subject: $this->fileCache[static::FILE_CALLER]
         );
     }
 

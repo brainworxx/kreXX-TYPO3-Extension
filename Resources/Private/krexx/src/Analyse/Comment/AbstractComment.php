@@ -47,11 +47,6 @@ use Reflector;
 abstract class AbstractComment
 {
     /**
-     * @var Pool
-     */
-    protected Pool $pool;
-
-    /**
      * Pattern for the finding of inherited comments.
      *
      * @var string[]
@@ -68,9 +63,8 @@ abstract class AbstractComment
      *
      * @param Pool $pool
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
     }
 
     /**
@@ -95,7 +89,7 @@ abstract class AbstractComment
      * @return string
      *   The better readable comment
      */
-    protected function prettifyComment($comment): string
+    protected function prettifyComment(string|bool $comment): string
     {
         if ($comment === false) {
             return '';
@@ -105,16 +99,17 @@ abstract class AbstractComment
         // comment chars with the array_map callback.
         // We skip lines with /** and */
         $result = [];
-        foreach (array_slice(explode("\n", $comment), 1, -1) as $commentLine) {
+        $array = explode(separator: "\n", string: $comment);
+        foreach (array_slice(array: $array, offset: 1, length: -1) as $commentLine) {
             // Remove comment-chars and trim the whitespace.
-            $result[] = trim($commentLine, "* \t\n\r\0\x0B");
+            $result[] = trim(string: $commentLine, characters: "* \t\n\r\0\x0B");
         }
 
         // Sadly, we must not escape this here, or glue it with <br /> for a
         // direct display. The thing is, we may resolve several @inheritdoc
         // marks. The escaping and nlbr() will be done when everything is
         // stitched together.
-        return implode(PHP_EOL, $result);
+        return implode(separator: PHP_EOL, array: $result);
     }
 
     /**
@@ -140,9 +135,9 @@ abstract class AbstractComment
             // Replace the first we find. There may be others in there,
             // and we must not replace them with themselves, causing
             // the comment to repeat itself.
-            if (strpos($originalComment, $pattern) !== false) {
+            if (str_contains(haystack: $originalComment, needle: $pattern)) {
                 // Found one, and end the foreach.
-                $originalComment = str_replace($pattern, $comment, $originalComment);
+                $originalComment = str_replace(search: $pattern, replace: $comment, subject: $originalComment);
                 break;
             }
         }

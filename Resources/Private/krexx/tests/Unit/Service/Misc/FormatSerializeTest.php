@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Service\Misc;
 
+use Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesInheritanceFixture;
 use Brainworxx\Krexx\Service\Misc\FormatSerialize;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesFixture;
 use Brainworxx\Krexx\Tests\Fixtures\SerializableFixture;
@@ -54,7 +55,7 @@ class FormatSerializeTest extends AbstractHelper
     /**
      * Test the pretty print of a serialized string.
      */
-    public function testPrettyPrint()
+    public function testPrettyPrint(): void
     {
         $fixtureClass = new ComplexPropertiesFixture();
         $string = serialize($fixtureClass);
@@ -66,8 +67,8 @@ class FormatSerializeTest extends AbstractHelper
         $expectationList = [
             '    ',
             '        ',
-            'Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesFixture',
-            'Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesInheritanceFixture',
+            ComplexPropertiesFixture::class,
+            ComplexPropertiesInheritanceFixture::class,
             'inheritedProtected',
             'inherited public',
             'qwer',
@@ -84,7 +85,7 @@ class FormatSerializeTest extends AbstractHelper
     /**
      * We feed the pretty print with an invalid string.
      */
-    public function testPrettyPrintFail()
+    public function testPrettyPrintFail(): void
     {
         $fixtureClass = new ComplexPropertiesFixture();
         $fixtureClass->wat = 'böf';
@@ -100,7 +101,7 @@ class FormatSerializeTest extends AbstractHelper
     /**
      * Again with a serializable class.
      */
-    public function testPrettyPrintSerializable()
+    public function testPrettyPrintSerializable(): void
     {
         $fixtureClass = new SerializableFixture();
         $string = serialize($fixtureClass);

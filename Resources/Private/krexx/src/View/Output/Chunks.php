@@ -66,13 +66,6 @@ class Chunks implements ConfigConstInterface
     protected const STRING_DELIMITER = '@@@';
 
     /**
-     * Here we store all relevant data.
-     *
-     * @var Pool
-     */
-    protected Pool $pool;
-
-    /**
      * Here we store the metadata from the call.
      *
      * We save this data in a separate file, so that a backend extension can offer
@@ -104,21 +97,21 @@ class Chunks implements ConfigConstInterface
      *
      * @var string
      */
-    protected string $logDir;
+    protected string $logDir = '';
 
     /**
      * The folder for the output chunks.
      *
      * @var string
      */
-    protected string $chunkDir;
+    protected string $chunkDir = '';
 
     /**
      * Microtime stamp for chunk operations.
      *
      * @var string
      */
-    protected string $fileStamp;
+    protected string $fileStamp = '';
 
     /**
      * Here we save the encoding we are currently using.
@@ -133,13 +126,12 @@ class Chunks implements ConfigConstInterface
      * @param Pool $pool
      *   The pool, where we store the classes we need.
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
         $this->chunkDir = $pool->config->getChunkDir();
         $this->logDir = $pool->config->getLogDir();
-        $stamp = explode(' ', microtime());
-        $this->fileStamp = $stamp[1] . str_replace('0.', '', $stamp[0]);
+        $stamp = explode(separator: ' ', string: microtime());
+        $this->fileStamp = $stamp[1] . str_replace(search: '0.', replace: '', subject: $stamp[0]);
 
         $pool->chunks = $this;
     }
@@ -159,13 +151,13 @@ class Chunks implements ConfigConstInterface
     {
         static $counter = 0;
 
-        if ($this->chunkAllowed && strlen($string) > 10000) {
+        if ($this->chunkAllowed && strlen(string: $string) > 10000) {
             // Get the key.
             $key = $this->fileStamp . '_' . ++$counter;
             // Detect the encoding in the chunk.
-            $this->detectEncoding($string);
+            $this->detectEncoding(string: $string);
             // Write the key to the chunks' folder.
-            $this->pool->fileService->putFileContents($this->chunkDir . $key . '.Krexx.tmp', $string);
+            $this->pool->fileService->putFileContents(filePath: $this->chunkDir . $key . '.Krexx.tmp', string: $string);
             // Return the first part plus the key.
             return static::STRING_DELIMITER . $key . static::STRING_DELIMITER;
         }
@@ -191,9 +183,9 @@ class Chunks implements ConfigConstInterface
     {
         $filename = $this->chunkDir . $key . '.Krexx.tmp';
         // Read the file.
-        $string = $this->pool->fileService->getFileContents($filename);
-        // Delete it, we don't need it anymore.
-        $this->pool->fileService->deleteFile($filename);
+        $string = $this->pool->fileService->getFileContents(filePath: $filename);
+        // Delete it, we don't need it any more.
+        $this->pool->fileService->deleteFile(filePath: $filename);
         return $string;
     }
 
@@ -208,24 +200,24 @@ class Chunks implements ConfigConstInterface
     public function sendDechunkedToBrowser(string $string): void
     {
         // Check for HTML output.
-        if ($this->pool->createClass(CheckOutput::class)->isOutputHtml()) {
-            $chunkPos = strpos($string, static::STRING_DELIMITER);
+        if ($this->pool->createClass(classname: CheckOutput::class)->isOutputHtml()) {
+            $chunkPos = strpos(haystack: $string, needle: static::STRING_DELIMITER);
 
             while ($chunkPos !== false) {
                 // We have a chunk, we send the html part.
-                echo substr($string, 0, $chunkPos);
+                echo substr(string: $string, offset: 0, length: $chunkPos);
                 ob_flush();
                 flush();
-                $chunkPart = substr($string, $chunkPos);
+                $chunkPart = substr(string: $string, offset: $chunkPos);
 
                 // We translate the first chunk.
-                $result = explode(static::STRING_DELIMITER, $chunkPart, 3);
+                $result = explode(separator: static::STRING_DELIMITER, string: $chunkPart, limit: 3);
                 $string = str_replace(
-                    static::STRING_DELIMITER . $result[1] . static::STRING_DELIMITER,
-                    $this->dechunkMe($result[1]),
-                    $chunkPart
+                    search: static::STRING_DELIMITER . $result[1] . static::STRING_DELIMITER,
+                    replace: $this->dechunkMe(key: $result[1]),
+                    subject: $chunkPart
                 );
-                $chunkPos = strpos($string, static::STRING_DELIMITER);
+                $chunkPos = strpos(haystack: $string, needle: static::STRING_DELIMITER);
             }
 
             // No more chunk keys, we send what is left.
@@ -253,37 +245,40 @@ class Chunks implements ConfigConstInterface
 
         // Determine the filename.
         $filename = $this->logDir . $this->fileStamp . '.Krexx.html';
-        $chunkPos = strpos($string, static::STRING_DELIMITER);
+        $chunkPos = strpos(haystack: $string, needle: static::STRING_DELIMITER);
 
         while ($chunkPos !== false) {
             // We have a chunk, we save the html part.
-            $this->pool->fileService->putFileContents($filename, substr($string, 0, $chunkPos));
+            $this->pool->fileService->putFileContents(
+                filePath: $filename,
+                string: substr(string: $string, offset: 0, length: $chunkPos)
+            );
 
-            $chunkPart = substr($string, $chunkPos);
+            $chunkPart = substr(string: $string, offset: $chunkPos);
 
             // We translate the first chunk.
             // Strangely, with a memory peak of 84 MB, explode is
             // 2 mb cheaper than preg_match().
-            $result = explode(static::STRING_DELIMITER, $chunkPart, 3);
+            $result = explode(separator: static::STRING_DELIMITER, string: $chunkPart, limit: 3);
             $string = str_replace(
-                static::STRING_DELIMITER . $result[1] . static::STRING_DELIMITER,
-                $this->dechunkMe($result[1]),
-                $chunkPart
+                search: static::STRING_DELIMITER . $result[1] . static::STRING_DELIMITER,
+                replace: $this->dechunkMe($result[1]),
+                subject: $chunkPart
             );
-            $chunkPos = strpos($string, static::STRING_DELIMITER);
+            $chunkPos = strpos(haystack: $string, needle: static::STRING_DELIMITER);
         }
 
         // No more chunks, we save what is left.
-        $this->pool->fileService->putFileContents($filename, $string);
+        $this->pool->fileService->putFileContents(filePath: $filename, string: $string);
         // Save our metadata, so a potential backend module can display it.
         // We may or may not have already some output for this file.
-        if (!empty($this->metadata)) {
+        if ($this->metadata !== []) {
             $filename .= '.json';
             // Remove the old metadata file. We still have all it's content
             // available in $this->metadata.
-            $this->pool->fileService->deleteFile($filename);
+            $this->pool->fileService->deleteFile(filePath: $filename);
             // Create a new metadata file with new info.
-            $this->pool->fileService->putFileContents($filename, json_encode($this->metadata));
+            $this->pool->fileService->putFileContents(filePath: $filename, string: json_encode(value: $this->metadata));
         }
     }
 
@@ -343,7 +338,7 @@ class Chunks implements ConfigConstInterface
      */
     public function addMetadata(array $caller): void
     {
-        if ($this->pool->config->getSetting(static::SETTING_DESTINATION) === static::VALUE_FILE) {
+        if ($this->pool->config->getSetting(name: static::SETTING_DESTINATION) === static::VALUE_FILE) {
             $this->metadata[] = $caller;
         }
     }
@@ -353,19 +348,19 @@ class Chunks implements ConfigConstInterface
      */
     public function __destruct()
     {
-        if (empty($this->chunkDir)) {
+        if ($this->chunkDir === '' || $this->chunkDir === '0') {
             return;
         }
 
         // Get a list of all chunk files from the run.
-        $chunkList = glob($this->chunkDir . $this->fileStamp . '_*');
-        if (empty($chunkList)) {
+        $chunkList = glob(pattern: $this->chunkDir . $this->fileStamp . '_*');
+        if ($chunkList === [] || $chunkList === false) {
             return;
         }
 
         // Delete them all!
         foreach ($chunkList as $file) {
-            $this->pool->fileService->deleteFile($file);
+            $this->pool->fileService->deleteFile(filePath: $file);
         }
     }
 
@@ -383,12 +378,12 @@ class Chunks implements ConfigConstInterface
     public function detectEncoding(string $string): void
     {
         static $doNothingEncoding = ['ASCII', 'UTF-8', false];
-        $encoding = $this->pool->encodingService->mbDetectEncoding($string);
+        $encoding = $this->pool->encodingService->mbDetectEncoding(string: $string);
 
         // We need to decide, if we need to change the official encoding of
         // the HTML output with a meta tag. We ignore everything in the
         // doNothingEncoding array.
-        if (!in_array($encoding, $doNothingEncoding, true)) {
+        if (!in_array(needle: $encoding, haystack: $doNothingEncoding, strict: true)) {
             $this->officialEncoding = $encoding;
         }
     }

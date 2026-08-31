@@ -47,7 +47,7 @@ class ButtonTest extends AbstractRenderHans
     /**
      * Test the rendering of a button.
      */
-    public function testRenderButton()
+    public function testRenderButton(): void
     {
         $this->mockModel(static::GET_NAME, 'clickme');
         $this->mockModel(static::GET_NORMAL, 'doit');

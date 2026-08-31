@@ -40,6 +40,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Iterate through the ressource analysis and generate an output.
@@ -49,6 +50,15 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 class ThroughResource extends AbstractCallback implements CallbackConstInterface
 {
+    /**
+     * Inject the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
     /**
      * Renders the info of a resource.
      *
@@ -62,19 +72,19 @@ class ThroughResource extends AbstractCallback implements CallbackConstInterface
 
         // Temporarily disable code gen.
         $isAllowedCodeGen = $this->pool->codegenHandler->isCodegenAllowed();
-        $this->pool->codegenHandler->setCodegenAllowed(false);
+        $this->pool->codegenHandler->setCodegenAllowed(bool: false);
 
         foreach ($this->parameters[static::PARAM_DATA] as $name => $data) {
             $output .= $this->pool->routing->analysisHub(
-                $this->pool->createClass(Model::class)
-                    ->setData($data)
-                    ->setName(str_replace('_', ' ', $name))
-                    ->setNormal($data)
+                model: $this->pool->createClass(classname: Model::class)
+                    ->setData(data: $data)
+                    ->setName(name: str_replace(search: '_', replace: ' ', subject: $name))
+                    ->setNormal(normal: $data)
             );
         }
 
         // Reset code generation.
-        $this->pool->codegenHandler->setCodegenAllowed($isAllowedCodeGen);
+        $this->pool->codegenHandler->setCodegenAllowed(bool: $isAllowedCodeGen);
 
         return $output;
     }

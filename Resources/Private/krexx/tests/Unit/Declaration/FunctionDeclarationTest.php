@@ -45,7 +45,7 @@ class FunctionDeclarationTest extends AbstractHelper
     /**
      * Test the retrieval of declaration of simple functions.
      */
-    public function testRetrieveDeclaration()
+    public function testRetrieveDeclaration(): void
     {
         $functionDeclaration = new FunctionDeclaration(\Krexx::$pool);
 

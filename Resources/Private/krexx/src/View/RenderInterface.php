@@ -136,51 +136,9 @@ interface RenderInterface
     public function renderButton(Model $model): string;
 
     /**
-     * Renders the second part of the fatal error handler.
-     *
-     * @param string $errstr
-     *   The string from the error.
-     * @param string $errfile
-     *   The file where the error occurred.
-     * @param int $errline
-     *   The line number where the error occurred.
-     *
-     * @return string
-     *   The template file, with all markers replaced.
-     *
-     * @deprecated
-     *   Since 6.0.0
-     *   Will be removed.
-     *   Has anybody used this one since PHP 7.0 anyway?
-     * @codeCoverageIgnore
-     *   We will not test deprecated code.
-     */
-    public function renderFatalMain(string $errstr, string $errfile, int $errline): string;
-
-    /**
-     * Renders the header part of the fatal error handler.
-     *
-     * @param string $cssJs
-     *   The css and js from the template.
-     * @param string $errorType
-     *   The error type, for the big, fat headline.
-     *
-     * @return string
-     *   The template file, with all markers replaced.
-     *
-     * @deprecated
-     *   Since 6.0.0
-     *   Will be removed.
-     *   Has anybody used this one since PHP 7.0 anyway?
-     * @codeCoverageIgnore
-     *   We will not test deprecated code.
-     */
-    public function renderFatalHeader(string $cssJs, string $errorType): string;
-
-    /**
      * Renders all internal messages.
      *
-     * @param \Brainworxx\Krexx\View\Message[] $messages
+     * @param Message[] $messages
      *   The current messages.
      *
      * @return string

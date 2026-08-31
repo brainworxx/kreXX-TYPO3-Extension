@@ -41,6 +41,7 @@ use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
 use Brainworxx\Krexx\Logging\Model as LoggingModel;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use Throwable;
 
 /**
@@ -48,6 +49,15 @@ use Throwable;
  */
 class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterface
 {
+    /**
+     * Inject the pool.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
     /**
      * Error object analysis.
      *
@@ -61,22 +71,27 @@ class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterf
 
         /** @var \Throwable $data */
         $data = $this->parameters[static::PARAM_DATA];
-        $this->addExceptionMessage($data);
+        $this->addExceptionMessage(data: $data);
         $lineNo = $data->getLine() - 1;
-        $source = trim($this->pool->fileService->readSourcecode($data->getFile(), $lineNo, $lineNo - 5, $lineNo + 5));
+        $source = trim(string: $this->pool->fileService->readSourcecode(
+            filePath: $data->getFile(),
+            highlight: $lineNo,
+            readFrom: $lineNo - 5,
+            readTo: $lineNo + 5
+        ));
         if (empty($source)) {
-            $source = $this->pool->messages->getHelp('noSourceAvailable');
+            $source = $this->pool->messages->getHelp(key: 'noSourceAvailable');
         }
 
         return $output . $this->pool->render->renderExpandableChild(
-            $this->dispatchEventWithModel(
-                'source',
-                $this->pool->createClass(Model::class)
-                    ->setData($source)
-                    ->setName($this->pool->messages->getHelp('sourceCode'))
-                    ->setNormal(static::UNKNOWN_VALUE)
-                    ->setHasExtra(true)
-                    ->setType($this->pool->messages->getHelp('phpType'))
+            model: $this->dispatchEventWithModel(
+                name: 'source',
+                model: $this->pool->createClass(classname: Model::class)
+                    ->setData(data: $source)
+                    ->setName(name: $this->pool->messages->getHelp(key: 'sourceCode'))
+                    ->setNormal(normal: static::UNKNOWN_VALUE)
+                    ->setHasExtra(value: true)
+                    ->setType(type: $this->pool->messages->getHelp(key: 'phpType'))
             )
         );
     }
@@ -87,7 +102,7 @@ class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterf
      * @param Throwable|LoggingModel $data
      * @return void
      */
-    protected function addExceptionMessage($data): void
+    protected function addExceptionMessage(Throwable|LoggingModel $data): void
     {
         // Level 1 means, that is the first object we are looking at.
         if ($this->pool->emergencyHandler->getNestingLevel() !== 1) {
@@ -96,13 +111,14 @@ class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterf
         $message = $data->getMessage();
 
         // Some messages are huge.
-        if (strlen($message) > 80) {
-            $message = substr($message, 0, 75) . ' ...';
+        if (strlen(string: $message) > 80) {
+            $message = substr(string: $message, offset: 0, length: 75) . ' ...';
         }
 
         // Escape it, there can be some bad stuff in there.
-        $message = $this->pool->encodingService->encodeString($message);
-        $this->pool->messages->addMessage('exceptionText', [get_class($data), $message], true);
+        $message = $this->pool->encodingService->encodeString(data: $message);
+        $this->pool->messages
+            ->addMessage(key: 'exceptionText', args: [get_class(object: $data), $message], isThrowAway: true);
     }
 
     /**
@@ -115,21 +131,21 @@ class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterf
     {
         $output = '';
         $trace = $this->parameters[static::PARAM_DATA]->getTrace();
-        if (is_array($trace)) {
-            $this->pool->codegenHandler->setCodegenAllowed(false);
+        if (is_array(value: $trace)) {
+            $this->pool->codegenHandler->setCodegenAllowed(bool: false);
             $output .= $this->pool->render->renderExpandableChild(
-                $this->dispatchEventWithModel(
-                    static::TRACE_BACKTRACE,
-                    $this->pool->createClass(Model::class)
-                        ->setName($this->pool->messages->getHelp('backTrace'))
-                        ->setType($this->pool->messages->getHelp('classInternals'))
-                        ->addParameter(static::PARAM_DATA, $trace)
+                model: $this->dispatchEventWithModel(
+                    name: static::TRACE_BACKTRACE,
+                    model: $this->pool->createClass(classname: Model::class)
+                        ->setName(name: $this->pool->messages->getHelp(key: 'backTrace'))
+                        ->setType(type: $this->pool->messages->getHelp(key: 'classInternals'))
+                        ->addParameter(name: static::PARAM_DATA, value: $trace)
                         ->injectCallback(
-                            $this->pool->createClass(ProcessBacktrace::class)
+                            object: $this->pool->createClass(classname: ProcessBacktrace::class)
                         )
                 )
             );
-            $this->pool->codegenHandler->setCodegenAllowed(true);
+            $this->pool->codegenHandler->setCodegenAllowed(bool: true);
         }
 
         return $output;

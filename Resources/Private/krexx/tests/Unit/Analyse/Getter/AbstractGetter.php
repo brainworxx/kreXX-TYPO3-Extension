@@ -12,7 +12,7 @@ class AbstractGetter extends AbstractHelper
 
     /**
      * @param array $fixture
-     * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $classReflection
+     * @param ReflectionClass $classReflection
      * @return void
      */
     protected function validateResults(array $fixture, ReflectionClass $classReflection)

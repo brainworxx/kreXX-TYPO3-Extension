@@ -48,7 +48,7 @@ class AbstractRenderTest extends AbstractHelper
     /**
      * Test the initializing of the render class.
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $skinDirectory = 'whatever';
         $configMock = $this->createMock(Config::class);

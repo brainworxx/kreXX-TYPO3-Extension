@@ -59,29 +59,20 @@ abstract class AbstractGetter
     protected ?ReflectionProperty $reflectionProperty = null;
 
     /**
-     * This is the pool.
-     *
-     * @var \Brainworxx\Krexx\Service\Factory\Pool
-     */
-    protected Pool $pool;
-
-    /**
      * Inject the pool,
      *
-     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     * @param Pool $pool
      */
-    public function __construct(Pool $pool)
-    {
-        $this->pool = $pool;
-    }
+    abstract public function __construct(Pool $pool);
 
     /**
      * We retrieve the possible return value of the gatter, without calling it.
      *
      * @param \ReflectionMethod $reflectionMethod
      *   The reflection of the getter we are analysing.
-     * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflectionClass
+     * @param ReflectionClass $reflectionClass
      *   The reflection of the class we are analysing.
+     *
      * @return mixed
      *   We retrieve the value.
      */
@@ -89,7 +80,7 @@ abstract class AbstractGetter
         ReflectionMethod $reflectionMethod,
         ReflectionClass $reflectionClass,
         string $currentPrefix
-    );
+    ): mixed;
 
     /**
      * What the method says. Have we found something?
@@ -124,18 +115,18 @@ abstract class AbstractGetter
     {
         // Some people cast their stuff before returning it.
         // Remove it from the code before passing it to the regex.
-        $haystack = str_replace(['(int)', '(string)', '(float)', '(bool)'], '', $haystack);
-        $haystack = str_replace('  ', ' ', $haystack);
+        $haystack = str_replace(search: ['(int)', '(string)', '(float)', '(bool)'], replace: '', subject: $haystack);
+        $haystack = str_replace(search: '  ', replace: ' ', subject: $haystack);
 
         $findings = [];
         preg_match_all(
-            str_replace(
-                ['###0###', '###1###'],
-                [preg_quote($searchArray[0]), preg_quote($searchArray[1])],
-                '/(?<=###0###).*?(?=###1###)/'
+            pattern: str_replace(
+                search: ['###0###', '###1###'],
+                replace: [preg_quote($searchArray[0]), preg_quote($searchArray[1])],
+                subject: '/(?<=###0###).*?(?=###1###)/'
             ),
-            $haystack,
-            $findings
+            subject: $haystack,
+            matches: $findings
         );
 
         // Return the file name as well as stuff from the path.

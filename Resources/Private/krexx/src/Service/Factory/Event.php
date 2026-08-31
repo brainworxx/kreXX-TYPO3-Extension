@@ -54,23 +54,14 @@ class Event
     public array $register = [];
 
     /**
-     * The pool.
-     *
-     * @var Pool
-     */
-    protected Pool $pool;
-
-    /**
      * Injects the pool. Retrieve the global event handlers from the overwrites.
      *
      * @param Pool $pool
      *   The pool, what else?
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
         $this->register = SettingsGetter::getEventList();
-
         $pool->eventService = $this;
     }
 
@@ -82,7 +73,7 @@ class Event
      * @param AbstractCallback|null $callback
      *   The callback, that emitted the event.
      *   Null, when coming from the routing.
-     * @param \Brainworxx\Krexx\Analyse\Model|null $model
+     * @param Model|null $model
      *   The model so far, if available.
      *
      * @return string
@@ -99,7 +90,7 @@ class Event
 
         // Got to handle them all.
         foreach ($this->register[$name] as $classname) {
-            $output .= $this->pool->createClass($classname)->handle($callback, $model);
+            $output .= $this->pool->createClass(classname: $classname)->handle(callback: $callback, model: $model);
         }
 
         return $output;

@@ -52,7 +52,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 class ModelTest extends AbstractHelper
 {
     /**
-     * @var \Brainworxx\Krexx\Logging\Model
+     * @var Model
      */
     protected $model;
 
@@ -66,7 +66,7 @@ class ModelTest extends AbstractHelper
     /**
      * Test the getter and setter of the message.
      */
-    public function testSetGetMessage()
+    public function testSetGetMessage(): void
     {
         $message = 'some message';
 
@@ -77,7 +77,7 @@ class ModelTest extends AbstractHelper
     /**
      * Test the getter and setter of the trace.
      */
-    public function testSetGetTrace()
+    public function testSetGetTrace(): void
     {
         $trace = [
           'what' => 'ever',
@@ -91,7 +91,7 @@ class ModelTest extends AbstractHelper
     /**
      * Test the getter and setter of the line.
      */
-    public function testSetGetLine()
+    public function testSetGetLine(): void
     {
         $line = 42;
 
@@ -102,7 +102,7 @@ class ModelTest extends AbstractHelper
     /**
      * Test the getter and setter of the file.
      */
-    public function testSetGetFile()
+    public function testSetGetFile(): void
     {
         $file = 'autoexec.bat';
 
@@ -113,7 +113,7 @@ class ModelTest extends AbstractHelper
     /**
      * Test the getter and setter of the code.
      */
-    public function testSetGetCode()
+    public function testSetGetCode(): void
     {
         $code = '1234 asdf';
 

@@ -75,4 +75,3 @@ class Log extends AbstractLog
         );
     }
 }
-

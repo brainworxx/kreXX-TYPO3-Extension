@@ -48,8 +48,6 @@ use Brainworxx\Krexx\View\Skins\Hans\ConnectorLeft;
 use Brainworxx\Krexx\View\Skins\Hans\ConnectorRight;
 use Brainworxx\Krexx\View\Skins\Hans\CssJs;
 use Brainworxx\Krexx\View\Skins\Hans\ExpandableChild;
-use Brainworxx\Krexx\View\Skins\Hans\FatalHeader;
-use Brainworxx\Krexx\View\Skins\Hans\FatalMain;
 use Brainworxx\Krexx\View\Skins\Hans\Footer;
 use Brainworxx\Krexx\View\Skins\Hans\Header;
 use Brainworxx\Krexx\View\Skins\Hans\Help;
@@ -86,9 +84,6 @@ class RenderHans extends AbstractRender implements
     use Search;
     use SingeChildHr;
     use SingleEditableChild;
-
-    use FatalHeader;
-    use FatalMain;
 
     /**
      * Template file name.
@@ -222,20 +217,6 @@ class RenderHans extends AbstractRender implements
      * @var string
      */
     protected const FILE_SI_BUTTON = 'singleButton';
-
-    /**
-     * Template file name.
-     *
-     * @var string
-     */
-    protected const FILE_FATAL_MAIN = 'fatalMain';
-
-    /**
-     * Template file name.
-     *
-     * @var string
-     */
-    protected const FILE_FATAL_HEADER = 'fatalHeader';
 
     /**
      * Template file name.

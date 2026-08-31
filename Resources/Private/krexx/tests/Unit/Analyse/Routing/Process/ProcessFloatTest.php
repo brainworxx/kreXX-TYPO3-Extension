@@ -48,8 +48,19 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(AbstractRouting::class, 'dispatchProcessEvent')]
 #[CoversMethod(ProcessFloat::class, 'formatFloat')]
 #[CoversMethod(ProcessFloat::class, 'canHandle')]
+#[CoversMethod(ProcessFloat::class, '__construct')]
 class ProcessFloatTest extends AbstractHelper
 {
+    /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new ProcessFloat(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
     /**
      * Testing the float value processing.
      */

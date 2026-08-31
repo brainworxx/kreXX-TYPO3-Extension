@@ -64,7 +64,10 @@ trait Json
      */
     public function setHelpid(string $helpId): Model
     {
-        $this->addToJson($this->pool->messages->getHelp('metaHelp'), $this->pool->messages->getHelp($helpId));
+        $this->addToJson(
+            key: $this->pool->messages->getHelp(key: 'metaHelp'),
+            value: $this->pool->messages->getHelp(key: $helpId)
+        );
         return $this;
     }
 
@@ -84,11 +87,11 @@ trait Json
     public function addToJson(string $key, string $value): Model
     {
 
-        if (empty($value)) {
+        if ($value === '' || $value === '0') {
             unset($this->json[$key]);
         } else {
             // Remove leftover linebreaks.
-            $value = trim(str_replace(["\r", "\n"], ['', ''], $value));
+            $value = trim(string: str_replace(search: ["\r", "\n"], replace: ['', ''], subject: $value));
             $this->json[$key] = $value;
         }
 
@@ -97,12 +100,12 @@ trait Json
 
     public function addJsonHint(string $hint): Model
     {
-        $key = $this->pool->messages->getHelp('metaHint');
-        $hint = trim(str_replace(["\r", "\n"], ['', ''], $hint));
+        $key = $this->pool->messages->getHelp(key: 'metaHint');
+        $hint = trim(string: str_replace(search: ["\r", "\n"], replace: ['', ''], subject: $hint));
         if (isset($this->json[$key])) {
             $hint = $this->json[$key] . '<br>' . $hint;
         }
-        $this->addToJson($key, $hint);
+        $this->addToJson(key: $key, value: $hint);
 
         return $this;
     }

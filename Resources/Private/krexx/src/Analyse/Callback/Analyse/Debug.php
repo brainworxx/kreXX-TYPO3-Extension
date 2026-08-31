@@ -40,6 +40,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Debug method result analysis methods.
@@ -49,6 +50,15 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 class Debug extends AbstractCallback implements CallbackConstInterface
 {
+    /**
+     * Inject the pool.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
     /**
      * Iterate though the result of the polled debug methods.
      *
@@ -60,11 +70,11 @@ class Debug extends AbstractCallback implements CallbackConstInterface
         // This could be anything, we need to route it.
         return $this->dispatchStartEvent() .
             $this->pool->routing->analysisHub(
-                $this->dispatchEventWithModel(
-                    static::EVENT_MARKER_ANALYSES_END,
-                    $this->pool->createClass(Model::class)
-                        ->setData($this->parameters[static::PARAM_DATA])
-                        ->setName($this->pool->messages->getHelp('result'))
+                model: $this->dispatchEventWithModel(
+                    name: static::EVENT_MARKER_ANALYSES_END,
+                    model: $this->pool->createClass(classname: Model::class)
+                        ->setData(data: $this->parameters[static::PARAM_DATA])
+                        ->setName(name: $this->pool->messages->getHelp(key: 'result'))
                 )
             );
     }

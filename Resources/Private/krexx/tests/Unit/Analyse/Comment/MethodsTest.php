@@ -55,7 +55,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 class MethodsTest extends AbstractHelper
 {
     /**
-     * @var \Brainworxx\Krexx\Analyse\Comment\Methods
+     * @var Methods
      */
     protected $methodComment;
 
@@ -89,7 +89,7 @@ class MethodsTest extends AbstractHelper
      *
      * Comment in plain sight above method.
      */
-    public function testGetComment()
+    public function testGetComment(): void
     {
         // Comment in plain sight above method.
         $this->assertEquals(

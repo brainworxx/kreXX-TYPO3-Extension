@@ -90,19 +90,19 @@ class ReturnType extends AbstractComment
     public function getComment(Reflector $reflection, ?ReflectionClass $reflectionClass = null): string
     {
         // Get a first impression by the reflection.
-        $result = $this->pool->createClass(MethodDeclaration::class)
-            ->retrieveReturnType($reflection);
+        $result = $this->pool->createClass(classname: MethodDeclaration::class)
+            ->retrieveReturnType(reflection: $reflection);
         if ($result !== '') {
-            return $this->pool->encodingService->encodeString($result);
+            return $this->pool->encodingService->encodeString(data: $result);
         }
 
         // Fallback to the comments parsing.
         $docComment = $reflection->getDocComment();
         if (
             !empty($docComment)
-            && preg_match('/(?<=@return ).*$/m', $docComment, $matches) > 0
+            && preg_match(pattern: '/(?<=@return ).*$/m', subject: $docComment, matches: $matches) > 0
         ) {
-            $result = $this->retrieveReturnTypeFromComment($matches[0], $reflectionClass);
+            $result = $this->retrieveReturnTypeFromComment(comment: $matches[0], reflectionClass: $reflectionClass);
         }
 
         return $result;
@@ -121,21 +121,21 @@ class ReturnType extends AbstractComment
      */
     protected function retrieveReturnTypeFromComment(string $comment, ?ReflectionClass $reflectionClass = null): string
     {
-        $resultToken = strtok($comment . ' ', ' ');
+        $resultToken = strtok(token: ' ', string: $comment . ' ');
         $result = '';
-        if (strpos($resultToken, '$this') === 0 && $reflectionClass !== null) {
+        if (str_starts_with(haystack: $resultToken, needle: '$this') && $reflectionClass instanceof \ReflectionClass) {
             // @return $this
             // And we know what $this actually is.
-            $result = $this->pool->encodingService->encodeString('\\' . $reflectionClass->getName());
+            $result = $this->pool->encodingService->encodeString(data: '\\' . $reflectionClass->getName());
         } elseif (
             // Inside the whitelist
-            in_array($resultToken, static::ALLOWED_TYPES, true)
+            in_array(needle: $resultToken, haystack: static::ALLOWED_TYPES, strict: true)
             // Looks like a class name with namespace.
-            || strpos($resultToken, '\\') === 0
+            || str_starts_with(haystack: $resultToken, needle: '\\')
             // Multiple types.
-            || strpos($resultToken, '|') !== false
+            || str_contains(haystack: $resultToken, needle: '|')
         ) {
-            $result = $this->pool->encodingService->encodeString($resultToken);
+            $result = $this->pool->encodingService->encodeString(data: $resultToken);
         }
 
         return $result;

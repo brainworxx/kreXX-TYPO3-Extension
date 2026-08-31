@@ -48,7 +48,7 @@ class Cookie
     /**
      * Our security handler.
      *
-     * @var \Brainworxx\Krexx\Service\Config\Validation
+     * @var Validation
      */
     protected Validation $validation;
 
@@ -62,17 +62,17 @@ class Cookie
     /**
      * Inject the pool, and get a first impression of the cookies.
      *
-     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     * @param Pool $pool
      */
     public function __construct(Pool $pool)
     {
         $this->validation = $pool->config->validation;
-        $cookies = $pool->getGlobals('_COOKIE');
+        $cookies = $pool->getGlobals(what: '_COOKIE');
 
         if (isset($cookies['KrexxDebugSettings'])) {
             // We have local settings.
-            $settings = json_decode($cookies['KrexxDebugSettings'], true);
-            if (is_array($settings)) {
+            $settings = json_decode(json: $cookies['KrexxDebugSettings'], associative: true);
+            if (is_array(value: $settings)) {
                 $this->settings = $settings;
             }
         }
@@ -94,10 +94,10 @@ class Cookie
         // Do we have a value in the cookies?
         if (
             isset($this->settings[$name]) &&
-            $this->validation->evaluateSetting($group, $name, $this->settings[$name])
+            $this->validation->evaluateSetting(group: $group, name: $name, value: $this->settings[$name])
         ) {
             // We escape them, just in case.
-            return htmlspecialchars($this->settings[$name]);
+            return htmlspecialchars(string: $this->settings[$name]);
         }
 
         // Still here?

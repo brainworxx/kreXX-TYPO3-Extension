@@ -55,7 +55,7 @@ class EventTest extends AbstractHelper
     /**
      * Test the setting of the pool and the retrieval of the listener.
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $customEventHandler = 'SomeClassName';
 
@@ -83,7 +83,7 @@ class EventTest extends AbstractHelper
     /**
      * Test the dispatching of events and their handler.
      */
-    public function testDispatch()
+    public function testDispatch(): void
     {
         $event = new Event(Krexx::$pool);
         $fixture = [

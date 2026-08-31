@@ -37,6 +37,8 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\View\Skins\Hans;
 
+use Brainworxx\Krexx\View\Message;
+
 /**
  * Renders the messages.
  */
@@ -53,12 +55,12 @@ trait Messages
     public function renderMessages(array $messages): string
     {
         $result = '';
-        /** @var \Brainworxx\Krexx\View\Message $message */
+        /** @var Message $message */
         foreach ($messages as $message) {
             $result .= str_replace(
-                $this->markerMessages,
-                $message->getText(),
-                $this->fileCache[static::FILE_MESSAGE]
+                search: $this->markerMessages,
+                replace: $message->getText(),
+                subject: $this->fileCache[static::FILE_MESSAGE]
             );
         }
 

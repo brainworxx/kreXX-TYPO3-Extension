@@ -47,13 +47,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 trait ConnectorService
 {
     /**
-     * Here we store all relevant data.
-     *
-     * @var Pool
-     */
-    protected Pool $pool;
-
-    /**
      * The connector service, used for source generation.
      *
      * @var Connectors
@@ -63,14 +56,11 @@ trait ConnectorService
     /**
      * Inject the pool and create the connector service.
      *
-     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     * @param Pool $pool
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->connectorService = $pool->createClass(
-            Connectors::class
-        );
-        $this->pool = $pool;
+        $this->connectorService = $pool->createClass(classname: Connectors::class);
     }
 
      /**
@@ -95,7 +85,7 @@ trait ConnectorService
      */
     public function getConnectorRight(int $cap = 0): string
     {
-        return $this->connectorService->getConnectorRight($cap);
+        return $this->connectorService->getConnectorRight(cap: $cap);
     }
 
     /**
@@ -108,9 +98,9 @@ trait ConnectorService
      * @return Model
      *   $this for chaining.
      */
-    public function setConnectorParameters($params): Model
+    public function setConnectorParameters(string|int $params): Model
     {
-        $this->connectorService->setParameters($params);
+        $this->connectorService->setParameters(params: $params);
         return $this;
     }
 
@@ -135,7 +125,7 @@ trait ConnectorService
      */
     public function setConnectorType(string $type): Model
     {
-        $this->connectorService->setType($type);
+        $this->connectorService->setType(type: $type);
         return $this;
     }
 
@@ -143,14 +133,14 @@ trait ConnectorService
      * Sets a special and custom connectorLeft. Only used for constants code
      * generation.
      *
-     * @param string $string
+     * @param string $customConnectorLeft
      *
      * @return Model
      *   Return $this for chaining.
      */
-    public function setCustomConnectorLeft(string $string): Model
+    public function setCustomConnectorLeft(string $customConnectorLeft): Model
     {
-        $this->connectorService->setCustomConnectorLeft($string);
+        $this->connectorService->setCustomConnectorLeft(customConnectorLeft: $customConnectorLeft);
         return $this;
     }
 
@@ -185,7 +175,7 @@ trait ConnectorService
      */
     public function setReturnType(string $returnType): Model
     {
-        $this->connectorService->setReturnType($returnType);
+        $this->connectorService->setReturnType(returnType: $returnType);
         return $this;
     }
 }

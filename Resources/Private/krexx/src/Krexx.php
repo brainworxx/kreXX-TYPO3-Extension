@@ -41,7 +41,6 @@ use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Controller\BacktraceController;
 use Brainworxx\Krexx\Controller\DumpController;
 use Brainworxx\Krexx\Controller\EditSettingsController;
-use Brainworxx\Krexx\Controller\ExceptionController;
 use Brainworxx\Krexx\Controller\TimerController;
 use Brainworxx\Krexx\Logging\LoggingTrait;
 use Brainworxx\Krexx\Service\Config\Config;
@@ -88,8 +87,8 @@ class Krexx
 
         AbstractController::$analysisInProgress = true;
 
-        static::$pool->createClass(TimerController::class)
-            ->timerAction($string);
+        static::$pool->createClass(classname: TimerController::class)
+            ->timerAction(string: $string);
 
         AbstractController::$analysisInProgress = false;
     }
@@ -105,7 +104,7 @@ class Krexx
 
         // Disabled ?
         if (
-            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(name: ConfigConstInterface::SETTING_DISABLED) ||
             AbstractController::$analysisInProgress ||
             Config::$disabledByPhp
         ) {
@@ -114,7 +113,7 @@ class Krexx
 
         AbstractController::$analysisInProgress = true;
 
-        static::$pool->createClass(TimerController::class)
+        static::$pool->createClass(classname: TimerController::class)
             ->timerEndAction();
 
         AbstractController::$analysisInProgress = false;
@@ -131,13 +130,13 @@ class Krexx
      * @return mixed
      *   Return the original analysis value.
      */
-    public static function open($data = null)
+    public static function open(mixed $data = null): mixed
     {
         Pool::createPool();
 
         // Disabled?
         if (
-            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(name: ConfigConstInterface::SETTING_DISABLED) ||
             AbstractController::$analysisInProgress ||
             Config::$disabledByPhp
         ) {
@@ -146,8 +145,8 @@ class Krexx
 
         AbstractController::$analysisInProgress = true;
 
-        static::$pool->createClass(DumpController::class)
-            ->dumpAction($data);
+        static::$pool->createClass(classname: DumpController::class)
+            ->dumpAction(data: $data);
 
         AbstractController::$analysisInProgress = false;
 
@@ -171,7 +170,7 @@ class Krexx
 
         // Disabled?
         if (
-            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(name: ConfigConstInterface::SETTING_DISABLED) ||
             AbstractController::$analysisInProgress ||
             Config::$disabledByPhp
         ) {
@@ -180,8 +179,8 @@ class Krexx
 
         AbstractController::$analysisInProgress = true;
 
-        static::$pool->createClass(BacktraceController::class)
-            ->backtraceAction($backtrace);
+        static::$pool->createClass(classname: BacktraceController::class)
+            ->backtraceAction(backtrace: $backtrace);
 
         AbstractController::$analysisInProgress = false;
     }
@@ -195,7 +194,7 @@ class Krexx
     {
         Pool::createPool();
 
-        static::$pool->config->setDisabled(true);
+        static::$pool->config->setDisabled(value: true);
         Config::$disabledByPhp = true;
     }
 
@@ -213,87 +212,31 @@ class Krexx
         // Disabled?
         // We are ignoring local settings here.
         if (
-            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(name: ConfigConstInterface::SETTING_DISABLED) ||
             Config::$disabledByPhp
         ) {
             return;
         }
 
-         static::$pool->createClass(EditSettingsController::class)
+         static::$pool->createClass(classname: EditSettingsController::class)
             ->editSettingsAction();
-    }
-
-    /**
-     * Registering our exception handler.
-     *
-     * @deprecated
-     *   Since 6.0.0
-     *   Will be removed.
-     *   Has anybody used this one since PHP 7.0 anyway?
-     * @codeCoverageIgnore
-     *   We will not test deprecated code.
-     *
-     * @api
-     */
-    public static function registerExceptionHandler(): void
-    {
-        Pool::createPool();
-
-        // Disabled?
-        if (
-            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
-            Config::$disabledByPhp
-        ) {
-            return;
-        }
-
-        static::$pool->createClass(ExceptionController::class)
-            ->registerAction();
-    }
-
-    /**
-     * Unregistering our exception handler.
-     *
-     * @deprecated
-     *   Since 6.0.0
-     *   Will be removed.
-     *   Has anybody used this one since PHP 7.0 anyway?
-     * @codeCoverageIgnore
-     *   We will not test deprecated code.
-     *
-     * @api
-     */
-    public static function unregisterExceptionHandler(): void
-    {
-        Pool::createPool();
-
-        // Disabled?
-        if (
-            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
-            Config::$disabledByPhp
-        ) {
-            return;
-        }
-
-        static::$pool->createClass(ExceptionController::class)
-            ->unregisterAction();
     }
 
     /**
      * Ignore all settings, and force file logging. Ajax requests will not be ignored.
      *
-     * @api
-     *
-     * @param mixed $data
+     * @param mixed|null $data
      *   The variable we want to analyse.
      *
      * @return mixed
      *   Return the original analysis value.
+     *@api
+     *
      */
-    public static function log($data = null)
+    public static function log(mixed $data = null): mixed
     {
         static::startForcedLog();
-        static::open($data);
+        static::open(data: $data);
         static::endForcedLog();
 
         return $data;
@@ -313,7 +256,7 @@ class Krexx
     public static function logBacktrace(?array $backtrace = null): void
     {
         static::startForcedLog();
-        static::backtrace($backtrace);
+        static::backtrace(backtrace: $backtrace);
         static::endForcedLog();
     }
 

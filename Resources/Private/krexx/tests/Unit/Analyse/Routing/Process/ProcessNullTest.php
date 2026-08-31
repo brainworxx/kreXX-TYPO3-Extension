@@ -47,8 +47,19 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(ProcessNull::class, 'handle')]
 #[CoversMethod(AbstractRouting::class, 'dispatchProcessEvent')]
 #[CoversMethod(ProcessNull::class, 'canHandle')]
+#[CoversMethod(ProcessNull::class, '__construct')]
 class ProcessNullTest extends AbstractHelper
 {
+    /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new ProcessNull(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
     /**
      * Testing the float value processing.
      */

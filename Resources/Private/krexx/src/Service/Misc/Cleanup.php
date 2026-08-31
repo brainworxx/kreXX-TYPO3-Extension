@@ -46,13 +46,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 class Cleanup implements ConfigConstInterface
 {
     /**
-     * The pool.
-     *
-     * @var \Brainworxx\Krexx\Service\Factory\Pool
-     */
-    protected Pool $pool;
-
-    /**
      * We only do a chunks cleanup once.
      *
      * @var bool
@@ -62,11 +55,10 @@ class Cleanup implements ConfigConstInterface
     /**
      * Assigning the pool.
      *
-     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     * @param Pool $pool
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
     }
 
     /**
@@ -83,24 +75,24 @@ class Cleanup implements ConfigConstInterface
         }
 
         // Cleanup old logfiles to prevent an overflow.
-        $logList = glob($this->pool->config->getLogDir() . '*.Krexx.html');
-        if (empty($logList)) {
+        $logList = glob(pattern: $this->pool->config->getLogDir() . '*.Krexx.html');
+        if ($logList === [] || $logList === false) {
             return $this;
         }
 
         array_multisort(
-            array_map([$this->pool->fileService, 'filetime'], $logList),
+            array_map(callback: $this->pool->fileService->filetime(...), array: $logList),
             SORT_DESC,
             $logList
         );
 
-        $maxFileCount = (int)$this->pool->config->getSetting(static::SETTING_MAX_FILES);
+        $maxFileCount = (int)$this->pool->config->getSetting(name: static::SETTING_MAX_FILES);
         $count = 1;
         // Cleanup logfiles.
         foreach ($logList as $file) {
             if ($count > $maxFileCount) {
-                $this->pool->fileService->deleteFile($file);
-                $this->pool->fileService->deleteFile($file . '.json');
+                $this->pool->fileService->deleteFile(filePath: $file);
+                $this->pool->fileService->deleteFile(filePath: $file . '.json');
             }
 
             ++$count;
@@ -125,10 +117,10 @@ class Cleanup implements ConfigConstInterface
         static::$chunksDone = true;
         // Clean up leftover files.
         $now = time();
-        foreach ((array)glob($this->pool->config->getChunkDir() . '*.Krexx.tmp') as $file) {
+        foreach ((array)glob(pattern: $this->pool->config->getChunkDir() . '*.Krexx.tmp') as $file) {
             // We delete everything that is older than 15 minutes.
-            if (($this->pool->fileService->filetime($file) + 900) < $now) {
-                $this->pool->fileService->deleteFile($file);
+            if (($this->pool->fileService->filetime(filePath: $file) + 900) < $now) {
+                $this->pool->fileService->deleteFile(filePath: $file);
             }
         }
 

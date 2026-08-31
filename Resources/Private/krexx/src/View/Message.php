@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,7 +34,6 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 namespace Brainworxx\Krexx\View;
 
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -42,11 +43,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  */
 class Message
 {
-    /**
-     * @var \Brainworxx\Krexx\Service\Factory\Pool
-     */
-    protected Pool $pool;
-
     /**
      * The key under which this message is stored.
      *
@@ -78,11 +74,10 @@ class Message
     /**
      * Inject the pool.
      *
-     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     * @param Pool $pool
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
     }
 
     /**

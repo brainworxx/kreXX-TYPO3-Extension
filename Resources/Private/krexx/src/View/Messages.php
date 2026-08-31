@@ -60,13 +60,6 @@ class Messages
     protected array $helpArray = [];
 
     /**
-     * Here we store all relevant data.
-     *
-     * @var Pool
-     */
-    protected Pool $pool;
-
-    /**
      * The language key where the texts are stored.
      *
      * @var string
@@ -79,9 +72,8 @@ class Messages
      * @param Pool $pool
      *   The pool, where we store the classes we need.
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
         $pool->messages = $this;
     }
 
@@ -118,11 +110,11 @@ class Messages
         // We will only display these messages once.
         if (!isset($this->messages[$key])) {
             // Add it to the keys, so the CMS can display it.
-            $this->messages[$key] = $this->pool->createClass(Message::class)
-                ->setKey($key)
-                ->setArguments($args)
-                ->setText($this->getHelp($key, $args))
-                ->setIsThrowAway($isThrowAway);
+            $this->messages[$key] = $this->pool->createClass(classname: Message::class)
+                ->setKey(key: $key)
+                ->setArguments(arguments: $args)
+                ->setText($this->getHelp(key: $key, args: $args))
+                ->setIsThrowAway(isThrowAway: $isThrowAway);
         }
     }
 
@@ -159,11 +151,11 @@ class Messages
         // Simple Wrapper for OutputActions::$render->renderMessages
         if (
             php_sapi_name() === 'cli' &&
-            !empty($this->messages) &&
-            !defined('KREXX_TEST_IN_PROGRESS')
+            $this->messages !== [] &&
+            !defined(constant_name: 'KREXX_TEST_IN_PROGRESS')
         ) {
             // Output the messages on the shell.
-             $result = "\n\n" . $this->getHelp('shellFeedbackHeadline') . "\n";
+             $result = "\n\n" . $this->getHelp(key: 'shellFeedbackHeadline') . "\n";
             $result .= "==============\n";
             foreach ($this->messages as $message) {
                 $result .= strip_tags($message->getText()) . "\n";
@@ -173,7 +165,7 @@ class Messages
         }
 
         // Return the rendered messages.
-        return $this->pool->render->renderMessages($this->messages);
+        return $this->pool->render->renderMessages(messages: $this->messages);
     }
 
     /**
@@ -189,7 +181,15 @@ class Messages
      */
     public function getHelp(string $key, array $args = []): string
     {
-        return vsprintf($this->helpArray[$key] ?? '', $args);
+        if (empty($this->helpArray[$key])) {
+            return '';
+        }
+
+        if ($args === []) {
+            return $this->helpArray[$key];
+        }
+
+        return vsprintf(format: $this->helpArray[$key], values: $args);
     }
 
     /**
@@ -204,7 +204,10 @@ class Messages
         foreach ($fileList as $filename) {
             $helpArray = array_replace_recursive(
                 $helpArray,
-                (array)parse_ini_string($this->pool->fileService->getFileContents($filename, false), true)
+                (array)parse_ini_string(
+                    ini_string: $this->pool->fileService->getFileContents(filePath: $filename, showError: false),
+                    process_sections: true
+                )
             );
         }
 

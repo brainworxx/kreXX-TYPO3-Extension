@@ -48,13 +48,24 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(ConfigSection::class, 'callMe')]
 #[CoversMethod(ConfigSection::class, 'generateOutput')]
 #[CoversMethod(ConfigSection::class, 'prepareValue')]
+#[CoversMethod(ConfigSection::class, '__construct')]
 #[CoversMethod(AbstractCallback::class, 'dispatchStartEvent')]
 class ConfigSectionTest extends AbstractHelper
 {
     /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new ConfigSection(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
+    /**
      * Testing if the configuration is rendered correctly.
      */
-    public function testCallMe()
+    public function testCallMe(): void
     {
         // Prepare the fixture.
         $noRender = new Model();

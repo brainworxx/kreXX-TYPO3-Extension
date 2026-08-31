@@ -47,6 +47,7 @@ $callbackScalar = '\\Brainworxx\\Krexx\\Analyse\\Scalar\\String\\';
 $caller = '\\Brainworxx\\Krexx\\Analyse\\Caller\\';
 $factory = '\\Brainworxx\\Krexx\\Service\\Factory\\';
 $scalaString = '\\Brainworxx\\Krexx\\Analyse\\Scalar\String\\';
+$analyseObjects = '\\Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\';
 
 AbstractHelper::defineFunctionMock($analyseRoutingProcess, 'class_exists');
 AbstractHelper::defineFunctionMock($analyseRoutingProcess, 'is_object');
@@ -78,7 +79,7 @@ AbstractHelper::defineFunctionMock($view, 'defined');
 AbstractHelper::defineFunctionMock($caller, 'time');
 AbstractHelper::defineFunctionMock($factory, 'getmypid');
 AbstractHelper::defineFunctionMock($scalaString, 'class_exists');
-
+AbstractHelper::defineFunctionMock($analyseObjects, 'function_exists');
 
 // Register a shutdown method to die, so we get no output on the shell.
 register_shutdown_function(function () {

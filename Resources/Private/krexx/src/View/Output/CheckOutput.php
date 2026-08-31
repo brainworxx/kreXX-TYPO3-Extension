@@ -52,20 +52,12 @@ class CheckOutput
     protected const REMOTE_ADDRESS = 'REMOTE_ADDR';
 
     /**
-     * Here we store all relevant data.
-     *
-     * @var \Brainworxx\Krexx\Service\Factory\Pool
-     */
-    protected Pool $pool;
-
-    /**
      * Injects the pool.
      *
-     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     * @param Pool $pool
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
     }
 
     /**
@@ -82,7 +74,7 @@ class CheckOutput
         $server = $this->pool->getServer();
 
         return isset($server['HTTP_X_REQUESTED_WITH']) &&
-            strtolower($server['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+            strtolower(string: $server['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
     }
 
     /**
@@ -107,10 +99,10 @@ class CheckOutput
         // When we have dispatched a PDF or Json, the browser will not be
         // able to render the HTML output correctly.
         foreach (headers_list() as $header) {
-            $header = strtolower($header);
+            $header = strtolower(string: $header);
             if (
-                strpos($header, 'content-type') !== false &&
-                strpos($header, 'html') === false
+                str_contains(haystack: $header, needle: 'content-type')
+                && !str_contains(haystack: $header, needle: 'html')
             ) {
                 // We do have none html content type.
                 return false;
@@ -138,14 +130,14 @@ class CheckOutput
     {
         $server = $this->pool->getServer();
         $remote = isset($server[static::REMOTE_ADDRESS]) ? (string) $server[static::REMOTE_ADDRESS] : null;
-        $ipList = array_map('trim', explode(',', $whitelist));
+        $ipList = array_map(callback: trim(...), array: explode(separator: ',', string: $whitelist));
         if (
             // There is no IP on the shell.
             $this->isCli()
             // Or we allow everyone.
             || $whitelist === '*'
             // Or the IPs are matching.
-            || in_array($remote, $ipList, true)
+            || in_array(needle: $remote, haystack: $ipList, strict: true)
         ) {
             return true;
         }
@@ -155,7 +147,7 @@ class CheckOutput
             return false;
         }
 
-        return $this->checkWildcards($ipList, $remote);
+        return $this->checkWildcards(ipList: $ipList, remote: $remote);
     }
 
     /**
@@ -170,9 +162,9 @@ class CheckOutput
     protected function checkWildcards(array $ipList, string $remote): bool
     {
         foreach ($ipList as $ip) {
-            $wildcardPos = strpos($ip, '*');
+            $wildcardPos = strpos(haystack: $ip, needle: '*');
             // Check if the ip has a wildcard.
-            if ($wildcardPos !== false && substr($remote, 0, $wildcardPos) . '*' === $ip) {
+            if ($wildcardPos !== false && substr(string: $remote, offset: 0, length: $wildcardPos) . '*' === $ip) {
                 return true;
             }
         }

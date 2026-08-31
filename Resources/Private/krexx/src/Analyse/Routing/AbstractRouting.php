@@ -47,22 +47,12 @@ use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 abstract class AbstractRouting
 {
     /**
-     * Here we store all relevant data.
-     *
-     * @var Pool
-     */
-    protected Pool $pool;
-
-    /**
      * Injects the pool.
      *
      * @param Pool $pool
      *   The pool, where we store the classes we need.
      */
-    public function __construct(Pool $pool)
-    {
-         $this->pool = $pool;
-    }
+    abstract public function __construct(Pool $pool);
 
     /**
      * Generates an id for the DOM.
@@ -71,15 +61,15 @@ abstract class AbstractRouting
      * The ID is the object hash as well as the kruXX call number, to avoid
      * collisions (even if they are unlikely).
      *
-     * @param mixed $data
+     * @param object $data
      *   The object from which we want the ID.
      *
      * @return string
      *   The generated id.
      */
-    protected function generateDomIdFromObject($data): string
+    protected function generateDomIdFromObject(object $data): string
     {
-        return 'k' . $this->pool->emergencyHandler->getKrexxCount() . '_' . spl_object_hash($data);
+        return 'k' . $this->pool->emergencyHandler->getKrexxCount() . '_' . spl_object_hash(object: $data);
     }
 
     /**
@@ -94,9 +84,8 @@ abstract class AbstractRouting
     protected function dispatchProcessEvent(Model $model): Model
     {
         $this->pool->eventService->dispatch(
-            static::class . PluginConfigInterface::START_PROCESS,
-            null,
-            $model
+            name: static::class . PluginConfigInterface::START_PROCESS,
+            model: $model
         );
 
         return $model;
@@ -107,18 +96,17 @@ abstract class AbstractRouting
      *
      * @param string $name
      *   The event name.
-     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @param Model $model
      *   The model, so far.
      *
-     * @return \Brainworxx\Krexx\Analyse\Model
+     * @return Model
      *   The changed model.
      */
     protected function dispatchNamedEvent(string $name, Model $model): Model
     {
         $this->pool->eventService->dispatch(
-            static::class . '::' . $name,
-            null,
-            $model
+            name: static::class . '::' . $name,
+            model: $model
         );
 
         return $model;

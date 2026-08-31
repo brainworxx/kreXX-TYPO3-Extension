@@ -78,7 +78,7 @@ class CheckOutputTest extends AbstractHelper
     /**
      * Test the setting of the pool.
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $checkOutput = new CheckOutput(Krexx::$pool);
         $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $checkOutput));
@@ -87,7 +87,7 @@ class CheckOutputTest extends AbstractHelper
     /**
      * Test the ajax detection.
      */
-    public function testIsAjax()
+    public function testIsAjax(): void
     {
         $_SERVER[static::HTTP_X_REQUESTED_WITH] = 'xmlhttprequest';
 
@@ -101,7 +101,7 @@ class CheckOutputTest extends AbstractHelper
     /**
      * Test the cli detection, with a cli mock
      */
-    public function testIsCliCli()
+    public function testIsCliCli(): void
     {
         $sapiMock = $this->getFunctionMock(static::OUTPUT_NAMESPACE, static::PHP_SAPI_NAME);
         $sapiMock->expects($this->once())
@@ -114,7 +114,7 @@ class CheckOutputTest extends AbstractHelper
     /**
      * Test the cli detection with something else  mock.
      */
-    public function testIsCliOther()
+    public function testIsCliOther(): void
     {
         $sapiMock = $this->getFunctionMock(static::OUTPUT_NAMESPACE, static::PHP_SAPI_NAME);
         $sapiMock->expects($this->once())
@@ -127,7 +127,7 @@ class CheckOutputTest extends AbstractHelper
     /**
      * Test the detection of already send HTML output.
      */
-    public function testIsOutputHtmlHtml()
+    public function testIsOutputHtmlHtml(): void
     {
         $headerMock = $this->getFunctionMock(static::OUTPUT_NAMESPACE, static::HEADERS_LIST);
         $headerMock->expects($this->once())
@@ -140,7 +140,7 @@ class CheckOutputTest extends AbstractHelper
     /**
      * Test the detection of already send PDF output.
      */
-    public function testIsOutputHtmlPdf()
+    public function testIsOutputHtmlPdf(): void
     {
         $headerMock = $this->getFunctionMock(static::OUTPUT_NAMESPACE, static::HEADERS_LIST);
         $headerMock->expects($this->once())
@@ -153,7 +153,7 @@ class CheckOutputTest extends AbstractHelper
     /**
      * Test if the remote address is allowed to trigger kreXX
      */
-    public function testIsAllowedIp()
+    public function testIsAllowedIp(): void
     {
         // Disable CLI mode.
         $sapiMock = $this->getFunctionMock(static::OUTPUT_NAMESPACE, static::PHP_SAPI_NAME);

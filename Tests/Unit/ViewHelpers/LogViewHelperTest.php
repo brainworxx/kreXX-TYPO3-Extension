@@ -57,11 +57,7 @@ class LogViewHelperTest extends AbstractHelper
     {
         $logViewHelper = new LogViewHelper();
         // Inject the view and the rendering context.
-        if (class_exists(StandaloneView::class)) {
-            $view = $this->createMock(StandaloneView::class);
-        } else {
-            $view = $this->createMock(ViewInterface::class);
-        }
+        $view = $this->createMock(ViewInterface::class);
         $variableContainer = $this->createMock(ViewHelperVariableContainer::class);
         $variableContainer->expects($this->once())
             ->method('getView')
@@ -97,17 +93,8 @@ class LogViewHelperTest extends AbstractHelper
         $settingsDestination->expects($this->once())
             ->method('setValue')
             ->with(Fallback::VALUE_FILE);
-        $settingsAjax = $this->createMock(Model::class);
-        $settingsAjax->expects($this->once())
-            ->method('setSource')
-            ->with('Forced logging')
-            ->willReturn($settingsAjax);
-        $settingsAjax->expects($this->once())
-            ->method('setValue')
-            ->with(false);
         $configMock->settings = [
             Fallback::SETTING_DESTINATION => $settingsDestination,
-            Fallback::SETTING_DETECT_AJAX => $settingsAjax
         ];
 
         $logViewHelper->render();

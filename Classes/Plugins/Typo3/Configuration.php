@@ -54,7 +54,6 @@ use Brainworxx\Krexx\Analyse\Scalar\String\Xml;
 use Brainworxx\Krexx\Controller\BacktraceController;
 use Brainworxx\Krexx\Controller\DumpController;
 use Brainworxx\Krexx\Controller\EditSettingsController;
-use Brainworxx\Krexx\Controller\ExceptionController;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
@@ -70,7 +69,6 @@ use TYPO3\CMS\Core\Database\Query\QueryBuilder as DbQueryBuilder;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 use TYPO3\CMS\Extbase\Persistence\RepositoryInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
@@ -122,7 +120,6 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
 
         // Register the JS dispatcher.
         Registration::registerEvent(EditSettingsController::class . '::outputCssAndJs', InlineJsCssDispatcher::class);
-        Registration::registerEvent(ExceptionController::class . '::outputCssAndJs', InlineJsCssDispatcher::class);
         Registration::registerEvent(BacktraceController::class . '::outputCssAndJs', InlineJsCssDispatcher::class);
         Registration::registerEvent(DumpController::class . '::outputCssAndJs', InlineJsCssDispatcher::class);
 
@@ -133,12 +130,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
         Registration::setChunksFolder($tempPaths[ConfigConstInterface::CHUNKS_FOLDER] . DIRECTORY_SEPARATOR);
         Registration::setLogFolder($tempPaths[ConfigConstInterface::LOG_FOLDER] . DIRECTORY_SEPARATOR);
         $this->createWorkingDirectories($tempPaths);
-
-        if (!class_exists(ObjectManager::class)) {
-            // Register the direct output as pre-configuration in TYPO3 12.
-            Registration::addNewFallbackValue(static::SETTING_DESTINATION, static::VALUE_BROWSER_IMMEDIATELY);
-        }
-
+        Registration::addNewFallbackValue(static::SETTING_DESTINATION, static::VALUE_BROWSER_IMMEDIATELY);
         $this->registerBlacklisting();
 
         // Add additional texts to the help.

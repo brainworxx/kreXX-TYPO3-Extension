@@ -51,7 +51,7 @@ class AbstractCallerTest extends AbstractHelper
     /**
      * Testing the setting of the pool
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $callerFinder = new CallerFinder(Krexx::$pool);
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $callerFinder));
@@ -60,7 +60,7 @@ class AbstractCallerTest extends AbstractHelper
     /**
      * Testing the setting of the pattern
      */
-    public function testSetPattern()
+    public function testSetPattern(): void
     {
         $callerFinder = new CallerFinder(Krexx::$pool);
         $callerFinder->setPattern(static::TEST_PATTERN);
@@ -70,7 +70,7 @@ class AbstractCallerTest extends AbstractHelper
     /**
      * Test the getting of the pattern.
      */
-    public function testGetPattern()
+    public function testGetPattern(): void
     {
         $callerFinder = new CallerFinder(Krexx::$pool);
 

@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\View\Output;
 
+use Brainworxx\Krexx\View\Output\Browser;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\Cleanup;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
@@ -46,7 +47,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 class BrowserImmediatelyTest extends AbstractHelper
 {
     /**
-     * @var \Brainworxx\Krexx\View\Output\Browser
+     * @var Browser
      */
     protected $browserImmediately;
 
@@ -64,7 +65,7 @@ class BrowserImmediatelyTest extends AbstractHelper
      * Since this is a wrapper around the Browser::shutdownCallback()
      * we recycle the same test.
      */
-    public function testFinalize()
+    public function testFinalize(): void
     {
         $stringOne = '$stringOne';
         $stringTwo = '$stringTwo';

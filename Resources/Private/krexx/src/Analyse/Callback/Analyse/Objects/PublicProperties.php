@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Reflection\HiddenProperty;
 use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
@@ -53,6 +54,15 @@ use ReflectionProperty;
 class PublicProperties extends AbstractObjectAnalysis
 {
     /**
+     * Inject the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
+    /**
      * Dump all public properties.
      *
      * @return string
@@ -62,7 +72,7 @@ class PublicProperties extends AbstractObjectAnalysis
     {
         $output = $this->dispatchStartEvent();
 
-        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
+        /** @var ReflectionClass $ref */
         $ref = $this->parameters[static::PARAM_REF];
         $data = $ref->getData();
         $publicProps = [];
@@ -78,20 +88,20 @@ class PublicProperties extends AbstractObjectAnalysis
         //
         // What is left are those special properties that were dynamically
         // set during runtime, but were not declared in the class.
-        foreach ($ref->getProperties(ReflectionProperty::IS_PUBLIC) as $refProp) {
+        foreach ($ref->getProperties(filter: ReflectionProperty::IS_PUBLIC) as $refProp) {
             $publicProps[$refProp->name] = $refProp;
         }
 
-        $refProps = $this->handleUndeclaredProperties($data, $publicProps, $ref);
-        if (empty($refProps)) {
+        $refProps = $this->handleUndeclaredProperties(data: $data, publicProps: $publicProps, ref: $ref);
+        if ($refProps === []) {
             return $output;
         }
 
-        usort($refProps, [$this, static::REFLECTION_SORTING]);
+        usort(array:$refProps, callback: [$this, static::REFLECTION_SORTING]);
         // Adding an HR to reflect that the following stuff are not public
         // properties anymore.
         return $output .
-            $this->getReflectionPropertiesData($refProps, $ref) .
+            $this->getReflectionPropertiesData(refProps: $refProps, ref: $ref) .
             $this->pool->render->renderSingeChildHr();
     }
 
@@ -100,20 +110,20 @@ class PublicProperties extends AbstractObjectAnalysis
      *
      * Also: Take care of the \DateTime properties anomaly.
      *
-     * @param mixed $data
+     * @param object $data
      * @param ReflectionProperty[] $publicProps
-     * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
+     * @param ReflectionClass $ref
      * @return array
      */
     protected function handleUndeclaredProperties(
-        $data,
+        object $data,
         array $publicProps,
         ReflectionClass $ref
     ): array {
         // For every not-declared property, we add another reflection.
         // Those are simply added during runtime
-        foreach (array_keys(array_diff_key($ref->getObjectVars(), $publicProps)) as $key) {
-            $publicProps[$key] = new UndeclaredProperty($ref, $key);
+        foreach (array_keys(array: array_diff_key($ref->getObjectVars(), $publicProps)) as $key) {
+            $publicProps[$key] = new UndeclaredProperty(declaringClass: $ref, propertyName: $key);
         }
 
         // Test for hidden properties
@@ -126,7 +136,7 @@ class PublicProperties extends AbstractObjectAnalysis
         }
 
         foreach ($missingProperties as $propertyName) {
-            $publicProps[$propertyName] = new HiddenProperty($ref, $propertyName);
+            $publicProps[$propertyName] = new HiddenProperty(declaringClass: $ref, propertyName: $propertyName);
         }
 
         return $publicProps;

@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Krexx;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(ThroughResource::class, 'callMe')]
+#[CoversMethod(ThroughResource::class, '__construct')]
 class ThroughResourceTest extends AbstractHelper
 {
     public const  SOME_KEY = 'some_key';
@@ -50,6 +51,15 @@ class ThroughResourceTest extends AbstractHelper
     public const  ANOTHER_VALUE = 'another value';
     public const  SOME_ARRAY = 'array';
 
+    /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new ThroughResource(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
 
     /**
      * Testing the analysis of a resource stream.

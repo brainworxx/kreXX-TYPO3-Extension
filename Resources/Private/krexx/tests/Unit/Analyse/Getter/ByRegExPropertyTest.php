@@ -59,7 +59,7 @@ class ByRegExPropertyTest extends AbstractGetter
     /**
      * Test the construct
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $byRegExProperty = new ByRegExProperty(Krexx::$pool);
         $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $byRegExProperty));
@@ -68,7 +68,7 @@ class ByRegExPropertyTest extends AbstractGetter
     /**
      * Test with a simple fixture.
      */
-    public function testRetrieveItSimple()
+    public function testRetrieveItSimple(): void
     {
         $instance = new GetterFixture();
         $classReflection = new ReflectionClass($instance);
@@ -111,7 +111,7 @@ class ByRegExPropertyTest extends AbstractGetter
     /**
      * Test that we do not handle internal classes or methods.
      */
-    public function testRetrieveItInternal()
+    public function testRetrieveItInternal(): void
     {
         $instance = new Exception();
         $classReflection = new ReflectionClass($instance);
@@ -131,7 +131,7 @@ class ByRegExPropertyTest extends AbstractGetter
     /**
      * Test the retrieval of the possible getter by the method name and by, deep.
      */
-    public function testRetrieveItDeep()
+    public function testRetrieveItDeep(): void
     {
         $instance = new DeepGetterFixture();
         $classReflection = new ReflectionClass($instance);

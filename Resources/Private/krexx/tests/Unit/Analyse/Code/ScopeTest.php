@@ -70,7 +70,7 @@ class ScopeTest extends AbstractHelper
     /**
      * Testing the pool handling.
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $this->scope));
         $this->assertEquals($this->scope, Krexx::$pool->scope);
@@ -79,7 +79,7 @@ class ScopeTest extends AbstractHelper
     /**
      * Test the setting of the scope
      */
-    public function testSetScope()
+    public function testSetScope(): void
     {
         $codegenMock = $this->createMock(Codegen::class);
         $codegenMock->expects($this->never())
@@ -102,7 +102,7 @@ class ScopeTest extends AbstractHelper
     /**
      * Test the scope getting
      */
-    public function testGetScope()
+    public function testGetScope(): void
     {
         $this->setValueByReflection(static::SCOPE_ATTRIBUTE_NAME, static::TEST_STRING, $this->scope);
         $this->assertEquals(static::TEST_STRING, $this->scope->getScope());
@@ -116,7 +116,7 @@ class ScopeTest extends AbstractHelper
      * Are there unit tests for unit test?
      * Is this the ultimate test for our not-so-young hero?
      */
-    public function testTestModelForCodegen()
+    public function testTestModelForCodegen(): void
     {
         // Some fixtures
         $object = new stdClass();
@@ -176,7 +176,7 @@ class ScopeTest extends AbstractHelper
     /**
      * Testing the Scope "analysis".
      */
-    public function testIsInScope()
+    public function testIsInScope(): void
     {
         $this->setNestingLevel(1);
 

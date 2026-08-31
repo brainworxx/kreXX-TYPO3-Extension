@@ -56,7 +56,7 @@ class RoutingTest extends AbstractHelper
     public const  PROCESSOR = 'processors';
 
     /**
-     * @var \Brainworxx\Krexx\Analyse\Routing\Routing
+     * @var Routing
      */
     protected $routing;
 
@@ -111,7 +111,7 @@ class RoutingTest extends AbstractHelper
      * Test if all processors will get set, and that the routing class gets
      * set in the pool.
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         /** @var ProcessInterface $processors */
         $processors = $this->retrieveValueByReflection(static::PROCESSOR, $this->routing);
@@ -123,7 +123,7 @@ class RoutingTest extends AbstractHelper
     /**
      * Simply test, if an emergency break gets respected.
      */
-    public function testAnalysisHubEmergencyBreak()
+    public function testAnalysisHubEmergencyBreak(): void
     {
         // Create the model.
         $model = new Model(Krexx::$pool);
@@ -143,7 +143,7 @@ class RoutingTest extends AbstractHelper
     /**
      * Simple routing of a string.
      */
-    public function testAnalysisHubString()
+    public function testAnalysisHubString(): void
     {
         // Create the model.
         $model = new Model(Krexx::$pool);
@@ -157,7 +157,7 @@ class RoutingTest extends AbstractHelper
      * We test the final calling of the ProcessOther after everything else
      * has failed.
      */
-    public function testAnalysisHubOther()
+    public function testAnalysisHubOther(): void
     {
         $renderNothing = new RenderNothing(Krexx::$pool);
         Krexx::$pool->render = $renderNothing;

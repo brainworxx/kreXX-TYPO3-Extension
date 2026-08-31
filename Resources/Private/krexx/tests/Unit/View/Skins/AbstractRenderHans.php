@@ -68,7 +68,7 @@ abstract class AbstractRenderHans extends AbstractHelper
     protected $modelMock;
 
     /**
-     * @var \Brainworxx\Krexx\View\Skins\RenderHans
+     * @var RenderHans
      */
     protected $renderHans;
 
@@ -215,28 +215,6 @@ abstract class AbstractRenderHans extends AbstractHelper
                     $pathToSkin . 'singleButton' . $fileSuffix,
                     true,
                     implode('', $hans->getMarkerSingleButton())
-                ],
-                // fatalMain.html /**
-                /** @deprecated
-                  *   Since 6.0.0
-                  *   Will be removed.
-                  *   Has anybody used this one since PHP 7.0 anyway?
-                 **/
-                [
-                    $pathToSkin . 'fatalMain' . $fileSuffix,
-                    true,
-                    implode('', $hans->getMarkerFatalMain())
-                ],
-                // fatalHeader.html
-                /** @deprecated
-                  *   Since 6.0.0
-                  *   Will be removed.
-                  *   Has anybody used this one since PHP 7.0 anyway?
-                 **/
-                [
-                    $pathToSkin . 'fatalHeader' . $fileSuffix,
-                    true,
-                    implode('', $hans->getMarkerFatalHeader())
                 ],
                 // messages.html
                 [

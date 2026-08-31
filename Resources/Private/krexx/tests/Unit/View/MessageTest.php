@@ -54,7 +54,7 @@ class MessageTest extends AbstractHelper
     /**
      * Test the setting of the pool
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $message = new Message(Krexx::$pool);
         $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $message));
@@ -63,7 +63,7 @@ class MessageTest extends AbstractHelper
     /**
      * Test the setter / getter of the key.
      */
-    public function testSetGetKey()
+    public function testSetGetKey(): void
     {
         $message = new Message(Krexx::$pool);
         $message->setKey('house key');
@@ -73,7 +73,7 @@ class MessageTest extends AbstractHelper
     /**
      * Test the setter of the trow away status.
      */
-    public function testSetIsThrowAway()
+    public function testSetIsThrowAway(): void
     {
         $message = new Message(Krexx::$pool);
         $message->setIsThrowAway(true);
@@ -83,7 +83,7 @@ class MessageTest extends AbstractHelper
     /**
      * Test the setter/getter for the arguments.
      */
-    public function testSetGetArguments()
+    public function testSetGetArguments(): void
     {
         $fixture = ['my', 'little', 'fixture'];
         $message = new Message(Krexx::$pool);
@@ -95,7 +95,7 @@ class MessageTest extends AbstractHelper
      * Test the setter/getter of the text. We also take a look at the message
      * removal
      */
-    public function testSetGetText()
+    public function testSetGetText(): void
     {
         $text = 'You can lorem my ipsum';
         $key = 'car keys.';

@@ -39,6 +39,7 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Processing of booleans.
@@ -53,6 +54,15 @@ class ProcessBoolean extends AbstractRouting implements ProcessInterface, Proces
     protected Model $model;
 
     /**
+     * Inject the pool.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
+    /**
      * Is this one a boolean?
      *
      * @param Model $model
@@ -64,7 +74,7 @@ class ProcessBoolean extends AbstractRouting implements ProcessInterface, Proces
     public function canHandle(Model $model): bool
     {
         $this->model = $model;
-        return is_bool($model->getData());
+        return is_bool(value: $model->getData());
     }
 
     /**
@@ -77,10 +87,10 @@ class ProcessBoolean extends AbstractRouting implements ProcessInterface, Proces
     {
         $data = $this->model->getData() ? 'TRUE' : 'FALSE';
         return $this->pool->render->renderExpandableChild(
-            $this->dispatchProcessEvent(
-                $this->model->setData($data)
-                    ->setNormal($data)
-                    ->setType(static::TYPE_BOOL)
+            model: $this->dispatchProcessEvent(
+                model: $this->model->setData(data: $data)
+                    ->setNormal(normal: $data)
+                    ->setType(type: static::TYPE_BOOL)
             )
         );
     }

@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration;
 use Brainworxx\Krexx\Analyse\Getter\AbstractGetter;
 use Brainworxx\Krexx\Analyse\Getter\ByMethodName;
@@ -97,40 +98,39 @@ class ThroughGetter extends AbstractCallback implements
     /**
      * These analysers will take a look at the getter.
      *
-     * @var \Brainworxx\Krexx\Analyse\Getter\AbstractGetter[]
+     * @var AbstractGetter[]
      */
     protected array $getterAnalyser;
 
     /**
      * Class for the comment analysis.
      *
-     * @var \Brainworxx\Krexx\Analyse\Comment\Methods
+     * @var Methods
      */
     protected Methods $commentAnalysis;
 
     /**
      * The method declaration retriever.
      *
-     * @var \Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration
+     * @var MethodDeclaration
      */
     protected MethodDeclaration $methodDeclaration;
 
     /**
      * Injects the pool and initializes the comment analysis.
      *
-     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     * @param Pool $pool
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        parent::__construct($pool);
-        $this->commentAnalysis = $this->pool->createClass(Methods::class);
+        $this->commentAnalysis = $this->pool->createClass(classname: Methods::class);
         $this->getterAnalyser = [
-            $this->pool->createClass(ByMethodName::class),
-            $this->pool->createClass(ByRegExProperty::class),
-            $this->pool->createClass(ByRegExContainer::class),
-            $this->pool->createClass(ByRegExDelegate::class)
+            $this->pool->createClass(classname: ByMethodName::class),
+            $this->pool->createClass(classname: ByRegExProperty::class),
+            $this->pool->createClass(classname: ByRegExContainer::class),
+            $this->pool->createClass(classname: ByRegExDelegate::class)
         ];
-        $this->methodDeclaration = $this->pool->createClass(MethodDeclaration::class);
+        $this->methodDeclaration = $this->pool->createClass(classname: MethodDeclaration::class);
     }
 
     /**
@@ -182,24 +182,24 @@ class ThroughGetter extends AbstractCallback implements
             // 2.) We got NULL as a value
             // 3.) We were unable to get any info at all.
             /** @var Model $model */
-            $model = $this->pool->createClass(Model::class)
-                ->setName($reflectionMethod->getName())
-                ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC);
-            $this->assignMetaDataToJson($model, $reflectionMethod);
+            $model = $this->pool->createClass(classname: Model::class)
+                ->setName(name: $reflectionMethod->getName())
+                ->setCodeGenType(codeGenType: static::CODEGEN_TYPE_PUBLIC);
+            $this->assignMetaDataToJson(model: $model, reflectionMethod: $reflectionMethod);
 
             // We need to decide if we are handling static getters.
             if ($reflectionMethod->isStatic()) {
-                $model->setConnectorType(static::CONNECTOR_STATIC_METHOD);
+                $model->setConnectorType(type: static::CONNECTOR_STATIC_METHOD);
             } else {
-                $model->setConnectorType(static::CONNECTOR_METHOD);
+                $model->setConnectorType(type: static::CONNECTOR_METHOD);
             }
 
             // Get ourselves a possible return value
             $output .= $this->retrievePropertyValue(
-                $reflectionMethod,
-                $this->dispatchEventWithModel(
-                    __FUNCTION__ . static::EVENT_MARKER_END,
-                    $model
+                reflectionMethod: $reflectionMethod,
+                model: $this->dispatchEventWithModel(
+                    name: __FUNCTION__ . static::EVENT_MARKER_END,
+                    model: $model
                 )
             );
         }
@@ -210,7 +210,7 @@ class ThroughGetter extends AbstractCallback implements
     /**
      * We assign the metadata (comments and declaration) to the model.
      *
-     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @param Model $model
      *   The model so far.
      * @param \ReflectionMethod $reflectionMethod
      *   Reflection of the method that we are analysing.
@@ -218,11 +218,11 @@ class ThroughGetter extends AbstractCallback implements
     protected function assignMetaDataToJson(Model $model, ReflectionMethod $reflectionMethod): void
     {
         $comments = $this->commentAnalysis
-            ->getComment($reflectionMethod, $this->parameters[static::PARAM_REF]);
-        $declaration = nl2br($this->methodDeclaration->retrieveDeclaration($reflectionMethod));
+            ->getComment(reflection: $reflectionMethod, reflectionClass: $this->parameters[static::PARAM_REF]);
+        $declaration = nl2br(string: $this->methodDeclaration->retrieveDeclaration(reflection: $reflectionMethod));
         $messages = $this->pool->messages;
-        $model->addToJson($messages->getHelp('metaMethodComment'), nl2br($comments))
-            ->addToJson($messages->getHelp('metaDeclaredIn'), $declaration);
+        $model->addToJson(key: $messages->getHelp(key: 'metaMethodComment'), value: nl2br(string: $comments))
+            ->addToJson(key: $messages->getHelp(key: 'metaDeclaredIn'), value: $declaration);
     }
 
     /**
@@ -238,67 +238,74 @@ class ThroughGetter extends AbstractCallback implements
      */
     protected function retrievePropertyValue(ReflectionMethod $reflectionMethod, Model $model): string
     {
-        $this->resetParameters($reflectionMethod);
-        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflectionClass */
+        $this->resetParameters(reflectionMethod: $reflectionMethod);
+        /** @var ReflectionClass $reflectionClass */
         $reflectionClass = $this->parameters[static::PARAM_REF];
         $currentPrefix = $this->parameters[static::CURRENT_PREFIX];
         foreach ($this->getterAnalyser as $analyser) {
-            $value = $analyser->retrieveIt($reflectionMethod, $reflectionClass, $currentPrefix);
+            $value = $analyser->retrieveIt(
+                reflectionMethod: $reflectionMethod,
+                reflectionClass: $reflectionClass,
+                currentPrefix: $currentPrefix
+            );
             if ($analyser->hasResult()) {
-                $this->prepareParameters($value, $analyser, $reflectionMethod);
-                $this->prepareModel($model, $value);
+                $this->prepareParameters(value: $value, analyser: $analyser, reflectionMethod: $reflectionMethod);
+                $this->prepareModel(model: $model, value: $value);
                 break;
             }
         }
 
-        $this->dispatchEventWithModel(__FUNCTION__ . '::resolving', $model);
+        $this->dispatchEventWithModel(name: __FUNCTION__ . '::resolving', model: $model);
 
         if ($this->parameters[static::PARAM_ADDITIONAL][static::PARAM_NOTHING_FOUND]) {
             $messages = $this->pool->messages;
             // Found nothing  :-(
             // We literally have no info. We need to tell the user.
             // We render this right away, without any routing.
-            return $this->pool->render->renderExpandableChild($this->dispatchEventWithModel(
-                __FUNCTION__ . static::EVENT_MARKER_END,
-                $model->setType($messages->getHelp('getterValueUnknown'))
-                    ->setNormal($messages->getHelp('getterValueUnknown'))
-                    ->addJsonHint($messages->getHelp('getterUnknown'))
+            return $this->pool->render->renderExpandableChild(model: $this->dispatchEventWithModel(
+                name: __FUNCTION__ . static::EVENT_MARKER_END,
+                model: $model->setType(type: $messages->getHelp(key: 'getterValueUnknown'))
+                    ->setNormal(normal: $messages->getHelp(key: 'getterValueUnknown'))
+                    ->addJsonHint(hint: $messages->getHelp(key: 'getterUnknown'))
             ));
         }
 
         return $this->pool->routing->analysisHub(
-            $this->dispatchEventWithModel(__FUNCTION__ . static::EVENT_MARKER_END, $model)
+            model: $this->dispatchEventWithModel(name: __FUNCTION__ . static::EVENT_MARKER_END, model: $model)
         );
     }
 
     /**
      * Prepare the model with the retrieved value.
      *
-     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @param Model $model
      *   The model, so far.
      * @param mixed $value
      *   The retrieved possible value. Can be anything.
      */
-    protected function prepareModel(Model $model, $value): void
+    protected function prepareModel(Model $model, mixed $value): void
     {
-        $model->setData($value);
+        $model->setData(data: $value);
         if ($value === null) {
             // A NULL value might mean that the values does not
             // exist, until the getter computes it.
-            $model->addJsonHint($this->pool->messages->getHelp('getterNull'));
+            $model->addJsonHint(hint: $this->pool->messages->getHelp(key: 'getterNull'));
         }
     }
 
     /**
      * @param mixed $value
      *   The possible value that we retrieved.
-     * @param \Brainworxx\Krexx\Analyse\Getter\AbstractGetter $analyser
+     * @param AbstractGetter $analyser
      *   The analyser that we used.
      * @param \ReflectionMethod $reflectionMethod
      *   Reflection of the method that we are analysing.
      */
-    protected function prepareParameters($value, AbstractGetter $analyser, ReflectionMethod $reflectionMethod): void
-    {
+    protected function prepareParameters(
+        mixed $value,
+        AbstractGetter $analyser,
+        ReflectionMethod $reflectionMethod
+    ): void {
         $this->parameters[static::PARAM_ADDITIONAL] = [
             static::PARAM_NOTHING_FOUND => false,
             static::PARAM_VALUE => $value,
@@ -317,7 +324,7 @@ class ThroughGetter extends AbstractCallback implements
      * @param \ReflectionMethod $reflectionMethod
      * @return void
      */
-    protected function resetParameters(ReflectionMethod $reflectionMethod)
+    protected function resetParameters(ReflectionMethod $reflectionMethod): void
     {
         $this->parameters[static::PARAM_ADDITIONAL] = [
             static::PARAM_NOTHING_FOUND => true,

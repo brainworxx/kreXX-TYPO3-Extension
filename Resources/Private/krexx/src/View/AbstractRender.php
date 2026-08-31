@@ -60,13 +60,6 @@ abstract class AbstractRender implements RenderInterface
     protected const STYLE_ACTIVE = 'kactive';
 
     /**
-     * Here we store all relevant data.
-     *
-     * @var Pool
-     */
-    protected Pool $pool;
-
-    /**
      * Caching the content fo the template files.
      *
      * @var string[]
@@ -80,14 +73,13 @@ abstract class AbstractRender implements RenderInterface
      * @param Pool $pool
      *   The pool.
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
         $this->pool->render = $this;
 
         // Prepare the template file cache.
-        foreach (glob(($this->pool->config->getSkinDirectory()) . '*.html') as $filePath) {
-            $this->fileCache[basename($filePath, '.html')] = $pool->fileService->getFileContents($filePath);
+        foreach (glob(pattern: $this->pool->config->getSkinDirectory() . '*.html') as $filePath) {
+            $this->fileCache[basename($filePath, '.html')] = $pool->fileService->getFileContents(filePath: $filePath);
         }
     }
 
@@ -102,16 +94,16 @@ abstract class AbstractRender implements RenderInterface
     protected function encodeJson(array $array): string
     {
         // No data, no json!
-        if (empty($array)) {
+        if ($array === []) {
             return '';
         }
 
         $encodingService = $this->pool->encodingService;
         foreach ($array as &$entry) {
-            $entry = $encodingService->encodeString($entry);
+            $entry = $encodingService->encodeString(data: $entry);
         }
 
-        return json_encode($array);
+        return json_encode(value: $array);
     }
 
     /**
@@ -129,13 +121,13 @@ abstract class AbstractRender implements RenderInterface
      */
     protected function generateDataAttribute(string $name, string $data): string
     {
-        return ' data-' . $name . '="' . str_replace('"', '&#34;', $data) . '" ';
+        return ' data-' . $name . '="' . str_replace(search: '"', replace: '&#34;', subject: $data) . '" ';
     }
 
     /**
      * Retrieve the css type classes form the model.
      *
-     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @param Model $model
      *   The model.
      *
      * @return string
@@ -145,10 +137,10 @@ abstract class AbstractRender implements RenderInterface
     {
         $typeClasses = $model->isExpandable() ? 'kexpand ' : ' ';
 
-        foreach (explode(' ', $model->getType()) as $typeClass) {
+        foreach (explode(separator: ' ', string: $model->getType()) as $typeClass) {
             $typeClasses .= 'k' . $typeClass . ' ';
         }
 
-        return strtolower($typeClasses);
+        return strtolower(string: $typeClasses);
     }
 }

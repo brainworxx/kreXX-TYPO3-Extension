@@ -74,7 +74,7 @@ class ExtFilePathTest extends AbstractHelper
             $extFilePath->canHandle('random string', $model),
             'This is not a handleable string.'
         );
-        $this->assertEmpty($model->getJson());
+        $this->assertEmpty($model->getJson(), 'This is not a handleable string.');
 
         $fixture = 'EXT:includekrexx/Tests/Fixtures/123458.Krexx.html';
         $model = new Model(\Krexx::$pool);
@@ -110,13 +110,6 @@ class ExtFilePathTest extends AbstractHelper
             ->willReturn('just a file');
         $this->setValueByReflection('bufferInfo', $finfoMock, $extFilePath);
 
-        // Make sure that the resolved path gets filtered.
-        $fileServiceMock = $this->createMock(File::class);
-        $fileServiceMock->expects($this->once())
-            ->method('filterFilePath')
-            ->willReturn('Tests/Fixtures/123458.Krexx.html');
-        \Krexx::$pool->fileService = $fileServiceMock;
-
         $this->assertFalse($extFilePath->canHandle($fixture, $model), 'Always false. We add the stuff to the model.');
         $extFilePath->callMe();
 
@@ -127,10 +120,8 @@ class ExtFilePathTest extends AbstractHelper
             'Mimetype file' => 'just a file',
             'Error' => 'The file or directory does not exist.'
         ];
-        $this->assertEquals(
-            $expectations,
-            $jsonData,
-            'The file does exists, we just did not mock the file_exists(). We need to test the feedback about a missing file.'
-        );
+        $this->assertEquals($expectations['Mimetype file'], $jsonData['Mimetype file']);
+        $this->assertEquals($expectations['Error'], $jsonData['Error']);
+        $this->assertStringContainsString($expectations['Resolved EXT path'], $jsonData['Resolved EXT path']);
     }
 }

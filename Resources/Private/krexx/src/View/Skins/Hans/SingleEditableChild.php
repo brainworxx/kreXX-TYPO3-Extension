@@ -87,26 +87,30 @@ trait SingleEditableChild
         // For dropdown elements, we need to render the options.
         $options = '';
         if ($model->getType() === static::RENDER_TYPE_SELECT) {
-            $options = $this->renderSelectOptions($model);
+            $options = $this->renderSelectOptions(model: $model);
         }
 
         return str_replace(
-            $this->markerSingleEditableChild,
-            [
+            search: $this->markerSingleEditableChild,
+            replace: [
                 $model->getData(),
                 $model->getNormal(),
-                str_replace($this->markerDropdownOptions, $options, $this->renderSpecificEditableElement($model)),
+                str_replace(
+                    search: $this->markerDropdownOptions,
+                    replace: $options,
+                    subject: $this->renderSpecificEditableElement(model: $model)
+                ),
                 static::RENDER_EDITABLE,
-                $this->renderHelp($model),
+                $this->renderHelp(model: $model),
             ],
-            $this->fileCache[static::FILE_SI_EDIT_CHILD]
+            subject: $this->fileCache[static::FILE_SI_EDIT_CHILD]
         );
     }
 
     /**
      * Renders the options of a select.
      *
-     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @param Model $model
      *   The model.
      *
      * @return string
@@ -129,9 +133,9 @@ trait SingleEditableChild
         foreach ($valueList as $value => $text) {
             $value === $model->getName() ? $selected = 'selected="selected"' : $selected = '';
             $options .= str_replace(
-                $this->markerSelectOption,
-                [$text, $value, $selected],
-                $this->fileCache[static::FILE_SI_SELECT_OPTIONS]
+                search: $this->markerSelectOption,
+                replace: [$text, $value, $selected],
+                subject: $this->fileCache[static::FILE_SI_SELECT_OPTIONS]
             );
         }
 
@@ -141,7 +145,7 @@ trait SingleEditableChild
     /**
      * Dynamically render the element.
      *
-     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @param Model $model
      *   The model.
      *
      * @return string
@@ -150,12 +154,12 @@ trait SingleEditableChild
     protected function renderSpecificEditableElement(Model $model): string
     {
         return str_replace(
-            $this->markerSingleInput,
-            [
+            search: $this->markerSingleInput,
+            replace: [
                 $model->getDomid(),
                 $model->getName()
             ],
-            $this->fileCache['single' . $model->getType()]
+            subject: $this->fileCache['single' . $model->getType()]
         );
     }
 

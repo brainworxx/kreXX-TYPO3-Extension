@@ -43,14 +43,12 @@ use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate as ModuleTemplateUnit;
 use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate14 as ModuleTemplateUnit14;
-use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplateFactory as ModuleTemplateFactoryUnit;
 use Brainworxx\Krexx\Krexx;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\View\ViewInterface;
 use TYPO3\CMS\Extbase\Mvc\RequestInterface;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
@@ -88,9 +86,8 @@ class AbstractControllerTest extends AbstractHelper
         $formConfigMock = $this->createMock(FormConfiguration::class);
         $settings = $this->createMock(Settings::class);
         $pageRenderer = $this->createMock(PageRenderer::class);
-        $typo3Version = new Typo3Version();
 
-        $indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer, $typo3Version);
+        $indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer);
 
         if (class_exists(ViewInterface::class)) {
             $mtMock = $this->createMock(ModuleTemplateUnit14::class);
@@ -98,25 +95,14 @@ class AbstractControllerTest extends AbstractHelper
             $mtMock = $this->createMock(ModuleTemplateUnit::class);
         }
 
-        if (method_exists($indexController, 'injectObjectManager')) {
-            // TYPO3 11 style
-            $objectManagerMock = $this->createMock(ObjectManager::class);
-            $objectManagerMock->expects($this->once())
-                ->method('get')
-                ->with(ModuleTemplate::class)
-                ->willReturn($mtMock);
-            $this->setValueByReflection('objectManager', $objectManagerMock, $indexController);
-        } else {
-            // TYPO3 12 style.
-            // We are using the ModuleTemplateFactory.
-            $mtFactoryMock = $this->createMock(ModuleTemplateFactoryUnit::class);
-            $mtFactoryMock->expects($this->once())
-                ->method('create')
-                ->willReturn($mtMock);
-            $this->injectIntoGeneralUtility(ModuleTemplateFactory::class, $mtFactoryMock);
-            $requestMock = $this->createMock(RequestInterface::class);
-            $this->setValueByReflection('request', $requestMock, $indexController);
-        }
+        // We are using the ModuleTemplateFactory.
+        $mtFactoryMock = $this->createMock(ModuleTemplateFactoryUnit::class);
+        $mtFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($mtMock);
+        $this->injectIntoGeneralUtility(ModuleTemplateFactory::class, $mtFactoryMock);
+        $requestMock = $this->createMock(RequestInterface::class);
+        $this->setValueByReflection('request', $requestMock, $indexController);
 
         $indexController->initializeAction();
     }

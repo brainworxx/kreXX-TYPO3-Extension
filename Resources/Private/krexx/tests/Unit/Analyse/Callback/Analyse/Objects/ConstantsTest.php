@@ -48,6 +48,7 @@ use ReflectionClass;
 #[CoversMethod(Constants::class, 'callMe')]
 #[CoversMethod(AbstractCallback::class, 'dispatchStartEvent')]
 #[CoversMethod(AbstractCallback::class, 'dispatchEventWithModel')]
+#[CoversMethod(Constants::class, '__construct')]
 class ConstantsTest extends AbstractHelper
 {
     protected function setUp(): void
@@ -59,6 +60,16 @@ class ConstantsTest extends AbstractHelper
         ];
 
         $this->mockEmergencyHandler();
+    }
+
+    /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new Constants(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
     }
 
     /**

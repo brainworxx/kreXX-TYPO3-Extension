@@ -50,7 +50,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(Getter::class, 'callMe')]
 #[CoversMethod(Getter::class, 'populateGetterLists')]
 #[CoversMethod(Getter::class, 'retrieveMethodList')]
-#[CoversMethod(Getter::class, 'callMe')]
+#[CoversMethod(Getter::class, '__construct')]
 class GetterTest extends AbstractHelper
 {
     public const  TEST_STRING = 'some name';
@@ -82,6 +82,16 @@ class GetterTest extends AbstractHelper
         ];
 
         $this->mockEmergencyHandler();
+    }
+
+    /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new Getter(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
     }
 
     /**

@@ -37,6 +37,8 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionProperty;
 
 /**
@@ -52,6 +54,15 @@ use ReflectionProperty;
 class PrivateProperties extends AbstractObjectAnalysis
 {
     /**
+     * Inject the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
+    /**
      * Dumping all private properties.
      *
      * @return string
@@ -62,7 +73,7 @@ class PrivateProperties extends AbstractObjectAnalysis
         $output = $this->dispatchStartEvent();
 
         $refProps = [];
-        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
+        /** @var ReflectionClass $ref */
         $ref = $this->parameters[static::PARAM_REF];
         // We need to keep the original reference intact.
         $reflectionClass = $ref;
@@ -72,22 +83,22 @@ class PrivateProperties extends AbstractObjectAnalysis
         // We need to get all parent classes and then poll them for private
         // properties to get the whole picture.
         do {
-            $refProps = [...$refProps, ...$reflectionClass->getProperties(ReflectionProperty::IS_PRIVATE)];
+            $refProps = [...$refProps, ...$reflectionClass->getProperties(filter: ReflectionProperty::IS_PRIVATE)];
             // And now for the parent class.
             $reflectionClass = $reflectionClass->getParentClass();
-        } while (is_object($reflectionClass));
+        } while (is_object(value: $reflectionClass));
 
-        if (empty($refProps)) {
+        if ($refProps === []) {
             return $output;
         }
 
-        usort($refProps, [$this, static::REFLECTION_SORTING]);
+        usort(array: $refProps, callback: [$this, static::REFLECTION_SORTING]);
 
         return $output .
             $this->getReflectionPropertiesData(
-                $refProps,
-                $ref,
-                $this->pool->messages->getHelp('privateProperties')
+                refProps: $refProps,
+                ref: $ref,
+                label: $this->pool->messages->getHelp(key: 'privateProperties')
             );
     }
 }

@@ -62,31 +62,34 @@ class MethodDeclaration extends AbstractDeclaration
         $reflectionClass = $reflection->getDeclaringClass();
 
         if ($reflectionClass->isInternal()) {
-            return $messages->getHelp('metaPredeclared');
+            return $messages->getHelp(key: 'metaPredeclared');
         }
 
         $filename = (string)$reflection->getFileName();
-        if (empty($filename)) {
+        if ($filename === '' || $filename === '0') {
             // Not sure, if this is possible.
-            return $this->pool->messages->getHelp('unknownDeclaration');
+            return $this->pool->messages->getHelp(key: 'unknownDeclaration');
         }
 
         // If the filename of the $declaringClass and the $reflectionMethod differ,
         // we are facing a trait here.
-        $secondLine = $messages->getHelp('metaInClass') . $reflection->class . "\n";
+        $secondLine = $messages->getHelp(key: 'metaInClass') . $reflection->class . "\n";
         if ($reflection->getFileName() !== $reflectionClass->getFileName()) {
             // There is no real clean way to get the name of the trait that we
             // are looking at.
-            $traitName = $this->pool->messages->getHelp('canNotResolveTrait');
-            $trait = $this->retrieveDeclaringReflection($reflection, $reflectionClass);
-            if ($trait !== null) {
+            $traitName = $this->pool->messages->getHelp(key: 'canNotResolveTrait');
+            $trait = $this->retrieveDeclaringReflection(
+                reflectionMethod: $reflection,
+                declaringClass: $reflectionClass
+            );
+            if ($trait instanceof \ReflectionClass) {
                 $traitName = $trait->getName();
             }
 
-            $secondLine = $messages->getHelp('metaInTrait') . $traitName . "\n";
+            $secondLine = $messages->getHelp(key: 'metaInTrait') . $traitName . "\n";
         }
 
-        return $filename . "\n" . $secondLine . $messages->getHelp('metaInLine') .
+        return $filename . "\n" . $secondLine . $messages->getHelp(key: 'metaInLine') .
             $reflection->getStartLine();
     }
 
@@ -104,7 +107,7 @@ class MethodDeclaration extends AbstractDeclaration
             return '';
         }
 
-        return $this->retrieveNamedType($namedType);
+        return $this->retrieveNamedType(namedType: $namedType);
     }
 
     /**
@@ -121,7 +124,7 @@ class MethodDeclaration extends AbstractDeclaration
     public function retrieveParameterType(ReflectionParameter $reflectionParameter): string
     {
         return $reflectionParameter->hasType() ?
-            $this->retrieveNamedType($reflectionParameter->getType()) . ' ' : '';
+            $this->retrieveNamedType(namedType: $reflectionParameter->getType()) . ' ' : '';
     }
 
     /**
@@ -148,8 +151,8 @@ class MethodDeclaration extends AbstractDeclaration
         // Go through the first layer of traits.
         // No need to recheck the availability for traits. This is done above.
         foreach ($declaringClass->getTraits() as $trait) {
-            $result = $this->retrieveDeclaringReflection($reflectionMethod, $trait);
-            if ($result !== null) {
+            $result = $this->retrieveDeclaringReflection(reflectionMethod:  $reflectionMethod, declaringClass: $trait);
+            if ($result instanceof \ReflectionClass) {
                 return $result;
             }
         }

@@ -80,13 +80,6 @@ abstract class AbstractController implements ConfigConstInterface
     protected static array $jsCssSend = [];
 
     /**
-     * Our pool where we keep all relevant classes.
-     *
-     * @var Pool
-     */
-    protected Pool $pool;
-
-    /**
      * Finds our caller.
      *
      * @var AbstractCaller
@@ -106,26 +99,22 @@ abstract class AbstractController implements ConfigConstInterface
      * @param Pool $pool
      *   The pool, where we store the classes we need.
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
-        $this->callerFinder = $pool->createClass(CallerFinder::class);
+        $this->callerFinder = $pool->createClass(classname: CallerFinder::class);
 
         // Register our output service.
         // Depending on the setting, we use another class here.
         // We get a new output service for every krexx call, because the hosting
         // cms may do their stuff in the shutdown functions as well.
-        $this->destination = $pool->config->getSetting(static::SETTING_DESTINATION);
-        switch ($this->destination) {
-            case static::VALUE_BROWSER:
-                $this->outputService = $pool->createClass(Browser::class);
-                break;
-            case static::VALUE_FILE:
-                $this->outputService = $pool->createClass(File::class);
-                break;
-            default:
-                $this->outputService = $pool->createClass(BrowserImmediately::class);
-        }
+        $this->destination = $pool->config->getSetting(name: static::SETTING_DESTINATION);
+        $this->outputService = match ($this->destination) {
+            static::VALUE_BROWSER => $pool->createClass(
+                classname: Browser::class
+            ),
+            static::VALUE_FILE => $pool->createClass(classname: File::class),
+            default => $pool->createClass(classname: BrowserImmediately::class),
+        };
 
         $this->pool->reset();
     }
@@ -147,24 +136,24 @@ abstract class AbstractController implements ConfigConstInterface
         // Now we need to stitch together the content of the configuration file
         // as well as its path.
         $pathToConfig = $this->pool->config->getPathToConfigFile();
-        if ($this->pool->fileService->fileIsReadable($pathToConfig)) {
-            $path = $this->pool->messages->getHelp('currentConfig');
+        if ($this->pool->fileService->fileIsReadable(filePath: $pathToConfig)) {
+            $path = $this->pool->messages->getHelp(key: 'currentConfig');
         } else {
             // Project settings are not accessible
             // tell the user, that we are using fallback settings.
-            $path = $this->pool->messages->getHelp('configFileNotFound');
+            $path = $this->pool->messages->getHelp(key: 'configFileNotFound');
         }
 
         return $this->pool->render->renderFooter(
-            $caller,
-            $this->pool->createClass(Model::class)
-                ->setName($path)
-                ->setType($pathToConfig)
-                ->setHelpid('currentSettings')
+            caller: $caller,
+            model: $this->pool->createClass(classname: Model::class)
+                ->setName(name: $path)
+                ->setType(type: $pathToConfig)
+                ->setHelpid(helpId: 'currentSettings')
                 ->injectCallback(
-                    $this->pool->createClass(ThroughConfig::class)
+                    object: $this->pool->createClass(classname: ThroughConfig::class)
                 ),
-            $isExpanded
+            configOnly: $isExpanded
         );
     }
 
@@ -185,26 +174,26 @@ abstract class AbstractController implements ConfigConstInterface
 
         // Adding the js to the output.
         $skinDirectory = $this->pool->config->getSkinDirectory();
-        if ($this->pool->fileService->fileIsReadable(KREXX_DIR . 'resources/jsLibs/kdt.min.js')) {
+        if ($this->pool->fileService->fileIsReadable(filePath: KREXX_DIR . 'resources/jsLibs/kdt.min.js')) {
             // The js works only if everything is minified.
-            $jsCode = $this->pool->fileService->getFileContents(KREXX_DIR . 'resources/jsLibs/kdt.min.js') .
-                $this->pool->fileService->getFileContents($skinDirectory . 'krexx.min.js');
+            $jsCode = $this->pool->fileService->getFileContents(filePath: KREXX_DIR . 'resources/jsLibs/kdt.min.js') .
+                $this->pool->fileService->getFileContents(filePath: $skinDirectory . 'krexx.min.js');
         } else {
-            $jsCode = $this->pool->fileService->getFileContents(KREXX_DIR . 'resources/jsLibs/kdt.js') .
-                $this->pool->fileService->getFileContents($skinDirectory . 'krexx.js');
+            $jsCode = $this->pool->fileService->getFileContents(filePath: KREXX_DIR . 'resources/jsLibs/kdt.js') .
+                $this->pool->fileService->getFileContents(filePath: $skinDirectory . 'krexx.js');
         }
 
         // Get the css file.
-        if ($this->pool->fileService->fileIsReadable($skinDirectory . 'skin.min.css')) {
-            $css = $this->pool->fileService->getFileContents($skinDirectory . 'skin.min.css');
+        if ($this->pool->fileService->fileIsReadable(filePath: $skinDirectory . 'skin.min.css')) {
+            $css = $this->pool->fileService->getFileContents(filePath: $skinDirectory . 'skin.min.css');
         } else {
-            $css = $this->pool->fileService->getFileContents($skinDirectory . 'skin.css');
+            $css = $this->pool->fileService->getFileContents(filePath: $skinDirectory . 'skin.css');
         }
 
         /** @var Model $model */
-        $model = $this->pool->createClass(Model::class);
-        $model->setData($jsCode)->setNormal($css);
-        $this->pool->eventService->dispatch(static::class . '::outputCssAndJs', null, $model);
+        $model = $this->pool->createClass(classname: Model::class);
+        $model->setData(data: $jsCode)->setNormal(normal: $css);
+        $this->pool->eventService->dispatch(name: static::class . '::outputCssAndJs', model: $model);
         return $this->pool->render->renderCssJs($model->getNormal(), $model->getData());
     }
 }

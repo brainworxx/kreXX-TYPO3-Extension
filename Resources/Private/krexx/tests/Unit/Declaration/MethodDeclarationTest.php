@@ -59,7 +59,7 @@ class MethodDeclarationTest extends AbstractHelper
     /**
      * Test the retrieval of declaration of simple functions.
      */
-    public function testRetrieveDeclaration()
+    public function testRetrieveDeclaration(): void
     {
         $methodDeclaration = new MethodDeclaration(\Krexx::$pool);
 
@@ -86,7 +86,7 @@ class MethodDeclarationTest extends AbstractHelper
     /**
      * Test the retrieval of an unknown declaration.
      */
-    public function testRetrieveDeclarationUnknown()
+    public function testRetrieveDeclarationUnknown(): void
     {
         $reflectionMethodMock = $this->createMock(\ReflectionMethod::class);
         $reflectionClassMock = $this->createMock(\ReflectionClass::class);
@@ -110,7 +110,7 @@ class MethodDeclarationTest extends AbstractHelper
     /**
      * Testing the retrieval of the return type by reflections.
      */
-    public function testRetrieveReturnType()
+    public function testRetrieveReturnType(): void
     {
         $fixture = new ReturnTypeFixture();
         $returnType = new MethodDeclaration(\Krexx::$pool);
@@ -122,19 +122,17 @@ class MethodDeclarationTest extends AbstractHelper
         $refMethod = $refClass->getMethod('returnThis');
         $this->assertEquals('', $returnType->retrieveReturnType($refMethod));
 
-        // Doing PHP 8+ specific tests.
-        if (version_compare(phpversion(), '8.0.0', '>=')) {
-            $fixture = new UnionTypeFixture();
-            $refClass = new ReflectionClass($fixture);
-            $refMethod = $refClass->getMethod('unionParameter');
-            $this->assertEquals('array|int|bool', $returnType->retrieveReturnType($refMethod));
-        }
+        $fixture = new UnionTypeFixture();
+        $refClass = new ReflectionClass($fixture);
+        $refMethod = $refClass->getMethod('unionParameter');
+        $this->assertEquals('array|int|bool', $returnType->retrieveReturnType($refMethod));
+
     }
 
     /**
      * Testing the retrieval of a declared parameter type.
      */
-    public function testRetrieveParameterType()
+    public function testRetrieveParameterType(): void
     {
         $methodDeclaration = new MethodDeclaration(\Krexx::$pool);
 
@@ -169,16 +167,13 @@ class MethodDeclarationTest extends AbstractHelper
         );
 
         // Union type
-        // Doing PHP 8+ specific tests.
-        if (version_compare(phpversion(), '8.0.0', '>=')) {
-            $classReflection = new \ReflectionClass(UnionTypeFixture::class);
-            $methodReflection = $classReflection->getMethod('unionParameter');
-            $parameterReflection = $methodReflection->getParameters()[0];
-            $this->assertEquals(
-                'array|int|bool ',
-                $methodDeclaration->retrieveParameterType($parameterReflection),
-                'The not prefixes type list with the | symbol.'
-            );
-        }
+        $classReflection = new \ReflectionClass(UnionTypeFixture::class);
+        $methodReflection = $classReflection->getMethod('unionParameter');
+        $parameterReflection = $methodReflection->getParameters()[0];
+        $this->assertEquals(
+            'array|int|bool ',
+            $methodDeclaration->retrieveParameterType($parameterReflection),
+            'The not prefixes type list with the | symbol.'
+        );
     }
 }

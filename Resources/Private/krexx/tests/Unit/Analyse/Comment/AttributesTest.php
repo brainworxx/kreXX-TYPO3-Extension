@@ -49,10 +49,6 @@ class AttributesTest extends AbstractHelper
 {
     public function testGetAttributes(): void
     {
-        if (version_compare(phpversion(), '8.1.0', '<')) {
-            $this->markTestSkipped('Wrong PHP version.');
-        }
-
         $attributes = new Attributes();
         $reflectionClass = new \ReflectionClass(AttributeFixture::class);
         $reflectionProperty = $reflectionClass->getProperty('foo');

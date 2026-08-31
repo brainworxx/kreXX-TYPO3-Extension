@@ -40,6 +40,7 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Processing of objects.
@@ -54,6 +55,15 @@ class ProcessObject extends AbstractProcessNoneScalar implements CallbackConstIn
     protected Model $model;
 
     /**
+     * Inject the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
+    /**
      * Is this one an object?
      *
      * @param Model $model
@@ -65,7 +75,7 @@ class ProcessObject extends AbstractProcessNoneScalar implements CallbackConstIn
     public function canHandle(Model $model): bool
     {
         $this->model = $model;
-        return is_object($model->getData());
+        return is_object(value: $model->getData());
     }
 
     /**
@@ -79,18 +89,18 @@ class ProcessObject extends AbstractProcessNoneScalar implements CallbackConstIn
         $this->pool->emergencyHandler->upOneNestingLevel();
 
         // Remember that we've been here before.
-        $this->pool->recursionHandler->addToHive($this->model->getData());
+        $this->pool->recursionHandler->addToHive(bee: $this->model->getData());
 
         $object = $this->model->getData();
         // Output data from the class.
         $result = $this->pool->render->renderExpandableChild(
-            $this->dispatchProcessEvent(
-                $this->model->setType(static::TYPE_CLASS)
-                    ->addParameter(static::PARAM_DATA, $object)
-                    ->addParameter(static::PARAM_NAME, $this->model->getName())
-                    ->setNormal('\\' . get_class($object))
-                    ->setDomid($this->generateDomIdFromObject($object))
-                    ->injectCallback($this->pool->createClass(Objects::class))
+            model: $this->dispatchProcessEvent(
+                model: $this->model->setType(type: static::TYPE_CLASS)
+                    ->addParameter(name: static::PARAM_DATA, value: $object)
+                    ->addParameter(name: static::PARAM_NAME, value: $this->model->getName())
+                    ->setNormal(normal: '\\' . $object::class)
+                    ->setDomid(domid: $this->generateDomIdFromObject(data: $object))
+                    ->injectCallback(object: $this->pool->createClass(classname: Objects::class))
             )
         );
 

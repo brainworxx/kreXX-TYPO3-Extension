@@ -50,9 +50,19 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(Serialized::class, 'canHandle')]
 #[CoversMethod(AbstractScalarAnalysis::class, 'callMe')]
 #[CoversMethod(Serialized::class, 'handle')]
-
+#[CoversMethod(Serialized::class, '__construct')]
 class SerializedTest extends AbstractHelper
 {
+    /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new Serialized(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
     /**
      * Test if the pretty print for the serialize is active.
      */

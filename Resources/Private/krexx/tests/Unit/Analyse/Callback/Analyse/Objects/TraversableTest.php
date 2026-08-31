@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray;
@@ -50,6 +51,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(Traversable::class, 'callMe')]
 #[CoversMethod(Traversable::class, 'retrieveTraversableData')]
 #[CoversMethod(Traversable::class, 'analyseTraversableResult')]
+#[CoversMethod(Traversable::class, '__construct')]
 class TraversableTest extends AbstractHelper
 {
     public const  CHECK_NESTING = 'checkNesting';
@@ -65,7 +67,7 @@ class TraversableTest extends AbstractHelper
     protected $endEvent = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Traversable::analysisEnd';
 
     /**
-     * @var \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties
+     * @var PublicProperties
      */
     protected $traversable;
 
@@ -93,7 +95,7 @@ class TraversableTest extends AbstractHelper
     /**
      * Test, if we do not ignore the emergency handler.
      */
-    public function testCallMeWithEmergency()
+    public function testCallMeWithEmergency(): void
     {
         // Tell the emergency handler mock that we have a nesting level problem.
         Krexx::$pool->emergencyHandler->expects($this->once())
@@ -147,7 +149,7 @@ class TraversableTest extends AbstractHelper
     /**
      * Test, if the traversable analysis can handle some errors and warnings.
      */
-    public function testCallMeWithErrors()
+    public function testCallMeWithErrors(): void
     {
         // Tell the emergency handler, that the nesting level is ok.
         Krexx::$pool->emergencyHandler->expects($this->once())
@@ -181,8 +183,11 @@ class TraversableTest extends AbstractHelper
     /**
      * Test, if the normal array analysis is called.
      */
-    public function testMeWithSmallArray()
+    public function testMeWithSmallArray(): void
     {
+        $object = new Traversable(Krexx::$pool);
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+
         // Tell the emergency handler, that the nesting level is ok.
         Krexx::$pool->emergencyHandler->expects($this->any())
             ->method(static::CHECK_NESTING)
@@ -232,7 +237,7 @@ class TraversableTest extends AbstractHelper
     /**
      * Test if the large array analysis is called.
      */
-    public function testMeWithLargeArray()
+    public function testMeWithLargeArray(): void
     {
         // Tell the emergency handler, that the nesting level is ok.
         Krexx::$pool->emergencyHandler->expects($this->any())

@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Going through an array with 2000 objects can create more than 1 GB of
@@ -67,6 +68,15 @@ class ThroughLargeArray extends AbstractCallback implements
     ProcessConstInterface
 {
     /**
+     * Inject the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
+    /**
      * Renders the expendable around the array analysis.
      *
      * @return string
@@ -74,32 +84,20 @@ class ThroughLargeArray extends AbstractCallback implements
      */
     public function callMe(): string
     {
-        $output = $this->dispatchStartEvent();
-
-        $recursionMarker = $this->pool->recursionHandler->getMarker();
-        $output .= $this->pool->render->renderSingeChildHr();
+        $output = $this->dispatchStartEvent() . $this->pool->render->renderSingeChildHr();
 
         // Iterate through.
         foreach ($this->parameters[static::PARAM_DATA] as $key => $value) {
-            // We will not output our recursion marker.
-            // Meh, the only reason for the recursion marker
-            // in arrays is because of the $GLOBAL array, which
-            // we will only render once.
-            // @deprecated Will be removed when we drop 8.0 support
-            if ($key === $recursionMarker) {
-                continue;
-            }
-
             /** @var Model $model */
-            $model = $this->pool->createClass(Model::class)->setCodeGenType(
-                $this->parameters[static::PARAM_MULTILINE] ?
+            $model = $this->pool->createClass(classname: Model::class)->setCodeGenType(
+                codeGenType: $this->parameters[static::PARAM_MULTILINE] ?
                     static::CODEGEN_TYPE_ITERATOR_TO_ARRAY : static::CODEGEN_TYPE_PUBLIC
             );
 
             // Handling string keys of the array.
-            $this->handleKey($key, $model);
+            $this->handleKey(key: $key, model: $model);
             // Handling of the value and add some output.
-            $output .= $this->handleValue($value, $model);
+            $output .= $this->handleValue(value: $value, model: $model);
         }
 
         return $output . $this->pool->render->renderSingeChildHr();
@@ -114,16 +112,16 @@ class ThroughLargeArray extends AbstractCallback implements
      * @param Model $model
      *   The so far prepared model we are preparing further.
      */
-    protected function handleKey($key, Model $model): void
+    protected function handleKey(int|string $key, Model $model): void
     {
-        if (is_string($key)) {
-            $model->setName($this->pool->encodingService->encodeString($key))
-                ->setConnectorType(static::CONNECTOR_ASSOCIATIVE_ARRAY);
+        if (is_string(value: $key)) {
+            $model->setName(name: $this->pool->encodingService->encodeString(data: $key))
+                ->setConnectorType(type: static::CONNECTOR_ASSOCIATIVE_ARRAY);
 
             return;
         }
 
-        $model->setName($key)->setConnectorType(static::CONNECTOR_NORMAL_ARRAY);
+        $model->setName(name: $key)->setConnectorType(type: static::CONNECTOR_NORMAL_ARRAY);
     }
 
     /**
@@ -136,26 +134,27 @@ class ThroughLargeArray extends AbstractCallback implements
      * @return string
      *   The generated markup
      */
-    protected function handleValue($value, Model $model): string
+    protected function handleValue(mixed $value, Model $model): string
     {
         $messages = $this->pool->messages;
-        if (is_object($value)) {
+        if (is_object(value: $value)) {
             // We will not go too deep here, and say only what it is.
-            $model->setType($messages->getHelp('simpleClassType'))->setNormal(get_class($value));
+            $model->setType(type: $messages->getHelp(key: 'simpleClassType'))
+                ->setNormal(normal: $value::class);
 
-            return $this->pool->render->renderExpandableChild($model);
+            return $this->pool->render->renderExpandableChild(model: $model);
         }
 
-        if (is_array($value)) {
+        if (is_array(value: $value)) {
             // Adding another array to the output may be as bad as a
             // complete object analysis.
-            $model->setType($messages->getHelp('simpleArrayType'))
-                ->setNormal($messages->getHelp('count') . count($value));
+            $model->setType(type: $messages->getHelp(key: 'simpleArrayType'))
+                ->setNormal(normal: $messages->getHelp(key: 'count') . count(value: $value));
 
-                return $this->pool->render->renderExpandableChild($model);
+                return $this->pool->render->renderExpandableChild(model: $model);
         }
 
         // We handle the simple type normally with the analysis hub.
-        return $this->pool->routing->analysisHub($model->setData($value));
+        return $this->pool->routing->analysisHub(model: $model->setData(data: $value));
     }
 }

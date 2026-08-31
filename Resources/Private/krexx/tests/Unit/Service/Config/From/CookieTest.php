@@ -73,7 +73,7 @@ class CookieTest extends AbstractHelper
      * Testing the assigning of the validation class and the reading of mocked
      * values.
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         // Run with a working fixture.
         $poolMock = $this->createMock(Pool::class);
@@ -106,7 +106,7 @@ class CookieTest extends AbstractHelper
     /**
      * What the method name says.
      */
-    public function testGetConfigFromCookies()
+    public function testGetConfigFromCookies(): void
     {
         $someGroup = 'some group';
 

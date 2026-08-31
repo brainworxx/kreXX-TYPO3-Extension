@@ -112,7 +112,7 @@ class ModelTest extends AbstractHelper
     /**
      * Test if we get the pool as well as the connector service.
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $this->model));
 
@@ -125,7 +125,7 @@ class ModelTest extends AbstractHelper
     /**
      * Test if the callback gets set.
      */
-    public function testInjectCallback()
+    public function testInjectCallback(): void
     {
         $mockCallback = $this->createMock(
             AbstractCallback::class
@@ -146,7 +146,7 @@ class ModelTest extends AbstractHelper
      * The rendering will call the callback. We will mock the callback and test
      * if we get the actual output from it.
      */
-    public function testRenderMe()
+    public function testRenderMe(): void
     {
         $mockCallback = $this->createMock(
             AbstractCallback::class
@@ -172,7 +172,7 @@ class ModelTest extends AbstractHelper
     /**
      * Test if we can add several parameters.
      */
-    public function testAddParameter()
+    public function testAddParameter(): void
     {
         $parameterOne = new stdClass();
         $parameterTwo = "some value";
@@ -192,7 +192,7 @@ class ModelTest extends AbstractHelper
      * Test the setting of the help id. The help id sets additional text to the
      * specific analysis, to explain the output.
      */
-    public function testSetHelpId()
+    public function testSetHelpId(): void
     {
         // Mock the message class, which will provide the help text.
         $helpText = 'some help text';
@@ -218,7 +218,7 @@ class ModelTest extends AbstractHelper
     /**
      * Test if we can add stuff to the json. Linebreaks should be removed.
      */
-    public function testAddToJson()
+    public function testAddToJson(): void
     {
         $text = "Look\n at\r me\n\r, I'm\n\r a string";
         $key = 'some key';
@@ -238,7 +238,7 @@ class ModelTest extends AbstractHelper
     /**
      * Test if we can add hints to the json. Hints will be added to the existing hints with a line break.
      */
-    public function testAddJsonHint()
+    public function testAddJsonHint(): void
     {
         $hint1 = "This is the first hint.";
         $hint2 = "This is the second hint.";
@@ -271,7 +271,7 @@ class ModelTest extends AbstractHelper
     /**
      * Test the getter for the json value.
      */
-    public function testGetJson()
+    public function testGetJson(): void
     {
         $jsonData = [
             'some' => 'value',
@@ -286,7 +286,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the setter for the data value.
      */
-    public function testSetData()
+    public function testSetData(): void
     {
         $data = new stdClass();
         $this->assertEquals($this->model, $this->model->setData($data));
@@ -296,7 +296,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the getter of the data value.
      */
-    public function testGetData()
+    public function testGetData(): void
     {
         $data = new stdClass();
         $this->setValueByReflection('data', $data, $this->model);
@@ -306,7 +306,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the setter for the name value.
      */
-    public function testSetName()
+    public function testSetName(): void
     {
         $data = static::SOME_STRING_TO_PASS_THROUGH;
         $this->assertEquals($this->model, $this->model->setName($data));
@@ -316,7 +316,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the getter for the name value.
      */
-    public function testGetName()
+    public function testGetName(): void
     {
         $data = static::SOME_STRING_TO_PASS_THROUGH;
         $this->setValueByReflection('name', $data, $this->model);
@@ -326,7 +326,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the setter for the normal value.
      */
-    public function testSetNormal()
+    public function testSetNormal(): void
     {
         $data = static::SOME_STRING_TO_PASS_THROUGH;
         $this->assertEquals($this->model, $this->model->setNormal($data));
@@ -336,7 +336,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the getter for the normal value.
      */
-    public function testGetNormal()
+    public function testGetNormal(): void
     {
         $data = static::SOME_STRING_TO_PASS_THROUGH;
         $this->setValueByReflection('normal', $data, $this->model);
@@ -346,7 +346,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the setter for the additional value.
      */
-    public function testSetAdditional()
+    public function testSetAdditional(): void
     {
         $data = static::SOME_STRING_TO_PASS_THROUGH;
         $this->assertEquals($this->model, $this->model->setAdditional($data));
@@ -356,7 +356,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the getter for the additional value.
      */
-    public function testGetAdditional()
+    public function testGetAdditional(): void
     {
         $data = static::SOME_STRING_TO_PASS_THROUGH;
         $this->setValueByReflection('additional', $data, $this->model);
@@ -366,7 +366,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the setter for the type value.
      */
-    public function testSetType()
+    public function testSetType(): void
     {
         $data = 'some type';
         $this->assertEquals($this->model, $this->model->setType($data));
@@ -376,7 +376,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the getter for the type value.
      */
-    public function testGetType()
+    public function testGetType(): void
     {
         $data = static::SOME_STRING_TO_PASS_THROUGH;
         $this->setValueByReflection('type', $data, $this->model);
@@ -386,7 +386,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the getter for the left connector.
      */
-    public function testGetConnectorLeft()
+    public function testGetConnectorLeft(): void
     {
         $data = static::SOME_STRING_TO_PASS_THROUGH;
 
@@ -402,7 +402,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the right connector.
      */
-    public function testGetConnectorRight()
+    public function testGetConnectorRight(): void
     {
         $data = static::SOME_STRING_TO_PASS_THROUGH;
         $cap = 5;
@@ -420,7 +420,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the setter of the dom id.
      */
-    public function testSetDomid()
+    public function testSetDomid(): void
     {
         $data = static::SOME_STRING_TO_PASS_THROUGH;
 
@@ -431,7 +431,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the getter of the dom id.
      */
-    public function testGetDomid()
+    public function testGetDomid(): void
     {
         $data = static::SOME_STRING_TO_PASS_THROUGH;
 
@@ -442,7 +442,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the getter for the extras boolean.
      */
-    public function testGetHasExtra()
+    public function testGetHasExtra(): void
     {
         $data = true;
 
@@ -453,7 +453,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the setter for the extras boolean.
      */
-    public function testSetHasExtra()
+    public function testSetHasExtra(): void
     {
         $data = true;
 
@@ -464,7 +464,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the setter for the connector parameters.
      */
-    public function testSetConnectorParameters()
+    public function testSetConnectorParameters(): void
     {
         $data = static::SOME_STRING_TO_PASS_THROUGH;
 
@@ -480,7 +480,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the getter for the connector parameters.
      */
-    public function testGetConnectorParameters()
+    public function testGetConnectorParameters(): void
     {
         $data = static::SOME_STRING_TO_PASS_THROUGH;
 
@@ -496,7 +496,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the setter of the connector type
      */
-    public function testSetConnectorType()
+    public function testSetConnectorType(): void
     {
         $data = 1234;
 
@@ -511,7 +511,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the setter of the custom connector left.
      */
-    public function testSetCustomConnectorLeft()
+    public function testSetCustomConnectorLeft(): void
     {
         $data = 5678;
 
@@ -526,7 +526,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the getter of the language connector.
      */
-    public function testGetConnectorLanguage()
+    public function testGetConnectorLanguage(): void
     {
         $data = static::SOME_STRING_TO_PASS_THROUGH;
 
@@ -542,12 +542,12 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the getter of the parameter fo the callback.
      */
-    public function testGetParameters()
+    public function testGetParameters(): void
     {
-        $data = array(
+        $data = [
             'param1' => 'value1',
             'param2' => 'value2',
-        );
+        ];
 
         $this->setValueByReflection('parameters', $data, $this->model);
         $this->assertEquals($data, $this->model->getParameters());
@@ -556,7 +556,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the setting of the code generation type.
      */
-    public function testSetCodeGenType()
+    public function testSetCodeGenType(): void
     {
         $data = 'some constant';
 
@@ -568,7 +568,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the getter of the code generation type.
      */
-    public function testGetCodeGenType()
+    public function testGetCodeGenType(): void
     {
         $data = 'Another constant';
 
@@ -592,7 +592,7 @@ class ModelTest extends AbstractHelper
     /**
      * Test if we are handling a callback or stuff with "extra".
      */
-    public function testIsExpandable()
+    public function testIsExpandable(): void
     {
         $this->assertFalse($this->model->isExpandable());
 
@@ -611,7 +611,7 @@ class ModelTest extends AbstractHelper
     /**
      * Test the setter/getter for the return type.
      */
-    public function testSetGetReturnType()
+    public function testSetGetReturnType(): void
     {
         $data = 'string';
         $this->assertEquals($this->model, $this->model->setReturnType($data));

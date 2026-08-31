@@ -87,7 +87,7 @@ class ProcessArrayTest extends AbstractHelper
     /**
      * Test the reading of the settings
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $processArray = new ProcessArray(\Krexx::$pool);
         $this->assertNotEquals(0, $this->retrieveValueByReflection('arrayCountLimit', $processArray));
@@ -96,7 +96,7 @@ class ProcessArrayTest extends AbstractHelper
     /**
      * Test the processing of a normal array.
      */
-    public function testProcessNormal()
+    public function testProcessNormal(): void
     {
         Krexx::$pool->rewrite[ThroughArray::class] = CallbackCounter::class;
         $this->assertResults();
@@ -105,7 +105,7 @@ class ProcessArrayTest extends AbstractHelper
     /**
      * Test the processing of a large array.
      */
-    public function testProcessLargeArray()
+    public function testProcessLargeArray(): void
     {
         Krexx::$pool->rewrite[ThroughLargeArray::class] = CallbackCounter::class;
         Krexx::$pool->config->settings[Fallback::SETTING_ARRAY_COUNT_LIMIT]->setValue('2');
@@ -115,7 +115,7 @@ class ProcessArrayTest extends AbstractHelper
     /**
      * Test the check if we can handle the array processing.
      */
-    public function testCanHandle()
+    public function testCanHandle(): void
     {
         $processArray = new ProcessArray(Krexx::$pool);
         $model = new Model(Krexx::$pool);

@@ -57,7 +57,7 @@ class AbstractProcessNoneScalarTest extends AbstractHelper
     /**
      * Test the handling of a too deep nesting.
      */
-    public function testHandleNestedTooDeep()
+    public function testHandleNestedTooDeep(): void
     {
         // Prepare the mock objects
         $emergencyHandlerMock = $this->createMock(Emergency::class);
@@ -94,7 +94,7 @@ class AbstractProcessNoneScalarTest extends AbstractHelper
     /**
      * Test the recursion handling of the none scalar routing.
      */
-    public function testHandleRecursionObject()
+    public function testHandleRecursionObject(): void
     {
         $recursionMock = $this->createMock(Recursion::class);
         $recursionMock->expects($this->once())
@@ -124,7 +124,7 @@ class AbstractProcessNoneScalarTest extends AbstractHelper
     /**
      * Test the recursion handling of the globals array.
      */
-    public function testHandleGlobals()
+    public function testHandleGlobals(): void
     {
         $recursionMock = $this->createMock(Recursion::class);
         $recursionMock->expects($this->once())

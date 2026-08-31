@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use ReflectionException;
 use Throwable;
@@ -62,6 +63,15 @@ class DebugMethods extends AbstractObjectAnalysis implements
     ConfigConstInterface
 {
     /**
+     * Inject the pool.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
+    /**
      * Calls all configured debug methods in die class.
      *
      * I've added a try and an empty error function callback
@@ -79,23 +89,26 @@ class DebugMethods extends AbstractObjectAnalysis implements
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflectionClass */
         $reflectionClass = $this->parameters[static::PARAM_REF];
         $data = $reflectionClass->getData();
-
-        foreach (explode(',', $this->pool->config->getSetting(static::SETTING_DEBUG_METHODS)) as $funcName) {
+        $functionNames = $this->pool->config->getSetting(name: static::SETTING_DEBUG_METHODS);
+        foreach (explode(separator: ',', string: $functionNames) as $funcName) {
             if (
-                $this->checkIfAccessible($data, $funcName, $reflectionClass) &&
+                $this->checkIfAccessible(data: $data, funcName: $funcName, reflectionClass: $reflectionClass) &&
                 // We ignore NULL values.
-                ($result = $this->retrieveValue($data, $funcName)) !== null
+                ($result = $this->retrieveValue(object: $data, methodName: $funcName)) !== null
             ) {
                 $output .= $this->pool->render->renderExpandableChild(
-                    $this->dispatchEventWithModel($funcName, $this->pool->createClass(Model::class)
-                        ->setName($funcName)
-                        ->setType($this->pool->messages->getHelp('debugMethod'))
-                        ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
-                        ->setNormal(static::UNKNOWN_VALUE)
-                        ->setHelpid($funcName)
-                        ->setConnectorType(static::CONNECTOR_METHOD)
-                        ->addParameter(static::PARAM_DATA, $result)
-                        ->injectCallback($this->pool->createClass(Debug::class)))
+                    model: $this->dispatchEventWithModel(
+                        name: $funcName,
+                        model: $this->pool->createClass(classname: Model::class)
+                            ->setName(name: $funcName)
+                            ->setType(type: $this->pool->messages->getHelp(key: 'debugMethod'))
+                            ->setCodeGenType(codeGenType: static::CODEGEN_TYPE_PUBLIC)
+                            ->setNormal(normal: static::UNKNOWN_VALUE)
+                            ->setHelpid(helpId: $funcName)
+                            ->setConnectorType(type: static::CONNECTOR_METHOD)
+                            ->addParameter(name: static::PARAM_DATA, value: $result)
+                            ->injectCallback(object: $this->pool->createClass(classname: Debug::class))
+                    )
                 );
                 unset($result);
             }
@@ -115,14 +128,14 @@ class DebugMethods extends AbstractObjectAnalysis implements
      * @return mixed
      *   Whatever the method would return.
      */
-    protected function retrieveValue(object $object, string $methodName)
+    protected function retrieveValue(object $object, string $methodName): mixed
     {
         $result = null;
         // Add a try to prevent the hosting CMS from doing something stupid.
-        set_error_handler($this->pool->retrieveErrorCallback());
+        set_error_handler(callback: $this->pool->retrieveErrorCallback());
         try {
             $result = $object->$methodName();
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             // Do nothing.
         }
 
@@ -135,7 +148,7 @@ class DebugMethods extends AbstractObjectAnalysis implements
     /**
      * Check if we are allowed to access this class method as a debug method for this class.
      *
-     * @param mixed $data
+     * @param object $data
      *   The class that we are currently analysing.
      * @param string $funcName
      *   The name of the function that we want to call.
@@ -145,16 +158,16 @@ class DebugMethods extends AbstractObjectAnalysis implements
      * @return bool
      *   Whether we are allowed to access this method.
      */
-    protected function checkIfAccessible($data, string $funcName, ReflectionClass $reflectionClass): bool
+    protected function checkIfAccessible(object $data, string $funcName, ReflectionClass $reflectionClass): bool
     {
         // We need to check if:
         // 1. Method exists. It may be protected though.
         // 2. Method can be called. There may be a magical method, though.
         // 3. It's not blacklisted.
         if (
-            !method_exists($data, $funcName) ||
-            !is_callable([$data, $funcName]) ||
-            !$this->pool->config->validation->isAllowedDebugCall($data, $funcName)
+            !method_exists(object_or_class: $data, method: $funcName) ||
+            !is_callable(value: [$data, $funcName]) ||
+            !$this->pool->config->validation->isAllowedDebugCall(data: $data, method: $funcName)
         ) {
             return false;
         }
@@ -162,9 +175,9 @@ class DebugMethods extends AbstractObjectAnalysis implements
         // We need to check if the callable function requires any parameters.
         // We will not call those, because we simply can not provide them.
         try {
-            $ref = $reflectionClass->getMethod($funcName);
+            $ref = $reflectionClass->getMethod(name: $funcName);
             return $ref->getNumberOfRequiredParameters() === 0;
-        } catch (ReflectionException $e) {
+        } catch (ReflectionException) {
             return false;
         }
     }

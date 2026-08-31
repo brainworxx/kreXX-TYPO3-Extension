@@ -42,6 +42,7 @@ use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -52,26 +53,22 @@ class IndexController extends AbstractController implements ConstInterface
     /**
      * Simple index action, display everything.
      *
-     * @return string|null|\Psr\Http\Message\ResponseInterface
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    public function indexAction()
+    public function indexAction(): ResponseInterface
     {
         if (!$this->hasAccess()) {
             // Sorry!
             $this->addFlashMessage(
                 static::translate(static::ACCESS_DENIED),
                 static::translate(static::ACCESS_DENIED),
-                $this->flashMessageError
+                ContextualFeedbackSeverity::ERROR
             );
-            if (method_exists($this, 'htmlResponse')) {
-                $response = $this->responseFactory->createResponse()
-                    ->withAddedHeader('Content-Type', 'text/html; charset=utf-8');
-                $response->getBody()->write('');
-                return $response;
-            }
 
-            // TYPO3 v10 fallback.
-            return '';
+            $response = $this->responseFactory->createResponse()
+                ->withAddedHeader('Content-Type', 'text/html; charset=utf-8');
+            $response->getBody()->write('');
+            return $response;
         }
 
         $this->checkProductiveSetting();
@@ -87,7 +84,6 @@ class IndexController extends AbstractController implements ConstInterface
      * Save the configuration, hen redirect back to the index.
      *
      * @param \Brainworxx\Includekrexx\Domain\Model\Settings $settings
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -97,7 +93,7 @@ class IndexController extends AbstractController implements ConstInterface
             $this->addFlashMessage(
                 static::translate(static::ACCESS_DENIED),
                 static::translate(static::SAVE_FAIL_TITLE),
-                $this->flashMessageError
+                ContextualFeedbackSeverity::ERROR
             );
             return $this->redirect('index');
         }
@@ -105,19 +101,18 @@ class IndexController extends AbstractController implements ConstInterface
         // Check for writing permission.
         // Check the actual writing process.
         $jsonPath = $settings->prepareFileName($this->pool->config->getPathToConfigFile());
-        $displayFilePath = $this->pool->fileService->filterFilePath($jsonPath);
         if (is_writable(dirname($jsonPath)) && file_put_contents($jsonPath, $settings->generateContent())) {
             // File was saved successfully.
             $this->addFlashMessage(
-                static::translate(static::SAVE_SUCCESS_TEXT, [$displayFilePath]),
+                static::translate(static::SAVE_SUCCESS_TEXT, [$jsonPath]),
                 static::translate(static::SAVE_SUCCESS_TITLE)
             );
         } else {
             // Something went wrong here!
             $this->addFlashMessage(
-                static::translate(static::FILE_NOT_WRITABLE, [$displayFilePath]),
+                static::translate(static::FILE_NOT_WRITABLE, [$jsonPath]),
                 static::translate(static::SAVE_FAIL_TITLE),
-                $this->flashMessageError
+                ContextualFeedbackSeverity::ERROR
             );
         }
 

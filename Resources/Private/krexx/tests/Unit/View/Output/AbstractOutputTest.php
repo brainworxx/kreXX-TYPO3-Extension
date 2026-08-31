@@ -48,7 +48,7 @@ class AbstractOutputTest extends AbstractHelper
     /**
      * Test the setting of the pool.
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $browser = new Browser(Krexx::$pool);
         $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $browser));
@@ -57,7 +57,7 @@ class AbstractOutputTest extends AbstractHelper
     /**
      * Test the adding of a chunk string, just like the method name implies.
      */
-    public function testAddChunkString()
+    public function testAddChunkString(): void
     {
         $stringOne = 'I\'m a little string.';
         $stringTwo = 'Tri tra whatever';

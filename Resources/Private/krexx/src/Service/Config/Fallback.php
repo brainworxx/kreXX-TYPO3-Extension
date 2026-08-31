@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Config;
 
-use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use Brainworxx\Krexx\View\Skins\RenderHans;
 use Brainworxx\Krexx\View\Skins\RenderSmokyGrey;
@@ -71,6 +70,9 @@ abstract class Fallback implements ConfigConstInterface
      * Method name used to evaluate the maximum runtime.
      *
      * @see \Brainworxx\Krexx\Service\Config\Validation
+     *
+     * @deprecated
+     *   Since 7.0.0, will be removed in 8.0
      *
      * @var string
      */
@@ -144,7 +146,6 @@ abstract class Fallback implements ConfigConstInterface
         self::SECTION_OUTPUT => [
             self::SETTING_DISABLED,
             self::SETTING_IP_RANGE,
-            self::SETTING_DETECT_AJAX,
         ],
         self::SECTION_BEHAVIOR => [
             self::SETTING_SKIN,
@@ -156,23 +157,18 @@ abstract class Fallback implements ConfigConstInterface
             self::SETTING_MAX_STEP_NUMBER,
             self::SETTING_ARRAY_COUNT_LIMIT,
             self::SETTING_NESTING_LEVEL,
+            self::SETTING_MAX_CALL,
         ],
         self::SECTION_PROPERTIES => [
             self::SETTING_ANALYSE_PROTECTED,
             self::SETTING_ANALYSE_PRIVATE,
             self::SETTING_ANALYSE_TRAVERSABLE,
-            self::SETTING_ANALYSE_SCALAR,
         ],
         self::SECTION_METHODS => [
             self::SETTING_ANALYSE_PROTECTED_METHODS,
             self::SETTING_ANALYSE_PRIVATE_METHODS,
             self::SETTING_ANALYSE_GETTER,
             self::SETTING_DEBUG_METHODS,
-        ],
-        self::SECTION_EMERGENCY => [
-            self::SETTING_MAX_CALL,
-            self::SETTING_MAX_RUNTIME,
-            self::SETTING_MEMORY_LEFT,
         ],
     ];
 
@@ -248,21 +244,10 @@ abstract class Fallback implements ConfigConstInterface
     protected array $skinConfiguration = [];
 
     /**
-     * Here we store all relevant data.
-     *
-     * @var Pool
+     * Initialize the fallback configuration, get the skins.
      */
-    protected Pool $pool;
-
-    /**
-     * Injects the pool and initialize the fallback configuration, get the skins.
-     *
-     * @param Pool $pool
-     */
-    public function __construct(Pool $pool)
+    public function __construct()
     {
-        $this->pool = $pool;
-
         // Generate the configuration fallback.
         $this->generateConfigFallback();
         // Generate the configuration for the fe editor.
@@ -282,7 +267,7 @@ abstract class Fallback implements ConfigConstInterface
 
         // Adding the new configuration options from the plugins.
         $pluginConfig = SettingsGetter::getNewSettings();
-        if (empty($pluginConfig)) {
+        if ($pluginConfig === []) {
             return;
         }
 
@@ -304,20 +289,16 @@ abstract class Fallback implements ConfigConstInterface
             static::SETTING_ANALYSE_PRIVATE_METHODS => $this->returnBoolSelectFalse(static::SECTION_METHODS),
             static::SETTING_ANALYSE_PROTECTED => $this->returnBoolSelectFalse(static::SECTION_PROPERTIES),
             static::SETTING_ANALYSE_PRIVATE => $this->returnBoolSelectFalse(static::SECTION_PROPERTIES),
-            static::SETTING_ANALYSE_SCALAR => $this->returnBoolSelectTrue(static::SECTION_PROPERTIES),
             static::SETTING_ANALYSE_TRAVERSABLE => $this->returnBoolSelectTrue(static::SECTION_PROPERTIES),
             static::SETTING_DEBUG_METHODS => $this->returnDebugMethods(),
             static::SETTING_NESTING_LEVEL => $this->returnInput(static::SECTION_PRUNE, 10),
-            static::SETTING_MAX_CALL => $this->returnInput(static::SECTION_EMERGENCY, 10),
+            static::SETTING_MAX_CALL => $this->returnInput(static::SECTION_PRUNE, 10),
             static::SETTING_DISABLED => $this->returnBoolSelectFalse(static::SECTION_OUTPUT),
             static::SETTING_DESTINATION => $this->returnDestination(),
             static::SETTING_MAX_FILES => $this->returnMaxFiles(),
             static::SETTING_SKIN => $this->returnSkin(),
-            static::SETTING_DETECT_AJAX => $this->returnBoolSelectTrue(static::SECTION_OUTPUT),
             static::SETTING_IP_RANGE => $this->returnIpRange(),
             static::SETTING_ANALYSE_GETTER => $this->returnBoolSelectTrue(static::SECTION_METHODS),
-            static::SETTING_MEMORY_LEFT => $this->returnInput(static::SECTION_EMERGENCY, 64),
-            static::SETTING_MAX_RUNTIME => $this->returnMaxRuntime(),
             static::SETTING_MAX_STEP_NUMBER => $this->returnInput(static::SECTION_PRUNE, 15),
             static::SETTING_ARRAY_COUNT_LIMIT => $this->returnInput(static::SECTION_PRUNE, 300),
             static::SETTING_LANGUAGE_KEY => $this->returnLanguages(),
@@ -331,7 +312,7 @@ abstract class Fallback implements ConfigConstInterface
     {
         // Adding the new configuration options from the plugins.
         $pluginConfig = SettingsGetter::getNewSettings();
-        if (empty($pluginConfig)) {
+        if ($pluginConfig === []) {
             return;
         }
 
@@ -521,6 +502,12 @@ abstract class Fallback implements ConfigConstInterface
     /**
      * The render settings for the max runtime.
      *
+     * @deprecated
+     *   Since 7.0.0, will be removed in 8.0.0.
+     *
+     * @codeCoverageIgnore
+     *   We do not test this, as it is deprecated and will be removed in 8.0.0.
+     *
      * @return array
      */
     protected function returnMaxRuntime(): array
@@ -539,5 +526,5 @@ abstract class Fallback implements ConfigConstInterface
      *
      * @var string
      */
-    public string $version = '6.0.8';
+    public string $version = '7.0.0';
 }

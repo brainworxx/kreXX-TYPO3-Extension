@@ -56,12 +56,12 @@ abstract class AbstractProcessNoneScalar extends AbstractRouting implements Proc
     {
         // Check the nesting level.
         if ($this->pool->emergencyHandler->checkNesting()) {
-            return $this->handleNestedTooDeep($this->model);
+            return $this->handleNestedTooDeep(model: $this->model);
         }
 
         // Render recursion.
-        if ($this->pool->recursionHandler->isInHive($this->model->getData())) {
-            return $this->handleRecursion($this->model);
+        if ($this->pool->recursionHandler->isInHive(bee: $this->model->getData())) {
+            return $this->handleRecursion(model: $this->model);
         }
 
         // Render the none scalar stuff.
@@ -79,7 +79,7 @@ abstract class AbstractProcessNoneScalar extends AbstractRouting implements Proc
     /**
      * This none simple type was analysed before.
      *
-     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @param Model $model
      *   The already prepared model.
      *
      * @return string
@@ -88,9 +88,9 @@ abstract class AbstractProcessNoneScalar extends AbstractRouting implements Proc
     protected function handleRecursion(Model $model): string
     {
         $data = $model->getData();
-        if (is_object($data)) {
-            $normal = '\\' . get_class($data);
-            $domId = $this->generateDomIdFromObject($data);
+        if (is_object(value: $data)) {
+            $normal = '\\' . $data::class;
+            $domId = $this->generateDomIdFromObject(data: $data);
         } else {
             // Must be the globals array.
             $normal = '$GLOBALS';
@@ -100,16 +100,16 @@ abstract class AbstractProcessNoneScalar extends AbstractRouting implements Proc
         return $this->pool->render->renderRecursion(
             // Prepare the model for the recursion rendering.
             // We also need to unset the data for the source generation.
-            $model->setDomid($domId)
-                ->setNormal($normal)
-                ->setData(null)
+            model: $model->setDomid(domid: $domId)
+                ->setNormal(normal: $normal)
+                ->setData(data: null)
         );
     }
 
     /**
      * This none simple type was nested too deep.
      *
-     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @param Model $model
      *   The already prepared model.
      *
      * @return string
@@ -117,14 +117,14 @@ abstract class AbstractProcessNoneScalar extends AbstractRouting implements Proc
      */
     protected function handleNestedTooDeep(Model $model): string
     {
-        $text = $this->pool->messages->getHelp('maximumLevelReached2');
+        $text = $this->pool->messages->getHelp(key: 'maximumLevelReached2');
 
-        $model->setData($text)
-            ->setNormal($this->pool->messages->getHelp('maximumLevelReached1'))
-            ->setType(is_array($model->getData()) ? static::TYPE_ARRAY : static::TYPE_OBJECT)
-            ->setHasExtra(true);
+        $model->setData(data: $text)
+            ->setNormal(normal: $this->pool->messages->getHelp(key: 'maximumLevelReached1'))
+            ->setType(type: is_array(value: $model->getData()) ? static::TYPE_ARRAY : static::TYPE_OBJECT)
+            ->setHasExtra(value: true);
 
         // Render it directly.
-        return $this->pool->render->renderExpandableChild($model);
+        return $this->pool->render->renderExpandableChild(model: $model);
     }
 }

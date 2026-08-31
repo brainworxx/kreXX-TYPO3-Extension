@@ -67,7 +67,7 @@ class RegistrationTest extends AbstractRegistration
     /**
      * Test the setting of a specific configuration file.
      */
-    public function testSetConfigFile()
+    public function testSetConfigFile(): void
     {
         $path = 'some' . DIRECTORY_SEPARATOR . 'file.ini';
         Registration::setConfigFile($path);
@@ -77,7 +77,7 @@ class RegistrationTest extends AbstractRegistration
     /**
      * Test the setting of the chunks folder.
      */
-    public function testSetChunksFolder()
+    public function testSetChunksFolder(): void
     {
         $path = 'extra chunky';
         Registration::setChunksFolder($path);
@@ -87,7 +87,7 @@ class RegistrationTest extends AbstractRegistration
     /**
      * Test the setting of the log folder.
      */
-    public function testSetLogFolder()
+    public function testSetLogFolder(): void
     {
         $path = 'logging';
         Registration::setLogFolder($path);
@@ -97,7 +97,7 @@ class RegistrationTest extends AbstractRegistration
     /**
      * Test the adding of blacklisted class / debug method combinations.
      */
-    public function testAddMethodToDebugBlacklist()
+    public function testAddMethodToDebugBlacklist(): void
     {
         $class = 'MyClass';
         $methodOne = 'doingStuff';
@@ -115,7 +115,7 @@ class RegistrationTest extends AbstractRegistration
     /**
      * Test the adding of class names to the blacklisted debug class list.
      */
-    public function testAddClassToDebugBlacklist()
+    public function testAddClassToDebugBlacklist(): void
     {
         $classOne = 'SomeClass';
         $classTwo = 'AnotherClass';
@@ -129,7 +129,7 @@ class RegistrationTest extends AbstractRegistration
     /**
      * Test the adding of class rewrites.
      */
-    public function testAddRewrite()
+    public function testAddRewrite(): void
     {
         $classOne = 'OrgClass';
         $classTwo = 'NewClass';
@@ -143,7 +143,7 @@ class RegistrationTest extends AbstractRegistration
     /**
      * Test the registering of the event handlers
      */
-    public function testRegisterEvent()
+    public function testRegisterEvent(): void
     {
         $eventOne = 'some event';
         $eventTwo = 'another event';
@@ -163,7 +163,7 @@ class RegistrationTest extends AbstractRegistration
     /**
      * Test the registering of help files.
      */
-    public function testRegisterAdditionalHelpFile()
+    public function testRegisterAdditionalHelpFile(): void
     {
         $fileOne = 'help.ini';
         $fileTwo = 'lang.ini';
@@ -176,7 +176,7 @@ class RegistrationTest extends AbstractRegistration
     /**
      * Test the registering of an additional skin.
      */
-    public function testRegisterAdditionalskin()
+    public function testRegisterAdditionalskin(): void
     {
         $skinName = 'Dev skin';
         $renderClass = 'My\\Render\\Class';
@@ -192,7 +192,7 @@ class RegistrationTest extends AbstractRegistration
     /**
      * Test the registration of additional string processors.
      */
-    public function testRegisterAdditionalScalarString()
+    public function testRegisterAdditionalScalarString(): void
     {
         Registration::addScalarStringAnalyser(static::class);
         $this->assertEquals([static::class], SettingsGetter::getAdditionalScalarString());
@@ -201,7 +201,7 @@ class RegistrationTest extends AbstractRegistration
     /**
      * Test the adding of new configuration definitions
      */
-    public function testAddNewSetting()
+    public function testAddNewSetting(): void
     {
         $setting = new NewSetting();
         Registration::addNewSettings($setting);
@@ -211,7 +211,7 @@ class RegistrationTest extends AbstractRegistration
     /**
      * Test the adding of a new fallback value
      */
-    public function testAddNewFallbackValue()
+    public function testAddNewFallbackValue(): void
     {
         Registration::addNewFallbackValue('justa', 'value');
         $this->assertEquals('value', SettingsGetter::getNewFallbackValues()['justa']);
@@ -220,7 +220,7 @@ class RegistrationTest extends AbstractRegistration
     /**
      * Test the adding of a language.
      */
-    public function testAddLanguage()
+    public function testAddLanguage(): void
     {
         Registration::addLanguage('fr', 'français');
         $this->assertEquals(['fr' => 'français'], SettingsGetter::getAdditionalLanguages());
@@ -253,27 +253,27 @@ class RegistrationTest extends AbstractRegistration
     /**
      * Test the registering of a plugin.
      */
-    public function testRegisterAndActivatePlugin()
+    public function testRegisterAndActivatePlugin(): void
     {
         $pluginMock = $this->createMockPlugin();
         Registration::register($pluginMock);
         $expectation = [
-            get_class($pluginMock) => [
+            $pluginMock::class => [
                 Registration::CONFIG_CLASS => $pluginMock,
                 Registration::IS_ACTIVE => false,
             ]
         ];
         $this->assertEquals($expectation, SettingsGetter::getPlugins());
 
-        Registration::activatePlugin(get_class($pluginMock));
-        $expectation[get_class($pluginMock)][Registration::IS_ACTIVE] = true;
+        Registration::activatePlugin($pluginMock::class);
+        $expectation[$pluginMock::class][Registration::IS_ACTIVE] = true;
         $this->assertEquals($expectation, SettingsGetter::getPlugins());
     }
 
     /**
      * Test the early return when deactivating an alredy deactivated plugin.
      */
-    public function testDeactivatePluginDeactivated()
+    public function testDeactivatePluginDeactivated(): void
     {
         $this->setValueByReflection(static::LOG_FOLDER, 'whatever', $this->registration);
         Registration::deactivatePlugin('Test Plugin');
@@ -283,12 +283,12 @@ class RegistrationTest extends AbstractRegistration
     /**
      * Test the normal deactivation of a plugin.
      */
-    public function testDeactivatePluginNormal()
+    public function testDeactivatePluginNormal(): void
     {
         // Register a plugin with a configuration class
         $pluginMock = $this->createMockPlugin();
         Registration::register($pluginMock);
-        $pluginMockClassName = get_class($pluginMock);
+        $pluginMockClassName = $pluginMock::class;
         Registration::activatePlugin($pluginMockClassName);
         $pluginMock2 = new PluginConfigFixture();
         Registration::register($pluginMock2);

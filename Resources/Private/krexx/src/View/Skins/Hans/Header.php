@@ -66,8 +66,8 @@ trait Header
     {
         $messages = $this->pool->messages;
         return str_replace(
-            $this->markerHeader,
-            [
+            search: $this->markerHeader,
+            replace: [
                 $this->pool->config->version,
                 $this->pool->emergencyHandler->getKrexxCount(),
                 $headline,
@@ -76,11 +76,11 @@ trait Header
                 $this->renderSearch(),
                 $messages->outputMessages(),
                 $this->pool->chunks->getOfficialEncoding(),
-                $messages->getHelp('noJavaScript'),
-                $messages->getHelp('callNumber'),
-                $messages->getHelp('searchHeadline'),
+                $messages->getHelp(key: 'noJavaScript'),
+                $messages->getHelp(key: 'callNumber'),
+                $messages->getHelp(key: 'searchHeadline'),
             ],
-            $this->fileCache[static::FILE_HEADER]
+            subject: $this->fileCache[static::FILE_HEADER]
         );
     }
 

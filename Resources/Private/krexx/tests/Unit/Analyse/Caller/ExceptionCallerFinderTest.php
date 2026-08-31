@@ -43,12 +43,23 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(ExceptionCallerFinder::class, 'findCaller')]
+#[CoversMethod(ExceptionCallerFinder::class, '__construct')]
 class ExceptionCallerFinderTest extends AbstractHelper
 {
     /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new ExceptionCallerFinder(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
+    /**
      * Test the return array.
      */
-    public function testFindCaller()
+    public function testFindCaller(): void
     {
         $fixture = new \Exception();
         $callerFinder = new ExceptionCallerFinder(Krexx::$pool);
@@ -56,7 +67,7 @@ class ExceptionCallerFinderTest extends AbstractHelper
         $result = $callerFinder->findCaller($whatever, $fixture);
 
         $this->assertEquals(__FILE__, $result[BacktraceConstInterface::TRACE_FILE]);
-        $this->assertEquals(54, $result[BacktraceConstInterface::TRACE_LINE]);
+        $this->assertEquals(65, $result[BacktraceConstInterface::TRACE_LINE]);
         $this->assertEquals(' ' . \Exception::class, $result[BacktraceConstInterface::TRACE_VARNAME]);
         $this->assertEquals('error', $result[BacktraceConstInterface::TRACE_LEVEL]);
         $this->assertEquals(\Exception::class, $result[BacktraceConstInterface::TRACE_TYPE]);

@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Processing of a backtrace. No abstract for you, because we are dealing with
@@ -55,6 +56,15 @@ class ProcessBacktrace extends AbstractCallback implements
     ConfigConstInterface
 {
     /**
+     * Inject the pool.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
+    /**
      * Wrapper around the process method, so we can use this one as a callback.
      *
      * @return string
@@ -62,7 +72,7 @@ class ProcessBacktrace extends AbstractCallback implements
      */
     public function callMe(): string
     {
-        return $this->handle($this->parameters[static::PARAM_DATA]);
+        return $this->handle(backtrace: $this->parameters[static::PARAM_DATA]);
     }
 
     /**
@@ -88,12 +98,16 @@ class ProcessBacktrace extends AbstractCallback implements
         }
 
         $output = '';
-        $maxStep = (int) $this->pool->config->getSetting(static::SETTING_MAX_STEP_NUMBER);
-        $stepCount = count($backtrace);
+        $maxStep = (int) $this->pool->config->getSetting(name: static::SETTING_MAX_STEP_NUMBER);
+        $stepCount = count(value: $backtrace);
 
         // Remove steps according to the configuration.
         if ($maxStep < $stepCount) {
-            $this->pool->messages->addMessage('omittedBacktrace', [($maxStep + 1), $stepCount], true);
+            $this->pool->messages->addMessage(
+                key: 'omittedBacktrace',
+                args: [($maxStep + 1), $stepCount],
+                isThrowAway: true
+            );
         } else {
             // We will not analyse more steps than we actually have.
             $maxStep = $stepCount;
@@ -101,39 +115,15 @@ class ProcessBacktrace extends AbstractCallback implements
 
         for ($step = 1; $step <= $maxStep; ++$step) {
             $output .= $this->pool->render->renderExpandableChild(
-                $this->pool->createClass(Model::class)
-                    ->setName($step)
-                    ->setType(static::TYPE_STACK_FRAME)
-                    ->addParameter(static::PARAM_DATA, $backtrace[$step - 1])
-                    ->injectCallback($this->pool->createClass(BacktraceStep::class))
+                model: $this->pool->createClass(classname: Model::class)
+                    ->setName(name: $step)
+                    ->setType(type: static::TYPE_STACK_FRAME)
+                    ->addParameter(name: static::PARAM_DATA, value: $backtrace[$step - 1])
+                    ->injectCallback(object: $this->pool->createClass(classname: BacktraceStep::class))
             );
         }
 
         return $output;
-    }
-
-    /**
-     * Filter the file path, for better readability.
-     *
-     * @param array $backtraceStep
-     *   The backtrace step.
-     *
-     * @deprecated
-     *   Since 6.0.0. Will be removed.
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
-     * @return array
-     *   The same backtrace step., but with a filtered file path.
-     */
-    protected function filterFilePath(array $backtraceStep): array
-    {
-        if (isset($backtraceStep[static::TRACE_FILE])) {
-            $backtraceStep[static::TRACE_ORG_FILE] = $backtraceStep[static::TRACE_FILE];
-        }
-
-        return $backtraceStep;
     }
 
     /**
@@ -149,13 +139,16 @@ class ProcessBacktrace extends AbstractCallback implements
         // We remove all steps that came from inside the kreXX lib.
         $krexxScr = KREXX_DIR . 'src';
         foreach ($backtrace as $key => $step) {
-            if (isset($step[static::TRACE_FILE]) && strpos($step[static::TRACE_FILE], $krexxScr) !== false) {
+            if (
+                isset($step[static::TRACE_FILE])
+                && str_contains(haystack: $step[static::TRACE_FILE], needle: $krexxScr)
+            ) {
                 unset($backtrace[$key]);
             } else {
                 // No need to go further, because we should have passed the
                 // kreXX part.
                 // Reset the array keys, because the 0 is now missing.
-                return array_values($backtrace);
+                return array_values(array: $backtrace);
             }
         }
 

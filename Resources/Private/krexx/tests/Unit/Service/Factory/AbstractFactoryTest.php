@@ -68,7 +68,7 @@ class AbstractFactoryTest extends AbstractHelper
     /**
      * Testing the creation of a class with and without rewrites.
      */
-    public function testCreateClass()
+    public function testCreateClass(): void
     {
 
         $this->assertInstanceOf(
@@ -86,7 +86,7 @@ class AbstractFactoryTest extends AbstractHelper
     /**
      * Test the retrieval of the super variable globals.
      */
-    public function testGetGlobals()
+    public function testGetGlobals(): void
     {
         $this->assertSame($GLOBALS, Krexx::$pool->getGlobals());
         $this->assertSame($GLOBALS['_ENV'], Krexx::$pool->getGlobals('_ENV'));
@@ -95,7 +95,7 @@ class AbstractFactoryTest extends AbstractHelper
     /**
      * Test the retrieval of the superglobal SERVER.
      */
-    public function testGetServer()
+    public function testGetServer(): void
     {
         $this->assertSame($GLOBALS['_SERVER'], Krexx::$pool->getServer());
     }
@@ -103,7 +103,7 @@ class AbstractFactoryTest extends AbstractHelper
     /**
      * Test the creation of a new pool.
      */
-    public function testCreatePool()
+    public function testCreatePool(): void
     {
         // Pool already exists, test do nothing.
         $oldPool = Krexx::$pool;
@@ -131,7 +131,7 @@ class AbstractFactoryTest extends AbstractHelper
     /**
      * Test the retrieval of the error callback, as well as running it.
      */
-    public function testRetrieveErrorCallback()
+    public function testRetrieveErrorCallback(): void
     {
         $pool = new Pool();
         $callback = $pool->retrieveErrorCallback();

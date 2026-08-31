@@ -177,7 +177,7 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
      * @return string
      *   Human-readable file size.
      */
-    protected function fileSizeConvert($bytes): string
+    protected function fileSizeConvert(false|int $bytes): string
     {
         $bytes = floatval($bytes);
         $unit = 'UNIT';

@@ -62,17 +62,17 @@ class BacktraceController extends AbstractController implements BacktraceConstIn
         }
 
         // Find caller.
-        $caller = $this->callerFinder->findCaller(static::TRACE_BACKTRACE, []);
+        $caller = $this->callerFinder->findCaller(headline: static::TRACE_BACKTRACE, data: []);
         $caller[static::TRACE_LEVEL] = 'backtrace';
-        $this->pool->codegenHandler->setCodegenAllowed(false);
+        $this->pool->codegenHandler->setCodegenAllowed(bool: false);
 
         $analysis = $this->pool
-            ->createClass(ProcessBacktrace::class)
-            ->handle($backtrace);
+            ->createClass(classname: ProcessBacktrace::class)
+            ->handle(backtrace: $backtrace);
 
         // Detect the encoding on the start-chunk-string of the analysis
         // for a complete encoding picture.
-        $this->pool->chunks->detectEncoding($analysis);
+        $this->pool->chunks->detectEncoding(string: $analysis);
 
         // Now that our analysis is done, we must check if there was an emergency
         // break.
@@ -82,16 +82,18 @@ class BacktraceController extends AbstractController implements BacktraceConstIn
 
         // Add the caller as metadata to the chunks class. It will be saved as
         // additional info, in case we are logging to a file.
-        $this->pool->chunks->addMetadata($caller);
+        $this->pool->chunks->addMetadata(caller: $caller);
 
         // We need to get the footer before the generating of the header,
         // because we need to display messages in the header from the configuration.
-        $footer = $this->outputFooter($caller);
+        $footer = $this->outputFooter(caller: $caller);
 
         $this->outputService
-            ->addChunkString($this->pool->render->renderHeader(static::TRACE_BACKTRACE, $this->outputCssAndJs()))
-            ->addChunkString($analysis)
-            ->addChunkString($footer)
+            ->addChunkString(chunkString: $this->pool->render->renderHeader(
+                headline: static::TRACE_BACKTRACE,
+                cssJs: $this->outputCssAndJs()
+            ))->addChunkString(chunkString: $analysis)
+            ->addChunkString(chunkString: $footer)
             ->finalize();
 
         return $this;

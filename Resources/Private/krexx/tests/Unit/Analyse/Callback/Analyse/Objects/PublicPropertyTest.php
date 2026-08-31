@@ -55,10 +55,11 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(AbstractObjectAnalysis::class, 'getReflectionPropertiesData')]
 #[CoversMethod(AbstractObjectAnalysis::class, 'reflectionSorting')]
 #[CoversMethod(PublicProperties::class, 'handleUndeclaredProperties')]
+#[CoversMethod(PublicProperties::class, '__construct')]
 class PublicPropertyTest extends AbstractHelper
 {
     /**
-     * @var \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties
+     * @var PublicProperties
      */
     protected $publicProperties;
 
@@ -90,10 +91,20 @@ class PublicPropertyTest extends AbstractHelper
     }
 
     /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new PublicProperties(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
+    /**
      * Test the public property analysis, without any public ones in the
      * fixture
      */
-    public function testCallMeNoPublic()
+    public function testCallMeNoPublic(): void
     {
         // Test start event
         $this->mockEventService([$this->startEvent, $this->publicProperties]);
@@ -119,7 +130,7 @@ class PublicPropertyTest extends AbstractHelper
      * Test the public property analysis, with public ones in the fixture.
      * We also add some undeclared ones to the mix.
      */
-    public function testCallMeWithPublic()
+    public function testCallMeWithPublic(): void
     {
         // Set up the events
         $this->mockEventService([$this->startEvent, $this->publicProperties], [$this->endEvent, $this->publicProperties]);
@@ -161,7 +172,7 @@ class PublicPropertyTest extends AbstractHelper
     /**
      * Testing the "public" properties of a date time analysis.
      */
-    public function testCallMeDateTime()
+    public function testCallMeDateTime(): void
     {
         // Set up the events
         $this->mockEventService([$this->startEvent, $this->publicProperties], [$this->endEvent, $this->publicProperties]);
@@ -180,19 +191,10 @@ class PublicPropertyTest extends AbstractHelper
             ->callMe();
 
         $params = CallbackCounter::$staticParameters[0];
-
-        if (version_compare('7.4', phpversion(), '<')) {
-            $propertyType = HiddenProperty::class;
-            $isPublic = false;
-        } else {
-            $propertyType = UndeclaredProperty::class;
-            $isPublic = true;
-        }
-
         $expectations = [
-            (new $propertyType($fixture['ref'], 'date'))->setIsPublic($isPublic),
-            (new $propertyType($fixture['ref'], 'timezone'))->setIsPublic($isPublic),
-            (new $propertyType($fixture['ref'], 'timezone_type'))->setIsPublic($isPublic),
+            (new HiddenProperty($fixture['ref'], 'date'))->setIsPublic(false),
+            (new HiddenProperty($fixture['ref'], 'timezone'))->setIsPublic(false),
+            (new HiddenProperty($fixture['ref'], 'timezone_type'))->setIsPublic(false),
         ];
 
         $this->assertEquals($expectations, $params['data']);

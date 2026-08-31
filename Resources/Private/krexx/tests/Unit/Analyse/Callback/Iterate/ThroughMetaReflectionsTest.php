@@ -43,8 +43,19 @@ use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(ThroughMetaReflections::class, 'callMe')]
+#[CoversMethod(ThroughMetaReflections::class, '__construct')]
 class ThroughMetaReflectionsTest extends AbstractHelper
 {
+    /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new ThroughMetaReflections(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
     /**
      * Test the iterating through meta reflections.
      */

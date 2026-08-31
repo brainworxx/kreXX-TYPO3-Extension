@@ -53,30 +53,12 @@ class File
     protected static array $isReadableCache = [];
 
     /**
-     * @var Pool
-     */
-    protected Pool $pool;
-
-    /**
-     * The current docroot.
-     *
-     * @deprecated
-     *   Since 6.0.0. Will be removed.
-     *
-     * @var string
-     */
-    protected string $docRoot;
-
-    /**
      * Injects the pool.
      *
      * @param Pool $pool
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
-        $server = $pool->getServer();
-        $this->docRoot = trim($this->realpath($server['DOCUMENT_ROOT']), DIRECTORY_SEPARATOR);
         $pool->fileService = $this;
     }
 
@@ -101,7 +83,7 @@ class File
 
         // Read the file into our cache array. We may need to reed this file a
         // few times.
-        $content = $this->getFileContentsArray($filePath);
+        $content = $this->getFileContentsArray(filePath: $filePath);
 
         if ($readFrom < 0) {
              $readFrom = 0;
@@ -128,9 +110,9 @@ class File
 
             $currentLineNo === $highlight ? $className = 'highlight' : $className = 'source';
             $result .= $this->pool->render->renderBacktraceSourceLine(
-                $className,
-                $realLineNo,
-                $this->pool->encodingService->encodeString($content[$currentLineNo], true)
+                className: $className,
+                lineNo: $realLineNo,
+                sourceCode: $this->pool->encodingService->encodeString(data: $content[$currentLineNo], code: true)
             );
         }
 
@@ -154,7 +136,7 @@ class File
         $result = '';
 
         // Read the file into our cache array.
-        $content = $this->getFileContentsArray($filePath);
+        $content = $this->getFileContentsArray(filePath: $filePath);
         if ($readFrom < 0) {
              $readFrom = 0;
         }
@@ -192,7 +174,7 @@ class File
      */
     protected function getFileContentsArray(string $filePath): SplFixedArray
     {
-        $filePath = $this->realpath($filePath);
+        $filePath = $this->realpath(filePath: $filePath);
 
         static $filecache = [];
 
@@ -202,11 +184,11 @@ class File
 
         // Using \SplFixedArray to save some memory, as it can get
         // quite huge, depending on your system. 4mb is nothing here.
-        if ($this->fileIsReadable($filePath)) {
-            return $filecache[$filePath] = SplFixedArray::fromArray(file($filePath));
+        if ($this->fileIsReadable(filePath: $filePath)) {
+            return $filecache[$filePath] = SplFixedArray::fromArray(array: file(filename: $filePath));
         }
         // Not readable!
-        return $filecache[$filePath] = new SplFixedArray(0);
+        return $filecache[$filePath] = new SplFixedArray(size: 0);
     }
 
     /**
@@ -224,27 +206,27 @@ class File
      */
     public function getFileContents(string $filePath, bool $showError = true): string
     {
-        if (!$this->fileIsReadable($filePath)) {
+        if (!$this->fileIsReadable(filePath: $filePath)) {
             if ($showError) {
                 // This file was not readable! We need to tell the user!
-                $this->pool->messages->addMessage('fileserviceAccess', [$filePath], true);
+                $this->pool->messages->addMessage(key: 'fileserviceAccess', args: [$filePath], isThrowAway: true);
             }
             // Return empty string.
             return '';
         }
 
         // Get the file contents.
-        set_error_handler($this->pool->retrieveErrorCallback());
-        $filePath = $this->realpath($filePath);
+        set_error_handler(callback: $this->pool->retrieveErrorCallback());
+        $filePath = $this->realpath(filePath: $filePath);
         $file = fopen($filePath, 'r');
         if ($file === false) {
             // File opening just failed!
-            $this->pool->messages->addMessage('fileserviceAccess', [$filePath], true);
+            $this->pool->messages->addMessage(key: 'fileserviceAccess', args: [$filePath], isThrowAway: true);
             restore_error_handler();
             return '';
         }
-        $result = fread($file, filesize($filePath));
-        fclose($file);
+        $result = fread(stream: $file, length: filesize($filePath));
+        fclose(stream: $file);
         restore_error_handler();
 
         return $result;
@@ -266,7 +248,7 @@ class File
     {
         // Register the file as a readable one.
         static::$isReadableCache[$filePath] = true;
-        file_put_contents($filePath, $string, FILE_APPEND);
+        file_put_contents(filename: $filePath, data: $string, flags: FILE_APPEND);
     }
 
     /**
@@ -276,58 +258,29 @@ class File
      */
     public function deleteFile(string $filePath): void
     {
-        $realpath = $this->realpath($filePath);
+        $realpath = $this->realpath(filePath: $filePath);
 
-        set_error_handler($this->pool->retrieveErrorCallback());
+        set_error_handler(callback: $this->pool->retrieveErrorCallback());
 
         // Fast-forward for the current chunk files.
         if (isset(static::$isReadableCache[$realpath])) {
-            unlink($realpath);
+            unlink(filename: $realpath);
             restore_error_handler();
             return;
         }
 
         // Check if it is an actual file and if it is writable.
         // Those are left over chunks from previous calls, or old logfiles.
-        if (is_file($realpath)) {
+        if (is_file(filename: $realpath)) {
             // Make sure it is unlinkable.
-            chmod($realpath, 0777);
-            if (!unlink($realpath)) {
+            chmod(filename: $realpath, permissions: 0777);
+            if (!unlink(filename: $realpath)) {
                 // We have a permission problem here!
-                $this->pool->messages->addMessage('fileserviceDelete', [$realpath]);
+                $this->pool->messages->addMessage(key: 'fileserviceDelete', args: [$realpath]);
             }
         }
 
         restore_error_handler();
-    }
-
-    /**
-     * We will remove the $_SERVER['DOCUMENT_ROOT'] from the absolute
-     * path of the calling file.
-     * Return the original path, in case we can not determine the
-     * $_SERVER['DOCUMENT_ROOT']
-     *
-     * @deprecated
-     *   Since 6.0.0. Will be removed.
-     *
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @param string $filePath
-     *   The path we want to filter
-     *
-     * @return string
-     *   The filtered path to the calling file.
-     */
-    public function filterFilePath(string $filePath): string
-    {
-        $realpath = ltrim($this->realpath($filePath), DIRECTORY_SEPARATOR);
-        if (!empty($this->docRoot) && strpos($realpath, $this->docRoot) === 0) {
-            // Found it on position 0.
-            $realpath = '...' . DIRECTORY_SEPARATOR . substr($realpath, strlen($this->docRoot) + 1);
-        }
-
-        return $realpath;
     }
 
     /**
@@ -341,15 +294,10 @@ class File
      */
     public function fileIsReadable(string $filePath): bool
     {
-        $realPath = $this->realpath($filePath);
-
-        // Return the cache, if we have any.
-        if (isset(static::$isReadableCache[$realPath])) {
-            return static::$isReadableCache[$realPath];
-        }
+        $realPath = $this->realpath(filePath: $filePath);
 
         // Set the cache and return it.
-        return static::$isReadableCache[$realPath] = is_readable($realPath) && is_file($realPath);
+        return static::$isReadableCache[$realPath] ?? static::$isReadableCache[$realPath] = is_readable(filename: $realPath) && is_file(filename: $realPath);
     }
 
     /**
@@ -362,11 +310,11 @@ class File
      */
     public function filetime(string $filePath): int
     {
-        $filePath = $this->realpath($filePath);
+        $filePath = $this->realpath(filePath: $filePath);
 
-        if ($this->fileIsReadable($filePath)) {
-            set_error_handler($this->pool->retrieveErrorCallback());
-            $result = filemtime($filePath);
+        if ($this->fileIsReadable(filePath: $filePath)) {
+            set_error_handler(callback: $this->pool->retrieveErrorCallback());
+            $result = filemtime(filename: $filePath);
             restore_error_handler();
         }
 
@@ -390,7 +338,7 @@ class File
      */
     protected function realpath(string $filePath): string
     {
-        $realpath = realpath($filePath);
+        $realpath = realpath(path: $filePath);
 
         if ($realpath === false) {
             return $filePath;
@@ -413,8 +361,9 @@ class File
     public function isDirectoryWritable(string $path): bool
     {
         $filename = 'test';
-        set_error_handler($this->pool->retrieveErrorCallback());
-        $result = (bool)file_put_contents($path . $filename, 'x') && unlink($path . $filename);
+        set_error_handler(callback: $this->pool->retrieveErrorCallback());
+        $result = (bool)file_put_contents(filename: $path . $filename, data: 'x')
+            && unlink(filename: $path . $filename);
         restore_error_handler();
 
         return $result;

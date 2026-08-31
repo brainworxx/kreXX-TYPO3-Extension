@@ -45,20 +45,12 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 class Encoding
 {
     /**
-     * Our pool.
-     *
-     * @var Pool
-     */
-    protected Pool $pool;
-
-    /**
      * Injects the pool.
      *
      * @param Pool $pool
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
         $this->registerPolyfill();
         $pool->encodingService = $this;
     }
@@ -72,13 +64,13 @@ class Encoding
      */
     protected function registerPolyfill(): void
     {
-        if (!function_exists('mb_detect_encoding')) {
+        if (!function_exists(function: 'mb_detect_encoding')) {
             /**
              * Cheap dummy "polyfill" for mb_detect_encoding
              *
              * @param string $string
              *   Will not get used.
-             * @param string $encodingList
+             * @param string $encodings
              *   Will not get used.
              * @param bool $strict
              *   Will not get used.
@@ -86,7 +78,7 @@ class Encoding
              * @return string
              *   Always 'polyfill'.
              */
-            function mb_detect_encoding($string = '', $encodingList = null, $strict = false): string
+            function mb_detect_encoding($string = '', $encodings = null, $strict = false): string|false
             {
                 return 'polyfill';
             }
@@ -104,7 +96,7 @@ class Encoding
              */
             function mb_strlen($string, $encoding = null): int
             {
-                return strlen($string);
+                return strlen(string: (string) $string);
             }
 
             /**
@@ -122,7 +114,7 @@ class Encoding
              */
             function mb_substr($string, $start, $length): string
             {
-                return substr($string, $start, $length);
+                return substr(string: (string) $string, offset: $start, length: $length);
             }
 
             /**
@@ -131,21 +123,21 @@ class Encoding
              *
              * @param string $string
              *   Will not get used.
-             * @param string $toEncoding
+             * @param string $to_encoding
              *   Will not get used.
-             * @param string $fromEncoding
+             * @param string $from_encoding
              *   Will not get used.
              *
              * @return string
              *   Always an empty string.
              */
-            function mb_convert_encoding($string, $toEncoding, $fromEncoding): string
+            function mb_convert_encoding($string, $to_encoding, $from_encoding): string
             {
                 return '';
             }
 
             // Tell the dev, that we have a problem.
-            $this->pool->messages->addMessage('mbstringNotInstalled');
+            $this->pool->messages->addMessage(key: 'mbstringNotInstalled');
         }
     }
 
@@ -169,10 +161,10 @@ class Encoding
             return '';
         }
 
-        if (strlen($data) > 3072000) {
+        if (strlen(string: $data) > 3072000) {
             // This is a very large string.
             // We would run out of memory, if we try to encode it.
-            return $this->pool->messages->getHelp('stringTooLargeNormal');
+            return $this->pool->messages->getHelp(key: 'stringTooLargeNormal');
         }
 
         // Initialize the encoding configuration.
@@ -188,14 +180,18 @@ class Encoding
         }
 
         // There are several places here, that may throw a warning.
-        set_error_handler($this->pool->retrieveErrorCallback());
+        set_error_handler(callback: $this->pool->retrieveErrorCallback());
 
-        $result = str_replace($search, ['&#64;', '&#123;', '&nbsp;&nbsp;'], htmlentities($data, ENT_QUOTES));
+        $result = str_replace(
+            search: $search,
+            replace: ['&#64;', '&#123;', '&nbsp;&nbsp;'],
+            subject: htmlentities(string: $data, flags: ENT_QUOTES)
+        );
 
         // Check if encoding was successful.
         // 99.99% of the time, the encoding works.
         if (empty($result)) {
-            $result = $this->encodeCompletely($data, $code);
+            $result = $this->encodeCompletely(data: $data, code: $code);
         }
 
         // Reactivate whatever error handling we had previously.
@@ -223,12 +219,16 @@ class Encoding
      */
     protected function encodeCompletely(string &$data, bool $code): string
     {
-        if (strlen($data) > 102400) {
-            return $this->pool->messages->getHelp('stringTooLarge');
+        if (strlen(string: $data) > 102400) {
+            return $this->pool->messages->getHelp(key: 'stringTooLarge');
         }
 
-        $encoding = mb_detect_encoding($data, 'auto', true);
-        $data = mb_convert_encoding($data, 'UTF-32', $encoding === false ? null : $encoding);
+        $encoding = mb_detect_encoding(string: $data, encodings: 'auto', strict: true);
+        $data = mb_convert_encoding(
+            string: $data,
+            to_encoding: 'UTF-32',
+            from_encoding: $encoding === false ? null : $encoding
+        );
         if (empty($data)) {
             // Unable to convert this string into something we can completely
             // encode. Fallback to an empty string.
@@ -236,10 +236,10 @@ class Encoding
         }
 
         return implode(
-            "",
-            array_map(
-                $code ? [$this, 'arrayMapCallbackCode'] : [$this, 'arrayMapCallbackNormal'],
-                unpack("N*", $data)
+            separator: '',
+            array: array_map(
+                callback: $code ? $this->arrayMapCallbackCode(...) : $this->arrayMapCallbackNormal(...),
+                array: unpack(format: "N*", string: $data)
             )
         );
     }
@@ -261,9 +261,9 @@ class Encoding
      * @return string|bool
      *   The result.
      */
-    public function mbDetectEncoding(string $string, string $encodinglist = 'auto', bool $strict = true)
+    public function mbDetectEncoding(string $string): bool|string
     {
-        return mb_detect_encoding($string, $encodinglist, $strict);
+        return mb_detect_encoding(string: $string, encodings: 'auto', strict: true);
     }
 
     /**
@@ -282,9 +282,9 @@ class Encoding
     {
         // Meh, the original mb_strlen interprets a null here as an empty string.
         if ($encoding === null) {
-            return mb_strlen($string);
+            return mb_strlen(string: $string);
         }
-        return mb_strlen($string, $encoding);
+        return mb_strlen(string: $string, encoding: $encoding);
     }
 
     /**
@@ -306,7 +306,7 @@ class Encoding
      */
     public function mbSubStr(string $string, int $start, int $length): string
     {
-        return mb_substr($string, $start, $length);
+        return mb_substr(string: $string, start: $start, length: $length);
     }
 
     /**
@@ -322,20 +322,20 @@ class Encoding
      *
      * @return string|int
      */
-    public function encodeStringForCodeGeneration($name)
+    public function encodeStringForCodeGeneration(string|int $name): string|int
     {
-        if (is_int($name)) {
+        if (is_int(value: $name)) {
             return $name;
         }
 
         $result = str_replace(
-            ['&#039;', "\0", "\xEF", "\xBB", "\xBF"],
-            ["\&#039;", '\' . "\0" . \'', '\' . "\xEF" . \'', '\' . "\xBB" . \'', '\' . "\xBF" . \''],
-            $name
+            search: ['&#039;', "\0", "\xEF", "\xBB", "\xBF"],
+            replace: ["\&#039;", '\' . "\0" . \'', '\' . "\xEF" . \'', '\' . "\xBB" . \'', '\' . "\xBF" . \''],
+            subject: $name
         );
 
         // Clean it up a bit
-        return str_replace('" . \'\' . "', '', $result);
+        return str_replace(search: '" . \'\' . "', replace: '', subject: $result);
     }
 
     /**

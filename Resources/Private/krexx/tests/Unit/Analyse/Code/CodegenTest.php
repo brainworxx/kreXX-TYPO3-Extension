@@ -80,7 +80,7 @@ class CodegenTest extends AbstractHelper
     /**
      * The model for the code generation.
      *
-     * @var \Brainworxx\Krexx\Analyse\Model
+     * @var Model
      */
     protected $fixture;
 
@@ -125,7 +125,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the pool handling.
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $this->codegenHandler));
         $this->assertEquals($this->codegenHandler, Krexx::$pool->codegenHandler);
@@ -134,7 +134,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the forbidden code generation.
      */
-    public function testGenerateSourceNoGen()
+    public function testGenerateSourceNoGen(): void
     {
         $this->codegenHandler->setCodegenAllowed(false);
         $this->expectConnectorCalls(0, 0);
@@ -145,7 +145,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the concatenation of the first run.
      */
-    public function testGenerateSourceFirstRun()
+    public function testGenerateSourceFirstRun(): void
     {
         $this->setValueByReflection(static::FIRST_RUN, true, $this->codegenHandler);
         $this->expectConnectorCalls(0, 0);
@@ -171,7 +171,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the type hint with a more complicated varname from the source.
      */
-    public function testGenerateSourceFirstRunNoTypeHint()
+    public function testGenerateSourceFirstRunNoTypeHint(): void
     {
         $this->fixture->setName('$instance->getValue()');
         $this->setValueByReflection(static::FIRST_RUN, true, $this->codegenHandler);
@@ -200,7 +200,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test an empty run, something like krexx(), without any variable.
      */
-    public function testGenerateSourceEmptyFirstRunNoTypeHint()
+    public function testGenerateSourceEmptyFirstRunNoTypeHint(): void
     {
         $this->fixture->setName('');
         $this->setValueByReflection(static::FIRST_RUN, true, $this->codegenHandler);
@@ -212,7 +212,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the type hint with a more complitated varname from the source.
      */
-    public function testGenerateSourceFirstRunTypeHintScalar()
+    public function testGenerateSourceFirstRunTypeHintScalar(): void
     {
         $this->setValueByReflection(static::FIRST_RUN, true, $this->codegenHandler);
         $this->expectConnectorCalls(0, 0);
@@ -234,7 +234,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the stop return, in case of constants.
      */
-    public function testGenerateSourceMetaConstants()
+    public function testGenerateSourceMetaConstants(): void
     {
         $this->expectConnectorCalls(0, 0);
         $this->fixture->setCodeGenType(Codegen::CODEGEN_TYPE_META_CONSTANTS);
@@ -247,7 +247,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test an empty return value, in case of empty connectors.
      */
-    public function testGenerateSourceEmpty()
+    public function testGenerateSourceEmpty(): void
     {
         $this->connectorMock->expects($this->exactly(1))
             ->method(static::GET_CONNECTOR_LEFT)
@@ -265,7 +265,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the concatenation in case of debug methods.
      */
-    public function testGenerateSourceIsDebug()
+    public function testGenerateSourceIsDebug(): void
     {
         $this->expectConnectorCalls(1, 1);
         $this->fixture
@@ -280,7 +280,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the concatenation in case of debug methods.
      */
-    public function testGenerateSourceIteratorToArray()
+    public function testGenerateSourceIteratorToArray(): void
     {
         $this->expectConnectorCalls(1, 1);
         $this->fixture->setCodeGenType($this->codegenHandler::CODEGEN_TYPE_ITERATOR_TO_ARRAY);
@@ -293,7 +293,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the meta json code generation.
      */
-    public function testGenerateSourceMetaDecodedJson()
+    public function testGenerateSourceMetaDecodedJson(): void
     {
         $this->fixture->setCodeGenType($this->codegenHandler::CODEGEN_TYPE_JSON_DECODE);
         $this->assertEquals(
@@ -306,7 +306,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the meta Base64 code generation.
      */
-    public function testGenerateMetaDecodedBase64()
+    public function testGenerateMetaDecodedBase64(): void
     {
         $this->fixture->setCodeGenType($this->codegenHandler::CODEGEN_TYPE_BASE64_DECODE);
         $this->assertEquals(
@@ -319,7 +319,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the code generation for inaccessible array values.
      */
-    public function testGenerateSourceArrayValueAccess()
+    public function testGenerateSourceArrayValueAccess(): void
     {
         $this->expectConnectorCalls(0, 0);
         $this->connectorMock->expects($this->once())
@@ -341,7 +341,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the concatenation in case of public access.
      */
-    public function testGenerateSourceIsPublic()
+    public function testGenerateSourceIsPublic(): void
     {
         $this->expectConnectorCalls(1, 1);
         $this->fixture->setCodeGenType(Codegen::CODEGEN_TYPE_PUBLIC);
@@ -354,7 +354,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the concatenation in case that the model is in the scope.
      */
-    public function testGenerateSourceInScope()
+    public function testGenerateSourceInScope(): void
     {
         $this->expectConnectorCalls(3, 1);
 
@@ -375,7 +375,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the '. . .' when out of scope.
      */
-    public function testGenerateSourceNotInScope()
+    public function testGenerateSourceNotInScope(): void
     {
         $this->expectConnectorCalls(2, 0);
 
@@ -393,7 +393,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the special handling of special chars in the parameters.
      */
-    public function testGenerateSourceWithEscaping()
+    public function testGenerateSourceWithEscaping(): void
     {
         $fixture = new Model(\Krexx::$pool);
 
@@ -413,7 +413,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the small ones.
      */
-    public function testSimpleGetterandSetter()
+    public function testSimpleGetterandSetter(): void
     {
         $this->assertEquals('', $this->codegenHandler->generateWrapperLeft());
         $this->assertEquals('', $this->codegenHandler->generateWrapperRight());
@@ -425,7 +425,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the multiple enabling / disabling of the code generation.
      */
-    public function testSetAllowCodegen()
+    public function testSetAllowCodegen(): void
     {
         $this->codegenHandler->setCodegenAllowed(false);
         $this->assertFalse(
@@ -456,7 +456,7 @@ class CodegenTest extends AbstractHelper
      * Test the parameter analysis, with a required parameter.
      * We use a special DateTime parameter as a fixture.
      */
-    public function testParameterToString()
+    public function testParameterToString(): void
     {
         $fixture = function (\DateTimeZone $object){};
         $reflectionFunction = new \ReflectionFunction($fixture);
@@ -472,11 +472,8 @@ class CodegenTest extends AbstractHelper
      * Test the parameter analysis, with a default value which is an object.
      * We use a special method from the Parameters fixture for this.
      */
-    public function testParameterToStringWithObjects()
+    public function testParameterToStringWithObjects(): void
     {
-        if (version_compare(phpversion(), '8.1.0', '<=')) {
-            $this->markTestSkipped('Wrong PHP version.');
-        }
         $fixture = new Parameters();
         $reflection = new \ReflectionClass($fixture);
         $reflectionMethod = $reflection->getMethod('someMethod');
@@ -490,7 +487,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the parameter analysis, with a special default value.
      */
-    public function testParameterToStringWithQuotationMarks()
+    public function testParameterToStringWithQuotationMarks(): void
     {
         $refParamMock = $this->createMock(ReflectionParameter::class);
         $refParamMock->expects($this->once())
@@ -512,7 +509,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test with a bunch of real parameters.
      */
-    public function testDefaultValueTranslation()
+    public function testDefaultValueTranslation(): void
     {
         $reflection = new \ReflectionClass(MethodParameterFixture::class);
         $reflectionMethod = $reflection->getMethod('arrayDefault');
@@ -550,27 +547,22 @@ class CodegenTest extends AbstractHelper
             $this->codegenHandler->parameterToString($reflectionParameter)
         );
 
-        if (version_compare(phpversion(), '8.0.0', '>=')) {
-            // Test for union types.
-            $reflection = new \ReflectionClass(UnionTypeFixture::class);
-            $reflectionMethod = $reflection->getMethod('unionParameter');
-            $reflectionParameter = $reflectionMethod->getParameters()[0];
-            $this->assertEquals(
-                'array|int|bool $parameter',
-                $this->codegenHandler->parameterToString($reflectionParameter)
-            );
-        }
+        // Test for union types.
+        $reflection = new \ReflectionClass(UnionTypeFixture::class);
+        $reflectionMethod = $reflection->getMethod('unionParameter');
+        $reflectionParameter = $reflectionMethod->getParameters()[0];
+        $this->assertEquals(
+            'array|int|bool $parameter',
+            $this->codegenHandler->parameterToString($reflectionParameter)
+        );
+
     }
 
     /**
      * Test stuff with a Enum parameter.
      */
-    public function testDefaultValueEnum()
+    public function testDefaultValueEnum(): void
     {
-        if (version_compare(phpversion(), '8.0.99', '<=')) {
-            $this->markTestSkipped('Wrong PHP version.');
-        }
-
         $reflection = new \ReflectionClass(EnumFixture::class);
         $reflectionMethod = $reflection->getMethod('useEnums');
         $reflectionParameter = $reflectionMethod->getParameters()[0];

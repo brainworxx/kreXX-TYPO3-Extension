@@ -59,13 +59,13 @@ trait Button
     public function renderButton(Model $model): string
     {
         return str_replace(
-            $this->markerSingleButton,
-            [
+            search: $this->markerSingleButton,
+            replace: [
                 $model->getNormal(),
                 $model->getName(),
-                $this->renderHelp($model),
+                $this->renderHelp(model: $model),
             ],
-            $this->fileCache[static::FILE_SI_BUTTON]
+            subject: $this->fileCache[static::FILE_SI_BUTTON]
         );
     }
 

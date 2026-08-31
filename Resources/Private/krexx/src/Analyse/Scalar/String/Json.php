@@ -39,6 +39,8 @@ namespace Brainworxx\Krexx\Analyse\Scalar\String;
 
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
+use stdClass;
 
 /**
  * Deep analysis for json strings.
@@ -55,9 +57,9 @@ class Json extends AbstractScalarAnalysis implements CodegenConstInterface
     /**
      * What the variable name says.
      *
-     * @var \stdClass|array
+     * @var \stdClass|array|null
      */
-    protected $decodedJson;
+    protected null|stdClass|array $decodedJson;
 
     /**
      * The model, so far.
@@ -67,17 +69,26 @@ class Json extends AbstractScalarAnalysis implements CodegenConstInterface
     protected Model $model;
 
     /**
+     * Inject the pool.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
+    /**
      * {@inheritDoc}
      */
     public static function isActive(): bool
     {
-        return function_exists('json_decode');
+        return function_exists(function: 'json_decode');
     }
 
     /**
      * Test, if this is a json, and if we can decode it.
      *
-     * @param string $string
+     * @param string|int|bool $string $string
      *   The string we want to take a look at.
      * @param Model $model
      *   The model, so far.
@@ -85,10 +96,10 @@ class Json extends AbstractScalarAnalysis implements CodegenConstInterface
      * @return bool
      *   Well? Can we handle it?
      */
-    public function canHandle($string, Model $model): bool
+    public function canHandle(string|int|bool $string, Model $model): bool
     {
         // Get a fist impression.
-        $first = substr($string, 0, 1);
+        $first = substr(string: $string, offset: 0, length: 1);
         if (!($first === '{' xor $first === '[')) {
             return false;
         }
@@ -97,7 +108,7 @@ class Json extends AbstractScalarAnalysis implements CodegenConstInterface
         $this->decodedJson = null;
 
         // @deprecated Will be removed once we drop 8.3 support.
-        if (function_exists('json_validate') && json_validate($string)) {
+        if (function_exists(function: 'json_validate') && json_validate(json: $string)) {
             // Doing it the PHP 8.3 way.
             $this->model = $model;
             $this->handledValue = $string;
@@ -106,7 +117,7 @@ class Json extends AbstractScalarAnalysis implements CodegenConstInterface
 
         // The only way to test a valid json, is to decode it.
         // @deprecated This will be removed in PHP 8.3.
-        $this->decodedJson = json_decode($string);
+        $this->decodedJson = json_decode(json: $string);
         if (json_last_error() === JSON_ERROR_NONE || $this->decodedJson !== null) {
             $this->model = $model;
             $this->handledValue = $string;
@@ -127,20 +138,20 @@ class Json extends AbstractScalarAnalysis implements CodegenConstInterface
         if (empty($this->decodedJson)) {
             // We will not decode it again, if we already have a result.
             // @deprecated The "if" will be removed in PHP 8.3.
-            $this->decodedJson = json_decode($this->handledValue);
+            $this->decodedJson = json_decode(json: $this->handledValue);
         }
 
         $messages = $this->pool->messages;
         $meta = [
-            $messages->getHelp('metaDecodedJson') => $this->decodedJson,
-            $messages->getHelp('metaPrettyPrint') => $this->pool->encodingService
-                ->encodeString(json_encode($this->decodedJson, JSON_PRETTY_PRINT))
+            $messages->getHelp(key: 'metaDecodedJson') => $this->decodedJson,
+            $messages->getHelp(key: 'metaPrettyPrint') => $this->pool->encodingService
+                ->encodeString(data: json_encode(value: $this->decodedJson, flags: JSON_PRETTY_PRINT))
         ];
 
         // Move the extra part into a nest, for better readability.
         if ($this->model->hasExtra()) {
-            $this->model->setHasExtra(false);
-            $meta[$messages->getHelp('metaContent')] = $this->model->getData();
+            $this->model->setHasExtra(value: false);
+            $meta[$messages->getHelp(key: 'metaContent')] = $this->model->getData();
         }
 
         return $meta;

@@ -83,7 +83,7 @@ class Pool extends AbstractFactory
      *
      * Gets loaded in the output footer.
      *
-     * @var \Brainworxx\Krexx\View\RenderInterface
+     * @var RenderInterface
      */
     public RenderInterface $render;
 
@@ -174,31 +174,31 @@ class Pool extends AbstractFactory
         $this->rewrite = $rewrite;
 
         // Initializes the file service.
-        $this->createClass(File::class);
+        $this->createClass(classname: File::class);
         // Initializes the messages.
-        $this->createClass(Messages::class);
+        $this->createClass(classname: Messages::class);
         // Initialize the encoding service.
-        $this->createClass(Encoding::class);
+        $this->createClass(classname: Encoding::class);
         // Initializes the configuration.
-        $this->createClass(Config::class);
+        $this->createClass(classname: Config::class);
         // Initialize the emergency handler.
-        $this->createClass(Emergency::class);
+        $this->createClass(classname: Emergency::class);
         // Initialize the recursionHandler.
-        $this->createClass(Recursion::class);
+        $this->createClass(classname: Recursion::class);
         // Initialize the code generation.
-        $this->createClass(Codegen::class);
+        $this->createClass(classname: Codegen::class);
         // Initializes the chunks' handler.
-        $this->createClass(Chunks::class);
+        $this->createClass(classname: Chunks::class);
         // Initializes the scope analysis.
-        $this->createClass(Scope::class);
+        $this->createClass(classname: Scope::class);
         // Initializes the routing.
-        $this->createClass(Routing::class);
+        $this->createClass(classname: Routing::class);
         // Initialize the event handler.
-        $this->createClass(Event::class);
+        $this->createClass(classname: Event::class);
         // Initializes the render class.
-        $this->createClass($this->config->getSkinClass());
+        $this->createClass(classname: $this->config->getSkinClass());
         // Create the registry
-        $this->createClass(Registry::class);
+        $this->createClass(classname: Registry::class);
         // Check the environment and prepare the feedback, if necessary.
         $this->checkEnvironment();
     }
@@ -213,26 +213,26 @@ class Pool extends AbstractFactory
         // Check chunk folder is writable.
         // If not, give feedback!
         $chunkFolder = $this->config->getChunkDir();
-        if (!$this->fileService->isDirectoryWritable($chunkFolder)) {
+        if (!$this->fileService->isDirectoryWritable(path: $chunkFolder)) {
             $this->messages->addMessage(
-                'chunksNotWritable',
-                [$chunkFolder]
+                key: 'chunksNotWritable',
+                args: [$chunkFolder]
             );
             // We can work without chunks, but this will require much more memory!
-            $this->chunks->setChunkAllowed(false);
+            $this->chunks->setChunkAllowed(bool: false);
         }
 
         // Check if the log folder is writable.
         // If not, give feedback!
         $logFolder = $this->config->getLogDir();
-        if (!$this->fileService->isDirectoryWritable($logFolder)) {
+        if (!$this->fileService->isDirectoryWritable(path: $logFolder)) {
             $this->messages->addMessage(
-                'logNotWritable',
-                [$logFolder]
+                key: 'logNotWritable',
+                args: [$logFolder]
             );
             // Tell the chunk output that we have no write access in the logging
             // folder.
-            $this->chunks->setLoggingAllowed(false);
+            $this->chunks->setLoggingAllowed(bool: false);
         }
 
         // At this point, we won't inform the dev right away. The error message
@@ -247,19 +247,19 @@ class Pool extends AbstractFactory
     {
         // We need to reset our recursion handler, because
         // the content of classes might change with another run.
-        $this->createClass(Recursion::class);
+        $this->createClass(classname: Recursion::class);
 
         // Initialize the code generation.
-        $this->createClass(Codegen::class);
-        $this->createClass(Scope::class);
+        $this->createClass(classname: Codegen::class);
+        $this->createClass(classname: Scope::class);
 
         // Reset the routing, because they cache their settings.
-        $this->createClass(Routing::class);
+        $this->createClass(classname: Routing::class);
 
         if ($this->processId !== getmypid()) {
             // We just got forked!
             // Hence, reset the chunked class to avoid file collision.
-            $this->createClass(Chunks::class);
+            $this->createClass(classname: Chunks::class);
             $this->processId = getmypid();
         }
 

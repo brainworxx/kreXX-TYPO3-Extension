@@ -45,7 +45,7 @@ class BacktraceSourceLineTest extends AbstractRenderHans
     /**
      * Test the rendering of a single source code line for the backtrace.
      */
-    public function testRenderBacktraceSourceLine()
+    public function testRenderBacktraceSourceLine(): void
     {
         $className = 'first class';
         $lineNumber = '92';

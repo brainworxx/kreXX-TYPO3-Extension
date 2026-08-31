@@ -122,6 +122,9 @@ interface ConfigConstInterface
     /**
      * Array key. Contains the config of the emergency section.
      *
+     * @deprecated
+     *   Since 7.0.0, will be removed in 8.0.0.
+     *
      * @var string
      */
     public const SECTION_EMERGENCY = 'emergency';
@@ -211,13 +214,6 @@ interface ConfigConstInterface
     public const SETTING_MAX_FILES = 'maxfiles';
 
     /**
-     * Array key. Holds the value of detectAjax.
-     *
-     * @var string
-     */
-    public const SETTING_DETECT_AJAX = 'detectAjax';
-
-    /**
      * Array key. Holds the value of level.
      *
      * @var string
@@ -234,12 +230,18 @@ interface ConfigConstInterface
     /**
      * Array key. Holds the value of maxRuntime.
      *
+     * @deprecated
+     *   Since 7.0.0, will be removed in 8.0.0.
+     *
      * @var string
      */
     public const SETTING_MAX_RUNTIME = 'maxRuntime';
 
     /**
      * Array key. Holds the value of memoryLeft.
+     *
+     * @deprecated
+     *   Since 7.0.0, will be removed in 8.0.0.
      *
      * @var string
      */
@@ -265,13 +267,6 @@ interface ConfigConstInterface
      * @var string
      */
     public const SETTING_ANALYSE_PRIVATE = 'analysePrivate';
-
-    /**
-     * Array key. Holds the value of analyseScalar.
-     *
-     * @var string
-     */
-    public const SETTING_ANALYSE_SCALAR = 'analyseScalar';
 
     /**
      * Array key. Holds the value of analyseTraversable.

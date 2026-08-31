@@ -73,21 +73,20 @@ class LllString extends AbstractScalarAnalysis
      *
      * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
         $this->localisationUtility = new LocalizationUtility();
         $typo3Version = new Typo3Version();
         if ($typo3Version->getMajorVersion() > 13) {
             try {
                 $this->extensionKeys = ExtensionManagementUtility::getLoadedExtensionListArray();
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 // Do nothing.
                 // Unable to retrieve the extension keys.Maybe we are running in a context where this is not possible.
                 // Or someone messed with the installation.
                 // This is a debugger after all.
             }
         }
-        parent::__construct($pool);
     }
 
     /**
@@ -113,7 +112,7 @@ class LllString extends AbstractScalarAnalysis
     protected function isDomainTranslation(string $string): bool
     {
         // Get a first impression.
-        if (strpos($string, ':') === false && strpos($string, '.') === false) {
+        if (!str_contains($string, ':') && !str_contains($string, '.')) {
             // We need a ":" and a "." in there somewhere.
             return false;
         }
@@ -134,7 +133,7 @@ class LllString extends AbstractScalarAnalysis
      */
     public function canHandle($string, Model $model): bool
     {
-        if (strpos($string, 'LLL:') === false && !$this->isDomainTranslation($string)) {
+        if (!str_contains($string, 'LLL:') && !$this->isDomainTranslation($string)) {
             // Early return. Not much to do here.
             return false;
         }
@@ -172,7 +171,7 @@ class LllString extends AbstractScalarAnalysis
     {
         $string = preg_replace('/^LLL:(.+):[^:]+$/', "$1", $string);
 
-        if (strpos($string, 'EXT:') === 0) {
+        if (str_starts_with($string, 'EXT:')) {
             $string = GeneralUtility::getFileAbsFileName($string);
             $model->addToJson($this->pool->messages->getHelp('TYPO3ResPath'), $string);
             if (!file_exists($string)) {
@@ -190,10 +189,10 @@ class LllString extends AbstractScalarAnalysis
      * @codeCoverageIgnore
      *   Who tests the tests?
      *
-     * @param UnitLocalizationUtility|UnitLocalizationUtility12|UnitLocalizationUtility14 $object
+     * @param \TYPO3\CMS\Extbase\Utility\LocalizationUtility $object
      *   The name of the localisation utility.
      */
-    public function setLocalisationUtility($object): void
+    public function setLocalisationUtility(LocalizationUtility $object): void
     {
         $this->localisationUtility = $object;
     }

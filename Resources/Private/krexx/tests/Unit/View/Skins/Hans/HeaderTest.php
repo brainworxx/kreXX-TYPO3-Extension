@@ -54,7 +54,7 @@ class HeaderTest extends AbstractRenderHans
     /**
      * Test the rendering of the kreXX header.
      */
-    public function testRenderHeader()
+    public function testRenderHeader(): void
     {
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())

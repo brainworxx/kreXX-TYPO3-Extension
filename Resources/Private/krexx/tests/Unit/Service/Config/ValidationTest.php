@@ -55,7 +55,6 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(Validation::class, 'evalDestination')]
 #[CoversMethod(Validation::class, 'evalInt')]
 #[CoversMethod(Validation::class, 'evalIpRange')]
-#[CoversMethod(Validation::class, 'evalMaxRuntime')]
 #[CoversMethod(Validation::class, 'evalSkin')]
 #[CoversMethod(Validation::class, 'evalLanguage')]
 #[CoversMethod(Validation::class, 'isAllowedDebugCall')]
@@ -67,7 +66,7 @@ class ValidationTest extends AbstractHelper
     /**
      * Testing the setting of the pool and the merging of the method blacklist
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $className = 'someClass';
         $anotherClassName = 'anotherClass';
@@ -101,7 +100,7 @@ class ValidationTest extends AbstractHelper
     /**
      * Testing, if a specific class is blacklisted for debug methods.
      */
-    public function testIsAllowedDebugCall()
+    public function testIsAllowedDebugCall(): void
     {
         Registration::addClassToDebugBlacklist(stdClass::class);
         Registration::addMethodToDebugBlacklist(SplObjectStorage::class, 'readMailRealFast');
@@ -119,7 +118,7 @@ class ValidationTest extends AbstractHelper
     /**
      * Testing the validation of settings.
      */
-    public function testEvaluateSetting()
+    public function testEvaluateSetting(): void
     {
         $iniGet = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Config\\', 'ini_get');
         $iniGet->expects($this->any())
@@ -248,29 +247,9 @@ class ValidationTest extends AbstractHelper
     }
 
     /**
-     * We evaluate the max runtime with a simulated eternal runtime setting.
-     */
-    public function testEvalMaxRuntime()
-    {
-        $iniGetMock = $this->getFunctionMock('Brainworxx\\Krexx\\Service\\Config\\', 'ini_get');
-        $iniGetMock->expects($this->once())
-            ->with('max_execution_time')
-            ->willReturn(0);
-
-        $validation = new Validation(Krexx::$pool);
-        $result = $validation->evaluateSetting(
-            'I don\'t need no group!',
-            $validation::SETTING_MAX_RUNTIME,
-            'an invalid string'
-        );
-
-        $this->assertTrue($result, 'We do not check the value when there is no maximal execution time set.');
-    }
-
-    /**
      * Crete a custom setting, and then evaluate it.
      */
-    public function testEvaluateSettingCustom()
+    public function testEvaluateSettingCustom(): void
     {
         $settingName = 'editableBoolean';
         $sectionName = 'someWhere';
@@ -297,9 +276,7 @@ class ValidationTest extends AbstractHelper
         Registration::addNewSettings($customSetting);
 
         $callbackSettingName = 'callbackSetting';
-        $callback = function ($value) {
-            return $value === static::WHATEVER;
-        };
+        $callback = (fn($value) => $value === static::WHATEVER);
         $callbackSetting = new NewSetting();
         $callbackSetting->setName($callbackSettingName)
             ->setValidation($callback)

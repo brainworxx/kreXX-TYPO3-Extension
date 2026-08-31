@@ -46,7 +46,7 @@ class AbstractDeclarationTest extends AbstractHelper
     /**
      * Test the injection of the pool
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $functionDeclaration = new FunctionDeclaration(\Krexx::$pool);
         $this->assertEquals(\Krexx::$pool, $this->retrieveValueByReflection('pool', $functionDeclaration));

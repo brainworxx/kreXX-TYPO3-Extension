@@ -60,7 +60,7 @@ class SettingsGetterTest extends AbstractRegistration
     /**
      * Test the getting of the getter for the configuration file, and it's fallback.
      */
-    public function testGetConfigFile()
+    public function testGetConfigFile(): void
     {
         $this->assertEquals(
             KREXX_DIR . 'config' . DIRECTORY_SEPARATOR . 'Krexx.',
@@ -79,7 +79,7 @@ class SettingsGetterTest extends AbstractRegistration
     /**
      * Test the getting of the getter for the chunk folder, and it's fallback.
      */
-    public function testGetChunkFolder()
+    public function testGetChunkFolder(): void
     {
         $this->assertEquals(
             KREXX_DIR . 'chunks' . DIRECTORY_SEPARATOR,
@@ -98,7 +98,7 @@ class SettingsGetterTest extends AbstractRegistration
     /**
      * Test the getting of the getter for the log folder, and it's fallback.
      */
-    public function testGetLogFolder()
+    public function testGetLogFolder(): void
     {
         $this->assertEquals(
             KREXX_DIR . 'log' . DIRECTORY_SEPARATOR,
@@ -117,7 +117,7 @@ class SettingsGetterTest extends AbstractRegistration
     /**
      * What the method name says.
      */
-    public function testGetBlacklistDebugMethods()
+    public function testGetBlacklistDebugMethods(): void
     {
         $this->setValueByReflection(static::BLACK_LIST_METHODS, [1, 2, 3], $this->registration);
         $this->assertEquals([1, 2, 3], SettingsGetter::getBlacklistDebugMethods());
@@ -126,7 +126,7 @@ class SettingsGetterTest extends AbstractRegistration
     /**
      * What the method name says.
      */
-    public function testGetBlacklistDebugClass()
+    public function testGetBlacklistDebugClass(): void
     {
         $this->setValueByReflection(static::BLACK_LIST_CLASS, [1, 2, 3], $this->registration);
         $this->assertEquals([1, 2, 3], SettingsGetter::getBlacklistDebugClass());
@@ -135,7 +135,7 @@ class SettingsGetterTest extends AbstractRegistration
     /**
      * What the method name says.
      */
-    public function testGetRewriteList()
+    public function testGetRewriteList(): void
     {
         $this->setValueByReflection(static::REWRITE_LIST, [1, 2, 3], $this->registration);
         $this->assertEquals([1, 2, 3], SettingsGetter::getRewriteList());
@@ -144,7 +144,7 @@ class SettingsGetterTest extends AbstractRegistration
     /**
      * What the method name says.
      */
-    public function testGetEventList()
+    public function testGetEventList(): void
     {
         $this->setValueByReflection(static::EVENT_LIST, [1, 2, 3], $this->registration);
         $this->assertEquals([1, 2, 3], SettingsGetter::getEventList());
@@ -153,7 +153,7 @@ class SettingsGetterTest extends AbstractRegistration
     /**
      * What the method name says.
      */
-    public function testGetAdditionalHelpFiles()
+    public function testGetAdditionalHelpFiles(): void
     {
         $this->setValueByReflection(static::ADD_HELP_FILES, [1, 2, 3], $this->registration);
         $this->assertEquals([1, 2, 3], SettingsGetter::getAdditionalHelpFiles());
@@ -162,7 +162,7 @@ class SettingsGetterTest extends AbstractRegistration
     /**
      * What the method name says.
      */
-    public function testGetPlugins()
+    public function testGetPlugins(): void
     {
         $this->setValueByReflection(static::PLUGINS, [1, 2, 3], $this->registration);
         $this->assertEquals([1, 2, 3], SettingsGetter::getPlugins());
@@ -171,7 +171,7 @@ class SettingsGetterTest extends AbstractRegistration
     /**
      * What the method name says.
      */
-    public function testGetAdditionalSkinList()
+    public function testGetAdditionalSkinList(): void
     {
         $this->setValueByReflection(static::ADD_SKIN_LIST, [1, 2, 3], $this->registration);
         $this->assertEquals([1, 2, 3], SettingsGetter::getAdditionalSkinList());
@@ -180,7 +180,7 @@ class SettingsGetterTest extends AbstractRegistration
     /**
      * Testing the getting of the scalar string analysis classes.
      */
-    public function testGetAdditionalScalarString()
+    public function testGetAdditionalScalarString(): void
     {
          $this->setValueByReflection(static::ADD_SCALAR_STRING, [static::class], $this->registration);
          $this->assertEquals([static::class], SettingsGetter::getAdditionalScalarString());
@@ -189,7 +189,7 @@ class SettingsGetterTest extends AbstractRegistration
     /**
      * Testing the getting of new registered settings definitions.
      */
-    public function testGetNewSettings()
+    public function testGetNewSettings(): void
     {
         $this->setValueByReflection(static::NEW_SETTINGS, [static::class], $this->registration);
         $this->assertEquals([static::class], SettingsGetter::getNewSettings());
@@ -198,7 +198,7 @@ class SettingsGetterTest extends AbstractRegistration
     /**
      * Testing the getting of additional languages.
      */
-    public function testGetAdditionalLanguages()
+    public function testGetAdditionalLanguages(): void
     {
         $this->setValueByReflection(static::ADDITIONAL_LANGUAGES, [1, 2, 3], $this->registration);
         $this->assertEquals([1, 2, 3], SettingsGetter::getAdditionalLanguages());
@@ -207,7 +207,7 @@ class SettingsGetterTest extends AbstractRegistration
     /**
      * Testing the getting of additional languages.
      */
-    public function testGetNewFallbackValues()
+    public function testGetNewFallbackValues(): void
     {
         $this->setValueByReflection(static::NEW_FALLBACK_VALUES, [1, 2, 3], $this->registration);
         $this->assertEquals([1, 2, 3], SettingsGetter::getNewFallbackValues());

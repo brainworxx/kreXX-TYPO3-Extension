@@ -48,8 +48,19 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(Base64::class, 'isActive')]
 #[CoversMethod(Base64::class, 'canHandle')]
 #[CoversMethod(Base64::class, 'handle')]
+#[CoversMethod(Base64::class, '__construct')]
 class Base64Test extends AbstractHelper
 {
+    /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new Base64(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
     /**
      * Its always active
      */

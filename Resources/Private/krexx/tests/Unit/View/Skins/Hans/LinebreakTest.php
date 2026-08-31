@@ -45,7 +45,7 @@ class LinebreakTest extends AbstractRenderHans
     /**
      * Test the rednering of a line break.
      */
-    public function testRenderLineBreak()
+    public function testRenderLineBreak(): void
     {
         $this->assertStringContainsString(
             'Breaking the line! Breaking the line!',

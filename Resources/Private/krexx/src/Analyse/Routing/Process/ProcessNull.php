@@ -39,6 +39,7 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Processing of NULL values. Really.
@@ -51,6 +52,15 @@ class ProcessNull extends AbstractRouting implements ProcessInterface, ProcessCo
      * @var Model
      */
     protected Model $model;
+
+    /**
+     * Inject the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
 
     /**
      * Is this one null?
@@ -77,8 +87,8 @@ class ProcessNull extends AbstractRouting implements ProcessInterface, ProcessCo
     {
         $data = 'NULL';
         return $this->pool->render->renderExpandableChild(
-            $this->dispatchProcessEvent(
-                $this->model->setData($data)->setNormal($data)->setType(static::TYPE_NULL)
+            model: $this->dispatchProcessEvent(
+                model: $this->model->setData(data: $data)->setNormal(normal: $data)->setType(type: static::TYPE_NULL)
             )
         );
     }

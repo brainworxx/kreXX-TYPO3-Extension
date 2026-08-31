@@ -90,25 +90,34 @@ trait ExpandableChild
 
         // Generating our code.
         $codegenHandler = $this->pool->codegenHandler;
-        $generateSource = $codegenHandler->generateSource($model);
+        $generateSource = $codegenHandler->generateSource(model: $model);
         return str_replace(
-            $this->markerExpandableChild,
-            [
+            search: $this->markerExpandableChild,
+            replace: [
                 $model->getName(),
                 $model->getType(),
-                $this->retrieveTypeClasses($model),
+                $this->retrieveTypeClasses(model: $model),
                 $model->getNormal(),
-                $this->renderConnectorLeft($model->getConnectorLeft()),
-                $this->renderConnectorRight($model->getConnectorRight(128), $model->getReturnType()),
-                $this->generateDataAttribute(static::DATA_ATTRIBUTE_SOURCE, $generateSource),
-                $this->renderSourceButtonWithStop($generateSource),
+                $this->renderConnectorLeft(connector: $model->getConnectorLeft()),
+                $this->renderConnectorRight(
+                    connector: $model->getConnectorRight(cap: 128),
+                    returnType: $model->getReturnType()
+                ),
+                $this->generateDataAttribute(name: static::DATA_ATTRIBUTE_SOURCE, data: $generateSource),
+                $this->renderSourceButtonWithStop(gencode: $generateSource),
                 $isExpanded ? 'kopened' : '',
-                $this->pool->chunks->chunkMe($this->renderNest($model, $isExpanded)),
-                $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_L, $codegenHandler->generateWrapperLeft()),
-                $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_R, $codegenHandler->generateWrapperRight()),
-                $this->renderHelp($model),
+                $this->pool->chunks->chunkMe(string: $this->renderNest(model: $model, isExpanded: $isExpanded)),
+                $this->generateDataAttribute(
+                    name: static::DATA_ATTRIBUTE_WRAPPER_L,
+                    data: $codegenHandler->generateWrapperLeft()
+                ),
+                $this->generateDataAttribute(
+                    name: static::DATA_ATTRIBUTE_WRAPPER_R,
+                    data: $codegenHandler->generateWrapperRight()
+                ),
+                $this->renderHelp(model: $model),
             ],
-            $this->fileCache[static::FILE_EX_CHILD_NORMAL]
+            subject: $this->fileCache[static::FILE_EX_CHILD_NORMAL]
         );
     }
 
@@ -125,7 +134,7 @@ trait ExpandableChild
     {
         if (
             $gencode === static::CODEGEN_STOP_BIT ||
-            empty($gencode) ||
+            ($gencode === '' || $gencode === '0') ||
             !$this->pool->codegenHandler->isCodegenAllowed()
         ) {
             // Remove the button marker, because here is nothing to add.
@@ -157,28 +166,24 @@ trait ExpandableChild
         }
 
         // Are we expanding this one?
-        if ($isExpanded) {
-            $style = '';
-        } else {
-            $style = static::STYLE_HIDDEN;
-        }
+        $style = $isExpanded ? '' : static::STYLE_HIDDEN;
 
         return str_replace(
-            $this->markerNest,
-            [
+            search: $this->markerNest,
+            replace: [
                 $style,
                 $model->renderMe(),
                 $domid,
-                $this->renderExtra($model),
+                $this->renderExtra(model: $model),
             ],
-            $this->fileCache[static::FILE_NEST]
+            subject: $this->fileCache[static::FILE_NEST]
         );
     }
 
     /**
      * Render the 'extra' part of the singe child output.
      *
-     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @param Model $model
      *   The model.
      *
      * @return string
@@ -188,9 +193,9 @@ trait ExpandableChild
     {
         if ($model->hasExtra()) {
             return str_replace(
-                $this->markerSingleChildExtra,
-                $this->prepareExtra($model->getData()),
-                $this->fileCache[static::FILE_SI_CHILD_EX]
+                search: $this->markerSingleChildExtra,
+                replace: $this->prepareExtra(extra: $model->getData()),
+                subject: $this->fileCache[static::FILE_SI_CHILD_EX]
             );
         }
 
@@ -211,7 +216,7 @@ trait ExpandableChild
      */
     protected function prepareExtra(string $extra): string
     {
-        $lastChar = substr($extra, -1);
+        $lastChar = substr(string: $extra, offset: -1);
         if ($lastChar === "\n" || $lastChar === "\r") {
             return $extra . $lastChar;
         }

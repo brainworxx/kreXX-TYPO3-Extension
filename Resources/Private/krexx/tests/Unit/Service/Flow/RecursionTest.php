@@ -47,14 +47,13 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(Recursion::class, 'getMarker')]
 #[CoversMethod(Recursion::class, 'isInHive')]
 #[CoversMethod(Recursion::class, 'addToHive')]
-#[CoversMethod(Recursion::class, '__destruct')]
 #[CoversMethod(Recursion::class, '__construct')]
 class RecursionTest extends AbstractHelper
 {
     public const  RECURSION_HIVE = 'recursionHive';
 
     /**
-     * @var \Brainworxx\Krexx\Service\Flow\Recursion
+     * @var Recursion
      */
     protected $recursion;
 
@@ -71,15 +70,9 @@ class RecursionTest extends AbstractHelper
     /**
      * Test the setting of the recursion marker and the creation of the hive.
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $this->assertStringContainsString('Krexx', $this->recursion->getMarker());
-        if (version_compare(phpversion(), '8.1.0', '<=')) {
-            $this->assertTrue(
-                $GLOBALS[$this->recursion->getMarker()],
-                'The marker should be set in the globals.'
-            );
-        }
         $this->assertEquals(
             new SplObjectStorage(),
             $this->retrieveValueByReflection(static::RECURSION_HIVE, $this->recursion)
@@ -88,23 +81,9 @@ class RecursionTest extends AbstractHelper
     }
 
     /**
-     * Test the removal of the recursion marker in the globals.
-     */
-    public function testDestruct()
-    {
-        if (version_compare(phpversion(), '8.1.0', '>=')) {
-            $this->markTestSkipped('Wrong PHP version.');
-        }
-        $marker = $this->recursion->getMarker();
-        $this->recursion->__destruct();
-        $this->assertFalse(isset($GLOBALS[$marker]));
-        $this->setValueByReflection('recursionMarker', $marker, $this->recursion);
-    }
-
-    /**
      * Test the adding of classes to the hive.
      */
-    public function testAddToHive()
+    public function testAddToHive(): void
     {
         $fixture = new StdClass();
 
@@ -120,7 +99,7 @@ class RecursionTest extends AbstractHelper
     /**
      * Test the actual recursion handling.
      */
-    public function testIsInHive()
+    public function testIsInHive(): void
     {
         $fixture = new StdClass();
 
@@ -133,28 +112,17 @@ class RecursionTest extends AbstractHelper
 
         $this->assertTrue($this->recursion->isInHive($fixture));
         $this->assertFalse($this->recursion->isInHive(['some', 'array']));
-        if (version_compare(phpversion(), '8.1.0', '<=')) {
-            $this->assertFalse($this->recursion->isInHive($GLOBALS));
-            $this->assertTrue($this->recursion->isInHive($GLOBALS), 'Render them a second time');
-        }
 
         // And now the same thing with an array.
         $fixture = [];
         $this->assertFalse($this->recursion->isInHive($fixture));
         $this->assertFalse($this->recursion->isInHive($fixture), 'We do not track arrays');
-        $fixture[$this->recursion->getMarker()] = true;
-
-        if (version_compare(phpversion(), '8.1.0', '>=')) {
-            // 8.1.0 does not have globals anymore.
-            $this->assertFalse($this->recursion->isInHive($fixture), 'Pretend that this is the global array.');
-            $this->assertTrue($this->recursion->isInHive($fixture), 'We did track it.');
-        }
     }
 
     /**
      * Test the geter for the marker
      */
-    public function testGetMarker()
+    public function testGetMarker(): void
     {
         $marker = 'some string';
         $this->setValueByReflection('recursionMarker', $marker, $this->recursion);
@@ -164,7 +132,7 @@ class RecursionTest extends AbstractHelper
     /**
      * Test the meta hive.
      */
-    public function testIsInMetaHive()
+    public function testIsInMetaHive(): void
     {
         $hive = ['marker' => true];
         $this->setValueByReflection('metaRecursionHive', $hive, $this->recursion);
@@ -175,7 +143,7 @@ class RecursionTest extends AbstractHelper
     /**
      * Test the adding of stuff to the meta hive.
      */
-    public function testAddToMetaHive()
+    public function testAddToMetaHive(): void
     {
         $this->recursion->addToMetaHive('key');
         $this->assertEquals(['key' => true], $this->retrieveValueByReflection('metaRecursionHive', $this->recursion));

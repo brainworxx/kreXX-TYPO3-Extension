@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Scalar\String;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Throwable;
 use ReflectionException;
@@ -50,6 +51,15 @@ class ClassName extends AbstractScalarAnalysis
      * @var Model
      */
     protected Model $model;
+
+    /**
+     * Inject the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
 
     /**
      * Is always active
@@ -66,25 +76,25 @@ class ClassName extends AbstractScalarAnalysis
      *
      * To avoid needless junk, we only look at classes with a namespace.
      *
-     * @param string $string
+     * @param string|int|bool $string $string
      *   The possible class name we are looking at
-     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @param Model $model
      *   The model so far.
      *
      * @return bool
      *   Is this a class name?
      */
-    public function canHandle($string, Model $model): bool
+    public function canHandle(string|int|bool $string, Model $model): bool
     {
-        set_error_handler($this->pool->retrieveErrorCallback());
+        set_error_handler(callback: $this->pool->retrieveErrorCallback());
         try {
-            if (strpos($string, '\\') !== false && class_exists($string)) {
+            if (str_contains(haystack: $string, needle: '\\') && class_exists(class: $string)) {
                 $this->handledValue = $string;
                 $this->model = $model;
                 restore_error_handler();
                 return true;
             }
-        } catch (Throwable $throwable) {
+        } catch (Throwable) {
         }
 
         restore_error_handler();
@@ -102,14 +112,14 @@ class ClassName extends AbstractScalarAnalysis
         $messages = $this->pool->messages;
         $meta = [];
         try {
-            $meta = [$messages->getHelp('metaReflection') => new ReflectionClass($this->handledValue)];
-        } catch (ReflectionException $e) {
+            $meta = [$messages->getHelp(key: 'metaReflection') => new ReflectionClass(data: $this->handledValue)];
+        } catch (ReflectionException) {
         }
 
         // Move the extra part into a nest, for better readability.
         if ($this->model->hasExtra()) {
-            $this->model->setHasExtra(false);
-            $meta[$messages->getHelp('metaContent')] = $this->model->getData();
+            $this->model->setHasExtra(value: false);
+            $meta[$messages->getHelp(key: 'metaContent')] = $this->model->getData();
         }
 
         return $meta;

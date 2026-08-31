@@ -47,7 +47,7 @@ class CleanUpVarNameTest extends AbstractHelper
     /**
      * Simply test stuff the cleanup of variable names from a kreXX call.
      */
-    public function testCleanup()
+    public function testCleanup(): void
     {
         $testCourt = [
             // A simple variable name

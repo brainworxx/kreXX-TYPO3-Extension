@@ -92,19 +92,15 @@ class EmergencyTest extends AbstractHelper
     {
         // Mock config
         $configMock = $this->createMock(Config::class);
-        $configMock->expects($this->exactly(4))
+        $configMock->expects($this->exactly(2))
             ->method('getSetting')
             ->with(...$this->withConsecutive(
-                [Fallback::SETTING_MAX_RUNTIME],
-                [Fallback::SETTING_MEMORY_LEFT],
                 [Fallback::SETTING_MAX_CALL],
                 [Fallback::SETTING_NESTING_LEVEL]
             ))->willReturnMap([
-                [Fallback::SETTING_MAX_RUNTIME, '60'],
-                [Fallback::SETTING_MEMORY_LEFT, '64'],
                 [Fallback::SETTING_MAX_CALL, '10'],
                 [Fallback::SETTING_NESTING_LEVEL, '5']
-                ]);
+            ]);
         Krexx::$pool->config = $configMock;
     }
 
@@ -112,69 +108,7 @@ class EmergencyTest extends AbstractHelper
      * Test the caching of several settings, as well as retreating the memory
      * limit.
      */
-    public function testConstructWithKb()
-    {
-        $this->setConfigMock();
-
-        // Mock kb memory limit
-        $iniGet = $this->getFunctionMock(static::FLOW_NAMESPACE, static::INI_GET);
-        $iniGet->expects($this->once())
-            ->willReturn('50k');
-
-        $this->emergency = new Emergency(Krexx::$pool);
-
-        // Test setting of pool
-        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $this->emergency));
-        // Test setting itself in pool
-        $this->assertSame($this->emergency, Krexx::$pool->emergencyHandler);
-        // Test setting of values from config
-        $this->assertEquals(
-            60,
-            $this->retrieveValueByReflection(static::MAX_RUNTIME, $this->emergency)
-        );
-        $this->assertEquals(
-            64 * 1024 * 1024,
-            $this->retrieveValueByReflection(static::MIN_MEMORY_LEFT, $this->emergency)
-        );
-        $this->assertEquals(
-            10,
-            $this->retrieveValueByReflection(static::MAX_CALL, $this->emergency)
-        );
-        $this->assertEquals(
-            5,
-            $this->retrieveValueByReflection(static::MAX_NESTING_LEVEL, $this->emergency)
-        );
-        $this->assertEquals(
-            50 * 1024,
-            $this->retrieveValueByReflection(static::SERVER_MEMORY_LIMIT, $this->emergency)
-        );
-    }
-
-    /**
-     * Test the caching of several settings, as well as retreating the memory
-     * limit.
-     */
-    public function testConstructWithMb()
-    {
-        $this->setConfigMock();
-
-        // Mock MB memory limit.
-        $iniGet = $this->getFunctionMock(static::FLOW_NAMESPACE, static::INI_GET);
-        $iniGet->expects($this->once())
-            ->willReturn('50m');
-
-        $this->emergency = new Emergency(Krexx::$pool);
-        $this->assertEquals(
-            50 * 1024 * 1024,
-            $this->retrieveValueByReflection(static::SERVER_MEMORY_LIMIT, $this->emergency)
-        );
-    }
-
-    /**
-     * Test the caching of several settings, as well as retreating the memory
-     * limit.
-     */
-    public function testConstructWithNoLimit()
+    public function testConstructWithNoLimit(): void
     {
         $this->setConfigMock();
 
@@ -190,7 +124,7 @@ class EmergencyTest extends AbstractHelper
     /**
      * Test the disabling of the emergency break.
      */
-    public function testDisable()
+    public function testDisable(): void
     {
         $this->assertEquals(false, $this->retrieveValueByReflection(Fallback::SETTING_DISABLED, $this->emergency));
         $this->emergency->setDisable(true);
@@ -202,7 +136,7 @@ class EmergencyTest extends AbstractHelper
     /**
      * Test disabled.
      */
-    public function testCheckEmergencyBreakDisabled()
+    public function testCheckEmergencyBreakDisabled(): void
     {
         $this->setValueByReflection(Fallback::SETTING_DISABLED, true, $this->emergency);
         $this->setValueByReflection(static::ALL_IS_OK, false, $this->emergency);
@@ -212,7 +146,7 @@ class EmergencyTest extends AbstractHelper
     /**
      * Test failed before
      */
-    public function testCheckEmergencyBreakFailedBefore()
+    public function testCheckEmergencyBreakFailedBefore(): void
     {
         $this->setValueByReflection(static::ALL_IS_OK, false, $this->emergency);
         $this->assertEquals(true, $this->emergency->checkEmergencyBreak());
@@ -221,7 +155,7 @@ class EmergencyTest extends AbstractHelper
     /**
      * Test failed memory limit.
      */
-    public function testCheckEmergencyBreakFailedMemory()
+    public function testCheckEmergencyBreakFailedMemory(): void
     {
         $this->mockDebugBacktraceStandard();
         $this->setValueByReflection(static::SERVER_MEMORY_LIMIT, 550, $this->emergency);
@@ -238,7 +172,7 @@ class EmergencyTest extends AbstractHelper
     /**
      * Test with failed runtime check and successful memory check.
      */
-    public function testCheckEmergencyBreakFailedRuntime()
+    public function testCheckEmergencyBreakFailedRuntime(): void
     {
         $this->mockDebugBacktraceStandard();
 
@@ -268,7 +202,7 @@ class EmergencyTest extends AbstractHelper
     /**
      * Everything went better than expected.
      */
-    public function testCheckEmergencyBreakOk()
+    public function testCheckEmergencyBreakOk(): void
     {
         // Make sure that the memory check succeeds.
         $this->setValueByReflection(static::SERVER_MEMORY_LIMIT, 5000, $this->emergency);
@@ -290,7 +224,7 @@ class EmergencyTest extends AbstractHelper
     /**
      * Going up one level.
      */
-    public function testUpOneNestingLevel()
+    public function testUpOneNestingLevel(): void
     {
         $this->setValueByReflection(static::NESTING_LEVEL, 10, $this->emergency);
         $this->emergency->upOneNestingLevel();
@@ -300,7 +234,7 @@ class EmergencyTest extends AbstractHelper
     /**
      * Going down one nesting level.
      */
-    public function testDownOneNestingLevel()
+    public function testDownOneNestingLevel(): void
     {
         $this->setValueByReflection(static::NESTING_LEVEL, 10, $this->emergency);
         $this->emergency->downOneNestingLevel();
@@ -310,7 +244,7 @@ class EmergencyTest extends AbstractHelper
     /**
      * Test the nesting level.
      */
-    public function testCheckNesting()
+    public function testCheckNesting(): void
     {
         $this->setValueByReflection(static::NESTING_LEVEL, 10, $this->emergency);
         $this->setValueByReflection(static::MAX_NESTING_LEVEL, 5, $this->emergency);
@@ -324,7 +258,7 @@ class EmergencyTest extends AbstractHelper
     /**
      * Test the getter of the current nesting level.
      */
-    public function testGetNestingLevel()
+    public function testGetNestingLevel(): void
     {
         $this->setValueByReflection(static::NESTING_LEVEL, 10, $this->emergency);
         $this->assertEquals(10, $this->emergency->getNestingLevel());
@@ -333,7 +267,7 @@ class EmergencyTest extends AbstractHelper
     /**
      * Test the timer initialization.
      */
-    public function testInitTimer()
+    public function testInitTimer(): void
     {
         $time = $this->getFunctionMock(static::FLOW_NAMESPACE, 'time');
         $time->expects($this->once())
@@ -356,7 +290,7 @@ class EmergencyTest extends AbstractHelper
     /**
      * Test the re-initializing of the timer on cli.
      */
-    public function testInitTimerOnCli()
+    public function testInitTimerOnCli(): void
     {
         $time = $this->getFunctionMock(static::FLOW_NAMESPACE, 'time');
         $time->expects($this->exactly(2))
@@ -375,7 +309,7 @@ class EmergencyTest extends AbstractHelper
     /**
      * Test the checking and up-counting of the krexx counts
      */
-    public function testCheckMaxCall()
+    public function testCheckMaxCall(): void
     {
         // Called too many times.
         $this->setValueByReflection(static::KREXX_COUNT, 999, $this->emergency);
@@ -397,7 +331,7 @@ class EmergencyTest extends AbstractHelper
     /**
      * Test the getter for the kreXX count
      */
-    public function testGetKrexxCount()
+    public function testGetKrexxCount(): void
     {
         $this->setValueByReflection(static::KREXX_COUNT, 999, $this->emergency);
         $this->assertEquals(999, $this->emergency->getKrexxCount());

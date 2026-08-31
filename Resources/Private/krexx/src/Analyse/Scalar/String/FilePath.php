@@ -72,7 +72,7 @@ class FilePath extends AbstractScalarAnalysis
      */
     public static function isActive(): bool
     {
-        return class_exists(finfo::class, false);
+        return class_exists(class:finfo::class, autoload: false);
     }
 
     /**
@@ -80,10 +80,9 @@ class FilePath extends AbstractScalarAnalysis
      *
      * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        parent::__construct($pool);
-        $this->bufferInfo = new finfo(FILEINFO_MIME);
+        $this->bufferInfo = new finfo(flags: FILEINFO_MIME);
     }
 
     /**
@@ -91,7 +90,7 @@ class FilePath extends AbstractScalarAnalysis
      *
      * Of course, we only act, if finfo is available.
      *
-     * @param string $string
+     * @param string|int|bool $string $string
      *   The string to test.
      *
      * @param Model $model
@@ -100,18 +99,18 @@ class FilePath extends AbstractScalarAnalysis
      * @return bool
      *   The result, if it's callable.
      */
-    public function canHandle($string, Model $model): bool
+    public function canHandle(string|int|bool $string, Model $model): bool
     {
         // Some fast static caching.
         static $cache = [];
 
-        if (strlen($string) < 25) {
+        if (strlen(string: $string) < 25) {
             // Early return for the most values.
             return false;
         }
 
         if (!isset($cache[$string])) {
-            $cache[$string] = $this->retrieveFileInfo($string);
+            $cache[$string] = $this->retrieveFileInfo(string: $string);
         }
 
         if (empty($cache[$string])) {
@@ -121,11 +120,14 @@ class FilePath extends AbstractScalarAnalysis
 
         $messages = $this->pool->messages;
         if (!empty($cache[$string][static::REAL_PATH])) {
-            $model->addToJson($messages->getHelp('realPath'), $cache[$string][static::REAL_PATH]);
+            $model->addToJson(key: $messages->getHelp(key: 'realPath'), value: $cache[$string][static::REAL_PATH]);
         }
 
         if (!empty($cache[$string][static::MIME_TYPE])) {
-            $model->addToJson($messages->getHelp('metaMimeTypeFile'), $cache[$string][static::MIME_TYPE]);
+            $model->addToJson(
+                key: $messages->getHelp(key: 'metaMimeTypeFile'),
+                value: $cache[$string][static::MIME_TYPE]
+            );
         }
 
         return false;
@@ -139,10 +141,10 @@ class FilePath extends AbstractScalarAnalysis
     {
         $result = [];
 
-        set_error_handler($this->pool->retrieveErrorCallback());
+        set_error_handler(callback: $this->pool->retrieveErrorCallback());
         try {
-            $isFile = is_file($string);
-        } catch (TypeError $exception) {
+            $isFile = is_file(filename: $string);
+        } catch (TypeError) {
             $isFile = false;
         }
         restore_error_handler();
@@ -152,12 +154,12 @@ class FilePath extends AbstractScalarAnalysis
             return $result;
         }
 
-        $realPath = realpath($string);
-        if ($string !== $realPath && is_string($realPath)) {
+        $realPath = realpath(path: $string);
+        if ($string !== $realPath && is_string(value: $realPath)) {
             // We only add the realpath, if it differs from the string
             $result[static::REAL_PATH] = $realPath;
         }
-        $result[static::MIME_TYPE] = $this->bufferInfo->file($string);
+        $result[static::MIME_TYPE] = $this->bufferInfo->file(filename: $string);
 
         return $result;
     }

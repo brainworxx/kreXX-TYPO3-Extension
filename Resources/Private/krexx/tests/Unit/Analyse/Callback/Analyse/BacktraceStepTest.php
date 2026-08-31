@@ -53,6 +53,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(BacktraceStep::class, 'retrieveSource')]
 #[CoversMethod(AbstractCallback::class, 'dispatchStartEvent')]
 #[CoversMethod(AbstractCallback::class, 'dispatchEventWithModel')]
+#[CoversMethod(BacktraceStep::class, '__construct')]
 class BacktraceStepTest extends AbstractHelper
 {
     /**
@@ -71,9 +72,19 @@ class BacktraceStepTest extends AbstractHelper
     }
 
     /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new BacktraceStep(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
+    /**
      * Testing, if all events got fired.
      */
-    public function testCallMe()
+    public function testCallMe(): void
     {
         $backtraceStep = new BacktraceStep(Krexx::$pool);
         $this->mockEventService(
@@ -94,7 +105,7 @@ class BacktraceStepTest extends AbstractHelper
     /**
      * Test everything, but some data is missing.
      */
-    public function testCallMeEmpty()
+    public function testCallMeEmpty(): void
     {
         $backtraceStep = new BacktraceStep(Krexx::$pool);
         $singleStep = ['data' => debug_backtrace()[5]];

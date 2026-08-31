@@ -64,7 +64,7 @@ class Attributes
     {
         try {
             $attributes = $reflection->getAttributes();
-        } catch (Throwable $e) {
+        } catch (Throwable) {
         }
 
         // Wrong PHP version, or no attributes available.
@@ -80,7 +80,7 @@ class Attributes
             try {
                 $name = $attribute->getName();
                 $arguments = $attribute->getArguments();
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 // In case of an error, we skip this attribute.
                 continue;
             }
@@ -94,14 +94,14 @@ class Attributes
             $flattenedArguments = '';
 
             foreach ($arguments as $argument) {
-                $flattenedArguments .= $this->flattenArgument($argument, 4, true);
+                $flattenedArguments .= $this->flattenArgument(parameter: $argument, indention: 4, useIndention: true);
             }
             // Combine the name and arguments into a single string.
             $result[] = '#[' . $name . '(' . $flattenedArguments . PHP_EOL . ')]';
         }
 
         // Join all attribute strings with a comma and a space.
-        return implode(PHP_EOL, $result);
+        return implode(separator: PHP_EOL, array: $result);
     }
 
     /**
@@ -116,17 +116,17 @@ class Attributes
      *
      * @return string
      */
-    protected function flattenArgument($parameter, int $indention, bool $useIndention): string
+    protected function flattenArgument(mixed $parameter, int $indention, bool $useIndention): string
     {
-        $result = $useIndention ? $this->indent($indention) : '';
+        $result = $useIndention ? $this->indent(indention: $indention) : '';
         switch (true) {
-            case is_null($parameter):
+            case $parameter === null:
                 $result .= 'NULL,';
                 break;
-            case is_string($parameter):
+            case is_string(value: $parameter):
                 $result .= '\'' . $parameter . '\',';
                 break;
-            case is_numeric($parameter):
+            case is_numeric(value: $parameter):
                 $result .= $parameter . ',';
                 break;
             case $parameter === true:
@@ -135,15 +135,15 @@ class Attributes
             case $parameter === false:
                 $result .= 'FALSE,';
                 break;
-            case is_array($parameter):
-                $result .= $this->handleArray($parameter, $indention) . ',';
+            case is_array(value: $parameter):
+                $result .= $this->handleArray(parameter: $parameter, indention: $indention) . ',';
                 break;
             case $parameter instanceof UnitEnum:
-                $result .= get_class($parameter) . '::' . $parameter->name;
+                $result .= $parameter::class . '::' . $parameter->name;
                 break;
-            case is_object($parameter):
+            case is_object(value: $parameter):
                 // If the parameter is an object, we return its class name.
-                $result .= get_class($parameter) . '::class,';
+                $result .= $parameter::class . '::class,';
         }
 
         return $result;
@@ -162,20 +162,20 @@ class Attributes
      */
     protected function handleArray(array $parameter, int $indention): string
     {
-        if (empty($parameter)) {
+        if ($parameter === []) {
             // If the array is empty, we return an empty array representation.
-            return str_repeat(' ', $indention - 4) . '[]';
+            return str_repeat(string: ' ', times: $indention - 4) . '[]';
         }
-        $result = str_repeat(' ', $indention) . '[';
+        $result = str_repeat(string: ' ', times: $indention) . '[';
         $indention += 4;
         foreach ($parameter as $key => $value) {
             // Add '' around the key if it is a string.
-            $key = is_int($key) ? $key : '\'' . $key . '\'';
-            $result .= $this->indent($indention) . $key . ' => ' .
-                $this->flattenArgument($value, $indention, false);
+            $key = is_int(value: $key) ? $key : '\'' . $key . '\'';
+            $result .= $this->indent(indention: $indention) . $key . ' => ' .
+                $this->flattenArgument(parameter: $value, indention: $indention, useIndention: false);
         }
 
-        return trim($result, ', ') . $this->indent($indention - 4) . ']';
+        return trim(string: $result, characters: ', ') . $this->indent(indention: $indention - 4) . ']';
     }
 
     /**
@@ -189,6 +189,6 @@ class Attributes
      */
     protected function indent(int $indention): string
     {
-        return PHP_EOL . str_repeat(' ', $indention);
+        return PHP_EOL . str_repeat(string: ' ', times: $indention);
     }
 }

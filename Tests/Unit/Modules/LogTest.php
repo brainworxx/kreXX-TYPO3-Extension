@@ -56,7 +56,6 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(Log14::class, 'hasAccess')]
 #[CoversMethod(Log14::class, 'retrieveKrexxMessages')]
 #[CoversMethod(Log14::class, 'createView')]
-#[CoversMethod(Log14::class, 'createView13')]
 #[CoversMethod(Log14::class, 'renderMessage')]
 #[CoversMethod(Log14::class, 'getDataToStore')]
 #[CoversMethod(Log14::class, 'getLabel')]

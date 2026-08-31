@@ -60,7 +60,7 @@ class SettingsGetter extends Registration
      */
     public static function getConfigFile(): string
     {
-        if (empty(static::$configFile)) {
+        if (static::$configFile === '' || static::$configFile === '0') {
             static::$configFile = KREXX_DIR . 'config' . DIRECTORY_SEPARATOR . 'Krexx.';
         }
 
@@ -75,7 +75,7 @@ class SettingsGetter extends Registration
      */
     public static function getChunkFolder(): string
     {
-        if (empty(static::$chunkFolder)) {
+        if (static::$chunkFolder === '' || static::$chunkFolder === '0') {
             static::$chunkFolder = KREXX_DIR . 'chunks' . DIRECTORY_SEPARATOR;
         }
 
@@ -90,7 +90,7 @@ class SettingsGetter extends Registration
      */
     public static function getLogFolder(): string
     {
-        if (empty(static::$logFolder)) {
+        if (static::$logFolder === '' || static::$logFolder === '0') {
             static::$logFolder = KREXX_DIR . 'log' . DIRECTORY_SEPARATOR;
         }
 
@@ -158,7 +158,7 @@ class SettingsGetter extends Registration
     /**
      * Get the status of all registered plugins.
      *
-     * @return \Brainworxx\Krexx\Service\Plugin\PluginConfigInterface[][]
+     * @return PluginConfigInterface[][]
      *   The configuration data for the view
      */
     public static function getPlugins(): array
@@ -192,7 +192,7 @@ class SettingsGetter extends Registration
      * Getter for the list of class instances that contain new settings
      * definitions.
      *
-     * @return \Brainworxx\Krexx\Service\Plugin\NewSetting[]
+     * @return NewSetting[]
      */
     public static function getNewSettings(): array
     {

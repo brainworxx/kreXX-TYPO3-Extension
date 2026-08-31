@@ -66,7 +66,7 @@ abstract class AbstractRenderSmokyGrey extends AbstractHelper
     protected $modelMock;
 
     /**
-     * @var \Brainworxx\Krexx\View\Skins\RenderSmokyGrey
+     * @var RenderSmokyGrey
      */
     protected $renderSmokyGrey;
 
@@ -147,12 +147,6 @@ abstract class AbstractRenderSmokyGrey extends AbstractHelper
                     true,
                     implode('', $smoky->getMarkerFooter())
                 ],
-                // fatalMain.html
-                [
-                    $pathToSkin . 'fatalMain' . $fileSuffix,
-                    true,
-                    implode('', $smoky->getMarkerFatalMain())
-                ],
                 // search.html
                 [
                     $pathToSkin . 'search' . $fileSuffix,
@@ -219,12 +213,6 @@ abstract class AbstractRenderSmokyGrey extends AbstractHelper
                     $pathToSkin . 'cssJs' . $fileSuffix,
                     true,
                     implode('', $smoky->getMarkerCssJs())
-                ],
-                // fatalHeader.html
-                [
-                    $pathToSkin . 'fatalHeader' . $fileSuffix,
-                    true,
-                    implode('', $smoky->getMarkerFatalHeader())
                 ],
                 // help.html
                 [

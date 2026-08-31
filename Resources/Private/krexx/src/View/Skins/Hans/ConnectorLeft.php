@@ -59,9 +59,9 @@ trait ConnectorLeft
     protected function renderConnectorLeft(string $connector): string
     {
         return str_replace(
-            $this->markerConnectorLeft,
-            $connector,
-            $this->fileCache[static::FILE_CONNECTOR_LEFT]
+            search: $this->markerConnectorLeft,
+            replace: $connector,
+            subject: $this->fileCache[static::FILE_CONNECTOR_LEFT]
         );
     }
 

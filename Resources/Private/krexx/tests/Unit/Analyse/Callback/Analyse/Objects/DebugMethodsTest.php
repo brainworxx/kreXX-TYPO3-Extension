@@ -51,6 +51,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(DebugMethods::class, 'retrieveValue')]
 #[CoversMethod(AbstractCallback::class, 'dispatchStartEvent')]
 #[CoversMethod(AbstractCallback::class, 'dispatchEventWithModel')]
+#[CoversMethod(DebugMethods::class, '__construct')]
 class DebugMethodsTest extends AbstractHelper
 {
     /**
@@ -100,6 +101,16 @@ class DebugMethodsTest extends AbstractHelper
         $this->assertEquals(false, $data->callWithParameter);
 
         parent::assertPostConditions();
+    }
+
+    /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new DebugMethods(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
     }
 
     /**

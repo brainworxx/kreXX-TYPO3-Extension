@@ -37,6 +37,8 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Caller;
 
+use Brainworxx\Krexx\Logging\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use Throwable;
 
 /**
@@ -49,25 +51,34 @@ class ExceptionCallerFinder extends AbstractCaller implements BacktraceConstInte
      *
      * @param string $headline
      *   An empty string. Not used here.
-     * @param \Throwable|\Brainworxx\Krexx\Logging\Model $data
+     * @param \Throwable|Model $data
      *   The exception that was thrown
      *
      * @return array
      *   The exception, that was thrown.
      */
-    public function findCaller(string $headline, $data): array
+    public function findCaller(string $headline, mixed $data): array
     {
         if ($data instanceof Throwable) {
-            $headline = get_class($data);
+            $headline = $data::class;
         }
         return [
             static::TRACE_FILE => $data->getFile(),
             static::TRACE_LINE => $data->getLine() + 1,
-            static::TRACE_VARNAME => ' ' . get_class($data),
+            static::TRACE_VARNAME => ' ' . $data::class,
             static::TRACE_LEVEL => 'error',
             static::TRACE_TYPE => $headline,
-            static::TRACE_DATE => date(static::TIME_FORMAT, time()),
+            static::TRACE_DATE => date(format: static::TIME_FORMAT, timestamp: time()),
             static::TRACE_URL => $this->getCurrentUrl(),
         ];
+    }
+
+    /**
+     * Inject the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
     }
 }

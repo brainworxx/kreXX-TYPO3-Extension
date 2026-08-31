@@ -66,9 +66,9 @@ class ProcessString extends AbstractRouting implements
     /**
      * The buffer info class. We use it to get the mimetype from a string.
      *
-     * @var \finfo|\Brainworxx\Krexx\Service\Misc\FileinfoDummy
+     * @var \finfo|FileinfoDummy
      */
-    protected $bufferInfo;
+    protected finfo|FileinfoDummy $bufferInfo;
 
     /**
      * The deeper string analysis.
@@ -85,34 +85,22 @@ class ProcessString extends AbstractRouting implements
     protected int $bufferInfoThreshold = 20;
 
     /**
-     * Caching of the setting SETTING_ANALYSE_SCALAR
-     *
-     * @var bool
-     */
-    protected bool $analyseScalar;
-
-    /**
      * Inject the pool and initialize the buffer-info class.
      *
-     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     * @param Pool $pool
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        parent::__construct($pool);
-
         // Init the fileinfo class.
-        if (class_exists(finfo::class, false)) {
-            $this->bufferInfo = new finfo(FILEINFO_MIME);
+        if (class_exists(class: finfo::class, autoload: false)) {
+            $this->bufferInfo = new finfo(flags: FILEINFO_MIME);
         } else {
             // Use a "polyfill" dummy, tell the dev that we have a problem.
-            $this->bufferInfo = $pool->createClass(FileinfoDummy::class);
-            $pool->messages->addMessage('fileinfoNotInstalled');
+            $this->bufferInfo = $pool->createClass(classname: FileinfoDummy::class);
+            $pool->messages->addMessage(key: 'fileinfoNotInstalled');
         }
 
-        $this->analyseScalar = $this->pool->config->getSetting(static::SETTING_ANALYSE_SCALAR);
-        if ($this->analyseScalar) {
-            $this->scalarString = $pool->createClass(ScalarString::class);
-        }
+        $this->scalarString = $pool->createClass(classname: ScalarString::class);
     }
 
     /**
@@ -127,7 +115,7 @@ class ProcessString extends AbstractRouting implements
     public function canHandle(Model $model): bool
     {
         $this->model = $model;
-        return is_string($model->getData());
+        return is_string(value: $model->getData());
     }
 
     /**
@@ -144,26 +132,22 @@ class ProcessString extends AbstractRouting implements
         // preview (which we call "extra").
         // We also need to check for linebreaks, because the preview can not
         // display those.
-        $length = $this->retrieveLengthAndEncoding($data);
-        if ($length > 50 || strstr($data, PHP_EOL) !== false) {
+        $length = $this->retrieveLengthAndEncoding(data: $data);
+        if ($length > 50 || str_contains(haystack: (string) $data, needle: PHP_EOL)) {
             $cut = $this->pool->encodingService->encodeString(
-                $this->pool->encodingService->mbSubStr($data, 0, 50)
+                data: $this->pool->encodingService->mbSubStr(string: $data, start: 0, length: 50)
             ) . static::UNKNOWN_VALUE;
 
-            $data = $this->pool->encodingService->encodeString($data);
+            $data = $this->pool->encodingService->encodeString(data: $data);
 
-            $this->model->setHasExtra(true)
-                ->setNormal($cut)
-                ->setData($data);
+            $this->model->setHasExtra(value: true)
+                ->setNormal(normal: $cut)
+                ->setData(data: $data);
         } else {
-            $this->model->setNormal($this->pool->encodingService->encodeString($data));
+            $this->model->setNormal(normal: $this->pool->encodingService->encodeString(data: $data));
         }
 
-        if ($this->analyseScalar) {
-            return $this->handleStringScalar($originalData);
-        }
-
-        return $this->pool->render->renderExpandableChild($this->dispatchProcessEvent($this->model));
+        return $this->handleStringScalar(originalData: $originalData);
     }
 
     /**
@@ -177,14 +161,14 @@ class ProcessString extends AbstractRouting implements
      */
     protected function handleStringScalar(string $originalData): string
     {
-        $this->scalarString->handle($this->model, $originalData);
+        $this->scalarString->handle(model: $this->model, originalData: $originalData);
         $domId = $this->model->getDomid();
-        if ($domId !== '' && $this->pool->recursionHandler->isInMetaHive($domId)) {
-            return $this->pool->render->renderRecursion($this->model);
+        if ($domId !== '' && $this->pool->recursionHandler->isInMetaHive(domId: $domId)) {
+            return $this->pool->render->renderRecursion(model: $this->model);
         }
 
-        $this->pool->recursionHandler->addToMetaHive($domId);
-        return $this->pool->render->renderExpandableChild($this->dispatchProcessEvent($this->model));
+        $this->pool->recursionHandler->addToMetaHive(domId: $domId);
+        return $this->pool->render->renderExpandableChild(model: $this->dispatchProcessEvent(model: $this->model));
     }
 
     /**
@@ -198,15 +182,15 @@ class ProcessString extends AbstractRouting implements
      */
     protected function retrieveLengthAndEncoding(string $data): int
     {
-        $encoding = $this->pool->encodingService->mbDetectEncoding($data);
+        $encoding = $this->pool->encodingService->mbDetectEncoding(string: $data);
         $messages = $this->pool->messages;
 
         if ($encoding === false) {
             // Looks like we have a mixed encoded string.
-            $length = $this->pool->encodingService->mbStrLen($data);
+            $length = $this->pool->encodingService->mbStrLen(string: $data);
         } else {
             // Normal encoding, nothing special here.
-            $length = $this->pool->encodingService->mbStrLen($data, $encoding);
+            $length = $this->pool->encodingService->mbStrLen(string: $data, encoding: $encoding);
         }
 
         // Long string or with broken encoding.
@@ -214,18 +198,19 @@ class ProcessString extends AbstractRouting implements
             // Let's see, what the buffer-info can do with it.
             static $bufferCache = [];
             if (!isset($bufferCache[$data])) {
-                $bufferCache[$data] = $this->bufferInfo->buffer($data);
+                $bufferCache[$data] = $this->bufferInfo->buffer(string: $data);
             }
-            $this->model->addToJson($messages->getHelp('metaMimeTypeString'), $bufferCache[$data]);
+            $this->model->addToJson(key: $messages->getHelp(key: 'metaMimeTypeString'), value: $bufferCache[$data]);
         } elseif ($encoding === false) {
             // Short string with broken encoding.
-            $this->model->addToJson($messages->getHelp('metaEncoding'), 'broken');
+            $this->model->addToJson(key: $messages->getHelp(key: 'metaEncoding'), value: 'broken');
         } else {
             // Short string with normal encoding.
-            $this->model->addToJson($messages->getHelp('metaEncoding'), $encoding);
+            $this->model->addToJson(key: $messages->getHelp(key: 'metaEncoding'), value: $encoding);
         }
 
-        $this->model->setType(static::TYPE_STRING)->addToJson($messages->getHelp('metaLength'), (string)$length);
+        $this->model->setType(type: static::TYPE_STRING)
+            ->addToJson(key: $messages->getHelp(key: 'metaLength'), value: (string)$length);
 
         return $length;
     }

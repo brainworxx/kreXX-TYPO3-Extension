@@ -56,6 +56,16 @@ class XmlTest extends AbstractHelper
     public const  CHILDREN = 'children';
 
     /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new Xml(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
+    /**
      * Test the disabling of the XML analysis.
      */
     public function testIsActiveNot()

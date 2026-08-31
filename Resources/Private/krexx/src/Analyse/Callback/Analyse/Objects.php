@@ -53,6 +53,7 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Logging\Model as LogModel;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use stdClass;
 use Throwable;
@@ -81,6 +82,15 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
     ];
 
     /**
+     * Inject the pool.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
+    /**
      * Starts the dump of an object.
      *
      * @throws \ReflectionException
@@ -92,14 +102,14 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
     {
         $output = $this->pool->render->renderSingeChildHr() . $this->dispatchStartEvent();
 
+        // Dumping all configured debug functions.
         foreach ($this->generateDumperList() as $classname) {
             $output .= $this->pool
-                ->createClass($classname)
-                ->setParameters($this->parameters)
+                ->createClass(classname: $classname)
+                ->setParameters(parameters: $this->parameters)
                 ->callMe();
         }
 
-        // Dumping all configured debug functions.
         // Adding an HR for a better readability.
         return $output . $this->pool->render->renderSingeChildHr();
     }
@@ -115,11 +125,11 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
     protected function generateDumperList(): array
     {
         $data = $this->parameters[static::PARAM_DATA];
-        $ref = $this->parameters[static::PARAM_REF] = new ReflectionClass($data);
+        $ref = $this->parameters[static::PARAM_REF] = new ReflectionClass(data: $data);
         $config = $this->pool->config;
         $stuffToDump = [PublicProperties::class];
-
-        if (in_array($ref->getName(), [stdClass::class, __PHP_Incomplete_Class::class], true)) {
+        $hayStack = [stdClass::class, __PHP_Incomplete_Class::class];
+        if (in_array(needle: $ref->getName(), haystack: $hayStack, strict: true)) {
             // We ignore everything else for these two types.
             return $stuffToDump;
         }
@@ -128,7 +138,7 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
         // We do this early on, because we do not want other analysis methods
         // fetch traversable results, that are only fetchable once.
         if (
-            $config->getSetting(static::SETTING_ANALYSE_TRAVERSABLE) === true
+            $config->getSetting(name: static::SETTING_ANALYSE_TRAVERSABLE) === true
             && $data instanceof \Traversable
         ) {
             $stuffToDump[] = Traversable::class;
@@ -143,7 +153,7 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
         }
 
         // Dumping all the property related stuff.
-        $this->addPropertyDumper($stuffToDump);
+        $this->addPropertyDumper(stuffToDump: $stuffToDump);
 
         return [...$stuffToDump, ...$this->standardDumper];
     }
@@ -161,23 +171,23 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
 
         // Dumping getter methods before the protected and private,
         // in case we are not in scope.
-        if (!$isInScope && $config->getSetting(static::SETTING_ANALYSE_GETTER)) {
+        if (!$isInScope && $config->getSetting(name: static::SETTING_ANALYSE_GETTER)) {
             $stuffToDump[] = Getter::class;
         }
 
         // Dumping protected properties.
-        if ($isInScope || $config->getSetting(static::SETTING_ANALYSE_PROTECTED)) {
+        if ($isInScope || $config->getSetting(name: static::SETTING_ANALYSE_PROTECTED)) {
             $stuffToDump[] = ProtectedProperties::class;
         }
 
         // Dumping private properties.
-        if ($isInScope || $config->getSetting(static::SETTING_ANALYSE_PRIVATE)) {
+        if ($isInScope || $config->getSetting(name: static::SETTING_ANALYSE_PRIVATE)) {
             $stuffToDump[] = PrivateProperties::class;
         }
 
         // Dumping getter methods before the protected and private,
         // in case we are in scope.
-        if ($isInScope && $config->getSetting(static::SETTING_ANALYSE_GETTER)) {
+        if ($isInScope && $config->getSetting(name: static::SETTING_ANALYSE_GETTER)) {
             $stuffToDump[] = Getter::class;
         }
     }

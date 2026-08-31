@@ -55,8 +55,19 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(AbstractRouting::class, 'dispatchProcessEvent')]
 #[CoversMethod(AbstractRouting::class, 'generateDomIdFromObject')]
 #[CoversMethod(ProcessClosure::class, 'canHandle')]
+#[CoversMethod(ProcessClosure::class, '__construct')]
 class ProcessClosureTest extends AbstractHelper
 {
+    /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new ProcessClosure(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
     /**
      * Test the processing of a closure.
      */

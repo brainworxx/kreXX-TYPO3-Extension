@@ -56,6 +56,7 @@ class DomainRecordRetriever extends RawRecordRetriever
 
     /**
      * @inheritDoc
+     * @throws \ReflectionException
      */
     public function handle(ReflectionClass $ref): array
     {
@@ -87,7 +88,7 @@ class DomainRecordRetriever extends RawRecordRetriever
         }
 
         $rawRecordValues = $this->processObjectValues(parent::handle($rawRecordRef));
-        if (strpos($rawRecordType, '.') !== false) {
+        if (str_contains($rawRecordType, '.')) {
             // If the type contains a dot, we only merge the uid and pid.
             $result['uid'] = $rawRecordValues['uid'] ?? null;
             $result['pid'] = $rawRecordValues['pid'] ?? null;

@@ -52,7 +52,7 @@ class ReturnTypesTest extends AbstractHelper
      *
      * @see \Brainworxx\Krexx\Tests\Fixtures\ReturnTypeFixture
      */
-    public function testGetComment()
+    public function testGetComment(): void
     {
         $fixture = new ReturnTypeFixture();
         $returnType = new ReturnType(Krexx::$pool);

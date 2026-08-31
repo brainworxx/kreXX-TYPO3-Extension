@@ -51,7 +51,7 @@ class FileTest extends AbstractHelper
     /**
      * Test the creation of a file.
      */
-    public function testFinalize()
+    public function testFinalize(): void
     {
         $file = new File(Krexx::$pool);
 

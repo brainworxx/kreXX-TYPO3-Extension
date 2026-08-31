@@ -38,15 +38,14 @@ namespace Brainworxx\Krexx\Tests\Unit\Service\Config\From;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\From\File as ConfigFromFile;
 use Brainworxx\Krexx\Service\Config\Validation;
-use Brainworxx\Krexx\Service\Config\From\File;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use Brainworxx\Krexx\Service\Misc\File as FileService;
 
-#[CoversMethod(File::class, 'getConfigFromFile')]
-#[CoversMethod(File::class, 'getFeConfigFromFile')]
-#[CoversMethod(File::class, 'loadFile')]
-#[CoversMethod(File::class, '__construct')]
+#[CoversMethod(ConfigFromFile::class, 'getConfigFromFile')]
+#[CoversMethod(ConfigFromFile::class, 'getFeConfigFromFile')]
+#[CoversMethod(ConfigFromFile::class, 'loadFile')]
+#[CoversMethod(ConfigFromFile::class, '__construct')]
 class FileTest extends AbstractHelper
 {
     public const  SETTINGS = 'settings';
@@ -64,7 +63,6 @@ class FileTest extends AbstractHelper
         $this->fixture = [
             ConfigFromFile::SECTION_FE_EDITING => [
                 ConfigFromFile::SETTING_SKIN => ConfigFromFile::RENDER_TYPE_CONFIG_NONE,
-                ConfigFromFile::SETTING_DETECT_AJAX => ConfigFromFile::RENDER_TYPE_CONFIG_DISPLAY,
                 ConfigFromFile::SETTING_NESTING_LEVEL => ConfigFromFile::RENDER_TYPE_CONFIG_FULL,
                 ConfigFromFile::SETTING_DEBUG_METHODS => ConfigFromFile::RENDER_TYPE_CONFIG_FULL,
                 ConfigFromFile::SETTING_ANALYSE_PRIVATE => 'garbage'
@@ -75,7 +73,7 @@ class FileTest extends AbstractHelper
     /**
      * Testing the setting of the validation class.
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $config = new ConfigFromFile(Krexx::$pool);
         $this->assertSame(Krexx::$pool->config->validation, $this->retrieveValueByReflection('validation', $config));
@@ -84,7 +82,7 @@ class FileTest extends AbstractHelper
     /**
      * Test the loading of an ini file into the settings.
      */
-    public function testLoadFileIni()
+    public function testLoadFileIni(): void
     {
         $this->fixture = ';' . PHP_EOL .
             '; kreXX CONFIGURATION FILE' . PHP_EOL .
@@ -144,7 +142,7 @@ class FileTest extends AbstractHelper
     /**
      * Test the loading of an json file into the settings.
      */
-    public function testLoadFileJson()
+    public function testLoadFileJson(): void
     {
         $setting = ['output' => ['disabled' => false]];
         $this->fixture = json_encode($setting);
@@ -176,7 +174,7 @@ class FileTest extends AbstractHelper
      * Test the translating from the more human readable into the stuff for
      * the skin "engine".
      */
-    public function testGetFeConfigFromFile()
+    public function testGetFeConfigFromFile(): void
     {
         // Test without any file data.
         $config = new ConfigFromFile(Krexx::$pool);
@@ -190,13 +188,6 @@ class FileTest extends AbstractHelper
         ];
 
         $this->assertEquals($none, $config->getFeConfigFromFile($config::SETTING_SKIN));
-        $this->assertEquals(
-            [
-                ConfigFromFile::RENDER_TYPE => ConfigFromFile::RENDER_TYPE_SELECT,
-                ConfigFromFile::RENDER_EDITABLE => ConfigFromFile::VALUE_FALSE
-            ],
-            $config->getFeConfigFromFile($config::SETTING_DETECT_AJAX)
-        );
         $this->assertEquals(
             [
                 ConfigFromFile::RENDER_TYPE => ConfigFromFile::RENDER_TYPE_INPUT,
@@ -214,7 +205,7 @@ class FileTest extends AbstractHelper
     /**
      * Testing the retrival and validation from the settings array.
      */
-    public function testGetConfigFromFile()
+    public function testGetConfigFromFile(): void
     {
         $anotherGroup = 'another group';
         $knownSetting = 'known setting';

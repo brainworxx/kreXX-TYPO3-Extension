@@ -45,7 +45,7 @@ class HeaderTest extends AbstractRenderSmokyGrey
     /**
      * Test the additional stuff in the header rendering.
      */
-    public function testRenderHeader()
+    public function testRenderHeader(): void
     {
         $result = $this->renderSmokyGrey->renderHeader(
             \Krexx::$pool->messages->getHelp('headlineCookieConf'),

@@ -167,22 +167,19 @@ class FileWriterTest extends AbstractHelper implements BacktraceConstInterface, 
     public function testWriteLogWithConfig()
     {
         $config = [
-            Fallback::SETTING_ANALYSE_SCALAR => 'true',
+            Fallback::SETTING_SKIN => 'smokygrey',
             'mehSetting' => 'blargh'
         ];
 
         $configModelMock = $this->createMock(Model::class);
         $configModelMock->expects($this->once())
             ->method('setValue')
-            ->with($config[Fallback::SETTING_ANALYSE_SCALAR])
+            ->with($config[Fallback::SETTING_SKIN])
             ->willReturn($configModelMock);
         $configModelMock->expects(($this->once()))
             ->method('setSource')
             ->with('kreXX log writer');
-        $configModelMock->expects(($this->once()))
-            ->method('getValue')
-            ->willReturn(false);
-        \Krexx::$pool->config->settings[Fallback::SETTING_ANALYSE_SCALAR] = $configModelMock;
+        \Krexx::$pool->config->settings[Fallback::SETTING_SKIN] = $configModelMock;
 
         $fileWriter = new FileWriter($config);
         $fileWriter->writeLog($this->prepareFixture());

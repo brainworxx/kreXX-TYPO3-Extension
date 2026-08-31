@@ -46,16 +46,9 @@ use Brainworxx\Krexx\Service\Misc\Cleanup;
 abstract class AbstractOutput
 {
     /**
-     * Here we store all relevant data.
-     *
-     * @var Pool
-     */
-    protected Pool $pool;
-
-    /**
      * Deleting old chunks and logfiles.
      *
-     * @var \Brainworxx\Krexx\Service\Misc\Cleanup
+     * @var Cleanup
      */
     protected Cleanup $cleanupService;
 
@@ -81,10 +74,9 @@ abstract class AbstractOutput
      * @param Pool $pool
      *   The pool, where we store the classes we need.
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
-        $this->cleanupService = $pool->createClass(Cleanup::class);
+        $this->cleanupService = $pool->createClass(classname: Cleanup::class);
     }
 
     /**

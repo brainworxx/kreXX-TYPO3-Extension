@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers;
 
-use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQueryParser;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
@@ -47,6 +46,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use Throwable;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 /**
@@ -120,13 +120,13 @@ class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, Pr
     /**
      * Retrieve the SQL from a query builder object.
      *
-     * @param QueryBuilder|QueryInterface $query
+     * @param object $query
      *   The callback with the QueryBuilder
      *
      * @return string
      *   The SQL, or an empty string in case of an error.
      */
-    protected function retrieveSql($query): string
+    protected function retrieveSql(object $query): string
     {
         try {
             if ($query instanceof QueryInterface) {
@@ -166,7 +166,7 @@ class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, Pr
      * @return string
      *   The SQL with the replaced parameter.
      */
-    protected function replaceParameter(string $sql, string $key, $parameter): string
+    protected function replaceParameter(string $sql, string $key, mixed $parameter): string
     {
         if (is_string($parameter)) {
             $parameter = '\'' . $parameter . '\'';

@@ -38,7 +38,6 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Iterate;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties;
 use Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
 use Brainworxx\Krexx\Tests\Fixtures\AttributeFixture;
@@ -66,6 +65,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(ThroughProperties::class, 'retrieveValueStatus')]
 #[CoversMethod(PropertyDeclaration::class, 'retrieveNamedPropertyType')]
 #[CoversMethod(ThroughProperties::class, 'isPropertyNameNormal')]
+#[CoversMethod(ThroughProperties::class, '__construct')]
 class ThroughPropertiesTest extends AbstractHelper
 {
     public const PUBLIC_STRING_PROPERTY = 'publicStringProperty';
@@ -90,7 +90,7 @@ class ThroughPropertiesTest extends AbstractHelper
     public const BOOLEAN = 'boolean';
 
     /**
-     * @var \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties
+     * @var ThroughProperties
      */
     protected $throughProperties;
 
@@ -114,9 +114,19 @@ class ThroughPropertiesTest extends AbstractHelper
     protected $endEvent = 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughProperties::callMe::end';
 
     /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new ThroughProperties(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
+    /**
      * Testing an analysis without any methods to look at.
      */
-    public function testCallMeEmpty()
+    public function testCallMeEmpty(): void
     {
         // Test for the start event
         $this->mockEventService(
@@ -138,7 +148,7 @@ class ThroughPropertiesTest extends AbstractHelper
     /**
      * Normal test run for the property analysis.
      */
-    public function testCallMeNormal()
+    public function testCallMeNormal(): void
     {
         // Test the events.
         $this->mockEventService(
@@ -298,12 +308,7 @@ class ThroughPropertiesTest extends AbstractHelper
 
         // publicStatic
         $expectedJson = [static::JSON_DECLARED_KEY => $complexDeclarationString];
-        if (version_compare(phpversion(), '7.4.99', '>')) {
-            // We can not retrieve the default values of static properties
-            // in PHP 7.x. and very early PHP 8.0 versions. We ignore the early
-            // 8.0 versions for the sake of our sanity.
-            $expectedJson[static::JSON_DEFAULT_VALUE] = '1';
-        }
+        $expectedJson[static::JSON_DEFAULT_VALUE] = '1';
 
         $this->assertModelValues(
             $models[6],
@@ -392,7 +397,7 @@ class ThroughPropertiesTest extends AbstractHelper
             ['qwer', 'asdf'],
             static::PUBLIC_ARRAY_DEFAULT,
             [
-                static::JSON_DECLARED_KEY => 'Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesFixture',
+                static::JSON_DECLARED_KEY => ComplexPropertiesFixture::class,
                 static::JSON_COMMENT_KEY => 'A simple variable with a default array.<br /><br />&#64;var string[]',
                 static::JSON_DEFAULT_VALUE => 'array (<br />&nbsp;&nbsp;0 =&gt; &#039;qwer&#039;,<br />&nbsp;&nbsp;1 =&gt; &#039;asdf&#039;,<br />)'
             ],
@@ -401,13 +406,13 @@ class ThroughPropertiesTest extends AbstractHelper
             'Public '
         );
 
-        // A float default vaule.
+        // A float default value.
         $this->assertModelValues(
             $models[13],
             123.456,
             static::PUBLIC_FLOAT_PROPERTY,
             [
-                static::JSON_DECLARED_KEY => 'Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesFixture',
+                static::JSON_DECLARED_KEY => ComplexPropertiesFixture::class,
                 static::JSON_COMMENT_KEY => 'Public float property<br /><br />&#64;var float',
                 static::JSON_DEFAULT_VALUE => '123.456'
             ],
@@ -416,13 +421,14 @@ class ThroughPropertiesTest extends AbstractHelper
             'Public '
         );
 
+
         // A boolean default value.
         $this->assertModelValues(
             $models[14],
             true,
             static::BOOLEAN,
             [
-                static::JSON_DECLARED_KEY => 'Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesFixture',
+                static::JSON_DECLARED_KEY => ComplexPropertiesFixture::class,
                 static::JSON_COMMENT_KEY => 'Boolean default value.<br /><br />&#64;var bool',
                 static::JSON_DEFAULT_VALUE => true
             ],
@@ -435,12 +441,8 @@ class ThroughPropertiesTest extends AbstractHelper
     /**
      * Provoke an error when getting the default value.
      */
-    public function testCallMeError()
+    public function testCallMeError(): void
     {
-        if (version_compare(phpversion(), '7.4.99', '<')) {
-            $this->markTestSkipped('Wrong PHP Version');
-        }
-
         // Create a fixture.
         $refPropertyMock = $this->createMock(ReflectionProperty::class);
         $refPropertyMock->expects($this->any())
@@ -493,12 +495,8 @@ class ThroughPropertiesTest extends AbstractHelper
     /**
      * Special tests for PHP 8, actually with some 7.4'er stuff.
      */
-    public function testCallMePhpEight()
+    public function testCallMePhpEight(): void
     {
-        if (version_compare(phpversion(), '8.0.99', '<')) {
-            $this->markTestSkipped('Wrong PHP Version');
-        }
-
         // Test the events.
         $this->mockEventService(
             [$this->startEvent, $this->throughProperties],
@@ -542,12 +540,8 @@ class ThroughPropertiesTest extends AbstractHelper
     /**
      * Testing the default enum value.
      */
-    public function testCallMeDefaultEnum()
+    public function testCallMeDefaultEnum(): void
     {
-        if (version_compare(phpversion(), '8.0.99', '<')) {
-            $this->markTestSkipped('Wrong PHP Version');
-        }
-
         // Test the events.
         $this->mockEventService(
             [$this->startEvent, $this->throughProperties],
@@ -587,12 +581,8 @@ class ThroughPropertiesTest extends AbstractHelper
         );
     }
 
-    public function testCallMeAttribute()
+    public function testCallMeAttribute(): void
     {
-        if (version_compare(phpversion(), '8.0.99', '<')) {
-            $this->markTestSkipped('Wrong PHP Version');
-        }
-
         // Test the events.
         $this->mockEventService(
             [$this->startEvent, $this->throughProperties],
@@ -635,7 +625,7 @@ class ThroughPropertiesTest extends AbstractHelper
     /**
      * Simply assert the stuff inside the model.
      *
-     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @param Model $model
      * @param mixed $data
      * @param string $name
      * @param array $json
@@ -674,7 +664,7 @@ class ThroughPropertiesTest extends AbstractHelper
     /**
      * Testing the property name analysis.
      */
-    public function testIsPropertyNameNormal()
+    public function testIsPropertyNameNormal(): void
     {
         $this->assertTrue($this->throughProperties->isPropertyNameNormal('getValue'));
         $this->assertFalse($this->throughProperties->isPropertyNameNormal('get value'));

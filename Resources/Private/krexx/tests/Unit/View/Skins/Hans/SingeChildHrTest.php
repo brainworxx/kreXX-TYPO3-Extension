@@ -45,7 +45,7 @@ class SingeChildHrTest extends AbstractRenderHans
     /**
      * Test the rendering of a HR tag.
      */
-    public function testRenderSingeChildHr()
+    public function testRenderSingeChildHr(): void
     {
         $this->assertStringContainsString('HR does not mean human resources', $this->renderHans->renderSingeChildHr());
     }

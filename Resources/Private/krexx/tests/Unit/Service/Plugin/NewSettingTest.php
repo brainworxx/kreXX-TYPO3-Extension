@@ -55,7 +55,7 @@ class NewSettingTest extends AbstractHelper
     /**
      * Test the setter and getter.
      */
-    public function testSetterGetter()
+    public function testSetterGetter(): void
     {
         $section = 'some section';
         $default = 'Default Value';

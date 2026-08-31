@@ -53,12 +53,23 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(AbstractRouting::class, 'dispatchProcessEvent')]
 #[CoversMethod(ProcessResource::class, 'renderUnknownOrClosed')]
 #[CoversMethod(AbstractRouting::class, 'dispatchNamedEvent')]
+#[CoversMethod(ProcessResource::class, '__construct')]
 class ProcessResourceTest extends AbstractHelper
 {
     public const  PROCESS_NAMESPACE = '\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\';
     public const  GET_RESOURCE_TYPE = 'get_resource_type';
     public const  CURL_GETINFO = 'curl_getinfo';
     public const  GET_TYPE = 'gettype';
+
+    /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new ProcessResource(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
 
     /**
      * Testing the processing of a stream resource.

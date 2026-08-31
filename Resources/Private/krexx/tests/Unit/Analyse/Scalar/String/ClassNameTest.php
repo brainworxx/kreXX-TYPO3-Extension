@@ -49,8 +49,19 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(ClassName::class, 'handle')]
 #[CoversMethod(ClassName::class, 'canHandle')]
 #[CoversMethod(ClassName::class, 'isActive')]
+#[CoversMethod(ClassName::class, '__construct')]
 class ClassNameTest extends AbstractHelper
 {
+    /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new ClassName(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
     /**
      * Test if it is active.
      */

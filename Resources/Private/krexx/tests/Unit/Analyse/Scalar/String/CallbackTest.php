@@ -51,8 +51,19 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(Callback::class, 'isActive')]
 #[CoversMethod(FunctionDeclaration::class, 'retrieveDeclaration')]
 #[CoversMethod(Callback::class, 'insertParameters')]
+#[CoversMethod(Callback::class, '__construct')]
 class CallbackTest extends AbstractHelper
 {
+    /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new Callback(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
     /**
      * Test if the callback analyser can identify a callback.
      */

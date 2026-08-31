@@ -14,12 +14,6 @@ disabled = "false"
 ; iprange = "192.168.0.110,192.168.1.*"
 iprange = "*"
 
-; Shall kreXX try to detect an AJAX request?
-; If set to true, there will be no output when AJAX is detected, to prevent a
-; js error.
-detectAjax = "true"
-; detectAjax = "false"
-
 ; ------------------------------------------------------------------------------
 [behavior]
 
@@ -59,6 +53,11 @@ arrayCountLimit = 300
 ; When we reach a certain level, we simply stop there and won't go any further.
 level = "10"
 
+; How often can you call kreXX in one run?
+; kreXX can generate a lot of data, and depending on your settings
+; increasing this number might not be a good idea.
+maxCall = "15"
+
 ; ------------------------------------------------------------------------------
 [properties]
 ; kreXX can poll a lot of info. Depending on your needs, these might be a little
@@ -70,10 +69,6 @@ level = "10"
 analyseProtected = "false"
 ; analysePrivate = "true"
 analysePrivate = "false"
-
-; Shall kreXX do a deep analysis of scalar variables?
-analyseScalar = "true"
-;analyseScalar = "false"
 
 ; Shall kreXX try to traverse through the object?
 analyseTraversable = "true"
@@ -103,26 +98,6 @@ analyseGetter = "true"
 debugMethods = "debug,toArray,__toString,toString"
 
 ; ------------------------------------------------------------------------------
-[emergency]
-
-; How often can you call kreXX in one run?
-; kreXX can generate a lot of data, and depending on your settings
-; increasing this number might not be a good idea.
-maxCall = "15"
-
-; kreXX checks during the analysis how much time has elapsed since start. Here
-; you can adjust the amount where it will trigger an emergency break. Unit of
-; measurement is seconds.
-maxRuntime = "60"
-
-; Setting up the config for the emergency break.
-; When analysing large objects, there is always the chance that you run out of
-; time or memory. kreXX checks these values regularly.
-; kreXX checks regularly how much memory is left. Here you can adjust the amount
-; where it will trigger an emergency break. Unit of measurement is MB.
-memoryLeft = "64"
-
-; ------------------------------------------------------------------------------
 [feEditing]
 ; Here you can edit the frontend configuration form
 ; full    = can be edited
@@ -133,7 +108,6 @@ memoryLeft = "64"
 ; Please note, that the logging and debug methods options can never be edited
 ; on the frontend.
 disabled = "full"
-detectAjax = "full"
 skin = "full"
 maxStepNumber = "full"
 arrayCountLimit = "full"
@@ -145,5 +119,3 @@ analyseProtectedMethods = "full"
 analysePrivateMethods = "full"
 analyseGetter = "full"
 maxCall = "full"
-memoryLeft = "full"
-maxRuntime = "full"

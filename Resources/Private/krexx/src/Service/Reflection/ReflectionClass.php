@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Reflection;
 
+use ArrayObject;
 use ReflectionException;
 use ReflectionProperty;
 use Throwable;
@@ -60,7 +61,7 @@ class ReflectionClass extends \ReflectionClass
      *
      * @var object|string
      */
-    protected $data;
+    protected object|string $data;
 
     /**
      * Storage for unset properties.
@@ -70,18 +71,6 @@ class ReflectionClass extends \ReflectionClass
     protected SplObjectStorage $unsetPropertyStorage;
 
     /**
-     * Must we set the properties accessible?
-     *
-     * This is not necessarily in PHP 8.1 and higher.
-     *
-     * @deprecated
-     *   Will be removed as soon as we drop support for PHP 8.0.
-     *
-     * @var bool|null
-     */
-    protected static ?bool $mustSetAccessible = null;
-
-    /**
      * ReflectionClass constructor.
      *
      * @param object|string $data
@@ -89,20 +78,16 @@ class ReflectionClass extends \ReflectionClass
      *
      * @throws \ReflectionException
      */
-    public function __construct($data)
+    public function __construct(object|string $data)
     {
-        if (static::$mustSetAccessible === null) {
-            // Determine, if we must set the properties accessible.
-            static::$mustSetAccessible = version_compare(phpversion(), '8.1.0', '<');
-        }
         // Retrieve the class variables.
-        if ($data instanceof \ArrayObject) {
+        if ($data instanceof ArrayObject) {
             try {
                 $flags = $data->getFlags();
-                $data->setFlags(\ArrayObject::STD_PROP_LIST);
+                $data->setFlags(flags: ArrayObject::STD_PROP_LIST);
                 $this->objectArray = (array) $data;
-                $data->setFlags($flags);
-            } catch (Throwable $throwable) {
+                $data->setFlags(flags: $flags);
+            } catch (Throwable) {
                 // Do nothing.
             }
         } else {
@@ -114,7 +99,7 @@ class ReflectionClass extends \ReflectionClass
         // Init our unset object storage;
         $this->unsetPropertyStorage = new SplObjectStorage();
 
-        parent::__construct($data);
+        parent::__construct(objectOrClass: $data);
     }
 
     /**
@@ -126,7 +111,7 @@ class ReflectionClass extends \ReflectionClass
      * @return mixed
      *   The retrieved value.
      */
-    public function retrieveValue(ReflectionProperty $refProperty)
+    public function retrieveValue(ReflectionProperty $refProperty): mixed
     {
         $propName = $refProperty->getName();
         $lookup = [
@@ -147,17 +132,14 @@ class ReflectionClass extends \ReflectionClass
         try {
             // Static values are not inside the value array.
             if ($refProperty->isStatic()) {
-                if (static::$mustSetAccessible) {
-                    $refProperty->setAccessible(true);
-                }
-                return $refProperty->getValue($this->data);
+                return $refProperty->getValue(object: $this->data);
             }
-        } catch (Throwable $throwable) {
+        } catch (Throwable) {
             // Do nothing.
             // We ignore this one.
         }
 
-        return $this->retrieveEsotericValue($refProperty);
+        return $this->retrieveEsotericValue(refProperty: $refProperty);
     }
 
     /**
@@ -173,17 +155,17 @@ class ReflectionClass extends \ReflectionClass
      *
      * @return mixed
      */
-    protected function retrieveEsotericValue(ReflectionProperty $refProperty)
+    protected function retrieveEsotericValue(ReflectionProperty $refProperty): mixed
     {
         $propName = $refProperty->getName();
-        if ($refProperty instanceof UndeclaredProperty && is_numeric($propName)) {
+        if ($refProperty instanceof UndeclaredProperty && is_numeric(value: $propName)) {
             // We are facing a numeric property name (yes, that is possible).
             // To be honest, this one of the most bizarre things I've encountered so
             // far. Depending on your PHP version, that value may not be accessible
             // via normal means from the array we have got here. And no, we are not
             // accessing the object directly.
-            return array_values($this->objectArray)[
-                array_search($propName, array_keys($this->objectArray))
+            return array_values(array: $this->objectArray)[
+                array_search(needle: $propName, haystack: array_keys(array: $this->objectArray))
             ] ?? null;
         }
 
@@ -192,19 +174,19 @@ class ReflectionClass extends \ReflectionClass
             // But first we must make sure that the hosting cms does not do
             // something stupid. Accessing this value directly it probably
             // a bad idea, but the only way to get the value.
-            set_error_handler(Krexx::$pool->retrieveErrorCallback());
+            set_error_handler(callback: Krexx::$pool->retrieveErrorCallback());
             try {
                 $result = $this->data->$propName;
                 restore_error_handler();
                 return $result;
-            } catch (Throwable $exception) {
+            } catch (Throwable) {
                 // Do nothing.
                 // Looks like somebody did not like me accessing it directly.
             }
             restore_error_handler();
         }
 
-        $this->unsetPropertyStorage->offsetSet($refProperty);
+        $this->unsetPropertyStorage->offsetSet(object: $refProperty);
         return null;
     }
 
@@ -212,13 +194,11 @@ class ReflectionClass extends \ReflectionClass
      * The original get_object_vars() is problematic, because it
      * may fire PropertyHooks, LazyProxies or LazyGhosts.
      *
-     * @return mixed[]
+     * @return array
      */
     public function getObjectVars(): array
     {
-        return array_filter($this->objectArray, function ($key) {
-            return strpos((string)$key, "\0") === false;
-        }, ARRAY_FILTER_USE_KEY);
+        return array_filter(array: $this->objectArray, callback: fn($key) => !str_contains(haystack: (string)$key, needle: "\0"), mode: ARRAY_FILTER_USE_KEY);
     }
 
     /**
@@ -231,7 +211,7 @@ class ReflectionClass extends \ReflectionClass
      */
     public function isPropertyUnset(ReflectionProperty $reflectionProperty): bool
     {
-        return $this->unsetPropertyStorage->offsetExists($reflectionProperty);
+        return $this->unsetPropertyStorage->offsetExists(object: $reflectionProperty);
     }
 
     /**
@@ -266,8 +246,8 @@ class ReflectionClass extends \ReflectionClass
         $result = [];
         foreach ($interfaceNames as $interfaceName) {
             try {
-                $result[$interfaceName] = new ReflectionClass($interfaceName);
-            } catch (ReflectionException $exception) {
+                $result[$interfaceName] = new ReflectionClass(data: $interfaceName);
+            } catch (ReflectionException) {
                 // Do nothing. We skip this one.
                 // Not sure how this could happen.
             }
@@ -291,8 +271,8 @@ class ReflectionClass extends \ReflectionClass
         $result = [];
         foreach ($traits as $trait) {
             try {
-                $result[$trait] = new ReflectionClass($trait);
-            } catch (ReflectionException $exception) {
+                $result[$trait] = new ReflectionClass(data: $trait);
+            } catch (ReflectionException) {
                 // We skip this one.
             }
         }
@@ -303,17 +283,16 @@ class ReflectionClass extends \ReflectionClass
     /**
      * Wrapper around the getParentClass, to make sure we get our ReflectionClass.
      *
-     * @return bool|\ReflectionClass
+     * @return false|ReflectionClass
      */
-    #[\ReturnTypeWillChange]
-    public function getParentClass()
+    public function getParentClass(): ReflectionClass|false
     {
         $result = false;
         $parent = parent::getParentClass();
         if (!empty($parent)) {
             try {
                 $result = new ReflectionClass($parent->name);
-            } catch (ReflectionException $e) {
+            } catch (ReflectionException) {
                 // Do nothing.
             }
         }

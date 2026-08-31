@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Array analysis methods.
@@ -59,6 +60,15 @@ class ThroughArray extends AbstractCallback implements
     ProcessConstInterface
 {
     /**
+     * Inject the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
+    /**
      * Renders the expendable around the array analysis.
      *
      * @return string
@@ -72,23 +82,13 @@ class ThroughArray extends AbstractCallback implements
         $multilineCodeGen = $this->parameters[static::PARAM_MULTILINE] ?
             static::CODEGEN_TYPE_ITERATOR_TO_ARRAY : static::CODEGEN_TYPE_PUBLIC;
 
-        // @deprecated
-        // Will be removed as soon as we drop PHP 8.0 support.
-        $recursionMarker = $this->pool->recursionHandler->getMarker();
-
         $array = $this->parameters[static::PARAM_DATA];
         // Iterate through.
         foreach ($array as $key => $value) {
-            // We will not output our recursion marker.
-            // Meh, the only reason for the recursion marker
-            // in arrays is because of the $GLOBAL array, which
-            // we will only render once.
-            if ($key === $recursionMarker) {
-                continue;
-            }
-
             $output .= $this->pool->routing
-                ->analysisHub($this->prepareModel($array, $key, $value, $multilineCodeGen));
+                ->analysisHub(
+                    model: $this->prepareModel(key: $key, value: $value, multilineCodeGen: $multilineCodeGen)
+                );
         }
 
         return $output . $this->pool->render->renderSingeChildHr();
@@ -97,9 +97,6 @@ class ThroughArray extends AbstractCallback implements
     /**
      * Create the model and set the values that we have.
      *
-     * @param array $array
-     *   Deprecated since 6.0.0. This parameter will be removed.
-     *   The array we are analysing.
      * @param int|string $key
      *   A current key.
      * @param mixed $value
@@ -107,22 +104,22 @@ class ThroughArray extends AbstractCallback implements
      * @param string $multilineCodeGen
      *   The prepared code generation.
      *
-     * @return \Brainworxx\Krexx\Analyse\Model
+     * @return Model
      *   The prepared model.
      */
-    protected function prepareModel(array $array, $key, $value, string $multilineCodeGen): Model
+    protected function prepareModel(int|string $key, mixed $value, string $multilineCodeGen): Model
     {
         /** @var Model $model */
         $model = $this->pool
-            ->createClass(Model::class)
-            ->setData($value)
-            ->setCodeGenType($multilineCodeGen);
+            ->createClass(classname: Model::class)
+            ->setData(data: $value)
+            ->setCodeGenType(codeGenType: $multilineCodeGen);
 
-        if (is_string($key)) {
-            $model->setName($this->pool->encodingService->encodeString($key))
-                ->setConnectorType(static::CONNECTOR_ASSOCIATIVE_ARRAY);
+        if (is_string(value: $key)) {
+            $model->setName(name: $this->pool->encodingService->encodeString(data: $key))
+                ->setConnectorType(type: static::CONNECTOR_ASSOCIATIVE_ARRAY);
         } else {
-            $model->setName($key)->setConnectorType(static::CONNECTOR_NORMAL_ARRAY);
+            $model->setName(name: $key)->setConnectorType(type: static::CONNECTOR_NORMAL_ARRAY);
         }
 
         return $model;

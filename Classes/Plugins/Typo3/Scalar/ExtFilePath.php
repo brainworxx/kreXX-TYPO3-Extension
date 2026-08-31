@@ -56,7 +56,7 @@ class ExtFilePath extends FilePath
      */
     public function canHandle($string, Model $model): bool
     {
-        if (strpos($string, 'EXT:') !== 0) {
+        if (!str_starts_with($string, 'EXT:')) {
             // Does not start with EXT:
             // Nothing to do here.
             return false;
@@ -66,7 +66,7 @@ class ExtFilePath extends FilePath
         set_error_handler($this->pool->retrieveErrorCallback());
         try {
             $string = GeneralUtility::getFileAbsFileName($string);
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             // Huh, someone messed with the GeneralUtility.
             restore_error_handler();
             return false;
@@ -80,7 +80,7 @@ class ExtFilePath extends FilePath
 
         // Preserve the result from the getFileAbsFileName.
         $messages = $this->pool->messages;
-        $model->addToJson($messages->getHelp('TYPO3ResPath'), $this->pool->fileService->filterFilePath($string));
+        $model->addToJson($messages->getHelp('TYPO3ResPath'), $string);
 
         if (!file_exists($string)) {
             $model->addToJson($messages->getHelp('TYPO3ResPathError'), $messages->getHelp('TYPO3ResPathDoesNotExist'));

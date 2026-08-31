@@ -57,7 +57,7 @@ class ByRegExDelegateTest extends AbstractGetter
     /**
      * Test the initialization of the getter analysers
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $this->assertNotEmpty($this->retrieveValueByReflection('getterAnalyser', $this->testSubject));
     }
@@ -66,7 +66,7 @@ class ByRegExDelegateTest extends AbstractGetter
      * Make sure that we do not create an infinite loop by running into a circular reference.
      * But then, there is no way for the getter to work in the first place!
      */
-    public function testRetrieveItTooDeep()
+    public function testRetrieveItTooDeep(): void
     {
         $instance = new EndlessLoop();
         $classReflection = new ReflectionClass($instance);
@@ -86,7 +86,7 @@ class ByRegExDelegateTest extends AbstractGetter
     /**
      * The class to test should not be able to retrieve any of these.
      */
-    public function testRetrieveIt()
+    public function testRetrieveIt(): void
     {
         $instance = new DelegateGetterFixture();
         $classReflection = new ReflectionClass($instance);

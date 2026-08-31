@@ -47,8 +47,19 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(ProcessBoolean::class, 'handle')]
 #[CoversMethod(AbstractRouting::class, 'dispatchProcessEvent')]
 #[CoversMethod(ProcessBoolean::class, 'canHandle')]
+#[CoversMethod(ProcessBoolean::class, '__construct')]
 class ProcessBooleanTest extends AbstractHelper
 {
+    /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new ProcessBoolean(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
     /**
      * Testing the processing of booleans.
      */

@@ -49,12 +49,13 @@ use ReflectionProperty;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(ProtectedProperties::class, 'callMe')]
+#[CoversMethod(ProtectedProperties::class, '__construct')]
 #[CoversMethod(AbstractObjectAnalysis::class, 'getReflectionPropertiesData')]
 #[CoversMethod(AbstractObjectAnalysis::class, 'reflectionSorting')]
 class ProtectedPropertiesTest extends AbstractHelper
 {
     /**
-     * @var \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ProtectedProperties
+     * @var ProtectedProperties
      */
     protected $protectedProperties;
 
@@ -79,10 +80,20 @@ class ProtectedPropertiesTest extends AbstractHelper
     }
 
     /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new ProtectedProperties(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
+    /**
      * Test the private property analysis, without any protected ones in the
      * fixture.
      */
-    public function testCallMeNoProtected()
+    public function testCallMeNoProtected(): void
     {
         // Test start event
         $this->mockEventService(
@@ -113,7 +124,7 @@ class ProtectedPropertiesTest extends AbstractHelper
      * Test, if the private analysis gets all privates, including the
      * "inherited"  ones.
      */
-    public function testCallMeWithProtected()
+    public function testCallMeWithProtected(): void
     {
         // Set up the events
         $this->mockEventService(

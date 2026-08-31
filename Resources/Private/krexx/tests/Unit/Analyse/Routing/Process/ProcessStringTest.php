@@ -43,10 +43,8 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessString;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
-use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\From\File;
 use Brainworxx\Krexx\Service\Flow\Recursion;
-use Brainworxx\Krexx\Service\Misc\Encoding;
 use Brainworxx\Krexx\Service\Misc\FileinfoDummy;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
@@ -82,9 +80,19 @@ class ProcessStringTest extends AbstractHelper
     }
 
     /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new ProcessString(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
+    /**
      * Testing the setting of the pool and of the file info class.
      */
-    public function testConstructWithoutFinfo()
+    public function testConstructWithoutFinfo(): void
     {
         // Mock the class_exists method, to return always false.
         $classExistMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'class_exists');
@@ -100,13 +108,12 @@ class ProcessStringTest extends AbstractHelper
 
         // And while we are at it, test if the internal setting was set.
         $this->assertNotNull($this->retrieveValueByReflection('scalarString', $processor));
-        $this->assertNotNull($this->retrieveValueByReflection('analyseScalar', $processor));
     }
 
     /**
      * Testing the setting of the pool and of the file info class.
      */
-    public function testConstructWithFinfo()
+    public function testConstructWithFinfo(): void
     {
         // Mock the class_exists method, to return always true.
         $classExistMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'class_exists');
@@ -120,7 +127,7 @@ class ProcessStringTest extends AbstractHelper
     /**
      * Testing with a normal short string.
      */
-    public function testProcessNormal()
+    public function testProcessNormal(): void
     {
         $fixture = 'short string';
         $model = $this->prepareMocksAndRunTest($fixture . '<');
@@ -135,7 +142,7 @@ class ProcessStringTest extends AbstractHelper
     /**
      * Testing with broken encoding.
      */
-    public function testProcessBrokenEncodung()
+    public function testProcessBrokenEncodung(): void
     {
         $fixture = 'short string';
         $model = $this->prepareMocksAndRunTest($fixture . substr('üä', 1));
@@ -151,7 +158,7 @@ class ProcessStringTest extends AbstractHelper
     /**
      * Testing with a large string.
      */
-    public function testProcessLargerString()
+    public function testProcessLargerString(): void
     {
         $fixture = 'a string larger than 20 chars';
         $length = strlen($fixture);
@@ -169,7 +176,7 @@ class ProcessStringTest extends AbstractHelper
     /**
      * Testing with a string larger than 50 characters.
      */
-    public function testProcessHugeString()
+    public function testProcessHugeString(): void
     {
         $fixture = 'This is a very large string, bigger than 50 chars. Lorem ipsum and so on, just to fill it up.';
         $length = strlen('>' . $fixture . '<');
@@ -191,7 +198,7 @@ class ProcessStringTest extends AbstractHelper
     /**
      * Testing with linebreaks in the fixture.
      */
-    public function testProcessWithLinebreaks()
+    public function testProcessWithLinebreaks(): void
     {
         $fixture = 'some' . PHP_EOL . 'string';
         $model = $this->prepareMocksAndRunTest($fixture . '&');
@@ -209,7 +216,7 @@ class ProcessStringTest extends AbstractHelper
     /**
      * Testing the triggering of the scalar analysis and its recursion handling.
      */
-    public function testProcessWithScalar()
+    public function testProcessWithScalar(): void
     {
         $fixture = '{"whatever": "okay"}';
         $renderNothing = new RenderNothing(Krexx::$pool);
@@ -239,38 +246,6 @@ class ProcessStringTest extends AbstractHelper
         );
     }
 
-    public function testProcessWithoutScalar()
-    {
-        // Deactivate the scalar analysis.
-        Krexx::$pool->rewrite[File::class] = ConfigSupplier::class;
-        ConfigSupplier::$overwriteValues[ConfigConstInterface::SETTING_ANALYSE_SCALAR] = false;
-        new Config(\Krexx::$pool);
-
-        $fixture = '{"whatever": "okay"}';
-        $renderNothing = new RenderNothing(Krexx::$pool);
-        Krexx::$pool->render = $renderNothing;
-
-        $recursionHandlerMock = $this->createMock(Recursion::class);
-        $recursionHandlerMock->expects($this->never())
-            ->method('isInMetaHive');
-        $recursionHandlerMock->expects($this->never())
-            ->method('addToMetaHive');
-        Krexx::$pool->recursionHandler = $recursionHandlerMock;
-
-        $model = new Model(Krexx::$pool);
-        $model->setData($fixture);
-
-        $this->processString = new ProcessString(Krexx::$pool);
-        $this->processString->canHandle($model);
-        $this->processString->handle();
-
-        $this->assertCount(
-            1,
-            $renderNothing->model['renderExpandableChild'],
-            'The first one should be in the expandable child.'
-        );
-    }
-
     /**
      * Prepare the mocks and run the test. Nice, huh?
      * The things you do to prevent a bad rating . . .
@@ -280,7 +255,7 @@ class ProcessStringTest extends AbstractHelper
      * @param int $length
      * @param $bufferOutput
      *
-     * @return \Brainworxx\Krexx\Analyse\Model
+     * @return Model
      */
     protected function prepareMocksAndRunTest(string $fixture, $bufferOutput = null): Model
     {
@@ -311,7 +286,7 @@ class ProcessStringTest extends AbstractHelper
     /**
      * Test the check if we can handle the array processing.
      */
-    public function testCanHandle()
+    public function testCanHandle(): void
     {
         $processor = new ProcessString(Krexx::$pool);
         $model = new Model(Krexx::$pool);

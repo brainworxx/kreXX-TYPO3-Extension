@@ -57,21 +57,23 @@ class EditSettingsController extends AbstractController
 
         // We will not check this for the cookie config, to avoid people locking
         // themselves out.
-        $this->pool->emergencyHandler->setDisable(true);
+        $this->pool->emergencyHandler->setDisable(bool: true);
 
         // Find caller.
-        $headLine = $this->pool->messages->getHelp('headlineCookieConf');
-        $caller = $this->callerFinder->findCaller($headLine, []);
-        $this->pool->chunks->addMetadata($caller);
+        $headLine = $this->pool->messages->getHelp(key: 'headlineCookieConf');
+        $caller = $this->callerFinder->findCaller(headline: $headLine, data: []);
+        $this->pool->chunks->addMetadata(caller: $caller);
 
         // Render it.
-        $footer = $this->outputFooter($caller, true);
-        $this->pool->chunks->detectEncoding($footer);
+        $footer = $this->outputFooter(caller: $caller, isExpanded: true);
+        $this->pool->chunks->detectEncoding(string: $footer);
 
         $this->outputService
-            ->addChunkString($this->pool->render->renderHeader($headLine, $this->outputCssAndJs()))
-            ->addChunkString($footer);
-        $this->pool->emergencyHandler->setDisable(false);
+            ->addChunkString(chunkString: $this->pool->render->renderHeader(
+                headline: $headLine,
+                cssJs: $this->outputCssAndJs()
+            ))->addChunkString(chunkString: $footer);
+        $this->pool->emergencyHandler->setDisable(bool: false);
         $this->outputService->finalize();
 
         return $this;

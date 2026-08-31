@@ -72,7 +72,7 @@ class KrexxTest extends AbstractHelper
         $this->setValueByReflection(static::TIME_KEEPING, [], TimerController::class);
     }
 
-    protected function getDirContents($dir, &$results = array())
+    protected function getDirContents($dir, &$results = [])
     {
         $files = scandir($dir);
 
@@ -82,7 +82,7 @@ class KrexxTest extends AbstractHelper
                 if ($this->endsWith($path, '.php')) {
                     $results[] = $path;
                 }
-            } elseif ($value != "." && $value != "..") {
+            } elseif ($value !== "." && $value !== "..") {
                 $this->getDirContents($path, $results);
             }
         }
@@ -99,19 +99,19 @@ class KrexxTest extends AbstractHelper
      */
     protected function endsWith($string, $test)
     {
-        $stringLength = strlen($string);
-        $testLength = strlen($test);
+        $stringLength = strlen((string) $string);
+        $testLength = strlen((string) $test);
         if ($testLength > $stringLength) {
             return false;
         }
-        return substr_compare($string, $test, $stringLength - $testLength, $testLength) === 0;
+        return substr_compare((string) $string, (string) $test, $stringLength - $testLength, $testLength) === 0;
     }
 
     /**
      * Testing the bootstrapping for class loading and creating
      * the krexx() shorthand.
      */
-    public function testBootstrapKrexx()
+    public function testBootstrapKrexx(): void
     {
         // Testing the simple stuff
         $this->assertDirectoryExists(KREXX_DIR);
@@ -123,8 +123,8 @@ class KrexxTest extends AbstractHelper
         $fileList = $this->getDirContents(KREXX_DIR . 'src');
         foreach ($fileList as $file) {
             $className = $nameSpace . str_replace(
-                array($dir, '.php', DIRECTORY_SEPARATOR),
-                array('', '', '\\'),
+                [$dir, '.php', DIRECTORY_SEPARATOR],
+                ['', '', '\\'],
                 $file
             );
             $result = interface_exists($className) || class_exists($className) || trait_exists($className);
@@ -136,7 +136,7 @@ class KrexxTest extends AbstractHelper
      * Test if we can take a moment while kreXX is disabled.
      *
      */
-    public function testTimerMomentDisabled()
+    public function testTimerMomentDisabled(): void
     {
         // Disable it
         Krexx::disable();
@@ -152,7 +152,7 @@ class KrexxTest extends AbstractHelper
      * Test if we can take a moment while kreXX is analying something else.
      *
      */
-    public function testTimerMomentInProgress()
+    public function testTimerMomentInProgress(): void
     {
         // Disable it by acting like we are in the middle of an analysis.
         AbstractController::$analysisInProgress = true;
@@ -168,7 +168,7 @@ class KrexxTest extends AbstractHelper
      * Testing, if it can be disabled, as expected.
      *
      */
-    public function testTimerMomentEnabled()
+    public function testTimerMomentEnabled(): void
     {
         // Test the normal behaviour.
         Krexx::timerMoment('test');
@@ -185,7 +185,7 @@ class KrexxTest extends AbstractHelper
     /**
      * Testing if we get an output while kreXX is disabled.
      */
-    public function testTimerEndDisabled()
+    public function testTimerEndDisabled(): void
     {
         // Disable it
         Krexx::$pool->config->setDisabled(true);
@@ -199,7 +199,7 @@ class KrexxTest extends AbstractHelper
     /**
      * Test if we can get an output, while another analysis is in progress.
      */
-    public function testTimerEndInProgress()
+    public function testTimerEndInProgress(): void
     {
         // Disable it by acting like we are in the middle of an analysis.
         AbstractController::$analysisInProgress = true;
@@ -213,7 +213,7 @@ class KrexxTest extends AbstractHelper
     /**
      * Test if we can get an output at all.
      */
-    public function testTimerEndNormal()
+    public function testTimerEndNormal(): void
     {
         $this->mockDebugBacktraceStandard();
         Krexx::timerEnd();
@@ -224,7 +224,7 @@ class KrexxTest extends AbstractHelper
     /**
      * Test if we can get an output when disabled.
      */
-    public function testOpenDisabled()
+    public function testOpenDisabled(): void
     {
         // Disable it
         Krexx::$pool->config->setDisabled(true);
@@ -237,7 +237,7 @@ class KrexxTest extends AbstractHelper
     /**
      * Test if we can get an output, while another analysis is in progress.
      */
-    public function testOpenInProgress()
+    public function testOpenInProgress(): void
     {
         // Disable it by acting like we are in the middle of an analysis.
         AbstractController::$analysisInProgress = true;
@@ -250,7 +250,7 @@ class KrexxTest extends AbstractHelper
     /**
      * Test if we can get an output at all.
      */
-    public function testOpen()
+    public function testOpen(): void
     {
         $this->mockDebugBacktraceStandard();
 
@@ -262,7 +262,7 @@ class KrexxTest extends AbstractHelper
     /**
      * Test if we can get an output when disabled.
      */
-    public function testBacktraceDisabled()
+    public function testBacktraceDisabled(): void
     {
         // Disable it
         Krexx::$pool->config->setDisabled(true);
@@ -275,7 +275,7 @@ class KrexxTest extends AbstractHelper
     /**
      * Test if we can get an output, while another analysis is in progress.
      */
-    public function testBacktraceInProgress()
+    public function testBacktraceInProgress(): void
     {
         // Disable it by acting like we are in the middle of an analysis.
         AbstractController::$analysisInProgress = true;
@@ -288,7 +288,7 @@ class KrexxTest extends AbstractHelper
     /**
      * Test if we can get an output at all.
      */
-    public function testBacktrace()
+    public function testBacktrace(): void
     {
         // We make this a short one.
         Krexx::$pool->config->settings[Fallback::SETTING_MAX_STEP_NUMBER]->setValue(1);
@@ -302,7 +302,7 @@ class KrexxTest extends AbstractHelper
     /**
      * Test if it sets the value if kreXX beeing disabled.
      */
-    public function testDisable()
+    public function testDisable(): void
     {
         $this->assertFalse(Krexx::$pool->config->getSetting(Fallback::SETTING_DISABLED));
         Krexx::disable();
@@ -312,7 +312,7 @@ class KrexxTest extends AbstractHelper
     /**
      * Test the edit settings, normally.
      */
-    public function testEditSettings()
+    public function testEditSettings(): void
     {
         $this->mockDebugBacktraceStandard();
         Krexx::editSettings();
@@ -323,7 +323,7 @@ class KrexxTest extends AbstractHelper
     /**
      * Test if we can get an output when disabled.
      */
-    public function testEditSettingsDisabled()
+    public function testEditSettingsDisabled(): void
     {
         // Disable it
         Krexx::$pool->config->setDisabled(true);
@@ -356,37 +356,19 @@ class KrexxTest extends AbstractHelper
             ->method('getSource')
             ->willReturn($forcedLogging);
 
-        $settingsMockAjax = $this->createMock(Model::class);
-        $settingsMockAjax->expects($this->once())
-            ->method('setSource')
-            ->with($this->equalTo($forcedLogging))
-            ->willReturn($settingsMockAjax);
-        $settingsMockAjax->expects($this->once())
-            ->method('setValue')
-            ->with($this->equalTo(false));
-        $settingsMockAjax->expects($this->any())
-            ->method('getValue')
-            ->willReturn(false);
-        $settingsMockAjax->expects($this->once())
-            ->method('getSource')
-            ->willReturn($forcedLogging);
-
         // Inject the mock into the settings
         Krexx::$pool->config->settings[Fallback::SETTING_DESTINATION] = $settingsMockDest;
-        Krexx::$pool->config->settings[Fallback::SETTING_DETECT_AJAX] = $settingsMockAjax;
     }
 
     /**
      * Test, if the forced logger worked as expected afterwards.
      *
      * @param $settingsMockDest
-     * @param $settingsMockAjax
      */
-    protected function endForcedLogger($settingsMockDest, $settingsMockAjax)
+    protected function endForcedLogger($settingsMockDest)
     {
         // Test if the mock are gone.
         $this->assertNotEquals($settingsMockDest, Krexx::$pool->config->settings[Fallback::SETTING_DESTINATION]);
-        $this->assertNotEquals($settingsMockAjax, Krexx::$pool->config->settings[Fallback::SETTING_DETECT_AJAX]);
 
         // Test if we have a logfile.
         $filesystemIterator = new FilesystemIterator(
@@ -399,13 +381,12 @@ class KrexxTest extends AbstractHelper
     /**
      * Test the forced logger.
      */
-    public function testLog()
+    public function testLog(): void
     {
         $this->mockDebugBacktraceStandard();
 
         $this->beginForcedLogger();
         $settingsMockDest = Krexx::$pool->config->settings[Fallback::SETTING_DESTINATION];
-        $settingsMockAjax = Krexx::$pool->config->settings[Fallback::SETTING_DETECT_AJAX];
 
         // Run a simple analysis.
         Krexx::log();
@@ -413,19 +394,18 @@ class KrexxTest extends AbstractHelper
         // The counter should be at 1.
         $this->assertEquals(1, $this->retrieveValueByReflection(static::KREXX_COUNT, Krexx::$pool->emergencyHandler));
 
-        $this->endForcedLogger($settingsMockDest, $settingsMockAjax);
+        $this->endForcedLogger($settingsMockDest);
     }
 
     /**
      * Testing the backtrace logger.
      */
-    public function testLogBacktrace()
+    public function testLogBacktrace(): void
     {
         $this->mockDebugBacktraceStandard();
 
         $this->beginForcedLogger();
         $settingsMockDest = Krexx::$pool->config->settings[Fallback::SETTING_DESTINATION];
-        $settingsMockAjax = Krexx::$pool->config->settings[Fallback::SETTING_DETECT_AJAX];
 
         // We make this a short one.
         Krexx::$pool->config->settings[Fallback::SETTING_MAX_STEP_NUMBER]->setValue(1);
@@ -434,31 +414,30 @@ class KrexxTest extends AbstractHelper
         // The counter should be at 0.
         $this->assertEquals(1, $this->retrieveValueByReflection(static::KREXX_COUNT, Krexx::$pool->emergencyHandler));
 
-        $this->endForcedLogger($settingsMockDest, $settingsMockAjax);
+        $this->endForcedLogger($settingsMockDest);
     }
 
     /**
      * Testing the timer logging.
      */
-    public function testLogTimerEnd()
+    public function testLogTimerEnd(): void
     {
         $this->mockDebugBacktraceStandard();
 
         $this->beginForcedLogger();
         $settingsMockDest = Krexx::$pool->config->settings[Fallback::SETTING_DESTINATION];
-        $settingsMockAjax = Krexx::$pool->config->settings[Fallback::SETTING_DETECT_AJAX];
 
         Krexx::logTimerEnd();
         // The counter should go up to 1
         $this->assertEquals(1, $this->retrieveValueByReflection(static::KREXX_COUNT, Krexx::$pool->emergencyHandler));
 
-        $this->endForcedLogger($settingsMockDest, $settingsMockAjax);
+        $this->endForcedLogger($settingsMockDest);
     }
 
     /**
      * Testing, if kreXX is disabled, if the call comes from the wrong IP.
      */
-    public function testDisabledByIp()
+    public function testDisabledByIp(): void
     {
         // The ip settings are read as soon as the configuration is created.
         // Setting them afterwards is not possible.

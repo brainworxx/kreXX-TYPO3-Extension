@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Configuration output methods.
@@ -52,6 +53,15 @@ use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 class ThroughConfig extends AbstractCallback implements CallbackConstInterface, ConfigConstInterface
 {
     /**
+     * Inject the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
+    /**
      * Renders whole configuration.
      *
      * @return string
@@ -61,10 +71,10 @@ class ThroughConfig extends AbstractCallback implements CallbackConstInterface, 
     {
         return $this->dispatchStartEvent() . $this->renderAllSections() .
             $this->pool->render->renderButton(
-                $this->pool->createClass(Model::class)
-                    ->setName('kresetbutton')
-                    ->setNormal($this->pool->messages->getHelp('resetCookiesReadable'))
-                    ->setHelpid('kresetbutton')
+                model: $this->pool->createClass(classname: Model::class)
+                    ->setName(name: 'kresetbutton')
+                    ->setNormal(normal: $this->pool->messages->getHelp(key: 'resetCookiesReadable'))
+                    ->setHelpid(helpId: 'kresetbutton')
             );
     }
 
@@ -86,15 +96,15 @@ class ThroughConfig extends AbstractCallback implements CallbackConstInterface, 
         $configOutput = '';
         foreach ($sections as $sectionName => $sectionData) {
             // Render a whole section.
-            if ($this->hasSomethingToRender($sectionData)) {
+            if ($this->hasSomethingToRender(sectionData: $sectionData)) {
                 $configOutput .= $this->pool->render->renderExpandableChild(
-                    $this->pool->createClass(Model::class)
-                        ->setName($this->pool->messages->getHelp($sectionName . 'Readable'))
-                        ->setType($this->pool->messages->getHelp('configType'))
-                        ->setNormal(static::UNKNOWN_VALUE)
-                        ->addParameter(static::PARAM_DATA, $sectionData)
+                    model: $this->pool->createClass(classname: Model::class)
+                        ->setName(name: $this->pool->messages->getHelp(key: $sectionName . 'Readable'))
+                        ->setType(type: $this->pool->messages->getHelp(key: 'configType'))
+                        ->setNormal(normal: static::UNKNOWN_VALUE)
+                        ->addParameter(name: static::PARAM_DATA, value: $sectionData)
                         ->injectCallback(
-                            $this->pool->createClass(ConfigSection::class)
+                            object: $this->pool->createClass(classname: ConfigSection::class)
                         )
                 );
             }

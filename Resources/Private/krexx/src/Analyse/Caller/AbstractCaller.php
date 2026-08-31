@@ -45,13 +45,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 abstract class AbstractCaller
 {
     /**
-     * Our pool where we keep al relevant classes.
-     *
-     * @var Pool
-     */
-    protected Pool $pool;
-
-    /**
      * Pattern that we are using to identify the caller.
      *
      * We use this one to identify the line from which kreXX was called.
@@ -75,10 +68,8 @@ abstract class AbstractCaller
      * @param Pool $pool
      *   The pool, where we store the classes we need.
      */
-    public function __construct(Pool $pool)
-    {
-        $this->pool = $pool;
-    }
+    abstract public function __construct(Pool $pool);
+
 
     /**
      * Setter for the identifier pattern.
@@ -91,7 +82,7 @@ abstract class AbstractCaller
      */
     public function setPattern(string $pattern): AbstractCaller
     {
-        $this->pattern = strtolower($pattern);
+        $this->pattern = strtolower(string: $pattern);
         return $this;
     }
 
@@ -124,7 +115,7 @@ abstract class AbstractCaller
      *     'url' => 'http://some.server.xx/path/'
      *   );
      */
-    abstract public function findCaller(string $headline, $data): array;
+    abstract public function findCaller(string $headline, mixed $data): array;
 
     /**
      * Get the analysis type for the metadata and the page title.
@@ -139,15 +130,15 @@ abstract class AbstractCaller
      * @return string
      *   The analysis type.
      */
-    protected function getType(string $headline, string $varname, $data): string
+    protected function getType(string $headline, string $varname, mixed $data): string
     {
-        if (empty($headline)) {
-            $type = is_object($data) ? get_class($data) : gettype($data);
+        if ($headline === '' || $headline === '0') {
+            $type = get_debug_type($data);
             if ($type === 'double') {
                 $type = 'float';
             }
 
-            return $this->pool->messages->getHelp('analysisOf') . $varname . ', ' . $type;
+            return $this->pool->messages->getHelp(key: 'analysisOf') . $varname . ', ' . $type;
         }
 
         // We already have a headline and will not touch it.
@@ -181,8 +172,8 @@ abstract class AbstractCaller
         // SSL or no SSL.
         $ssl = !empty($server['HTTPS']) && $server['HTTPS'] === 'on';
 
-        $protocol = strtolower($server['SERVER_PROTOCOL']);
-        $protocol = substr($protocol, 0, strpos($protocol, '/'));
+        $protocol = strtolower(string: (string) $server['SERVER_PROTOCOL']);
+        $protocol = substr(string: $protocol, offset: 0, length: strpos(haystack: $protocol, needle: '/'));
         if ($ssl) {
             $protocol .= 's';
         }
@@ -193,6 +184,6 @@ abstract class AbstractCaller
 
         $host = $server['HTTP_HOST'] ?? $server['SERVER_NAME'] . $port;
 
-        return $this->pool->encodingService->encodeString($protocol . '://' . $host . $server['REQUEST_URI']);
+        return $this->pool->encodingService->encodeString(data: $protocol . '://' . $host . $server['REQUEST_URI']);
     }
 }

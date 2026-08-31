@@ -64,7 +64,7 @@ class ReflectionClassTest extends AbstractHelper
      * Testing the array casting of an object as well as creating the actual
      * reflection.
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $fixture = new stdClass();
         $fixture->valueOne = 'qwer';
@@ -85,7 +85,7 @@ class ReflectionClassTest extends AbstractHelper
      * Testing the array casting of an ArrayObject as well as creating the actual
      * reflection.
      */
-    public function testConstructWithArrayObject()
+    public function testConstructWithArrayObject(): void
     {
         $fixture = new \ArrayObject(['key1' => 'value1', 'key2' => 'value2']);
         set_error_handler(function (){});
@@ -105,7 +105,7 @@ class ReflectionClassTest extends AbstractHelper
     /**
      * Simple getter tester.
      */
-    public function testGetData()
+    public function testGetData(): void
     {
         $fixture = new stdClass();
         $reflection = new ReflectionClass($fixture);
@@ -117,7 +117,7 @@ class ReflectionClassTest extends AbstractHelper
      * It may not look like it, but this is the most important part of kreXX.
      * Here we retrieve the values from objects.
      */
-    public function testRetrieveValue()
+    public function testRetrieveValue(): void
     {
         $normal = 'normal';
         $fixture = new PublicFixture();
@@ -168,7 +168,7 @@ class ReflectionClassTest extends AbstractHelper
     /**
      * We deliberately throw an error when retrieving the value.
      */
-    public function testRetrieveValueWithErrors()
+    public function testRetrieveValueWithErrors(): void
     {
         // Doing it with an undeclared property.
         $reflectionMock = $this->createMock(UndeclaredProperty::class);
@@ -208,7 +208,7 @@ class ReflectionClassTest extends AbstractHelper
     /**
      * Test the retrieval of the actually implemented interfaces of this class.
      */
-    public function testGetInterfaces()
+    public function testGetInterfaces(): void
     {
         $fixture = new PublicFixture();
         $reflection = new ReflectionClass($fixture);
@@ -228,7 +228,7 @@ class ReflectionClassTest extends AbstractHelper
     /**
      * Test the retrieval of the traits.
      */
-    public function testGetTraits()
+    public function testGetTraits(): void
     {
         $fixture = new ComplexMethodFixture();
         $reflection = new ReflectionClass($fixture);
@@ -244,7 +244,7 @@ class ReflectionClassTest extends AbstractHelper
     /**
      * Test the retrieval and caching of the parent class.
      */
-    public function testGetParentClass()
+    public function testGetParentClass(): void
     {
         $fixture = new SimpleFixture();
         $reflection = new ReflectionClass($fixture);
@@ -259,7 +259,7 @@ class ReflectionClassTest extends AbstractHelper
     /**
      * Test the retrieval of the object vars.
      */
-    public function testGetObjectVars()
+    public function testGetObjectVars(): void
     {
         $simple = new SimpleFixture();
         $reflection = new ReflectionClass($simple);

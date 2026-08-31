@@ -57,7 +57,7 @@ class ExpandableChildTest extends AbstractRenderSmokyGrey
     /**
      * Test the rendering of an expandable child.
      */
-    public function testRenderExpandableChild()
+    public function testRenderExpandableChild(): void
     {
         $this->mockModel(static::GET_NAME, 'Model name');
         $this->mockModel(static::GET_CONNECTOR_LANGUAGE, 'Turbo Pasquale');
@@ -108,7 +108,7 @@ class ExpandableChildTest extends AbstractRenderSmokyGrey
     /**
      * Test the rendering of an expandable child, but with a small connector.
      */
-    public function testRenderExpandableChildSmallConnector()
+    public function testRenderExpandableChildSmallConnector(): void
     {
         $this->mockModel(static::GET_CONNECTOR_RIGHT, 'xx');
         $this->mockModel(static::GET_RETURN_TYPE, '');
@@ -121,7 +121,7 @@ class ExpandableChildTest extends AbstractRenderSmokyGrey
         $this->assertStringNotContainsString('xx', $result, 'We do not render small connectors.');
     }
 
-    public function testRenderExpandableChildEmergency()
+    public function testRenderExpandableChildEmergency(): void
     {
         $modelMock = $this->createMock(Model::class);
         $modelMock->expects($this->never())

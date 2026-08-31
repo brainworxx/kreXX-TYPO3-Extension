@@ -285,10 +285,6 @@ class ThroughMethodsTest extends AbstractHelper
      */
     public function testCallMeAttributes()
     {
-        if (version_compare(PHP_VERSION, '8.1.0', '<')) {
-            $this->markTestSkipped('Wrong PHP version.');
-        }
-
         // Test the event calling.
         $this->mockEventService(
             [$this->startEvent, $this->throughMethods],

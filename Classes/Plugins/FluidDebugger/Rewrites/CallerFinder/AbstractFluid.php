@@ -44,6 +44,8 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionException;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use ReflectionClass;
+use TYPO3Fluid\Fluid\View\ViewInterface;
+use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 
 /**
  * Contains all methods, that are used by the fluid caller finder classes.
@@ -100,14 +102,14 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
     /**
      * @var mixed
      */
-    protected $parsedTemplate;
+    protected mixed $parsedTemplate;
 
     /**
      * The line in the template file. that we were able to resolve.
      *
      * @var string|int
      */
-    protected $line = self::FLUID_NOT_AVAILABLE;
+    protected string|int $line = self::FLUID_NOT_AVAILABLE;
 
     /**
      * The variable name, that we were able to resolve.
@@ -146,10 +148,8 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
      *
      * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        parent::__construct($pool);
-
         // Handling the injections.
         $this->varname = static::FLUID_VARIABLE;
         $this->view = $this->pool->registry->get(DebugViewHelper::REGISTRY_VIEW);
@@ -222,7 +222,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
         $this->resolveLineAndVarName();
 
         return [
-            static::TRACE_FILE => $this->pool->fileService->filterFilePath($this->path),
+            static::TRACE_FILE => $this->path,
             static::TRACE_LINE => $this->line,
             static::TRACE_VARNAME => $this->varname,
             static::TRACE_TYPE => $this->getType($messages->getHelp($helpKey), $this->varname, $data),
@@ -309,7 +309,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
      * @return string
      *   The analysis type.
      */
-    protected function getType(string $headline, string $varname, $data): string
+    protected function getType(string $headline, string $varname, mixed $data): string
     {
         if (is_object($data)) {
             $type = get_class($data);
@@ -336,7 +336,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
     protected function checkForComplicatedStuff(string $varname): string
     {
         // We check for : and -> to see if we are facing some inline stuff
-        if (strpos($varname, ':') !== false || strpos($varname, '->') !== false) {
+        if (str_contains($varname, ':') || str_contains($varname, '->')) {
             // Double escaping for the JS insert.
             // The things you have to do.
             $code = htmlspecialchars(htmlspecialchars('<f:variable value="{')) .

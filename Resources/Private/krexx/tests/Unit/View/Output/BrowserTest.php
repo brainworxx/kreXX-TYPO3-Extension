@@ -49,7 +49,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 class BrowserTest extends AbstractHelper
 {
     /**
-     * @var \Brainworxx\Krexx\View\Output\Browser
+     * @var Browser
      */
     protected $browser;
 
@@ -66,7 +66,7 @@ class BrowserTest extends AbstractHelper
     /**
      * Test the initializing of the send-stuff-to-browser mechanism.
      */
-    public function testShutdownCallback()
+    public function testShutdownCallback(): void
     {
         $stringOne = '$stringOne';
         $stringTwo = '$stringTwo';
@@ -97,7 +97,7 @@ class BrowserTest extends AbstractHelper
     /**
      * Test the registration of this class in the php shutdown phase.
      */
-    public function testFinalize()
+    public function testFinalize(): void
     {
         $shutdownFunction = $this->getFunctionMock(
             '\\Brainworxx\\Krexx\\View\\Output\\',

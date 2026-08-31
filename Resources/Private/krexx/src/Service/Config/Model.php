@@ -47,7 +47,7 @@ class Model implements ConfigConstInterface
      *
      * @var int|string|bool|null
      */
-    protected $value;
+    protected string|int|bool|null $value = null;
 
     /**
      * The section of this setting.
@@ -113,7 +113,7 @@ class Model implements ConfigConstInterface
      * @return $this
      *   Return $this for Chaining.
      */
-    public function setValue($value): Model
+    public function setValue(string|int|null|bool $value): Model
     {
         if ($value === static::VALUE_TRUE) {
             $value = true;
@@ -160,7 +160,7 @@ class Model implements ConfigConstInterface
      *
      * @return int|string|bool|null
      */
-    public function getValue()
+    public function getValue(): bool|int|string|null
     {
         return $this->value;
     }

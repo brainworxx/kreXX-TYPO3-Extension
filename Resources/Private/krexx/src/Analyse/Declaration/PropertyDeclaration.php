@@ -55,25 +55,30 @@ class PropertyDeclaration extends AbstractDeclaration
     {
         $messages = $this->pool->messages;
         // Early returns for simple cases.
-        if (isset($reflection->isUndeclared)) {
-            return $messages->getHelp('metaUndeclared');
+        if (property_exists($reflection, 'isUndeclared') && $reflection->isUndeclared !== null) {
+            return $messages->getHelp(key: 'metaUndeclared');
         }
 
         $reflectionClass = $reflection->getDeclaringClass();
         if ($reflectionClass->isInternal()) {
-            return $messages->getHelp('metaPredeclared');
+            return $messages->getHelp(key: 'metaPredeclared');
         }
 
         $traits = $reflectionClass->getTraits();
         if (!empty($traits)) {
             // Update the declaring class reflection from the traits.
-            $reflectionClass = $this->retrieveDeclaringClassFromTraits($traits, $reflection, $reflectionClass);
+            $reflectionClass = $this->retrieveDeclaringClassFromTraits(
+                traits: $traits,
+                refProperty: $reflection,
+                originalRef: $reflectionClass
+            );
         }
         $result = '';
         if ($reflectionClass !== null) {
             $result = $reflectionClass->getFileName() .
                 $this->pool->render->renderLinebreak() .
-                ($reflectionClass->isTrait() ? $messages->getHelp('metaInTrait') : $messages->getHelp('metaInClass')) .
+                ($reflectionClass->isTrait() ?
+                    $messages->getHelp(key: 'metaInTrait') : $messages->getHelp(key: 'metaInClass')) .
                 $reflectionClass->name;
         }
 
@@ -89,7 +94,7 @@ class PropertyDeclaration extends AbstractDeclaration
     public function retrieveNamedPropertyType(ReflectionProperty $refProperty): string
     {
         if ($refProperty->hasType()) {
-            return trim($this->retrieveNamedType($refProperty->getType()));
+            return trim(string: $this->retrieveNamedType(namedType: $refProperty->getType()));
         }
 
         return '';
@@ -125,8 +130,8 @@ class PropertyDeclaration extends AbstractDeclaration
         $propertyName = $refProperty->name;
 
         foreach ($traits as $trait) {
-            if ($trait->hasProperty($propertyName)) {
-                if (count($trait->getTraitNames()) > 0) {
+            if ($trait->hasProperty(name: $propertyName)) {
+                if (count(value: $trait->getTraitNames()) > 0) {
                     // Multiple layers of traits!
                     return null;
                 }

@@ -48,7 +48,7 @@ class FooterTest extends AbstractRenderSmokyGrey
     /**
      * Test the removal of the debug tab, when we are in config mode.
      */
-    public function testRenderFooter()
+    public function testRenderFooter(): void
     {
         $this->mockEmergencyHandler();
         $model = $this->createMock(Model::class);

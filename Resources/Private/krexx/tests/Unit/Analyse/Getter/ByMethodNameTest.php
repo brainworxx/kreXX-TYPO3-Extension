@@ -49,6 +49,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(ByMethodName::class, 'convertToSnakeCase')]
 #[CoversMethod(ByMethodName::class, 'hasResult')]
 #[CoversMethod(ByMethodName::class, 'getReflectionProperty')]
+#[CoversMethod(ByMethodName::class, '__construct')]
 class ByMethodNameTest extends AbstractGetter
 {
     public function setUp(): void
@@ -58,9 +59,19 @@ class ByMethodNameTest extends AbstractGetter
     }
 
     /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new ByMethodName(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
+    /**
      * Test the retrieval of the possible getter by the method name, simple.
      */
-    public function testRetrieveItSimple()
+    public function testRetrieveItSimple(): void
     {
         $instance = new GetterFixture();
         $classReflection = new ReflectionClass($instance);
@@ -103,7 +114,7 @@ class ByMethodNameTest extends AbstractGetter
     /**
      * Test the retrieval of the possible getter by the method name and by, deep
      */
-    public function testRetrieveItDeep()
+    public function testRetrieveItDeep(): void
     {
         $instance = new DeepGetterFixture();
         $classReflection = new ReflectionClass($instance);

@@ -39,6 +39,7 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use DateTime;
 use Throwable;
 
@@ -55,6 +56,15 @@ class ProcessInteger extends AbstractRouting implements ProcessInterface, Proces
     protected Model $model;
 
     /**
+     * Inject the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
+    /**
      * Is this one an integer?
      *
      * @param Model $model
@@ -66,7 +76,7 @@ class ProcessInteger extends AbstractRouting implements ProcessInterface, Proces
     public function canHandle(Model $model): bool
     {
         $this->model = $model;
-        return is_int($model->getData());
+        return is_int(value: $model->getData());
     }
 
     /**
@@ -83,18 +93,18 @@ class ProcessInteger extends AbstractRouting implements ProcessInterface, Proces
             $int = $this->model->getData();
             if ($int > 946681200) {
                 $this->model->addToJson(
-                    $this->pool->messages->getHelp('metaTimestamp'),
-                    (new DateTime('@' . $int))->format('d.M Y H:i:s')
+                    key: $this->pool->messages->getHelp(key: 'metaTimestamp'),
+                    value: (new DateTime(datetime: '@' . $int))->format(format: 'd.M Y H:i:s')
                 );
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             // Do nothing.
             // Not sure how this can happen.
         }
 
         return $this->pool->render->renderExpandableChild(
-            $this->dispatchProcessEvent(
-                $this->model->setNormal($this->model->getData())->setType(static::TYPE_INTEGER)
+            model: $this->dispatchProcessEvent(
+                model: $this->model->setNormal(normal: $this->model->getData())->setType(type: static::TYPE_INTEGER)
             )
         );
     }

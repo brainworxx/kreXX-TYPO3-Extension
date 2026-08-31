@@ -83,7 +83,7 @@ class ScalarStringTest extends AbstractHelper
     /**
      * Test the retrieval of the plugin scalar string analysis classes.
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         Registration::addScalarStringAnalyser(ScalarNothing::class);
         $this->scalarString = new ScalarString(Krexx::$pool);
@@ -105,7 +105,7 @@ class ScalarStringTest extends AbstractHelper
     /**
      * Test the scalar deep analysis, without any fitting callback.
      */
-    public function testHandleNoHandle()
+    public function testHandleNoHandle(): void
     {
         // Prepare the fixture.
         $string = 'whatever';
@@ -127,7 +127,7 @@ class ScalarStringTest extends AbstractHelper
      * Test the handling with a handler that handles the handling with a handle
      * Meh, the puns are killing me.
      */
-    public function testHandleNormal()
+    public function testHandleNormal(): void
     {
         // Prepare the model.
         $string = 'handle with care';

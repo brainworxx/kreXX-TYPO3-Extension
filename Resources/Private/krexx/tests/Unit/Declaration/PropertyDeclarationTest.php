@@ -55,7 +55,7 @@ class PropertyDeclarationTest extends AbstractHelper
     /**
      * Test the retrieval of the declaration place of properties
      */
-    public function testRetrieveDeclaration()
+    public function testRetrieveDeclaration(): void
     {
         $propertyDeclaration = new PropertyDeclaration(\Krexx::$pool);
 
@@ -91,7 +91,7 @@ class PropertyDeclarationTest extends AbstractHelper
     /**
      * Test the retrieval of a typed property declaration type.
      */
-    public function testRetrieveNamedPropertyType()
+    public function testRetrieveNamedPropertyType(): void
     {
         $propertyDeclaration = new PropertyDeclaration(\Krexx::$pool);
 
@@ -113,43 +113,37 @@ class PropertyDeclarationTest extends AbstractHelper
             'It is not typed, we expect an empty string.'
         );
 
+        // Test with a simple typed property.
+        $reflection = new \ReflectionClass(TypeFixture::class);
+        $fixture = $reflection->getProperty('simplyTyped');
+        $this->assertEquals(
+            'string',
+            $propertyDeclaration->retrieveNamedPropertyType($fixture),
+            'It\'s just typed that way.'
+        );
 
-        if (version_compare(phpversion(), '7.4.0', '>=')) {
-            // Test with a simple typed property.
-            $reflection = new \ReflectionClass(TypeFixture::class);
-            $fixture = $reflection->getProperty('simplyTyped');
-            $this->assertEquals(
-                'string',
-                $propertyDeclaration->retrieveNamedPropertyType($fixture),
-                'It\'s just typed that way.'
-            );
+        // Test with a class typed property.
+        $fixture = $reflection->getProperty('reflection');
+        $this->assertEquals(
+            '\Reflection',
+            $propertyDeclaration->retrieveNamedPropertyType($fixture),
+            'A namespaced class name.'
+        );
 
-            // Test with a class typed property.
-            $fixture = $reflection->getProperty('reflection');
-            $this->assertEquals(
-                '\Reflection',
-                $propertyDeclaration->retrieveNamedPropertyType($fixture),
-                'A namespaced class name.'
-            );
+        // Test with a class that does not exist.
+        $fixture = $reflection->getProperty('nothing');
+        $this->assertEquals(
+            '\Does\Not\Exist',
+            $propertyDeclaration->retrieveNamedPropertyType($fixture),
+            'A namespaced class name, that does not exist.'
+        );
 
-            // Test with a class that does not exist.
-             $fixture = $reflection->getProperty('nothing');
-             $this->assertEquals(
-                '\Does\Not\Exist',
-                $propertyDeclaration->retrieveNamedPropertyType($fixture),
-                'A namespaced class name, that does not exist.'
-            );
-        }
-
-        // Test with a union type property.
-        if (version_compare(phpversion(), '8.0.0', '>=')) {
-            $reflection = new \ReflectionClass(UnionTypeFixture::class);
-            $fixture = $reflection->getProperty('unionType');
-            $this->assertEquals(
-                'array|int|bool',
-                $propertyDeclaration->retrieveNamedPropertyType($fixture),
-                'It\'s just typed that way.'
-            );
-        }
+        $reflection = new \ReflectionClass(UnionTypeFixture::class);
+        $fixture = $reflection->getProperty('unionType');
+        $this->assertEquals(
+            'array|int|bool',
+            $propertyDeclaration->retrieveNamedPropertyType($fixture),
+            'It\'s just typed that way.'
+        );
     }
 }

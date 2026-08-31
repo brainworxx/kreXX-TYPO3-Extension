@@ -49,7 +49,7 @@ class HiddenPropertyTest extends AbstractHelper
      * Test the setting of the class reflection as well as the
      * special handling of the DateTime anomaly.
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $fixture = new ReflectionClass($this);
         $justaName = 'whatever';
@@ -73,7 +73,7 @@ class HiddenPropertyTest extends AbstractHelper
         $this->assertFalse($hiddenProperty->isPublic(), 'The DateTimeImmutable properties are not public.');
     }
 
-    public function testHasType()
+    public function testHasType(): void
     {
         $fixture = new ReflectionClass($this);
         $justaName = 'whatever';

@@ -55,7 +55,7 @@ class ModelTest extends AbstractHelper
     public const  VALUE = 'some value';
 
     /**
-     * @var \Brainworxx\Krexx\Service\Config\Model
+     * @var Model
      */
     protected $model;
 
@@ -66,13 +66,13 @@ class ModelTest extends AbstractHelper
         $this->model = new Model();
     }
 
-    public function testSetEditable()
+    public function testSetEditable(): void
     {
         $this->assertSame($this->model, $this->model->setEditable(true));
         $this->assertEquals(true, $this->model->isEditable());
     }
 
-    public function testSetType()
+    public function testSetType(): void
     {
         $this->assertSame($this->model, $this->model->setType(static::VALUE));
         $this->assertEquals(static::VALUE, $this->model->getType());
@@ -81,7 +81,7 @@ class ModelTest extends AbstractHelper
     /**
      * Testing the setting and the traqnformation into a boolean, if neccessary.
      */
-    public function testSetValue()
+    public function testSetValue(): void
     {
         $this->assertSame($this->model, $this->model->setValue(static::VALUE));
         $this->assertEquals(static::VALUE, $this->model->getValue());
@@ -93,43 +93,43 @@ class ModelTest extends AbstractHelper
         $this->assertEquals(true, $this->model->getValue());
     }
 
-    public function testGetEditable()
+    public function testGetEditable(): void
     {
         $this->setValueByReflection('editable', true, $this->model);
         $this->assertEquals(true, $this->model->isEditable());
     }
 
-    public function testGetSection()
+    public function testGetSection(): void
     {
         $this->setValueByReflection('section', static::VALUE, $this->model);
         $this->assertEquals(static::VALUE, $this->model->getSection());
     }
 
-    public function testGetType()
+    public function testGetType(): void
     {
         $this->setValueByReflection('type', static::VALUE, $this->model);
         $this->assertEquals(static::VALUE, $this->model->getType());
     }
 
-    public function testGetValue()
+    public function testGetValue(): void
     {
         $this->setValueByReflection('value', static::VALUE, $this->model);
         $this->assertEquals(static::VALUE, $this->model->getValue());
     }
 
-    public function testSetSection()
+    public function testSetSection(): void
     {
         $this->assertSame($this->model, $this->model->setSection(static::VALUE));
         $this->assertEquals(static::VALUE, $this->model->getSection());
     }
 
-    public function testGetSource()
+    public function testGetSource(): void
     {
         $this->setValueByReflection('source', static::VALUE, $this->model);
         $this->assertEquals(static::VALUE, $this->model->getSource());
     }
 
-    public function testSetSource()
+    public function testSetSource(): void
     {
         $this->assertSame($this->model, $this->model->setSource(static::VALUE));
         $this->assertEquals(static::VALUE, $this->model->getSource());

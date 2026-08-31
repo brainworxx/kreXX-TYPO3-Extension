@@ -65,10 +65,8 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(AbstractController::class, 'hasAccess')]
 #[CoversMethod(AbstractController::class, 'checkProductiveSetting')]
 #[CoversMethod(AbstractController::class, 'assignCssJs')]
-#[CoversMethod(AbstractController::class, 'assignCssJs11Style')]
 #[CoversMethod(AbstractController::class, 'generateAjaxTranslations')]
 #[CoversMethod(AbstractController::class, 'moduleTemplateRender')]
-#[CoversMethod(AbstractController::class, 'moduleTemplateRenderOld')]
 #[CoversMethod(AbstractController::class, 'assignMultiple')]
 class IndexControllerTest extends AbstractHelper
 {
@@ -197,19 +195,9 @@ class IndexControllerTest extends AbstractHelper
         }
 
         $pageRenderer = $this->createMock(PageRenderer::class);
-
-        if (method_exists(PageRenderer::class, 'loadJavaScriptModule')) {
-            $pageRenderer->expects($this->any())
-                ->method('addJsInlineCode')
-                ->with(...$this->withConsecutive(['krexxajaxtrans', $translationContent, false, false, true]));
-        } else {
-            $pageRenderer->expects($this->any())
-                ->method('addJsInlineCode')
-                ->with(...$this->withConsecutive(
-                    ['krexxjs', $jsCssFileContent],
-                    ['krexxajaxtrans', $translationContent]
-                ));
-        }
+        $pageRenderer->expects($this->any())
+            ->method('addJsInlineCode')
+            ->with(...$this->withConsecutive(['krexxajaxtrans', $translationContent, false, false, true]));
 
         $pageRenderer->expects($this->once())
             ->method('addCssInlineBlock')

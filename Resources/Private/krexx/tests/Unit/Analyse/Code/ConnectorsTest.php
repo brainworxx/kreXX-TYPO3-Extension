@@ -58,14 +58,14 @@ class ConnectorsTest extends AbstractHelper
     }
 
     /**
-     * @var \Brainworxx\Krexx\Analyse\Code\Connectors
+     * @var Connectors
      */
     protected $connectors;
 
     /**
      * Test the setting of the parameters
      */
-    public function testSetParameters()
+    public function testSetParameters(): void
     {
         $this->connectors->setParameters(static::TEST_STRING);
         $this->assertEquals(static::TEST_STRING, $this->connectors->getParameters());
@@ -74,7 +74,7 @@ class ConnectorsTest extends AbstractHelper
     /**
      * Test the setter of the type
      */
-    public function testSetType()
+    public function testSetType(): void
     {
         $this->connectors->setType(static::TEST_STRING);
         $this->assertEquals(static::TEST_STRING, $this->retrieveValueByReflection('type', $this->connectors));
@@ -83,7 +83,7 @@ class ConnectorsTest extends AbstractHelper
     /**
      * Test the getter for the left connector.
      */
-    public function testGetConnectorLeft()
+    public function testGetConnectorLeft(): void
     {
         // Without custom connector.
         $this->connectors->setType($this->connectors::CONNECTOR_ASSOCIATIVE_ARRAY);
@@ -97,7 +97,7 @@ class ConnectorsTest extends AbstractHelper
     /**
      * Test the getter for the right connector.
      */
-    public function testGetConnectorRight()
+    public function testGetConnectorRight(): void
     {
         // Test with methods and without parameters
         $this->connectors->setType($this->connectors::CONNECTOR_STATIC_METHOD);
@@ -121,7 +121,7 @@ class ConnectorsTest extends AbstractHelper
     /**
      * Test the setter for a custom connector left.
      */
-    public function testSetCustomconnectorLeft()
+    public function testSetCustomconnectorLeft(): void
     {
         $this->connectors->setCustomConnectorLeft(static::TEST_STRING);
         $this->assertEquals(static::TEST_STRING, $this->connectors->getConnectorLeft());
@@ -130,7 +130,7 @@ class ConnectorsTest extends AbstractHelper
     /**
      * Test the getLanguage
      */
-    public function testGetLanguage()
+    public function testGetLanguage(): void
     {
         $this->assertEquals('php', $this->connectors->getLanguage());
     }

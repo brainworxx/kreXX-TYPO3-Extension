@@ -39,6 +39,7 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Processing of other types of values.
@@ -53,6 +54,15 @@ class ProcessOther extends AbstractRouting implements ProcessInterface
      * @var Model
      */
     protected Model $model;
+
+    /**
+     * Inject the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
 
     /**
      * Fall back to telling the dev to create a ticket, requesting an analysis
@@ -79,12 +89,12 @@ class ProcessOther extends AbstractRouting implements ProcessInterface
     public function handle(): string
     {
         // Unknown type, better encode it, just to be sure.
-        $type = $this->pool->encodingService->encodeString(gettype($this->model->getData()));
+        $type = $this->pool->encodingService->encodeString(data: gettype(value: $this->model->getData()));
         return $this->pool->render->renderExpandableChild(
-            $this->dispatchProcessEvent(
-                $this->model->setType($type)
-                    ->setNormal($this->pool->messages->getHelp('UnhandledType') . $type)
-                    ->setHelpid('unhandedOtherHelp')
+            model: $this->dispatchProcessEvent(
+                model: $this->model->setType(type: $type)
+                    ->setNormal(normal: $this->pool->messages->getHelp(key: 'UnhandledType') . $type)
+                    ->setHelpid(helpId: 'unhandedOtherHelp')
             )
         );
     }

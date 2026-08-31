@@ -68,16 +68,9 @@ abstract class AbstractFactory
      */
     public function __construct()
     {
-        $this->errorCallback = function (
-            int $errno,
-            string $errstr,
-            ?string $errfile = null,
-            ?int $errline = null,
-            ?array $errcontext = null
-        ): bool {
+        $this->errorCallback = 
             // Do nothing.
-            return true;
-        };
+            (fn(int $errno, string $errstr, ?string $errfile = null, ?int $errline = null, ?array $errcontext = null): bool => true);
     }
 
     /**
@@ -96,21 +89,26 @@ abstract class AbstractFactory
             $classname = $this->rewrite[$classname];
         }
 
-        return new $classname($this);
+        if (method_exists($classname, '__construct')) {
+            // Inject the pool.
+            return new $classname(pool: $this);
+        }
+
+        return new $classname();
     }
 
     /**
      * Return a part the superglobal $GLOBALS.
      *
-     * @param string|int $what
+     * @param int|string $what
      *   The part of the globals we want to access.
      *
      * @return array
      *   The part we are requesting.
      */
-    public function &getGlobals($what = ''): array
+    public function &getGlobals(int|string $what = ''): array
     {
-        if (empty($what)) {
+        if ($what === 0 || ($what === '' || $what === '0')) {
             return $GLOBALS;
         }
 
@@ -153,10 +151,10 @@ abstract class AbstractFactory
         // Create a new pool where we store all our classes.
         // We also need to check if we have an overwrite for the pool.
         if (empty($rewrite[Pool::class])) {
-            Krexx::$pool = new Pool($rewrite);
+            Krexx::$pool = new Pool(rewrite: $rewrite);
         } else {
             $classname = $rewrite[Pool::class];
-            Krexx::$pool = new $classname($rewrite);
+            Krexx::$pool = new $classname(rewrite: $rewrite);
         }
     }
 }

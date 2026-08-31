@@ -37,32 +37,14 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Comment;
 
-use ReflectionClass;
-use Reflector;
-
 /**
  * Retrieving the comment of a property.
+ *
+ * @deprecated
+ *   Since 7.0.0. Will be removed. Use the Comment class.
+ * @codeCoverageIgnore
+ *   We do not test deprecated classes.
  */
-class Properties extends AbstractComment
+class Properties extends Comment
 {
-    /**
-     * Get the comment from a property.
-     *
-     * @param \Reflector $reflection
-     * @param \ReflectionClass|null $reflectionClass
-     * @return string
-     */
-    public function getComment(Reflector $reflection, ?ReflectionClass $reflectionClass = null): string
-    {
-        if (isset($reflection->isUndeclared)) {
-            return '';
-        }
-
-        // Cache not found. We need to generate this one.
-        return nl2br(
-            $this->pool->encodingService->encodeString(
-                $this->prettifyComment($reflection->getDocComment())
-            )
-        );
-    }
 }

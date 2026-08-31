@@ -40,11 +40,9 @@ namespace Brainworxx\Krexx\View\Skins;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\Button;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\ConnectorRight;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\ExpandableChild;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\FatalMain;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\Footer;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\Header;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\Help;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\Recursion;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\SingleEditableChild;
 
 /**
@@ -59,8 +57,6 @@ class RenderSmokyGrey extends RenderHans
     use Footer;
     use ConnectorRight;
     use Help;
-
-    use FatalMain;
 
     /**
      * Data attribute for the help display.

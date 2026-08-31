@@ -49,7 +49,7 @@ trait Data
      *
      * @var mixed
      */
-    protected $data;
+    protected mixed $data;
 
     /**
      * Setter for the data.
@@ -60,7 +60,7 @@ trait Data
      * @return Model
      *   $this, for chaining.
      */
-    public function setData($data): Model
+    public function setData(mixed $data): Model
     {
         $this->data = $data;
         return $this;
@@ -72,7 +72,7 @@ trait Data
      * @return mixed
      *   The variable, we are currently analysing.
      */
-    public function &getData()
+    public function &getData(): mixed
     {
         return $this->data;
     }

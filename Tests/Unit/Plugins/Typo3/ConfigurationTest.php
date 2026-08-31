@@ -219,7 +219,6 @@ class ConfigurationTest extends AbstractHelper implements ConstInterface
                 Objects::class . Configuration::START_EVENT => [QueryDebugger::class => QueryDebugger::class],
                 Xml::class . Configuration::END_EVENT => [FlexFormParser::class => FlexFormParser::class],
                 EditSettingsController::class . '::outputCssAndJs' => [InlineJsCssDispatcher::class => InlineJsCssDispatcher::class],
-                ExceptionController::class . '::outputCssAndJs' => [InlineJsCssDispatcher::class => InlineJsCssDispatcher::class],
                 BacktraceController::class . '::outputCssAndJs' => [InlineJsCssDispatcher::class => InlineJsCssDispatcher::class],
                 DumpController::class . '::outputCssAndJs' => [InlineJsCssDispatcher::class => InlineJsCssDispatcher::class],
                 FluidObjects::class . '::callMe::start' => [QueryDebugger::class => QueryDebugger::class],

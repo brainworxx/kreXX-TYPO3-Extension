@@ -88,7 +88,7 @@ class MessagesTest extends AbstractHelper
     /**
      * Test the initializing of the messages class.
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $this->assertSame(Krexx::$pool->messages, $this->messagesClass);
         $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $this->messagesClass));
@@ -97,7 +97,7 @@ class MessagesTest extends AbstractHelper
     /**
      * Test the removing od message keys.
      */
-    public function testRemoveKey()
+    public function testRemoveKey(): void
     {
         $messageKey = 'key 2';
         $this->setValueByReflection(static::KEY_VARIABLE_NAME, [$messageKey => 'whatever'], $this->messagesClass);
@@ -109,7 +109,7 @@ class MessagesTest extends AbstractHelper
     /**
      * Testing the outputting of messages.
      */
-    public function testOutputMessages()
+    public function testOutputMessages(): void
     {
         // Simulate a cli request. Actually, it already is a cli request, we
         // test the checking of it.
@@ -154,7 +154,7 @@ class MessagesTest extends AbstractHelper
     /**
      * Seriously, get help!
      */
-    public function testGetHelp()
+    public function testGetHelp(): void
     {
         $helpArray = ['doctor' => 'Some %s string.'];
         $this->setValueByReflection('helpArray', $helpArray, $this->messagesClass);
@@ -166,7 +166,7 @@ class MessagesTest extends AbstractHelper
     /**
      * Test a simple getter.
      */
-    public function testGetMessages()
+    public function testGetMessages(): void
     {
         $fixture = [
             ['california' => []],
@@ -191,7 +191,7 @@ class MessagesTest extends AbstractHelper
      * Purging of the already read stuff, and read it again.
      *
      */
-    public function testReadHelpTexts()
+    public function testReadHelpTexts(): void
     {
         $iniContents = '[en]' . "\n" .
             'someKey = "a string"';
@@ -213,7 +213,7 @@ class MessagesTest extends AbstractHelper
     /**
      * Test the assignment of the language key.
      */
-    public function testSetLanguageKey()
+    public function testSetLanguageKey(): void
     {
         $this->messagesClass->setLanguageKey('de');
         Registration::addLanguage('anykey', 'Any Key');

@@ -111,7 +111,7 @@ class Fluid extends AbstractFluid
     }
 
     /**
-     * @param mixed $resolvedIdentifiers
+     * @param array $resolvedIdentifiers
      *   This should be an array, depending on how successful the script so far was.
      * @param string $hash
      *   The hash form the temp template path.
@@ -121,7 +121,7 @@ class Fluid extends AbstractFluid
      * @return string
      *   The actual template name.
      */
-    protected function resolveTemplateName($resolvedIdentifiers, string $hash, TemplatePaths $templatePath): string
+    protected function resolveTemplateName(array $resolvedIdentifiers, string $hash, TemplatePaths $templatePath): string
     {
         if (!isset($resolvedIdentifiers['partials'])) {
             // Unable to identify the partial.
@@ -129,7 +129,7 @@ class Fluid extends AbstractFluid
         }
 
         foreach ($resolvedIdentifiers['partials'] as $fileName => $realIdentifier) {
-            if (strpos($realIdentifier, $hash) !== false) {
+            if (str_contains($realIdentifier, $hash)) {
                 // We've got our filename!
                 // The filename is actually the path relative to the partials
                 // directory, so we need to resolve it via the template paths class.

@@ -65,7 +65,7 @@ class EncodingTest extends AbstractHelper
      *
      * We will not test the cheap mb_string polyfills.
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $this->assertSame($this->encoding, Krexx::$pool->encodingService);
         $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $this->encoding));
@@ -74,7 +74,7 @@ class EncodingTest extends AbstractHelper
     /**
      * Testing the early return with an empty string.
      */
-    public function testEncodeStringEmpty()
+    public function testEncodeStringEmpty(): void
     {
         $fixture = '';
         $this->assertEquals($fixture, $this->encoding->encodeString($fixture));
@@ -83,7 +83,7 @@ class EncodingTest extends AbstractHelper
     /**
      * Testing the encoding of strings, also with some special stuff.
      */
-    public function testEncodeStringNormal()
+    public function testEncodeStringNormal(): void
     {
         $fixture = 'just another string <div> { @  ';
         $expected = 'just another string &lt;div&gt; &#123; &#64;&nbsp;&nbsp;';
@@ -101,7 +101,7 @@ class EncodingTest extends AbstractHelper
     /**
      * We test it with a completely broken string.
      */
-    public function testEncodeStringCompletelyBroken()
+    public function testEncodeStringCompletelyBroken(): void
     {
         $mbConvertEncodingMock = $this->getFunctionMock(
             '\\Brainworxx\\Krexx\\Service\\Misc\\',
@@ -116,7 +116,7 @@ class EncodingTest extends AbstractHelper
     /**
      * Testing the encoding of strings, where html entities fail.
      */
-    public function testEncodeStringBroken()
+    public function testEncodeStringBroken(): void
     {
         $fixture = substr('öÖäÄüÜ', 0, 3);
         $expected = '&#246;&#63;';
@@ -130,7 +130,7 @@ class EncodingTest extends AbstractHelper
     /**
      * Testing the encoding of normal string when they are larger than 3 MB.
      */
-    public function testEncodeStringNormalHuge()
+    public function testEncodeStringNormalHuge(): void
     {
         $fixture = str_pad('', 3072001, 'just another string <div> { @ ');
         $expected = Krexx::$pool->messages->getHelp('stringTooLargeNormal');
@@ -140,7 +140,7 @@ class EncodingTest extends AbstractHelper
     /**
      * Testing the preparation of string as code connectors.
      */
-    public function testEncodeStringForCodeGeneration()
+    public function testEncodeStringForCodeGeneration(): void
     {
         $fixture = 'value';
 
@@ -169,7 +169,7 @@ class EncodingTest extends AbstractHelper
     /**
      * Testing the wrapper around the mb_strlen.
      */
-    public function testMbStrLen()
+    public function testMbStrLen(): void
     {
         $mbStrLen = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'mb_strlen');
         $mbStrLen->expects($this->exactly(2))

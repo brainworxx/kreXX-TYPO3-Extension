@@ -75,7 +75,7 @@ class ChunksTest extends AbstractHelper
     /**
      * Test the initialization of a new chunks class.
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $pool = Krexx::$pool;
         // Mock the configuration.
@@ -108,7 +108,7 @@ class ChunksTest extends AbstractHelper
     /**
      * Test the adding of a small chunk string
      */
-    public function testChunkMeSmall()
+    public function testChunkMeSmall(): void
     {
         $chunks = new Chunks(Krexx::$pool);
         $fixture = 'very small string';
@@ -124,7 +124,7 @@ class ChunksTest extends AbstractHelper
     /**
      * Test the adding of a large chunk string, without chunking.
      */
-    public function testChunkMeLargeNochunk()
+    public function testChunkMeLargeNochunk(): void
     {
         $chunks = new Chunks(Krexx::$pool);
         $chunks->setChunkAllowed(false);
@@ -143,7 +143,7 @@ class ChunksTest extends AbstractHelper
     /**
      * Test the adding of a large chunk string.
      */
-    public function testChunkMeLarge()
+    public function testChunkMeLarge(): void
     {
         $chunks = new Chunks(Krexx::$pool);
         $fixture = 'chunkable string';
@@ -179,7 +179,7 @@ class ChunksTest extends AbstractHelper
     /**
      * Test the sending of the output to the browser.
      */
-    public function testSendDechunkedToBrowser()
+    public function testSendDechunkedToBrowser(): void
     {
         // This one is a little bit tricky, because we need to simulate a few
         // chunk files with pointers in them.
@@ -236,7 +236,7 @@ class ChunksTest extends AbstractHelper
     /**
      * Test the sending of the output to a logfile.
      */
-    public function testSaveDechunkedToFile()
+    public function testSaveDechunkedToFile(): void
     {
         // The tings you do to test your code . . .
         $chunkDir = 'some dir';
@@ -307,7 +307,7 @@ class ChunksTest extends AbstractHelper
     /**
      * Test the setter for chunk allowance. Pun intended.
      */
-    public function testSetChunkAllowed()
+    public function testSetChunkAllowed(): void
     {
         $chunks = new Chunks(Krexx::$pool);
         $chunks->setChunkAllowed(true);
@@ -320,7 +320,7 @@ class ChunksTest extends AbstractHelper
     /**
      * Test the getter for chunk allowance. Pun intended.
      */
-    public function testIsChunkAllowed()
+    public function testIsChunkAllowed(): void
     {
         $chunks = new Chunks(Krexx::$pool);
         $this->setValueByReflection('chunkAllowed', true, $chunks);
@@ -333,7 +333,7 @@ class ChunksTest extends AbstractHelper
     /**
      * Test the setter for the logging allowance. The puns are killing me.
      */
-    public function testSetLoggingAllowed()
+    public function testSetLoggingAllowed(): void
     {
         $chunks = new Chunks(Krexx::$pool);
         $chunks->setLoggingAllowed(true);
@@ -346,7 +346,7 @@ class ChunksTest extends AbstractHelper
     /**
      * Test the getter for the logging is allowed. No pun,see?
      */
-    public function testIsLoggingAllowed()
+    public function testIsLoggingAllowed(): void
     {
         $chunks = new Chunks(Krexx::$pool);
         $this->setValueByReflection(static::LOGGING_IS_ALLOWED, true, $chunks);
@@ -359,7 +359,7 @@ class ChunksTest extends AbstractHelper
     /**
      * Test the adding of meta data.
      */
-    public function testAddMetaData()
+    public function testAddMetaData(): void
     {
         $metadata = ['some meta stuff'];
 
@@ -382,7 +382,7 @@ class ChunksTest extends AbstractHelper
      * Test cleanup of all currently used chunkfiles, in case there was
      * something left. Actually, this should not happen.
      */
-    public function testDestruct()
+    public function testDestruct(): void
     {
         $fileList = [
           'file 1',
@@ -418,7 +418,7 @@ class ChunksTest extends AbstractHelper
     /**
      * Test the cleanup without any directory to clean up.
      */
-    public function testDestructWithoutChunkDir()
+    public function testDestructWithoutChunkDir(): void
     {
         $chunks = new Chunks(Krexx::$pool);
         $globMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\View\\Output\\', 'glob');
@@ -431,7 +431,7 @@ class ChunksTest extends AbstractHelper
     /**
      * Test the encoding detection.
      */
-    public function testDetectEncoding()
+    public function testDetectEncoding(): void
     {
         $chunks = new Chunks(Krexx::$pool);
 
@@ -457,7 +457,7 @@ class ChunksTest extends AbstractHelper
     /**
      * Test the getter for the official encoding.
      */
-    public function testGetOfficialEncoding()
+    public function testGetOfficialEncoding(): void
     {
         $chunks = new Chunks(Krexx::$pool);
         $this->setValueByReflection(static::OFFICIAL_ENCODING, 'whatever', $chunks);

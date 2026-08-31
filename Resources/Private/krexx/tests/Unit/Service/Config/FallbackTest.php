@@ -54,7 +54,6 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(Fallback::class, 'returnInput')]
 #[CoversMethod(Fallback::class, 'returnIpRange')]
 #[CoversMethod(Fallback::class, 'returnMaxFiles')]
-#[CoversMethod(Fallback::class, 'returnMaxRuntime')]
 #[CoversMethod(Fallback::class, 'returnSkin')]
 #[CoversMethod(Fallback::class, 'generateSkinConfiguration')]
 #[CoversMethod(Fallback::class, 'generateConfigFallback')]
@@ -65,7 +64,7 @@ class FallbackTest extends AbstractHelper
     /**
      * Test the construct of an abstract class. Sounds about right.
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         Registration::registerAdditionalskin('Unit Test Skin', 'UnitRenderer', '/dev/null');
         $config = new Config(Krexx::$pool);
@@ -94,7 +93,7 @@ class FallbackTest extends AbstractHelper
     /**
      * Test the assigning of custom settings
      */
-    public function testConstructWithCustomSettings()
+    public function testConstructWithCustomSettings(): void
     {
         $settingName = 'customName';
         $sectionName = 'customSection';

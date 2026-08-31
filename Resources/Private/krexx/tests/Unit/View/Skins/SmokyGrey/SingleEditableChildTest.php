@@ -49,7 +49,7 @@ class SingleEditableChildTest extends AbstractRenderSmokyGrey
     /**
      * Test the additional stuff of the single editable child rendering.
      */
-    public function testRenderSingleEditableChild()
+    public function testRenderSingleEditableChild(): void
     {
         $this->mockModel(static::GET_JSON, ['formless' => 'forming']);
         $this->modelMock->expects($this->any())

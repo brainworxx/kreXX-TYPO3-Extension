@@ -52,6 +52,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(ErrorObject::class, 'addExceptionMessage')]
 #[CoversMethod(AbstractCallback::class, 'dispatchStartEvent')]
 #[CoversMethod(AbstractCallback::class, 'dispatchEventWithModel')]
+#[CoversMethod(ErrorObject::class, '__construct')]
 class ErrorObjectTest extends AbstractHelper
 {
     /**
@@ -66,6 +67,16 @@ class ErrorObjectTest extends AbstractHelper
         Krexx::$pool->rewrite = [
             ProcessBacktrace::class => CallbackCounter::class
         ];
+    }
+
+    /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new ErrorObject(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
     }
 
     /**

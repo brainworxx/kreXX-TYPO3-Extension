@@ -58,16 +58,9 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
     protected const TYPE_HINT_WHITE_LIST = ['->', '::', '[', ']', '(', ')', '.'];
 
     /**
-     * Here we store all relevant data.
-     *
-     * @var Pool
-     */
-    protected Pool $pool;
-
-    /**
      * Retrieves the declared method parameters from the declaration.
      *
-     * @var \Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration
+     * @var MethodDeclaration
      */
     protected MethodDeclaration $methodDeclaration;
 
@@ -117,11 +110,10 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
      * @param Pool $pool
      *   The pool, where we store the classes we need.
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
         $pool->codegenHandler = $this;
-        $this->methodDeclaration = $pool->createClass(MethodDeclaration::class);
+        $this->methodDeclaration = $pool->createClass(classname: MethodDeclaration::class);
     }
 
     /**
@@ -131,7 +123,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
      * we can generate PHP code to actually reach the corresponding value.
      * This function generates this code.
      *
-     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @param Model $model
      *   The model, which hosts all the data we need.
      *
      * @return string
@@ -152,35 +144,35 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
             // it comes directly from the source code itself.
             // And of course, there are no connectors.
             $this->firstRun = false;
-            $this->addTypeHint($model);
-            return $this->pool->encodingService->encodeString((string) $model->getName());
+            $this->addTypeHint(model: $model);
+            return $this->pool->encodingService->encodeString(data: (string) $model->getName());
         }
 
         $type = $model->getCodeGenType();
         $result = '';
         if ($type === static::CODEGEN_TYPE_PUBLIC) {
             // Public methods, debug methods.
-            $result = $this->concatenation($model);
+            $result = $this->concatenation(model: $model);
         } elseif ($type !== static::CODEGEN_TYPE_EMPTY) {
             // We go for the more complicated stuff.
-            $result = $this->generateComplicatedStuff($model);
+            $result = $this->generateComplicatedStuff(model: $model);
         }
 
         // I'm not really sure if it is possible to create element names that
         // we need to escape.
-        return $this->pool->encodingService->encodeString($result);
+        return $this->pool->encodingService->encodeString(data: $result);
     }
 
     /**
      * Adding the typehint to the model, on the first run.
      *
-     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @param Model $model
      */
     protected function addTypeHint(Model $model): void
     {
         if (
-            empty($name = (string) $model->getName())
-            || strpos($name, '$') !== 0
+            ($name = (string) $model->getName()) === '' || ($name = (string) $model->getName()) === '0'
+            || !str_starts_with(haystack: $name, needle: '$')
         ) {
             // There is no name, no need for a hint.
             return;
@@ -188,7 +180,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
 
         $type = $model->getType() === static::TYPE_CLASS ? $model->getNormal() : $model->getType();
         foreach (static::TYPE_HINT_WHITE_LIST as $value) {
-            if (strpos($name, $value) !== false) {
+            if (str_contains(haystack: $name, needle: $value)) {
                 // We are analysing something like:
                 // $this->getWhatever();
                 // We can not type hint this.
@@ -197,15 +189,15 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
         }
 
         $model->addToJson(
-            $this->pool->messages->getHelp('metaTypeHint'),
-            '/** @var ' . $type . ' ' . $name . ' */'
+            key: $this->pool->messages->getHelp(key: 'metaTypeHint'),
+            value: '/** @var ' . $type . ' ' . $name . ' */'
         );
     }
 
     /**
      * The more obscure stuff for the code generation.
      *
-     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @param Model $model
      *   The model, which hosts all the data we need.
      *
      * @return string
@@ -224,7 +216,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
         // And now for the more serious stuff.
         switch ($type) {
             case static::CODEGEN_TYPE_ITERATOR_TO_ARRAY:
-                $result = 'iterator_to_array(;firstMarker;)' . $this->concatenation($model);
+                $result = 'iterator_to_array(;firstMarker;)' . $this->concatenation(model: $model);
                 break;
 
             case static::CODEGEN_TYPE_ARRAY_VALUES_ACCESS:
@@ -232,9 +224,9 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
                 break;
 
             default:
-                if ($this->pool->scope->testModelForCodegen($model)) {
+                if ($this->pool->scope->testModelForCodegen(model: $model)) {
                     // Test if we are inside the scope. Everything within our scope is reachable.
-                    $result = $this->concatenation($model);
+                    $result = $this->concatenation(model: $model);
                 }
         }
 
@@ -268,7 +260,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
     /**
      * Simple concatenation of all parameters.
      *
-     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @param Model $model
      *
      * @return string
      *   The generated code.
@@ -277,7 +269,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
     {
         // We simply add the connectors for public access.
         return $model->getConnectorLeft() .
-            $this->pool->encodingService->encodeStringForCodeGeneration($model->getName()) .
+            $this->pool->encodingService->encodeStringForCodeGeneration(name: $model->getName()) .
             $model->getConnectorRight();
     }
 
@@ -333,17 +325,17 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
             $prefix = '&';
         }
 
-        $name = $this->methodDeclaration->retrieveParameterType($reflectionParameter) .
+        $name = $this->methodDeclaration->retrieveParameterType(reflectionParameter: $reflectionParameter) .
             $prefix . '$' . $reflectionParameter->getName();
 
         // Retrieve the default value, if available.
         if ($reflectionParameter->isDefaultValueAvailable()) {
             $default = $reflectionParameter->getDefaultValue();
-            $name .= ' = ' . $this->translateDefaultValue($default);
+            $name .= ' = ' . $this->translateDefaultValue(default: $default);
         }
 
         // Escape it, just in case.
-        return $this->pool->encodingService->encodeString($name);
+        return $this->pool->encodingService->encodeString(data: $name);
     }
 
     /**
@@ -351,14 +343,14 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
      *
      * @param mixed $default
      *
-     * @return mixed
+     * @return string
      *   The type in a human-readable form.
      */
-    protected function translateDefaultValue($default)
+    protected function translateDefaultValue(mixed $default): string
     {
-        if (is_string($default)) {
-            $default = '\'' . str_replace('\'', '\\\'', $default) . '\'';
-        } elseif (is_array($default)) {
+        if (is_string(value: $default)) {
+            $default = '\'' . str_replace(search: '\'', replace: '\\\'', subject: $default) . '\'';
+        } elseif (is_array(value: $default)) {
             $default = 'array()';
         } elseif ($default ===  true) {
             $default = 'TRUE';
@@ -367,12 +359,12 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
         } elseif ($default === null) {
             $default = 'NULL';
         } elseif ($default instanceof UnitEnum) {
-            $default = get_class($default) . '::' . $default->name;
-        } elseif (is_object($default)) {
-            $default = 'new \\' .  get_class($default) . '()';
+            $default = $default::class . '::' . $default->name;
+        } elseif (is_object(value: $default)) {
+            $default = 'new \\' .  $default::class . '()';
         } else {
             // Not sure if this is even possible, but I'm not taking my chances.
-            $default = gettype($default);
+            $default = gettype(value: $default);
         }
 
         return $default;

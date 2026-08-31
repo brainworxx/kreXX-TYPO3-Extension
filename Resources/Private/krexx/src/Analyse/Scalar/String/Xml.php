@@ -58,16 +58,6 @@ class Xml extends AbstractScalarAnalysis
     /**
      * Was the decoding of the XML successful?
      *
-     * @deprecated
-     *   Since 6.0.0. Will be removed.
-     *
-     * @var bool
-     */
-    protected $hasErrors = false;
-
-    /**
-     * Was the decoding of the XML successful?
-     *
      * @var string
      */
     protected string $error = '';
@@ -82,12 +72,10 @@ class Xml extends AbstractScalarAnalysis
     /**
      * Inject the pool, initialize the parser.
      *
-     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     * @param Pool $pool
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        parent::__construct($pool);
-
         $this->DOMDocument = new DOMDocument("1.0");
         // The pretty print done by a dom parser.
         $this->DOMDocument->preserveWhiteSpace = false;
@@ -99,13 +87,13 @@ class Xml extends AbstractScalarAnalysis
      */
     public static function isActive(): bool
     {
-        return class_exists(DOMDocument::class);
+        return class_exists(class: DOMDocument::class, autoload: false);
     }
 
     /**
      * Test, if this is a valid XML structure.
      *
-     * @param bool|int|string $string
+     * @param string|int|bool $string
      *   The possible json.
      * @param Model $model
      *   The model, so far for additional information.
@@ -113,29 +101,25 @@ class Xml extends AbstractScalarAnalysis
      * @return bool
      *   Well? Can we handle it?
      */
-    public function canHandle($string, Model $model): bool
+    public function canHandle(string|int|bool $string, Model $model): bool
     {
         // Get a first impression, we check the mime type of the model.
         $metaStuff = $model->getJson();
-        $mimeType = $this->pool->messages->getHelp('metaMimeTypeString');
-        if (
-            empty($metaStuff[$mimeType]) ||
-            strpos($metaStuff[$mimeType], 'xml;') === false
-        ) {
+        $mimeType = $this->pool->messages->getHelp(key: 'metaMimeTypeString');
+        if (empty($metaStuff[$mimeType]) || !str_contains(haystack: $metaStuff[$mimeType], needle: 'xml;')) {
             // Was not identified as xml before.
             // Early return.
             return false;
         }
         $this->error = '';
-        $this->hasErrors = false;
 
         // Load the document.
-        set_error_handler([$this, 'errorCallback']);
-        $this->DOMDocument->loadXML($string);
+        set_error_handler(callback: $this->errorCallback(...));
+        $this->DOMDocument->loadXML(source: $string);
         restore_error_handler();
 
-        if (!empty($this->error)) {
-            $model->addToJson($this->pool->messages->getHelp('xmlError'), $this->error);
+        if ($this->error !== '' && $this->error !== '0') {
+            $model->addToJson(key: $this->pool->messages->getHelp(key: 'xmlError'), value: $this->error);
             return false;
         }
 
@@ -155,15 +139,15 @@ class Xml extends AbstractScalarAnalysis
         $meta = [];
         $messages = $this->pool->messages;
 
-        $meta[$messages->getHelp('metaPrettyPrint')] = $this->pool
+        $meta[$messages->getHelp(key: 'metaPrettyPrint')] = $this->pool
             ->encodingService
-            ->encodeString($this->DOMDocument->saveXML());
+            ->encodeString(data: $this->DOMDocument->saveXML());
 
         // Move the extra part into a nest, for better readability.
-        $this->model->setHasExtra(false);
-        $meta[$messages->getHelp('metaContent')] = $this->pool
+        $this->model->setHasExtra(value: false);
+        $meta[$messages->getHelp(key: 'metaContent')] = $this->pool
             ->encodingService
-            ->encodeString($this->handledValue);
+            ->encodeString(data: $this->handledValue);
 
         return $meta;
     }
@@ -178,8 +162,7 @@ class Xml extends AbstractScalarAnalysis
      */
     public function errorCallback(int $errno, string $errstr): bool
     {
-        $this->error = $this->pool->encodingService->encodeString($errstr);
-        $this->hasErrors = true;
+        $this->error = $this->pool->encodingService->encodeString(data: $errstr);
         return true;
     }
 }

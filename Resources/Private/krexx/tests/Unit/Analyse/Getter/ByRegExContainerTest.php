@@ -45,6 +45,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(ByRegExContainer::class, 'retrieveIt')]
 #[CoversMethod(ByRegExContainer::class, 'extractValue')]
+#[CoversMethod(ByRegExContainer::class, '__construct')]
 class ByRegExContainerTest extends AbstractGetter
 {
     public function setUp(): void
@@ -54,9 +55,19 @@ class ByRegExContainerTest extends AbstractGetter
     }
 
     /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new ByRegExContainer(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
+    /**
      * The class to test should not be able to retrieve any of these.
      */
-    public function testRetrieveItSimple()
+    public function testRetrieveItSimple(): void
     {
         $instance = new GetterFixture();
         $classReflection = new ReflectionClass($instance);
@@ -99,7 +110,7 @@ class ByRegExContainerTest extends AbstractGetter
     /**
      * Test that we do not handle internal classes or methods.
      */
-    public function testRetrieveItInternal()
+    public function testRetrieveItInternal(): void
     {
         $instance = new Exception();
         $classReflection = new ReflectionClass($instance);
@@ -119,7 +130,7 @@ class ByRegExContainerTest extends AbstractGetter
     /**
      * Retrieving the value fom a value-container.
      */
-    public function testRetrieveItContainer()
+    public function testRetrieveItContainer(): void
     {
         $instance = new ContainerFixture();
         $classReflection = new ReflectionClass($instance);

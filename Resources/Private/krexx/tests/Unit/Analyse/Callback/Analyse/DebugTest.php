@@ -43,14 +43,25 @@ use Brainworxx\Krexx\Krexx;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(Debug::class, 'callMe')]
+#[CoversMethod(Debug::class, '__construct')]
 #[CoversMethod(AbstractCallback::class, 'dispatchStartEvent')]
 #[CoversMethod(AbstractCallback::class, 'dispatchEventWithModel')]
 class DebugTest extends AbstractHelper
 {
     /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new Debug(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
+    /**
      * Testing if the debug method output gets routed.
      */
-    public function testCallMe()
+    public function testCallMe(): void
     {
         $debug = new Debug(Krexx::$pool);
         $data = ['data' => 'just some string'];

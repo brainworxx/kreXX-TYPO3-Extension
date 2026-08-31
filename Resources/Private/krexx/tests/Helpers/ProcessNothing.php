@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,9 +34,9 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 namespace Brainworxx\Krexx\Tests\Helpers;
 
+use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessInterface;
@@ -46,7 +48,16 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessInterface;
  */
 class ProcessNothing extends AbstractRouting implements ProcessInterface
 {
-    public function canHandle(Model $data): bool
+    /**
+     * Inject the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
+    public function canHandle(Model $model): bool
     {
         return true;
     }

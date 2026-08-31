@@ -47,7 +47,7 @@ class MessagesTest extends AbstractRenderHans
     /**
      * Test the message rendering.
      */
-    public function testRenderMessages()
+    public function testRenderMessages(): void
     {
         $fixture = [
             'How do I activate SMS?',

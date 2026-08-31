@@ -60,7 +60,7 @@ class CallerFinderTest extends AbstractHelper
     public const  HEADLINE_STRING = 'A headline';
 
     /**
-     * @var \Brainworxx\Krexx\Analyse\Caller\CallerFinder
+     * @var CallerFinder
      */
     protected $callerFinder;
 
@@ -109,9 +109,7 @@ class CallerFinderTest extends AbstractHelper
         $poolMock->messages = Krexx::$pool->messages;
         $poolMock->expects($this->any())
             ->method('createClass')
-            ->willReturnCallback(function ($classname) {
-                return Krexx::$pool->createClass($classname);
-            });
+            ->willReturnCallback(fn($classname) => Krexx::$pool->createClass($classname));
 
         // Create our test subject.
         $this->callerFinder = new CallerFinder($poolMock);
@@ -146,7 +144,7 @@ class CallerFinderTest extends AbstractHelper
     /**
      * Test the setting of the call pattern and the pattern itself.´ß
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $krexx = 'krexx';
         $this->assertEquals($krexx, $this->callerFinder->getPattern());
@@ -169,7 +167,7 @@ class CallerFinderTest extends AbstractHelper
      * Test normally, without any outside iterference, the way it is normally
      * executed.
      */
-    public function testFindCallerNormal()
+    public function testFindCallerNormal(): void
     {
         $this->mockDebugBacktrace()
             ->expects($this->once())
@@ -190,7 +188,7 @@ class CallerFinderTest extends AbstractHelper
     /**
      * Test the resolving of inline calles of kreXX.
      */
-    public function testFindCallerInline()
+    public function testFindCallerInline(): void
     {
         $this->mockDebugBacktrace()
             ->expects($this->once())
@@ -213,7 +211,7 @@ class CallerFinderTest extends AbstractHelper
     /**
      * Test with an externally set headline.
      */
-    public function testFindCallerHeadline()
+    public function testFindCallerHeadline(): void
     {
 
         $this->mockDebugBacktrace()
@@ -234,7 +232,7 @@ class CallerFinderTest extends AbstractHelper
     /**
      * Test with a source file, that is not readable.
      */
-    public function testFindCallerUnreadableSource()
+    public function testFindCallerUnreadableSource(): void
     {
         // Create a fixture.
         $fixture = $this->createFixture(74);
@@ -258,7 +256,7 @@ class CallerFinderTest extends AbstractHelper
     /**
      * Test the finding without a valid url.
      */
-    public function testFindCallerNoUrl()
+    public function testFindCallerNoUrl(): void
     {
         $this->mockDebugBacktrace()
             ->expects($this->once())
@@ -281,9 +279,7 @@ class CallerFinderTest extends AbstractHelper
         $poolMock->messages = Krexx::$pool->messages;
         $poolMock->expects($this->any())
             ->method('createClass')
-            ->willReturnCallback(function ($classname) {
-                return Krexx::$pool->createClass($classname);
-            });
+            ->willReturnCallback(fn($classname) => Krexx::$pool->createClass($classname));
         $this->callerFinder = new CallerFinder($poolMock);
 
         // Run the test
@@ -294,7 +290,7 @@ class CallerFinderTest extends AbstractHelper
     /**
      * Manipulate the lookup array to prevent finding anything.
      */
-    public function testFindCallerNoResult()
+    public function testFindCallerNoResult(): void
     {
         $this->mockDebugBacktrace()
             ->expects($this->once())
@@ -316,7 +312,7 @@ class CallerFinderTest extends AbstractHelper
     /**
      * Test the caller finder with the forced logger.
      */
-    public function testFindCallerLogging()
+    public function testFindCallerLogging(): void
     {
         $classRef = new ReflectionClass(LoggerCallerFixture::class);
         $fixture = [

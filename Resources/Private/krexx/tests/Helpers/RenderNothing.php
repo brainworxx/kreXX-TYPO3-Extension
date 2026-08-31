@@ -77,7 +77,7 @@ class RenderNothing extends RenderHans
     protected $footer = '';
 
     /**
-     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @param Model $model
      * @return string
      */
     public function renderSingleChild(Model $model): string
@@ -87,7 +87,7 @@ class RenderNothing extends RenderHans
     }
 
     /**
-     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @param Model $model
      * @return mixed|string
      */
     public function renderRecursion(Model $model): string
@@ -95,11 +95,11 @@ class RenderNothing extends RenderHans
         $this->model[__FUNCTION__][] = $model;
         // I'm supposed to do something different here, to avoid a bad rating in
         // the TER-Sonarcube. Hence:
-        return '' . '';
+        return '';
     }
 
     /**
-     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @param Model $model
      * @param bool $is
      * @return string
      */
@@ -108,7 +108,7 @@ class RenderNothing extends RenderHans
         $this->model[__FUNCTION__][] = $model;
         // I'm supposed to do something different here, to avoid a bad rating in
         // the TER-Sonarcube. Hence:
-        return '' . '' . '';
+        return '';
     }
 
     /**
@@ -138,7 +138,7 @@ class RenderNothing extends RenderHans
     /**
      * @param string $footer
      */
-    public function setFooter(string $footer)
+    public function setFooter(string $footer): void
     {
         $this->footer = $footer;
     }
@@ -157,7 +157,7 @@ class RenderNothing extends RenderHans
     /**
      * @param string $fatalMain
      */
-    public function setFatalMain(string $fatalMain)
+    public function setFatalMain(string $fatalMain): void
     {
         $this->fatalMain = $fatalMain;
     }

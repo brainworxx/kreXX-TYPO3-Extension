@@ -36,7 +36,7 @@ $EM_CONF[$_EXTKEY] = [
     'title' => 'kreXX Debugger',
     'description' => 'Alternative for `f:debug` (fluid) and `debug();` (PHP) with additional analysis features and logging options.',
     'category' => 'misc',
-    'version' => '6.1.7',
+    'version' => '7.0.0',
     'state' => 'stable',
     'uploadfolder' => false,
     'createDirs' => '',
@@ -45,14 +45,14 @@ $EM_CONF[$_EXTKEY] = [
     'author' => 'BRAINWORXX GmbH',
     'constraints' => [
         'depends' => [
-            'typo3' => '10.4.0-14.3.99',
-            'php' => '7.4.0-8.5.99',
+            'typo3' => '13.4.0-14.3.99',
+            'php' => '8.2.0-8.5.99',
         ],
         'conflicts' => [],
         'suggests' => [
-            'adminpanel' => '10.4.0-14.3.99',
-            'aimeos' => '20.10.5-25.99.99',
-            'vhs' => '6.0.0-7.99.99',
+            'adminpanel' => '13.4.0-14.3.99',
+            'aimeos' => '24.10.0-26.99.99',
+            'vhs' => '7.1.0-8.99.99',
             'content_blocks' => '1.0.0-2.99.99'
         ],
     ],

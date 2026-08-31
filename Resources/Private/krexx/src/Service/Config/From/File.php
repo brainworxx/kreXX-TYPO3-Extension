@@ -49,7 +49,7 @@ class File extends Fallback
     /**
      * Our security handler.
      *
-     * @var \Brainworxx\Krexx\Service\Config\Validation
+     * @var Validation
      */
     protected Validation $validation;
 
@@ -65,9 +65,9 @@ class File extends Fallback
      *
      * @param Pool $pool
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        parent::__construct($pool);
+        parent::__construct();
         $this->validation = $pool->config->validation;
     }
 
@@ -86,19 +86,19 @@ class File extends Fallback
 
         foreach (['ini' => 'parse_ini_string', 'json' => 'json_decode'] as $extension => $decoder) {
             $completePath = $path . $extension;
-            if ($this->pool->fileService->fileIsReadable($completePath)) {
+            if ($this->pool->fileService->fileIsReadable(filePath: $completePath)) {
                 $this->settings = (array)$decoder(
-                    $this->pool->fileService->getFileContents($completePath, false),
+                    $this->pool->fileService->getFileContents(filePath: $completePath, showError: false),
                     true
                 );
                 // Feedback about the file name.
-                $this->pool->config->setPathToConfigFile($completePath);
+                $this->pool->config->setPathToConfigFile(file: $completePath);
                 return $this;
             }
         }
 
         // Still here? Give feedback about the filename.
-        $this->pool->config->setPathToConfigFile($completePath);
+        $this->pool->config->setPathToConfigFile(file: $completePath);
 
         return $this;
     }
@@ -115,9 +115,9 @@ class File extends Fallback
     public function getFeConfigFromFile(string $parameterName): ?array
     {
         // Get the human-readable stuff from the file.
-        $value = $this->getConfigFromFile(static::SECTION_FE_EDITING, $parameterName);
+        $value = $this->getConfigFromFile(group: static::SECTION_FE_EDITING, name: $parameterName);
 
-        if (empty($value)) {
+        if (in_array($value, ['', '0', false, null], true)) {
             // Sorry, no value stored.
             return null;
         }
@@ -157,16 +157,16 @@ class File extends Fallback
      * @param string $name
      *   The name of the setting.
      *
-     * @return mixed
+     * @return null|string|bool
      *   The value from the file. Null, when not available or not validated.
      */
-    public function getConfigFromFile(string $group, string $name)
+    public function getConfigFromFile(string $group, string $name): null|string|bool
     {
         // Do we have a value in the file?
         // Does it validate?
         if (
             isset($this->settings[$group][$name]) &&
-            $this->validation->evaluateSetting($group, $name, $this->settings[$group][$name])
+            $this->validation->evaluateSetting(group: $group, name: $name, value: $this->settings[$group][$name])
         ) {
             return $this->settings[$group][$name];
         }

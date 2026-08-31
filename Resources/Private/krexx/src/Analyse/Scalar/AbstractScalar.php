@@ -46,21 +46,11 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 abstract class AbstractScalar
 {
     /**
-     * The pool, like the variable name says.
-     *
-     * @var \Brainworxx\Krexx\Service\Factory\Pool
-     */
-    protected Pool $pool;
-
-    /**
      * Inject hte pool.
      *
-     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     * @param Pool $pool
      */
-    public function __construct(Pool $pool)
-    {
-        $this->pool = $pool;
-    }
+    abstract public function __construct(Pool $pool);
 
     /**
      * Generate a DOM id for recursion handling.
@@ -77,7 +67,8 @@ abstract class AbstractScalar
      */
     protected function generateDomId(string $string, string $className): string
     {
-        return 'k' . $this->pool->emergencyHandler->getKrexxCount() . '_scalar_' . md5($string . '_' . $className);
+        return 'k' . $this->pool->emergencyHandler->getKrexxCount() . '_scalar_'
+            . md5(string: $string . '_' . $className);
     }
 
     /**
@@ -88,7 +79,7 @@ abstract class AbstractScalar
      * @param string $originalData
      *   The unescaped original data of the analysis.
      *
-     * @return \Brainworxx\Krexx\Analyse\Model
+     * @return Model
      *   The adjusted model.
      */
     abstract public function handle(Model $model, string $originalData): Model;

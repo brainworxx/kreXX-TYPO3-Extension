@@ -69,7 +69,7 @@ class PoolTest extends AbstractHelper
     /**
      * Testing the creation of all neccessary classes.
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         Krexx::$pool = null;
         Pool::createPool();
@@ -102,7 +102,7 @@ class PoolTest extends AbstractHelper
     /**
      * Test the checking of the environment, where kreXX is running.
      */
-    public function testCheckEnvironmentIsWritable()
+    public function testCheckEnvironmentIsWritable(): void
     {
         $filename = 'test';
         // Chunks folder is writable
@@ -125,7 +125,7 @@ class PoolTest extends AbstractHelper
     /**
      * Test the checking of the environment, where kreXX is running.
      */
-    public function testCheckEnvironmentIsNotWritable()
+    public function testCheckEnvironmentIsNotWritable(): void
     {
         $filename = 'test';
         // Chunks folder is not writable
@@ -150,7 +150,7 @@ class PoolTest extends AbstractHelper
     /**
      * Test the renewal of the "semi-singletons" after an analysis.
      */
-    public function testReset()
+    public function testReset(): void
     {
         Krexx::$pool->recursionHandler = $this->createMock(Recursion::class);
         Krexx::$pool->codegenHandler = $this->createMock(Codegen::class);
@@ -168,7 +168,7 @@ class PoolTest extends AbstractHelper
      * Test the renewal of the "semi-singletons" after an analysis, with
      * simulating a new process fork.
      */
-    public function testResetWithNewFork()
+    public function testResetWithNewFork(): void
     {
         $getmypidMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Factory', 'getmypid');
         $getmypidMock->expects($this->exactly(2))

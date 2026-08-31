@@ -63,18 +63,18 @@ trait CssJs
     {
         $messages = $this->pool->messages;
         return str_replace(
-            $this->markerCssJs,
-            [
+            search: $this->markerCssJs,
+            replace: [
                 $css,
                 $javascript,
-                $messages->getHelp('tsEnterText'),
-                $messages->getHelp('tsTooSmall'),
-                $messages->getHelp('tsPleaseReload'),
-                $messages->getHelp('tsConfigReset'),
-                $messages->getHelp('tsNoDataAvailable'),
-                $messages->getHelp('tsAdditionalData')
+                $messages->getHelp(key: 'tsEnterText'),
+                $messages->getHelp(key: 'tsTooSmall'),
+                $messages->getHelp(key: 'tsPleaseReload'),
+                $messages->getHelp(key: 'tsConfigReset'),
+                $messages->getHelp(key: 'tsNoDataAvailable'),
+                $messages->getHelp(key: 'tsAdditionalData')
             ],
-            $this->fileCache[static::FILE_CSSJS]
+            subject: $this->fileCache[static::FILE_CSSJS]
         );
     }
 

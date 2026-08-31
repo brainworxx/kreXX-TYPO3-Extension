@@ -63,24 +63,24 @@ trait Footer
         // to the config as the current payload.
         if ($configOnly) {
             return str_replace(
-                $this->markerFooter,
-                [
+                search: $this->markerFooter,
+                replace: [
                     '',
-                    $this->pool->messages->getHelp('additionalData'),
-                    $this->pool->messages->getHelp('noDataAvailable'),
+                    $this->pool->messages->getHelp(key: 'additionalData'),
+                    $this->pool->messages->getHelp(key: 'noDataAvailable'),
                 ],
-                parent::renderFooter($caller, $model, true)
+                subject: parent::renderFooter(caller: $caller, model: $model, configOnly: true)
             );
         }
 
         return str_replace(
-            $this->markerFooter,
-            [
+            search: $this->markerFooter,
+            replace: [
                 static::STYLE_HIDDEN,
-                $this->pool->messages->getHelp('additionalData'),
-                $this->pool->messages->getHelp('noDataAvailable'),
+                $this->pool->messages->getHelp(key: 'additionalData'),
+                $this->pool->messages->getHelp(key: 'noDataAvailable'),
             ],
-            parent::renderFooter($caller, $model, $configOnly)
+            subject: parent::renderFooter(caller: $caller, model: $model, configOnly: $configOnly)
         );
     }
 

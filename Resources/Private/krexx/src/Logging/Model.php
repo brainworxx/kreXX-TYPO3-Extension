@@ -112,8 +112,7 @@ class Model
     {
         // Use it is several lines, to prevent the getter analysis to
         // coax the actual output out of the class.
-        $this
-            ->backtrace = $backtrace;
+        $this->backtrace = $backtrace;
         return $this;
     }
 

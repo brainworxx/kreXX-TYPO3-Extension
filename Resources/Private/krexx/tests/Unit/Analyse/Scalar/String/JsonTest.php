@@ -49,8 +49,19 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(Json::class, 'handle')]
 #[CoversMethod(Json::class, 'canHandle')]
 #[CoversMethod(Json::class, 'isActive')]
+#[CoversMethod(Json::class, '__construct')]
 class JsonTest extends AbstractHelper
 {
+    /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new Json(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
     /**
      * Test the json extension detection.
      */

@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use SplObjectStorage;
 use Throwable;
 
@@ -56,6 +57,15 @@ use Throwable;
  */
 class Traversable extends AbstractObjectAnalysis implements ConfigConstInterface
 {
+    /**
+     * Inject the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
+
     /**
      * Checks runtime, memory and nesting level. Then trigger the actual analysis.
      *
@@ -96,9 +106,9 @@ class Traversable extends AbstractObjectAnalysis implements ConfigConstInterface
         try {
             // We need to deactivate the current error handling to
             // prevent the host system to do anything stupid.
-            set_error_handler($this->pool->retrieveErrorCallback());
-            $parameter = iterator_to_array($data);
-        } catch (Throwable $e) {
+            set_error_handler(callback: $this->pool->retrieveErrorCallback());
+            $parameter = iterator_to_array(iterator: $data);
+        } catch (Throwable) {
             //Restore the previous error handler, and return an empty string.
             restore_error_handler();
             $this->pool->emergencyHandler->downOneNestingLevel();
@@ -107,7 +117,7 @@ class Traversable extends AbstractObjectAnalysis implements ConfigConstInterface
 
         // Reactivate whatever error handling we had previously.
         restore_error_handler();
-        return $this->analyseTraversableResult($data, $parameter);
+        return $this->analyseTraversableResult(originalClass: $data, result: $parameter);
     }
 
     /**
@@ -124,32 +134,31 @@ class Traversable extends AbstractObjectAnalysis implements ConfigConstInterface
     protected function analyseTraversableResult(object $originalClass, array $result): string
     {
         // Direct access to the iterator object,de depending on the object itself.
-        $multiline = !($originalClass instanceof ArrayAccess)
-            || $originalClass instanceof SplObjectStorage;
+        $multiline = !($originalClass instanceof ArrayAccess) || $originalClass instanceof SplObjectStorage;
         $messages = $this->pool->messages;
 
         /** @var Model $model */
-        $model = $this->pool->createClass(Model::class)
-            ->setName($this->parameters[static::PARAM_NAME])
-            ->setType($messages->getHelp('foreach'))
-            ->addParameter(static::PARAM_DATA, $result)
-            ->addParameter(static::PARAM_MULTILINE, $multiline)
-            ->addToJson($messages->getHelp('metaLength'), (string)count($result));
+        $model = $this->pool->createClass(classname: Model::class)
+            ->setName(name: $this->parameters[static::PARAM_NAME])
+            ->setType(type: $messages->getHelp(key: 'foreachType'))
+            ->addParameter(name: static::PARAM_DATA, value: $result)
+            ->addParameter(name: static::PARAM_MULTILINE, value: $multiline)
+            ->addToJson(key: $messages->getHelp(key: 'metaLength'), value: (string)count(value: $result));
 
         // Check, if we are handling a huge array. Huge arrays tend to result in a huge
         // output, maybe even triggering an emergency break. to avoid this, we give them
         // a special callback.
-        if (count($result) > (int) $this->pool->config->getSetting(static::SETTING_ARRAY_COUNT_LIMIT)) {
-            $model->injectCallback($this->pool->createClass(ThroughLargeArray::class))
-                ->setNormal($messages->getHelp('simplifiedTraversableInfo'))
-                ->setHelpid('simpleArray');
+        if (count(value: $result) > (int) $this->pool->config->getSetting(name: static::SETTING_ARRAY_COUNT_LIMIT)) {
+            $model->injectCallback(object: $this->pool->createClass(classname: ThroughLargeArray::class))
+                ->setNormal(normal: $messages->getHelp(key: 'simplifiedTraversableInfo'))
+                ->setHelpid(helpId: 'simpleArray');
         } else {
-            $model->injectCallback($this->pool->createClass(ThroughArray::class))
-                ->setNormal($messages->getHelp('traversableInfo'));
+            $model->injectCallback(object: $this->pool->createClass(classname: ThroughArray::class))
+                ->setNormal(normal: $messages->getHelp(key: 'traversableInfo'));
         }
 
         $analysisResult = $this->pool->render->renderExpandableChild(
-            $this->dispatchEventWithModel(static::EVENT_MARKER_ANALYSES_END, $model)
+            model: $this->dispatchEventWithModel(name: static::EVENT_MARKER_ANALYSES_END, model: $model)
         );
 
         $this->pool->emergencyHandler->downOneNestingLevel();

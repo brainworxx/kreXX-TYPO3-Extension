@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Getter;
 
+use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionMethod;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 
@@ -75,7 +76,7 @@ class ByRegExContainer extends AbstractGetter
         ReflectionMethod $reflectionMethod,
         ReflectionClass $reflectionClass,
         string $currentPrefix
-    ) {
+    ): mixed {
         $this->foundSomething = false;
         if ($reflectionMethod->isInternal()) {
             // There is no code for internal methods.
@@ -84,28 +85,28 @@ class ByRegExContainer extends AbstractGetter
 
         // Read the sourcecode into a string.
         $sourcecode = $this->pool->fileService->readFile(
-            $reflectionMethod->getFileName(),
-            $reflectionMethod->getStartLine(),
-            $reflectionMethod->getEndLine()
+            filePath: $reflectionMethod->getFileName(),
+            readFrom: $reflectionMethod->getStartLine(),
+            readTo: $reflectionMethod->getEndLine()
         );
 
         // Identify the container.
         // We are looking for something like this:
         // $this->container['key'];
-        $results = $this->findIt($this->firstPattern, $sourcecode);
-        if (empty($results)) {
+        $results = $this->findIt(searchArray: $this->firstPattern, haystack: $sourcecode);
+        if ($results === []) {
             return null;
         }
 
         // We take the first one that we get.
         // There may others in there, but when the developer uses static
         // caching, this is where the value should be.
-        $parts = explode($this->secondPattern, $results[0]);
-        if (count($parts) !== 2) {
+        $parts = explode(separator: $this->secondPattern, string: (string) $results[0]);
+        if (count(value: $parts) !== 2) {
             return null;
         }
 
-        return $this->extractValue($parts, $reflectionClass);
+        return $this->extractValue(parts: $parts, reflectionClass: $reflectionClass);
     }
 
     /**
@@ -117,21 +118,25 @@ class ByRegExContainer extends AbstractGetter
      *   The extracted value. Null means that we were unable to find anything
      *   with certainty.
      */
-    protected function extractValue(array $parts, ReflectionClass $reflectionClass)
+    protected function extractValue(array $parts, ReflectionClass $reflectionClass): mixed
     {
         // There may (or may not) be gibberish in there, but it does not matter.
         $containerName = $parts[0];
-        if (!$reflectionClass->hasProperty($containerName)) {
+        if (!$reflectionClass->hasProperty(name: $containerName)) {
             return null;
         }
 
-        $key = trim($parts[1], '\'"');
-        $container = $reflectionClass->retrieveValue($reflectionClass->getProperty($containerName));
+        $key = trim(string: (string) $parts[1], characters: '\'"');
+        $container = $reflectionClass->retrieveValue(refProperty: $reflectionClass->getProperty(name: $containerName));
         if (!isset($container[$key])) {
             return null;
         }
 
         $this->foundSomething = true;
         return $container[$key];
+    }
+
+    public function __construct(protected Pool $pool)
+    {
     }
 }

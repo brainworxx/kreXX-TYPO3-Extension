@@ -69,9 +69,9 @@ trait ConnectorRight
         }
 
         return str_replace(
-            $this->markerConnectorRight,
-            [$connector, $returnType === '' ? '' : ': ' . $returnType],
-            $this->fileCache[static::FILE_CONNECTOR_RIGHT]
+            search: $this->markerConnectorRight,
+            replace: [$connector, $returnType === '' ? '' : ': ' . $returnType],
+            subject: $this->fileCache[static::FILE_CONNECTOR_RIGHT]
         );
     }
 

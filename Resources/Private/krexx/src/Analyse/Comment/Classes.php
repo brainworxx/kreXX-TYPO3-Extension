@@ -37,29 +37,14 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Comment;
 
-use ReflectionClass;
-use Reflector;
-
 /**
  * Get the class comment.
+ *
+ * @deprecated
+ *   Since 7.0.0. Will be removed. Use the Comment class.
+ * @codeCoverageIgnore
+ *   We do not test deprecated classes.
  */
-class Classes extends AbstractComment
+class Classes extends Comment
 {
-    /**
-     * Get the prettified class comment.
-     *
-     * @param \ReflectionClass $reflection
-     *   The actual reflection class.
-     * @param \ReflectionClass|null $reflectionClass
-     *   Not used.
-     *
-     * @return string
-     *   The comment.
-     */
-    public function getComment(Reflector $reflection, ?ReflectionClass $reflectionClass = null): string
-    {
-        return $this->pool->encodingService->encodeString(
-            $this->prettifyComment($reflection->getDocComment())
-        );
-    }
 }

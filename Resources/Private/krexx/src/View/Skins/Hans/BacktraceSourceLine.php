@@ -57,13 +57,13 @@ trait BacktraceSourceLine
     public function renderBacktraceSourceLine(string $className, int $lineNo, string $sourceCode): string
     {
         return str_replace(
-            $this->markerBacktraceSourceLine,
-            [
+            search: $this->markerBacktraceSourceLine,
+            replace: [
                 $className,
                 $lineNo,
                 $sourceCode,
             ],
-            $this->fileCache[static::FILE_BACKTRACE_SOURCELINE]
+            subject: $this->fileCache[static::FILE_BACKTRACE_SOURCELINE]
         );
     }
 

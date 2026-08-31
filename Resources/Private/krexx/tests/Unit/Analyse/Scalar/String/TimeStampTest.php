@@ -37,14 +37,26 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Scalar\String;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Scalar\String\TimeStamp;
+use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use DateTime;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(TimeStamp::class, 'isActive')]
 #[CoversMethod(TimeStamp::class, 'canHandle')]
+#[CoversMethod(TimeStamp::class, '__construct')]
 class TimeStampTest extends AbstractHelper
 {
+    /**
+     * Test if the __construct injects the pool.
+     */
+    public function testConstruct(): void
+    {
+        $object = new TimeStamp(Krexx::$pool);
+
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
+    }
+
     /**
      * Test something, that is always true.
      */

@@ -40,9 +40,10 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
-use Brainworxx\Krexx\Analyse\Comment\Functions;
+use Brainworxx\Krexx\Analyse\Comment\Comment;
 use Brainworxx\Krexx\Analyse\Comment\ReturnType;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use Closure;
 use ReflectionException;
 use ReflectionFunction;
@@ -61,6 +62,15 @@ class ProcessClosure extends AbstractProcessNoneScalar implements
      * @var Model
      */
     protected Model $model;
+
+    /**
+     * Inject the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
 
     /**
      * Is this one a boolean?
@@ -88,24 +98,24 @@ class ProcessClosure extends AbstractProcessNoneScalar implements
         /** @var Closure $data */
         $data = $this->model->getData();
         // Remember that we've been here before.
-        $this->pool->recursionHandler->addToHive($data);
+        $this->pool->recursionHandler->addToHive(bee: $data);
 
         try {
-            $ref = new ReflectionFunction($data);
-        } catch (ReflectionException $e) {
+            $ref = new ReflectionFunction(function: $data);
+        } catch (ReflectionException) {
             // Not sure how this can happen.
             return '';
         }
 
-        $result = $this->retrieveMetaData($ref);
-        return $this->pool->render->renderExpandableChild($this->dispatchProcessEvent(
-            $this->model->setType(static::TYPE_CLOSURE)
-                ->setNormal(static::UNKNOWN_VALUE)
-                ->setConnectorParameters($this->retrieveParameterList($ref, $result))
-                ->setDomid($this->generateDomIdFromObject($data))
-                ->setConnectorType(static::CONNECTOR_METHOD)
-                ->addParameter(static::PARAM_DATA, $result)
-                ->injectCallback($this->pool->createClass(ThroughMeta::class))
+        $result = $this->retrieveMetaData(ref: $ref);
+        return $this->pool->render->renderExpandableChild(model: $this->dispatchProcessEvent(
+            model: $this->model->setType(type: static::TYPE_CLOSURE)
+                ->setNormal(normal: static::UNKNOWN_VALUE)
+                ->setConnectorParameters(params: $this->retrieveParameterList(ref: $ref, result: $result))
+                ->setDomid(domid: $this->generateDomIdFromObject(data: $data))
+                ->setConnectorType(type: static::CONNECTOR_METHOD)
+                ->addParameter(name: static::PARAM_DATA, value: $result)
+                ->injectCallback(object: $this->pool->createClass(classname: ThroughMeta::class))
         ));
     }
 
@@ -124,25 +134,26 @@ class ProcessClosure extends AbstractProcessNoneScalar implements
         $messages = $this->pool->messages;
 
         // Adding comments from the file.
-        $result[$messages->getHelp('metaComment')] = $this->pool
-            ->createClass(Functions::class)
-            ->getComment($ref);
+        $result[$messages->getHelp(key: 'metaComment')] = $this->pool
+            ->createClass(classname: Comment::class)
+            ->getComment(reflection: $ref);
 
         // Adding the sourcecode
-        $result[$messages->getHelp('metaSource')] = $this->retrieveSourceCode($ref);
+        $result[$messages->getHelp(key: 'metaSource')] = $this->retrieveSourceCode($ref);
 
         // Adding the place where it was declared.
-        $result[$messages->getHelp('metaDeclaredIn')] = $ref->getFileName() . "\n";
-        $result[$messages->getHelp('metaDeclaredIn')] .= 'in line ' . $ref->getStartLine();
+        $result[$messages->getHelp(key: 'metaDeclaredIn')] = $ref->getFileName() . "\n";
+        $result[$messages->getHelp(key: 'metaDeclaredIn')] .= 'in line ' . $ref->getStartLine();
 
         // Adding the namespace, but only if we have one.
         $namespace = $ref->getNamespaceName();
-        if (empty(!$namespace)) {
-            $result[$messages->getHelp('metaNamespace')] = $namespace;
+        if ($namespace) {
+            $result[$messages->getHelp(key: 'metaNamespace')] = $namespace;
         }
 
         // Adding the return type.
-        $result[$messages->getHelp('metaReturnType')] = $this->pool->createClass(ReturnType::class)->getComment($ref);
+        $result[$messages->getHelp(key: 'metaReturnType')] = $this->pool->createClass(classname: ReturnType::class)
+            ->getComment(reflection: $ref);
 
         return $result;
     }
@@ -161,10 +172,10 @@ class ProcessClosure extends AbstractProcessNoneScalar implements
         // Adding the sourcecode
         $highlight = $ref->getStartLine() - 1;
         return $this->pool->fileService->readSourcecode(
-            $ref->getFileName(),
-            $highlight,
-            $highlight - 3,
-            $ref->getEndLine() - 1
+            filePath: $ref->getFileName(),
+            highlight: $highlight,
+            readFrom: $highlight - 3,
+            readTo: $ref->getEndLine() - 1
         );
     }
 
@@ -183,14 +194,13 @@ class ProcessClosure extends AbstractProcessNoneScalar implements
     {
         $paramList = '';
         foreach ($ref->getParameters() as $key => $reflectionParameter) {
-            $paramList .=  $result[$this->pool->messages->getHelp('metaParamNo') . ++$key] = $this->pool
-                ->codegenHandler
-                ->parameterToString($reflectionParameter);
+            $paramList .=  $result[$this->pool->messages->getHelp(key: 'metaParamNo') . ++$key] = $this->pool
+                ->codegenHandler->parameterToString(reflectionParameter: $reflectionParameter);
             // We add a comma to the parameter list, to separate them for a
             // better readability.
             $paramList .= ', ';
         }
 
-        return rtrim($paramList, ', ');
+        return rtrim(string: $paramList, characters: ', ');
     }
 }
