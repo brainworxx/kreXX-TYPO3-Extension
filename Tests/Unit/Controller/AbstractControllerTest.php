@@ -54,7 +54,6 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(AbstractController::class, 'initializeAction')]
 #[CoversMethod(AbstractController::class, '__construct')]
-#[CoversMethod(AbstractController::class, 'prepare11Flashmessages')]
 class AbstractControllerTest extends AbstractHelper
 {
     /**
