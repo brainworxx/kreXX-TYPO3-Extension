@@ -5,6 +5,21 @@ Changelog
 =============================================================
 
 :Version: 7.0.0
+:Date: tbd
+
+Changes:
+    * [Change] Dropped support for PHP 7.4, 8.0 and 8.1.
+    * [Change] Removed deprecations.
+    * [Change] removed the following configuration settings:
+        - [output]detectAjax
+        - [properties]analyseScalar
+        - [emergency]maxRuntime
+        - [emergency]memoryLeft
+    * [Change] Moved the maxCall setting from [emergency] to [prune]. Removed the now empty [emergency] section.
+    * [Change] Dropped support for TYPO3 10, 11 and 12.
+    * [Change] Refactored / rewritten the rendering and the JS of the backend module and kicked out all the old compatibility workarounds.
+
+:Version: 6.1.7
 :Date: 2026-06-27
 
 Changes:
