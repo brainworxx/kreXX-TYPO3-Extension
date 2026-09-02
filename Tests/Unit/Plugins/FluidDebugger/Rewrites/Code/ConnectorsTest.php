@@ -59,7 +59,7 @@ class ConnectorsTest extends AbstractHelper
             Connectors::CONNECTOR_STATIC_PROPERTY => ['.', ''],
             Connectors::CONNECTOR_SPECIAL_CHARS_PROP => ['.', ''],
         ];
-        $connector = new Connectors();
+        $connector = new Connectors(\Krexx::$pool);
 
         $this->assertEquals($expected, $this->retrieveValueByReflection('connectorArray', $connector));
     }
@@ -69,7 +69,7 @@ class ConnectorsTest extends AbstractHelper
      */
     public function testGetConnectorRight()
     {
-        $connector = new Connectors();
+        $connector = new Connectors(\Krexx::$pool);
         $this->assertEquals('', $connector->getConnectorRight(42));
 
         // And now with some parameters.

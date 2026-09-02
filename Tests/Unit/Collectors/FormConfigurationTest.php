@@ -40,7 +40,6 @@ use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
-use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(FormConfiguration::class, 'assignData')]
@@ -56,11 +55,8 @@ class FormConfigurationTest extends AbstractHelper
     {
         // No access.
         $configuration = new FormConfiguration();
-        if (class_exists(AbstractTemplateView::class)) {
-            $viewMock = $this->createMock(AbstractTemplateView::class);
-        } else {
-            $viewMock = $this->createMock(ModuleTemplate::class);
-        }
+        $viewMock = $this->createMock(ModuleTemplate::class);
+
         $viewMock->expects($this->never())
             ->method('assign');
         $configuration->assignData($viewMock);
@@ -75,11 +71,7 @@ class FormConfigurationTest extends AbstractHelper
             \Krexx::$pool->config
         );
 
-        if (class_exists(AbstractTemplateView::class)) {
-            $viewMock = $this->createMock(AbstractTemplateView::class);
-        } else {
-            $viewMock = $this->createMock(ModuleTemplate::class);
-        }
+        $viewMock = $this->createMock(ModuleTemplate::class);
         $viewMock->expects($this->once())
             ->method('assign')
             ->with(

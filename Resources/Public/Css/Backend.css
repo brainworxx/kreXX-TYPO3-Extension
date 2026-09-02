@@ -1,0 +1,35 @@
+td.description {
+    width: 400px;
+}
+
+td.commands {
+    width: 110px;
+}
+
+td.commands .btn,
+td.commands .form-check-input
+{
+    height: 36px !important;
+}
+
+.panel-body {
+    max-width: 1200px;
+}
+
+.panel-body.staged {
+    max-width: 820px;
+}
+
+.meta {
+    hyphens: auto;
+}
+
+.krexx-logs.table td {
+    background-color: var(--krexx-row-bg-light);
+}
+
+@media (prefers-color-scheme: dark) {
+    .krexx-logs.table td {
+        background-color: var(--krexx-row-bg-dark);
+    }
+}

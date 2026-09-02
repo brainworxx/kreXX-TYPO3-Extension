@@ -73,7 +73,7 @@ abstract class AbstractCollector implements ControllerConstInterface, ConfigCons
     /**
      * @var string
      */
-    protected const SETTINGS_USE_FACTORY_SETTINGS = 'useFactorySettings';
+    protected const SETTINGS_USE_OWN_SETTINGS = 'useOwnSettings';
 
     /**
      * @var string

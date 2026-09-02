@@ -48,7 +48,7 @@ use TYPO3\CMS\Core\Core\ApplicationContext;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\ResponseFactory;
 use TYPO3\CMS\Core\Http\ServerRequest;
-use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException;
@@ -87,9 +87,9 @@ class IndexControllerTest extends AbstractHelper
         $formConfigMock = $this->createMock(FormConfiguration::class);
         $settings = $this->createMock(Settings::class);
         $pageRenderer = $this->createMock(PageRenderer::class);
-        $typo3Version = new Typo3Version();
+        $iconFactory = $this->createMock(IconFactory::class);
 
-        $this->indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer, $typo3Version);
+        $this->indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer, $iconFactory);
     }
 
     /**
@@ -119,7 +119,6 @@ class IndexControllerTest extends AbstractHelper
         $jsCssFileContent = 'file content';
         $templateContent = 'template content';
         $translationContent = 'window.ajaxTranslate = {"deletefile":"ajax.delete.file","error":"ajax.error","in":"ajax.in","line":"ajax.line","updatedLoglist":"ajax.updated.loglist","deletedCookies":"ajax.deleted.cookies"};';
-        $typo3Version = new Typo3Version();
 
         $fileGetContents =  $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_get_contents');
         $fileGetContents->expects($this->any())
@@ -148,63 +147,26 @@ class IndexControllerTest extends AbstractHelper
         } else {
             $viewMock = $this->createMock(ModuleTemplate14::class);
         }
-        if ($typo3Version->getMajorVersion() < 11) {
-            $viewMock->expects($this->exactly(1))
-                ->method('assignMultiple')
-                ->with(['settings' => $settingsModel]);
-            $viewMock->expects($this->once())
-                ->method('render')
-                ->willReturn($templateContent);
-        }
 
         $moduleTemplateMock = $this->createMock(ModuleTemplate::class);
-        $moduleTemplateMock->expects($this->once())
-            ->method('setModuleName')
-            ->with('tx_includekrexx');
+        $moduleTemplateMock->expects($this->exactly(1))
+            ->method('assignMultiple');
 
-        if ($typo3Version->getMajorVersion() > 11) {
-            $moduleTemplateMock->expects($this->exactly(2))
-                ->method('assignMultiple');
-        }
-        if ($typo3Version->getMajorVersion() < 11) {
-            $moduleTemplateMock->expects($this->once())
-                ->method('setContent')
-                ->with($templateContent);
-            $moduleTemplateMock->expects($this->once())
-                ->method('renderContent')
-                ->willReturn($templateContent);
-        }
 
         // Prepare the collectors
         $configurationMock = $this->createMock(Configuration::class);
         $configFeMock = $this->createMock(FormConfiguration::class);
-        if ($typo3Version->getMajorVersion() > 11) {
-            $configurationMock->expects($this->once())
-                ->method('assignData')
-                ->with($moduleTemplateMock);
-            $configFeMock->expects($this->once())
-                ->method('assignData')
-                ->with($moduleTemplateMock);
-        } else {
-            $configurationMock->expects($this->once())
-                ->method('assignData')
-                ->with($viewMock);
-            $configFeMock->expects($this->once())
-                ->method('assignData')
-                ->with($viewMock);
-        }
-
+        $configurationMock->expects($this->once())
+            ->method('assignData')
+            ->with($moduleTemplateMock);
+        $configFeMock->expects($this->once())
+            ->method('assignData')
+            ->with($moduleTemplateMock);
         $pageRenderer = $this->createMock(PageRenderer::class);
-        $pageRenderer->expects($this->any())
-            ->method('addJsInlineCode')
-            ->with(...$this->withConsecutive(['krexxajaxtrans', $translationContent, false, false, true]));
-
-        $pageRenderer->expects($this->once())
-            ->method('addCssInlineBlock')
-            ->with('krexxBeCss', $jsCssFileContent);
 
         // Inject it, like there is no tomorrow.
-        $this->indexController = new IndexController($configurationMock, $configFeMock, $settingsModel, $pageRenderer, $typo3Version);
+        $iconFactory = $this->createMock(IconFactory::class);
+        $this->indexController = new IndexController($configurationMock, $configFeMock, $settingsModel, $pageRenderer, $iconFactory);
         $this->setValueByReflection('moduleTemplate', $moduleTemplateMock, $this->indexController);
 
         if (method_exists($this->indexController, 'injectResponseFactory')) {

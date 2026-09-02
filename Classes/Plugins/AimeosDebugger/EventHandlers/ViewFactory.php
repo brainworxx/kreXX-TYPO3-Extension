@@ -87,13 +87,6 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
     protected const STANDARD = '\\Standard';
 
     /**
-     * Our pool.
-     *
-     * @var \Brainworxx\Krexx\Service\Factory\Pool
-     */
-    protected Pool $pool;
-
-    /**
      * List of all retrieved helper classes from the view.
      *
      * @var object[]|null
@@ -105,9 +98,8 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
      *
      * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
     }
 
     /**

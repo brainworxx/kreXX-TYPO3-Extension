@@ -11,15 +11,16 @@
 <f:section name="main"><f:spaceless>
 
     <h2><f:translate key="usage.headline.fluid" /></h2>
+
     <f:render section="codeblock-start" arguments="{name: 'fluidnormal'}" />&lt;krexx:debug&gt;&#123;_all&#125;&lt;/krexx:debug&gt;
 &lt;krexx:log&gt;&#123;_all&#125;&lt;/krexx:log&gt;<f:render section="codeblock-end"/>
 
-    <div class="spacer"></div>
+    <hr />
 
     <f:render section="codeblock-start" arguments="{name: 'fluidvalue'}" />&lt;krexx:debug value=&quot;&#123;my: &#x27;value&#x27;, to: &#x27;analyse&#x27;&#125;&quot; /&gt;
 &lt;krexx:log value=&quot;&#123;my: &#x27;value&#x27;, to: &#x27;analyse&#x27;&#125;&quot; /&gt;<f:render section="codeblock-end"/>
 
-    <div class="spacer"></div>
+    <hr />
 
     <f:render section="codeblock-start" arguments="{name: 'fluidmoment'}" />&lt;!-- <f:translate key="usage.code.fluidmoment" /> --&gt;
 &lt;krexx:timer.moment value=&quot;<f:translate key="usage.code.fluidmoment.1" />&quot;/&gt;
@@ -50,14 +51,14 @@ krexxlog($myObject);<f:render section="codeblock-end"/>
     </ul>
     <f:translate key="usage.features.simple" />
 
-    <div class="spacer"></div>
+    <hr />
     <f:render section="codeblock-start" arguments="{name: 'moment'}"/>\Krexx::timerMoment($string);<f:render section="codeblock-end"/>
-    <div class="spacer"></div>
+    <hr />
     <f:render section="codeblock-start" arguments="{name: 'timerEnd'}"/>\Krexx::timerEnd()
 // forced logging
 \Krexx::logTimerEnd();<f:render section="codeblock-end"/>
 
-    <div class="spacer"></div>
+    <hr />
     <f:render section="codeblock-start" arguments="{name: 'backtrace'}" />\Krexx::backtrace();
 // forced logging
 \Krexx::logBacktrace();<f:render section="codeblock-end"/>
@@ -75,11 +76,11 @@ krexxlog($myObject);<f:render section="codeblock-end"/>
  * @var string {name}
  *   The name of the code block, used for the translation label.
  */
-<f:section name="codeblock-start"><f:translate key="usage.label.{name}" /><div class="codeblock"><pre></f:section>
+<f:section name="codeblock-start"><f:translate key="usage.label.{name}" /><div class="border"><pre class="m-2"><code></f:section>
 
 /**
  * Renders the end of a codeblock
  */
-<f:section name="codeblock-end"></pre></div></f:section>
+<f:section name="codeblock-end"></code></pre></div></f:section>
 
 </html>

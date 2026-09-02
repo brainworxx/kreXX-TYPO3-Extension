@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code;
 
 use Brainworxx\Krexx\Analyse\Code\Connectors as OrgConnectors;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Special connectors for fluid. Used by the code generation.
@@ -47,7 +48,7 @@ class Connectors extends OrgConnectors
     /**
      * Update the connectors array.
      */
-    public function __construct()
+    public function __construct(protected Pool $pool)
     {
         $fluid = ['.', ''];
         $fluidParameters = ['.', '(@param@)'];

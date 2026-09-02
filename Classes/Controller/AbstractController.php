@@ -45,10 +45,13 @@ use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Psr\Http\Message\ResponseInterface;
-use TYPO3\CMS\Backend\Template\ModuleTemplate;
+use TYPO3\CMS\Backend\Template\Components\Buttons\DropDown\DropDownToggle;
+use TYPO3\CMS\Backend\Template\Components\Buttons\DropDownButton;
+use TYPO3\CMS\Backend\Template\Components\Buttons\GenericButton;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Imaging\IconSize;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -102,7 +105,8 @@ abstract class AbstractController extends ActionController implements ConstInter
         protected Configuration $configuration,
         protected FormConfiguration $formConfiguration,
         protected Settings $settingsModel,
-        protected PageRenderer $pageRenderer
+        protected PageRenderer $pageRenderer,
+        protected IconFactory $iconFactory,
     ) {
         Pool::createPool();
         $this->pool = Krexx::$pool;
@@ -118,6 +122,7 @@ abstract class AbstractController extends ActionController implements ConstInter
         parent::initializeAction();
         $this->moduleTemplate = GeneralUtility::makeInstance(ModuleTemplateFactory::class)
             ->create($this->request);
+        $this->addControls();
     }
 
     /**
@@ -180,54 +185,46 @@ abstract class AbstractController extends ActionController implements ConstInter
         }
     }
 
-    /**
-     * With 10.0, the backend container became somewhat unable to handle css and
-     * js files. The path needs to be different, depending on the debug settings.
-     *
-     * @example
-     *   /typo3_100/typo3conf/ext/includekrexx/Resources/Public/Css/Index.css
-     *   --> with debug settings
-     *   /typo3conf/ext/includekrexx/Resources/Public/Css/Index.css
-     *   --> with productive settings.
-     *
-     * Imho the best way to deal with this is to (again) assign the css and js
-     * inline.
-     */
-    protected function assignCssJs(): void
+    protected function addControls(): void
     {
-        $this->pageRenderer->loadJavaScriptModule('@brainworxx/includekrexx/Index.js');
-        $this->pageRenderer->addJsInlineCode(
-            'krexxajaxtrans',
-            $this->generateAjaxTranslations(),
-            false,
-            false,
-            true
-        );
+        $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
 
-        $cssPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Private/Css/Index.css');
-        $this->pageRenderer->addCssInlineBlock('krexxBeCss', file_get_contents($cssPath), false, false, true);
-        $this->moduleTemplate->setModuleName('tx_includekrexx');
-    }
+        /** @var GenericButton $button */
+        $saveButton = GeneralUtility::makeInstance(GenericButton::class);
+        $saveTitle = static::translate('save');
+        $saveButton->setLabel($saveTitle)
+            ->setTitle($saveTitle)
+            ->setShowLabelText(true)
+            ->setAttributes(['form' => 'save-form'])
+            ->setIcon($this->iconFactory->getIcon('actions-save', IconSize::SMALL));
+        $buttonBar->addButton(button: $saveButton);
 
-    /**
-     * Generate the translation JS object manually in PHP, because I do not
-     * trust Fluid enough to do this across all versions from 7.6 to 11.5.
-     *
-     * @return string
-     *   The generated javascript variable with the translations.
-     */
-    protected function generateAjaxTranslations(): string
-    {
-        $translation = [
-            'deletefile' => static::translate('ajax.delete.file'),
-            'error' => static::translate('ajax.error'),
-            'in' => static::translate('ajax.in'),
-            'line' => static::translate('ajax.line'),
-            'updatedLoglist' => static::translate('ajax.updated.loglist'),
-            'deletedCookies' => static::translate('ajax.deleted.cookies'),
-        ];
+        /** @var DropDownButton $dropdown */
+        $dropdown = GeneralUtility::makeInstance(DropDownButton::class);
+        $dropdown->setShowLabelText(true)
+            ->setShowLabelText(true)
+            ->setLabel(static::translate('simple'));
+        /** @var DropDownToggle $simpleItem */
+        $simpleItem = GeneralUtility::makeInstance(DropDownToggle::class);
+        $simpleItem->setAttribute('data-mode', 'simple')
+            ->setActive(true)
+            ->setLabel(static::translate('simple'));
+        /** @var DropDownToggle $expertItem */
+        $expertItem = GeneralUtility::makeInstance(DropDownToggle::class);
+        $expertItem->setAttribute('data-mode', 'expert')
+            ->setActive(false)
+            ->setLabel(static::translate('expert'));
+        $dropdown->addItem($simpleItem)->addItem($expertItem);
+        $buttonBar->addButton(button: $dropdown);
 
-        return 'window.ajaxTranslate = ' .  json_encode($translation) . ';';
+        $cookieButton = GeneralUtility::makeInstance(GenericButton::class);
+        $cookieText = static::translate('clear.cookies');
+        $cookieButton->setLabel($cookieText)
+            ->setTitle($cookieText)
+            ->setShowLabelText(true)
+            ->setIcon($this->iconFactory->getIcon('actions-cookie', IconSize::SMALL))
+            ->setClasses('cookies');
+        $buttonBar->addButton(button: $cookieButton);
     }
 
     /**
@@ -237,20 +234,22 @@ abstract class AbstractController extends ActionController implements ConstInter
      */
     protected function moduleTemplateRender(): ResponseInterface
     {
-        $this->assignCssJs();
-        $this->assignMultiple(['compatibilityClasses' => 'module-body t3js-module-body']);
+        $this->pageRenderer->addInlineLanguageLabelArray([
+            'deletefile' => static::translate('ajax.delete.file'),
+            'in' => static::translate('ajax.in'),
+            'line' => static::translate('ajax.line'),
+            'updatedLoglist' => static::translate('ajax.updated.loglist'),
+            'deletedCookies' => static::translate('ajax.deleted.cookies'),
+            'ajaxSuccess' => static::translate('ajax.success'),
+            'ajaxError' => static::translate('ajax.error'),
+            'parsingError' => static::translate('ajax.parsing.error'),
+            'warning' => static::translate('ajax.warning'),
+            'yes' => static::translate('ajax.yes'),
+            'no' => static::translate('ajax.no'),
+        ]);
+
         $this->configuration->assignData($this->moduleTemplate);
         $this->formConfiguration->assignData($this->moduleTemplate);
         return $this->moduleTemplate->renderResponse('Index/Index');
-    }
-
-    /**
-     * Compatibility wrapper around the assignment of multiple values.
-     *
-     * @param array $values
-     */
-    protected function assignMultiple(array $values): void
-    {
-        $this->moduleTemplate->assignMultiple($values);
     }
 }

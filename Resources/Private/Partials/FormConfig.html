@@ -17,7 +17,6 @@
     <f:render section="table" arguments="{headline: 'subhead.pruneOutput',   payload: 'pruneOutput',   formConfig: formConfig}" />
     <f:render section="table" arguments="{headline: 'subhead.properties',    payload: 'properties',    formConfig: formConfig}" />
     <f:render section="table" arguments="{headline: 'subhead.methods',       payload: 'methods',       formConfig: formConfig}" />
-    <f:render section="table" arguments="{headline: 'subhead.emergencystop', payload: 'emergencystop', formConfig: formConfig}" />
 </f:section>
 
 /**
@@ -29,7 +28,6 @@
 <f:section name="output">
     <f:render section="dropdown" arguments="{formConfig.disabled}" />
     <f:render section="dropdown" arguments="{formConfig.iprange}" />
-    <f:render section="dropdown" arguments="{formConfig.detectAjax}" />
 </f:section>
 <f:section name="behavior">
     <f:render section="dropdown" arguments="{formConfig.skin}" />
@@ -41,11 +39,11 @@
     <f:render section="dropdown" arguments="{formConfig.maxStepNumber}" />
     <f:render section="dropdown" arguments="{formConfig.arrayCountLimit}" />
     <f:render section="dropdown" arguments="{formConfig.level}" />
+    <f:render section="dropdown" arguments="{formConfig.maxCall}" />
 </f:section>
 <f:section name="properties">
     <f:render section="dropdown" arguments="{formConfig.analyseProtected}" />
     <f:render section="dropdown" arguments="{formConfig.analysePrivate}" />
-    <f:render section="dropdown" arguments="{formConfig.analyseScalar}" />
     <f:render section="dropdown" arguments="{formConfig.analyseTraversable}" />
 </f:section>
 <f:section name="methods">
@@ -54,12 +52,6 @@
     <f:render section="dropdown" arguments="{formConfig.analyseGetter}" />
     <f:render section="dropdown" arguments="{formConfig.debugMethods}" />
 </f:section>
-<f:section name="emergencystop">
-    <f:render section="dropdown" arguments="{formConfig.maxCall}" />
-    <f:render section="dropdown" arguments="{formConfig.memoryLeft}" />
-    <f:render section="dropdown" arguments="{formConfig.maxRuntime}" />
-</f:section>
-
 /**
  * Renders a configuration table.
  *
@@ -72,20 +64,18 @@
  */
 <f:section name="table">
     <h3><f:translate key="{headline}" /></h3>
-    <div class="table-wrapper formtable">
-        <table border="0" class="krexx-config">
-            <thead>
-                <tr>
-                    <th class="description"><f:translate key="table.desc" /></th>
-                    <th class="value"><f:translate key="table.value" /></th>
-                    <th class="commands"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <f:render section="{payload}" arguments="{formConfig: formConfig}" />
-            </tbody>
-        </table>
-    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th class="description"><f:translate key="table.desc" /></th>
+            <th class="value"><f:translate key="table.value" /></th>
+            <th class="commands"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <f:render section="{payload}" arguments="{formConfig: formConfig}" />
+        </tbody>
+    </table>
 </f:section>
 
 
@@ -97,7 +87,7 @@
  *   The name of the dropdown.
  * @var array {options}
  *   The options for the dropdown.
- * @var bool {useFactorySettings}
+ * @var bool {useOwnSettings}
  *   Are we using factory settings here?
  * @var string {value}
  *   The current value of the dropdown.
@@ -108,14 +98,29 @@
     <tr>
         <td class="description"><label for="form{name}"><f:translate key="label.{name}" /></label></td>
         <td class="value">
-            <div class="chevron"><f:form.select additionalAttributes="{autocomplete: 'off'}" id="form{name}" property="form{name}" options="{options}" value="{value}" /></div>
-            <div id="form{name}-fallback" class="fallback">{fallback}</div>
+            <f:form.select additionalAttributes="{autocomplete: 'off'}"
+                           class="form-select"
+                           id="form{name}"
+                           property="form{name}"
+                           options="{options}"
+                           value="{value}"
+                           data-value="{value}"
+                           data-fallback="{fallback}"
+            />
         </td>
         <td class="commands">
-            <label class="button" for="factory.form{name}">
-                <f:form.checkbox class="switch" additionalAttributes="{autocomplete: 'off'}" id="factory.form{name}" property="factory" checked="{useFactorySettings}" value="1" />
-                <span class="switch" ></span>
-            </label>
+            <div class="form-check form-check-type-labeled-toggle d-inline-block">
+                <label class="form-check-label visually-hidden" for="factory.form{name}"><f:translate key="label.factorysettings"/></label>
+                <f:form.checkbox class="form-check-input"
+                                 additionalAttributes="{autocomplete: 'off'}"
+                                 id="factory.form{name}"
+                                 property="factory"
+                                 checked="{useOwnSettings}"
+                                 data-form-check-label-checked="{f:translate(key: 'label.factorysettings.on')}"
+                                 data-form-check-label-unchecked="{f:translate(key: 'label.factorysettings.off')}"
+                                 value="1"
+                />
+            </div>
         </td>
     </tr>
 </f:section>

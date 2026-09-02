@@ -377,10 +377,6 @@
 				<source>Prune output</source>
 				<target state="final">Ausgabe begrenzen</target>
 			</trans-unit>
-			<trans-unit id="subhead.emergencystop" approved="yes">
-				<source>Emergency stop</source>
-				<target state="final">Notstop</target>
-			</trans-unit>
 			<trans-unit id="subhead.typo3" approved="yes">
 				<source>TYPO3 specific</source>
 				<target state="final">TYPO3 spezifisches</target>
@@ -486,6 +482,18 @@
 			<trans-unit id="label.languageKey" approved="yes">
 				<source>Language</source>
 				<target state="final">Sprache</target>
+			</trans-unit>
+			<trans-unit id="label.factorysettings" approved="yes">
+				<source>Use own value</source>
+				<target state="final">Eigene Werte verwenden</target>
+			</trans-unit>
+			<trans-unit id="label.factorysettings.on" approved="yes">
+				<source>On</source>
+				<target state="final">An</target>
+			</trans-unit>
+			<trans-unit id="label.factorysettings.off" approved="yes">
+				<source>Off</source>
+				<target state="final">Aus</target>
 			</trans-unit>
 
 			<!-- Content stuff  Edit Frontend Settings -->
@@ -651,9 +659,13 @@
 				<source>Delete this file?</source>
 				<target state="final">Die Datei löschen?</target>
 			</trans-unit>
-			<trans-unit id="ajax.error" approved="yes">
+			<trans-unit id="ajax.parsing.error" approved="yes">
 				<source>Error while parsing the server answer.</source>
 				<target state="final">Die Serverantwort konnte nicht geparst werden.</target>
+			</trans-unit>
+			<trans-unit id="ajax.error" approved="yes">
+				<source>Error</source>
+				<target state="final">Fehler</target>
 			</trans-unit>
 			<trans-unit id="ajax.in" approved="yes">
 				<source>in</source>
@@ -670,6 +682,22 @@
 			<trans-unit id="ajax.deleted.cookies" approved="yes">
 				<source>All cookie settings were removed!</source>
 				<target state="final">Alle Debug-Cookie Einstellungen wurden entfernt.</target>
+			</trans-unit>
+			<trans-unit id="ajax.success" approved="yes">
+				<source>Success</source>
+				<target state="final">Erfolgreich</target>
+			</trans-unit>
+			<trans-unit id="ajax.warning" approved="yes">
+				<source>Warning</source>
+				<target state="final">Achung</target>
+			</trans-unit>
+			<trans-unit id="ajax.yes" approved="yes">
+				<source>Yes</source>
+				<target state="final">Ja</target>
+			</trans-unit>
+			<trans-unit id="ajax.no" approved="yes">
+				<source>No</source>
+				<target state="final">Nein</target>
 			</trans-unit>
 		</body>
 	</file>

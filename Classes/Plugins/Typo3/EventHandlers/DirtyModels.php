@@ -57,18 +57,10 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Exception\TooDirtyException;
 class DirtyModels implements EventHandlerInterface
 {
     /**
-     * The resource pool
-     *
-     * @var Pool
-     */
-    protected Pool $pool;
-
-    /**
      * {@inheritdoc}
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
     }
 
     /**

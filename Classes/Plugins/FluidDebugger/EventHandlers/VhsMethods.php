@@ -52,18 +52,10 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 class VhsMethods implements EventHandlerInterface, CallbackConstInterface, FluidConstInterface
 {
     /**
-     * The resource pool
-     *
-     * @var Pool
-     */
-    protected Pool $pool;
-
-    /**
      * {@inheritdoc}
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
     }
 
     /**

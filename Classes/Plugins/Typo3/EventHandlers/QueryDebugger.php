@@ -57,18 +57,10 @@ use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, ProcessConstInterface
 {
     /**
-     * The resource pool
-     *
-     * @var Pool
-     */
-    protected Pool $pool;
-
-    /**
      * {@inheritdoc}
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
     }
 
     /**

@@ -72,13 +72,6 @@ class DynamicGetter implements
     ConnectorsConstInterface
 {
     /**
-     * The resource pool
-     *
-     * @var Pool
-     */
-    protected Pool $pool;
-
-    /**
      * The retriever for the dynamic getters.
      *
      * @var \Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\AbstractGetterRetriever[]
@@ -105,10 +98,8 @@ class DynamicGetter implements
     /**
      * {@inheritdoc}
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
-
         foreach ($this->processersClassNames as $class) {
             $this->retriever[] = $pool->createClass($class);
         }

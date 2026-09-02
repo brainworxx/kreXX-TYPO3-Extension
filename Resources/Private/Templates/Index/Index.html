@@ -1,7 +1,6 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
 
-<f:layout name="Index"/>
-
+<f:layout name="Module"/>
 
 /**
  * Renders the complete backend module.
@@ -12,8 +11,91 @@
  * @var array {_all}
  *   Complete access to all variables.
  */
-<f:section name="main">
-    <f:render partial="Index" section="main" arguments="{_all}" />
+<f:section name="Content">
+    <f:be.pageRenderer includeCssFiles="{0: 'EXT:includekrexx/Resources/Public/Css/Backend.css'}"
+                       includeJavaScriptModules="{0: '@brainworxx/includekrexx/KrexxBackend.js'}"/>
+
+    <f:flashMessages />
+
+    <h1><f:translate key="mlang_tabs_tab"/> </h1>
+    <div role="tabpanel">
+        <ul class="nav nav-tabs t3js-tabs" role="tablist" id="tabs-DTM-1721236302" data-store-last-tab="1">
+            <li role="presentation" class="nav-item t3js-tabmenu-item">
+                <button type="button"
+                        class="nav-link active"
+                        data-bs-toggle="tab"
+                        data-bs-target="#tab-1"
+                        aria-controls="tab-1"
+                        role="tab">
+                    {f:translate(key:'layout.log.index')}
+                </button>
+            </li>
+            <li role="presentation" class="nav-item t3js-tabmenu-item">
+                <button type="button"
+                        class="nav-link"
+                        data-bs-toggle="tab"
+                        data-bs-target="#tab-2"
+                        aria-controls="tab-2"
+                        role="tab">
+                    {f:translate(key:'layout.edit.config.file')}
+                </button>
+            </li>
+            <li role="presentation" class="nav-item t3js-tabmenu-item expert">
+                <button type="button"
+                        class="nav-link"
+                        data-bs-toggle="tab"
+                        data-bs-target="#tab-3"
+                        aria-controls="tab-3"
+                        role="tab">
+                    {f:translate(key:'layout.edit.config.fe')}
+                </button>
+            </li>
+            <li role="presentation" class="nav-item t3js-tabmenu-item">
+                <button type="button"
+                        class="nav-link"
+                        data-bs-toggle="tab"
+                        data-bs-target="#tab-4"
+                        aria-controls="tab-4"
+                        role="tab">
+                    {f:translate(key:'layout.usage.help')}
+                </button>
+            </li>
+        </ul>
+
+        <f:form id="save-form" action="save" object="{settings}" objectName="settings" name="settings" method="POST">
+            <div class="tab-content">
+                <div id="tab-1" role="tabpanel" class="tab-pane active">
+                    <div class="panel">
+                        <div class="panel-body">
+                            <f:render partial="Log" section="main" arguments="{_all}" />
+                        </div>
+                    </div>
+                </div>
+                <div id="tab-2" role="tabpanel" class="tab-pane">
+                    <div class="panel">
+                        <div class="panel-body staged">
+                            <f:render partial="Config" section="main" arguments="{_all}"/>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab-3" role="tabpanel" class="tab-pane">
+                    <div class="panel">
+                        <div class="panel-body staged">
+                            <f:render partial="FormConfig" section="main" arguments="{_all}"/>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab-4" role="tabpanel" class="tab-pane">
+                    <div class="panel">
+                        <div class="panel-body staged">
+                            <f:render partial="Help" section="main" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </f:form>
+    </div>
+
 </f:section>
 
 </html>

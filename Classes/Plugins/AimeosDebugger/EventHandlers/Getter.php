@@ -72,13 +72,6 @@ use ReflectionMethod;
 class Getter extends AbstractEventHandler implements CallbackConstInterface
 {
     /**
-     * Our pool.
-     *
-     * @var \Brainworxx\Krexx\Service\Factory\Pool
-     */
-    protected Pool $pool;
-
-    /**
      * The names of the internal storages if Aimeos items.
      *
      * @var string[]
@@ -94,9 +87,8 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface
      *
      * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
     }
 
     /**

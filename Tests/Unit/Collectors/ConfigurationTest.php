@@ -39,7 +39,6 @@ use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate;
 use Brainworxx\Krexx\Service\Config\Config;
-use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(Configuration::class, 'assignData')]
@@ -55,12 +54,7 @@ class ConfigurationTest extends AbstractHelper
     {
         // No access.
         $configuration = new Configuration();
-        if (class_exists(AbstractTemplateView::class)) {
-            $viewMock = $this->createMock(AbstractTemplateView::class);
-        } else {
-            $viewMock = $this->createMock(ModuleTemplate::class);
-        }
-
+        $viewMock = $this->createMock(ModuleTemplate::class);
         $viewMock->expects($this->never())
             ->method('assign');
         $configuration->assignData($viewMock);
@@ -79,11 +73,8 @@ class ConfigurationTest extends AbstractHelper
         $this->setValueByReflection('userUc', [Config::SETTING_MAX_FILES => '1000'], $configuration);
 
         // Mock the view.
-        if (class_exists(AbstractTemplateView::class)) {
-            $viewMock = $this->createMock(AbstractTemplateView::class);
-        } else {
-            $viewMock = $this->createMock(ModuleTemplate::class);
-        }
+        $viewMock = $this->createMock(ModuleTemplate::class);
+
         $viewMock->expects($this->exactly(2))
             ->method('assign')
             ->with(...$this->withConsecutive(
@@ -92,10 +83,10 @@ class ConfigurationTest extends AbstractHelper
                     $this->callback(function ($config) {
                         // @see config.ini in the fixtures.
                         return $config[Config::SETTING_SKIN]['value'] === 'hans' &&
-                            $config[Config::SETTING_SKIN]['useFactorySettings'] === false &&
+                            $config[Config::SETTING_SKIN]['useOwnSettings'] === true &&
                             $config[Config::SETTING_IP_RANGE]['value'] === 'testing . . .' &&
                             $config[Config::SETTING_MAX_FILES]['value'] === '1000' &&
-                            $config[Config::SETTING_MAX_FILES]['useFactorySettings'] === true;
+                            $config[Config::SETTING_MAX_FILES]['useOwnSettings'] === false;
                     })
                 ],
                 [

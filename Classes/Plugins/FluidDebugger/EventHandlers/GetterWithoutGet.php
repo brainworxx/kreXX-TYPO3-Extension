@@ -51,18 +51,10 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 class GetterWithoutGet implements EventHandlerInterface
 {
     /**
-     * The resource pool
-     *
-     * @var Pool
-     */
-    protected Pool $pool;
-
-    /**
      * {@inheritdoc}
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
     }
 
     /**

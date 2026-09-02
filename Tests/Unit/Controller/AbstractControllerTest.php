@@ -43,10 +43,12 @@ use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate as ModuleTemplateUnit;
 use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate14 as ModuleTemplateUnit14;
+use TYPO3\CMS\Backend\Template\Components\ButtonBar;
+use TYPO3\CMS\Backend\Template\Components\DocHeaderComponent;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplateFactory as ModuleTemplateFactoryUnit;
 use Brainworxx\Krexx\Krexx;
-use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\View\ViewInterface;
 use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 use TYPO3\CMS\Core\Page\PageRenderer;
@@ -54,6 +56,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(AbstractController::class, 'initializeAction')]
 #[CoversMethod(AbstractController::class, '__construct')]
+#[CoversMethod(AbstractController::class, 'addControls')]
 class AbstractControllerTest extends AbstractHelper
 {
     /**
@@ -65,15 +68,16 @@ class AbstractControllerTest extends AbstractHelper
         $formConfigMock = $this->createMock(FormConfiguration::class);
         $settings = $this->createMock(Settings::class);
         $pageRenderer = $this->createMock(PageRenderer::class);
-        $typo3Version = new Typo3Version();
+        $iconFactory = $this->createMock(IconFactory::class);
 
-        $indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer, $typo3Version);
+        $indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer, $iconFactory);
 
         $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $indexController));
         $this->assertSame($configMock, $this->retrieveValueByReflection('configuration', $indexController));
         $this->assertSame($formConfigMock, $this->retrieveValueByReflection('formConfiguration', $indexController));
         $this->assertSame($settings, $this->retrieveValueByReflection('settingsModel', $indexController));
         $this->assertSame($pageRenderer, $this->retrieveValueByReflection('pageRenderer', $indexController));
+        $this->assertSame($iconFactory, $this->retrieveValueByReflection('iconFactory', $indexController));
     }
 
     /**
@@ -85,8 +89,9 @@ class AbstractControllerTest extends AbstractHelper
         $formConfigMock = $this->createMock(FormConfiguration::class);
         $settings = $this->createMock(Settings::class);
         $pageRenderer = $this->createMock(PageRenderer::class);
+        $iconFactory = $this->createMock(IconFactory::class);
 
-        $indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer);
+        $indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer, $iconFactory);
 
         if (class_exists(ViewInterface::class)) {
             $mtMock = $this->createMock(ModuleTemplateUnit14::class);
@@ -99,6 +104,19 @@ class AbstractControllerTest extends AbstractHelper
         $mtFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($mtMock);
+
+        $docHeaderMock = $this->createMock(DocHeaderComponent::class);
+        $mtMock->expects($this->once())
+            ->method('getDocHeaderComponent')
+            ->willReturn($docHeaderMock);
+        $buttonBarMock = $this->createMock(ButtonBar::class);
+        $docHeaderMock->expects($this->once())
+            ->method('getButtonBar')
+            ->willReturn($buttonBarMock);
+        $buttonBarMock->expects($this->exactly(3))
+            ->method('addButton')
+            ->willReturnSelf();
+
         $this->injectIntoGeneralUtility(ModuleTemplateFactory::class, $mtFactoryMock);
         $requestMock = $this->createMock(RequestInterface::class);
         $this->setValueByReflection('request', $requestMock, $indexController);

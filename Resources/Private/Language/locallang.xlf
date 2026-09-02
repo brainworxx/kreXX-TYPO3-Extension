@@ -289,9 +289,6 @@
 			<trans-unit id="subhead.pruneOutput">
 				<source>Prune output</source>
 			</trans-unit>
-			<trans-unit id="subhead.emergencystop">
-				<source>Emergency stop</source>
-			</trans-unit>
 			<trans-unit id="subhead.typo3">
 				<source>TYPO3 specific</source>
 			</trans-unit>
@@ -371,6 +368,15 @@
 			</trans-unit>
 			<trans-unit id="label.languageKey">
 				<source>Language</source>
+			</trans-unit>
+			<trans-unit id="label.factorysettings">
+				<source>Use own value</source>
+			</trans-unit>
+			<trans-unit id="label.factorysettings.on">
+				<source>On</source>
+			</trans-unit>
+			<trans-unit id="label.factorysettings.off">
+				<source>Off</source>
 			</trans-unit>
 
 			<!-- Content stuff  Edit Frontend Settings -->
@@ -497,8 +503,11 @@
 			<trans-unit id="ajax.delete.file">
 				<source>Delete this file?</source>
 			</trans-unit>
-			<trans-unit id="ajax.error">
+			<trans-unit id="ajax.parsing.error">
 				<source>Error while parsing the server answer.</source>
+			</trans-unit>
+			<trans-unit id="ajax.error">
+				<source>Error</source>
 			</trans-unit>
 			<trans-unit id="ajax.in">
 				<source>in</source>
@@ -511,6 +520,18 @@
 			</trans-unit>
 			<trans-unit id="ajax.deleted.cookies">
 				<source>All cookie settings were removed!</source>
+			</trans-unit>
+			<trans-unit id="ajax.success">
+				<source>Success</source>
+			</trans-unit>
+			<trans-unit id="ajax.warning">
+				<source>Warning</source>
+			</trans-unit>
+			<trans-unit id="ajax.yes">
+				<source>Yes</source>
+			</trans-unit>
+			<trans-unit id="ajax.no">
+				<source>No</source>
 			</trans-unit>
 
 		</body>

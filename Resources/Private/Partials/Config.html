@@ -31,20 +31,18 @@
  */
 <f:section name="table">
     <h3><f:translate key="{headline}" /></h3>
-    <div class="table-wrapper formtable">
-        <table border="0" class="krexx-config">
-            <thead>
-                <tr>
-                    <th class="description"><f:translate key="table.desc" /></th>
-                    <th class="value"><f:translate key="table.value" /></th>
-                    <th class="commands"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <f:render section="{payload}" arguments="{config: config, dropdown: dropdown}" />
-            </tbody>
-        </table>
-    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th class="description"><f:translate key="table.desc" /></th>
+            <th class="value"><f:translate key="table.value" /></th>
+            <th class="commands"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <f:render section="{payload}" arguments="{config: config, dropdown: dropdown}" />
+        </tbody>
+    </table>
 </f:section>
 
 /**
@@ -97,32 +95,25 @@
  *   The options for the dropdown.
  * @var string {config.value}
  *   The current value of the dropdown.
- * @var boolean {config.useFactorySettings}
+ * @var boolean {config.useOwnSettings}
  *   Are we using factory settings here?
  */
 <f:section name="dropdown">
     <tr class="{config.mode}">
         <td class="description"><label for="{config.name}"><f:translate key="label.{config.name}" /></label></td>
         <td class="value">
-            <div class="chevron"><f:form.select additionalAttributes="{autocomplete: 'off'}" id="{config.name}" property="{config.name}" options="{options}" value="{config.value}" /></div>
-            <f:variable value="{config.fallback}" name="fallback"/>
-            <f:for each="{options}" key="value" as="translation">
-                <f:if condition="{value}=={config.fallback}">
-                    <f:variable value="{translation}" name="fallback"/>
-                </f:if>
-            </f:for>
-            <div id="{config.name}-fallback" class="fallback">{fallback}</div>
+            <f:form.select additionalAttributes="{autocomplete: 'off'}"
+                           class="form-select"
+                           id="{config.name}"
+                           property="{config.name}"
+                           options="{options}"
+                           value="{config.value}"
+                           data-fallback="{config.fallback}"
+                           data-value="{config.value}"
+            />
         </td>
         <td class="commands">
-            <div class="button tooltip-hover">
-                <div class="toolwrapper">
-                    <div class="tooltip-text"><f:translate key="{config.name}" /></div>
-                </div>
-            </div>
-            <label class="button" for="factory.{config.name}">
-                <f:form.checkbox class="switch" additionalAttributes="{autocomplete: 'off'}" id="factory.{config.name}" property="factory" checked="{config.useFactorySettings}" value="1" />
-                <span class="switch" ></span>
-            </label>
+            <f:render section="commands" arguments="{config: config}" />
         </td>
     </tr>
 </f:section>
@@ -134,28 +125,49 @@
  *   The name of the input field.
  * @var string {config.value}
  *   The current value of the dropdown.
- * @var integer {config.useFactorySettings}
+ * @var integer {config.useOwnSettings}
  *   Are we using factory settings here?
  */
 <f:section name="input">
     <tr class="{config.mode}">
         <td class="description"><label for="{config.name}"><f:translate key="label.{config.name}" /></label></td>
         <td class="value">
-            <f:form.textfield additionalAttributes="{autocomplete: 'off'}" id="{config.name}" property="{config.name}"  value="{config.value}" />
-            <div id="{config.name}-fallback" class="fallback">{config.fallback}</div>
+            <f:form.textfield additionalAttributes="{autocomplete: 'off'}"
+                              class="form-control"
+                              id="{config.name}"
+                              property="{config.name}"
+                              value="{config.value}"
+                              data-fallback="{config.fallback}"
+                              data-value="{config.value}"
+            />
         </td>
         <td class="commands">
-            <div class="button tooltip-hover">
-                <div class="toolwrapper">
-                    <div class="tooltip-text"><f:translate key="{config.name}" /></div>
-                </div>
-            </div>
-            <label class="button" for="factory.{config.name}">
-                <f:form.checkbox class="switch" additionalAttributes="{autocomplete: 'off'}" id="factory.{config.name}" property="factory" checked="{config.useFactorySettings}" value="1" />
-                <span class="switch" ></span>
-            </label>
+            <f:render section="commands" arguments="{config: config}" />
         </td>
     </tr>
+</f:section>
+
+<f:section name="commands">
+    <button type="button"
+            class="btn btn-sm btn-default"
+            data-bs-toggle="popover"
+            data-bs-title="{f:translate(key: 'label.{config.name}')}"
+            data-bs-content="{f:translate(key: config.name)}">
+        <core:icon identifier="actions-question-circle" size="small" />
+    </button>
+    <div class="form-check form-check-type-labeled-toggle d-inline-block">
+        <label class="form-check-label visually-hidden" for="factory.{config.name}"><f:translate key="label.factorysettings"/></label>
+        <f:form.checkbox
+            class="form-check-input"
+            additionalAttributes="{autocomplete: 'off'}"
+            id="factory.{config.name}"
+            property="factory"
+            checked="{config.useOwnSettings}"
+            data-form-check-label-checked="{f:translate(key: 'label.factorysettings.on')}"
+            data-form-check-label-unchecked="{f:translate(key: 'label.factorysettings.off')}"
+            value="1"
+        />
+    </div>
 </f:section>
 
 </html>

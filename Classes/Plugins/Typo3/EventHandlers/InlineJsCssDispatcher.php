@@ -48,15 +48,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class InlineJsCssDispatcher implements EventHandlerInterface, ConfigConstInterface
 {
     /**
-     * The pool.
-     *
-     * @var \Brainworxx\Krexx\Service\Factory\Pool
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
      */
-    protected Pool $pool;
-
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
     }
 
     /**

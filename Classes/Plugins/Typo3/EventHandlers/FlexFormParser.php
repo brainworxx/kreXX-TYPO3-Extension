@@ -54,20 +54,15 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class FlexFormParser implements EventHandlerInterface, CallbackConstInterface
 {
     /**
-     * The resource pool
-     *
-     * @var Pool
+     * @var FlexFromServiceCore
      */
-    protected Pool $pool;
-
     protected FlexFromServiceCore $flexFormService;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
         $this->flexFormService = GeneralUtility::makeInstance(FlexFromServiceCore::class);
     }
 

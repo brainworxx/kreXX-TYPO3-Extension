@@ -92,7 +92,7 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
         $config[$settingsName] = [
             static::SETTINGS_NAME => $settingsName,
             static::SETTINGS_OPTIONS => $dropdown,
-            static::SETTINGS_USE_FACTORY_SETTINGS => false,
+            static::SETTINGS_USE_OWN_SETTINGS => true,
             static::SETTINGS_VALUE => $this->convertKrexxFeSetting(
                 $this->fileReader->getFeConfigFromFile($settingsName)
             ),
@@ -106,7 +106,7 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
             $config[$settingsName][static::SETTINGS_VALUE] = $this->convertKrexxFeSetting(
                 $this->fileReader->feConfigFallback[$settingsName][$this->fileReader::RENDER]
             );
-            $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = true;
+            $config[$settingsName][static::SETTINGS_USE_OWN_SETTINGS] = false;
         }
     }
 

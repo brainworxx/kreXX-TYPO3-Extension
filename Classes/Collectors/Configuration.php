@@ -51,7 +51,7 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
     /**
      * Assign the kreXX configuration for the view.
      *
-     * @param \TYPO3\CMS\Fluid\View\AbstractTemplateView|\TYPO3\CMS\Backend\Template\ModuleTemplate $view
+     * @param \TYPO3\CMS\Backend\Template\ModuleTemplate $view
      */
     public function assignData($view): void
     {
@@ -125,7 +125,7 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
             $config[$settingsName] = [
                 static::SETTINGS_NAME => $settingsName,
                 static::SETTINGS_VALUE => $iniReader->getConfigFromFile($group, $settingsName),
-                static::SETTINGS_USE_FACTORY_SETTINGS => false,
+                static::SETTINGS_USE_OWN_SETTINGS => true,
                 static::SETTINGS_FALLBACK => $fallbackOverwrites[$settingsName] ?? $fallback[static::SETTINGS_VALUE]
             ];
             $this->applyFallbackToConfig($config, $settingsName, $fallback);
@@ -159,7 +159,7 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
 
         // Check if we have a value from the last time a user has saved
         // the settings.
-        $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = true;
+        $config[$settingsName][static::SETTINGS_USE_OWN_SETTINGS] = false;
         $config[$settingsName][static::SETTINGS_VALUE] = $this->userUc[$settingsName] ??
             $fallback[static::SETTINGS_VALUE];
 

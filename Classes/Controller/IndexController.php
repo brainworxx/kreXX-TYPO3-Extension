@@ -75,7 +75,7 @@ class IndexController extends AbstractController implements ConstInterface
 
         // Has kreXX something to say? Maybe a write-protected logfolder?
         $this->retrieveKrexxMessages();
-        $this->assignMultiple(['settings' => $this->settingsModel]);
+        $this->moduleTemplate->assignMultiple(['settings' => $this->settingsModel]);
 
         return $this->moduleTemplateRender();
     }
@@ -91,9 +91,9 @@ class IndexController extends AbstractController implements ConstInterface
     {
         if (!$this->hasAccess()) {
             $this->addFlashMessage(
-                static::translate(static::ACCESS_DENIED),
-                static::translate(static::SAVE_FAIL_TITLE),
-                ContextualFeedbackSeverity::ERROR
+                messageBody: static::translate(static::ACCESS_DENIED),
+                messageTitle: static::translate(static::SAVE_FAIL_TITLE),
+                severity: ContextualFeedbackSeverity::ERROR
             );
             return $this->redirect('index');
         }
@@ -104,15 +104,15 @@ class IndexController extends AbstractController implements ConstInterface
         if (is_writable(dirname($jsonPath)) && file_put_contents($jsonPath, $settings->generateContent())) {
             // File was saved successfully.
             $this->addFlashMessage(
-                static::translate(static::SAVE_SUCCESS_TEXT, [$jsonPath]),
-                static::translate(static::SAVE_SUCCESS_TITLE)
+                messageBody: static::translate(static::SAVE_SUCCESS_TEXT, [$jsonPath]),
+                messageTitle: static::translate(static::SAVE_SUCCESS_TITLE)
             );
         } else {
             // Something went wrong here!
             $this->addFlashMessage(
-                static::translate(static::FILE_NOT_WRITABLE, [$jsonPath]),
-                static::translate(static::SAVE_FAIL_TITLE),
-                ContextualFeedbackSeverity::ERROR
+                messageBody: static::translate(static::FILE_NOT_WRITABLE, [$jsonPath]),
+                messageTitle: static::translate(static::SAVE_FAIL_TITLE),
+                severity: ContextualFeedbackSeverity::ERROR
             );
         }
 

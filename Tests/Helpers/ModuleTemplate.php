@@ -36,6 +36,7 @@
 namespace Brainworxx\Includekrexx\Tests\Helpers;
 
 use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Backend\Template\Components\DocHeaderComponent;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\View\ViewInterface;
 
@@ -73,5 +74,10 @@ class ModuleTemplate
     public function render(string $templateFileName = ''): string
     {
         // TODO: Implement render() method.
+    }
+
+    public function getDocHeaderComponent(): DocHeaderComponent
+    {
+
     }
 }

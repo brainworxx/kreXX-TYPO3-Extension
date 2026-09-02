@@ -67,18 +67,12 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
     ];
 
     /**
-     * @var Pool
-     */
-    protected Pool $pool;
-
-    /**
      * Inject the pool.
      *
      * @param Pool $pool
      */
-    public function __construct(Pool $pool)
+    public function __construct(protected Pool $pool)
     {
-        $this->pool = $pool;
     }
 
     /**
