@@ -64,10 +64,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(IndexController::class, 'indexAction')]
 #[CoversMethod(AbstractController::class, 'hasAccess')]
 #[CoversMethod(AbstractController::class, 'checkProductiveSetting')]
-#[CoversMethod(AbstractController::class, 'assignCssJs')]
-#[CoversMethod(AbstractController::class, 'generateAjaxTranslations')]
 #[CoversMethod(AbstractController::class, 'moduleTemplateRender')]
-#[CoversMethod(AbstractController::class, 'assignMultiple')]
 class IndexControllerTest extends AbstractHelper
 {
     protected const NO_MORE_MESSAGES = 'No more messages here.';
