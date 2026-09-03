@@ -156,7 +156,7 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
      */
     protected function isDisabled(): bool
     {
-        $get = (string)GeneralUtility::getIndpEnv('REQUEST_URI');
+        $get = $this->retrieveCurrentUri();
 
         if (
             str_contains($get, '/ajax/refreshLoglist')
@@ -183,6 +183,27 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
         }
 
         return false;
+    }
+
+    /**
+     * Retrieve the current URI, if available.
+     *
+     * @return string
+     *   The current URI, or an empty string.
+     */
+    protected function retrieveCurrentUri(): string
+    {
+        if (empty($GLOBALS['TYPO3_REQUEST'])) {
+            return '';
+        }
+
+        /** @var \TYPO3\CMS\Core\Http\NormalizedParams $attribute */
+        $attribute = $GLOBALS['TYPO3_REQUEST']->getAttribute('normalizedParams');
+        if (empty($attribute)) {
+            return '';
+        }
+
+        return $attribute->getRequestUri();
     }
 
     /**

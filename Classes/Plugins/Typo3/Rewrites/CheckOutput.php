@@ -50,6 +50,27 @@ class CheckOutput extends OrgCheckOutput
      */
     public function isAllowedIp(string $whitelist): bool
     {
-        return GeneralUtility::cmpIP(GeneralUtility::getIndpEnv(static::REMOTE_ADDRESS), $whitelist);
+        return GeneralUtility::cmpIP($this->retrieveRemoteAddress(), $whitelist);
+    }
+
+    /**
+     * Retrieve the remote address from the normalizes pareameters, if available.
+     *
+     * @return string
+     *   The remote address.
+     */
+    protected function retrieveRemoteAddress(): string
+    {
+        if (empty($GLOBALS['TYPO3_REQUEST'])) {
+            return '';
+        }
+
+        /** @var \TYPO3\CMS\Core\Http\NormalizedParams $attribute */
+        $attribute = $GLOBALS['TYPO3_REQUEST']->getAttribute('normalizedParams');
+        if (empty($attribute)) {
+            return '';
+        }
+
+        return $attribute->getRemoteAddress();
     }
 }

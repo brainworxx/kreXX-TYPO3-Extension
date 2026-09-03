@@ -46,6 +46,8 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\Model;
 use Brainworxx\Krexx\Logging\Model as LogModel;
+use TYPO3\CMS\Core\Http\NormalizedParams;
+use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Log\LogRecord;
@@ -59,6 +61,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(FileWriter::class, 'prepareLogModelNormal')]
 #[CoversMethod(FileWriter::class, 'applyTheConfiguration')]
 #[CoversMethod(FileWriter::class, '__construct')]
+#[CoversMethod(FileWriter::class, 'retrieveCurrentUri')]
 class FileWriterTest extends AbstractHelper implements BacktraceConstInterface, ConstInterface
 {
     protected const REQUEST_URI  = 'REQUEST_URI';
@@ -204,11 +207,29 @@ class FileWriterTest extends AbstractHelper implements BacktraceConstInterface, 
      */
     public function testWriteLogRouting()
     {
-        $_SERVER[static::REQUEST_URI] = '/ajax/refreshLoglist';
+        $requestMock = $this->createMock(ServerRequest::class);
+        $parameterMock = $this->createMock(NormalizedParams::class);
+        $parameterMock->expects($this->once())
+            ->method('getRequestUri')
+            ->willReturn('/ajax/refreshLoglist');
+        $requestMock->expects($this->once())
+            ->method('getAttribute')
+            ->with('normalizedParams')
+            ->willReturn($parameterMock);
+        $GLOBALS['TYPO3_REQUEST'] = $requestMock;
         $fileWriter = new FileWriter([]);
         $fileWriter->writeLog($this->prepareFixture());
 
-        $_SERVER[static::REQUEST_URI] = '/ajax/delete';
+        $requestMock = $this->createMock(ServerRequest::class);
+        $parameterMock = $this->createMock(NormalizedParams::class);
+        $parameterMock->expects($this->once())
+            ->method('getRequestUri')
+            ->willReturn('/ajax/delete');
+        $requestMock->expects($this->once())
+            ->method('getAttribute')
+            ->with('normalizedParams')
+            ->willReturn($parameterMock);
+        $GLOBALS['TYPO3_REQUEST'] = $requestMock;
         $fileWriter = new FileWriter([]);
         $fileWriter->writeLog($this->prepareFixture());
 

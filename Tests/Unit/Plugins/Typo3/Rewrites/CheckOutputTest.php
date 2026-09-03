@@ -38,10 +38,13 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3\Rewrites;
 use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
+use TYPO3\CMS\Core\Http\NormalizedParams;
+use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(CheckOutput::class, 'isAllowedIp')]
+#[CoversMethod(CheckOutput::class, 'retrieveRemoteAddress')]
 class CheckOutputTest extends AbstractHelper
 {
     public function tearDown(): void
@@ -57,13 +60,21 @@ class CheckOutputTest extends AbstractHelper
     public function testIsAllowedIp()
     {
         $checkOutput = new CheckOutput(Krexx::$pool);
+        // Check without any remote address set, should return true.
+        unset($GLOBALS['TYPO3_REQUEST']);
+        $this->assertTrue($checkOutput->isAllowedIp('*'), 'Test with no request object.');
 
-        // Prepare the General Untility.
-        $this->setValueByReflection(
-            'indpEnvCache',
-            ['REMOTE_ADDR' => '127.0.0.0'],
-            GeneralUtility::class
-        );
+        // Check with a simulated remote address set, should return true.
+        $requestMock = $this->createMock(ServerRequest::class);
+        $parameterMock = $this->createMock(NormalizedParams::class);
+        $parameterMock->expects($this->once())
+            ->method('getRemoteAddress')
+            ->willReturn('127.0.0.0');
+        $requestMock->expects($this->once())
+            ->method('getAttribute')
+            ->with('normalizedParams')
+            ->willReturn($parameterMock);
+        $GLOBALS['TYPO3_REQUEST'] = $requestMock;
         $this->assertTrue($checkOutput->isAllowedIp('*'));
     }
 }
