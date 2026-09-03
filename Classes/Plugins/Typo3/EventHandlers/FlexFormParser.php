@@ -64,13 +64,13 @@ class FlexFormParser implements EventHandlerInterface, CallbackConstInterface
      */
     public function __construct(protected Pool $pool)
     {
-        if (class_exists(FlexFormTools::class)) {
-            // Use the right class for TYPO3 v14.0.0 and above
-            $this->flexFormService = GeneralUtility::makeInstance(FlexFormTools::class);
-        } else {
+        if (class_exists(FlexFromServiceCore::class)) {
             // @deprecated since 7.0.0. Will be removed as soon as we drop
             // support for TYPO3 v13.0.0
             $this->flexFormService = GeneralUtility::makeInstance(FlexFromServiceCore::class);
+        } else {
+            // Use the right class for TYPO3 v14.0.0 and above
+            $this->flexFormService = GeneralUtility::makeInstance(FlexFormTools::class);
         }
     }
 
