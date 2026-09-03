@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
+use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
 use TYPO3\CMS\Core\Service\FlexFormService as FlexFromServiceCore;
 use TYPO3\CMS\Extbase\Service\FlexFormService as FlexFromServiceExtbase;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -56,8 +57,14 @@ class FlexFormParserTest extends AbstractHelper
      */
     public function testConstruct()
     {
-        $flexFormServiceMock = $this->createMock(FlexFromServiceCore::class);
-        $this->injectIntoGeneralUtility(FlexFromServiceCore::class, $flexFormServiceMock);
+
+        if (class_exists(FlexFormTools::class)) {
+            $flexFormServiceMock = $this->createMock(FlexFormTools::class);
+            $this->injectIntoGeneralUtility(FlexFormTools::class, $flexFormServiceMock);
+        } else {
+            $flexFormServiceMock = $this->createMock(FlexFromServiceCore::class);
+            $this->injectIntoGeneralUtility(FlexFromServiceCore::class, $flexFormServiceMock);
+        }
         $flexFormParser = new FlexFormParser(Krexx::$pool);
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $flexFormParser));
     }
@@ -73,11 +80,20 @@ class FlexFormParserTest extends AbstractHelper
         $fixture = '';
         $model->addParameter(CallbackConstInterface::PARAM_VALUE, $fixture)
             ->addParameter(CallbackConstInterface::PARAM_DATA, $meta);
-        $flexFormServiceMock = $this->createMock(FlexFromServiceCore::class);
-        $flexFormServiceMock->expects($this->once())
-            ->method('convertFlexFormContentToArray')
-            ->willThrowException(new \Exception());
-        $this->injectIntoGeneralUtility(FlexFromServiceCore::class, $flexFormServiceMock);
+        if (class_exists(FlexFormTools::class)) {
+            $flexFormServiceMock = $this->createMock(FlexFormTools::class);
+            $flexFormServiceMock->expects($this->once())
+                ->method('convertFlexFormContentToArray')
+                ->willThrowException(new \Exception());
+            $this->injectIntoGeneralUtility(FlexFormTools::class, $flexFormServiceMock);
+        } else {
+            $flexFormServiceMock = $this->createMock(FlexFromServiceCore::class);
+            $flexFormServiceMock->expects($this->once())
+                ->method('convertFlexFormContentToArray')
+                ->willThrowException(new \Exception());
+            $this->injectIntoGeneralUtility(FlexFromServiceCore::class, $flexFormServiceMock);
+        }
+
         $flexFormParser = new FlexFormParser(Krexx::$pool);
 
         $this->assertEquals(
@@ -115,19 +131,29 @@ class FlexFormParserTest extends AbstractHelper
 </T3FlexForms>';
         $model->addParameter(CallbackConstInterface::PARAM_VALUE, $fixture)
             ->addParameter(CallbackConstInterface::PARAM_DATA, $meta);
-
-        $flexFormServiceMock = $this->createMock(FlexFromServiceCore::class);
-
         $expectation = [
             'basePath' => 'fileadmin/',
             'pathType' => 'relative',
             'caseSensitive' => '1'
         ];
-        $flexFormServiceMock->expects($this->once())
-            ->method('convertFlexFormContentToArray')
-            ->with($fixture)
-            ->willReturn($expectation);
-        $this->injectIntoGeneralUtility(FlexFromServiceCore::class, $flexFormServiceMock);
+
+
+        if (class_exists(FlexFormTools::class)) {
+            $flexFormServiceMock = $this->createMock(FlexFormTools::class);
+            $flexFormServiceMock->expects($this->once())
+                ->method('convertFlexFormContentToArray')
+                ->with($fixture)
+                ->willReturn($expectation);
+            $this->injectIntoGeneralUtility(FlexFormTools::class, $flexFormServiceMock);
+        } else {
+            $flexFormServiceMock = $this->createMock(FlexFromServiceCore::class);
+            $flexFormServiceMock->expects($this->once())
+                ->method('convertFlexFormContentToArray')
+                ->with($fixture)
+                ->willReturn($expectation);
+            $this->injectIntoGeneralUtility(FlexFromServiceCore::class, $flexFormServiceMock);
+        }
+
         // Load the TYPO3 language files
         Registration::registerAdditionalHelpFile(KREXX_DIR . '..' .
             DIRECTORY_SEPARATOR . 'Language' . DIRECTORY_SEPARATOR . 't3.kreXX.ini');

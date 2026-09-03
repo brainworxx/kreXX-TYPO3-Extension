@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Throwable;
+use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
 use TYPO3\CMS\Core\Service\FlexFormService as FlexFromServiceCore;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -56,14 +57,21 @@ class FlexFormParser implements EventHandlerInterface, CallbackConstInterface
     /**
      * @var FlexFromServiceCore
      */
-    protected FlexFromServiceCore $flexFormService;
+    protected FlexFormTools|FlexFromServiceCore $flexFormService;
 
     /**
      * {@inheritdoc}
      */
     public function __construct(protected Pool $pool)
     {
-        $this->flexFormService = GeneralUtility::makeInstance(FlexFromServiceCore::class);
+        if (class_exists(FlexFormTools::class)) {
+            // Use the right class for TYPO3 v14.0.0 and above
+            $this->flexFormService = GeneralUtility::makeInstance(FlexFormTools::class);
+        } else {
+            // @deprecated since 7.0.0. Will be removed as soon as we drop
+            // support for TYPO3 v13.0.0
+            $this->flexFormService = GeneralUtility::makeInstance(FlexFromServiceCore::class);
+        }
     }
 
     /**
