@@ -42,7 +42,6 @@ use TYPO3\CMS\Core\Http\ServerRequest;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(AjaxController::class, 'deleteAction')]
-#[CoversMethod(AjaxController::class, 'hasAccess')]
 #[CoversMethod(AjaxController::class, 'delete')]
 #[CoversMethod(AjaxController::class, 'refreshLoglistAction')]
 class AjaxControllerTest extends AbstractHelper
@@ -65,19 +64,6 @@ class AjaxControllerTest extends AbstractHelper
         $this->assertEquals(
             '["file","list"]',
             $controller->refreshLoglistAction($serverRequest)->getBody()->__toString()
-        );
-    }
-
-    /**
-     * Test the deleting attempt of a logfile.
-     */
-    public function testDeleteActionNoAccess()
-    {
-        $controller = new AjaxController();
-        $serverRequest = new ServerRequest();
-        $this->assertEquals(
-            '{"class":"error","text":"accessDenied"}',
-            $controller->deleteAction($serverRequest)->getBody()->__toString()
         );
     }
 

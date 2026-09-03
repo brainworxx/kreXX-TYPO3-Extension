@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Modules;
 
-use Brainworxx\Includekrexx\Controller\AccessTrait;
 use Brainworxx\Includekrexx\Controller\ControllerConstInterface;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
@@ -68,7 +67,6 @@ abstract class AbstractLog extends AbstractSubModule implements
     ControllerConstInterface
 {
     use LanguageTrait;
-    use AccessTrait;
 
     /**
      * @var string
@@ -136,13 +134,6 @@ abstract class AbstractLog extends AbstractSubModule implements
      */
     public function getContent(ModuleData $data): string
     {
-        if (!$this->hasAccess()) {
-            return $this->renderMessage(
-                static::translate(static::TRANSLATION_PREFIX . static::ACCESS_DENIED),
-                static::MESSAGE_SEVERITY_ERROR
-            );
-        }
-
         $filelist = $data->getArrayCopy();
 
         // Handling an empty log file list.

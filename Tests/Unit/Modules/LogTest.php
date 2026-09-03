@@ -53,7 +53,6 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(Log14::class, 'getJavaScriptFiles')]
 #[CoversMethod(Log14::class, 'getCssFiles')]
 #[CoversMethod(Log14::class, 'getContent')]
-#[CoversMethod(Log14::class, 'hasAccess')]
 #[CoversMethod(Log14::class, 'retrieveKrexxMessages')]
 #[CoversMethod(Log14::class, 'createView')]
 #[CoversMethod(Log14::class, 'renderMessage')]
@@ -128,27 +127,6 @@ class LogTest extends AbstractHelper
         } else {
             $this->assertEquals($expectations, $this->log->getDataToStore($request));
         }
-    }
-
-    /**
-     * Test the displaying of the file list, when having no access.
-     */
-    public function testGetContentNoAccess()
-    {
-        $mockview = $this->mockView();
-        // Prepare the view for the messages.
-        $mockview->expects($this->once())
-            ->method(static::ASSIGN_MULTIPLE)
-            ->with([
-                static::TEXT => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:accessDenied',
-                static::SEVERITY => 'error',
-            ]);
-        $mockview->expects($this->once())
-            ->method(static::RENDER)
-            ->willReturn('Rendered Messages');
-
-        $moduleData = new ModuleData();
-        $this->assertEquals('Rendered Messages', $this->log->getContent($moduleData));
     }
 
     /**

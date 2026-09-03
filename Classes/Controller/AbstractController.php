@@ -64,7 +64,6 @@ use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 abstract class AbstractController extends ActionController implements ConstInterface, ControllerConstInterface
 {
     use LanguageTrait;
-    use AccessTrait;
 
     /**
      * @var string

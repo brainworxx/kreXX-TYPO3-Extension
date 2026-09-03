@@ -57,20 +57,6 @@ class IndexController extends AbstractController implements ConstInterface
      */
     public function indexAction(): ResponseInterface
     {
-        if (!$this->hasAccess()) {
-            // Sorry!
-            $this->addFlashMessage(
-                static::translate(static::ACCESS_DENIED),
-                static::translate(static::ACCESS_DENIED),
-                ContextualFeedbackSeverity::ERROR
-            );
-
-            $response = $this->responseFactory->createResponse()
-                ->withAddedHeader('Content-Type', 'text/html; charset=utf-8');
-            $response->getBody()->write('');
-            return $response;
-        }
-
         $this->checkProductiveSetting();
 
         // Has kreXX something to say? Maybe a write-protected logfolder?
@@ -89,15 +75,6 @@ class IndexController extends AbstractController implements ConstInterface
      */
     public function saveAction(Settings $settings): ResponseInterface
     {
-        if (!$this->hasAccess()) {
-            $this->addFlashMessage(
-                messageBody: static::translate(static::ACCESS_DENIED),
-                messageTitle: static::translate(static::SAVE_FAIL_TITLE),
-                severity: ContextualFeedbackSeverity::ERROR
-            );
-            return $this->redirect('index');
-        }
-
         // Check for writing permission.
         // Check the actual writing process.
         $jsonPath = $settings->prepareFileName($this->pool->config->getPathToConfigFile());
@@ -130,11 +107,6 @@ class IndexController extends AbstractController implements ConstInterface
      */
     public function dispatchAction(?ServerRequest $serverRequest = null): NullResponse
     {
-        $response = GeneralUtility::makeInstance(NullResponse::class);
-        if (!$this->hasAccess()) {
-            return $response;
-        }
-
         // No directory traversal for you!
         // Get the filepath.
         $rawId = $serverRequest->getQueryParams()['tx_includekrexx_tools_includekrexxkrexxconfiguration']['id'];

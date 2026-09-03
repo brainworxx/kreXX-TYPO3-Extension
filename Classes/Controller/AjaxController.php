@@ -53,7 +53,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class AjaxController implements ConstInterface, ControllerConstInterface
 {
     use LanguageTrait;
-    use AccessTrait;
 
     /**
      * List the logfiles with their corresponding metadata.
@@ -101,19 +100,10 @@ class AjaxController implements ConstInterface, ControllerConstInterface
         }
 
         $result = new stdClass();
-
-        if (!$this->hasAccess()) {
-            $result->class  = 'error';
-            $result->text = static::translate(static::ACCESS_DENIED);
-
-            $response->getBody()->write(json_encode($result));
-            return $response;
-        }
-
         Pool::createPool();
 
         // No directory traversal for you!
-        $fileId = preg_replace('/[^0-9]/', '', $serverRequest->getQueryParams()['fileid']);
+        $fileId = preg_replace('/[^0-9]/', '', $serverRequest->getQueryParams()['fileid'] ?? '');
         // Directly add the delete-result return value.
         $file = Krexx::$pool->config->getLogDir() . $fileId . '.Krexx';
 

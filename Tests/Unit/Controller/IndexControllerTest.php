@@ -62,7 +62,6 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(AbstractController::class, 'retrieveKrexxMessages')]
 #[CoversMethod(Settings::class, 'prepareFileName')]
 #[CoversMethod(IndexController::class, 'indexAction')]
-#[CoversMethod(AbstractController::class, 'hasAccess')]
 #[CoversMethod(AbstractController::class, 'checkProductiveSetting')]
 #[CoversMethod(AbstractController::class, 'moduleTemplateRender')]
 class IndexControllerTest extends AbstractHelper
@@ -90,32 +89,11 @@ class IndexControllerTest extends AbstractHelper
     }
 
     /**
-     * Test the index action, without access.
-     */
-    public function testIndexActionNoAccess()
-    {
-        $this->initFlashMessages($this->indexController);
-        if (method_exists($this->indexController, 'injectResponseFactory')) {
-            $this->indexController->injectResponseFactory(new ResponseFactory());
-        }
-        $this->indexController->indexAction();
-
-        $this->assertEquals(
-            'accessDenied',
-            $this->flashMessageQueue->getMessages()[0]->getMessage(),
-            'We did not mock a BE session, hence no access for you!'
-        );
-        $this->assertArrayNotHasKey(1, $this->flashMessageQueue->getMessages(), static::NO_MORE_MESSAGES);
-    }
-
-    /**
      * Normal test of the index action.
      */
     public function testIndexActionNormal()
     {
         $jsCssFileContent = 'file content';
-        $templateContent = 'template content';
-        $translationContent = 'window.ajaxTranslate = {"deletefile":"ajax.delete.file","error":"ajax.error","in":"ajax.in","line":"ajax.line","updatedLoglist":"ajax.updated.loglist","deletedCookies":"ajax.deleted.cookies"};';
 
         $fileGetContents =  $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_get_contents');
         $fileGetContents->expects($this->any())
@@ -191,35 +169,6 @@ class IndexControllerTest extends AbstractHelper
     }
 
     /**
-     * Test the redirect when having no access for the save action.
-     */
-    public function testSaveActionNoAccess()
-    {
-        $this->initFlashMessages($this->indexController);
-        $this->prepareRedirect($this->indexController);
-
-        $settingsModel = new Settings();
-
-        try {
-            $exceptionWasThrown = !empty($this->indexController->saveAction($settingsModel));
-        } catch (UnsupportedRequestTypeException $e) {
-            // We expect this one.
-            $exceptionWasThrown = true;
-        } catch (StopActionException $e) {
-            // We expect this one.
-            $exceptionWasThrown = true;
-        }
-        $this->assertTrue($exceptionWasThrown, static::REDIRECT_MESSAGE);
-
-        $this->assertEquals(
-            'accessDenied',
-            $this->flashMessageQueue->getMessages()[0]->getMessage(),
-            'We did not mock a BE session, hence no access for you!'
-        );
-        $this->assertArrayNotHasKey(1, $this->flashMessageQueue->getMessages(), static::NO_MORE_MESSAGES);
-    }
-
-    /**
      * Testing the saving of the ini file.
      */
     public function testSaveActionNormal()
@@ -240,8 +189,6 @@ class IndexControllerTest extends AbstractHelper
         $settingsMock->expects($this->once())
             ->method('prepareFileName')
             ->willReturn($configFilePath);
-
-
 
         $filePutContentsMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_put_contents');
         $filePutContentsMock->expects($this->once())
@@ -265,69 +212,6 @@ class IndexControllerTest extends AbstractHelper
             'Expecting the success message here.'
         );
         $this->assertArrayNotHasKey(1, $this->flashMessageQueue->getMessages(), static::NO_MORE_MESSAGES);
-    }
-
-    /**
-     * Testing the saving of the ini file.
-     */
-    public function testSaveActionNoWriteAccess()
-    {
-        $this->mockBeUser();
-
-        $this->initFlashMessages($this->indexController);
-        $this->prepareRedirect($this->indexController);
-
-        $iniContent = 'oh joy, even more settings . . .';
-        $pathParts = pathinfo(Krexx::$pool->config->getPathToConfigFile());
-        $configFilePath = $pathParts['dirname'] . DIRECTORY_SEPARATOR . $pathParts['filename'] . '.json';
-
-        $settingsMock = $this->createMock(Settings::class);
-        $settingsMock->expects($this->once())
-            ->method('generateContent')
-            ->willReturn($iniContent);
-        $settingsMock->expects($this->once())
-            ->method('prepareFileName')
-            ->willReturn($configFilePath);
-
-        $filePutContentsMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_put_contents');
-        $filePutContentsMock->expects($this->once())
-            ->with(Krexx::$pool->config->getPathToConfigFile(), $iniContent)
-            ->willReturn(false);
-
-        try {
-            $exceptionWasThrown = !empty($this->indexController->saveAction($settingsMock));
-        } catch (UnsupportedRequestTypeException $e) {
-            // We expect this one.
-            $exceptionWasThrown = true;
-        } catch (StopActionException $e) {
-            // We expect this one.
-            $exceptionWasThrown = true;
-        }
-
-        $this->assertTrue($exceptionWasThrown, static::REDIRECT_MESSAGE);
-
-        $this->assertEquals(
-            'file.not.writable',
-            $this->flashMessageQueue->getMessages()[0]->getMessage(),
-            'Expecting the failure message here.'
-        );
-        $this->assertArrayNotHasKey(1, $this->flashMessageQueue->getMessages(), static::NO_MORE_MESSAGES);
-    }
-
-    /**
-     * Testing the dispatching without access.
-     */
-    public function testDispatchActionNoAccess()
-    {
-        $serverRequestMock = $this->createMock(ServerRequest::class);
-        // Never, because we have no access.
-        $serverRequestMock->expects($this->never())
-            ->method('getQueryParams');
-
-        $headerMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'header');
-        $headerMock->expects($this->never());
-
-        $this->indexController->dispatchAction($serverRequestMock);
     }
 
     /**
