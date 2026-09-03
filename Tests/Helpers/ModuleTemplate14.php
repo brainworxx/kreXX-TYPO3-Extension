@@ -73,11 +73,9 @@ class ModuleTemplate14 implements ViewInterface
 
     public function render(string $templateFileName = ''): string
     {
-        // TODO: Implement render() method.
     }
 
     public function getDocHeaderComponent(): DocHeaderComponent
     {
-
     }
 }

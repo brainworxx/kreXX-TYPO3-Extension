@@ -73,7 +73,6 @@ class ModuleTemplate
 
     public function render(string $templateFileName = ''): string
     {
-        // TODO: Implement render() method.
     }
 
     public function getDocHeaderComponent(): DocHeaderComponent
