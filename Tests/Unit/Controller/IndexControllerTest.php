@@ -169,6 +169,41 @@ class IndexControllerTest extends AbstractHelper
     }
 
     /**
+     * Test the file writing with an error.
+     */
+    public function testSaveActionError()
+    {
+        $this->mockBeUser();
+
+        $this->initFlashMessages($this->indexController);
+        $this->prepareRedirect($this->indexController);
+
+        $iniContent = 'oh joy, even more settings . . .';
+        $pathParts = pathinfo(Krexx::$pool->config->getPathToConfigFile());
+        $configFilePath = $pathParts['dirname'] . DIRECTORY_SEPARATOR . $pathParts['filename'] . '.json';
+
+        $settingsMock = $this->createMock(Settings::class);
+        $settingsMock->expects($this->once())
+            ->method('generateContent')
+            ->willReturn($iniContent);
+        $settingsMock->expects($this->once())
+            ->method('prepareFileName')
+            ->willReturn($configFilePath);
+
+        $filePutContentsMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_put_contents');
+        $filePutContentsMock->expects($this->once())
+            ->with($configFilePath, $iniContent)
+            ->willReturn(false);
+
+        $this->indexController->saveAction($settingsMock);
+        $this->assertEquals(
+            'file.not.writable',
+            $this->flashMessageQueue->getMessages()[0]->getMessage(),
+            'Expecting the success message here.'
+        );
+    }
+
+    /**
      * Testing the saving of the ini file.
      */
     public function testSaveActionNormal()
