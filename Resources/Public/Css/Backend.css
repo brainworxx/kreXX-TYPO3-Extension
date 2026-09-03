@@ -7,9 +7,13 @@ td.commands {
 }
 
 td.commands .btn,
-td.commands .form-check-input
-{
+td.commands .form-check-input {
     height: 36px !important;
+}
+
+.tab-content .panel {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }
 
 .panel-body {
