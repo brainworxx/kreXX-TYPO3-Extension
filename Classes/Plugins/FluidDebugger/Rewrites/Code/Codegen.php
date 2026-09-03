@@ -101,26 +101,29 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
     /**
      * Test if we need to stop the code generation in its tracks.
      *
-     * - Test for a point in a variable name.
-     *   Stuff like this is not reachable by normal means.
-     * - Disallowing code generation for configured debug methods.
-     *   There is no real iterator_to_array method in vanilla fluid or vhs.
-     *   The groupedFor viewhelper can be abused, but the new variable would
-     *   only be visible inside the viewhelper scope. And adding a
-     *   {v:variable.set()} inside that scope would make the code generation
-     *   really complicated.
-     *
      * @param \Brainworxx\Krexx\Analyse\Model $model
      * @return bool
      */
     protected function isUnknownType(Model $model): bool
     {
         $name = $model->getName();
-        return
-            (is_string($name) && str_contains($name, '.') && $this->pool->scope->getScope() !== $name)
-            || $model->getType() === $this->pool->messages->getHelp('debugMethod')
-            || $model->getCodeGenType() === static::CODEGEN_TYPE_ITERATOR_TO_ARRAY
-            || $model->getCodeGenType() === static::CODEGEN_TYPE_JSON_DECODE;
+        // Test for a point in a variable name.
+        // Stuff like this is not reachable by normal means.
+        $isNotReachable = is_string($name) && str_contains($name, '.') && $this->pool->scope->getScope() !== $name;
+        // Disallowing code generation for configured debug methods.
+        $isDebugMethod = $model->getType() === $this->pool->messages->getHelp('debugMethod');
+        // There is no real iterator_to_array method in vanilla fluid or vhs.
+        // The groupedFor viewhelper can be abused, but the new variable would
+        // only be visible inside the viewhelper scope. And adding a
+        // {v:variable.set()} inside that scope would make the code generation
+        // really complicated.
+        $isIteratorToArray = $model->getCodeGenType() === static::CODEGEN_TYPE_ITERATOR_TO_ARRAY;
+        // There is no JSON decoding in native fluid, but in VHS.
+        // Again, adding a {v:format.json.decode()} inside the scope of the new
+        // variable would make the code generation really complicated.
+        $isJsonDecode = $model->getCodeGenType() === static::CODEGEN_TYPE_JSON_DECODE;
+
+        return $isNotReachable || $isDebugMethod || $isIteratorToArray || $isJsonDecode;
     }
 
     /**
