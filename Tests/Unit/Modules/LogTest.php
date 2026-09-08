@@ -58,9 +58,9 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(AbstractLog::class, 'retrieveKrexxMessages')]
 #[CoversMethod(AbstractLog::class, 'createView')]
 #[CoversMethod(AbstractLog::class, 'renderMessage')]
-#[CoversMethod(AbstractLog::class, 'getDataToStore')]
 #[CoversMethod(AbstractLog::class, 'getLabel')]
 #[CoversMethod(AbstractLog::class, 'getIdentifier')]
+#[CoversMethod(Log14::class, 'getDataToStore')]
 class LogTest extends AbstractHelper
 {
     protected const WRONG_VERSION = 'Wrong TYPO3 version.';
