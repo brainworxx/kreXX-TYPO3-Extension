@@ -46,7 +46,7 @@ use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(Getter::class, 'callMe')]
-#[CoversMethod(Getter::class, 'retrieveMethodList')]
+#[CoversMethod(\Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::class, 'retrieveMethodList')]
 class GetterTest extends AbstractHelper implements CallbackConstInterface
 {
     /**

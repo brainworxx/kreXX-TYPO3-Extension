@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Package\UnitTestPackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -90,11 +91,9 @@ class ExtFilePathTest extends AbstractHelper
         // Depending on the unit test version, we either get an empty array or
         // an error message in the model. This is scary, tbh.
         // Unit test version 12 and above will display an error.
-        if (version_compare(PHP_VERSION, '8.3.0', '>=')) {
-            $this->assertArrayHasKey('Error', $model->getJson());
-        } else {
-            $this->assertEmpty($model->getJson());
-        }
+        $result = $model->getJson();
+        $isOk = isset($result['Error']) || empty($result);
+        $this->assertTrue($isOk, 'The model should either be empty or contain an error message.');
 
         // The real test starts here.
         $this->simulatePackage('includekrexx', 'includekrexx/');

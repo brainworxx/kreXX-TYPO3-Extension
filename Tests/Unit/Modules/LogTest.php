@@ -37,6 +37,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Modules;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Collectors\LogfileList;
+use Brainworxx\Includekrexx\Modules\AbstractLog;
 use Brainworxx\Includekrexx\Modules\Log;
 use Brainworxx\Includekrexx\Modules\Log14;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
@@ -51,15 +52,15 @@ use TYPO3\CMS\Core\View\ViewInterface;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
-#[CoversMethod(Log14::class, 'getJavaScriptFiles')]
-#[CoversMethod(Log14::class, 'getCssFiles')]
-#[CoversMethod(Log14::class, 'getContent')]
-#[CoversMethod(Log14::class, 'retrieveKrexxMessages')]
-#[CoversMethod(Log14::class, 'createView')]
-#[CoversMethod(Log14::class, 'renderMessage')]
-#[CoversMethod(Log14::class, 'getDataToStore')]
-#[CoversMethod(Log14::class, 'getLabel')]
-#[CoversMethod(Log14::class, 'getIdentifier')]
+#[CoversMethod(AbstractLog::class, 'getJavaScriptFiles')]
+#[CoversMethod(AbstractLog::class, 'getCssFiles')]
+#[CoversMethod(AbstractLog::class, 'getContent')]
+#[CoversMethod(AbstractLog::class, 'retrieveKrexxMessages')]
+#[CoversMethod(AbstractLog::class, 'createView')]
+#[CoversMethod(AbstractLog::class, 'renderMessage')]
+#[CoversMethod(AbstractLog::class, 'getDataToStore')]
+#[CoversMethod(AbstractLog::class, 'getLabel')]
+#[CoversMethod(AbstractLog::class, 'getIdentifier')]
 class LogTest extends AbstractHelper
 {
     protected const WRONG_VERSION = 'Wrong TYPO3 version.';

@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\ViewHelpers;
 
+use Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper;
 use Brainworxx\Includekrexx\ViewHelpers\LogViewHelper;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\Model;
@@ -48,7 +49,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\ViewHelperVariableContainer;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use TYPO3Fluid\Fluid\View\ViewInterface;
 
-#[CoversMethod(LogViewHelper::class, 'analysis')]
+#[CoversMethod(DebugViewHelper::class, 'analysis')]
 class LogViewHelperTest extends AbstractHelper
 {
     /**

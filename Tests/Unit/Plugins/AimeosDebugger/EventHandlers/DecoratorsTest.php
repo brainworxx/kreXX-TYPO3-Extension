@@ -65,7 +65,6 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(Decorators::class, 'retrievePublicMethods')]
 #[CoversMethod(Decorators::class, 'retrieveReceiverObject')]
 #[CoversMethod(AbstractEventHandler::class, 'retrieveProperty')]
-#[CoversMethod(Decorators::class, 'retrieveProperty')]
 #[CoversMethod(Decorators::class, 'retrieveReceiverObjectName')]
 #[CoversMethod(Decorators::class, '__construct')]
 class DecoratorsTest extends AbstractHelper
