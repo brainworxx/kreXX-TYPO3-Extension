@@ -7,6 +7,7 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Krexx;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(OpaqueRessource::class, 'callMe')]
@@ -52,6 +53,7 @@ hjJuL9EH
     /**
      * Test the analysis of the so-called opaque ressource class analysis.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeCurl(): void
     {
         $this->mockEmergencyHandler();
@@ -76,6 +78,7 @@ hjJuL9EH
         $this->assertEquals(0, $result['redirect_count']);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeAddressInfo(): void
     {
         $this->mockEmergencyHandler();
@@ -103,6 +106,7 @@ hjJuL9EH
         $this->assertArrayHasKey('ai_addr', $result);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeSslCert(): void
     {
         $this->mockEmergencyHandler();
@@ -129,6 +133,7 @@ hjJuL9EH
         $this->assertEquals('Some-State', $result['subject']['ST']);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeGlImage(): void
     {
         $this->mockEmergencyHandler();
@@ -160,6 +165,7 @@ hjJuL9EH
      *
      * @return void
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeError(): void
     {
         $this->mockEmergencyHandler();

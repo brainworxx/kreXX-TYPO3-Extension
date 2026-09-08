@@ -155,9 +155,9 @@ class Message
      * @return string
      *   The message, what else?
      */
-    public function getText(): string
+    public function getText(bool $removeIt = true): string
     {
-        if ($this->isThrowAway) {
+        if ($this->isThrowAway && $removeIt) {
             // Removes itself, if it is a throwaway message.
             $this->pool->messages->removeKey($this->key);
         }

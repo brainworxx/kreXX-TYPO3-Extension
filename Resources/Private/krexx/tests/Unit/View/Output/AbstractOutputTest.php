@@ -41,7 +41,7 @@ use Brainworxx\Krexx\View\Output\AbstractOutput;
 use Brainworxx\Krexx\View\Output\Browser;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
-#[CoversMethod(Browser::class, 'addChunkString')]
+#[CoversMethod(AbstractOutput::class, 'addChunkString')]
 #[CoversMethod(AbstractOutput::class, '__construct')]
 class AbstractOutputTest extends AbstractHelper
 {

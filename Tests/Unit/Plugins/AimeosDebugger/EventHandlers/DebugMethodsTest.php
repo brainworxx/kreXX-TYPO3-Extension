@@ -52,6 +52,7 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods as AnalyseDebugMethods;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Aimeos\MShop\Product\Item\Standard as StandardProduct;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(DebugMethods::class, 'handle')]
@@ -93,6 +94,7 @@ class DebugMethodsTest extends AbstractHelper implements CallbackConstInterface
     /**
      * Test the subscribing and then handling of the event, with the wrong object.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testHandleWrongObject()
     {
         $this->skipIfAimeosIsNotInstalled();
@@ -119,6 +121,7 @@ class DebugMethodsTest extends AbstractHelper implements CallbackConstInterface
     /**
      * Test the subscribing and then handling of the event, with the right object.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testHandleNormal()
     {
         $this->skipIfAimeosIsNotInstalled();

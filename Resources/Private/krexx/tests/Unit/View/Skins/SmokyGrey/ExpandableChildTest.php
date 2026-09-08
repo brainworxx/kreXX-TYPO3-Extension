@@ -44,6 +44,7 @@ use Brainworxx\Krexx\View\AbstractRender;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\ConnectorRight;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\ExpandableChild;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\Help;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(ExpandableChild::class, 'renderExpandableChild')]
@@ -57,6 +58,7 @@ class ExpandableChildTest extends AbstractRenderSmokyGrey
     /**
      * Test the rendering of an expandable child.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRenderExpandableChild(): void
     {
         $this->mockModel(static::GET_NAME, 'Model name');
@@ -108,6 +110,7 @@ class ExpandableChildTest extends AbstractRenderSmokyGrey
     /**
      * Test the rendering of an expandable child, but with a small connector.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRenderExpandableChildSmallConnector(): void
     {
         $this->mockModel(static::GET_CONNECTOR_RIGHT, 'xx');
@@ -121,6 +124,7 @@ class ExpandableChildTest extends AbstractRenderSmokyGrey
         $this->assertStringNotContainsString('xx', $result, 'We do not render small connectors.');
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testRenderExpandableChildEmergency(): void
     {
         $modelMock = $this->createMock(Model::class);

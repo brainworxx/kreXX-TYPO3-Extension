@@ -47,6 +47,7 @@ use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(Getter::class, 'handle')]
@@ -90,6 +91,7 @@ class GetterTest extends AbstractHelper
     /**
      * Test the analysis of something else.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testHandleEmpty()
     {
         $this->skipIfAimeosIsNotInstalled();
@@ -122,6 +124,7 @@ class GetterTest extends AbstractHelper
     /**
      * Test the analysis of an Aimeos item.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testHandle()
     {
         $this->skipIfAimeosIsNotInstalled();

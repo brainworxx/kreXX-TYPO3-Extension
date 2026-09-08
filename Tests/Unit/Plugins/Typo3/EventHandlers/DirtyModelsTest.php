@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
 use TYPO3\CMS\Extbase\Persistence\Generic\Exception\TooDirtyException;
 use StdClass;
@@ -87,6 +88,7 @@ class DirtyModelsTest extends AbstractHelper
     /**
      * Test the additional stuff.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testHandle()
     {
         $this->mockEmergencyHandler();
@@ -126,6 +128,7 @@ class DirtyModelsTest extends AbstractHelper
     /**
      * Test the exception handling
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testHandleException()
     {
         $this->mockEmergencyHandler();

@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Service\Config\Model;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(ThroughConfig::class, 'callMe')]
@@ -63,6 +64,7 @@ class ThroughConfigTest extends AbstractHelper
     /**
      * Test the configuration iteration.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMe(): void
     {
         $this->mockEmergencyHandler();

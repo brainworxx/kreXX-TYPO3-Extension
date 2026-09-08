@@ -51,6 +51,7 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use finfo;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(ProcessString::class, '__construct')]
@@ -82,6 +83,7 @@ class ProcessStringTest extends AbstractHelper
     /**
      * Test if the __construct injects the pool.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testConstruct(): void
     {
         $object = new ProcessString(Krexx::$pool);
@@ -92,6 +94,7 @@ class ProcessStringTest extends AbstractHelper
     /**
      * Testing the setting of the pool and of the file info class.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testConstructWithoutFinfo(): void
     {
         // Mock the class_exists method, to return always false.
@@ -113,6 +116,7 @@ class ProcessStringTest extends AbstractHelper
     /**
      * Testing the setting of the pool and of the file info class.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testConstructWithFinfo(): void
     {
         // Mock the class_exists method, to return always true.
@@ -127,6 +131,7 @@ class ProcessStringTest extends AbstractHelper
     /**
      * Testing with a normal short string.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testProcessNormal(): void
     {
         $fixture = 'short string';
@@ -142,6 +147,7 @@ class ProcessStringTest extends AbstractHelper
     /**
      * Testing with broken encoding.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testProcessBrokenEncodung(): void
     {
         $fixture = 'short string';
@@ -158,6 +164,7 @@ class ProcessStringTest extends AbstractHelper
     /**
      * Testing with a large string.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testProcessLargerString(): void
     {
         $fixture = 'a string larger than 20 chars';
@@ -176,6 +183,7 @@ class ProcessStringTest extends AbstractHelper
     /**
      * Testing with a string larger than 50 characters.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testProcessHugeString(): void
     {
         $fixture = 'This is a very large string, bigger than 50 chars. Lorem ipsum and so on, just to fill it up.';
@@ -198,6 +206,7 @@ class ProcessStringTest extends AbstractHelper
     /**
      * Testing with linebreaks in the fixture.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testProcessWithLinebreaks(): void
     {
         $fixture = 'some' . PHP_EOL . 'string';
@@ -216,6 +225,7 @@ class ProcessStringTest extends AbstractHelper
     /**
      * Testing the triggering of the scalar analysis and its recursion handling.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testProcessWithScalar(): void
     {
         $fixture = '{"whatever": "okay"}';
@@ -286,6 +296,7 @@ class ProcessStringTest extends AbstractHelper
     /**
      * Test the check if we can handle the array processing.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCanHandle(): void
     {
         $processor = new ProcessString(Krexx::$pool);

@@ -90,8 +90,7 @@ abstract class AbstractRenderSmokyGrey extends AbstractHelper
         $smoky = new RenderSmokyGrey(Krexx::$pool);
         $this->fileServiceMock = $this->createMock(File::class);
         $pathToSkin = Krexx::$pool->config->getSkinDirectory();
-        $this->fileServiceMock->expects($this->any())
-            ->method('getFileContents')
+        $this->fileServiceMock->method('getFileContents')
             ->willReturnMap([
                 // sourceButton.html
                 [

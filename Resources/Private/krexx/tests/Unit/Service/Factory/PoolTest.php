@@ -54,6 +54,7 @@ use Brainworxx\Krexx\View\AbstractRender;
 use Brainworxx\Krexx\View\Messages;
 use Brainworxx\Krexx\View\Output\Chunks;
 use Brainworxx\Krexx\View\Skins\RenderHans;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
@@ -61,7 +62,6 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(Pool::class, 'checkEnvironment')]
 #[CoversMethod(File::class, 'isDirectoryWritable')]
 #[CoversMethod(Pool::class, '__construct')]
-#[CoversMethod(Pool::class, 'checkEnvironment')]
 class PoolTest extends AbstractHelper
 {
     public const  MISC_NAMESPACE = '\\Brainworxx\\Krexx\\Service\\Misc\\';
@@ -150,6 +150,7 @@ class PoolTest extends AbstractHelper
     /**
      * Test the renewal of the "semi-singletons" after an analysis.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testReset(): void
     {
         Krexx::$pool->recursionHandler = $this->createMock(Recursion::class);
@@ -168,6 +169,7 @@ class PoolTest extends AbstractHelper
      * Test the renewal of the "semi-singletons" after an analysis, with
      * simulating a new process fork.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testResetWithNewFork(): void
     {
         $getmypidMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Factory', 'getmypid');

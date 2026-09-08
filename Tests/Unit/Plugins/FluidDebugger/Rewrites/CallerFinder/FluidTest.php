@@ -40,6 +40,7 @@ use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\Registration;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use TYPO3\CMS\Fluid\View\TemplatePaths;
 use TYPO3Fluid\Fluid\Core\Parser\ParsedTemplateInterface;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -75,6 +76,7 @@ class FluidTest extends AbstractHelper
     /**
      * Test the template part.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testFindCallerTemplate()
     {
         $renderingStack = [[AbstractCallerFinderTest::PARSED_TEMPLATE => new \StdClass(), 'type' => 1]];
@@ -118,6 +120,7 @@ class FluidTest extends AbstractHelper
     /**
      * Test the layout part.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testFindCallerLayout()
     {
         $templatePath = realpath(__DIR__ . '/../../../../../Fixtures/FluidTemplate2.html');
@@ -155,6 +158,7 @@ class FluidTest extends AbstractHelper
     /**
      * Test the partial part.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testFindCallerPartial()
     {
         $templatePath = realpath(__DIR__ . '/../../../../../Fixtures/FluidTemplate3.html');
@@ -204,6 +208,7 @@ class FluidTest extends AbstractHelper
     /**
      * Test what happens when there is an error.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testFindCallerError()
     {
         $fluid = $this->createInstance([], Fluid::class);
@@ -220,6 +225,7 @@ class FluidTest extends AbstractHelper
     /**
      * Find the caller, when krexx is called twice.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testFindCallerDoubleCall()
     {
         $templatePath = realpath(__DIR__ . '/../../../../../Fixtures/FluidTemplate4.html');

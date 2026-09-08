@@ -43,6 +43,7 @@ use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility14;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\Registration;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
@@ -108,6 +109,7 @@ class LllStringTest extends AbstractHelper
     /**
      * Testing the "glue" to the TYPO3 translation handling.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCanHandle()
     {
         $payload = 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:mlang_tabs_tab';
@@ -143,6 +145,7 @@ class LllStringTest extends AbstractHelper
     /**
      * Just like the original test, but we expect the translation to throw an exception.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCanHandleException()
     {
         $payload = 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:mlang_tabs_tab';
@@ -158,6 +161,7 @@ class LllStringTest extends AbstractHelper
         );
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testCanHandleDomainTranslation()
     {
         $typo3Version = new Typo3Version();

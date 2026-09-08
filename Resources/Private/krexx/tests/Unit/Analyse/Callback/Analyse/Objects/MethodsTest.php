@@ -45,6 +45,7 @@ use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use ReflectionMethod;
 use stdClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -125,6 +126,7 @@ class MethodsTest extends AbstractHelper
     /**
      * Test if the __construct injects the pool.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testConstruct(): void
     {
         $object = new Methods(Krexx::$pool);
@@ -135,6 +137,7 @@ class MethodsTest extends AbstractHelper
     /**
      * Testing the methods analysis recursion.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeRecursion(): void
     {
         // Set up the recursion events
@@ -158,6 +161,7 @@ class MethodsTest extends AbstractHelper
     /**
      * Testing the analysis for public methods only.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMePublic(): void
     {
         // Set up the events
@@ -190,6 +194,7 @@ class MethodsTest extends AbstractHelper
     /**
      * Testing the analysis for public and protected methods.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeProtected(): void
     {
         // Set up the events
@@ -223,6 +228,7 @@ class MethodsTest extends AbstractHelper
     /**
      * Testing the analysis for public and private methods.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMePrivate(): void
     {
         // Set up the events
@@ -256,6 +262,7 @@ class MethodsTest extends AbstractHelper
     /**
      * Testing the analysis for public and private methods.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMePrivateProtected(): void
     {
         // Set up the events
@@ -290,6 +297,7 @@ class MethodsTest extends AbstractHelper
     /**
      * Testing the analysis with an empty stdClass
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMePrivateEmpty(): void
     {
         // Set up the events

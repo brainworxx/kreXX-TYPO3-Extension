@@ -44,6 +44,7 @@ use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ProcessNothing;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(BacktraceStep::class, 'callMe')]
@@ -74,6 +75,7 @@ class BacktraceStepTest extends AbstractHelper
     /**
      * Test if the __construct injects the pool.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testConstruct(): void
     {
         $object = new BacktraceStep(Krexx::$pool);
@@ -84,6 +86,7 @@ class BacktraceStepTest extends AbstractHelper
     /**
      * Testing, if all events got fired.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMe(): void
     {
         $backtraceStep = new BacktraceStep(Krexx::$pool);
@@ -105,6 +108,7 @@ class BacktraceStepTest extends AbstractHelper
     /**
      * Test everything, but some data is missing.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeEmpty(): void
     {
         $backtraceStep = new BacktraceStep(Krexx::$pool);

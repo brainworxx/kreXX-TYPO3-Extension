@@ -60,8 +60,7 @@ abstract class AbstractHelper extends AbstractKrexxTest
         }
         $renderingStackRefMock = $this->createMock(\ReflectionProperty::class);
         // Mock the property reflection of the rendering context.
-        $renderingStackRefMock->expects($this->any())
-            ->method('setAccessible')
+        $renderingStackRefMock->method('setAccessible')
             ->with(true);
         $renderingStackRefMock->expects($this->once())
             ->method('getValue')

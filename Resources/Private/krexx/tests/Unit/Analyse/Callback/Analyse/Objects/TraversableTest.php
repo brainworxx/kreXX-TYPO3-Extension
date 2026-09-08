@@ -46,6 +46,7 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 use ArrayObject;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(Traversable::class, 'callMe')]
@@ -95,6 +96,7 @@ class TraversableTest extends AbstractHelper
     /**
      * Test, if we do not ignore the emergency handler.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeWithEmergency(): void
     {
         // Tell the emergency handler mock that we have a nesting level problem.
@@ -126,8 +128,7 @@ class TraversableTest extends AbstractHelper
         // Prepare a second test.
         // Simulate an emergency break.
         $emergencyMock = $this->createMock(Emergency::class);
-        $emergencyMock->expects($this->any())
-            ->method('checkEmergencyBreak')
+        $emergencyMock->method('checkEmergencyBreak')
             ->willReturn(true);
 
         Krexx::$pool->emergencyHandler = $emergencyMock;
@@ -189,8 +190,7 @@ class TraversableTest extends AbstractHelper
         $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $object));
 
         // Tell the emergency handler, that the nesting level is ok.
-        Krexx::$pool->emergencyHandler->expects($this->any())
-            ->method(static::CHECK_NESTING)
+        Krexx::$pool->emergencyHandler->method(static::CHECK_NESTING)
             ->willReturn(false);
 
         // Listen for the start and end event.
@@ -240,8 +240,7 @@ class TraversableTest extends AbstractHelper
     public function testMeWithLargeArray(): void
     {
         // Tell the emergency handler, that the nesting level is ok.
-        Krexx::$pool->emergencyHandler->expects($this->any())
-            ->method(static::CHECK_NESTING)
+        Krexx::$pool->emergencyHandler->method(static::CHECK_NESTING)
             ->willReturn(false);
 
         // Listen for the start and end event.

@@ -38,6 +38,7 @@ namespace Brainworxx\Krexx\Tests\Unit\View\Skins\Hans;
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
 use Brainworxx\Krexx\View\AbstractRender;
 use Brainworxx\Krexx\View\Skins\Hans\Button;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(Button::class, 'renderButton')]
@@ -47,6 +48,7 @@ class ButtonTest extends AbstractRenderHans
     /**
      * Test the rendering of a button.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRenderButton(): void
     {
         $this->mockModel(static::GET_NAME, 'clickme');

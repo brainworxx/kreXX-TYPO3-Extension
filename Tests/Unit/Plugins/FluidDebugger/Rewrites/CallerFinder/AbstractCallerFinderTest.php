@@ -40,6 +40,7 @@ use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid;
 use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContext;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
@@ -59,6 +60,7 @@ class AbstractCallerFinderTest extends AbstractHelper
     /**
      * Test the retrieval of all necessary objects from the ViewHelper.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testConstructNormal()
     {
         $renderingStack = [[static::PARSED_TEMPLATE => new \StdClass(), 'type' => 5]];
@@ -71,8 +73,7 @@ class AbstractCallerFinderTest extends AbstractHelper
         }
         $renderingStackRefMock = $this->createMock(\ReflectionProperty::class);
         // Mock the property reflection of the rendering context.
-        $renderingStackRefMock->expects($this->any())
-            ->method('setAccessible')
+        $renderingStackRefMock->method('setAccessible')
             ->with(true);
         $renderingStackRefMock->expects($this->once())
             ->method('getValue')
@@ -113,6 +114,7 @@ class AbstractCallerFinderTest extends AbstractHelper
     /**
      * Test the error handling during construct.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testConstructError()
     {
         $viewMock = 'do not look at me';

@@ -36,12 +36,13 @@
 namespace Brainworxx\Krexx\Tests\Unit\Service\Reflection;
 
 use Brainworxx\Krexx\Service\Reflection\HiddenProperty;
+use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use DateTime;
 use ReflectionClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
-#[CoversMethod(HiddenProperty::class, 'hasType')]
+#[CoversMethod(UndeclaredProperty::class, 'hasType')]
 #[CoversMethod(HiddenProperty::class, '__construct')]
 class HiddenPropertyTest extends AbstractHelper
 {

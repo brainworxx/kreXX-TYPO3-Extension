@@ -59,6 +59,7 @@ use Brainworxx\Krexx\Service\Config\From\File;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Log\LogLevel;
@@ -159,6 +160,7 @@ class ConfigurationTest extends AbstractHelper implements ConstInterface
     /**
      * Test the adjustments done by the TYPO3 plugin.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testExec()
     {
         $log = 'log';

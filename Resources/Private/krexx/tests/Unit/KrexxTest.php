@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Tests\Unit;
 
 use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Controller\TimerController;
+use Brainworxx\Krexx\Logging\LoggingTrait;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\From\File;
@@ -54,8 +55,8 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(Krexx::class, 'editSettings')]
 #[CoversMethod(Krexx::class, 'timerEnd')]
 #[CoversMethod(Krexx::class, 'logTimerEnd')]
-#[CoversMethod(Krexx::class, 'startForcedLog')]
-#[CoversMethod(Krexx::class, 'endForcedLog')]
+#[CoversMethod(LoggingTrait::class, 'startForcedLog')]
+#[CoversMethod(LoggingTrait::class, 'endForcedLog')]
 #[CoversMethod(Krexx::class, 'logBacktrace')]
 #[CoversMethod(Krexx::class, 'log')]
 class KrexxTest extends AbstractHelper
@@ -349,8 +350,7 @@ class KrexxTest extends AbstractHelper
         $settingsMockDest->expects($this->once())
             ->method('setValue')
             ->with($this->equalTo(Fallback::VALUE_FILE));
-        $settingsMockDest->expects($this->any())
-            ->method('getValue')
+        $settingsMockDest->method('getValue')
             ->willReturn(Fallback::VALUE_FILE);
         $settingsMockDest->expects($this->once())
             ->method('getSource')

@@ -52,11 +52,12 @@ use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Helpers\OutputNothing;
 use Brainworxx\Krexx\View\Output\Browser;
 use Brainworxx\Krexx\View\Output\Chunks;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(DumpController::class, 'dumpAction')]
-#[CoversMethod(BacktraceController::class, 'outputFooter')]
-#[CoversMethod(BacktraceController::class, 'outputCssAndJs')]
+#[CoversMethod(\Brainworxx\Krexx\Controller\AbstractController::class, 'outputFooter')]
+#[CoversMethod(\Brainworxx\Krexx\Controller\AbstractController::class, 'outputCssAndJs')]
 class DumpControllerTest extends AbstractController
 {
     /**
@@ -138,14 +139,14 @@ class DumpControllerTest extends AbstractController
     /**
      * Testing the use of a log model, without code generation and with an emergency break.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testDumpActionSpecialCases()
     {
         $dumpController = new DumpController(Krexx::$pool);
         $fixture = new \Brainworxx\Krexx\Logging\Model();
         $message = 'Message in a bottle';
         $emergencyMock = $this->createMock(Emergency::class);
-        $emergencyMock->expects($this->any())
-            ->method('checkEmergencyBreak')
+        $emergencyMock->method('checkEmergencyBreak')
             ->willReturn(true);
         $codeGenMock = $this->createMock(Codegen::class);
         $codeGenMock->expects($this->once())
@@ -167,6 +168,7 @@ class DumpControllerTest extends AbstractController
      *   - No minimized JS files
      *   - No minimized CSS files.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testDumpActionWithFooterHandling()
     {
         $dumpController = new DumpController(Krexx::$pool);
@@ -174,16 +176,14 @@ class DumpControllerTest extends AbstractController
         $expectation = Krexx::$pool->messages->getHelp('configFileNotFound');
 
         $fileServiceMock = $this->createMock(File::class);
-        $fileServiceMock->expects($this->any())
-            ->method('fileIsReadable')
+        $fileServiceMock->method('fileIsReadable')
             ->willReturn(false);
         Krexx::$pool->fileService = $fileServiceMock;
 
         $outputService = new OutputNothing(Krexx::$pool);
         $this->setValueByReflection('outputService', $outputService, $dumpController);
         $emergencyMock = $this->createMock(Emergency::class);
-        $emergencyMock->expects($this->any())
-            ->method('checkEmergencyBreak')
+        $emergencyMock->method('checkEmergencyBreak')
             ->willReturn(false);
         Krexx::$pool->emergencyHandler = $emergencyMock;
         $this->setValueByReflection('jsCssSend', [], $dumpController);

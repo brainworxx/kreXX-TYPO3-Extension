@@ -45,6 +45,7 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use stdClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
@@ -74,6 +75,7 @@ class ProcessResourceTest extends AbstractHelper
     /**
      * Testing the processing of a stream resource.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testProcessStream()
     {
         $this->mockEmergencyHandler();
@@ -95,6 +97,7 @@ class ProcessResourceTest extends AbstractHelper
     /**
      * Testing the processing of a curl resource.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testProcessCurl()
     {
         $this->mockEmergencyHandler();
@@ -116,6 +119,7 @@ class ProcessResourceTest extends AbstractHelper
     /**
      * Testing the processing of a not yet implemented resource type analysis.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testProcessOther()
     {
         $this->mockEmergencyHandler();
@@ -134,6 +138,7 @@ class ProcessResourceTest extends AbstractHelper
     /**
      * Test the processing of a shell resource.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testProcessShell()
     {
         $this->mockEmergencyHandler();

@@ -113,5 +113,14 @@ class MessageTest extends AbstractHelper
         Krexx::$pool->messages = $messagesMock;
 
         $message->getText();
+
+        // And now for the throw away messages with removeIt = false
+        $message = new Message(Krexx::$pool);
+        $message->setText($text)->setKey($key)->setIsThrowAway(true);
+        $messagesMock = $this->createMock(Messages::class);
+        $messagesMock->expects($this->never())
+            ->method('removeKey');
+        Krexx::$pool->messages = $messagesMock;
+        $message->getText(false);
     }
 }

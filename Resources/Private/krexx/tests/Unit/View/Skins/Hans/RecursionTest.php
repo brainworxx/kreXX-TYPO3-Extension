@@ -41,6 +41,7 @@ use Brainworxx\Krexx\View\Skins\Hans\ConnectorLeft;
 use Brainworxx\Krexx\View\Skins\Hans\ConnectorRight;
 use Brainworxx\Krexx\View\Skins\Hans\Help;
 use Brainworxx\Krexx\View\Skins\Hans\Recursion;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(Recursion::class, 'renderRecursion')]
@@ -54,6 +55,7 @@ class RecursionTest extends AbstractRenderHans
     /**
      * Test the rendering of a recursion.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRenderRecursion(): void
     {
         // Prepare the model

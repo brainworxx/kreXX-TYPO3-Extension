@@ -39,6 +39,7 @@ use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
 use Brainworxx\Krexx\View\Message;
 use Brainworxx\Krexx\View\Skins\Hans\Messages;
 use Krexx;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(Messages::class, 'renderMessages')]
@@ -47,6 +48,7 @@ class MessagesTest extends AbstractRenderHans
     /**
      * Test the message rendering.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRenderMessages(): void
     {
         $fixture = [

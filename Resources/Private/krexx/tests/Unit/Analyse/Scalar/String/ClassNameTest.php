@@ -44,6 +44,7 @@ use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(ClassName::class, 'handle')]
@@ -111,6 +112,7 @@ class ClassNameTest extends AbstractHelper
     /**
      * Test the handling of the json.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testHandle()
     {
         $className = new ClassName(Krexx::$pool);

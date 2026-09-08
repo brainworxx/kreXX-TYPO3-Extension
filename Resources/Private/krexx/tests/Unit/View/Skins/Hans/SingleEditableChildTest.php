@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
 use Brainworxx\Krexx\View\AbstractRender;
 use Brainworxx\Krexx\View\Skins\Hans\Help;
 use Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(SingleEditableChild::class, 'renderSingleEditableChild')]
@@ -54,6 +55,7 @@ class SingleEditableChildTest extends AbstractRenderHans
     /**
      * Test the rendering of a editable input field.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRenderSingleEditableChildInput(): void
     {
         $this->mockModel(static::GET_DOMID, 'nullachtwhatever');
@@ -82,6 +84,7 @@ class SingleEditableChildTest extends AbstractRenderHans
     /**
      * Test the rendering of an editable dropdown field, the skin list
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRenderSingleEditableChildSelectSkin(): void
     {
         $selectedSkin = 'selectedSkin';
@@ -119,6 +122,7 @@ class SingleEditableChildTest extends AbstractRenderHans
     /**
      * Test the rendering of a simple boolean.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRenderSingleEditableChildSelectBool(): void
     {
         $this->mockModel(static::GET_DATA, 'some data');
@@ -137,6 +141,7 @@ class SingleEditableChildTest extends AbstractRenderHans
     /**
      * Test the rendering of the language dropdown
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRenderSingleEditableChildSelectLang(): void
     {
         $this->mockModel(static::GET_DATA, 'some data');

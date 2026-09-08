@@ -50,10 +50,8 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(Messages::class, '__construct')]
 #[CoversMethod(Messages::class, 'removeKey')]
 #[CoversMethod(Messages::class, 'outputMessages')]
-#[CoversMethod(Messages::class, 'getHelp')]
 #[CoversMethod(Messages::class, 'getMessages')]
 #[CoversMethod(Messages::class, 'addMessage')]
-#[CoversMethod(Messages::class, 'readHelpTexts')]
 class MessagesTest extends AbstractHelper
 {
     public const  KEY_VARIABLE_NAME = 'messages';

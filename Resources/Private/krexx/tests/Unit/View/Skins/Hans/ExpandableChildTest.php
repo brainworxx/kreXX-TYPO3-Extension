@@ -44,6 +44,7 @@ use Brainworxx\Krexx\View\AbstractRender;
 use Brainworxx\Krexx\View\Output\Chunks;
 use Brainworxx\Krexx\View\Skins\Hans\ConnectorRight;
 use Brainworxx\Krexx\View\Skins\Hans\ExpandableChild;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(ExpandableChild::class, 'renderExpandableChild')]
@@ -62,6 +63,7 @@ class ExpandableChildTest extends AbstractRenderHans
      * On hindsight, these names are just silly. Then again, we do have a skin
      * with the name 'Hans'.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRenderExpandableChild(): void
     {
         $emergencyMock = $this->createMock(Emergency::class);
@@ -117,6 +119,7 @@ class ExpandableChildTest extends AbstractRenderHans
     /**
      * Test the rendering of an expandable child with line breaks in the extra.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRenderExpandableChildLinebreaks(): void
     {
         $emergencyMock = $this->createMock(Emergency::class);
@@ -135,6 +138,7 @@ class ExpandableChildTest extends AbstractRenderHans
     /**
      * Test everything with an active emergency break.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRenderExpandableChildEmergency(): void
     {
         $emergencyMock = $this->createMock(Emergency::class);
@@ -151,6 +155,7 @@ class ExpandableChildTest extends AbstractRenderHans
     /**
      * Test the rendering without any connectors on the right.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRenderExpandableChildNoConnector(): void
     {
         $emergencyMock = $this->createMock(Emergency::class);
@@ -172,6 +177,7 @@ class ExpandableChildTest extends AbstractRenderHans
     /**
      * Test it with a source code button and expanded.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRenderExpandableChildCollapsed(): void
     {
         $emergencyMock = $this->createMock(Emergency::class);

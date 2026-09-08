@@ -93,7 +93,7 @@ abstract class AbstractRenderHans extends AbstractHelper
         $hans = new RenderHans(Krexx::$pool);
         $pathToSkin = Krexx::$pool->config->getSkinDirectory();
         $this->fileServiceMock = $this->createMock(File::class);
-        $this->fileServiceMock->expects($this->any())->method('getFileContents')
+        $this->fileServiceMock->method('getFileContents')
             ->willReturnMap([
                 // connectorLeft.html
                 [

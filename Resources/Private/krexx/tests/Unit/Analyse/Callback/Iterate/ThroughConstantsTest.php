@@ -41,6 +41,7 @@ use Brainworxx\Krexx\Tests\Fixtures\ConstantsFixture71;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(ThroughConstants::class, 'callMe')]
@@ -100,6 +101,7 @@ class ThroughConstantsTest extends AbstractHelper
     /**
      * Testing the PHP 7.1 plus constants handling.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMe()
     {
         \Krexx::$pool->scope->setScope('$somethingElse');
@@ -126,6 +128,7 @@ class ThroughConstantsTest extends AbstractHelper
     /**
      * And now the same thing while coming from the inside.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMe71InScope()
     {
         \Krexx::$pool->scope->setScope('$this');

@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(Base64::class, 'isActive')]
@@ -86,6 +87,7 @@ class Base64Test extends AbstractHelper
     /**
      * Test the handling of the json.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testHandle()
     {
         $base64 = new Base64(Krexx::$pool);

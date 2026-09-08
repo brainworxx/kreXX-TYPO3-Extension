@@ -41,6 +41,7 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(ProcessBacktrace::class, '__construct')]
@@ -92,6 +93,7 @@ class ProcessBacktraceTest extends AbstractHelper
     /**
      * Create a mock backtrace, and see if it is processed.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testProcessNormal()
     {
         $this->mockEmergencyHandler();
@@ -157,6 +159,7 @@ class ProcessBacktraceTest extends AbstractHelper
     /**
      * Testing the backtrace processing, without a backtrace.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testProcessEmpty()
     {
         $this->mockEmergencyHandler();
@@ -213,6 +216,7 @@ class ProcessBacktraceTest extends AbstractHelper
      * We mock the debug_backtrace, and make it return an empty value to
      * simulate a tiny backtrace.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testProcessReallyEmpty()
     {
         $this->mockEmergencyHandler();

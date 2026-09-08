@@ -45,6 +45,7 @@ use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\View\Skins\RenderHans;
 use Brainworxx\Krexx\Tests\Fixtures\ContainerFixture;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use ReflectionMethod;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
@@ -71,6 +72,7 @@ class ThroughGetterTest extends AbstractHelper
     /**
      * Testing the value retrieving in the getter analysis.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMe()
     {
         $this->mockEmergencyHandler();
@@ -244,6 +246,7 @@ class ThroughGetterTest extends AbstractHelper
     /**
      * Testing the value retrieving in the getter analysis from a value container.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeContainer()
     {
         $this->mockEmergencyHandler();
@@ -344,6 +347,7 @@ class ThroughGetterTest extends AbstractHelper
     /**
      * Testing the value retrieving in the getter analysis from a value delegate method.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeDelegate()
     {
         $this->mockEmergencyHandler();

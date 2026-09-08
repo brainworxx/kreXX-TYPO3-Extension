@@ -44,6 +44,7 @@ use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use ReflectionMethod;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
@@ -87,6 +88,7 @@ class GetterTest extends AbstractHelper
     /**
      * Test if the __construct injects the pool.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testConstruct(): void
     {
         $object = new Getter(Krexx::$pool);
@@ -97,6 +99,7 @@ class GetterTest extends AbstractHelper
     /**
      * Test without any methods at all.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeEmpty()
     {
         // Setup the events.
@@ -127,6 +130,7 @@ class GetterTest extends AbstractHelper
     /**
      * Test without any getter methods.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeWithoutGetter()
     {
         // Setup the events.
@@ -154,6 +158,7 @@ class GetterTest extends AbstractHelper
         $this->assertEquals([], CallbackCounter::$staticParameters);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeInScope()
     {
         // Setup the events.
@@ -197,6 +202,7 @@ class GetterTest extends AbstractHelper
         $this->assertEquals($expectedResult, CallbackCounter::$staticParameters);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeOutOfScope()
     {
         // Setup the events.

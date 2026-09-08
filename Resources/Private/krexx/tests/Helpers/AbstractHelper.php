@@ -193,11 +193,9 @@ abstract class AbstractHelper extends TestCase
     protected function mockEmergencyHandler()
     {
         $emergencyMock = $this->createMock(Emergency::class);
-        $emergencyMock->expects($this->any())
-            ->method('checkEmergencyBreak')
+        $emergencyMock->method('checkEmergencyBreak')
             ->willReturn(false);
-        $emergencyMock->expects($this->any())
-            ->method('getKrexxCount')
+        $emergencyMock->method('getKrexxCount')
             ->willReturn(1);
         Krexx::$pool->emergencyHandler = $emergencyMock;
     }

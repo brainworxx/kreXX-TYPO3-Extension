@@ -37,11 +37,13 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Scalar\String;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Scalar\String\AbstractScalarAnalysis;
 use Brainworxx\Krexx\Analyse\Scalar\String\FilePath;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use finfo;
 use Krexx;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use TypeError;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
@@ -49,8 +51,8 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(FilePath::class, 'isActive')]
 #[CoversMethod(FilePath::class, 'canHandle')]
 #[CoversMethod(FilePath::class, 'retrieveFileInfo')]
-#[CoversMethod(FilePath::class, 'callMe')]
-#[CoversMethod(FilePath::class, 'handle')]
+#[CoversMethod(AbstractScalarAnalysis::class, 'callMe')]
+#[CoversMethod(AbstractScalarAnalysis::class, 'handle')]
 class FilePathTest extends AbstractHelper
 {
     /**
@@ -90,6 +92,7 @@ class FilePathTest extends AbstractHelper
     /**
      * Test, if we can identify a file path.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCanHandle()
     {
         $filePath = new FilePath(Krexx::$pool);

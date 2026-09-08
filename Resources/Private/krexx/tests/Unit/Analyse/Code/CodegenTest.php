@@ -47,6 +47,7 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use ReflectionParameter;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
@@ -125,6 +126,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the pool handling.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testConstruct(): void
     {
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $this->codegenHandler));
@@ -200,6 +202,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test an empty run, something like krexx(), without any variable.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testGenerateSourceEmptyFirstRunNoTypeHint(): void
     {
         $this->fixture->setName('');
@@ -212,6 +215,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the type hint with a more complitated varname from the source.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testGenerateSourceFirstRunTypeHintScalar(): void
     {
         $this->setValueByReflection(static::FIRST_RUN, true, $this->codegenHandler);
@@ -293,6 +297,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the meta json code generation.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testGenerateSourceMetaDecodedJson(): void
     {
         $this->fixture->setCodeGenType($this->codegenHandler::CODEGEN_TYPE_JSON_DECODE);
@@ -306,6 +311,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the meta Base64 code generation.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testGenerateMetaDecodedBase64(): void
     {
         $this->fixture->setCodeGenType($this->codegenHandler::CODEGEN_TYPE_BASE64_DECODE);
@@ -393,6 +399,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the special handling of special chars in the parameters.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testGenerateSourceWithEscaping(): void
     {
         $fixture = new Model(\Krexx::$pool);
@@ -413,6 +420,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the small ones.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testSimpleGetterandSetter(): void
     {
         $this->assertEquals('', $this->codegenHandler->generateWrapperLeft());
@@ -425,6 +433,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the multiple enabling / disabling of the code generation.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testSetAllowCodegen(): void
     {
         $this->codegenHandler->setCodegenAllowed(false);
@@ -456,6 +465,7 @@ class CodegenTest extends AbstractHelper
      * Test the parameter analysis, with a required parameter.
      * We use a special DateTime parameter as a fixture.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testParameterToString(): void
     {
         $fixture = function (\DateTimeZone $object){};
@@ -472,6 +482,7 @@ class CodegenTest extends AbstractHelper
      * Test the parameter analysis, with a default value which is an object.
      * We use a special method from the Parameters fixture for this.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testParameterToStringWithObjects(): void
     {
         $fixture = new Parameters();
@@ -487,6 +498,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test the parameter analysis, with a special default value.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testParameterToStringWithQuotationMarks(): void
     {
         $refParamMock = $this->createMock(ReflectionParameter::class);
@@ -509,6 +521,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test with a bunch of real parameters.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testDefaultValueTranslation(): void
     {
         $reflection = new \ReflectionClass(MethodParameterFixture::class);
@@ -561,6 +574,7 @@ class CodegenTest extends AbstractHelper
     /**
      * Test stuff with a Enum parameter.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testDefaultValueEnum(): void
     {
         $reflection = new \ReflectionClass(EnumFixture::class);

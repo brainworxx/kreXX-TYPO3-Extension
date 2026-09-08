@@ -39,6 +39,7 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderSmokyGrey;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\Footer;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\Help;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(Footer::class, 'renderFooter')]
@@ -48,6 +49,7 @@ class FooterTest extends AbstractRenderSmokyGrey
     /**
      * Test the removal of the debug tab, when we are in config mode.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRenderFooter(): void
     {
         $this->mockEmergencyHandler();
@@ -55,11 +57,9 @@ class FooterTest extends AbstractRenderSmokyGrey
         $model->expects($this->exactly(2))
             ->method('getJson')
             ->willReturn([]);
-        $model->expects($this->any())
-            ->method('getType')
+        $model->method('getType')
             ->willReturn('');
-        $model->expects($this->any())
-            ->method('getConnectorRight')
+        $model->method('getConnectorRight')
             ->willReturn('');
 
         $result = $this->renderSmokyGrey->renderFooter([], $model, true);

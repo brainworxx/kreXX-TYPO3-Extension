@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Tests\Unit\View\Skins\Hans;
 
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
 use Brainworxx\Krexx\View\Skins\Hans\SingeChildHr;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(SingeChildHr::class, 'renderSingeChildHr')]
@@ -45,6 +46,7 @@ class SingeChildHrTest extends AbstractRenderHans
     /**
      * Test the rendering of a HR tag.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRenderSingeChildHr(): void
     {
         $this->assertStringContainsString('HR does not mean human resources', $this->renderHans->renderSingeChildHr());

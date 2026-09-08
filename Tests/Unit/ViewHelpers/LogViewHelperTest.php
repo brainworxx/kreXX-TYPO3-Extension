@@ -41,6 +41,7 @@ use Brainworxx\Krexx\Service\Config\Model;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\ViewHelperVariableContainer;
@@ -53,6 +54,7 @@ class LogViewHelperTest extends AbstractHelper
     /**
      * Test the logging part of the log ViewHelper.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRender()
     {
         $logViewHelper = new LogViewHelper();

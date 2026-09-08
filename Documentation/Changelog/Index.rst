@@ -16,6 +16,8 @@ Changes:
         - [emergency]maxRuntime
         - [emergency]memoryLeft
     * [Change] Moved the maxCall setting from [emergency] to [prune]. Removed the now empty [emergency] section.
+    * [Change] Throwaway messages are not removed any more when they are displayed in the shell.
+    * [Change] Updated the unit tests to UnitTest 13.0.
     * [Change] Dropped support for TYPO3 10, 11 and 12.
     * [Change] Refactored / rewritten the rendering and the JS of the backend module and kicked out all the old compatibility workarounds.
     * [Change] Mitigated deprecations in TYPO3 14.

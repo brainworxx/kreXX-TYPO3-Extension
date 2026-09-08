@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\View\Skins\RenderHans;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use ReflectionClass;
 
@@ -65,6 +66,7 @@ class ConstantsTest extends AbstractHelper
     /**
      * Test if the __construct injects the pool.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testConstruct(): void
     {
         $object = new Constants(Krexx::$pool);
@@ -75,6 +77,7 @@ class ConstantsTest extends AbstractHelper
     /**
      * Testing the analysis of constants (without any constants).
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeNoConstants()
     {
         // Create the fixture mock, without any constants.
@@ -112,6 +115,7 @@ class ConstantsTest extends AbstractHelper
     /**
      * Testing the analysis of constants,
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeWithConstants()
     {
         $returnConstants = ['some', 'constants'];

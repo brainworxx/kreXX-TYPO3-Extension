@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Declaration;
 
+use Brainworxx\Krexx\Analyse\Declaration\AbstractDeclaration;
 use Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration;
 use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesFixture;
@@ -46,9 +47,9 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(PropertyDeclaration::class, 'retrieveNamedPropertyType')]
-#[CoversMethod(PropertyDeclaration::class, 'retrieveNamedType')]
-#[CoversMethod(PropertyDeclaration::class, 'formatNamedType')]
-#[CoversMethod(PropertyDeclaration::class, 'retrieveDeclaration')]
+#[CoversMethod(AbstractDeclaration::class, 'retrieveNamedType')]
+#[CoversMethod(AbstractDeclaration::class, 'formatNamedType')]
+#[CoversMethod(AbstractDeclaration::class, 'retrieveDeclaration')]
 #[CoversMethod(PropertyDeclaration::class, 'retrieveDeclaringClassFromTraits')]
 class PropertyDeclarationTest extends AbstractHelper
 {

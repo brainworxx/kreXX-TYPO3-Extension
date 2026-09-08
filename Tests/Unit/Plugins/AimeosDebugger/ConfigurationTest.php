@@ -45,6 +45,7 @@ use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ThroughMethods;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use TYPO3\CMS\Core\Package\MetaData;
 use Aimeos\MW\DB\Statement\Base as StatementBase;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -102,6 +103,7 @@ class ConfigurationTest extends AbstractHelper
     /**
      * Test the registering of the events and all the other stuff for this plugin.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testExec()
     {
         $this->skipIfAimeosIsNotInstalled();

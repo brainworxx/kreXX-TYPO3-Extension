@@ -53,6 +53,7 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use DateTime;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(Meta::class, 'callMe')]
@@ -213,12 +214,12 @@ class MetaTest extends AbstractHelper
     /**
      * Test the meta analysis with other class types.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeOthers(): void
     {
         // Make sure that we are not testing a recursion.
         $recursionMock = $this->createMock(Recursion::class);
-        $recursionMock->expects($this->any())
-            ->method('isInMetaHive')
+        $recursionMock->method('isInMetaHive')
             ->willReturn(false);
         Krexx::$pool->recursionHandler = $recursionMock;
 
@@ -253,12 +254,12 @@ class MetaTest extends AbstractHelper
     /**
      * Test attributes with enums in them. and lots of other stuff in there.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeWithAttributes(): void
     {
         // Make sure that we are not testing a recursion.
         $recursionMock = $this->createMock(Recursion::class);
-        $recursionMock->expects($this->any())
-            ->method('isInMetaHive')
+        $recursionMock->method('isInMetaHive')
             ->willReturn(false);
         Krexx::$pool->recursionHandler = $recursionMock;
 

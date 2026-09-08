@@ -47,6 +47,7 @@ use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use ReflectionProperty;
 use DateTime;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -93,6 +94,7 @@ class PublicPropertyTest extends AbstractHelper
     /**
      * Test if the __construct injects the pool.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testConstruct(): void
     {
         $object = new PublicProperties(Krexx::$pool);
@@ -104,6 +106,7 @@ class PublicPropertyTest extends AbstractHelper
      * Test the public property analysis, without any public ones in the
      * fixture
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeNoPublic(): void
     {
         // Test start event
@@ -130,6 +133,7 @@ class PublicPropertyTest extends AbstractHelper
      * Test the public property analysis, with public ones in the fixture.
      * We also add some undeclared ones to the mix.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeWithPublic(): void
     {
         // Set up the events
@@ -172,6 +176,7 @@ class PublicPropertyTest extends AbstractHelper
     /**
      * Testing the "public" properties of a date time analysis.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeDateTime(): void
     {
         // Set up the events

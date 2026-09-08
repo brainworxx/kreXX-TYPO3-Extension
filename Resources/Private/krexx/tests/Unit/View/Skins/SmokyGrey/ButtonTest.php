@@ -39,6 +39,7 @@ use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderSmokyGrey;
 use Brainworxx\Krexx\View\AbstractRender;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\Button;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\Help;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(Button::class, 'renderButton')]
@@ -49,6 +50,7 @@ class ButtonTest extends AbstractRenderSmokyGrey
     /**
      * Test the rendering of a button. Again we test only the additional stuff.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRenderButton(): void
     {
         $this->mockModel(static::GET_JSON, ['buttonJson' => 'isFun']);
@@ -65,6 +67,7 @@ class ButtonTest extends AbstractRenderSmokyGrey
     /**
      * Test the rendering of a button, buth without the json.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRenderButtonWithoutJson(): void
     {
         $this->mockModel(static::GET_JSON, []);

@@ -157,8 +157,7 @@ class CheckOutputTest extends AbstractHelper
     {
         // Disable CLI mode.
         $sapiMock = $this->getFunctionMock(static::OUTPUT_NAMESPACE, static::PHP_SAPI_NAME);
-        $sapiMock->expects($this->any())
-            ->willReturn('browser');
+        $sapiMock->expects($this->any())->willReturn('browser');
         $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
         $checkOutput = new CheckOutput(Krexx::$pool);
 

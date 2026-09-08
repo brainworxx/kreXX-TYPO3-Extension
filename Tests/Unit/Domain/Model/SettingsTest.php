@@ -45,6 +45,7 @@ use Brainworxx\Krexx\Service\Config\Validation;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\Registration;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Package\MetaData;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -99,11 +100,9 @@ class SettingsTest extends AbstractHelper implements ConstInterface
 
         // Simulating the package
         $metaData = $this->createMock(MetaData::class);
-        $metaData->expects($this->any())
-            ->method('getVersion')
+        $metaData->method('getVersion')
             ->willReturn(AbstractHelper::TYPO3_VERSION);
         $this->simulatePackage(Bootstrap::EXT_KEY, 'what/ever/')
-            ->expects($this->any())
             ->method('getPackageMetaData')
             ->willReturn($metaData);
     }
@@ -115,6 +114,7 @@ class SettingsTest extends AbstractHelper implements ConstInterface
      * There is a point where we needed to stop and we have clearly passed it
      * but let's keep going and see what happens.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testItAll()
     {
         $this->prepareConfigToRun();

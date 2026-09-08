@@ -60,7 +60,6 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(Config::class, '__construct')]
 #[CoversMethod(Config::class, 'getChunkDir')]
 #[CoversMethod(Config::class, 'getLogDir')]
-#[CoversMethod(Config::class, 'getPathToConfigFile')]
 #[CoversMethod(Config::class, 'checkEnabledStatus')]
 class ConfigTest extends AbstractHelper
 {

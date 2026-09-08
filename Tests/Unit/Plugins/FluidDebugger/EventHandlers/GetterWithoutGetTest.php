@@ -45,6 +45,7 @@ use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\GetterFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(GetterWithoutGet::class, 'handle')]
@@ -63,6 +64,7 @@ class GetterWithoutGetTest extends AbstractHelper implements CallbackConstInterf
     /**
      * Test the removal of 'get' from the methodnames in fluid mode.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testHandle()
     {
         $this->mockEmergencyHandler();

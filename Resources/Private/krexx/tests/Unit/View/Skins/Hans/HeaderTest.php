@@ -44,6 +44,7 @@ use Brainworxx\Krexx\View\Skins\Hans\Header;
 use Brainworxx\Krexx\View\Skins\Hans\Messages;
 use Brainworxx\Krexx\View\Messages as ViewMessages;
 use Brainworxx\Krexx\View\Skins\Hans\Search;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(Header::class, 'renderHeader')]
@@ -54,6 +55,7 @@ class HeaderTest extends AbstractRenderHans
     /**
      * Test the rendering of the kreXX header.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRenderHeader(): void
     {
         $emergencyMock = $this->createMock(Emergency::class);

@@ -44,13 +44,14 @@ use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\LoggerCallerFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use ReflectionClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(CallerFinder::class, '__construct')]
 #[CoversMethod(CallerFinder::class, 'findCaller')]
 #[CoversMethod(CallerFinder::class, 'getVarName')]
-#[CoversMethod(CallerFinder::class, 'getType')]
+#[CoversMethod(AbstractCaller::class, 'getType')]
 #[CoversMethod(CallerFinder::class, 'identifyCaller')]
 #[CoversMethod(CallerFinder::class, 'removeKrexxPartFromCommand')]
 #[CoversMethod(AbstractCaller::class, 'getCurrentUrl')]
@@ -93,8 +94,7 @@ class CallerFinderTest extends AbstractHelper
         // Prepare the uri.
         // The things you do, to mock an uri call . . .
         $poolMock = $this->createMock(Pool::class);
-        $poolMock->expects($this->any())
-            ->method('getServer')
+        $poolMock->method('getServer')
             ->willReturn([
                 'SERVER_PROTOCOL' => 'abcd/',
                 'SERVER_PORT' => 123,
@@ -107,8 +107,7 @@ class CallerFinderTest extends AbstractHelper
         $poolMock->config = Krexx::$pool->config;
         $poolMock->emergencyHandler = Krexx::$pool->emergencyHandler;
         $poolMock->messages = Krexx::$pool->messages;
-        $poolMock->expects($this->any())
-            ->method('createClass')
+        $poolMock->method('createClass')
             ->willReturnCallback(fn($classname) => Krexx::$pool->createClass($classname));
 
         // Create our test subject.
@@ -144,6 +143,7 @@ class CallerFinderTest extends AbstractHelper
     /**
      * Test the setting of the call pattern and the pattern itself.´ß
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testConstruct(): void
     {
         $krexx = 'krexx';
@@ -167,6 +167,7 @@ class CallerFinderTest extends AbstractHelper
      * Test normally, without any outside iterference, the way it is normally
      * executed.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testFindCallerNormal(): void
     {
         $this->mockDebugBacktrace()
@@ -188,6 +189,7 @@ class CallerFinderTest extends AbstractHelper
     /**
      * Test the resolving of inline calles of kreXX.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testFindCallerInline(): void
     {
         $this->mockDebugBacktrace()
@@ -211,6 +213,7 @@ class CallerFinderTest extends AbstractHelper
     /**
      * Test with an externally set headline.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testFindCallerHeadline(): void
     {
 
@@ -232,6 +235,7 @@ class CallerFinderTest extends AbstractHelper
     /**
      * Test with a source file, that is not readable.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testFindCallerUnreadableSource(): void
     {
         // Create a fixture.
@@ -256,6 +260,7 @@ class CallerFinderTest extends AbstractHelper
     /**
      * Test the finding without a valid url.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testFindCallerNoUrl(): void
     {
         $this->mockDebugBacktrace()
@@ -264,8 +269,7 @@ class CallerFinderTest extends AbstractHelper
 
         // We need a different pool mock.
         $poolMock = $this->createMock(Pool::class);
-        $poolMock->expects($this->any())
-            ->method('getServer')
+        $poolMock->method('getServer')
             ->willReturn([
                 'SERVER_PROTOCOL' => 'abcd/',
                 'SERVER_PORT' => 123,
@@ -277,8 +281,7 @@ class CallerFinderTest extends AbstractHelper
         $poolMock->config = Krexx::$pool->config;
         $poolMock->emergencyHandler = Krexx::$pool->emergencyHandler;
         $poolMock->messages = Krexx::$pool->messages;
-        $poolMock->expects($this->any())
-            ->method('createClass')
+        $poolMock->method('createClass')
             ->willReturnCallback(fn($classname) => Krexx::$pool->createClass($classname));
         $this->callerFinder = new CallerFinder($poolMock);
 
@@ -290,6 +293,7 @@ class CallerFinderTest extends AbstractHelper
     /**
      * Manipulate the lookup array to prevent finding anything.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testFindCallerNoResult(): void
     {
         $this->mockDebugBacktrace()
@@ -312,6 +316,7 @@ class CallerFinderTest extends AbstractHelper
     /**
      * Test the caller finder with the forced logger.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testFindCallerLogging(): void
     {
         $classRef = new ReflectionClass(LoggerCallerFixture::class);

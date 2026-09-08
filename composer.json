@@ -20,7 +20,7 @@
   },
   "require-dev": {
     "typo3/cms-base-distribution": "^13 || ^14",
-    "phpunit/phpunit": "^9.5 || ^10.5 || ^11.5",
+    "phpunit/phpunit": "^11.4 || ^12.5 || ^13.2",
     "php-mock/php-mock-phpunit": "^2",
     "typo3/cms-adminpanel": "^13 || ^14",
     "aimeos/aimeos-typo3": "^24.10 || ^25.10 || ^26.7",

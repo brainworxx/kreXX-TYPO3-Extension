@@ -45,6 +45,7 @@ use Brainworxx\Krexx\Service\Misc\File as Fileservice;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(ProcessClosure::class, 'handleNoneScalar')]
@@ -71,6 +72,7 @@ class ProcessClosureTest extends AbstractHelper
     /**
      * Test the processing of a closure.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testProcess()
     {
         $this->mockEmergencyHandler();

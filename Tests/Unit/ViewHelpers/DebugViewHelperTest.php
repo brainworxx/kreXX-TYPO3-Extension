@@ -40,6 +40,7 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3Fluid\Fluid\Core\Parser\SyntaxTree\ViewHelperNode;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
@@ -69,6 +70,7 @@ class DebugViewHelperTest extends AbstractHelper
     /**
      * Test the rendering of the debug ViewHelper.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRender()
     {
         $debugViewHelper = new DebugViewHelper();
@@ -124,8 +126,7 @@ class DebugViewHelperTest extends AbstractHelper
             ->method('getView')
             ->willReturn($view);
         $renderingContext = $this->createMock(RenderingContextInterface::class);
-        $renderingContext->expects($this->any())
-            ->method('getViewHelperVariableContainer')
+        $renderingContext->method('getViewHelperVariableContainer')
             ->willReturn($variableContainer);
         $debugViewHelper->setRenderingContext($renderingContext);
         $reflection = new \ReflectionClass(ViewHelperNode::class);
@@ -152,8 +153,7 @@ class DebugViewHelperTest extends AbstractHelper
             ->method('getView')
             ->willReturn($view);
         $renderingContext = $this->createMock(RenderingContextInterface::class);
-        $renderingContext->expects($this->any())
-            ->method('getViewHelperVariableContainer')
+        $renderingContext->method('getViewHelperVariableContainer')
             ->willReturn($variableContainer);
         $debugViewHelper->setRenderingContext($renderingContext);
         $debugViewHelper->setRenderChildrenClosure(function () {

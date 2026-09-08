@@ -41,6 +41,7 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration as AimeosConfiguration;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Package\Package;
 use TYPO3\CMS\Core\Package\UnitTestPackageManager;
@@ -74,6 +75,7 @@ class BootstrapTest extends AbstractHelper
     /**
      * Testing the early failing of the bootstrapping.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRunEarlyFail()
     {
         // The kreXX directory is not defined . . .
@@ -96,18 +98,15 @@ class BootstrapTest extends AbstractHelper
         // Since we as retrieving the extension path, we need to simulate the
         // existing of the includekrexx package.
         $packageManagerMock = $this->createMock(UnitTestPackageManager::class);
-        $packageManagerMock->expects($this->any())
-            ->method('isPackageActive')
+        $packageManagerMock->method('isPackageActive')
             ->willReturn(true);
         $this->setValueByReflection('packageManager', $packageManagerMock, ExtensionManagementUtility::class);
 
         $packageMock = $this->createMock(Package::class);
-        $packageMock->expects($this->any())
-            ->method('getPackagePath')
+        $packageMock->method('getPackagePath')
             ->willReturn(KREXX_DIR. '/../../../');
 
-        $packageManagerMock->expects($this->any())
-            ->method('getPackage')
+        $packageManagerMock->method('getPackage')
             ->willReturn($packageMock);
 
         $this->bootstrap->run();
@@ -119,6 +118,7 @@ class BootstrapTest extends AbstractHelper
      *
      * We expect that there will be no exception when doing it.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRunInlcudeKrexx()
     {
         // The kreXX directory is not defined . . .
@@ -142,6 +142,7 @@ class BootstrapTest extends AbstractHelper
     /**
      * The normal bootstrapping.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testRunNormal()
     {
         $definedMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, static::DEFINED);

@@ -5,6 +5,7 @@
          cacheDirectory=".phpunit.cache"
          beStrictAboutOutputDuringTests="true"
          failOnRisky="true"
+		 displayDetailsOnPhpunitDeprecations="true"
          failOnWarning="true">
     <testsuites>
         <testsuite name="krexxsuit">
@@ -12,7 +13,7 @@
         </testsuite>
     </testsuites>
 
-    <source restrictNotices="true" restrictWarnings="true">
+    <source restrictNotices="true">
         <include>
             <directory>./src</directory>
         </include>

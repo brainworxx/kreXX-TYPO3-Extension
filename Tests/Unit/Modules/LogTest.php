@@ -41,6 +41,7 @@ use Brainworxx\Includekrexx\Modules\Log;
 use Brainworxx\Includekrexx\Modules\Log14;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
 use TYPO3\CMS\Core\Http\ServerRequest;
@@ -88,6 +89,7 @@ class LogTest extends AbstractHelper
     /**
      * Testing the unique identifier.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetIdentifier()
     {
         $this->assertEquals(Bootstrap::KREXX, $this->log->getIdentifier());
@@ -96,6 +98,7 @@ class LogTest extends AbstractHelper
     /**
      * Test the 'translated' label getter.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetLabel()
     {
         $this->assertEquals(
@@ -107,6 +110,7 @@ class LogTest extends AbstractHelper
     /**
      * Test the retrieval of the log fil list class.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetDataToStore()
     {
         $fileList = ['file', 'list'];
@@ -133,6 +137,7 @@ class LogTest extends AbstractHelper
      * Test the display of the no-logfiles-available message and the display of
      * kreXX messages, complaining about stuff.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetContentEmpty()
     {
         $this->mockBeUser();
@@ -167,6 +172,7 @@ class LogTest extends AbstractHelper
     /**
      * Test the normal display of the file list and without any messages.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetContentNormal()
     {
         $this->mockBeUser();
@@ -188,6 +194,7 @@ class LogTest extends AbstractHelper
     /**
      * Test the assigning of the css file.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetCssFiles()
     {
         $this->assertEquals(
@@ -199,6 +206,7 @@ class LogTest extends AbstractHelper
     /**
      * Test the not-assigning of any js files.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetJavaScriptFiles()
     {
         $this->assertEmpty($this->log->getJavaScriptFiles());

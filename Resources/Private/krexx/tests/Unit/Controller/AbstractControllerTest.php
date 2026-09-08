@@ -47,6 +47,7 @@ use Brainworxx\Krexx\View\Output\Browser;
 use Brainworxx\Krexx\View\Output\BrowserImmediately;
 use Brainworxx\Krexx\View\Output\File;
 use Brainworxx\Krexx\Service\Misc\File as FileService;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use Brainworxx\Krexx\Controller\AbstractController;
 
@@ -87,20 +88,18 @@ class AbstractControllerTest extends AbstractHelper
     /**
      * We simply test the outputCssAndJs, with loading the un-minified files.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testOutputCssAndJsWithoutMinFiles()
     {
         $fileMock = $this->createMock(FileService::class);
-        $fileMock->expects($this->any())
-            ->method('fileIsReadable')
+        $fileMock->method('fileIsReadable')
             ->willReturn(false);
-        $fileMock->expects($this->any())
-            ->method('getFileContents')
+        $fileMock->method('getFileContents')
             ->willReturn('some content');
         Krexx::$pool->fileService = $fileMock;
 
         $outputServiceMock = $this->createMock(Browser::class);
-        $outputServiceMock->expects($this->any())
-            ->method('addChunkString')
+        $outputServiceMock->method('addChunkString')
             ->willReturn($outputServiceMock);
 
         Krexx::$pool->render = new RenderNothing(Krexx::$pool);
@@ -112,8 +111,7 @@ class AbstractControllerTest extends AbstractHelper
         // Let's do this a second time, and make sure that we do not send the
         // css/js a second time.
         $fileMock = $this->createMock(FileService::class);
-        $fileMock->expects($this->any())
-            ->method('fileIsReadable')
+        $fileMock->method('fileIsReadable')
             ->willReturn(false);
         $fileMock->expects($this->never())
             ->method('getFileContents');

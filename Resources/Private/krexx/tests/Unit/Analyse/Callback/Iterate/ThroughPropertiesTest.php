@@ -50,6 +50,7 @@ use Brainworxx\Krexx\Tests\Fixtures\SuitEnumFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use ReflectionProperty;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
@@ -148,6 +149,7 @@ class ThroughPropertiesTest extends AbstractHelper
     /**
      * Normal test run for the property analysis.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeNormal(): void
     {
         // Test the events.
@@ -441,33 +443,26 @@ class ThroughPropertiesTest extends AbstractHelper
     /**
      * Provoke an error when getting the default value.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeError(): void
     {
         // Create a fixture.
         $refPropertyMock = $this->createMock(ReflectionProperty::class);
-        $refPropertyMock->expects($this->any())
-            ->method('hasDefaultValue')
+        $refPropertyMock->method('hasDefaultValue')
             ->willReturn(true);
-        $refPropertyMock->expects($this->any())
-            ->method('getDefaultValue')
+        $refPropertyMock->method('getDefaultValue')
             ->willThrowException(new \Exception());
-        $refPropertyMock->expects($this->any())
-            ->method('getName')
+        $refPropertyMock->method('getName')
             ->willReturn('someValue');
-        $refPropertyMock->expects($this->any())
-            ->method('isStatic')
+        $refPropertyMock->method('isStatic')
             ->willReturn(false);
-        $refPropertyMock->expects($this->any())
-            ->method('isProtected')
+        $refPropertyMock->method('isProtected')
             ->willReturn(false);
-        $refPropertyMock->expects($this->any())
-            ->method('isPrivate')
+        $refPropertyMock->method('isPrivate')
             ->willReturn(false);
-        $refPropertyMock->expects($this->any())
-            ->method('getDeclaringClass')
+        $refPropertyMock->method('getDeclaringClass')
             ->willReturn(new \ReflectionClass(PublicFixture::class));
-        $refPropertyMock->expects($this->any())
-            ->method('getDocComment')
+        $refPropertyMock->method('getDocComment')
             ->willReturn('');
 
 
@@ -495,6 +490,7 @@ class ThroughPropertiesTest extends AbstractHelper
     /**
      * Special tests for PHP 8, actually with some 7.4'er stuff.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMePhpEight(): void
     {
         // Test the events.
@@ -540,6 +536,7 @@ class ThroughPropertiesTest extends AbstractHelper
     /**
      * Testing the default enum value.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeDefaultEnum(): void
     {
         // Test the events.
@@ -581,6 +578,7 @@ class ThroughPropertiesTest extends AbstractHelper
         );
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeAttribute(): void
     {
         // Test the events.

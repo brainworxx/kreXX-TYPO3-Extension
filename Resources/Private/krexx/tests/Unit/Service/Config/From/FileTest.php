@@ -106,8 +106,7 @@ class FileTest extends AbstractHelper
             ->with($somePathIni, false)
             ->willReturn($this->fixture);
 
-        $fileServiceMock->expects($this->any())
-            ->method('fileIsReadable')
+        $fileServiceMock->method('fileIsReadable')
             ->willReturnMap(
                 [
                     [$somePathIni, true],

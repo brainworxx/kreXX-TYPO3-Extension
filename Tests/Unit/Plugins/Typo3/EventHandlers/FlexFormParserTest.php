@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
 use TYPO3\CMS\Core\Service\FlexFormService as FlexFromServiceCore;
 use TYPO3\CMS\Extbase\Service\FlexFormService as FlexFromServiceExtbase;
@@ -54,9 +55,9 @@ class FlexFormParserTest extends AbstractHelper
     /**
      * Test the assigning of the pool
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testConstruct()
     {
-
         if (class_exists(FlexFromServiceCore::class)) {
             $flexFormServiceMock = $this->createMock(FlexFromServiceCore::class);
             $this->injectIntoGeneralUtility(FlexFromServiceCore::class, $flexFormServiceMock);

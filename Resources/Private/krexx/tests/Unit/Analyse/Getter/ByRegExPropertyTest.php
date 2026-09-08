@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Getter;
 
+use Brainworxx\Krexx\Analyse\Getter\ByMethodName;
 use Brainworxx\Krexx\Analyse\Getter\ByRegExProperty;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\DeepGetterFixture;
@@ -43,10 +44,10 @@ use Brainworxx\Krexx\Krexx;
 use Exception;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
-#[CoversMethod(ByRegExProperty::class, '__construct')]
+#[CoversMethod(ByMethodName::class, '__construct')]
 #[CoversMethod(ByRegExProperty::class, 'retrieveIt')]
 #[CoversMethod(ByRegExProperty::class, 'retrieveReflectionProperty')]
-#[CoversMethod(ByRegExProperty::class, 'findIt')]
+#[CoversMethod(\Brainworxx\Krexx\Analyse\Getter\AbstractGetter::class, 'findIt')]
 #[CoversMethod(ByRegExProperty::class, 'analyseRegexResult')]
 #[CoversMethod(ByRegExProperty::class, 'retrievePropertyByName')]
 class ByRegExPropertyTest extends AbstractGetter

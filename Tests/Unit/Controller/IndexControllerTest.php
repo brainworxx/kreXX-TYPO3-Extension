@@ -44,6 +44,7 @@ use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate14;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use TYPO3\CMS\Core\Core\ApplicationContext;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\ResponseFactory;
@@ -91,6 +92,7 @@ class IndexControllerTest extends AbstractHelper
     /**
      * Normal test of the index action.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testIndexActionNormal()
     {
         $jsCssFileContent = 'file content';
@@ -171,6 +173,7 @@ class IndexControllerTest extends AbstractHelper
     /**
      * Test the file writing with an error.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testSaveActionError()
     {
         $this->mockBeUser();
@@ -206,6 +209,7 @@ class IndexControllerTest extends AbstractHelper
     /**
      * Testing the saving of the ini file.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testSaveActionNormal()
     {
         $this->mockBeUser();
@@ -252,6 +256,7 @@ class IndexControllerTest extends AbstractHelper
     /**
      * Testing the normal dispatching of a file.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testDispatchActionNormal()
     {
         $this->mockBeUser();

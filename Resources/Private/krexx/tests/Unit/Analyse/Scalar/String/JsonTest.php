@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Krexx;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use stdClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
@@ -106,6 +107,7 @@ class JsonTest extends AbstractHelper
     /**
      * Test the handling of the json.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testHandle()
     {
         $json = new Json(Krexx::$pool);

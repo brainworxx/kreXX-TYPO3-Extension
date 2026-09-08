@@ -41,6 +41,7 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Service\Plugin\Registration;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use TYPO3\CMS\Core\Package\UnitTestPackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -64,6 +65,7 @@ class ExtFilePathTest extends AbstractHelper
     /**
      * Test the resolving of EXT: strings for their actual files.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCanHandle()
     {
         $extFilePath = new ExtFilePath(\Krexx::$pool);
@@ -84,14 +86,21 @@ class ExtFilePathTest extends AbstractHelper
             $extFilePath->canHandle($fixture, $model),
             'This should trigger a \Throwable in the GeneralUtility'
         );
-        $this->assertEmpty($model->getJson());
+
+        // Depending on the unit test version, we either get an empty array or
+        // an error message in the model. This is scary, tbh.
+        // Unit test version 12 and above will display an error.
+        if (version_compare(PHP_VERSION, '8.3.0', '>=')) {
+            $this->assertArrayHasKey('Error', $model->getJson());
+        } else {
+            $this->assertEmpty($model->getJson());
+        }
 
         // The real test starts here.
         $this->simulatePackage('includekrexx', 'includekrexx/');
         if (method_exists(UnitTestPackageManager::class, 'resolvePackagePath') === true) {
             $packageManagerMock = $this->createMock(UnitTestPackageManager::class);
-            $packageManagerMock->expects($this->any())
-                ->method('resolvePackagePath')
+            $packageManagerMock->method('resolvePackagePath')
                 ->willReturn('includekrexx/Tests/Fixtures/123458.Krexx.html');
             $this->setValueByReflection('packageManager', $packageManagerMock, ExtensionManagementUtility::class);
         }

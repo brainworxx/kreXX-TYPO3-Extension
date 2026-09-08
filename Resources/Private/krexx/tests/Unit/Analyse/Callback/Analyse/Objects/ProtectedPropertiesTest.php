@@ -45,6 +45,7 @@ use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use ReflectionProperty;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
@@ -82,6 +83,7 @@ class ProtectedPropertiesTest extends AbstractHelper
     /**
      * Test if the __construct injects the pool.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testConstruct(): void
     {
         $object = new ProtectedProperties(Krexx::$pool);
@@ -93,6 +95,7 @@ class ProtectedPropertiesTest extends AbstractHelper
      * Test the private property analysis, without any protected ones in the
      * fixture.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeNoProtected(): void
     {
         // Test start event
@@ -124,6 +127,7 @@ class ProtectedPropertiesTest extends AbstractHelper
      * Test, if the private analysis gets all privates, including the
      * "inherited"  ones.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeWithProtected(): void
     {
         // Set up the events

@@ -47,8 +47,8 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(ByMethodName::class, 'prepareResult')]
 #[CoversMethod(ByMethodName::class, 'preparePropertyName')]
 #[CoversMethod(ByMethodName::class, 'convertToSnakeCase')]
-#[CoversMethod(ByMethodName::class, 'hasResult')]
-#[CoversMethod(ByMethodName::class, 'getReflectionProperty')]
+#[CoversMethod(\Brainworxx\Krexx\Analyse\Getter\AbstractGetter::class, 'hasResult')]
+#[CoversMethod(\Brainworxx\Krexx\Analyse\Getter\AbstractGetter::class, 'getReflectionProperty')]
 #[CoversMethod(ByMethodName::class, '__construct')]
 class ByMethodNameTest extends AbstractGetter
 {

@@ -37,6 +37,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3\EventHandlers;
 
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use StdClass;
 use TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
@@ -192,6 +193,7 @@ class QueryDebuggerTest extends AbstractHelper implements CallbackConstInterface
     /**
      * Test the debugging with a query interface.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testHandleQueryInterface()
     {
         $renderNothing = new RenderNothing(Krexx::$pool);

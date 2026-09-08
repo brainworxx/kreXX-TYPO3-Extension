@@ -71,7 +71,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(Objects::class, 'generateDumperList')]
 #[CoversMethod(Objects::class, 'addPropertyDumper')]
 #[CoversMethod(AbstractCallback::class, 'dispatchStartEvent')]
-#[CoversMethod(Objects::class, 'setParameters')]
+#[CoversMethod(AbstractCallback::class, 'setParameters')]
 #[CoversMethod(Objects::class, '__construct')]
 class ObjectsTest extends AbstractHelper
 {

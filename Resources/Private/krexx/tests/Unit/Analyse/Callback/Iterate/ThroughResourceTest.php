@@ -39,6 +39,7 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughResource;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(ThroughResource::class, 'callMe')]
@@ -64,6 +65,7 @@ class ThroughResourceTest extends AbstractHelper
     /**
      * Testing the analysis of a resource stream.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMe()
     {
         $throughResourceStream = new ThroughResource(Krexx::$pool);

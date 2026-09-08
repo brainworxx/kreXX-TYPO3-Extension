@@ -51,8 +51,8 @@ use Brainworxx\Krexx\View\Output\Chunks;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(BacktraceController::class, 'backtraceAction')]
-#[CoversMethod(BacktraceController::class, 'outputFooter')]
-#[CoversMethod(BacktraceController::class, 'outputCssAndJs')]
+#[CoversMethod(\Brainworxx\Krexx\Controller\AbstractController::class, 'outputFooter')]
+#[CoversMethod(\Brainworxx\Krexx\Controller\AbstractController::class, 'outputCssAndJs')]
 class BacktraceControllerTest extends AbstractController
 {
     /**
@@ -88,8 +88,7 @@ class BacktraceControllerTest extends AbstractController
         $emergencyMock->expects($this->once())
             ->method('checkMaxCall')
             ->willReturn(false);
-        $emergencyMock->expects($this->any())
-            ->method('checkEmergencyBreak')
+        $emergencyMock->method('checkEmergencyBreak')
             ->willReturn(true);
         Krexx::$pool->emergencyHandler = $emergencyMock;
 

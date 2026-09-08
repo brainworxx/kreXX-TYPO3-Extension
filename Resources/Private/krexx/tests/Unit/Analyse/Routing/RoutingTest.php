@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(Routing::class, '__construct')]
@@ -96,8 +97,7 @@ class RoutingTest extends AbstractHelper
             } else {
                 $mock->expects($this->never())
                     ->method('handle');
-                $mock->expects($this->any())
-                    ->method('canHandle')
+                $mock->method('canHandle')
                     ->willReturn(false);
             }
             $processors[$className] = $mock;
@@ -111,6 +111,7 @@ class RoutingTest extends AbstractHelper
      * Test if all processors will get set, and that the routing class gets
      * set in the pool.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testConstruct(): void
     {
         /** @var ProcessInterface $processors */
@@ -123,6 +124,7 @@ class RoutingTest extends AbstractHelper
     /**
      * Simply test, if an emergency break gets respected.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testAnalysisHubEmergencyBreak(): void
     {
         // Create the model.
@@ -143,6 +145,7 @@ class RoutingTest extends AbstractHelper
     /**
      * Simple routing of a string.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testAnalysisHubString(): void
     {
         // Create the model.
@@ -157,6 +160,7 @@ class RoutingTest extends AbstractHelper
      * We test the final calling of the ProcessOther after everything else
      * has failed.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testAnalysisHubOther(): void
     {
         $renderNothing = new RenderNothing(Krexx::$pool);

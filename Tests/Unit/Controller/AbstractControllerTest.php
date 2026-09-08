@@ -43,6 +43,7 @@ use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate as ModuleTemplateUnit;
 use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate14 as ModuleTemplateUnit14;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\Components\DocHeaderComponent;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
@@ -62,6 +63,7 @@ class AbstractControllerTest extends AbstractHelper
     /**
      * Test the creation of the pool and its assigning to the class.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testConstruct()
     {
         $configMock = $this->createMock(Configuration::class);
@@ -83,6 +85,7 @@ class AbstractControllerTest extends AbstractHelper
     /**
      * Test if the initialize action can produce the module template
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testInitializeAction()
     {
         $configMock = $this->createMock(Configuration::class);

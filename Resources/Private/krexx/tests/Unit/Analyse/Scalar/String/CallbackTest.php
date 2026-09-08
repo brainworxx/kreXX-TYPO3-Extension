@@ -38,15 +38,17 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Scalar\String;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Declaration\FunctionDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Scalar\String\AbstractScalarAnalysis;
 use Brainworxx\Krexx\Analyse\Scalar\String\Callback;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Krexx;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(Callback::class, 'canHandle')]
-#[CoversMethod(Callback::class, 'callMe')]
+#[CoversMethod(AbstractScalarAnalysis::class, 'callMe')]
 #[CoversMethod(Callback::class, 'handle')]
 #[CoversMethod(Callback::class, 'isActive')]
 #[CoversMethod(FunctionDeclaration::class, 'retrieveDeclaration')]
@@ -80,6 +82,7 @@ class CallbackTest extends AbstractHelper
     /**
      * Test the analysis of a callback.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testCallMeNormal()
     {
         $this->mockEmergencyHandler();

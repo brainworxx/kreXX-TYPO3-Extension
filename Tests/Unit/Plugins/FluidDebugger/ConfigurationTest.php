@@ -42,6 +42,7 @@ use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterWithoutGet
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\VhsMethods;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use TYPO3\CMS\Core\Package\MetaData;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Connectors as FluidConnectors;
@@ -135,6 +136,7 @@ class ConfigurationTest extends AbstractHelper
     /**
      * Test the registration of all necessary adjustments to the kreXX lib.
      */
+    #[AllowMockObjectsWithoutExpectations]
     public function testExec()
     {
         $this->simulatePackage(Bootstrap::EXT_KEY, 'A path/');
