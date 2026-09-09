@@ -7,6 +7,9 @@ Changelog
 :Version: 6.1.8
 :Date: tbd
 
+Changes:
+    * [Bugfix] Access to the configuration save action causes a fatal.
+
 -----
 
 :Version: 6.1.7

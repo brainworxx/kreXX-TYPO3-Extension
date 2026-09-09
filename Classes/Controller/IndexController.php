@@ -91,9 +91,9 @@ class IndexController extends AbstractController implements ConstInterface
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function saveAction(Settings $settings): ResponseInterface
+    public function saveAction(?Settings $settings = null): ResponseInterface
     {
-        if (!$this->hasAccess()) {
+        if (!$this->hasAccess() || $settings === null) {
             $this->addFlashMessage(
                 static::translate(static::ACCESS_DENIED),
                 static::translate(static::SAVE_FAIL_TITLE),
