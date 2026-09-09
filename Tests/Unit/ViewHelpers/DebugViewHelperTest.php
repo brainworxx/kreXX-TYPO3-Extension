@@ -35,13 +35,11 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\ViewHelpers;
 
-use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3Fluid\Fluid\Core\Parser\SyntaxTree\ViewHelperNode;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\ViewHelperVariableContainer;
@@ -76,11 +74,7 @@ class DebugViewHelperTest extends AbstractHelper
         $debugViewHelper = new DebugViewHelper();
         // Inject the view and the rendering context.
         // Mock the view
-        if (class_exists(StandaloneView::class)) {
-            $view = $this->createMock(StandaloneView::class);
-        } else {
-            $view = $this->createMock(ViewInterface::class);
-        }
+        $view = $this->createMock(ViewInterface::class);
         $variableContainer = $this->createMock(ViewHelperVariableContainer::class);
         $variableContainer->expects($this->once())
             ->method('getView')
@@ -116,11 +110,7 @@ class DebugViewHelperTest extends AbstractHelper
             ->willReturn(true);
         Krexx::$pool->config = $configMock;
         $debugViewHelper = new DebugViewHelper();
-        if (class_exists(StandaloneView::class)) {
-            $view = $this->createMock(StandaloneView::class);
-        } else {
-            $view = $this->createMock(ViewInterface::class);
-        }
+        $view = $this->createMock(ViewInterface::class);
         $variableContainer = $this->createMock(ViewHelperVariableContainer::class);
         $variableContainer->expects($this->once())
             ->method('getView')
@@ -143,11 +133,7 @@ class DebugViewHelperTest extends AbstractHelper
             ->willReturn(true);
         Krexx::$pool->config = $configMock;
         $debugViewHelper = new DebugViewHelper();
-        if (class_exists(StandaloneView::class)) {
-            $view = $this->createMock(StandaloneView::class);
-        } else {
-            $view = $this->createMock(ViewInterface::class);
-        }
+        $view = $this->createMock(ViewInterface::class);
         $variableContainer = $this->createMock(ViewHelperVariableContainer::class);
         $variableContainer->expects($this->once())
             ->method('getView')

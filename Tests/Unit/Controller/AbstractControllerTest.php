@@ -95,12 +95,7 @@ class AbstractControllerTest extends AbstractHelper
         $iconFactory = $this->createMock(IconFactory::class);
 
         $indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer, $iconFactory);
-
-        if (class_exists(ViewInterface::class)) {
-            $mtMock = $this->createMock(ModuleTemplateUnit14::class);
-        } else {
-            $mtMock = $this->createMock(ModuleTemplateUnit::class);
-        }
+        $mtMock = $this->createMock(ModuleTemplateUnit14::class);
 
         // We are using the ModuleTemplateFactory.
         $mtFactoryMock = $this->createMock(ModuleTemplateFactoryUnit::class);

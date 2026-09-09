@@ -54,7 +54,6 @@ use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Analyse\Objects as Fl
 use Brainworxx\Krexx\Controller\BacktraceController;
 use Brainworxx\Krexx\Controller\DumpController;
 use Brainworxx\Krexx\Controller\EditSettingsController;
-use Brainworxx\Krexx\Controller\ExceptionController;
 use Brainworxx\Krexx\Service\Config\From\File;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
@@ -67,7 +66,6 @@ use TYPO3\CMS\Core\Package\MetaData;
 use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput as T3CheckOutput;
 use Brainworxx\Krexx\View\Output\CheckOutput;
 use Krexx;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(Configuration::class, 'exec')]
@@ -251,17 +249,11 @@ class ConfigurationTest extends AbstractHelper implements ConstInterface
             'Test the new location of the log folder.'
         );
 
-        if (class_exists(ObjectManager::class)) {
-            $this->assertEmpty(
-                SettingsGetter::getNewFallbackValues(),
-                'An ObjectManager means TYPO3 10 or 11.'
-            );
-        } else {
-            $this->assertEquals(Configuration::VALUE_BROWSER_IMMEDIATELY,
-                SettingsGetter::getNewFallbackValues()[Configuration::SETTING_DESTINATION],
-                'Test if we registerd the new standard output method.'
-            );
-        }
+        $this->assertEquals(Configuration::VALUE_BROWSER_IMMEDIATELY,
+            SettingsGetter::getNewFallbackValues()[Configuration::SETTING_DESTINATION],
+            'Test if we registerd the new standard output method.'
+        );
+
 
         $toString = '__toString';
         $this->assertEquals(

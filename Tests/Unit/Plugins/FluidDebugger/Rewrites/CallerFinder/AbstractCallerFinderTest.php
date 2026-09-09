@@ -41,7 +41,6 @@ use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContext;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -66,11 +65,7 @@ class AbstractCallerFinderTest extends AbstractHelper
         $renderingStack = [[static::PARSED_TEMPLATE => new \StdClass(), 'type' => 5]];
 
         // Mock the view
-        if (class_exists(StandaloneView::class)) {
-            $viewMock = $this->createMock(StandaloneView::class);
-        } else {
-            $viewMock = $this->createMock(ModuleTemplate::class);
-        }
+        $viewMock = $this->createMock(ModuleTemplate::class);
         $renderingStackRefMock = $this->createMock(\ReflectionProperty::class);
         // Mock the property reflection of the rendering context.
         $renderingStackRefMock->method('setAccessible')

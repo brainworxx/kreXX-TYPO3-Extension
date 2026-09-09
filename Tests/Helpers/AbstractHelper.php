@@ -43,23 +43,17 @@ use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper as KrexxAbstractHelper;
 use phpmock\phpunit\PHPMock;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\NormalizedParams;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Package\Package;
 use TYPO3\CMS\Core\Package\UnitTestPackageManager;
-use TYPO3\CMS\Core\SystemResource\Identifier\SystemResourceIdentifierFactory;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
-use TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext;
 use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
-use TYPO3\CMS\Extbase\Mvc\Response;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Service\CacheService;
 use TYPO3\CMS\Extbase\Service\ExtensionService;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
@@ -89,10 +83,7 @@ abstract class AbstractHelper extends KrexxAbstractHelper
         // Reset the possible mocks in the general utility.
         $this->setValueByReflection(static::FINAL_CLASS_NAME_CACHE, [], GeneralUtility::class);
         $this->setValueByReflection(static::SINGLETON_INSTANCES, [], GeneralUtility::class);
-
-        if (class_exists(Environment::class)) {
-            $this->setValueByReflection('cli', null, Environment::class);
-        }
+        $this->setValueByReflection('cli', null, Environment::class);
 
         // Reset the registered plugins.
         $this->setValueByReflection('logFolder', '', Registration::class);
@@ -190,41 +181,24 @@ abstract class AbstractHelper extends KrexxAbstractHelper
      */
     protected function initFlashMessages($controller)
     {
-        if (method_exists($controller, 'injectInternalExtensionService')) {
-            // Doing this 11.0 style.
-            // Doing this 11 and 12 style.
-            if (method_exists($controller, 'injectObjectManager')) {
-                // 11
-                $this->flashMessageQueue = new FlashMessageQueueV11('identifyer');
-            } else {
-                // 12
-                $this->flashMessageQueue = new FlashMessageQueueV12('identifyer');
-            }
+        $this->flashMessageQueue = new FlashMessageQueueV12('identifyer');
 
-            $extensionServiceMock = $this->createMock(ExtensionService::class);
-            $extensionServiceMock->method('getPluginNamespace')
-                ->willReturn('\\Brainworxx\\Includekrexx\\');
-            $controller->injectInternalExtensionService($extensionServiceMock);
+        $extensionServiceMock = $this->createMock(ExtensionService::class);
+        $extensionServiceMock->method('getPluginNamespace')
+            ->willReturn('\\Brainworxx\\Includekrexx\\');
+        $controller->injectInternalExtensionService($extensionServiceMock);
 
-            $requestMock = $this->createMock(\TYPO3\CMS\Extbase\Mvc\Request::class);
-            $requestMock->method('getControllerExtensionName')
-                ->willReturn('ControllerExtensionName');
-            $requestMock->method('getPluginName')
-                ->willReturn('PluginName');
-            $this->setValueByReflection('request', $requestMock, $controller);
+        $requestMock = $this->createMock(\TYPO3\CMS\Extbase\Mvc\Request::class);
+        $requestMock->method('getControllerExtensionName')
+            ->willReturn('ControllerExtensionName');
+        $requestMock->method('getPluginName')
+            ->willReturn('PluginName');
+        $this->setValueByReflection('request', $requestMock, $controller);
 
-            $flashMessageService = $this->createMock(FlashMessageService::class);
-            $flashMessageService->method('getMessageQueueByIdentifier')
-                ->willReturn($this->flashMessageQueue);
-            $controller->injectInternalFlashMessageService($flashMessageService);
-        } else {
-            // Doing this 8.7 till 10.4 style.
-            $this->flashMessageQueue = new FlashMessageQueue();
-            $controllerContextMock = $this->createMock(ControllerContext::class);
-            $controllerContextMock->method('getFlashMessageQueue')
-                ->willReturn($this->flashMessageQueue);
-            $this->setValueByReflection('controllerContext', $controllerContextMock, $controller);
-        }
+        $flashMessageService = $this->createMock(FlashMessageService::class);
+        $flashMessageService->method('getMessageQueueByIdentifier')
+            ->willReturn($this->flashMessageQueue);
+        $controller->injectInternalFlashMessageService($flashMessageService);
     }
 
     /**
@@ -251,36 +225,16 @@ abstract class AbstractHelper extends KrexxAbstractHelper
      */
     protected function prepareRedirect($controller)
     {
-        if (class_exists(ObjectManager::class)) {
-            $cacheManagerMock = $this->createMock(CacheManager::class);
-            $cacheManagerMock->method('flushCachesInGroup')
-                ->with('system');
-
-            $cacheServiceMock = $this->createMock(CacheService::class);
-            $cacheServiceMock->method('clearCachesOfRegisteredPageIds');
-
-            $objectManagerMock = $this->createMock(ObjectManager::class);
-            $objectManagerMock->method('get')
-                ->willReturnMap([
-                    [CacheManager::class, $cacheManagerMock],
-                    [CacheService::class, $cacheServiceMock]
-                ]);
-
-            $this->setValueByReflection('objectManager', $objectManagerMock, $controller);
-        }
-
         $request = $this->createMock(Request::class);
         $request->method('getControllerName')
             ->willReturn('meier');
         $this->setValueByReflection('request', $request, $controller);
-        if (method_exists(Request::class, 'getAttribute')) {
-            $attribute = $this->createMock(NormalizedParams::class);
-            $attribute->method('isHttps')
-                ->willReturn(false);
-            $request->method('getAttribute')
-                ->willReturn($attribute);
-            $this->setValueByReflection('request', $request, $this->indexController);
-        }
+        $attribute = $this->createMock(NormalizedParams::class);
+        $attribute->method('isHttps')
+            ->willReturn(false);
+        $request->method('getAttribute')
+            ->willReturn($attribute);
+        $this->setValueByReflection('request', $request, $this->indexController);
 
         $uriBuilder = $this->createMock(UriBuilder::class);
         $uriBuilder->method('reset')
@@ -294,29 +248,6 @@ abstract class AbstractHelper extends KrexxAbstractHelper
         $uriBuilder->method('uriFor')
             ->willReturn('https:\\\\google.de');
         $this->setValueByReflection('uriBuilder', $uriBuilder, $controller);
-
-        if (class_exists(Response::class) === true) {
-            $response = $this->createMock(Response::class);
-            $response->method('setContent');
-            if (method_exists(Response::class, 'setStatus')) {
-                $response->method('setStatus');
-            }
-            if (method_exists(Response::class, 'setHeader')) {
-                $response->method('setHeader');
-            }
-            $this->setValueByReflection('response', $response, $controller);
-        }
-
-        $typo3Version = new Typo3Version();
-        if ($typo3Version->getMajorVersion() < 11) {
-            $contentObject = $this->createMock(ContentObjectRenderer::class);
-            $contentObject->method('getUserObjectType')
-                ->willReturn('');
-            $configurationManager = $this->createMock(ConfigurationManager::class);
-            $configurationManager->method('getContentObject')
-                ->willReturn($contentObject);
-            $this->setValueByReflection('configurationManager', $configurationManager, $controller);
-        }
     }
 
     /**

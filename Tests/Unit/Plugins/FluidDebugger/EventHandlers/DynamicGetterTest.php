@@ -166,13 +166,9 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
             new ReflectionClass(new ContentBlockGridData($gridPayload)),
         ];
 
-        if (class_exists(Page::class)) {
-            // The page record is handled by the DomainPageRetriever in TYPO3 14.0 and higher.
-            // The class does not exist in 10.
-            $page = new Page(['uid' => 1, 'pid' => 2, 'title' => 'Test Page']);
-            $testSubjects[] = new ReflectionClass($page);
-        }
-
+        // The page record is handled by the DomainPageRetriever in TYPO3 14.0 and higher.
+        $page = new Page(['uid' => 1, 'pid' => 2, 'title' => 'Test Page']);
+        $testSubjects[] = new ReflectionClass($page);
 
         // We do not add the flexform retriever to the list in TYPO3 14.0 and higher,
         // because there was a getter added directly to the FlexFormFieldValues class.

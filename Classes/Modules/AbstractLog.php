@@ -51,7 +51,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use TYPO3\CMS\Core\View\ViewInterface;
-use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * Frontend Access to the logfiles inside the admin panel.
@@ -85,8 +84,6 @@ abstract class AbstractLog extends AbstractSubModule implements
 
     /**
      * Creating the views for the frontend.
-     *
-     * The StandaloneView got itself deprecated, so we need to mitigate this.
      */
     protected function createView(string $template): ViewInterface
     {

@@ -54,7 +54,6 @@ use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
-use TYPO3\CMS\Extbase\Mvc\Response;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(IndexController::class, 'dispatchAction')]
@@ -119,11 +118,7 @@ class IndexControllerTest extends AbstractHelper
         $settingsModel = new Settings();
 
         // Mock the view.
-        if (class_exists(AbstractTemplateView::class)) {
-            $viewMock = $this->createMock(AbstractTemplateView::class);
-        } else {
-            $viewMock = $this->createMock(ModuleTemplate14::class);
-        }
+        $viewMock = $this->createMock(ModuleTemplate14::class);
 
         $moduleTemplateMock = $this->createMock(ModuleTemplate::class);
         $moduleTemplateMock->expects($this->exactly(1))
@@ -145,10 +140,8 @@ class IndexControllerTest extends AbstractHelper
         $iconFactory = $this->createMock(IconFactory::class);
         $this->indexController = new IndexController($configurationMock, $configFeMock, $settingsModel, $pageRenderer, $iconFactory);
         $this->setValueByReflection('moduleTemplate', $moduleTemplateMock, $this->indexController);
+        $this->indexController->injectResponseFactory(new ResponseFactory());
 
-        if (method_exists($this->indexController, 'injectResponseFactory')) {
-            $this->indexController->injectResponseFactory(new ResponseFactory());
-        }
         $this->initFlashMessages($this->indexController);
         $this->setValueByReflection('view', $viewMock, $this->indexController);
 

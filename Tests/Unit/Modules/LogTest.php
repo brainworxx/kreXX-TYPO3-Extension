@@ -49,7 +49,6 @@ use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use TYPO3\CMS\Core\View\ViewInterface;
-use TYPO3\CMS\Fluid\View\StandaloneView;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(AbstractLog::class, 'getJavaScriptFiles')]
@@ -220,29 +219,12 @@ class LogTest extends AbstractHelper
      */
     protected function mockView(int $count = 1): MockObject
     {
-        if (interface_exists(ViewFactoryInterface::class)) {
-            $viewFactoryMock = $this->createMock(ViewFactoryInterface::class);
-            $viewMock = $this->createMock(ViewInterface::class);
-            $viewFactoryMock->expects($this->exactly($count))
-                ->method('create')
-                ->willReturn($viewMock);
-            $this->injectIntoGeneralUtility(ViewFactoryInterface::class, $viewFactoryMock);
-        } else {
-            $viewMock = $this->createMock(StandaloneView::class);
-            $viewMock->expects($this->exactly($count))
-                ->method('setPartialRootPaths')
-                ->with(['EXT:includekrexx/Resources/Private/Partials']);
-            $viewMock->expects($this->exactly($count))
-                ->method('setLayoutRootPaths')
-                ->with(['EXT:includekrexx/Resources/Private/Layouts']);
-            $viewMock->expects($this->exactly($count))
-                ->method('setTemplatePathAndFilename');
-            $viewMock->expects($this->exactly($count))
-                ->method('setFormat')
-                ->with('html');
-
-            $this->injectIntoGeneralUtility(StandaloneView::class, $viewMock);
-        }
+        $viewFactoryMock = $this->createMock(ViewFactoryInterface::class);
+        $viewMock = $this->createMock(ViewInterface::class);
+        $viewFactoryMock->expects($this->exactly($count))
+            ->method('create')
+            ->willReturn($viewMock);
+        $this->injectIntoGeneralUtility(ViewFactoryInterface::class, $viewFactoryMock);
 
         return $viewMock;
     }

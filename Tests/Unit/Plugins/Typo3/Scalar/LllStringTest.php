@@ -37,7 +37,6 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3\Scalar;
 
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
-use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility;
 use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility12;
 use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility14;
 use Brainworxx\Krexx\Analyse\Model;
@@ -120,12 +119,9 @@ class LllStringTest extends AbstractHelper
         if ($typo3Version->getMajorVersion() > 13) {
             $lllString->setLocalisationUtility(new LocalizationUtility14());
             LocalizationUtility14::$values[$payload] = static::KREXX_DEBUGGER;
-        } elseif ($typo3Version->getMajorVersion() > 11) {
+        } else {
             $lllString->setLocalisationUtility(new LocalizationUtility12());
             LocalizationUtility12::$values[$payload] = static::KREXX_DEBUGGER;
-        } else {
-            $lllString->setLocalisationUtility(new LocalizationUtility());
-            LocalizationUtility::$values[$payload] = static::KREXX_DEBUGGER;
         }
 
         $this->simulatePackage('includekrexx', 'some path');
