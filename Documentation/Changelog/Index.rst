@@ -5,9 +5,11 @@ Changelog
 =============================================================
 
 :Version: 6.1.8
-:Date: tbd
+:Date: 2026-09-12
 
 Changes:
+    * [Feature] Display the headline in the debug output in the debug window.
+    * [Bugfix] The JS may not initialize completely in very special cases.
     * [Bugfix] Access to the configuration save action causes a fatal.
 
 -----
