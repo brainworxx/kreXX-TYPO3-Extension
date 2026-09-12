@@ -73,8 +73,12 @@ class IndexController extends AbstractController implements ConstInterface
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function saveAction(Settings $settings): ResponseInterface
+    public function saveAction(?Settings $settings = null): ResponseInterface
     {
+        if ($settings === null) {
+            // Huh, someone was messing with the URL, redirect back to index.
+            return $this->redirect('index');
+        }
         // Check for writing permission.
         // Check the actual writing process.
         $jsonPath = $settings->prepareFileName($this->pool->config->getPathToConfigFile());

@@ -22,6 +22,18 @@ Changes:
     * [Change] Refactored / rewritten the rendering and the JS of the backend module and kicked out all the old compatibility workarounds.
     * [Change] Mitigated deprecations in TYPO3 14.
 
+-----
+
+:Version: 6.1.8
+:Date: 2026-09-12
+
+Changes:
+    * [Feature] Display the headline in the debug output in the debug window.
+    * [Bugfix] The JS may not initialize completely in very special cases.
+    * [Bugfix] Access to the configuration save action causes a fatal.
+
+-----
+
 :Version: 6.1.7
 :Date: 2026-06-27
 

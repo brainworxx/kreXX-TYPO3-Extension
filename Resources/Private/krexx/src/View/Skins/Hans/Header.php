@@ -47,7 +47,6 @@ trait Header
      */
     private array $markerHeader = [
         '{version}',
-        '{KrexxCount}',
         '{headline}',
         '{cssJs}',
         '{KrexxId}',
@@ -55,8 +54,8 @@ trait Header
         '{messages}',
         '{encoding}',
         '{noJavaScript}',
-        '{callNumber}',
-        '{searchHeadline}'
+        '{searchHeadline}',
+        '{initialOffset}'
     ];
 
     /**
@@ -69,16 +68,15 @@ trait Header
             search: $this->markerHeader,
             replace: [
                 $this->pool->config->version,
-                $this->pool->emergencyHandler->getKrexxCount(),
                 $headline,
                 $cssJs,
                 $this->pool->recursionHandler->getMarker(),
                 $this->renderSearch(),
                 $messages->outputMessages(),
                 $this->pool->chunks->getOfficialEncoding(),
-                $messages->getHelp(key: 'noJavaScript'),
-                $messages->getHelp(key: 'callNumber'),
-                $messages->getHelp(key: 'searchHeadline'),
+                $messages->getHelp('noJavaScript'),
+                $messages->getHelp('searchHeadline'),
+                $this->pool->emergencyHandler->getKrexxCount() * 35
             ],
             subject: $this->fileCache[static::FILE_HEADER]
         );

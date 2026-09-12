@@ -3,8 +3,8 @@
         var hans = new Hans();
         hans.run();
         // We only do this once!
-        document.removeEventListener('DOMContentLoaded', runner);
+        window.removeEventListener('load', runner);
     }
 
-    document.addEventListener("DOMContentLoaded", runner);
+    window.addEventListener("load", runner);
 })();

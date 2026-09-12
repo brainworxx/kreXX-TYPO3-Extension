@@ -12,6 +12,11 @@
   displayed in the shell.
 - Change: Updated the unit tests to UnitTest 13.0.
 
+6.1.0
+- Feature: Display the headline in the debug output in the
+  debug window.
+- Bugfix: The JS may not initialize completely in very special cases.
+
 6.0.8
 - Bugfix: The help info text display of the Hans skin is respecting
   the whitespace formatting now.
