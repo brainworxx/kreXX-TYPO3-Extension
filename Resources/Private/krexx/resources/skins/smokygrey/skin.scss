@@ -297,10 +297,15 @@ $fontLight: lighter 10px tahoma, verdana;
       }
 
       .ktext {
-        display: inline-block;
         color: $greyLight;
-        vertical-align: 2px;
+        vertical-align: center;
         font-size: 16px;
+      }
+
+      .ksmalltext {
+        color: $white;
+        vertical-align: 2px;
+        font-size: 12px;
       }
 
       .kspace {

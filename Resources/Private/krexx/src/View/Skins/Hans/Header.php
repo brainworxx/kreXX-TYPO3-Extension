@@ -47,6 +47,7 @@ trait Header
      */
     private array $markerHeader = [
         '{version}',
+        // KrexxCount @deprecated sind 6.1.0, will be removed
         '{KrexxCount}',
         '{headline}',
         '{cssJs}',
@@ -55,8 +56,10 @@ trait Header
         '{messages}',
         '{encoding}',
         '{noJavaScript}',
+        // callNumber @deprecated sind 6.1.0, will be removed
         '{callNumber}',
-        '{searchHeadline}'
+        '{searchHeadline}',
+        '{initialOffset}'
     ];
 
     /**
@@ -69,6 +72,7 @@ trait Header
             $this->markerHeader,
             [
                 $this->pool->config->version,
+                // KrexxCount is @deprecated since 6.1.0, will be removed
                 $this->pool->emergencyHandler->getKrexxCount(),
                 $headline,
                 $cssJs,
@@ -77,8 +81,10 @@ trait Header
                 $messages->outputMessages(),
                 $this->pool->chunks->getOfficialEncoding(),
                 $messages->getHelp('noJavaScript'),
+                // callNumber is @deprecated since 6.1.0, will be removed
                 $messages->getHelp('callNumber'),
                 $messages->getHelp('searchHeadline'),
+                $this->pool->emergencyHandler->getKrexxCount() * 35
             ],
             $this->fileCache[static::FILE_HEADER]
         );
