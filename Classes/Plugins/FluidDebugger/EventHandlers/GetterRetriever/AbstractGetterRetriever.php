@@ -72,7 +72,7 @@ abstract class AbstractGetterRetriever
             if ($value instanceof RecordPropertyClosure) {
                 try {
                     $result[$property] = $value->instantiate();
-                } catch (Throwable $e) {
+                } catch (Throwable) {
                     // Do nothing.
                     // We skip this one.
                 }

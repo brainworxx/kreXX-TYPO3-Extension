@@ -94,7 +94,7 @@ class FlexFormParser implements EventHandlerInterface, CallbackConstInterface
 
             $meta[$this->pool->messages->getHelp('TYPO3metaDecodedFlexform')] = $result;
             $model->addParameter(static::PARAM_DATA, $meta);
-        } catch (Throwable $exception) {
+        } catch (Throwable) {
             // Do nothing.
             // We did a TYPO3 framework call. Which may or may not be unstable.
             // This is a debugging tool, after all.

@@ -100,7 +100,7 @@ class Fluid extends AbstractFluid
                     $templatePath
                 );
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             // Do nothing. We return the already existing empty result.
         }
 

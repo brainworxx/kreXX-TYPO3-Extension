@@ -131,7 +131,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
         // Analyse the already existing view helpers.
         try {
             return $this->retrieveHelpers($data, $ref) . $this->retrievePossibleOtherHelpers();
-        } catch (ReflectionException $e) {
+        } catch (ReflectionException) {
             // Do nothing. We skip this step.
         }
 

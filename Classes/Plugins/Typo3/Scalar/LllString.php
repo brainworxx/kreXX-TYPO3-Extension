@@ -151,7 +151,7 @@ class LllString extends AbstractScalarAnalysis
             }
 
             $this->resolveExtPath($string, $model);
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             // Huh, someone messed with the translations.
         }
 

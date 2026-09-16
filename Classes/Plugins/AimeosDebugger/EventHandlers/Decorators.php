@@ -148,7 +148,7 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
 
             try {
                 $ref = new ReflectionClass($receiver);
-            } catch (ReflectionException $e) {
+            } catch (ReflectionException) {
                 // We skip this one.
                 return  $methods;
             }
@@ -203,7 +203,7 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
         // Get the __call() source code.
         try {
             $methodRef = $ref->getMethod('__call');
-        } catch (ReflectionException $e) {
+        } catch (ReflectionException) {
             return '';
         }
 

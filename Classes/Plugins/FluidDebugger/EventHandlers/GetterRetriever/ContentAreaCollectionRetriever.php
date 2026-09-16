@@ -69,7 +69,7 @@ class ContentAreaCollectionRetriever extends AbstractGetterRetriever
 
         try {
             return iterator_to_array($ref->getData());
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             // Something went wrong, so I can't handle it.
             return [];
         }

@@ -88,13 +88,13 @@ class DirtyModels implements EventHandlerInterface
         try {
             try {
                 $model->addToJson($msg->getHelp('TYPO3ModelIsDirty'), $this->createReadableBoolean($data->_isDirty()));
-            } catch (TooDirtyException $e) {
+            } catch (TooDirtyException) {
                 $model->addToJson($msg->getHelp('TYPO3ModelIsDirty'), $msg->getHelp('TYPO3ModelIsTooDirty'));
             }
 
             $model->addToJson($msg->getHelp('TYPO3ModelIsAClone'), $this->createReadableBoolean($data->_isClone()));
             $model->addToJson($msg->getHelp('TYPO3ModelIsNew'), $this->createReadableBoolean($data->_isNew()));
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             // Do nothing.
             // Somebody has messed with the models.
         }
