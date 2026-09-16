@@ -30,6 +30,11 @@ td.commands .form-check-input {
 
 .krexx-logs.table td {
     background-color: var(--krexx-row-bg-light);
+    vertical-align: top;
+}
+
+.iconwrapper {
+    vertical-align: top;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -69,7 +69,7 @@ class IndexController extends AbstractController implements ConstInterface
     /**
      * Save the configuration, hen redirect back to the index.
      *
-     * @param \Brainworxx\Includekrexx\Domain\Model\Settings $settings
+     * @param \Brainworxx\Includekrexx\Domain\Model\Settings|null $settings
      *
      * @return \Psr\Http\Message\ResponseInterface
      */

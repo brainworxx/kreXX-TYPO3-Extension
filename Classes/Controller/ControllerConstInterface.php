@@ -42,11 +42,6 @@ interface ControllerConstInterface
     /**
      * @var string
      */
-    public const ACCESS_DENIED = 'accessDenied';
-
-    /**
-     * @var string
-     */
     public const MODULE_KEY = 'IncludekrexxKrexxConfiguration';
 
     /**

@@ -85,6 +85,11 @@ class KrexxBackend {
   debugTableBody = {};
 
   /**
+   * @type {HTMLDivElement}
+   */
+  expertTab = {}
+
+  /**
    * @type {number}
    */
   ajaxTimeout = 0;
@@ -121,6 +126,7 @@ class KrexxBackend {
     this.anchorModeSimple = document.querySelector('a[data-mode="simple"]');
     this.cookieButton = document.querySelector('button.cookies');
     this.expertElements = document.querySelectorAll('.expert');
+    this.expertTab = document.querySelector('#tab-3');
     this.buttonCookie = document.querySelector('button.cookies');
     this.factorySettingsElements = document.querySelectorAll('[id^="factory."]');
     this.debugTableBody = document.querySelector('table.krexx-logs tbody');
@@ -143,7 +149,11 @@ class KrexxBackend {
    * Initialise form elements on page load.
    */
   initFormElements() {
-    this.toggleModeEasy();
+    if (this.expertTab.classList.contains('active')) {
+      this.toggleModeExpert();
+    } else {
+      this.toggleModeEasy();
+    }
     for (const element of this.factorySettingsElements) {
       this.toggleFactorySetting({ target: element });
     }
@@ -271,21 +281,30 @@ class KrexxBackend {
       }
 
       let file = result[key];
-      html += '<tr ' + this.generateBackgroundStyle(file.name) + '>';
-      html += '<td class="align-top"><a target="_blank" href="' + file.dispatcher + '">  ' + file.name + '</a></td><td class="meta">';
+      html += '<tr ' + this.generateBackgroundStyle(file.name) + '>' +
+        '<td><a target="_blank" href="' + file.dispatcher + '">  ' + file.name + '</a></td><td class="meta">';
       for (i = 0; i < file.meta.length; i++) {
-        html += '<div class="border-bottom mb-2 pb-2">' + this.generateIcon(file.meta[i].level) + '<div class="d-inline-block align-middle">';
-        html += '<b>' + file.meta[i].type + '</b><br />';
-        html += TYPO3.lang.in + ' ' + file.meta[i].filename + ', ' + TYPO3.lang.line + ' ' + file.meta[i].line;
-        html += '</div></div>'
+        html += this.generateTableCell(file.meta[i], file.meta.length === (i + 1));
       }
-      if (file.meta.length > 0) {
-        html += '<div class="krexx-spacer"></div>'
-      }
-      html += '</td>';
+      html += '</td>' +
+        '<td class="d-none d-lg-table-cell">' + file.time + '</td><td class="d-none d-lg-table-cell">' + file.size + '</td>' +
+        '<td><div class="btn btn-default delete" data-id="' + file.id + '"><typo3-backend-icon identifier="actions-delete" size="small"></typo3-backend-icon></div></td></tr>';
+    }
 
-      html += '<td class="align-top d-none d-lg-table-cell">' + file.time + '</td><td class="align-top d-none d-lg-table-cell">' + file.size + '</td>';
-      html += '<td class="align-top"><div class="btn btn-default delete" data-id="' + file.id + '"><typo3-backend-icon identifier="actions-delete" size="small"></typo3-backend-icon></div></td></tr>';
+    return html;
+  }
+
+  /**
+   * Generate a table cell for a log entry.
+   *
+   * @param {{}} meta
+   * @returns {string}
+   */
+  generateTableCell(meta, isLast) {
+    let html = this.generateIcon(meta.level) + '<div class="d-inline-block">' +
+      '<b>' + meta.type + '</b><br />' + TYPO3.lang.in + ' ' + meta.filename + ', ' + TYPO3.lang.line + ' ' + meta.line + '</div>'
+    if (!isLast) {
+      html += '<hr>';
     }
 
     return html;
@@ -312,7 +331,7 @@ class KrexxBackend {
       default:
         icon = 'actions-file';
     }
-    return '<div class="d-none d-lg-inline-block align-middle me-2"><typo3-backend-icon identifier="' + icon + '" size="medium"></typo3-backend-icon></div>';
+    return '<div class="d-none d-lg-inline-block iconwrapper me-2"><typo3-backend-icon identifier="' + icon + '" size="medium"></typo3-backend-icon></div>';
   }
 
   /**
@@ -382,6 +401,8 @@ class KrexxBackend {
     this.anchorModeSimple.dataset.dropdowntoggleStatus = 'active';
     this.anchorModeExpert.dataset.dropdowntoggleStatus = '';
     this.buttonModeToggle.textContent = this.anchorModeSimple.title
+    this.buttonModeToggle.classList.remove('btn-danger');
+    this.buttonModeToggle.classList.add('btn-default');
     for (const element of this.expertElements) {
       element.style.display = 'none';
     }
@@ -394,6 +415,8 @@ class KrexxBackend {
     this.anchorModeSimple.dataset.dropdowntoggleStatus = '';
     this.anchorModeExpert.dataset.dropdowntoggleStatus = 'active';
     this.buttonModeToggle.textContent = this.anchorModeExpert.title
+    this.buttonModeToggle.classList.add('btn-danger');
+    this.buttonModeToggle.classList.remove('btn-default');
     for (const element of this.expertElements) {
       element.style.display = '';
     }
