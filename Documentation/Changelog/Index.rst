@@ -5,7 +5,7 @@ Changelog
 =============================================================
 
 :Version: 6.1.9
-:Date: 2026-09-12
+:Date: tbd
 
 Changes:
     * [Feature] Added support for Content Area Collections.
