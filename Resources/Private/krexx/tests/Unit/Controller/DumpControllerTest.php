@@ -47,6 +47,7 @@ use Brainworxx\Krexx\Controller\DumpController;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Flow\Emergency;
+use Brainworxx\Krexx\Service\Misc\Encoding;
 use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Helpers\OutputNothing;
@@ -129,11 +130,18 @@ class DumpControllerTest extends AbstractController
             ))->willReturnMap(
                 [
                     [Model::class, new Model(Krexx::$pool)],
-                    [ThroughConfig::class, new CallbackNothing(Krexx::$pool)]
+                    [ThroughConfig::class, new CallbackNothing()]
                 ]
             );
 
-        $dumpController->dumpAction($fixture);
+        $encodingMock = $this->createMock(Encoding::class);
+        $encodingMock->expects($this->once())
+            ->method('encodeString')
+            ->with('headline')
+            ->willReturn('headline');
+        $poolMock->encodingService = $encodingMock;
+
+        $dumpController->dumpAction($fixture, 'headline');
     }
 
     /**

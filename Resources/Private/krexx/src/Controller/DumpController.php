@@ -69,6 +69,7 @@ class DumpController extends AbstractController implements BacktraceConstInterfa
             // Called too often, we might get into trouble here!
             return $this;
         }
+        $message = $this->pool->encodingService->encodeString(data: $message);
 
         // Find caller.
         if ($data instanceof LogModel) {
