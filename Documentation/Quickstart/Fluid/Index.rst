@@ -13,11 +13,13 @@ Using the ViewHelpers is pretty much straight forward:
 
     <!-- Normal frontend output -->
     <krexx:debug>{_all}</krexx:debug>
-    <!-- Use this part if you don't want fluid to escape your string or if you are
-         stitching together an array. -->
+    <!-- Frontend output of a variable using an optional title -->
+    <krexx:debug title="Some optional title">{myVariable}</krexx:debug>
+    <!-- Use this part if you don't want fluid to escape your string or if you are stitching together an array. -->
     <krexx:debug value="{my: 'value', to: 'analyse'}" />
     <!-- Force the logging into a file -->
     <krexx:log>{_all}</krexx:log>
+    <krexx:log title="Some optional title">{myVariable}</krexx:log>
     <krexx:log value="{my: 'value', to: 'analyse'}" />
 
 

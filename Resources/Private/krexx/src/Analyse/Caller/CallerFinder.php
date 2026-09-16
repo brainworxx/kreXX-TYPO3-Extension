@@ -101,20 +101,37 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
             }
         }
 
-        $varname = $headline === '' || $headline === '0' ?
-            $this->getVarName(file: $caller[static::TRACE_FILE], line: $caller[static::TRACE_LINE]) :
-            $headline;
+        $varName = $this->cleanupVarName(
+            name: $this->getVarName(file: $caller[static::TRACE_FILE], line: $caller[static::TRACE_LINE]),
+            headline: $headline
+        );
 
         // We will not keep the whole backtrace im memory. We only return what we
         // actually need.
         return [
             static::TRACE_FILE => $caller[static::TRACE_FILE],
             static::TRACE_LINE => (int)$caller[static::TRACE_LINE],
-            static::TRACE_VARNAME => $varname,
-            static::TRACE_TYPE => $this->getType(headline: $headline, varname: $varname, data: $data),
+            static::TRACE_VARNAME => $varName,
+            static::TRACE_TYPE => $this->getType(headline: $headline, varname: $varName, data: $data),
             static::TRACE_DATE => date(format: static::TIME_FORMAT, timestamp: time()),
             static::TRACE_URL => $this->getCurrentUrl(),
         ];
+    }
+
+    /**
+     * We want only the first variable name, not the whole command. So we clean
+     * up the name.
+     *
+     * @param string $name
+     * @param string $headline
+     * @return string
+     */
+    protected function cleanupVarName(string $name, string $headline): string
+    {
+        $name = str_replace(search: '"' . $headline . '"', replace: '', subject: $name);
+        $name = str_replace(search: '\'' . $headline . '\'', replace: '', subject: $name);
+        $names = explode(separator: ',', string: $name);
+        return trim(string: $names[0], characters: " \t\n\r\0\x0B");
     }
 
     /**

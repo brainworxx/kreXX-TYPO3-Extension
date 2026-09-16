@@ -55,6 +55,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(CallerFinder::class, 'identifyCaller')]
 #[CoversMethod(CallerFinder::class, 'removeKrexxPartFromCommand')]
 #[CoversMethod(AbstractCaller::class, 'getCurrentUrl')]
+#[CoversMethod(CallerFinder::class, 'cleanupVarName')]
 class CallerFinderTest extends AbstractHelper
 {
     public const  FUNCTION_TO_TRACE = 'krexx';
@@ -227,7 +228,7 @@ class CallerFinderTest extends AbstractHelper
         // Check the result
         $this->assertStringEndsWith($this->pathToFixture, $result[BacktraceConstInterface::TRACE_FILE]);
         $this->assertEquals(75, $result[BacktraceConstInterface::TRACE_LINE]);
-        $this->assertEquals(static::HEADLINE_STRING, $result[BacktraceConstInterface::TRACE_VARNAME]);
+        $this->assertEquals('$parameter', $result[BacktraceConstInterface::TRACE_VARNAME]);
         $this->assertEquals(static::HEADLINE_STRING, $result[BacktraceConstInterface::TRACE_TYPE]);
         $this->assertArrayHasKey(BacktraceConstInterface::TRACE_DATE, $result);
     }

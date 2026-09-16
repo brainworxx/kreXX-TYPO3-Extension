@@ -126,11 +126,13 @@ class Krexx
      *
      * @param mixed $data
      *   The variable we want to analyse.
+     * @param string|null $title
+     *   An optional title for the analysis.
      *
      * @return mixed
      *   Return the original analysis value.
      */
-    public static function open(mixed $data = null): mixed
+    public static function open(mixed $data = null, ?string $title = null): mixed
     {
         Pool::createPool();
 
@@ -146,7 +148,7 @@ class Krexx
         AbstractController::$analysisInProgress = true;
 
         static::$pool->createClass(classname: DumpController::class)
-            ->dumpAction(data: $data);
+            ->dumpAction(data: $data, message: (string) $title);
 
         AbstractController::$analysisInProgress = false;
 
@@ -227,16 +229,18 @@ class Krexx
      *
      * @param mixed|null $data
      *   The variable we want to analyse.
+     * @param string|null $title
+     *   An optional title for the analysis.
      *
      * @return mixed
      *   Return the original analysis value.
      *@api
      *
      */
-    public static function log(mixed $data = null): mixed
+    public static function log(mixed $data = null, ?string $title = null): mixed
     {
         static::startForcedLog();
-        static::open(data: $data);
+        static::open(data: $data, title: $title);
         static::endForcedLog();
 
         return $data;

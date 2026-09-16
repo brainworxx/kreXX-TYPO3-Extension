@@ -56,7 +56,7 @@ class DumpController extends AbstractController implements BacktraceConstInterfa
      * @param mixed $data
      *   The variable we want to analyse.
      * @param string $message
-     *   If set, we are in logging mode. We use this as a variable name then.
+     *   An optional title for the analysis.
      * @param string $level
      *   The log level, if available.
      *
@@ -73,14 +73,14 @@ class DumpController extends AbstractController implements BacktraceConstInterfa
         // Find caller.
         if ($data instanceof LogModel) {
             $this->callerFinder = $this->pool->createClass(classname: ExceptionCallerFinder::class);
-        }
-        $caller = $this->callerFinder->findCaller(headline: $message, data: $data);
-        $caller[static::TRACE_LEVEL] = $level;
-
-        // We will only allow code generation, if we were able to determine the
-        // variable name or if we are not in logging mode.
-        $message === '' ? $this->pool->scope->setScope(scope: $caller[static::TRACE_VARNAME]) :
+            $caller = $this->callerFinder->findCaller(headline: $message, data: $data);
+            $caller[static::TRACE_LEVEL] = $level;
             $this->pool->codegenHandler->setCodegenAllowed(bool: false);
+        } else {
+            $caller = $this->callerFinder->findCaller(headline: $message, data: $data);
+            $caller[static::TRACE_LEVEL] = $level;
+            $this->pool->scope->setScope(scope: $caller[static::TRACE_VARNAME]);
+        }
 
         // Start the magic.
         $analysis = $this->pool->routing->analysisHub(

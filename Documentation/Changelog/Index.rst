@@ -8,6 +8,7 @@ Changelog
 :Date: tbd
 
 Changes:
+    * [Feature] Allow a second parameter as a headline for the debug output.
     * [Change] Dropped support for PHP 7.4, 8.0 and 8.1.
     * [Change] Removed deprecations.
     * [Change] Removed the following configuration settings:

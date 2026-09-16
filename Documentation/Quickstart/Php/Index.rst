@@ -16,8 +16,12 @@ Main analytic function
 
     // Analyse a variable
     krexx($myObject);
+    // Analyse a variable with a title
+    krexx($myObject, 'This is a title for the analysis');
     // Force kreXX to write an analysis into a log file.
     krexxlog($myObject);
+    // Force kreXX to write an analysis into a log file with a title.
+    krexxlog($myObject, 'This is a title for the analysis');
     // Do a backtrace and analyse it.
     \Krexx::backtrace();
     // Force kreXX to write a backtrace analysis into a log file

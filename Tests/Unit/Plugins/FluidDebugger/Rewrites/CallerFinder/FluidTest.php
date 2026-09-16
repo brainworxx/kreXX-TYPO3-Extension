@@ -112,7 +112,7 @@ class FluidTest extends AbstractHelper
 
         $this->assertStringContainsString('FluidTemplate1.html', $result['file']);
         $this->assertEquals('_all', $result[static::VARMANE]);
-        $this->assertEquals('Fluid analysis of _all, stdClass', $result['type']);
+        $this->assertEquals($headline, $result['type']);
         $this->assertEquals(2, $result['line']);
         $this->assertNotEmpty($result['date']);
     }
@@ -150,7 +150,7 @@ class FluidTest extends AbstractHelper
 
         $this->assertStringContainsString('FluidTemplate2.html', $result['file']);
         $this->assertEquals('text', $result[static::VARMANE]);
-        $this->assertEquals('Fluid analysis of text, string', $result['type']);
+        $this->assertEquals($headline, $result['type']);
         $this->assertEquals(2, $result['line']);
         $this->assertNotEmpty($result['date']);
     }
@@ -187,7 +187,7 @@ class FluidTest extends AbstractHelper
         // We are going into the complicated stuff here.
         Krexx::$pool->codegenHandler = new Codegen(Krexx::$pool);
 
-        $headline = 'H1';
+        $headline = '';
         $data =  [5];
         $result = $fluid->findCaller($headline, $data);
 
@@ -254,7 +254,7 @@ class FluidTest extends AbstractHelper
         // We are going into the complicated stuff here.
         Krexx::$pool->codegenHandler = new Codegen(Krexx::$pool);
 
-        $headline = 'H1';
+        $headline = '';
         $data =  [5];
         $result = $fluid->findCaller($headline, $data);
 

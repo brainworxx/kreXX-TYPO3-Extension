@@ -74,9 +74,25 @@ class ExceptionCallerFinderTest extends AbstractHelper
         $this->assertTrue(isset($result[BacktraceConstInterface::TRACE_DATE]));
         $this->assertEquals('n/a', $result[BacktraceConstInterface::TRACE_URL], 'There should be no url on the shell.');
 
-        // Something a little bit differnet with the log model.
+        // Something a little bit different with the log model.
         $logModel = new Model();
         $result = $callerFinder->findCaller($whatever, $logModel);
+        $this->assertEquals($whatever, $result[BacktraceConstInterface::TRACE_TYPE]);
+    }
+
+    /**
+     * Test if the findCaller method returns the message from the log model if
+     * no message is given.
+     *
+     * @return void
+     */
+    public function testCallerFinderWithoutMessage()
+    {
+        $logModel = new Model();
+        $whatever = 'Whatever';
+        $logModel->setMessage($whatever);
+        $callerFinder = new ExceptionCallerFinder(Krexx::$pool);
+        $result = $callerFinder->findCaller('', $logModel);
         $this->assertEquals($whatever, $result[BacktraceConstInterface::TRACE_TYPE]);
     }
 }

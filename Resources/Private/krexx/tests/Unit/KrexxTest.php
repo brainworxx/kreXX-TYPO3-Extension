@@ -261,6 +261,18 @@ class KrexxTest extends AbstractHelper
     }
 
     /**
+     * Test if we can get an output at all, with a headline.
+     *
+     * @return void
+     */
+    public function testKrexxOpenWithHeadline()
+    {
+        Krexx::open('justastring', 'This is a headline');
+        // The counter should be at 1.
+        $this->assertEquals(1, $this->retrieveValueByReflection(static::KREXX_COUNT, Krexx::$pool->emergencyHandler));
+    }
+
+    /**
      * Test if we can get an output when disabled.
      */
     public function testBacktraceDisabled(): void

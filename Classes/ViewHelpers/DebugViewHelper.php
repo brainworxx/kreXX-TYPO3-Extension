@@ -65,6 +65,11 @@ class DebugViewHelper extends AbstractViewHelper
     /**
      * @var string
      */
+    protected const ARGUMENT_TITLE = 'title';
+
+    /**
+     * @var string
+     */
     public const REGISTRY_VIEW = 'view';
 
     /**
@@ -111,6 +116,7 @@ class DebugViewHelper extends AbstractViewHelper
     public function initializeArguments(): void
     {
         $this->registerArgument(static::ARGUMENT_VALUE, 'mixed', 'The variable we want to analyse.');
+        $this->registerArgument(static::ARGUMENT_TITLE, 'string', 'The optional title for the analysis output.');
     }
 
     /**
@@ -156,20 +162,21 @@ class DebugViewHelper extends AbstractViewHelper
     protected function analysis(): void
     {
         $type = $this->analysisType;
+        $title = $this->arguments[static::ARGUMENT_TITLE] ?? null;
         $found  = false;
         if (isset($this->arguments[static::ARGUMENT_VALUE])) {
-            Krexx::$type($this->arguments[static::ARGUMENT_VALUE]);
+            Krexx::$type($this->arguments[static::ARGUMENT_VALUE], $title);
             $found = true;
         }
 
         if (isset($this->children)) {
-            Krexx::$type($this->children);
+            Krexx::$type($this->children, $title);
             $found = true;
         }
 
         if (!$found) {
             // Both are NULL, we must tell the dev!
-            Krexx::$type(null);
+            Krexx::$type(null, $title);
         }
     }
 }

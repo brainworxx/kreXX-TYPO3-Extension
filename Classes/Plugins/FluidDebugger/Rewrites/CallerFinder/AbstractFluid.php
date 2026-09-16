@@ -193,7 +193,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
     /**
      * {@inheritdoc}
      */
-    public function findCaller(string $headline, $data): array
+    public function findCaller(string $headline, mixed $data): array
     {
         // Reset the varname from the last call.
         $this->varname = static::FLUID_VARIABLE;
@@ -208,7 +208,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
                 static::TRACE_FILE => static::FLUID_NOT_AVAILABLE,
                 static::TRACE_LINE => static::FLUID_NOT_AVAILABLE,
                 static::TRACE_VARNAME => static::FLUID_VARIABLE,
-                static::TRACE_TYPE => $this->getType($messages->getHelp($helpKey), static::FLUID_VARIABLE, $data),
+                static::TRACE_TYPE => $this->getType($messages->getHelp($helpKey), $this->varname, $data),
                 static::TRACE_DATE => date(static::TIME_FORMAT, time()),
                 static::TRACE_URL => $this->getCurrentUrl(),
             ];
@@ -218,11 +218,16 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
         $this->resolvePath();
         $this->resolveLineAndVarName();
 
+        if (empty($headline)) {
+            $type = $this->getType($messages->getHelp($helpKey), $this->varname, $data);
+        } else {
+            $type = $headline;
+        }
         return [
             static::TRACE_FILE => $this->path,
             static::TRACE_LINE => $this->line,
             static::TRACE_VARNAME => $this->varname,
-            static::TRACE_TYPE => $this->getType($messages->getHelp($helpKey), $this->varname, $data),
+            static::TRACE_TYPE => $type,
             static::TRACE_DATE => date(static::TIME_FORMAT, time()),
             static::TRACE_URL => $this->getCurrentUrl(),
         ];
@@ -240,6 +245,8 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
         // Split the contents of the file into lines, disregarding the used
         // line endings.
         foreach (preg_split("/((\r?\n)|(\r\n?))/", $template) as $line => $content) {
+            // Remove the title attribute, if present.
+            $content = preg_replace('/\s*title="[^"]*"/i', '', $content);
             foreach ($this->callPattern as $funcname) {
                 $name = [];
                 preg_match_all('/\s*' . $funcname[0] . '(.*)' . $funcname[1] . '\s*/u', $content, $name);

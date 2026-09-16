@@ -278,13 +278,15 @@ call_user_func(function () {
      *
      * @param mixed $data
      *   The variable we want to analyse.
+     * @param string|null $title
+     *   An optional title for the analysis.
      *
      * @return mixed
      *   Return the original analysis value.
      */
-    function krexx($data = null)
+    function krexx(mixed $data = null, ?string $title = null): mixed
     {
-        return \Brainworxx\Krexx\Krexx::open($data);
+        return \Brainworxx\Krexx\Krexx::open(data: $data, title: $title);
     }
 
     /**
@@ -296,12 +298,14 @@ call_user_func(function () {
      *
      * @param mixed $data
      *   The variable we want to analyse.
+     * @param string|null $title
+     *   An optional title for the analysis.
      *
      * @return mixed
      *   Return the original analysis value.
      */
-    function krexxlog($data = null)
+    function krexxlog(mixed $data = null, ?string $title = null): mixed
     {
-        return \Brainworxx\Krexx\Krexx::log($data);
+        return \Brainworxx\Krexx\Krexx::log(data: $data, title: $title);
     }
 });

@@ -62,6 +62,9 @@ class ExceptionCallerFinder extends AbstractCaller implements BacktraceConstInte
         if ($data instanceof Throwable) {
             $headline = $data::class;
         }
+        if ($data instanceof Model && $headline === '') {
+            $headline = $data->getMessage();
+        }
         return [
             static::TRACE_FILE => $data->getFile(),
             static::TRACE_LINE => $data->getLine() + 1,

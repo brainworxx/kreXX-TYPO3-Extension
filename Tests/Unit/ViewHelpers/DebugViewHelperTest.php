@@ -63,6 +63,10 @@ class DebugViewHelperTest extends AbstractHelper
             'value',
             $this->retrieveValueByReflection('argumentDefinitions', $debugViewHelper)
         );
+        $this->assertArrayHasKey(
+            'title',
+            $this->retrieveValueByReflection('argumentDefinitions', $debugViewHelper)
+        );
     }
 
     /**
@@ -92,7 +96,7 @@ class DebugViewHelperTest extends AbstractHelper
         $debugViewHelper->setRenderChildrenClosure($closure);
 
         // Inject the arguments.
-        $debugViewHelper->setArguments(['value' => 'some text']);
+        $debugViewHelper->setArguments(['value' => 'some text', 'title' => 'some title']);
 
         // Stop the analysis in it's tracks.
         $configMock = $this->createMock(Config::class);
