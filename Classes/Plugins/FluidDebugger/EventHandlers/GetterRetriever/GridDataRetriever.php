@@ -43,12 +43,9 @@ use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockGridData;
 class GridDataRetriever extends AbstractGetterRetriever
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function canHandle(object $object): bool
-    {
-        return $object instanceof ContentBlockGridData;
-    }
+    protected array $handlingClasses = [ContentBlockGridData::class];
 
     /**
      * Retrieve 'properties' from the Record object. If it is a

@@ -38,6 +38,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger\EventHandlers
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\AbstractGetterRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\ContentAreaCollectionRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\ContentBlocksRetriever;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\DomainPageRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\DomainRecordRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\FlexFormRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\GridDataRetriever;
@@ -73,21 +74,17 @@ use TYPO3\CMS\Core\Settings\Settings;
 #[CoversMethod(DynamicGetter::class, '__construct')]
 #[CoversMethod(DynamicGetter::class, 'removeFromGetter')]
 #[CoversMethod(DynamicGetter::class, 'iterateResults')]
-#[CoversMethod(ContentBlocksRetriever::class, 'canHandle')]
 #[CoversMethod(ContentBlocksRetriever::class, 'handle')]
-#[CoversMethod(DomainRecordRetriever::class, 'canHandle')]
 #[CoversMethod(DomainRecordRetriever::class, 'handle')]
-#[CoversMethod(RawRecordRetriever::class, 'canHandle')]
 #[CoversMethod(RawRecordRetriever::class, 'handle')]
-#[CoversMethod(SettingsRetriever::class, 'canHandle')]
 #[CoversMethod(SettingsRetriever::class, 'handle')]
-#[CoversMethod(GridDataRetriever::class, 'canHandle')]
 #[CoversMethod(GridDataRetriever::class, 'handle')]
 #[CoversMethod(FlexFormRetriever::class, 'canHandle')]
 #[CoversMethod(FlexformRetriever::class, 'handle')]
-#[CoversMethod(ContentAreaCollectionRetriever::class, 'canHandle')]
 #[CoversMethod(ContentAreaCollectionRetriever::class, 'handle')]
+#[CoversMethod(DomainPageRetriever::class, 'handle')]
 #[CoversMethod(AbstractGetterRetriever::class, 'processObjectValues')]
+#[CoversMethod(AbstractGetterRetriever::class, 'canHandle')]
 class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface, CodegenConstInterface
 {
     /**

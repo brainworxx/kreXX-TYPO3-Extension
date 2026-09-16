@@ -46,12 +46,9 @@ use TYPO3\CMS\Core\Settings\Settings;
 class SettingsRetriever extends AbstractGetterRetriever
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function canHandle(object $object): bool
-    {
-        return $object instanceof Settings;
-    }
+    protected array $handlingClasses = [Settings::class];
 
     /**
      * @inheritDoc

@@ -38,9 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever;
 
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
-use Throwable;
 use TYPO3\CMS\Core\Domain\RawRecord;
-use TYPO3\CMS\Core\Domain\RecordPropertyClosure;
 
 /**
  * Retrieve the dynamic getter values of a RawRecord object.
@@ -48,12 +46,9 @@ use TYPO3\CMS\Core\Domain\RecordPropertyClosure;
 class RawRecordRetriever extends AbstractGetterRetriever
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function canHandle(object $object): bool
-    {
-        return $object instanceof RawRecord;
-    }
+    protected array $handlingClasses = [RawRecord::class];
 
     /**
      * Retrieve 'properties' from the Record object. If it is a

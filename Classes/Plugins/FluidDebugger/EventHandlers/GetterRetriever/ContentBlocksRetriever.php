@@ -48,10 +48,7 @@ class ContentBlocksRetriever extends AbstractGetterRetriever
     /**
      * {@inheritDoc}
      */
-    public function canHandle(object $object): bool
-    {
-        return $object instanceof ContentBlockData;
-    }
+    protected array $handlingClasses = [ContentBlockData::class];
 
     /**
      * {@inheritDoc}

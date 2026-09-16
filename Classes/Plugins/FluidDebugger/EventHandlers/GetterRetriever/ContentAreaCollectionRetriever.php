@@ -47,14 +47,10 @@ use TYPO3\CMS\Core\Page\ContentAreaCollection;
  */
 class ContentAreaCollectionRetriever extends AbstractGetterRetriever
 {
-
     /**
      * {@inheritDoc}
      */
-    public function canHandle(object $object): bool
-    {
-        return $object instanceof ContentAreaCollection;
-    }
+    protected array $handlingClasses = [ContentAreaCollection::class];
 
     /**
      * {@inheritDoc}

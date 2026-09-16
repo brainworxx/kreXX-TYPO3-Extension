@@ -44,6 +44,14 @@ use TYPO3\CMS\Core\Domain\RecordPropertyClosure;
 abstract class AbstractGetterRetriever
 {
     /**
+     * The classes that this retriever can handle.
+     * This is used to determine if the retriever can handle a given object.
+     *
+     * @var string[]
+     */
+    protected array $handlingClasses = [];
+
+    /**
      * Can we get the dynamic getters for the given object?
      *
      * @param object $object
@@ -52,7 +60,15 @@ abstract class AbstractGetterRetriever
      * @return bool
      *   True if we can handle the object, false otherwise.
      */
-    abstract public function canHandle(object $object): bool;
+    public function canHandle(object $object): bool
+    {
+        foreach ($this->handlingClasses as $class) {
+            if (!$object instanceof $class) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     /**
      * Retrieve the dynamic getters for the given object.

@@ -52,6 +52,11 @@ use TYPO3\CMS\Core\Domain\FlexFormFieldValues;
 class FlexFormRetriever extends AbstractGetterRetriever
 {
     /**
+     * {@inheritDoc}
+     */
+    protected array $handlingClasses = [FlexFormFieldValues::class];
+
+    /**
      * We only handle flex form field values
      *
      * TYPO3 14 has the 'getSheets' method, which is visible in the debug output
@@ -66,7 +71,7 @@ class FlexFormRetriever extends AbstractGetterRetriever
      */
     public function canHandle(object $object): bool
     {
-        return $object instanceof FlexFormFieldValues
+        return parent::canHandle($object)
             && !method_exists($object, 'getSheets');
     }
 

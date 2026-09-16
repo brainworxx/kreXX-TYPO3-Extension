@@ -44,20 +44,13 @@ use TYPO3\CMS\Core\Domain\RecordInterface;
 /**
  * Retrieve the dynamic getter values of a DomainPage object.
  * But only in TYPO3 14.0 and beyond.
- *
- * @codeCoverageIgnore
- *   We ignore th coveraage of this class untill TYPO3 14 becomes our main target.
- *   We do test it, but we only upload coverage for TYPO3 13.
  */
 class DomainPageRetriever extends AbstractGetterRetriever
 {
     /**
      * {@inheritDoc}
      */
-    public function canHandle(object $object): bool
-    {
-        return $object instanceof Page && $object instanceof RecordInterface;
-    }
+    protected array $handlingClasses = [Page::class, RecordInterface::class];
 
     /**
      * Retrieve all the values that this object knows.

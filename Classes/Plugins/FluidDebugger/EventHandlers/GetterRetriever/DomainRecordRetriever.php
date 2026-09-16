@@ -47,12 +47,9 @@ use TYPO3\CMS\Core\Domain\Record;
 class DomainRecordRetriever extends RawRecordRetriever
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function canHandle(object $object): bool
-    {
-        return $object instanceof Record;
-    }
+    protected array $handlingClasses = [Record::class];
 
     /**
      * @inheritDoc
