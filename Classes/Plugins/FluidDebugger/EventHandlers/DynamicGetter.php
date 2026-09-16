@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers;
 
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\ContentAreaCollectionRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\ContentBlocksRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\DomainPageRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\DomainRecordRetriever;
@@ -93,6 +94,7 @@ class DynamicGetter implements
         SettingsRetriever::class,
         FlexFormRetriever::class,
         DomainPageRetriever::class,
+        ContentAreaCollectionRetriever::class,
     ];
 
     /**

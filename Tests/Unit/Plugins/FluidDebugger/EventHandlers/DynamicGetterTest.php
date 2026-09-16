@@ -36,6 +36,7 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger\EventHandlers;
 
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\AbstractGetterRetriever;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\ContentAreaCollectionRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\ContentBlocksRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\DomainRecordRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\FlexFormRetriever;
@@ -63,6 +64,9 @@ use TYPO3\CMS\Core\Domain\Record;
 use TYPO3\CMS\Core\Domain\Record\ComputedProperties;
 use TYPO3\CMS\Core\Domain\RecordPropertyClosure;
 use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Page\ContentArea;
+use TYPO3\CMS\Core\Page\ContentAreaCollection;
+use TYPO3\CMS\Core\Page\ContentSlideMode;
 use TYPO3\CMS\Core\Settings\Settings;
 
 #[CoversMethod(DynamicGetter::class, 'handle')]
@@ -81,6 +85,8 @@ use TYPO3\CMS\Core\Settings\Settings;
 #[CoversMethod(GridDataRetriever::class, 'handle')]
 #[CoversMethod(FlexFormRetriever::class, 'canHandle')]
 #[CoversMethod(FlexformRetriever::class, 'handle')]
+#[CoversMethod(ContentAreaCollectionRetriever::class, 'canHandle')]
+#[CoversMethod(ContentAreaCollectionRetriever::class, 'handle')]
 #[CoversMethod(AbstractGetterRetriever::class, 'processObjectValues')]
 class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface, CodegenConstInterface
 {
@@ -170,6 +176,17 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
         $page = new Page(['uid' => 1, 'pid' => 2, 'title' => 'Test Page']);
         $testSubjects[] = new ReflectionClass($page);
 
+        if (class_exists(ContentAreaCollection::class)) {
+            $contentPayload = [
+                'contentArea1' => new ContentArea('', '', 0, ContentSlideMode::None, [], [], [], [new stdClass()]),
+            ];
+            // The ContentAreaCollection is a special case, because we transform it into
+            // an array. We do not test the internal workings of the ContentAreaCollection,
+            // we only test if we can get the array out of it.
+            $contentAreaCollection = new ContentAreaCollection($contentPayload);
+            $testSubjects[] = new ReflectionClass($contentAreaCollection);
+        }
+
         // We do not add the flexform retriever to the list in TYPO3 14.0 and higher,
         // because there was a getter added directly to the FlexFormFieldValues class.
         if (!method_exists($flexForm, 'getSheets')) {
@@ -241,6 +258,11 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
                         $this->assertEmpty($result, 'In TYPO3 versions below 14.0 the Page record is not handled.');
                     }
                     break;
+                case ContentAreaCollection::class:
+                    $this->assertCount(1, $result);
+                    $this->assertEquals('contentArea1', $result[0]->getName());
+                    $this->assertSame($contentPayload['contentArea1'], $result[0]->getData());
+                break;
                 default:
                     $this->fail('Unknown subject class: ' . $subjectClass);
             }
