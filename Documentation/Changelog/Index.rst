@@ -8,6 +8,7 @@ Changelog
 :Date: 2026-09-12
 
 Changes:
+    * [Feature] Added support for Content Area Collections.
 
 -----
 
