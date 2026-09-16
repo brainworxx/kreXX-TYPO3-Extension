@@ -78,7 +78,6 @@ use TYPO3\CMS\Core\Settings\Settings;
 #[CoversMethod(DomainRecordRetriever::class, 'handle')]
 #[CoversMethod(RawRecordRetriever::class, 'handle')]
 #[CoversMethod(SettingsRetriever::class, 'handle')]
-#[CoversMethod(GridDataRetriever::class, 'handle')]
 #[CoversMethod(FlexFormRetriever::class, 'canHandle')]
 #[CoversMethod(FlexformRetriever::class, 'handle')]
 #[CoversMethod(ContentAreaCollectionRetriever::class, 'handle')]

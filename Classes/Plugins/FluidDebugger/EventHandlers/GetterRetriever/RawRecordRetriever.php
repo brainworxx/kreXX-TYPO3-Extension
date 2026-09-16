@@ -51,6 +51,13 @@ class RawRecordRetriever extends AbstractGetterRetriever
     protected array $handlingClasses = [RawRecord::class];
 
     /**
+     * Name of the property we need to extract.
+     *
+     * @var string
+     */
+    protected string $propertyName = 'properties';
+
+    /**
      * Retrieve 'properties' from the Record object. If it is a
      * RecordPropertyClosure is, then instantiate it.
      *
@@ -62,13 +69,13 @@ class RawRecordRetriever extends AbstractGetterRetriever
      */
     public function handle(ReflectionClass $ref): array
     {
-        if (!$ref->hasProperty('properties')) {
+        if (!$ref->hasProperty($this->propertyName)) {
             // Huh, not what I expected.
             // This is not a Record object, so we cannot retrieve the properties.
             // But it is the right class?!?
             return [];
         }
 
-        return $this->processObjectValues($ref->retrieveValue($ref->getProperty('properties')));
+        return $this->processObjectValues($ref->retrieveValue($ref->getProperty($this->propertyName)));
     }
 }

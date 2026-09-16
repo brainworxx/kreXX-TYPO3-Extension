@@ -40,7 +40,7 @@ namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetr
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockGridData;
 
-class GridDataRetriever extends AbstractGetterRetriever
+class GridDataRetriever extends RawRecordRetriever
 {
     /**
      * {@inheritDoc}
@@ -48,24 +48,7 @@ class GridDataRetriever extends AbstractGetterRetriever
     protected array $handlingClasses = [ContentBlockGridData::class];
 
     /**
-     * Retrieve 'properties' from the Record object. If it is a
-     * RecordPropertyClosure is, then instantiate it.
-     *
-     * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
-     *   ReflectionClass of the RawRecord.
-     *
-     * @return array
-     *   The properties of the RawRecord, including uid and pid.
+     * {@inheritDoc}
      */
-    public function handle(ReflectionClass $ref): array
-    {
-        if (!$ref->hasProperty('grids')) {
-            // Huh, not what I expected.
-            // This is not a Grid object, so we cannot retrieve the properties.
-            // But it is the right class?!?
-            return [];
-        }
-
-        return $this->processObjectValues($ref->retrieveValue($ref->getProperty('grids')));
-    }
+    protected string $propertyName = 'grids';
 }
