@@ -95,12 +95,12 @@ class DynamicGetter implements
      */
     protected array $processersClassNames = [
         ContentBlocksRetriever::class,
+        DomainPageRetriever::class,
         DomainRecordRetriever::class,
         RawRecordRetriever::class,
         GridDataRetriever::class,
         SettingsRetriever::class,
         FlexFormRetriever::class,
-        DomainPageRetriever::class,
         ContentAreaCollectionRetriever::class,
     ];
 

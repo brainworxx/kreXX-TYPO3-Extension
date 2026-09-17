@@ -9,6 +9,7 @@ Changelog
 
 Changes:
     * [Feature] Added support for Content Area Collections.
+    * [Bugfix] The DomainPageRetriever was never called in TYPO3 14.3 and was never updated from 14.0 to 14.3.
 
 -----
 

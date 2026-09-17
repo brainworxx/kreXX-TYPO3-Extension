@@ -261,11 +261,11 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
                         $this->assertEmpty($result, 'In TYPO3 versions below 14.0 the Page record is not handled.');
                     }
                     break;
-                    case ContentAreaCollection::class:
-                        $this->assertCount(1, $result);
-                        $this->assertEquals('contentArea1', $result[0]->getName());
-                        $this->assertSame($contentPayload['contentArea1'], $result[0]->getData());
-                    break;
+                case ContentAreaCollection::class:
+                    $this->assertCount(1, $result);
+                    $this->assertEquals('contentArea1', $result[0]->getName());
+                    $this->assertSame($contentPayload['contentArea1'], $result[0]->getData());
+                break;
                 default:
                     $this->fail('Unknown subject class: ' . $subjectClass);
             }

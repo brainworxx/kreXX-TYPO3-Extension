@@ -49,7 +49,7 @@ use TYPO3\CMS\Core\Domain\RecordInterface;
  *   We ignore th coveraage of this class untill TYPO3 14 becomes our main target.
  *   We do test it, but we only upload coverage for TYPO3 13.
  */
-class DomainPageRetriever extends AbstractGetterRetriever
+class DomainPageRetriever extends DomainRecordRetriever
 {
     /**
      * {@inheritDoc}
@@ -68,20 +68,14 @@ class DomainPageRetriever extends AbstractGetterRetriever
      */
     public function handle(ReflectionClass $ref): array
     {
-        /** @var array $properties */
-        $properties = $ref->retrieveValue($ref->getProperty('properties'));
-        /** @var \TYPO3\CMS\Core\Domain\RawRecord $rawRecord */
-        $rawRecord = $ref->retrieveValue($ref->getProperty('rawRecord'));
+        $properties = parent::handle($ref);
+        if (!$ref->hasProperty('specialProperties')) {
+            // Not what we expected, but we can still return the properties we
+            // got from the parent.
+            return $properties;
+        }
         /** @var array $specialProperties */
         $specialProperties = $ref->retrieveValue($ref->getProperty('specialProperties'));
-
-        if (!isset($properties['uid'])) {
-            $properties['uid'] = $rawRecord->getUid();
-        }
-
-        if (!isset($properties['pid'])) {
-            $properties['pid'] = $rawRecord->getPid();
-        }
 
         return array_merge($specialProperties, $properties);
     }
