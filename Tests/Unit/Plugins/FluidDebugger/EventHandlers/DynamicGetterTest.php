@@ -41,7 +41,6 @@ use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\DomainPageRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\DomainRecordRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\FlexFormRetriever;
-use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\GridDataRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\RawRecordRetriever;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever\SettingsRetriever;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
@@ -258,7 +257,7 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
                     $this->assertCount(1, $result);
                     $this->assertEquals('contentArea1', $result[0]->getName());
                     $this->assertSame($contentPayload['contentArea1'], $result[0]->getData());
-                break;
+                    break;
                 default:
                     $this->fail('Unknown subject class: ' . $subjectClass);
             }

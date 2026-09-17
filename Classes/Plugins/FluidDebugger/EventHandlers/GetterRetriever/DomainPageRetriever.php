@@ -45,7 +45,7 @@ use TYPO3\CMS\Core\Domain\RecordInterface;
  * Retrieve the dynamic getter values of a DomainPage object.
  * But only in TYPO3 14.0 and beyond.
  */
-class DomainPageRetriever extends AbstractGetterRetriever
+class DomainPageRetriever extends DomainRecordRetriever
 {
     /**
      * {@inheritDoc}
@@ -61,20 +61,14 @@ class DomainPageRetriever extends AbstractGetterRetriever
      */
     public function handle(ReflectionClass $ref): array
     {
-        /** @var array $properties */
-        $properties = $ref->retrieveValue($ref->getProperty('properties'));
-        /** @var \TYPO3\CMS\Core\Domain\RawRecord $rawRecord */
-        $rawRecord = $ref->retrieveValue($ref->getProperty('rawRecord'));
+        $properties = parent::handle($ref);
+        if (!$ref->hasProperty('specialProperties')) {
+            // Not what we expected, but we can still return the properties we
+            // got from the parent.
+            return $properties;
+        }
         /** @var array $specialProperties */
         $specialProperties = $ref->retrieveValue($ref->getProperty('specialProperties'));
-
-        if (!isset($properties['uid'])) {
-            $properties['uid'] = $rawRecord->getUid();
-        }
-
-        if (!isset($properties['pid'])) {
-            $properties['pid'] = $rawRecord->getPid();
-        }
 
         return array_merge($specialProperties, $properties);
     }
