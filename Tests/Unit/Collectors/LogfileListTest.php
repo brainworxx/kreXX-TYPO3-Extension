@@ -41,7 +41,6 @@ use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
-#[CoversMethod(LogfileList::class, 'assignData')]
 #[CoversMethod(LogfileList::class, 'retrieveFileList')]
 #[CoversMethod(LogfileList::class, 'retrieveFileInfo')]
 #[CoversMethod(LogfileList::class, 'addMetaToFileInfo')]
@@ -54,20 +53,13 @@ class LogfileListTest extends AbstractHelper
      */
     public function testAssignData()
     {
-        $assign = 'assign';
-        $fileList = 'filelist';
         $someBeUrl = 'some backend url';
         $dateFormat = 'd.m.y H:i:s';
         $dispatcher = 'dispatcher';
 
         // No access. Show no files at all.
         $logLister = new LogfileList();
-        $viewMock = $this->createMock(ModuleTemplate::class);
-
-        $viewMock->expects($this->once())
-            ->method($assign)
-            ->with($fileList, []);
-        $logLister->assignData($viewMock);
+        $this->assertSame([], $logLister->retrieveFileList(), 'There should be no files, because of no access.');
 
         // Normal access.
         $logLister = new LogfileList();
@@ -99,8 +91,6 @@ class LogfileListTest extends AbstractHelper
                 'name' => '123456.Krexx.html',
                 'size' => '390 B',
                 'time' => date($dateFormat, 104),
-                'id' => '123456',
-                $dispatcher => $someBeUrl,
                 'meta' => [
                     [
                         'file' => '.../some/directory/file.php',
@@ -110,14 +100,14 @@ class LogfileListTest extends AbstractHelper
                         'date' => '05-08-2019 10:15:55',
                         'filename' => 'file.php'
                     ]
-                ]
+                ],
+                'id' => '123456',
+                $dispatcher => $someBeUrl,
             ],
             [
                 'name' => '123457.Krexx.html',
                 'size' => '316 B',
                 'time' => date($dateFormat, 105),
-                'id' => '123457',
-                $dispatcher => $someBeUrl,
                 'meta' => [
                     [
                         'file' => '.../some/directory/anotherFile.php',
@@ -127,23 +117,20 @@ class LogfileListTest extends AbstractHelper
                         'date' => '01-01-2010 10:00:00',
                         'filename' => 'anotherFile.php'
                     ]
-                ]
+                ],
+                'id' => '123457',
+                $dispatcher => $someBeUrl,
             ],
             [
                 'name' => '123458.Krexx.html',
                 'size' => '205 B',
                 'time' => date($dateFormat, 106),
+                'meta' => [],
                 'id' => '123458',
                 $dispatcher => $someBeUrl,
-                'meta' => []
             ]
         ];
-        $viewMock = $this->createMock(ModuleTemplate::class);
-
-        $viewMock->expects($this->once())
-            ->method($assign)
-            ->with($fileList, $expectation);
-        $logLister->assignData($viewMock);
+        $this->assertSame($expectation, $logLister->retrieveFileList(), 'The file list is not as expected.');
     }
 
     /**

@@ -48,15 +48,18 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class LogfileList extends AbstractCollector implements BacktraceConstInterface
 {
     /**
-     * Assigning the list to the view. Used by out adminpanel logging module.
+     * "Assigning" the list to the view.
+     * Well, not really. it is not called at all. But we need to implement this
+     * method, because the interface requires it.
      *
-     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
+     * @codeCoverageIgnore
+     *   Not much to test here.
      *
-     * @param \TYPO3\CMS\Fluid\View\AbstractTemplateView|\TYPO3\CMS\Backend\Template\ModuleTemplate $view
+     * @param \TYPO3\CMS\Backend\Template\ModuleTemplate $view
      */
     public function assignData($view): void
     {
-        $view->assign('filelist', $this->retrieveFileList());
+        // Do nothing.
     }
 
     /**
@@ -75,22 +78,22 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
         }
 
         // Get the log files and sort them.
-        $files = glob($this->pool->config->getLogDir() . '*.Krexx.html');
+        $files = glob(pattern: $this->pool->config->getLogDir() . '*.Krexx.html');
         if (empty($files)) {
             return [];
         }
 
-        set_error_handler(Krexx::$pool->retrieveErrorCallback());
+        set_error_handler(callback: Krexx::$pool->retrieveErrorCallback());
         // The function filemtime gets cached by php btw.
         usort(
-            $files,
-            function ($fileA, $fileB): int {
+            array: $files,
+            callback: function ($fileA, $fileB): int {
                 return (int)filemtime($fileB) - (int)filemtime($fileA);
             }
         );
         restore_error_handler();
 
-        return $this->retrieveFileInfo($files);
+        return $this->retrieveFileInfo(files: $files);
     }
 
     /**
@@ -106,21 +109,21 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
      */
     protected function retrieveFileInfo(array $files): array
     {
-        // These files may not be available anymore on high traffic sites. The
-        // filemtime() will throw a warning if the file does not exist anymore.
+        // These files may not be available any more on high traffic sites. The
+        // filemtime() will throw a warning if the file does not exist any more.
         set_error_handler(\Krexx::$pool->retrieveErrorCallback());
         $fileList = [];
         foreach ($files as $file) {
             // Getting the basic info.
             $fileinfo = [
-                'name' => basename($file),
-                'size' => $this->fileSizeConvert((int)filesize($file)),
-                'time' => date("d.m.y H:i:s", (int)filemtime($file)),
-                'meta' => $this->addMetaToFileInfo($file)
+                'name' => basename(path: $file),
+                'size' => $this->fileSizeConvert(bytes: (int)filesize(filename: $file)),
+                'time' => date("d.m.y H:i:s", (int)filemtime(filename: $file)),
+                'meta' => $this->addMetaToFileInfo(file: $file)
             ];
 
-            $fileinfo['id'] = str_replace('.Krexx.html', '', $fileinfo['name']);
-            $fileinfo['dispatcher'] = $this->getRoute($fileinfo['id']);
+            $fileinfo['id'] = str_replace(search: '.Krexx.html', replace: '', subject: $fileinfo['name']);
+            $fileinfo['dispatcher'] = $this->getRoute(fileId: $fileinfo['id']);
             $fileList[] = $fileinfo;
         }
         restore_error_handler();
@@ -143,24 +146,24 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
     {
         set_error_handler(\Krexx::$pool->retrieveErrorCallback());
         if (
-            !is_readable($file . '.json')
-            || empty($meta = file_get_contents($file . '.json'))
+            !is_readable(filename: $file . '.json')
+            || empty($meta = file_get_contents(filename: $file . '.json'))
         ) {
             restore_error_handler();
             return [];
         }
         restore_error_handler();
 
-        $metaArray = (array)json_decode($meta, true);
+        $metaArray = (array)json_decode(json: $meta, associative: true);
         if (empty($metaArray)) {
             return [];
         }
 
         foreach ($metaArray as &$meta) {
             $meta[static::PATHINFO_FILENAME] = $meta[static::TRACE_FILE] === 'n/a' ?
-                $meta[static::TRACE_FILE] : basename($meta[static::TRACE_FILE]);
+                $meta[static::TRACE_FILE] : basename(path: $meta[static::TRACE_FILE]);
             // Unescape the stuff from the json, to prevent double escaping.
-            $meta[static::TRACE_VARNAME] = htmlspecialchars_decode($meta[static::TRACE_VARNAME]);
+            $meta[static::TRACE_VARNAME] = htmlspecialchars_decode(string: $meta[static::TRACE_VARNAME]);
         }
 
         return $metaArray;
@@ -179,21 +182,25 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
      */
     protected function fileSizeConvert(false|int $bytes): string
     {
-        $bytes = floatval($bytes);
+        $bytes = (float)$bytes;
         $unit = 'UNIT';
         $value = 'VALUE';
 
         $arBytes = [
-            [$unit => 'TB', $value => pow(1024, 4)],
-            [$unit => 'GB', $value => pow(1024, 3)],
-            [$unit => 'MB', $value => pow(1024, 2)],
+            [$unit => 'TB', $value => pow(num: 1024, exponent: 4)],
+            [$unit => 'GB', $value => pow(num: 1024, exponent: 3)],
+            [$unit => 'MB', $value => pow(num: 1024, exponent: 2)],
             [$unit => 'KB', $value => 1024],
             [$unit => 'B', $value => 1],
         ];
 
         foreach ($arBytes as $aritem) {
             if ($bytes >= $aritem[$value]) {
-                return str_replace('.', ',', strval(round($bytes / $aritem[$value], 2))) . ' ' . $aritem[$unit];
+                return str_replace(
+                    search: '.',
+                    replace: ',',
+                    subject: (string)round(num: $bytes / $aritem[$value], precision:  2)
+                ) . ' ' . $aritem[$unit];
             }
         }
 
@@ -214,8 +221,8 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
     protected function getRoute(string $fileId): string
     {
         return (string) GeneralUtility::makeInstance(BeUriBuilder::class)->buildUriFromRoute(
-            'tools_IncludekrexxKrexxConfiguration_dispatch',
-            [
+            name: 'tools_IncludekrexxKrexxConfiguration_dispatch',
+            parameters: [
                 'tx_includekrexx_tools_includekrexxkrexxconfiguration[id]' => $fileId,
                 'tx_includekrexx_tools_includekrexxkrexxconfiguration[action]' => 'dispatch',
                 'tx_includekrexx_tools_includekrexxkrexxconfiguration[controller]' => 'Index'

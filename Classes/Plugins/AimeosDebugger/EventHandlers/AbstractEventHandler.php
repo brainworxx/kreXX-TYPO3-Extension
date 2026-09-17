@@ -63,9 +63,9 @@ abstract class AbstractEventHandler implements EventHandlerInterface, AimeosCons
     protected function retrieveProperty(ReflectionClass $reflectionClass, string $objectName, object $object): mixed
     {
         try {
-            if ($reflectionClass->hasProperty($objectName)) {
-                $propertyRef = $reflectionClass->getProperty($objectName);
-                return $propertyRef->getValue($object);
+            if ($reflectionClass->hasProperty(name: $objectName)) {
+                $propertyRef = $reflectionClass->getProperty(name: $objectName);
+                return $propertyRef->getValue(object: $object);
             }
         } catch (Throwable) {
             // Do nothing.

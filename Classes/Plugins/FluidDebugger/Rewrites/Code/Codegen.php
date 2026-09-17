@@ -82,20 +82,20 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
         }
 
         if (
-            $model->getType() === $this->pool->messages->getHelp('debugMethod')
+            $model->getType() === $this->pool->messages->getHelp(key:'debugMethod')
             && $model->getName() === 'getProperties'
         ) {
             // Doing special treatment for the getProperties debug method.
             // This one is directly callable in fluid.
-            $model->setName('properties');
-        } elseif ($this->isUnknownType($model)) {
+            $model->setName(name: 'properties');
+        } elseif ($this->isUnknownType(model: $model)) {
             return static::UNKNOWN_VALUE;
         } elseif ($model->getCodeGenType() === static::VHS_CALL_VIEWHELPER) {
             // Check for VHS values.
-            return $this->generateVhsCall($model);
+            return $this->generateVhsCall(model: $model);
         }
 
-        return $this->generateAll($model);
+        return $this->generateAll(model: $model);
     }
 
     /**
@@ -109,9 +109,11 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
         $name = $model->getName();
         // Test for a point in a variable name.
         // Stuff like this is not reachable by normal means.
-        $isNotReachable = is_string($name) && str_contains($name, '.') && $this->pool->scope->getScope() !== $name;
+        $isNotReachable = is_string(value: $name)
+            && str_contains(haystack: $name, needle: '.')
+            && $this->pool->scope->getScope() !== $name;
         // Disallowing code generation for configured debug methods.
-        $isDebugMethod = $model->getType() === $this->pool->messages->getHelp('debugMethod');
+        $isDebugMethod = $model->getType() === $this->pool->messages->getHelp(key: 'debugMethod');
         // There is no real iterator_to_array method in vanilla fluid or vhs.
         // The groupedFor viewhelper can be abused, but the new variable would
         // only be visible inside the viewhelper scope. And adding a
@@ -145,7 +147,7 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
         }
 
         // Do the child generation.
-        $result = parent::generateSource($model);
+        $result = parent::generateSource(model: $model);
         if (!$this->isAll) {
             return $result;
         }
@@ -162,7 +164,7 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
             --$nestingLevel;
         }
         if ($nestingLevel === 1) {
-            $result = trim($result, '.');
+            $result = trim(string: $result, characters: '.');
         }
 
         return $result;
@@ -191,7 +193,8 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
 
         $firstPart = ' -> v:call(method: \'';
         if (count($data[static::PARAM_ARRAY]) >= 1) {
-            return $firstPart . $model->getName() . '\', arguments: {' . rtrim($args, ', ') . '})';
+            return $firstPart . $model->getName() . '\', arguments: {' .
+                rtrim(string: $args, characters:  ', ') . '})';
         }
 
         return $firstPart . $model->getName() . '\')';

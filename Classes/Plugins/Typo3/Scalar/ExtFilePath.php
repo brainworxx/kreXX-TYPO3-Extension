@@ -56,16 +56,16 @@ class ExtFilePath extends FilePath
      */
     public function canHandle($string, Model $model): bool
     {
-        if (!str_starts_with($string, 'EXT:')) {
+        if (!str_starts_with(haystack: $string, needle: 'EXT:')) {
             // Does not start with EXT:
             // Nothing to do here.
             return false;
         }
 
         // Retrieve the EXT path from the framework.
-        set_error_handler($this->pool->retrieveErrorCallback());
+        set_error_handler(callback: $this->pool->retrieveErrorCallback());
         try {
-            $string = GeneralUtility::getFileAbsFileName($string);
+            $string = GeneralUtility::getFileAbsFileName(fileName: $string);
         } catch (Throwable) {
             // Huh, someone messed with the GeneralUtility.
             restore_error_handler();
@@ -80,12 +80,15 @@ class ExtFilePath extends FilePath
 
         // Preserve the result from the getFileAbsFileName.
         $messages = $this->pool->messages;
-        $model->addToJson($messages->getHelp('TYPO3ResPath'), $string);
+        $model->addToJson(key: $messages->getHelp(key: 'TYPO3ResPath'), value: $string);
 
-        if (!file_exists($string)) {
-            $model->addToJson($messages->getHelp('TYPO3ResPathError'), $messages->getHelp('TYPO3ResPathDoesNotExist'));
+        if (!file_exists(filename: $string)) {
+            $model->addToJson(
+                key: $messages->getHelp(key:'TYPO3ResPathError'),
+                value: $messages->getHelp(key: 'TYPO3ResPathDoesNotExist')
+            );
         }
 
-        return parent::canHandle($string, $model);
+        return parent::canHandle(string: $string, model: $model);
     }
 }

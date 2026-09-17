@@ -83,6 +83,6 @@ class Connectors extends OrgConnectors
             return '';
         }
 
-        return parent::getConnectorRight($cap);
+        return parent::getConnectorRight(cap: $cap);
     }
 }

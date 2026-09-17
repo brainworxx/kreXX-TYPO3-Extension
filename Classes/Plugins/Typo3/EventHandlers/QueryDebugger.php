@@ -76,35 +76,35 @@ class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, Pr
      */
     public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
     {
-        if (empty($sql = $this->retrieveSql($callback->getParameters()[static::PARAM_DATA]))) {
+        if (empty($sql = $this->retrieveSql(query: $callback->getParameters()[static::PARAM_DATA]))) {
             // Wrong object type, or problems with the SQL retrieval.
             return '';
         }
 
-        $length = strlen($sql);
-        $sqlEscaped = $this->pool->encodingService->encodeString($sql);
+        $length = strlen(string: $sql);
+        $sqlEscaped = $this->pool->encodingService->encodeString(data: $sql);
         /** @var Model $model */
-        $model = $this->pool->createClass(Model::class)
-            ->setData($sqlEscaped)
-            ->setHelpid('queryBuilderHelp')
-            ->setName('SQL')
-            ->setType(static::TYPE_STRING . $length);
+        $model = $this->pool->createClass(classname: Model::class)
+            ->setData(data: $sqlEscaped)
+            ->setHelpid(helpId: 'queryBuilderHelp')
+            ->setName(name: 'SQL')
+            ->setType(type: static::TYPE_STRING . $length);
 
         if ($length > 50) {
             $cut = $this->pool->encodingService->encodeString(
-                $this->pool->encodingService->mbSubStr($sql, 0, 50)
+                data: $this->pool->encodingService->mbSubStr(string: $sql, start: 0, length: 50)
             ) . static::UNKNOWN_VALUE;
-            $model->setNormal($cut)->setHasExtra(true);
+            $model->setNormal(normal: $cut)->setHasExtra(value: true);
         } else {
-            $model->setNormal($sqlEscaped);
+            $model->setNormal(normal: $sqlEscaped);
         }
 
         // Disable source generation
-        $this->pool->codegenHandler->setCodegenAllowed(false);
-        $result = $this->pool->render->renderExpandableChild($model);
+        $this->pool->codegenHandler->setCodegenAllowed(bool: false);
+        $result = $this->pool->render->renderExpandableChild(model: $model);
 
         // Enable source generation.
-        $this->pool->codegenHandler->setCodegenAllowed(true);
+        $this->pool->codegenHandler->setCodegenAllowed(bool: true);
 
         return $result;
     }
@@ -123,7 +123,7 @@ class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, Pr
         try {
             if ($query instanceof QueryInterface) {
                 $query = GeneralUtility::makeInstance(Typo3DbQueryParser::class)
-                    ->convertQueryToDoctrineQueryBuilder($query);
+                    ->convertQueryToDoctrineQueryBuilder(query: $query);
             }
 
             if (!$query instanceof QueryBuilder) {
@@ -135,13 +135,13 @@ class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, Pr
 
             // Insert the parameters into the sql
             foreach ($query->getParameters() as $key => $parameter) {
-                $sql = $this->replaceParameter($sql, ':' . $key, $parameter);
+                $sql = $this->replaceParameter(sql: $sql, key: ':' . $key, parameter: $parameter);
             }
 
             return $sql;
         } catch (Throwable $e) {
             // Tell the dev, that there is an error in the sql.
-            return $this->pool->messages->getHelp('TYPO3Error') . $e->getMessage();
+            return $this->pool->messages->getHelp(key: 'TYPO3Error') . $e->getMessage();
         }
     }
 
@@ -160,13 +160,18 @@ class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, Pr
      */
     protected function replaceParameter(string $sql, string $key, mixed $parameter): string
     {
-        if (is_string($parameter)) {
+        if (is_string(value: $parameter)) {
             $parameter = '\'' . $parameter . '\'';
         }
 
-        $pos = strpos($sql, $key);
+        $pos = strpos(haystack: $sql, needle: $key);
         if ($pos !== false) {
-            $sql = substr_replace($sql, (string) $parameter, $pos, strlen($key));
+            $sql = substr_replace(
+                string: $sql,
+                replace: (string)$parameter,
+                offset: $pos,
+                length: strlen(string: $key)
+            );
         }
 
         return $sql;

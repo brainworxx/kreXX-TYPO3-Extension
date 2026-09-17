@@ -58,21 +58,21 @@ class DomainRecordRetriever extends RawRecordRetriever
     public function handle(ReflectionClass $ref): array
     {
         // First stop, we retrieve the properties from the Record object.
-        $result = parent::handle($ref);
+        $result = parent::handle(ref: $ref);
 
         // Second stop, retrieve everything else from the RawRecord.
-        if (!$ref->hasProperty('rawRecord')) {
+        if (!$ref->hasProperty(name: 'rawRecord')) {
             // Again: Huh, not what I expected.
             return $result;
         }
 
         // We are only allowed to merge the properties from the RawRecord,
         // if the RawRecord type does not contain a dot.
-        $rawRecordPropertyRef = $ref->getProperty('rawRecord');
+        $rawRecordPropertyRef = $ref->getProperty(name: 'rawRecord');
         /** @var \TYPO3\CMS\Core\Domain\RawRecord $rawRecord */
-        $rawRecord = $ref->retrieveValue($rawRecordPropertyRef);
-        $rawRecordRef = new ReflectionClass($rawRecord);
-        if (!method_exists($rawRecord, 'getFullType')) {
+        $rawRecord = $ref->retrieveValue(refProperty: $rawRecordPropertyRef);
+        $rawRecordRef = new ReflectionClass(data: $rawRecord);
+        if (!method_exists(object_or_class: $rawRecord, method: 'getFullType')) {
             // Huh, not what I expected.
             return $result;
         }
@@ -84,12 +84,12 @@ class DomainRecordRetriever extends RawRecordRetriever
             return $result;
         }
 
-        $rawRecordValues = $this->processObjectValues(parent::handle($rawRecordRef));
-        if (str_contains($rawRecordType, '.')) {
+        $rawRecordValues = $this->processObjectValues(values: parent::handle(ref: $rawRecordRef));
+        if (str_contains(haystack: $rawRecordType, needle: '.')) {
             // If the type contains a dot, we only merge the uid and pid.
             $result['uid'] = $rawRecordValues['uid'] ?? null;
             $result['pid'] = $rawRecordValues['pid'] ?? null;
-            return $this->processObjectValues($result);
+            return $this->processObjectValues(values: $result);
         }
 
         return array_merge($rawRecordValues, $result);

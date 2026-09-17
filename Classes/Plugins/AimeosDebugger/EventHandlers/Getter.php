@@ -102,8 +102,10 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface
      * @return string
      *   The generated markup.
      */
-    public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
-    {
+    public function handle(
+        ?AbstractCallback $callback = null,
+        ?Model $model = null
+    ): string {
         // We will only act, if we have no value so far.
         // Also, we only do this for Aimeos items.
         $params = $callback->getParameters();
@@ -121,14 +123,14 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface
         // 'getCustomerId' should be 'some.key.customerid'
         /** @var \ReflectionMethod $reflectionMethod */
         $reflectionMethod = $params[static::PARAM_ADDITIONAL][static::PARAM_REFLECTION_METHOD];
-        $values = $this->retrieveValueArray($params, $reflectionMethod);
+        $values = $this->retrieveValueArray(params: $params, reflectionMethod: $reflectionMethod);
         if (empty($values)) {
             // There is nothing to retrieve here.
             // Not-so-Early return.
             return '';
         }
 
-        $this->assignResultsToModel($values, $model, $callback);
+        $this->assignResultsToModel(values: $values, model: $model, callback: $callback);
 
         // This will not get used by the event itself here.
         // Return an empty string.
@@ -145,27 +147,30 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface
      * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback $callback
      *   Our original callback.
      */
-    protected function assignResultsToModel(array $values, Model $model, AbstractCallback $callback): void
-    {
+    protected function assignResultsToModel(
+        array $values,
+        Model $model,
+        AbstractCallback $callback
+    ): void {
         $params = $callback->getParameters();
         /** @var \ReflectionMethod $reflectionMethod */
         $reflectionMethod = $params[static::PARAM_ADDITIONAL][static::PARAM_REFLECTION_METHOD];
-        $possibleKey = $this->retrievePossibleKey($reflectionMethod->name);
+        $possibleKey = $this->retrievePossibleKey(methodName: $reflectionMethod->name);
 
         foreach ($values as $key => $possibleResult) {
-            $keyParts = explode('.', $key);
+            $keyParts = explode(separator: '.', string: $key);
             if ($keyParts[count($keyParts) - 1] === $possibleKey) {
                 // We've got ourselves a result.
                 $params[static::PARAM_ADDITIONAL][static::PARAM_NOTHING_FOUND] = false;
                 // Update the parameters in the callback . . .
-                $callback->setParameters($params);
+                $callback->setParameters(parameters: $params);
 
                 // Update the model.
-                $model->setData($possibleResult);
+                $model->setData(data: $possibleResult);
                 if ($possibleResult === null) {
                     // A NULL value might mean that the values does not
                     // exist, until the getter computes it.
-                    $model->addJsonHint($this->pool->messages->getHelp('getterNull'));
+                    $model->addJsonHint(hint: $this->pool->messages->getHelp('getterNull'));
                 }
 
                 break;
@@ -184,7 +189,7 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface
      */
     protected function retrievePossibleKey(string $methodName): string
     {
-        $possibleKey = strtolower(substr($methodName, 3));
+        $possibleKey = strtolower(string: substr(string: $methodName, offset: 3));
 
         // Not all stored data keys can be derived directly from the getter name.
         if ($possibleKey === 'timemodified') {
@@ -217,8 +222,12 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface
         $data = $params[static::PARAM_REF]->getData();
 
         foreach ($this->aimeosDataStorages as $propertyName) {
-            $value = $this->retrieveProperty($reflectionClass, $propertyName, $data);
-            if (is_array($value)) {
+            $value = $this->retrieveProperty(
+                reflectionClass: $reflectionClass,
+                objectName: $propertyName,
+                object: $data
+            );
+            if (is_array(value: $value)) {
                 $result = array_merge($result, $value);
             }
         }
@@ -229,15 +238,19 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface
             ['(int)', '(string)', '(float)', '(bool)'],
             '',
             $this->pool->fileService->readFile(
-                $reflectionMethod->getFileName(),
-                $reflectionMethod->getStartLine(),
-                $reflectionMethod->getEndLine()
+                filePath: $reflectionMethod->getFileName(),
+                readFrom: $reflectionMethod->getStartLine(),
+                readTo: $reflectionMethod->getEndLine()
             )
         );
         // Parse the code via regex, and retrieve default values.
-        preg_match("/this->get\(\s*'([^']*)',\s*([0-9]+)\s*\);/", $sourcecode, $matches);
-        if (count($matches) === 3 && empty($result[$matches[1]])) {
-            $result[$matches[1]] = trim($matches[2], '"\'');
+        preg_match(
+            pattern: "/this->get\(\s*'([^']*)',\s*([0-9]+)\s*\);/",
+            subject: $sourcecode,
+            matches: $matches
+        );
+        if (count(value: $matches) === 3 && empty($result[$matches[1]])) {
+            $result[$matches[1]] = trim(string: $matches[2], characters: '"\'');
         }
 
         return $result;

@@ -370,8 +370,8 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
 
         $moduleSettings = [];
         // Process the settings.
-        $settings = $this->processGroups($moduleSettings);
-        $feEditing =  $this->processFeEditing($moduleSettings);
+        $settings = $this->processGroups(moduleSettings: $moduleSettings);
+        $feEditing = $this->processFeEditing(moduleSettings:$moduleSettings);
         $result = $settings + $feEditing;
 
         /** @var \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $user */
@@ -407,8 +407,8 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
             $result[$group] = [];
             foreach ($settings as $settingName) {
                 if (
-                    $this->$settingName !== null
-                    && $validation->evaluateSetting($group, $settingName, $this->$settingName)
+                    $this->$settingName !== null &&
+                    $validation->evaluateSetting(group: $group, name: $settingName, value: $this->$settingName)
                 ) {
                     $moduleSettings[$settingName] = $result[$group][$settingName] = $this->$settingName;
                 }
@@ -439,11 +439,11 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
         foreach (Krexx::$pool->config->feConfigFallback as $settingName => $settings) {
             $settingNameInModel = 'form' . $settingName;
             if (
-                $settings[static::RENDER][static::RENDER_TYPE] !== static::RENDER_TYPE_NONE &&
-                in_array($this->$settingNameInModel, $allowedValues, true)
+                $settings[static::RENDER][static::RENDER_TYPE] !== static::RENDER_TYPE_NONE
+                && in_array(needle: $this->$settingNameInModel, haystack: $allowedValues, strict: true)
             ) {
-                $moduleSettings[$settingNameInModel] = $result[static::SECTION_FE_EDITING][$settingName]
-                    = $this->$settingNameInModel;
+                $moduleSettings[$settingNameInModel] = $result[static::SECTION_FE_EDITING][$settingName] =
+                    $this->$settingNameInModel;
             }
         }
 

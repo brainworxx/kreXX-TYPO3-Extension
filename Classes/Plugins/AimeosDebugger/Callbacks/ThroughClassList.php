@@ -75,11 +75,12 @@ class ThroughClassList extends AbstractCallback implements CallbackConstInterfac
         // We simply pass it on to the routing.
         foreach ($data as $key => $object) {
             $result .= $this->pool->routing->analysisHub(
-                $this->dispatchEventWithModel(
-                    static::EVENT_MARKER_ANALYSES_END,
-                    $this->pool->createClass(Model::class)
-                        ->setData($object)
-                        ->setName($key)
+                model: $this->dispatchEventWithModel(
+                    name: static::EVENT_MARKER_ANALYSES_END,
+                    model: $this->pool
+                        ->createClass(classname: Model::class)
+                        ->setData(data: $object)
+                        ->setName(name: $key)
                 )
             );
         }

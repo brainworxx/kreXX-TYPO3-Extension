@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever;
 
-use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockGridData;
 
 class GridDataRetriever extends RawRecordRetriever

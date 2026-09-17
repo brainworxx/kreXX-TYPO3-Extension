@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
-use Aimeos\Base\View\Helper\Base as BaseHelperBase;
 use Aimeos\Base\View\Iface as BaseViewInterface;
 use Aimeos\MW\View\Helper\Base as HelperBase;
 use Aimeos\MW\View\Iface as ViewInterface;
@@ -70,21 +69,9 @@ use ReflectionException;
 class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
 {
     /**
-     * The namespace of the view helpers.
-     *
-     * @var string
-     */
-    protected const AI_NAMESPACE = 'Aimeos\\MW\\View\\Helper\\';
-
-    /**
      * @var string
      */
     protected const METHOD = 'transform';
-
-    /**
-     * @var string
-     */
-    protected const STANDARD = '\\Standard';
 
     /**
      * List of all retrieved helper classes from the view.
@@ -117,7 +104,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
     {
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $callback->getParameters()[static::PARAM_REF];
-        /** @var ViewInterface $data */
+        /** @var ViewInterface|BaseViewInterface $data */
         $data = $ref->getData();
 
         // Test if we are facing an Aimeos view.
@@ -130,7 +117,8 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
         // Analyse the transform method of all possible view helpers.
         // Analyse the already existing view helpers.
         try {
-            return $this->retrieveHelpers($data, $ref) . $this->retrievePossibleOtherHelpers();
+            return $this->retrieveHelpers(data: $data, ref: $ref) .
+                $this->retrievePossibleOtherHelpers();
         } catch (ReflectionException) {
             // Do nothing. We skip this step.
         }
@@ -149,29 +137,29 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
      * @return string
      *   The generated html.
      */
-    protected function retrieveHelpers($data, ReflectionClass $ref): string
+    protected function retrieveHelpers(ViewInterface|BaseViewInterface $data, ReflectionClass $ref): string
     {
         $result = '';
-        if ($ref->hasProperty('helper')) {
+        if ($ref->hasProperty(name:'helper')) {
             // Got our helpers right here.
             // Let's hope that other implementations use the same variable name.
             // We store the helpers here, because we need them later for the
             // actual method analysis. It is possible to inject helpers.
             // This means that the helper may be someone else as it should be,
             // according to the key.
-            $this->helpers = $this->retrieveProperty($ref, 'helper', $data);
-            if (is_array($this->helpers) && !empty($this->helpers)) {
+            $this->helpers = $this->retrieveProperty(reflectionClass: $ref, objectName: 'helper', object: $data);
+            if (is_array(value: $this->helpers) && !empty($this->helpers)) {
                 // We got ourselves some classes to analyse.
-                $this->pool->codegenHandler->setCodegenAllowed(false);
+                $this->pool->codegenHandler->setCodegenAllowed(bool:false);
                 $result = $this->pool->render->renderExpandableChild(
-                    $this->pool->createClass(Model::class)
-                        ->setName($this->pool->messages->getHelp('aimeosViewHelpers'))
-                        ->setType('class internals magical factory')
-                        ->addParameter(static::PARAM_DATA, $this->helpers)
-                        ->setHelpid('aimeosViewExisting')
-                        ->injectCallback($this->pool->createClass(ThroughClassList::class))
+                    model: $this->pool->createClass(classname: Model::class)
+                        ->setName(name: $this->pool->messages->getHelp('aimeosViewHelpers'))
+                        ->setType(type: 'class internals magical factory')
+                        ->addParameter(name: static::PARAM_DATA, value: $this->helpers)
+                        ->setHelpid(helpId: 'aimeosViewExisting')
+                        ->injectCallback(object: $this->pool->createClass(classname: ThroughClassList::class))
                 );
-                $this->pool->codegenHandler->setCodegenAllowed(true);
+                $this->pool->codegenHandler->setCodegenAllowed(bool: true);
             }
         }
 
@@ -200,20 +188,11 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
         // 3.) Replace the list with the ones from the already existing helpers
         // 4.) Analyse them all!
 
-        // Get a list of the core view helpers
-        // Get the core view helpers directory
-
-        if (class_exists(HelperBase::class)) {
-            $ref = new ReflectionClass(HelperBase::class);
-        } else {
-            $ref = new ReflectionClass(BaseHelperBase::class);
-        }
-
         // Replace the ones in there with the already instantiated ones from the
         // helper array.
         foreach ($this->helpers as $key => $helperObject) {
-            $ref = new ReflectionClass($helperObject);
-            $reflectionList[$key] = $ref->getMethod(static::METHOD);
+            $ref = new ReflectionClass(objectOrClass: $helperObject);
+            $reflectionList[$key] = $ref->getMethod(name: static::METHOD);
         }
 
         if (empty($reflectionList)) {
@@ -222,15 +201,15 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
 
         // Dump them, like there is no tomorrow.
         return $this->pool->render->renderExpandableChild(
-            $this->pool->createClass(Model::class)
-                ->setName($this->pool->messages->getHelp('aimeosViewFactory'))
-                ->setType('class internals view magic')
-                ->addParameter(static::PARAM_DATA, $reflectionList)
+            $this->pool->createClass(classname: Model::class)
+                ->setName(name: $this->pool->messages->getHelp('aimeosViewFactory'))
+                ->setType(type: 'class internals view magic')
+                ->addParameter(name: static::PARAM_DATA, value: $reflectionList)
                 // Tell the callback to pass on the factory name.
                 // Thanks to the magic factory, we must use this one.
-                ->addParameter(static::PARAM_IS_FACTORY_METHOD, true)
-                ->setHelpid('aimeosViewInfo')
-                ->injectCallback($this->pool->createClass(ThroughMethods::class))
+                ->addParameter(name: static::PARAM_IS_FACTORY_METHOD, value: true)
+                ->setHelpid(helpId: 'aimeosViewInfo')
+                ->injectCallback(object: $this->pool->createClass(classname: ThroughMethods::class))
         );
     }
 }

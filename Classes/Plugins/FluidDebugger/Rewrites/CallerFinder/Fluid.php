@@ -66,7 +66,9 @@ class Fluid extends AbstractFluid
     {
         // Resolve the layout file without any hacks by the framework.
         return $this->renderingContext->getTemplatePaths()
-            ->getLayoutPathAndFilename((string)$this->parsedTemplate->getLayoutName($this->renderingContext));
+            ->getLayoutPathAndFilename(
+                layoutName: (string)$this->parsedTemplate->getLayoutName($this->renderingContext)
+            );
     }
 
     /**
@@ -75,7 +77,7 @@ class Fluid extends AbstractFluid
     protected function getPartialPath(): string
     {
         $result = static::FLUID_NOT_AVAILABLE;
-        $identifier = explode('_', $this->parsedTemplate->getIdentifier());
+        $identifier = explode(separator: '_', string: $this->parsedTemplate->getIdentifier());
         // The thing here is, that this identifier is actually not the real
         // identifier. The one used to get the 'filename' looks like:
         // partial_Deep/Blargh_8dd0b1c4bad125962c0e339d5d5012c10226f77f
@@ -83,21 +85,21 @@ class Fluid extends AbstractFluid
         // partial_Deep_Blargh_8dd0b1c4bad125962c0e339d5d5012c10226f77f
         // We are using the hash value, hoping not to run into any
         // collision.
-        if (!isset($identifier[count($identifier) - 1])) {
+        if (!isset($identifier[count(value: $identifier) - 1])) {
             // No hash, no filename!
             return $result;
         }
         $templatePath = $this->renderingContext->getTemplatePaths();
 
         try {
-            $templatePathRef = new ReflectionClass($templatePath);
-            if ($templatePathRef->hasProperty('resolvedIdentifiers')) {
-                $resolvedIdentifiersRef = $templatePathRef->getProperty('resolvedIdentifiers');
-                $resolvedIdentifiers = $resolvedIdentifiersRef->getValue($templatePath);
+            $templatePathRef = new ReflectionClass(objectOrClass: $templatePath);
+            if ($templatePathRef->hasProperty(name: 'resolvedIdentifiers')) {
+                $resolvedIdentifiersRef = $templatePathRef->getProperty(name: 'resolvedIdentifiers');
+                $resolvedIdentifiers = $resolvedIdentifiersRef->getValue(object: $templatePath);
                 $result = $this->resolveTemplateName(
-                    $resolvedIdentifiers,
-                    $identifier[count($identifier) - 1],
-                    $templatePath
+                    resolvedIdentifiers: $resolvedIdentifiers,
+                    hash: $identifier[count($identifier) - 1],
+                    templatePath: $templatePath
                 );
             }
         } catch (Throwable) {
@@ -118,15 +120,18 @@ class Fluid extends AbstractFluid
      * @return string
      *   The actual template name.
      */
-    protected function resolveTemplateName(array $resolvedIdentifiers, string $hash, TemplatePaths $templatePath): string
-    {
+    protected function resolveTemplateName(
+        array $resolvedIdentifiers,
+        string $hash,
+        TemplatePaths $templatePath
+    ): string {
         if (!isset($resolvedIdentifiers['partials'])) {
             // Unable to identify the partial.
             return static::FLUID_NOT_AVAILABLE;
         }
 
         foreach ($resolvedIdentifiers['partials'] as $fileName => $realIdentifier) {
-            if (str_contains($realIdentifier, $hash)) {
+            if (str_contains(haystack: $realIdentifier, needle: $hash)) {
                 // We've got our filename!
                 // The filename is actually the path relative to the partials
                 // directory, so we need to resolve it via the template paths class.
@@ -139,9 +144,9 @@ class Fluid extends AbstractFluid
                 // because the file does not exist.
                 // We simply remove the file ending and let the template paths
                 // class do the rest.
-                $info = pathinfo($fileName);
+                $info = pathinfo(path: $fileName);
                 return $templatePath->getPartialPathAndFilename(
-                    $info['dirname'] . '/' . $info['filename']
+                    partialName: $info['dirname'] . '/' . $info['filename']
                 );
             }
         }

@@ -115,8 +115,16 @@ class DebugViewHelper extends AbstractViewHelper
      */
     public function initializeArguments(): void
     {
-        $this->registerArgument(static::ARGUMENT_VALUE, 'mixed', 'The variable we want to analyse.');
-        $this->registerArgument(static::ARGUMENT_TITLE, 'string', 'The optional title for the analysis output.');
+        $this->registerArgument(
+            name: static::ARGUMENT_VALUE,
+            type: 'mixed',
+            description: 'The variable we want to analyse.'
+        );
+        $this->registerArgument(
+            name: static::ARGUMENT_TITLE,
+            type: 'string',
+            description: 'The optional title for the analysis output.'
+        );
     }
 
     /**
@@ -132,14 +140,15 @@ class DebugViewHelper extends AbstractViewHelper
         try {
             $this->children = $this->renderChildren();
         } catch (Throwable) {
+            // Do nothing.
         }
 
         Pool::createPool();
         $view = $this->viewHelperVariableContainer->getView();
         $registry = Krexx::$pool->registry;
-        $registry->set(static::REGISTRY_VIEW, $view);
-        $registry->set(static::REGISTRY_VIEW_REFLECTION, new ReflectionClass($view));
-        $registry->set(static::REGISTRY_RENDERING_CONTEXT, $this->renderingContext);
+        $registry->set(key: static::REGISTRY_VIEW, value: $view);
+        $registry->set(key: static::REGISTRY_VIEW_REFLECTION, value: new ReflectionClass(objectOrClass: $view));
+        $registry->set(key: static::REGISTRY_RENDERING_CONTEXT, value: $this->renderingContext);
         Registration::activatePlugin(
             FluidConfiguration::class
         );
@@ -149,9 +158,9 @@ class DebugViewHelper extends AbstractViewHelper
         Registration::deactivatePlugin(
             FluidConfiguration::class
         );
-        $registry->set(static::REGISTRY_VIEW, null);
-        $registry->set(static::REGISTRY_VIEW_REFLECTION, null);
-        $registry->set(static::REGISTRY_RENDERING_CONTEXT, null);
+        $registry->set(key: static::REGISTRY_VIEW, value: null);
+        $registry->set(key: static::REGISTRY_VIEW_REFLECTION, value: null);
+        $registry->set(key: static::REGISTRY_RENDERING_CONTEXT, value: null);
 
         return '';
     }

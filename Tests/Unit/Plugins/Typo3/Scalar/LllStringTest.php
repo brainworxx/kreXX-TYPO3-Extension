@@ -49,7 +49,6 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(LllString::class, 'canHandle')]
 #[CoversMethod(LllString::class, 'resolveExtPath')]
 #[CoversMethod(LllString::class, '__construct')]
-#[CoversMethod(LllString::class, 'handle')]
 #[CoversMethod(LllString::class, 'isActive')]
 #[CoversMethod(LllString::class, 'isDomainTranslation')]
 class LllStringTest extends AbstractHelper

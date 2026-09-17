@@ -86,13 +86,15 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
      * @return string
      *   The generated markup.
      */
-    public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
-    {
+    public function handle(
+        ?AbstractCallback $callback = null,
+        ?Model $model = null
+    ): string {
         $result = '';
         $params = $callback->getParameters();
 
         // Get a first impression.
-        if (!$this->checkClassName($params[static::PARAM_REF])) {
+        if (!$this->checkClassName(reflectionClass: $params[static::PARAM_REF])) {
             // Early return, we skip this one.
             return $result;
         }
@@ -100,27 +102,38 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
         // Retrieve all piled up receiver objects. We may have decorators
         // inside of decorators.
         $allReceivers = [];
-        $methods = $this->retrieveMethods($params, $allReceivers);
+        $methods = $this->retrieveMethods(
+            params: $params,
+            allReceivers: $allReceivers
+        );
 
         if (!empty($methods)) {
             // Got to dump them all!
-            $result .= $this->pool->render->renderExpandableChild($this->pool->createClass(Model::class)
-                ->setName($this->pool->messages->getHelp('aimeosUndecoratedMeth'))
-                ->setType('class internals decorator')
-                ->addParameter(static::PARAM_DATA, $methods)
-                ->setHelpid('aimeosDecoratorsInfo')
-                ->injectCallback($this->pool->createClass(ThroughMethods::class)));
+            $result .= $this->pool->render->renderExpandableChild(
+                model: $this->pool->createClass(classname: Model::class)
+                    ->setName(name: $this->pool->messages->getHelp(key: 'aimeosUndecoratedMeth'))
+                    ->setType(type: 'class internals decorator')
+                    ->addParameter(name: static::PARAM_DATA, value: $methods)
+                    ->setHelpid(helpId: 'aimeosDecoratorsInfo')
+                    ->injectCallback(object: $this->pool->createClass(
+                        classname: ThroughMethods::class)
+                    )
+            );
         }
 
         // Do a normal analysis of all receiver objects.
         if (!empty($allReceivers)) {
-            $this->pool->codegenHandler->setCodegenAllowed(false);
-            $result .= $this->pool->render->renderExpandableChild($this->pool->createClass(Model::class)
-                ->setName($this->pool->messages->getHelp('aimeosDecoratedObj'))
-                ->setType('class internals decorator')
-                ->addParameter(static::PARAM_DATA, $allReceivers)
-                ->injectCallback($this->pool->createClass(ThroughClassList::class)));
-            $this->pool->codegenHandler->setCodegenAllowed(true);
+            $this->pool->codegenHandler->setCodegenAllowed(bool: false);
+            $result .= $this->pool->render->renderExpandableChild(
+                model: $this->pool->createClass(classname: Model::class)
+                    ->setName(name: $this->pool->messages->getHelp('aimeosDecoratedObj'))
+                    ->setType(type: 'class internals decorator')
+                    ->addParameter(name: static::PARAM_DATA, value: $allReceivers)
+                    ->injectCallback(object: $this->pool->createClass(
+                        classname: ThroughClassList::class)
+                    )
+            );
+            $this->pool->codegenHandler->setCodegenAllowed(bool: true);
         }
 
         return $result;
@@ -138,29 +151,31 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
      * @return string[]
      *   The  methods we need to analyse.
      */
-    protected function retrieveMethods(array $params, array &$allReceivers): array
-    {
-        $receiver = $this->retrieveReceiverObject($params[static::PARAM_DATA], $params[static::PARAM_REF]);
+    protected function retrieveMethods(
+        array $params,
+        array &$allReceivers
+    ): array {
+        $receiver = $this->retrieveReceiverObject(
+            data: $params[static::PARAM_DATA],
+            ref: $params[static::PARAM_REF]
+        );
         $methods = [];
         while ($receiver !== false) {
-            $methods = $this->retrievePublicMethods($params[static::PARAM_REF]);
+            $methods = $this->retrievePublicMethods(ref: $params[static::PARAM_REF]);
             $allReceivers[] = $receiver;
 
             try {
-                $ref = new ReflectionClass($receiver);
+                $ref = new ReflectionClass(objectOrClass: $receiver);
             } catch (ReflectionException) {
                 // We skip this one.
-                return  $methods;
+                return $methods;
             }
 
             // Get the not-decorated methods on the way.
-            $methods = array_diff_key(
-                $this->retrievePublicMethods($ref),
-                $methods
-            );
+            $methods = array_diff_key($this->retrievePublicMethods(ref: $ref), $methods);
 
             // Going deeper.
-            $receiver = $this->retrieveReceiverObject($receiver, $ref);
+            $receiver = $this->retrieveReceiverObject(data: $receiver, ref: $ref);
         }
 
         return $methods;
@@ -179,7 +194,7 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
     {
         // We only check Aimeos classes.
         do {
-            if (str_starts_with($reflectionClass->getNamespaceName(), 'Aimeos')) {
+            if (str_starts_with(haystack: $reflectionClass->getNamespaceName(), needle: 'Aimeos')) {
                 return true;
             }
             $reflectionClass = $reflectionClass->getParentClass();
@@ -202,25 +217,25 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
         // First, we need to get the name of the object we need to retrieve.
         // Get the __call() source code.
         try {
-            $methodRef = $ref->getMethod('__call');
+            $methodRef = $ref->getMethod(name: '__call');
         } catch (ReflectionException) {
             return '';
         }
 
         $source = $this->pool->fileService->readFile(
-            $methodRef->getFileName(),
-            $methodRef->getStartLine(),
-            $methodRef->getStartLine() + 5
+            filePath: $methodRef->getFileName(),
+            readFrom: $methodRef->getStartLine(),
+            readTo: $methodRef->getStartLine() + 5
         );
 
         // Check if we are passing methods, at all.
-        if (!str_contains($source, 'call_user_func')) {
+        if (!str_contains(haystack: $source, needle: 'call_user_func')) {
             return '';
         }
 
         // Still here? Now for the serious stuff.
         foreach ($this->internalObjectNames as $name => $needle) {
-            if (str_contains($source, $needle)) {
+            if (str_contains(haystack: $source, needle: $needle)) {
                 return $name;
             }
         }
@@ -239,8 +254,10 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
      * @return false|object
      *   Either a false, or the object that receives all method calls.
      */
-    protected function retrieveReceiverObject(mixed $data, ReflectionClass $ref): object|false
-    {
+    protected function retrieveReceiverObject(
+        mixed $data,
+        ReflectionClass $ref
+    ): object|false {
         $objectName = $this->retrieveReceiverObjectName($ref);
         if (empty($objectName)) {
             // Unable to retrieve the object name.
@@ -253,8 +270,12 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
         // to actually get it.
         $parentReflection = $ref;
         while (!empty($parentReflection)) {
-            $receiver = $this->retrieveProperty($parentReflection, $objectName, $data);
-            if (is_object($receiver)) {
+            $receiver = $this->retrieveProperty(
+                reflectionClass: $parentReflection,
+                objectName: $objectName,
+                object: $data
+            );
+            if (is_object(value: $receiver)) {
                 return $receiver;
             }
 
@@ -278,7 +299,7 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
     protected function retrievePublicMethods(ReflectionClass $ref): array
     {
         $result = [];
-        foreach ($ref->getMethods(ReflectionMethod::IS_PUBLIC) as $refMethod) {
+        foreach ($ref->getMethods(filter: ReflectionMethod::IS_PUBLIC) as $refMethod) {
             $result[$refMethod->name] = $refMethod;
         }
 

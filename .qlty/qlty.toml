@@ -6,7 +6,6 @@ exclude_patterns = [
     "**/Private/Partials/**",
     "**/Private/Templates/**",
     "**/Configuration/**",
-    "ext_tables.php",
     "ext_emconf.php",
     "ext_localconf.php",
 ]
@@ -17,7 +16,7 @@ test_patterns = [
 ]
 
 [runtimes.enabled]
-php = "7.4"
+php = "8.2"
 
 [smells]
 mode = "comment"

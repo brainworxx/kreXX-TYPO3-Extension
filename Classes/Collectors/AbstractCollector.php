@@ -131,9 +131,12 @@ abstract class AbstractCollector implements ControllerConstInterface, ConfigCons
         Pool::createPool();
         $this->pool = Krexx::$pool;
         if (isset($GLOBALS[static::BE_USER])) {
+            /** @var \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $user */
             $user = $GLOBALS[static::BE_USER];
-            $this->hasAccess = $user
-                ->check(static::BE_MODULES, static::PLUGIN_NAME);
+            $this->hasAccess = $user->check(
+                type: static::BE_MODULES,
+                value: static::PLUGIN_NAME
+            );
         }
         if ($this->hasAccess && isset($user->uc[static::MODULE_DATA][static::MODULE_KEY])) {
             $this->userUc = $user->uc[static::MODULE_DATA][static::MODULE_KEY];
@@ -143,7 +146,7 @@ abstract class AbstractCollector implements ControllerConstInterface, ConfigCons
     /**
      * Assigning stuff to the view.
      *
-     * @param \TYPO3\CMS\Fluid\View\AbstractTemplateView|\TYPO3\CMS\Backend\Template\ModuleTemplate $view
+     * @param \TYPO3\CMS\Backend\Template\ModuleTemplate $view
      */
     abstract public function assignData($view): void;
 }

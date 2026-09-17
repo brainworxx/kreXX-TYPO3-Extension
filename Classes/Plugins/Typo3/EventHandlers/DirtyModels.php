@@ -87,13 +87,25 @@ class DirtyModels implements EventHandlerInterface
         $msg = $this->pool->messages;
         try {
             try {
-                $model->addToJson($msg->getHelp('TYPO3ModelIsDirty'), $this->createReadableBoolean($data->_isDirty()));
+                $model->addToJson(
+                    key: $msg->getHelp(key: 'TYPO3ModelIsDirty'),
+                    value: $this->createReadableBoolean(bool: $data->_isDirty())
+                );
             } catch (TooDirtyException) {
-                $model->addToJson($msg->getHelp('TYPO3ModelIsDirty'), $msg->getHelp('TYPO3ModelIsTooDirty'));
+                $model->addToJson(
+                    key: $msg->getHelp(key: 'TYPO3ModelIsDirty'),
+                    value: $msg->getHelp(key: 'TYPO3ModelIsTooDirty')
+                );
             }
 
-            $model->addToJson($msg->getHelp('TYPO3ModelIsAClone'), $this->createReadableBoolean($data->_isClone()));
-            $model->addToJson($msg->getHelp('TYPO3ModelIsNew'), $this->createReadableBoolean($data->_isNew()));
+            $model->addToJson(
+                key: $msg->getHelp(key: 'TYPO3ModelIsAClone'),
+                value: $this->createReadableBoolean(bool: $data->_isClone())
+            );
+            $model->addToJson(
+                key: $msg->getHelp(key: 'TYPO3ModelIsNew'),
+                value: $this->createReadableBoolean(bool: $data->_isNew())
+            );
         } catch (Throwable) {
             // Do nothing.
             // Somebody has messed with the models.

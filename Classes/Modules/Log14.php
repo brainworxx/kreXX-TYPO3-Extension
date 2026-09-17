@@ -58,16 +58,10 @@ class Log14 extends AbstractLog
      * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
      *
      */
-    public function getDataToStore(
-        ServerRequestInterface $request,
-        ResponseInterface $response
-    ): ModuleData {
+    public function getDataToStore(ServerRequestInterface $request, ResponseInterface $response): ModuleData
+    {
         return new ModuleData(
-            [
-                'files' => GeneralUtility::makeInstance(
-                    LogfileList::class
-                )->retrieveFileList()
-            ]
+            array: ['files' => GeneralUtility::makeInstance(LogfileList::class)->retrieveFileList()]
         );
     }
 }

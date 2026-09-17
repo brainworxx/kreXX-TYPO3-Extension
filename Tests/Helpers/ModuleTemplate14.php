@@ -55,7 +55,7 @@ class ModuleTemplate14 implements ViewInterface
         return new Response();
     }
 
-    public function assignMultiple(array $stuff): ViewInterface
+    public function assignMultiple(array $values): ViewInterface
     {
     }
 

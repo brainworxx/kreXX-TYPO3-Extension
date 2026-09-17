@@ -90,14 +90,14 @@ abstract class AbstractLog extends AbstractSubModule implements
         /** @var ViewFactoryInterface $viewFactory */
         $viewFactory = GeneralUtility::makeInstance(ViewFactoryInterface::class);
         $viewFactoryData = new ViewFactoryData(
-            null,
-            ['EXT:includekrexx/Resources/Private/Partials'],
-            ['EXT:includekrexx/Resources/Private/Layouts'],
-            'EXT:includekrexx/Resources/Private/Templates/Modules/' . $template . '.html',
-            null,
-            'html'
+            templateRootPaths: null,
+            partialRootPaths: ['EXT:includekrexx/Resources/Private/Partials'],
+            layoutRootPaths: ['EXT:includekrexx/Resources/Private/Layouts'],
+            templatePathAndFilename: 'EXT:includekrexx/Resources/Private/Templates/Modules/' . $template . '.html',
+            request: null,
+            format: 'html'
         );
-        return $viewFactory->create($viewFactoryData);
+        return $viewFactory->create(data: $viewFactoryData);
     }
 
     /**
@@ -117,7 +117,7 @@ abstract class AbstractLog extends AbstractSubModule implements
      */
     public function getLabel(): string
     {
-        return static::translate(static::TRANSLATION_PREFIX . 'mlang_tabs_tab');
+        return static::translate(key: static::TRANSLATION_PREFIX . 'mlang_tabs_tab');
     }
 
     /**
@@ -136,13 +136,13 @@ abstract class AbstractLog extends AbstractSubModule implements
         // Handling an empty log file list.
         if (empty($filelist['files'])) {
             return $this->retrieveKrexxMessages() . $this->renderMessage(
-                static::translate(static::TRANSLATION_PREFIX . 'log.noresult'),
-                static::MESSAGE_SEVERITY_INFO
+                text: static::translate(static::TRANSLATION_PREFIX . 'log.noresult'),
+                severity: static::MESSAGE_SEVERITY_INFO
             );
         }
 
-        $view = $this->createView('Log');
-        $view->assignMultiple($filelist);
+        $view = $this->createView(template: 'Log');
+        $view->assignMultiple(values: $filelist);
 
         return $this->retrieveKrexxMessages() . $view->render();
     }
@@ -182,8 +182,8 @@ abstract class AbstractLog extends AbstractSubModule implements
      */
     protected function renderMessage(string $text, string $severity): string
     {
-        $view = $this->createView('Message');
-        $view->assignMultiple(['text' => $text, 'severity' => $severity]);
+        $view = $this->createView(template: 'Message');
+        $view->assignMultiple(values: ['text' => $text, 'severity' => $severity]);
         return $view->render();
     }
 
@@ -201,11 +201,11 @@ abstract class AbstractLog extends AbstractSubModule implements
 
         foreach (Krexx::$pool->messages->getMessages() as $message) {
             $renderedMessages .= $this->renderMessage(
-                static::translate(
+                text: static::translate(
                     static::TRANSLATION_PREFIX . $message->getKey(),
                     $message->getArguments()
                 ),
-                static::MESSAGE_SEVERITY_ERROR
+                severity: static::MESSAGE_SEVERITY_ERROR
             );
         }
 

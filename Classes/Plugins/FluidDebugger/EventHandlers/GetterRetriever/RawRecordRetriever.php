@@ -76,6 +76,8 @@ class RawRecordRetriever extends AbstractGetterRetriever
             return [];
         }
 
-        return $this->processObjectValues($ref->retrieveValue($ref->getProperty($this->propertyName)));
+        return $this->processObjectValues(values: $ref->retrieveValue(
+            refProperty: $ref->getProperty(name: $this->propertyName))
+        );
     }
 }

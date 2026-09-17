@@ -71,7 +71,7 @@ class ThroughMethods extends AbstractCallback implements ConstInterface, Callbac
         $isFactoryMethod = isset($this->parameters[static::PARAM_IS_FACTORY_METHOD]);
         $result = '';
         /** @var \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods $thoughMethods */
-        $thoughMethods = $this->pool->createClass(IterateThroughMethods::class);
+        $thoughMethods = $this->pool->createClass(classname: IterateThroughMethods::class);
 
         /** @var \ReflectionMethod $reflectionMethod */
         foreach ($data as $factoryName => $reflectionMethod) {

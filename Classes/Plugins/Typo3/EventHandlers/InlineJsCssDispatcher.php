@@ -66,7 +66,7 @@ class InlineJsCssDispatcher implements EventHandlerInterface, ConfigConstInterfa
         ?Model $model = null
     ): string {
         // We do this only when we are not logging.
-        if ($this->pool->config->getSetting(static::SETTING_DESTINATION) !== static::VALUE_FILE) {
+        if ($this->pool->config->getSetting(name: static::SETTING_DESTINATION) !== static::VALUE_FILE) {
             $jsSources = $model->getData();
             if (!empty($jsSources)) {
                 /** @var AssetCollector $collector */
@@ -74,16 +74,14 @@ class InlineJsCssDispatcher implements EventHandlerInterface, ConfigConstInterfa
                 // We enforce a nonce and add it to the bottom.
                 // Otherwise, it may not get rendered.
                 $collector->addInlineJavaScript(
-                    'krexxDomTools',
-                    '(function(){' . $jsSources . '})();',
-                    [],
-                    ['priority' => false, 'useNonce' => true]
+                    identifier: 'krexxDomTools',
+                    source: '(function(){' . $jsSources . '})();',
+                    options: ['priority' => false, 'useNonce' => true]
                 );
                 $collector->addInlineStyleSheet(
-                    'krexxInlineCss',
-                    $model->getNormal(),
-                    [],
-                    ['priority' => false, 'useNonce' => true]
+                    identifier: 'krexxInlineCss',
+                    source: $model->getNormal(),
+                    options: ['priority' => false, 'useNonce' => true]
                 );
             }
         }

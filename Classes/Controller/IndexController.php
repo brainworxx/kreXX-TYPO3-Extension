@@ -61,7 +61,9 @@ class IndexController extends AbstractController implements ConstInterface
 
         // Has kreXX something to say? Maybe a write-protected logfolder?
         $this->retrieveKrexxMessages();
-        $this->moduleTemplate->assignMultiple(['settings' => $this->settingsModel]);
+        $this->moduleTemplate->assignMultiple(
+            values: ['settings' => $this->settingsModel]
+        );
 
         return $this->moduleTemplateRender();
     }
@@ -77,21 +79,26 @@ class IndexController extends AbstractController implements ConstInterface
     {
         if ($settings === null) {
             // Huh, someone was messing with the URL, redirect back to index.
-            return $this->redirect('index');
+            return $this->redirect(actionName: 'index');
         }
         // Check for writing permission.
         // Check the actual writing process.
-        $jsonPath = $settings->prepareFileName($this->pool->config->getPathToConfigFile());
-        if (is_writable(dirname($jsonPath)) && file_put_contents($jsonPath, $settings->generateContent())) {
+        $jsonPath = $settings->prepareFileName(
+            $this->pool->config->getPathToConfigFile()
+        );
+        if (
+            is_writable(filename: dirname(path: $jsonPath))
+            && file_put_contents(filename: $jsonPath, data: $settings->generateContent())
+        ) {
             // File was saved successfully.
             $this->addFlashMessage(
-                messageBody: static::translate(static::SAVE_SUCCESS_TEXT, [$jsonPath]),
+                messageBody: static::translate(key: static::SAVE_SUCCESS_TEXT, arguments: [$jsonPath]),
                 messageTitle: static::translate(static::SAVE_SUCCESS_TITLE)
             );
         } else {
             // Something went wrong here!
             $this->addFlashMessage(
-                messageBody: static::translate(static::FILE_NOT_WRITABLE, [$jsonPath]),
+                messageBody: static::translate(key: static::FILE_NOT_WRITABLE, arguments: [$jsonPath]),
                 messageTitle: static::translate(static::SAVE_FAIL_TITLE),
                 severity: ContextualFeedbackSeverity::ERROR
             );
@@ -99,24 +106,26 @@ class IndexController extends AbstractController implements ConstInterface
 
         // Retrieve the failed messages from kreXX and redirect back.
         $this->retrieveKrexxMessages();
-        return $this->redirect('index');
+        return $this->redirect(actionName: 'index');
     }
 
     /**
      * Dispatch a logfile.
      *
-     * @param ServerRequest|null $serverRequest
+     * @param ServerRequest $serverRequest
      *
      * @return \TYPO3\CMS\Core\Http\NullResponse
      */
-    public function dispatchAction(?ServerRequest $serverRequest = null): NullResponse
+    public function dispatchAction(ServerRequest $serverRequest): NullResponse
     {
         // No directory traversal for you!
         // Get the filepath.
         $rawId = $serverRequest->getQueryParams()['tx_includekrexx_tools_includekrexxkrexxconfiguration']['id'];
-        $file = $this->pool->config->getLogDir() . preg_replace('/[^0-9]/', '', (string) $rawId) . '.Krexx.html';
+        $file = $this->pool->config->getLogDir() .
+            preg_replace(pattern: '/[^0-9]/', replacement: '', subject: (string)$rawId) .
+            '.Krexx.html';
         // We open and then send the file.
-        $this->dispatchFile($file);
+        $this->dispatchFile(path: $file);
 
         return GeneralUtility::makeInstance(NullResponse::class);
     }

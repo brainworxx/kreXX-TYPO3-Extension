@@ -59,7 +59,9 @@ class SettingsRetriever extends AbstractGetterRetriever
             return [];
         }
 
-        $settingsPropertyRef = $ref->getProperty('settings');
-        return $this->processObjectValues($ref->retrieveValue($settingsPropertyRef));
+        $settingsPropertyRef = $ref->getProperty(name: 'settings');
+        return $this->processObjectValues(
+            values: $ref->retrieveValue(refProperty: $settingsPropertyRef)
+        );
     }
 }

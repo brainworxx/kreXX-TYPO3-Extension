@@ -67,11 +67,7 @@ class Log extends AbstractLog
     public function getDataToStore(ServerRequestInterface $request): ModuleData
     {
         return new ModuleData(
-            [
-                'files' => GeneralUtility::makeInstance(
-                    LogfileList::class
-                )->retrieveFileList()
-            ]
+            array: ['files' => GeneralUtility::makeInstance(LogfileList::class)->retrieveFileList()]
         );
     }
 }

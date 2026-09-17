@@ -45,9 +45,6 @@ use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility as UnitLocalizationUtility;
-use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility12 as UnitLocalizationUtility12;
-use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility14 as UnitLocalizationUtility14;
 
 /**
  * LLL string parser.
@@ -82,9 +79,9 @@ class LllString extends AbstractScalarAnalysis
                 $this->extensionKeys = ExtensionManagementUtility::getLoadedExtensionListArray();
             } catch (Throwable) {
                 // Do nothing.
-                // Unable to retrieve the extension keys.Maybe we are running in a context where this is not possible.
-                // Or someone messed with the installation.
-                // This is a debugger after all.
+                // Unable to retrieve the extension keys. Maybe we are running
+                // in a context where this is not possible. Or someone messed
+                // with the installation. This is a debugger after all.
             }
         }
     }
@@ -112,13 +109,16 @@ class LllString extends AbstractScalarAnalysis
     protected function isDomainTranslation(string $string): bool
     {
         // Get a first impression.
-        if (!str_contains($string, ':') && !str_contains($string, '.')) {
-            // We need a ":" and a "." in there somewhere.
+        // We need a ":" and a "." in there somewhere.
+        if (
+            !str_contains(haystack: $string, needle: ':')
+            && !str_contains(haystack: $string, needle: '.')
+        ) {
             return false;
         }
 
-        $parts = explode('.', $string);
-        return (!empty($parts[0]) && in_array($parts[0], $this->extensionKeys));
+        $parts = explode(separator: '.', string: $string);
+        return (!empty($parts[0]) && in_array(needle: $parts[0], haystack: $this->extensionKeys));
     }
 
     /**
@@ -133,24 +133,28 @@ class LllString extends AbstractScalarAnalysis
      */
     public function canHandle($string, Model $model): bool
     {
-        if (!str_contains($string, 'LLL:') && !$this->isDomainTranslation($string)) {
+        if (
+            !str_contains(haystack: $string, needle: 'LLL:')
+            && !$this->isDomainTranslation(string: $string)
+        ) {
             // Early return. Not much to do here.
             return false;
         }
 
         // Retrieve the EXT path from the framework.
-        set_error_handler(function (): void {
-            // Do nothing.
-        });
+        set_error_handler($this->pool->retrieveErrorCallback());
 
         try {
             // Add the string directly to the model
-            $trans = $this->localisationUtility::translate($string);
+            $trans = $this->localisationUtility::translate(key: $string);
             if (!empty($trans)) {
-                $model->addToJson($this->pool->messages->getHelp('TYPO3Trans'), $trans);
+                $model->addToJson(
+                    key: $this->pool->messages->getHelp('TYPO3Trans'),
+                    value: $trans
+                );
             }
 
-            $this->resolveExtPath($string, $model);
+            $this->resolveExtPath(string: $string, model: $model);
         } catch (Throwable) {
             // Huh, someone messed with the translations.
         }
@@ -169,15 +173,22 @@ class LllString extends AbstractScalarAnalysis
      */
     protected function resolveExtPath(string $string, Model $model): void
     {
-        $string = preg_replace('/^LLL:(.+):[^:]+$/', "$1", $string);
+        $string = preg_replace(
+            pattern: '/^LLL:(.+):[^:]+$/',
+            replacement: "$1",
+            subject: $string
+        );
 
-        if (str_starts_with($string, 'EXT:')) {
-            $string = GeneralUtility::getFileAbsFileName($string);
-            $model->addToJson($this->pool->messages->getHelp('TYPO3ResPath'), $string);
-            if (!file_exists($string)) {
+        if (str_starts_with(haystack: $string, needle: 'EXT:')) {
+            $string = GeneralUtility::getFileAbsFileName(fileName: $string);
+            $model->addToJson(
+                key:$this->pool->messages->getHelp(key: 'TYPO3ResPath'),
+                value: $string
+            );
+            if (!file_exists(filename: $string)) {
                 $model->addToJson(
-                    $this->pool->messages->getHelp('TYPO3ResPathError'),
-                    $this->pool->messages->getHelp('TYPO3ResPathDoesNotExist')
+                    key: $this->pool->messages->getHelp(key: 'TYPO3ResPathError'),
+                    value: $this->pool->messages->getHelp(key: 'TYPO3ResPathDoesNotExist')
                 );
             }
         }
@@ -195,19 +206,5 @@ class LllString extends AbstractScalarAnalysis
     public function setLocalisationUtility(LocalizationUtility $object): void
     {
         $this->localisationUtility = $object;
-    }
-
-    /**
-     * Should not get called.
-     *
-     * We do not add another node to the output, just for a simple string.
-     *
-     * @return array
-     */
-    protected function handle(): array
-    {
-        // Do nothing.
-        // Should not get called.
-        return [];
     }
 }

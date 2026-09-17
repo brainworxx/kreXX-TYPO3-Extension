@@ -44,7 +44,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionException;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use ReflectionClass;
-use TYPO3Fluid\Fluid\View\ViewInterface;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 
 /**
@@ -152,9 +151,10 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
     {
         // Handling the injections.
         $this->varname = static::FLUID_VARIABLE;
-        $this->view = $this->pool->registry->get(DebugViewHelper::REGISTRY_VIEW);
-        $this->viewReflection = $this->pool->registry->get(DebugViewHelper::REGISTRY_VIEW_REFLECTION);
-        $this->renderingContext = $this->pool->registry->get(DebugViewHelper::REGISTRY_RENDERING_CONTEXT);
+        $registry = $this->pool->registry;
+        $this->view = $registry->get(key: DebugViewHelper::REGISTRY_VIEW);
+        $this->viewReflection = $registry->get(key: DebugViewHelper::REGISTRY_VIEW_REFLECTION);
+        $this->renderingContext = $registry->get(key: DebugViewHelper::REGISTRY_RENDERING_CONTEXT);
 
         // Assign the parsed template and the render type.
         $this->assignParsedTemplateRenderType();
@@ -165,15 +165,15 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
      */
     protected function assignParsedTemplateRenderType(): void
     {
-        if (!$this->viewReflection->hasProperty('renderingStack')) {
+        if (!$this->viewReflection->hasProperty(name: 'renderingStack')) {
             // No rendering stack, no template file  :-(
             $this->error = true;
             return;
         }
 
         try {
-            $renderingStackRef = $this->viewReflection->getProperty('renderingStack');
-            $renderingStack = $renderingStackRef->getValue($this->view);
+            $renderingStackRef = $this->viewReflection->getProperty(name: 'renderingStack');
+            $renderingStack = $renderingStackRef->getValue(object: $this->view);
         } catch (ReflectionException) {
             $this->error = true;
             return;
@@ -208,8 +208,12 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
                 static::TRACE_FILE => static::FLUID_NOT_AVAILABLE,
                 static::TRACE_LINE => static::FLUID_NOT_AVAILABLE,
                 static::TRACE_VARNAME => static::FLUID_VARIABLE,
-                static::TRACE_TYPE => $this->getType($messages->getHelp($helpKey), $this->varname, $data),
-                static::TRACE_DATE => date(static::TIME_FORMAT, time()),
+                static::TRACE_TYPE => $this->getType(
+                    headline: $messages->getHelp(key: $helpKey),
+                    varname: $this->varname,
+                    data: $data
+                ),
+                static::TRACE_DATE => date(format: static::TIME_FORMAT, timestamp: time()),
                 static::TRACE_URL => $this->getCurrentUrl(),
             ];
         }
@@ -219,7 +223,11 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
         $this->resolveLineAndVarName();
 
         if (empty($headline)) {
-            $type = $this->getType($messages->getHelp($helpKey), $this->varname, $data);
+            $type = $this->getType(
+                headline: $messages->getHelp($helpKey),
+                varname: $this->varname,
+                data: $data
+            );
         } else {
             $type = $headline;
         }
@@ -228,7 +236,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
             static::TRACE_LINE => $this->line,
             static::TRACE_VARNAME => $this->varname,
             static::TRACE_TYPE => $type,
-            static::TRACE_DATE => date(static::TIME_FORMAT, time()),
+            static::TRACE_DATE => date(format: static::TIME_FORMAT, timestamp: time()),
             static::TRACE_URL => $this->getCurrentUrl(),
         ];
     }
@@ -240,17 +248,21 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
      */
     protected function resolveLineAndVarName(): void
     {
-        $template = $this->pool->fileService->getFileContents($this->path, false);
+        $template = $this->pool->fileService->getFileContents(filePath: $this->path, showError: false);
         $counter = 0;
         // Split the contents of the file into lines, disregarding the used
         // line endings.
-        foreach (preg_split("/((\r?\n)|(\r\n?))/", $template) as $line => $content) {
+        foreach (preg_split(pattern: "/((\r?\n)|(\r\n?))/", subject: $template) as $line => $content) {
             // Remove the title attribute, if present.
-            $content = preg_replace('/\s*title="[^"]*"/i', '', $content);
+            $content = preg_replace(pattern: '/\s*title="[^"]*"/i', replacement: '', subject:  $content);
             foreach ($this->callPattern as $funcname) {
                 $name = [];
-                preg_match_all('/\s*' . $funcname[0] . '(.*)' . $funcname[1] . '\s*/u', $content, $name);
-                $this->retrieveNameLine($name, $line, $counter);
+                preg_match_all(
+                    pattern: '/\s*' . $funcname[0] . '(.*)' . $funcname[1] . '\s*/u',
+                    subject: $content,
+                    matches: $name
+                );
+                $counter = $this->retrieveNameLine(name: $name, line: $line, counter: $counter);
             }
         }
     }
@@ -258,12 +270,12 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
     /**
      * Retrieve the name and Line from, the regex result.
      */
-    protected function retrieveNameLine($name, $line, &$counter)
+    protected function retrieveNameLine(array $name, int $line, int $counter): int
     {
         if ($counter > 1) {
             $this->varname =  self::FLUID_VARIABLE;
             $this->line = self::FLUID_NOT_AVAILABLE;
-            return;
+            return $counter;
         }
 
         if (isset($name[1][0])) {
@@ -274,9 +286,11 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
         if (count($name[1]) === 1) {
             ++$counter;
             $this->varname = $this->checkForComplicatedStuff(
-                $this->pool->encodingService->encodeString($name[1][0])
+                varname: $this->pool->encodingService->encodeString(data: $name[1][0])
             );
         }
+
+        return $counter;
     }
 
     /**
@@ -315,12 +329,13 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
      */
     protected function getType(string $headline, string $varname, mixed $data): string
     {
-        if (is_object($data)) {
-            $type = get_class($data);
+        if (is_object(value: $data)) {
+            $type = get_class(object: $data);
         } else {
-            $type = gettype($data);
+            $type = gettype(value: $data);
         }
-        return $headline . $this->pool->messages->getHelp('fluidAnalysisOf') . $varname . ', ' . $type;
+        return $headline . $this->pool->messages->getHelp(key:'fluidAnalysisOf')
+            . $varname . ', ' . $type;
     }
 
     /**
@@ -340,13 +355,16 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
     protected function checkForComplicatedStuff(string $varname): string
     {
         // We check for : and -> to see if we are facing some inline stuff
-        if (str_contains($varname, ':') || str_contains($varname, '->')) {
+        if (
+            str_contains(haystack: $varname, needle: ':')
+            || str_contains(haystack: $varname, needle: '->')
+        ) {
             // Double escaping for the JS insert.
             // The things you have to do.
-            $code = htmlspecialchars(htmlspecialchars('<f:variable value="{')) .
+            $code = htmlspecialchars(htmlspecialchars(string: '<f:variable value="{')) .
                 $varname .
-                htmlspecialchars(htmlspecialchars('}" name="fluidvar" /> {'));
-            $this->pool->codegenHandler->setComplicatedWrapperLeft($code);
+                htmlspecialchars(htmlspecialchars(string: '}" name="fluidvar" /> {'));
+            $this->pool->codegenHandler->setComplicatedWrapperLeft(wrapper: $code);
             $varname = static::FLUID_VARIABLE;
         }
 

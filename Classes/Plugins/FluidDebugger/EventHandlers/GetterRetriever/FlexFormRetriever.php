@@ -71,8 +71,8 @@ class FlexFormRetriever extends AbstractGetterRetriever
      */
     public function canHandle(object $object): bool
     {
-        return parent::canHandle($object)
-            && !method_exists($object, 'getSheets');
+        return parent::canHandle(object: $object)
+            && !method_exists(object_or_class: $object, method: 'getSheets');
     }
 
     /**
@@ -87,8 +87,8 @@ class FlexFormRetriever extends AbstractGetterRetriever
     public function handle(ReflectionClass $ref): array
     {
         $sheets = [];
-        if ($ref->hasProperty('sheets')) {
-            $sheets = $ref->retrieveValue($ref->getProperty('sheets'));
+        if ($ref->hasProperty(name: 'sheets')) {
+            $sheets = $ref->retrieveValue(refProperty: $ref->getProperty(name: 'sheets'));
         }
 
         // Now we need to flatten the sheets to a single level array
@@ -98,10 +98,10 @@ class FlexFormRetriever extends AbstractGetterRetriever
         $result = [];
         foreach ($sheets as $sheet) {
             foreach ($sheet as $fieldKey => $fieldValue) {
-                if (array_key_exists($fieldKey, $result)) {
+                if (array_key_exists(key: $fieldKey, array: $result)) {
                     // Key already exists, we can not retrieve this value.
                     $result[$fieldKey] = null;
-                    Krexx::$pool->messages->addMessage('brokenFlexFormDetected', [$fieldKey]);
+                    Krexx::$pool->messages->addMessage(key: 'brokenFlexFormDetected', args: [$fieldKey]);
                 } else {
                     $result[$fieldKey] = $fieldValue;
                 }

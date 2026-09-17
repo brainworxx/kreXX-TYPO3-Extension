@@ -58,20 +58,23 @@ class Getter extends OriginalGetter
         $this->retrieveMethodList($ref);
         // The 'get' method indicated dynamic fluid getter.
         // If there are no other getter methods, we do not show this section.
-        if (empty($this->normalGetter + $this->isGetter + $this->hasGetter) && !$ref->hasMethod('get')) {
+        if (
+            empty($this->normalGetter + $this->isGetter + $this->hasGetter)
+            && !$ref->hasMethod(name: 'get')
+        ) {
             // There are no getter methods in here.
             return '';
         }
 
-        return $this->pool->createClass(Model::class)
-            ->injectCallback($this->pool->createClass(ThroughGetter::class))
-            ->setName($this->pool->messages->getHelp('getter'))
-            ->setHelpid('getterHelpInfo')
-            ->setType($this->pool->messages->getHelp('classInternals'))
-            ->addParameter(static::PARAM_IS_GETTER, $this->isGetter)
-            ->addParameter(static::PARAM_REF, $ref)
-            ->addParameter(static::PARAM_NORMAL_GETTER, $this->normalGetter)
-            ->addParameter(static::PARAM_HAS_GETTER, $this->hasGetter)
+        return $this->pool->createClass(classname: Model::class)
+            ->injectCallback($this->pool->createClass(classname: ThroughGetter::class))
+            ->setName(name: $this->pool->messages->getHelp('getter'))
+            ->setHelpid(helpId: 'getterHelpInfo')
+            ->setType(type: $this->pool->messages->getHelp('classInternals'))
+            ->addParameter(name: static::PARAM_IS_GETTER, value: $this->isGetter)
+            ->addParameter(name: static::PARAM_REF, value: $ref)
+            ->addParameter(name: static::PARAM_NORMAL_GETTER, value: $this->normalGetter)
+            ->addParameter(name: static::PARAM_HAS_GETTER, value: $this->hasGetter)
             ->renderMe() . $this->pool->render->renderSingeChildHr();
     }
 }

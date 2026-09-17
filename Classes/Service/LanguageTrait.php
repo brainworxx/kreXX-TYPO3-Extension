@@ -62,10 +62,14 @@ trait LanguageTrait
      */
     public static function translate(string $key, ?array $arguments = null): ?string
     {
-        if (defined('KREXX_TEST_IN_PROGRESS')) {
+        if (defined(constant_name: 'KREXX_TEST_IN_PROGRESS')) {
             return $key;
         }
 
-        return LocalizationUtility::translate($key, ConstInterface::EXT_KEY, $arguments);
+        return LocalizationUtility::translate(
+            key: $key,
+            extensionName: ConstInterface::EXT_KEY,
+            arguments: $arguments
+        );
     }
 }

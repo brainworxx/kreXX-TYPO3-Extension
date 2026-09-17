@@ -50,7 +50,7 @@ class CheckOutput extends OrgCheckOutput
      */
     public function isAllowedIp(string $whitelist): bool
     {
-        return GeneralUtility::cmpIP($this->retrieveRemoteAddress(), $whitelist);
+        return GeneralUtility::cmpIP(baseIP: $this->retrieveRemoteAddress(), list: $whitelist);
     }
 
     /**
@@ -66,7 +66,7 @@ class CheckOutput extends OrgCheckOutput
         }
 
         /** @var \TYPO3\CMS\Core\Http\NormalizedParams $attribute */
-        $attribute = $GLOBALS['TYPO3_REQUEST']->getAttribute('normalizedParams');
+        $attribute = $GLOBALS['TYPO3_REQUEST']->getAttribute(name: 'normalizedParams');
         if (empty($attribute)) {
             return '';
         }

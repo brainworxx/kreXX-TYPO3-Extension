@@ -74,7 +74,7 @@ class Configuration implements PluginConfigInterface, Typo3ConstInterface
      */
     public function getVersion(): string
     {
-        return ExtensionManagementUtility::getExtensionVersion(static::EXT_KEY);
+        return ExtensionManagementUtility::getExtensionVersion(key:static::EXT_KEY);
     }
 
     /**
@@ -85,29 +85,29 @@ class Configuration implements PluginConfigInterface, Typo3ConstInterface
     public function exec(): void
     {
         // Resolving the __get().
-        Registration::registerEvent(PublicProperties::class . static::START_EVENT, Properties::class);
+        Registration::registerEvent(name: PublicProperties::class . static::START_EVENT, className: Properties::class);
 
         // Resolving the getter that get their values from a private array.
-        Registration::registerEvent(ThroughGetter::class . '::retrievePropertyValue::resolving', Getter::class);
+        Registration::registerEvent(name: ThroughGetter::class . '::retrievePropertyValue::resolving', className: Getter::class);
 
         // Resolving the magical class methods of the decorator pattern.
-        Registration::registerEvent(AnalyseMethods::class . static::START_EVENT, Decorators::class);
+        Registration::registerEvent(name: AnalyseMethods::class . static::START_EVENT, className: Decorators::class);
 
         // Resolving the magical factory for the view helpers (not to be confused
         // with fluid viewhelpers).
-        Registration::registerEvent(AnalyseMethods::class . static::START_EVENT, ViewFactory::class);
+        Registration::registerEvent(name: AnalyseMethods::class . static::START_EVENT, className: ViewFactory::class);
 
         // Replacing the magical factory name in the method analysis.
-        Registration::registerEvent(IterateThroughMethods::class . static::END_EVENT, ThroughMethods::class);
+        Registration::registerEvent(name: IterateThroughMethods::class . static::END_EVENT, className: ThroughMethods::class);
 
         // Adding additional debug methods.
-        Registration::registerEvent(AnalyseDebugMethods::class . static::START_EVENT, DebugMethods::class);
+        Registration::registerEvent(name: AnalyseDebugMethods::class . static::START_EVENT, className: DebugMethods::class);
 
         // No __toString for the db statement class.
-        Registration::addMethodToDebugBlacklist(StatementBase::class, '__toString');
+        Registration::addMethodToDebugBlacklist(className: StatementBase::class, methodName: '__toString');
 
         // Adding additional texts.
-        $extPath = ExtensionManagementUtility::extPath(static::EXT_KEY);
-        Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/aimeos.kreXX.ini');
+        $extPath = ExtensionManagementUtility::extPath(key: static::EXT_KEY);
+        Registration::registerAdditionalHelpFile(path: $extPath . 'Resources/Private/Language/aimeos.kreXX.ini');
     }
 }

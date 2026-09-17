@@ -60,8 +60,8 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
             return;
         }
 
-        $view->assign('config', $this->retrieveConfiguration());
-        $view->assign('dropdown', $this->retrieveDropDowns());
+        $view->assign(key: 'config', value: $this->retrieveConfiguration());
+        $view->assign(key: 'dropdown', value: $this->retrieveDropDowns());
     }
 
     /**
@@ -76,9 +76,13 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
         return [
             'skins' => $this->pool->config->getSkinList(),
             static::SETTING_DESTINATION => [
-                static::VALUE_BROWSER => static::translate(static::VALUE_BROWSER),
+                static::VALUE_BROWSER => static::translate(
+                    static::VALUE_BROWSER
+                ),
                 static::VALUE_FILE => static::translate(static::VALUE_FILE),
-                static::VALUE_BROWSER_IMMEDIATELY => static::translate(static::VALUE_BROWSER_IMMEDIATELY),
+                static::VALUE_BROWSER_IMMEDIATELY => static::translate(
+                    static::VALUE_BROWSER_IMMEDIATELY
+                ),
             ],
             'bool' => [
                 static::VALUE_TRUE => static::translate(static::VALUE_TRUE),
@@ -106,11 +110,12 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
      */
     protected function retrieveConfiguration(): array
     {
-        $pathParts = pathinfo($this->pool->config->getPathToConfigFile());
+        $pathParts = pathinfo(path: $this->pool->config->getPathToConfigFile());
         /** @var File $iniReader */
-        $iniReader = $this->pool->createClass(File::class)
-            ->loadFile($pathParts[static::PATHINFO_DIRNAME] . DIRECTORY_SEPARATOR .
-            $pathParts[static::PATHINFO_FILENAME] . '.');
+        $iniReader = $this->pool->createClass(classname: File::class)->loadFile(
+            path: $pathParts[static::PATHINFO_DIRNAME] . DIRECTORY_SEPARATOR .
+            $pathParts[static::PATHINFO_FILENAME] . '.'
+        );
 
         $fallbackOverwrites = SettingsGetter::getNewFallbackValues();
 
@@ -124,11 +129,12 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
             $group = $fallback[static::SECTION];
             $config[$settingsName] = [
                 static::SETTINGS_NAME => $settingsName,
-                static::SETTINGS_VALUE => $iniReader->getConfigFromFile($group, $settingsName),
+                static::SETTINGS_VALUE => $iniReader->getConfigFromFile(group: $group, name: $settingsName),
                 static::SETTINGS_USE_OWN_SETTINGS => true,
-                static::SETTINGS_FALLBACK => $fallbackOverwrites[$settingsName] ?? $fallback[static::SETTINGS_VALUE]
+                static::SETTINGS_FALLBACK => $fallbackOverwrites[$settingsName] ??
+                    $fallback[static::SETTINGS_VALUE]
             ];
-            $this->applyFallbackToConfig($config, $settingsName, $fallback);
+            $this->applyFallbackToConfig(config: $config, settingsName: $settingsName, fallback: $fallback);
         }
 
         return $config;
@@ -147,8 +153,11 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
      * @param string[] $fallback
      *   The fallback values.
      */
-    protected function applyFallbackToConfig(array &$config, string $settingsName, array $fallback): void
-    {
+    protected function applyFallbackToConfig(
+        array &$config,
+        string $settingsName,
+        array $fallback
+    ): void {
         // Check if we have a value. If not, we need to load the factory
         // settings. We also need to set the info, if we are using the
         // factory settings, at all.
@@ -164,7 +173,7 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
             $fallback[static::SETTINGS_VALUE];
 
         // Assign the mode-class.
-        if (in_array($settingsName, $this->expertOnly, true)) {
+        if (in_array(needle: $settingsName, haystack: $this->expertOnly, strict: true)) {
             $config[$settingsName][static::SETTINGS_MODE] = 'expert';
         }
     }

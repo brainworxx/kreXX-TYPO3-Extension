@@ -92,11 +92,11 @@ class Properties extends AbstractEventHandler implements
         $result = '';
 
         if ($data instanceof ItemIface) {
-            $result .= $this->extractValues(static::AIMEOS_B_DATA, $params);
+            $result .= $this->extractValues(name: static::AIMEOS_B_DATA, params: $params);
         } elseif (
             $data instanceof NodeIface || $data instanceof ViewIface || $data instanceof BaseViewIface
         ) {
-            $result .= $this->extractValues(static::AIMEOS_VALUES, $params);
+            $result .= $this->extractValues(name:static::AIMEOS_VALUES, params: $params);
         }
 
         // Return the generated markup.
@@ -127,16 +127,20 @@ class Properties extends AbstractEventHandler implements
             $parentReflection !== false
             && empty($result)
         ) {
-            $result = $this->retrieveProperty($parentReflection, $name, $params[static::PARAM_DATA]);
+            $result = $this->retrieveProperty(
+                reflectionClass: $parentReflection,
+                objectName: $name,
+                object: $params[static::PARAM_DATA]
+            );
             $parentReflection = $parentReflection->getParentClass();
         }
 
         // Huh, something went wrong here!
-        if (empty($result) || !is_array($result)) {
+        if (empty($result) || !is_array(value: $result)) {
             return '';
         }
 
-        return $this->dumpTheMagic($result);
+        return $this->dumpTheMagic(array: $result);
     }
 
     /**
@@ -151,23 +155,24 @@ class Properties extends AbstractEventHandler implements
     protected function dumpTheMagic(array $array): string
     {
         $result = '';
-
+        /** @var ThroughProperties $throughProperties */
+        $throughProperties = $this->pool->createClass(classname: ThroughProperties::class);
         foreach ($array as $key => $value) {
             // Could be anything.
             // We need to route it though the analysis hub.
-            if ($this->pool->createClass(ThroughProperties::class)->isPropertyNameNormal($key)) {
+            if ($throughProperties->isPropertyNameNormal(propName: $key)) {
                 $connectorType = static::CONNECTOR_NORMAL_PROPERTY;
             } else {
                 $connectorType = static::CONNECTOR_SPECIAL_CHARS_PROP;
             }
 
             $result .= $this->pool->routing->analysisHub(
-                $this->pool->createClass(Model::class)
-                    ->setData($value)
-                    ->setName($key)
-                    ->setConnectorType($connectorType)
-                    ->setCodegenType(static::CODEGEN_TYPE_PUBLIC)
-                    ->addJsonHint($this->pool->messages->getHelp('aimeosMagicProp'))
+                model: $this->pool->createClass(classname: Model::class)
+                    ->setData(data: $value)
+                    ->setName(name: $key)
+                    ->setConnectorType(type: $connectorType)
+                    ->setCodegenType(codeGenType: static::CODEGEN_TYPE_PUBLIC)
+                    ->addJsonHint(hint: $this->pool->messages->getHelp(key: 'aimeosMagicProp'))
             );
         }
 

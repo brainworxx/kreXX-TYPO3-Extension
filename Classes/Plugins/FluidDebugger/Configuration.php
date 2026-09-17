@@ -87,15 +87,15 @@ class Configuration implements PluginConfigInterface, Typo3ConstInterface
     public function exec(): void
     {
         // Registering the fluid connector class.
-        Registration::addRewrite(Connectors::class, FluidConnectors::class);
+        Registration::addRewrite(originalClass: Connectors::class, rewriteClass: FluidConnectors::class);
         // Registering the special source generation for methods.
-        Registration::addRewrite(Codegen::class, FluidCodegen::class);
+        Registration::addRewrite(originalClass: Codegen::class, rewriteClass: FluidCodegen::class);
         // Special caller finder for Fluid.
-        Registration::addRewrite(CallerFinder::class, CallerFinderFluid::class);
+        Registration::addRewrite(originalClass: CallerFinder::class, rewriteClass: CallerFinderFluid::class);
         // Move the getter to the same level as the public properties.
-        Registration::addRewrite(Getter::class, GetterFluid::class);
+        Registration::addRewrite(originalClass: Getter::class, rewriteClass: GetterFluid::class);
         // Remove the constants-analysis.
-        Registration::addRewrite(Objects::class, ObjectsFluid::class);
+        Registration::addRewrite(originalClass: Objects::class, rewriteClass: ObjectsFluid::class);
 
         // The code generation class is a singleton.
         // We need to reset the pool.
@@ -103,14 +103,23 @@ class Configuration implements PluginConfigInterface, Typo3ConstInterface
 
         // Register our event handler, to remove the 'get' from the getter
         // method names. Fluid does not use these.
-        Registration::registerEvent(ThroughGetter::class . '::goThroughMethodList::end', GetterWithoutGet::class);
+        Registration::registerEvent(
+            name: ThroughGetter::class . '::goThroughMethodList::end',
+            className: GetterWithoutGet::class
+        );
         // Another event switches to VHS code generation.
-        Registration::registerEvent(ThroughMethods::class . static::END_EVENT, VhsMethods::class);
+        Registration::registerEvent(
+            name: ThroughMethods::class . static::END_EVENT,
+            className: VhsMethods::class
+        );
         // Special analysis for the ContentBlocks objects.
-        Registration::registerEvent(ThroughGetter::class . static::START_EVENT, DynamicGetter::class);
+        Registration::registerEvent(
+            name: ThroughGetter::class . static::START_EVENT,
+            className: DynamicGetter::class
+        );
 
         // Adding additional texts.
-        $extPath = ExtensionManagementUtility::extPath(static::EXT_KEY);
-        Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/fluid.kreXX.ini');
+        $extPath = ExtensionManagementUtility::extPath(key: static::EXT_KEY);
+        Registration::registerAdditionalHelpFile(path: $extPath . 'Resources/Private/Language/fluid.kreXX.ini');
     }
 }

@@ -54,7 +54,6 @@ use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use ReflectionMethod;
-use TYPO3\CMS\ContentBlocks\DataProcessing\ContentBlockData;
 
 /**
  * There are dynamic getter in TYPO3 13.4. We handle some of them here.
@@ -103,7 +102,7 @@ class DynamicGetter implements
     public function __construct(protected Pool $pool)
     {
         foreach ($this->processersClassNames as $class) {
-            $this->retriever[] = $pool->createClass($class);
+            $this->retriever[] = $pool->createClass(classname: $class);
         }
     }
 
@@ -126,13 +125,14 @@ class DynamicGetter implements
 
         foreach ($this->retriever as $retriever) {
             // Check if the retriever can handle the object.
-            if ($retriever->canHandle($data)) {
-                $getters = $retriever->handle($ref);
+            if ($retriever->canHandle(object: $data)) {
+                $getters = $retriever->handle(ref: $ref);
                 if (empty($getters)) {
                     // Nothing to do.
                     continue;
                 }
-                return $this->iterateResults($getters, $callback) . $this->pool->render->renderSingeChildHr();
+                return $this->iterateResults(getters: $getters, callback: $callback) .
+                    $this->pool->render->renderSingeChildHr();
             }
         }
 
@@ -158,17 +158,17 @@ class DynamicGetter implements
         $done = [];
         foreach ($getters as $key => $value) {
             // Iterate through the analysis result, and throw everything into the frontend.
-            $done[] = 'get' . ucfirst($key);
+            $done[] = 'get' . ucfirst(string: $key);
             $result .= $routing->analysisHub(
-                $this->pool->createClass(Model::class)
-                    ->setData($value)
-                    ->setName($key)
-                    ->setConnectorType(static::CONNECTOR_NORMAL_PROPERTY)
-                    ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
-                    ->setHelpid('fluidMagicGetter')
+                model: $this->pool->createClass(classname: Model::class)
+                    ->setData(data: $value)
+                    ->setName(name: $key)
+                    ->setConnectorType(type: static::CONNECTOR_NORMAL_PROPERTY)
+                    ->setCodeGenType(codeGenType: static::CODEGEN_TYPE_PUBLIC)
+                    ->setHelpid(helpId: 'fluidMagicGetter')
             );
         }
-        $this->removeFromGetter($done, $callback);
+        $this->removeFromGetter(done: $done, callback: $callback);
 
         return $result;
     }
@@ -188,11 +188,11 @@ class DynamicGetter implements
         $getter = $parameters[static::PARAM_NORMAL_GETTER] ?? [];
         /** @var ReflectionMethod $reflectionMethod */
         foreach ($getter as $key => $reflectionMethod) {
-            if (in_array($reflectionMethod->getName(), $done, true)) {
+            if (in_array(needle: $reflectionMethod->getName(), haystack: $done, strict: true)) {
                 unset($getter[$key]);
             }
         }
-        $parameters[static::PARAM_NORMAL_GETTER] = array_values($getter);
-        $callback->setParameters($parameters);
+        $parameters[static::PARAM_NORMAL_GETTER] = array_values(array: $getter);
+        $callback->setParameters(parameters: $parameters);
     }
 }

@@ -74,7 +74,7 @@ class ThroughMethods extends AbstractEventHandler
         $params = $callback->getParameters();
 
         if (isset($params[static::PARAM_FACTORY_NAME])) {
-            $model->setName($params[static::PARAM_FACTORY_NAME]);
+            $model->setName(name: $params[static::PARAM_FACTORY_NAME]);
         }
 
         return '';

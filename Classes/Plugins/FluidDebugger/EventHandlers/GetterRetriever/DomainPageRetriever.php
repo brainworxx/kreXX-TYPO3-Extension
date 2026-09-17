@@ -61,14 +61,16 @@ class DomainPageRetriever extends DomainRecordRetriever
      */
     public function handle(ReflectionClass $ref): array
     {
-        $properties = parent::handle($ref);
-        if (!$ref->hasProperty('specialProperties')) {
+        $properties = parent::handle(ref: $ref);
+        if (!$ref->hasProperty(name: 'specialProperties')) {
             // Not what we expected, but we can still return the properties we
             // got from the parent.
             return $properties;
         }
         /** @var array $specialProperties */
-        $specialProperties = $ref->retrieveValue($ref->getProperty('specialProperties'));
+        $specialProperties = $ref->retrieveValue(
+            refProperty: $ref->getProperty(name:'specialProperties')
+        );
 
         return array_merge($specialProperties, $properties);
     }

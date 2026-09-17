@@ -39,7 +39,6 @@ namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetr
 
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Throwable;
-use TYPO3\CMS\Core\Page\ContentAreaClosure;
 use TYPO3\CMS\Core\Page\ContentAreaCollection;
 
 /**
@@ -58,13 +57,13 @@ class ContentAreaCollectionRetriever extends AbstractGetterRetriever
     public function handle(ReflectionClass $ref): array
     {
         // This one is rather easy.
-        if (!$ref->hasProperty('contentAreas') || !$ref->hasProperty('request')) {
+        if (!$ref->hasProperty(name: 'contentAreas') || !$ref->hasProperty(name: 'request')) {
             // Not what I was expecting, so I can't handle it.
             return [];
         }
 
         try {
-            return iterator_to_array($ref->getData());
+            return iterator_to_array(iterator: $ref->getData());
         } catch (Throwable) {
             // Something went wrong, so I can't handle it.
             return [];

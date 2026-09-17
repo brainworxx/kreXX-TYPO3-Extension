@@ -97,7 +97,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
      */
     public function getVersion(): string
     {
-        return ExtensionManagementUtility::getExtensionVersion(static::EXT_KEY);
+        return ExtensionManagementUtility::getExtensionVersion(key: static::EXT_KEY);
     }
 
     /**
@@ -110,37 +110,65 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
     public function exec(): void
     {
         // We are using the TYPO3 ip security, instead of the kreXX implementation.
-        Registration::addRewrite(CheckOutput::class, T3CheckOutput::class);
+        Registration::addRewrite(
+            originalClass: CheckOutput::class,
+            rewriteClass: T3CheckOutput::class
+        );
 
         // Registering some special stuff for the model analysis.
-        Registration::registerEvent(ProcessObject::class . static::START_PROCESS, DirtyModels::class);
+        Registration::registerEvent(
+            name: ProcessObject::class . static::START_PROCESS,
+            className: DirtyModels::class
+        );
 
         // Registering the flexform parser.
-        Registration::registerEvent(Xml::class . static::END_EVENT, FlexFormParser::class);
+        Registration::registerEvent(
+            name: Xml::class . static::END_EVENT,
+            className: FlexFormParser::class
+        );
 
         // Register the JS dispatcher.
-        Registration::registerEvent(EditSettingsController::class . '::outputCssAndJs', InlineJsCssDispatcher::class);
-        Registration::registerEvent(BacktraceController::class . '::outputCssAndJs', InlineJsCssDispatcher::class);
-        Registration::registerEvent(DumpController::class . '::outputCssAndJs', InlineJsCssDispatcher::class);
+        Registration::registerEvent(
+            name: EditSettingsController::class . '::outputCssAndJs',
+            className: InlineJsCssDispatcher::class
+        );
+        Registration::registerEvent(
+            name: BacktraceController::class . '::outputCssAndJs',
+            className: InlineJsCssDispatcher::class
+        );
+        Registration::registerEvent(
+            name: DumpController::class . '::outputCssAndJs',
+            className: InlineJsCssDispatcher::class
+        );
 
         // See if we must create a temp directory for kreXX.
         $tempPaths = $this->generateTempPaths();
         // Register it!
-        Registration::setConfigFile($tempPaths[ConfigConstInterface::CONFIG_FOLDER] . DIRECTORY_SEPARATOR . 'Krexx.');
-        Registration::setChunksFolder($tempPaths[ConfigConstInterface::CHUNKS_FOLDER] . DIRECTORY_SEPARATOR);
-        Registration::setLogFolder($tempPaths[ConfigConstInterface::LOG_FOLDER] . DIRECTORY_SEPARATOR);
-        $this->createWorkingDirectories($tempPaths);
-        Registration::addNewFallbackValue(static::SETTING_DESTINATION, static::VALUE_BROWSER_IMMEDIATELY);
+        Registration::setConfigFile(
+            path: $tempPaths[ConfigConstInterface::CONFIG_FOLDER] . DIRECTORY_SEPARATOR . 'Krexx.'
+        );
+        Registration::setChunksFolder(
+            path: $tempPaths[ConfigConstInterface::CHUNKS_FOLDER] . DIRECTORY_SEPARATOR
+        );
+        Registration::setLogFolder(
+            path: $tempPaths[ConfigConstInterface::LOG_FOLDER] . DIRECTORY_SEPARATOR
+        );
+        $this->createWorkingDirectories(tempPaths: $tempPaths);
+        Registration::addNewFallbackValue(
+            name: static::SETTING_DESTINATION,
+            value: static::VALUE_BROWSER_IMMEDIATELY
+        );
         $this->registerBlacklisting();
 
         // Add additional texts to the help.
         Registration::registerAdditionalHelpFile(
-            ExtensionManagementUtility::extPath(static::EXT_KEY) . 'Resources/Private/Language/t3.kreXX.ini'
+            path: ExtensionManagementUtility::extPath(static::EXT_KEY) .
+            'Resources/Private/Language/t3.kreXX.ini'
         );
 
         // Register the scalar analysis classes.
-        Registration::addScalarStringAnalyser(ExtFilePath::class);
-        Registration::addScalarStringAnalyser(LllString::class);
+        Registration::addScalarStringAnalyser(class: ExtFilePath::class);
+        Registration::addScalarStringAnalyser(class: LllString::class);
 
         $this->registerFileWriterSettings();
         $this->registerVersionDependantStuff();
@@ -157,17 +185,29 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
         // $viewHelperNode might not be an object, and trying to render it might
         // cause a fatal error!
         $toString = '__toString';
-        Registration::addMethodToDebugBlacklist(AbstractViewHelper::class, $toString);
+        Registration::addMethodToDebugBlacklist(
+            className: AbstractViewHelper::class,
+            methodName: $toString
+        );
 
         // Deleting all rows from the DB via typo3 repository is NOT a good
         // debug method!
-        Registration::addMethodToDebugBlacklist(RepositoryInterface::class, 'removeAll');
+        Registration::addMethodToDebugBlacklist(
+            className: RepositoryInterface::class,
+            methodName: 'removeAll'
+        );
 
         // The lazy loading proxy may not have loaded the object at this time.
-        Registration::addMethodToDebugBlacklist(LazyLoadingProxy::class, $toString);
+        Registration::addMethodToDebugBlacklist(
+            className: LazyLoadingProxy::class,
+            methodName: $toString
+        );
 
         // We now have a better variant for the QueryBuilder analysis.
-        Registration::addMethodToDebugBlacklist(DbQueryBuilder::class, $toString);
+        Registration::addMethodToDebugBlacklist(
+            className: DbQueryBuilder::class,
+            methodName: $toString
+        );
     }
 
     /**
@@ -200,8 +240,8 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
         // Create the pool, it is not present and reload the configuration
         // with our new settings.
         Pool::createPool();
-        Krexx::$pool->createClass(Config::class);
-        if (Krexx::$pool->config->getSetting(static::ACTIVATE_T3_FILE_WRITER) === false) {
+        Krexx::$pool->createClass(classname: Config::class);
+        if (Krexx::$pool->config->getSetting(name: static::ACTIVATE_T3_FILE_WRITER) === false) {
             // Do nothing.
             return;
         }
@@ -229,23 +269,23 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
     protected function registerFileWriterSettings(): void
     {
         // Register the two new settings for the TYPO3 log writer integration.
-        Registration::addNewSettings(GeneralUtility::makeInstance(NewSetting::class)
-            ->setSection($this->getName())
-            ->setIsFeProtected(true)
-            ->setDefaultValue(static::VALUE_FALSE)
-            ->setIsEditable(false)
-            ->setRenderType(static::RENDER_TYPE_NONE)
-            ->setValidation('evalBool')
-            ->setName(static::ACTIVATE_T3_FILE_WRITER));
+        Registration::addNewSettings(GeneralUtility::makeInstance(className: NewSetting::class)
+            ->setSection(section: $this->getName())
+            ->setIsFeProtected(isFeProtected: true)
+            ->setDefaultValue(defaultValue: static::VALUE_FALSE)
+            ->setIsEditable(isEditable: false)
+            ->setRenderType(renderType: static::RENDER_TYPE_NONE)
+            ->setValidation(validation: 'evalBool')
+            ->setName(name: static::ACTIVATE_T3_FILE_WRITER));
 
-        Registration::addNewSettings(GeneralUtility::makeInstance(NewSetting::class)
-            ->setSection($this->getName())
-            ->setIsFeProtected(true)
-            ->setDefaultValue(LogLevel::ERROR)
-            ->setIsEditable(false)
-            ->setRenderType(static::RENDER_TYPE_NONE)
-            ->setValidation($this->createFileWriterValidator())
-            ->setName(static::LOG_LEVEL_T3_FILE_WRITER));
+        Registration::addNewSettings(GeneralUtility::makeInstance(className: NewSetting::class)
+            ->setSection(section: $this->getName())
+            ->setIsFeProtected(isFeProtected: true)
+            ->setDefaultValue(defaultValue: LogLevel::ERROR)
+            ->setIsEditable(isEditable: false)
+            ->setRenderType(renderType: static::RENDER_TYPE_NONE)
+            ->setValidation(validation: $this->createFileWriterValidator())
+            ->setName(name: static::LOG_LEVEL_T3_FILE_WRITER));
     }
 
     /**
@@ -266,11 +306,11 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
                 LogLevel::INFO,
                 LogLevel::DEBUG,
             ];
-            if (in_array($value, $levels, true)) {
+            if (in_array(needle: $value, haystack: $levels, strict: true)) {
                 return true;
             }
 
-            $pool->messages->addMessage('configErrorLoglevelT3FileWriter', [$value]);
+            $pool->messages->addMessage(key:'configErrorLoglevelT3FileWriter', args: [$value]);
             return false;
         };
     }
@@ -281,8 +321,14 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
     protected function registerVersionDependantStuff(): void
     {
         // The QueryBuilder special analysis.
-        Registration::registerEvent(Objects::class . static::START_EVENT, QueryDebugger::class);
-        Registration::registerEvent(FluidObjects::class . static::START_EVENT, QueryDebugger::class);
+        Registration::registerEvent(
+            name: Objects::class . static::START_EVENT,
+            className: QueryDebugger::class
+        );
+        Registration::registerEvent(
+            name: FluidObjects::class . static::START_EVENT,
+            className: QueryDebugger::class
+        );
 
         // Register our modules for the admin panel.
         if (
@@ -329,11 +375,17 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
         foreach ($tempPaths as $tempPath) {
             if (!is_dir($tempPath)) {
                 // Create it!
-                GeneralUtility::mkdir($tempPath);
+                GeneralUtility::mkdir(newFolder: $tempPath);
                 // Protect it!
-                GeneralUtility::writeFileToTypo3tempDir($tempPath . DIRECTORY_SEPARATOR . '.htaccess', $htAccess);
+                GeneralUtility::writeFileToTypo3tempDir(
+                    filepath: $tempPath . DIRECTORY_SEPARATOR . '.htaccess',
+                    content: $htAccess
+                );
                 // Empty index.html in case the htaccess is not enough.
-                GeneralUtility::writeFileToTypo3tempDir($tempPath . DIRECTORY_SEPARATOR . 'index.html', '');
+                GeneralUtility::writeFileToTypo3tempDir(
+                    filepath: $tempPath . DIRECTORY_SEPARATOR . 'index.html',
+                    content: ''
+                );
             }
         }
     }

@@ -56,21 +56,21 @@ class ContentBlocksRetriever extends AbstractGetterRetriever
     public function handle(ReflectionClass $ref): array
     {
         $result = [];
-        if ($ref->hasProperty('_processed')) {
-            $result = $ref->retrieveValue($ref->getProperty('_processed'));
+        if ($ref->hasProperty(name: '_processed')) {
+            $result = $ref->retrieveValue($ref->getProperty(name: '_processed'));
         }
-        if ($ref->hasProperty('_name')) {
-            $result['_name'] = $ref->retrieveValue($ref->getProperty('_name'));
+        if ($ref->hasProperty(name: '_name')) {
+            $result['_name'] = $ref->retrieveValue($ref->getProperty(name: '_name'));
         }
-        if ($ref->hasProperty('_grids')) {
-            $result['_grids'] = $ref->retrieveValue($ref->getProperty('_grids'));
+        if ($ref->hasProperty(name: '_grids')) {
+            $result['_grids'] = $ref->retrieveValue($ref->getProperty(name: '_grids'));
         }
 
         if ($ref->hasProperty('_record')) {
             /** @var \TYPO3\CMS\Core\Domain\Record $record */
-            $record = $ref->retrieveValue($ref->getProperty('_record'));
+            $record = $ref->retrieveValue(refProperty: $ref->getProperty(name: '_record'));
             $result = array_merge($record->toArray(), $result);
         }
-        return $this->processObjectValues($result);
+        return $this->processObjectValues(values: $result);
     }
 }

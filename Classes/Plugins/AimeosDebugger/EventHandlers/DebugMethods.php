@@ -116,8 +116,8 @@ class DebugMethods extends AbstractEventHandler implements
 
         foreach ($this->methods as $method => $classNames) {
             foreach ($classNames as $className) {
-                if ($data instanceof $className && $reflection->hasMethod($method)) {
-                    $output .= $this->callDebugMethod($data, $method, $reflection);
+                if ($data instanceof $className && $reflection->hasMethod(name: $method)) {
+                    $output .= $this->callDebugMethod(data: $data, methodName: $method, reflectionClass: $reflection);
                     // We are done with this one. On to the next method.
                     break;
                 }
@@ -146,18 +146,17 @@ class DebugMethods extends AbstractEventHandler implements
         // We are expecting arrays, btw.
         if (!empty($result)) {
             return $this->pool->render->renderExpandableChild(
-                $this->pool->createClass(Model::class)
-                    ->setName($methodName)
-                    ->setType($this->pool->messages->getHelp('debugMethod'))
-                    ->setNormal(static::UNKNOWN_VALUE)
-                    ->setHelpid($methodName)
-                    ->setConnectorType(static::CONNECTOR_METHOD)
-                    ->setConnectorParameters($this->retrieveParameters($reflectionClass->getMethod($methodName)))
-                    ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
-                    ->addParameter(static::PARAM_DATA, $result)
-                    ->injectCallback(
-                        $this->pool->createClass(Debug::class)
-                    )
+                model: $this->pool->createClass(classname: Model::class)
+                    ->setName(name: $methodName)
+                    ->setType(type: $this->pool->messages->getHelp(key: 'debugMethod'))
+                    ->setNormal(normal: static::UNKNOWN_VALUE)
+                    ->setHelpid(helpId: $methodName)
+                    ->setConnectorType(type: static::CONNECTOR_METHOD)
+                    ->setConnectorParameters(params: $this->retrieveParameters(
+                        reflectionMethod: $reflectionClass->getMethod(name: $methodName)
+                    ))->setCodeGenType(codeGenType: static::CODEGEN_TYPE_PUBLIC)
+                    ->addParameter(name: static::PARAM_DATA, value: $result)
+                    ->injectCallback(object: $this->pool->createClass(classname: Debug::class))
             );
         }
 
@@ -179,9 +178,10 @@ class DebugMethods extends AbstractEventHandler implements
         foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
             // We add a comma to the parameter list, to separate them for a
             // better readability.
-            $paramList .= $this->pool->codegenHandler->parameterToString($reflectionParameter) . ', ';
+            $paramList .= $this->pool->codegenHandler
+                ->parameterToString(reflectionParameter: $reflectionParameter) . ', ';
         }
 
-        return trim($paramList, ', ');
+        return trim(string: $paramList, characters: ', ');
     }
 }

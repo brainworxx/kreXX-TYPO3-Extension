@@ -56,7 +56,7 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
     /**
      * Assigning the form configuration to the view.
      *
-     * @param \TYPO3\CMS\Fluid\View\AbstractTemplateView|\TYPO3\CMS\Backend\Template\ModuleTemplate $view
+     * @param \TYPO3\CMS\Backend\Template\ModuleTemplate $view
      */
     public function assignData($view): void
     {
@@ -65,16 +65,20 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
             return;
         }
 
-        $pathParts = pathinfo($this->pool->config->getPathToConfigFile());
-        $this->fileReader = $this->pool->createClass(File::class)
-            ->loadFile($pathParts[static::PATHINFO_DIRNAME] . DIRECTORY_SEPARATOR .
+        $pathParts = pathinfo(path: $this->pool->config->getPathToConfigFile());
+        $this->fileReader = $this->pool->createClass(classname: File::class)
+            ->loadFile(path: $pathParts[static::PATHINFO_DIRNAME] . DIRECTORY_SEPARATOR .
                 $pathParts[static::PATHINFO_FILENAME] . '.');
         $config = [];
         foreach ($this->pool->config->feConfigFallback as $settingsName => $fallback) {
-            $this->generateSingleSetting($settingsName, $config, $this->generateDropdown($fallback));
+            $this->generateSingleSetting(
+                settingsName: $settingsName,
+                config: $config,
+                dropdown: $this->generateDropdown($fallback)
+            );
         }
 
-        $view->assign('formConfig', $config);
+        $view->assign(key: 'formConfig', value: $config);
     }
 
     /**
@@ -94,9 +98,9 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
             static::SETTINGS_OPTIONS => $dropdown,
             static::SETTINGS_USE_OWN_SETTINGS => true,
             static::SETTINGS_VALUE => $this->convertKrexxFeSetting(
-                $this->fileReader->getFeConfigFromFile($settingsName)
+                values: $this->fileReader->getFeConfigFromFile(parameterName: $settingsName)
             ),
-            static::SETTINGS_FALLBACK => array_key_first($dropdown)
+            static::SETTINGS_FALLBACK => array_key_first(array: $dropdown)
         ];
 
         // Check if we have a value. If not, we need to load the
@@ -104,7 +108,7 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
         // are using the factory settings, at all.
         if ($config[$settingsName][static::SETTINGS_VALUE] === null) {
             $config[$settingsName][static::SETTINGS_VALUE] = $this->convertKrexxFeSetting(
-                $this->fileReader->feConfigFallback[$settingsName][$this->fileReader::RENDER]
+                values: $this->fileReader->feConfigFallback[$settingsName][$this->fileReader::RENDER]
             );
             $config[$settingsName][static::SETTINGS_USE_OWN_SETTINGS] = false;
         }
@@ -124,21 +128,21 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
         // Yes, we are testing for the string "true", and not for a boolean.
         if ($fallback[static::RENDER][static::RENDER_EDITABLE] === static::VALUE_TRUE) {
             return [
-                static::RENDER_TYPE_CONFIG_FULL => static::translate(static::RENDER_TYPE_CONFIG_FULL),
-                static::RENDER_TYPE_CONFIG_DISPLAY => static::translate(static::RENDER_TYPE_CONFIG_DISPLAY),
-                static::RENDER_TYPE_CONFIG_NONE => static::translate(static::RENDER_TYPE_CONFIG_NONE)
+                static::RENDER_TYPE_CONFIG_FULL => static::translate(key: static::RENDER_TYPE_CONFIG_FULL),
+                static::RENDER_TYPE_CONFIG_DISPLAY => static::translate(key: static::RENDER_TYPE_CONFIG_DISPLAY),
+                static::RENDER_TYPE_CONFIG_NONE => static::translate(key: static::RENDER_TYPE_CONFIG_NONE)
             ];
         }
 
         if ($fallback[static::RENDER][static::RENDER_TYPE] !== static::RENDER_TYPE_NONE) {
             return [
-                static::RENDER_TYPE_CONFIG_DISPLAY => static::translate(static::RENDER_TYPE_CONFIG_DISPLAY),
-                static::RENDER_TYPE_CONFIG_NONE => static::translate(static::RENDER_TYPE_CONFIG_NONE)
+                static::RENDER_TYPE_CONFIG_DISPLAY => static::translate(key: static::RENDER_TYPE_CONFIG_DISPLAY),
+                static::RENDER_TYPE_CONFIG_NONE => static::translate(key: static::RENDER_TYPE_CONFIG_NONE)
             ];
         }
 
         return [
-            static::RENDER_TYPE_CONFIG_NONE => static::translate(static::RENDER_TYPE_CONFIG_NONE)
+            static::RENDER_TYPE_CONFIG_NONE => static::translate(key: static::RENDER_TYPE_CONFIG_NONE)
         ];
     }
 
@@ -157,7 +161,7 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
      */
     protected function convertKrexxFeSetting(array|string|int|null $values): ?string
     {
-        if (!is_array($values)) {
+        if (!is_array(value: $values)) {
             return null;
         }
 

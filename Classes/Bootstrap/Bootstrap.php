@@ -39,7 +39,6 @@ namespace Brainworxx\Includekrexx\Bootstrap;
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration as AimeosConfiguration;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
-use Brainworxx\Includekrexx\Plugins\ContentBlocks\Configuration as ContentBlocksConfiguration;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
@@ -72,31 +71,33 @@ class Bootstrap implements ConstInterface
         // Register and activate the TYPO3 plugin.
         /** @var T3configuration $t3configuration */
         $t3configuration = GeneralUtility::makeInstance(T3configuration::class);
-        Registration::register($t3configuration);
-        Registration::activatePlugin(get_class($t3configuration));
+        Registration::register(configClass:  $t3configuration);
+        Registration::activatePlugin(configClass: get_class(object: $t3configuration));
 
         // Register the fluid plugins.
         // We activate them later in the viewhelper.
-        Registration::register(GeneralUtility::makeInstance(FluidConfiguration::class));
+        Registration::register(
+            GeneralUtility::makeInstance(FluidConfiguration::class)
+        );
         // Register our debug-viewhelper globally, so people don't have to
         // do it inside the template. 'krexx' as a namespace should be unique enough.
         // Theoretically, this should be part of the fluid debugger plugin, but
         // activating it in the viewhelper is too late, for obvious reason.
         // @deprecated Will be removed as soon as we drop support for TYPO3 14.0.
         $typo3Version = new Typo3Version();
-        if (version_compare('14.0', $typo3Version->getVersion(), '>')) {
+        if (version_compare(version1: '14.0', version2: $typo3Version->getVersion(), operator: '>')) {
             $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID]
             [static::FLUID_NAMESPACE][static::KREXX][] = 'Brainworxx\\Includekrexx\\ViewHelpers';
         }
 
         // Register the Aimeos Magic plugin.
         /** @var AimeosConfiguration $aimeosConfiguration */
-        $aimeosConfiguration = GeneralUtility::makeInstance(AimeosConfiguration::class);
-        Registration::register($aimeosConfiguration);
+        $aimeosConfiguration = GeneralUtility::makeInstance(className: AimeosConfiguration::class);
+        Registration::register(configClass: $aimeosConfiguration);
 
         // Check if we have the Aimeos shop available.
-        if (ExtensionManagementUtility::isLoaded('aimeos')) {
-            Registration::activatePlugin(get_class($aimeosConfiguration));
+        if (ExtensionManagementUtility::isLoaded(key: 'aimeos')) {
+            Registration::activatePlugin(configClass: $aimeosConfiguration::class);
         }
     }
 
@@ -111,13 +112,14 @@ class Bootstrap implements ConstInterface
     {
         // There may be a composer version of kreXX installed.
         // We will not load the bundled one.
-        if (defined('KREXX_DIR')) {
+        if (defined(constant_name: 'KREXX_DIR')) {
             return true;
         }
 
         // Simply load the main file.
-        $krexxFile =  ExtensionManagementUtility::extPath(static::EXT_KEY) . 'Resources/Private/krexx/bootstrap.php';
-        if (file_exists($krexxFile)) {
+        $krexxFile = ExtensionManagementUtility::extPath(key: static::EXT_KEY) .
+            'Resources/Private/krexx/bootstrap.php';
+        if (file_exists(filename: $krexxFile)) {
             include_once $krexxFile;
             return true;
         }

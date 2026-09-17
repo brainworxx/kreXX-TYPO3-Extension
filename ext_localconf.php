@@ -32,18 +32,21 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 if (!defined('TYPO3')) {
     die('Access denied.');
 }
 
 call_user_func(
     function () {
-        if (class_exists(\Brainworxx\Includekrexx\Bootstrap\Bootstrap::class)) {
+        if (class_exists(Bootstrap::class)) {
             try {
-                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                    \Brainworxx\Includekrexx\Bootstrap\Bootstrap::class
+                GeneralUtility::makeInstance(
+                    Bootstrap::class
                 )->run();
-            } catch (\Throwable $exception) {
+            } catch (Throwable) {
                 // Do nothing.
                 // When updating the extension via ExtensionManager, there is a
                 // big chance that the cache is not cleared. And that means that

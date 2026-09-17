@@ -49,7 +49,6 @@ use Throwable;
 use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogRecord;
 use TYPO3\CMS\Core\Log\Writer\WriterInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * File writer logging implementation.
@@ -69,23 +68,13 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
     protected const EXCEPTION = 'exception';
 
     /**
-     * Overwrites for the configuration.
-     *
-     * @var array
-     */
-    protected array $localConfig = [];
-
-    /**
      * Constructs this log writer
      *
-     * @param array $options
+     * @param array $localConfig
      *   Special configuration options.
      */
-    public function __construct(array $options = [])
+    public function __construct(protected array $localConfig = [])
     {
-        // We do not validate this right away, because we may not have a pool
-        // at this time.
-        $this->localConfig = $options;
     }
 
     /**
@@ -106,12 +95,12 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
         AbstractController::$analysisInProgress = true;
 
         $backtrace = $this->retrieveBacktrace();
-        $logModel = $this->prepareLogModelOops($backtrace, $record);
+        $logModel = $this->prepareLogModelOops(backtrace: $backtrace, record: $record);
         Krexx::$pool->createClass(DumpController::class)
             ->dumpAction(
-                $logModel,
-                Krexx::$pool->encodingService->encodeString($logModel->getMessage()),
-                $record->getLevel()
+                data: $logModel,
+                message: $logModel->getMessage(),
+                level: $record->getLevel()
             );
 
         AbstractController::$analysisInProgress = false;
@@ -144,7 +133,7 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
             ++$step;
         }
 
-        return array_values($backtrace);
+        return array_values(array: $backtrace);
     }
 
     /**
@@ -159,8 +148,8 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
         $get = $this->retrieveCurrentUri();
 
         if (
-            str_contains($get, '/ajax/refreshLoglist')
-            || str_contains($get, '/ajax/delete')
+            str_contains(haystack: $get, needle: '/ajax/refreshLoglist')
+            || str_contains(haystack: $get, needle: '/ajax/delete')
         ) {
             // Do nothing.
             // We will not spam the log folder with debug calls from the kreXX
@@ -175,7 +164,7 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
 
         // Disabled?
         if (
-            Krexx::$pool->config->getSetting(static::SETTING_DISABLED)
+            Krexx::$pool->config->getSetting(name: static::SETTING_DISABLED)
             || AbstractController::$analysisInProgress
             || Config::$disabledByPhp
         ) {
@@ -198,7 +187,7 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
         }
 
         /** @var \TYPO3\CMS\Core\Http\NormalizedParams $attribute */
-        $attribute = $GLOBALS['TYPO3_REQUEST']->getAttribute('normalizedParams');
+        $attribute = $GLOBALS['TYPO3_REQUEST']->getAttribute(name: 'normalizedParams');
         if (empty($attribute)) {
             return '';
         }
@@ -231,14 +220,14 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
             !($backtrace[0][static::TRACE_ARGS][1][static::EXCEPTION] instanceof Throwable)
         ) {
             // Fallback to the normal handling.
-            return $this->prepareLogModelNormal($backtrace, $record);
+            return $this->prepareLogModelNormal(backtrace: $backtrace, record: $record);
         }
 
         /** @var Throwable $oopsException */
         $oopsException = $backtrace[0][static::TRACE_ARGS][1][static::EXCEPTION];
         $message = '';
 
-        if (method_exists($oopsException, 'getTitle')) {
+        if (method_exists(object_or_class: $oopsException, method: 'getTitle')) {
             $message = $oopsException->getTitle() . "\r\n";
         }
 
@@ -250,17 +239,17 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
         $realBacktrace = $oopsException->getTrace();
 
         /** @var LogModel $logModel */
-        $logModel = \Krexx::$pool->createClass(LogModel::class)
-            ->setTrace($realBacktrace)
-            ->setCode($record->getComponent())
-            ->setMessage($message);
+        $logModel = \Krexx::$pool->createClass(classname: LogModel::class)
+            ->setTrace(backtrace: $realBacktrace)
+            ->setCode(code: $record->getComponent())
+            ->setMessage(message: $message);
 
         if (isset($realBacktrace[0][static::TRACE_FILE])) {
-            $logModel->setFile((string)$realBacktrace[0][static::TRACE_FILE]);
+            $logModel->setFile(file: (string)$realBacktrace[0][static::TRACE_FILE]);
         }
 
         if (isset($realBacktrace[0][static::TRACE_LINE])) {
-            $logModel->setLine((int)$realBacktrace[0][static::TRACE_LINE]);
+            $logModel->setLine(line: (int)$realBacktrace[0][static::TRACE_LINE]);
         }
 
         return $logModel;
@@ -281,15 +270,15 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
     {
         /** @var LogModel $logModel */
         $logModel = \Krexx::$pool->createClass(LogModel::class)
-            ->setTrace($backtrace)
-            ->setCode($record->getComponent())
-            ->setMessage($record->getMessage());
+            ->setTrace(backtrace: $backtrace)
+            ->setCode(code: $record->getComponent())
+            ->setMessage(message: $record->getMessage());
 
         if (isset($backtrace[0][static::TRACE_FILE])) {
-            $logModel->setFile((string)$backtrace[0][static::TRACE_FILE]);
+            $logModel->setFile(file: (string)$backtrace[0][static::TRACE_FILE]);
         }
         if (isset($backtrace[0][static::TRACE_LINE])) {
-            $logModel->setLine((int)$backtrace[0][static::TRACE_LINE]);
+            $logModel->setLine(line: (int)$backtrace[0][static::TRACE_LINE]);
         }
 
         return $logModel;
@@ -307,15 +296,15 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
 
         // We are overwriting an already parsed configuration.
         // This means, we do not have to cate about the fe configuration keys,
-        // because they simply do not exist anymore at this point. Their value
+        // because they simply do not exist any more at this point. Their value
         // is already assigned at the model, and we do not touch these settings.
         $config = \Krexx::$pool->config;
         foreach ($this->localConfig as $key => $value) {
             if (
                 isset($config->settings[$key]) &&
-                $config->validation->evaluateSetting(static::KREXX_LOG_WRITER, $key, $value)
+                $config->validation->evaluateSetting(group: static::KREXX_LOG_WRITER, name: $key, value: $value)
             ) {
-                $config->settings[$key]->setValue($value)->setSource(static::KREXX_LOG_WRITER);
+                $config->settings[$key]->setValue($value)->setSource(source: static::KREXX_LOG_WRITER);
             }
         }
     }

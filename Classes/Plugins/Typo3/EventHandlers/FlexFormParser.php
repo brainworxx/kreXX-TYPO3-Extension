@@ -55,7 +55,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class FlexFormParser implements EventHandlerInterface, CallbackConstInterface
 {
     /**
-     * @var FlexFromServiceCore
+     * @var FlexFormTools|FlexFromServiceCore
      */
     protected FlexFormTools|FlexFromServiceCore $flexFormService;
 
@@ -75,7 +75,7 @@ class FlexFormParser implements EventHandlerInterface, CallbackConstInterface
     }
 
     /**
-     * Using the TYPO3 flexform parser to get data out of the xml structure.
+     * Using the TYPO3 flexform parser to get data out of the XML structure.
      *
      * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback|null $callback
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
@@ -87,13 +87,14 @@ class FlexFormParser implements EventHandlerInterface, CallbackConstInterface
 
         try {
             $meta = $parameters[static::PARAM_DATA];
-            $result = $this->flexFormService->convertFlexFormContentToArray($parameters[static::PARAM_VALUE]);
+            $result = $this->flexFormService
+                ->convertFlexFormContentToArray(flexFormContent: $parameters[static::PARAM_VALUE]);
             if (empty($result)) {
                 return '';
             }
 
-            $meta[$this->pool->messages->getHelp('TYPO3metaDecodedFlexform')] = $result;
-            $model->addParameter(static::PARAM_DATA, $meta);
+            $meta[$this->pool->messages->getHelp(key: 'TYPO3metaDecodedFlexform')] = $result;
+            $model->addParameter(name: static::PARAM_DATA, value: $meta);
         } catch (Throwable) {
             // Do nothing.
             // We did a TYPO3 framework call. Which may or may not be unstable.

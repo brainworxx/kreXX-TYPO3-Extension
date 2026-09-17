@@ -38,6 +38,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Controller;
 use Brainworxx\Includekrexx\Collectors\LogfileList;
 use Brainworxx\Includekrexx\Controller\AjaxController;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
+use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
@@ -55,10 +56,8 @@ class AjaxControllerTest extends AbstractHelper
         $logfileListMock->expects($this->once())
             ->method('retrieveFileList')
             ->willReturn(['file', 'list']);
-
-        $this->injectIntoGeneralUtility(LogfileList::class, $logfileListMock);
-
-        $controller = new AjaxController();
+        $response = new Response();
+        $controller = new AjaxController($response, $logfileListMock);
         $serverRequest = new ServerRequest();
 
         $this->assertEquals(
@@ -89,7 +88,11 @@ class AjaxControllerTest extends AbstractHelper
         $unlinkMock = $this->getFunctionMock($controllerNamespace, 'unlink');
         $unlinkMock->expects($this->exactly(2));
 
-        $controller = new AjaxController();
+        $response = new Response();
+        $logfileListMock = $this->createMock(LogfileList::class);
+        $logfileListMock->expects($this->never())
+            ->method('retrieveFileList');
+        $controller = new AjaxController($response, $logfileListMock);
 
         $this->assertEquals(
             '{"class":"success","text":"fileDeleted"}',
@@ -108,7 +111,11 @@ class AjaxControllerTest extends AbstractHelper
             ->method('getQueryParams')
             ->willReturn(['fileid' => '987654']);
 
-        $controller = new AjaxController();
+        $response = new Response();
+        $logfileListMock = $this->createMock(LogfileList::class);
+        $logfileListMock->expects($this->never())
+            ->method('retrieveFileList');
+        $controller = new AjaxController($response, $logfileListMock);
 
         $this->assertEquals(
             '{"class":"error","text":"fileDeletedFail"}',

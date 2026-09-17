@@ -58,8 +58,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 /**
- * Hosting all those ugly workarounds to keep this extension compatible back to
- * 13.4. This  makes the other controllers (hopefully) more readable.
+ * Hosting all the none-actions for the backend module, making the
+ * IndexController a bit more readable.
  */
 abstract class AbstractController extends ActionController implements ConstInterface, ControllerConstInterface
 {
@@ -112,15 +112,17 @@ abstract class AbstractController extends ActionController implements ConstInter
     }
 
     /**
-     * Trying to get the ModuleTemplate from TYPO3 10 to 13.
+     * Initialize the action, create the module template and add the controls.
      *
      * @return void
      */
     public function initializeAction(): void
     {
         parent::initializeAction();
+        // The only reason why we do not inject the ModuleTemplateFactory is,
+        // because it is final and can not be mocked in the unit tests. So we create it here.
         $this->moduleTemplate = GeneralUtility::makeInstance(ModuleTemplateFactory::class)
-            ->create($this->request);
+            ->create(request: $this->request);
         $this->addControls();
     }
 
@@ -133,9 +135,9 @@ abstract class AbstractController extends ActionController implements ConstInter
         if (Environment::getContext()->isProduction()) {
             // Display a warning, if we are in Productive / Live settings.
             $this->addFlashMessage(
-                static::translate('debugpreset.warning.message'),
-                static::translate('debugpreset.warning.title'),
-                ContextualFeedbackSeverity::WARNING
+                messageBody: static::translate(key:'debugpreset.warning.message'),
+                messageTitle: static::translate(key: 'debugpreset.warning.title'),
+                severity: ContextualFeedbackSeverity::WARNING
             );
         }
     }
@@ -146,14 +148,15 @@ abstract class AbstractController extends ActionController implements ConstInter
     protected function retrieveKrexxMessages(): void
     {
         // Get the keys and the args.
-        $messages = $this->pool->messages->getMessages();
-
-        foreach ($messages as $message) {
+        foreach ($this->pool->messages->getMessages() as $message) {
             // And translate them.
             $this->addFlashMessage(
-                static::translate($message->getKey(), $message->getArguments()) ?? $message->getText(),
-                static::translate('general.error.title'),
-                ContextualFeedbackSeverity::ERROR
+                messageBody: static::translate(
+                    key: $message->getKey(),
+                    arguments: $message->getArguments()
+                ) ?? $message->getText(),
+                messageTitle: static::translate('general.error.title'),
+                severity: ContextualFeedbackSeverity::ERROR
             );
         }
     }
@@ -169,21 +172,24 @@ abstract class AbstractController extends ActionController implements ConstInter
      */
     protected function dispatchFile(string $path): void
     {
-        if (is_readable($path)) {
-            header('Content-Type: text/html; charset=utf-8');
-            header('Content-length: ' . filesize($path));
+        if (is_readable(filename: $path)) {
+            header(header: 'Content-Type: text/html; charset=utf-8');
+            header(header: 'Content-length: ' . filesize(filename: $path));
 
             $size = 1024 * 1024;
-            $res = fopen($path, "rb");
-            while (!feof($res)) {
-                echo fread($res, $size);
+            $res = fopen(filename: $path, mode: "rb");
+            while (!feof(stream: $res)) {
+                echo fread(stream: $res, length: $size);
                 ob_flush();
                 flush();
             }
-            fclose($res);
+            fclose(stream: $res);
         }
     }
 
+    /**
+     * Add the buttons to the button bar.
+     */
     protected function addControls(): void
     {
         $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
@@ -191,38 +197,39 @@ abstract class AbstractController extends ActionController implements ConstInter
         /** @var GenericButton $button */
         $saveButton = GeneralUtility::makeInstance(GenericButton::class);
         $saveTitle = static::translate('save');
-        $saveButton->setLabel($saveTitle)
-            ->setTitle($saveTitle)
-            ->setShowLabelText(true)
-            ->setAttributes(['form' => 'save-form'])
-            ->setIcon($this->iconFactory->getIcon('actions-save', IconSize::SMALL));
+        $saveButton->setLabel(label: $saveTitle)
+            ->setTitle(title: $saveTitle)
+            ->setShowLabelText(showLabelText: true)
+            ->setAttributes(attributes:['form' => 'save-form'])
+            ->setIcon(icon: $this->iconFactory->getIcon(identifier: 'actions-save', size: IconSize::SMALL));
         $buttonBar->addButton(button: $saveButton);
 
         /** @var DropDownButton $dropdown */
         $dropdown = GeneralUtility::makeInstance(DropDownButton::class);
-        $dropdown->setShowLabelText(true)
-            ->setShowLabelText(true)
-            ->setLabel(static::translate('simple'));
+        $dropdown->setShowLabelText(showLabelText: true)
+            ->setLabel(label: static::translate(key: 'simple'));
+
         /** @var DropDownToggle $simpleItem */
         $simpleItem = GeneralUtility::makeInstance(DropDownToggle::class);
-        $simpleItem->setAttribute('data-mode', 'simple')
-            ->setActive(true)
-            ->setLabel(static::translate('simple'));
+        $simpleItem->setAttribute(name: 'data-mode', value: 'simple')
+            ->setActive(active: true)
+            ->setLabel(label: static::translate(key: 'simple'));
+
         /** @var DropDownToggle $expertItem */
         $expertItem = GeneralUtility::makeInstance(DropDownToggle::class);
-        $expertItem->setAttribute('data-mode', 'expert')
-            ->setActive(false)
-            ->setLabel(static::translate('expert'));
-        $dropdown->addItem($simpleItem)->addItem($expertItem);
+        $expertItem->setAttribute(name: 'data-mode', value: 'expert')
+            ->setActive(active: false)
+            ->setLabel(label: static::translate(key: 'expert'));
+        $dropdown->addItem(item: $simpleItem)->addItem(item: $expertItem);
         $buttonBar->addButton(button: $dropdown);
 
         $cookieButton = GeneralUtility::makeInstance(GenericButton::class);
         $cookieText = static::translate('clear.cookies');
-        $cookieButton->setLabel($cookieText)
-            ->setTitle($cookieText)
-            ->setShowLabelText(true)
-            ->setIcon($this->iconFactory->getIcon('actions-cookie', IconSize::SMALL))
-            ->setClasses('cookies');
+        $cookieButton->setLabel(label: $cookieText)
+            ->setTitle(title: $cookieText)
+            ->setShowLabelText(showLabelText: true)
+            ->setIcon(icon: $this->iconFactory->getIcon(identifier: 'actions-cookie', size: IconSize::SMALL))
+            ->setClasses(classes: 'cookies');
         $buttonBar->addButton(button: $cookieButton);
     }
 
@@ -233,22 +240,22 @@ abstract class AbstractController extends ActionController implements ConstInter
      */
     protected function moduleTemplateRender(): ResponseInterface
     {
-        $this->pageRenderer->addInlineLanguageLabelArray([
-            'deletefile' => static::translate('ajax.delete.file'),
-            'in' => static::translate('ajax.in'),
-            'line' => static::translate('ajax.line'),
-            'updatedLoglist' => static::translate('ajax.updated.loglist'),
-            'deletedCookies' => static::translate('ajax.deleted.cookies'),
-            'ajaxSuccess' => static::translate('ajax.success'),
-            'ajaxError' => static::translate('ajax.error'),
-            'parsingError' => static::translate('ajax.parsing.error'),
-            'warning' => static::translate('ajax.warning'),
-            'yes' => static::translate('ajax.yes'),
-            'no' => static::translate('ajax.no'),
+        $this->pageRenderer->addInlineLanguageLabelArray(array: [
+            'deletefile' => static::translate(key: 'ajax.delete.file'),
+            'in' => static::translate(key: 'ajax.in'),
+            'line' => static::translate(key: 'ajax.line'),
+            'updatedLoglist' => static::translate(key: 'ajax.updated.loglist'),
+            'deletedCookies' => static::translate(key: 'ajax.deleted.cookies'),
+            'ajaxSuccess' => static::translate(key: 'ajax.success'),
+            'ajaxError' => static::translate(key: 'ajax.error'),
+            'parsingError' => static::translate(key: 'ajax.parsing.error'),
+            'warning' => static::translate(key: 'ajax.warning'),
+            'yes' => static::translate(key: 'ajax.yes'),
+            'no' => static::translate(key: 'ajax.no'),
         ]);
 
-        $this->configuration->assignData($this->moduleTemplate);
-        $this->formConfiguration->assignData($this->moduleTemplate);
-        return $this->moduleTemplate->renderResponse('Index/Index');
+        $this->configuration->assignData(view: $this->moduleTemplate);
+        $this->formConfiguration->assignData(view: $this->moduleTemplate);
+        return $this->moduleTemplate->renderResponse(templateFileName: 'Index/Index');
     }
 }
