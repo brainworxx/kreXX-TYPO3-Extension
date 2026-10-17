@@ -35,12 +35,13 @@
  * configuration for the search.
  */
 class SearchConfig {
-    public searchKeys:boolean;
-    public searchShort:boolean;
-    public searchLong:boolean;
-    public caseSensitive:boolean;
-    public searchWhole:boolean;
-    public instance:string;
-    public searchtext:string;
-    public payload:HTMLElement;
+  public searchKeys: boolean = false;
+  public searchShort: boolean = false;
+  public searchLong: boolean = false;
+  public caseSensitive: boolean = false;
+  public searchWhole: boolean = false;
+  public instance: string = '';
+  public searchtext: string = '';
+  public payload: HTMLElement | null = null;
+  public node: Element | null = null;
 }

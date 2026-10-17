@@ -171,7 +171,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
     protected function addTypeHint(Model $model): void
     {
         if (
-            ($name = (string) $model->getName()) === '' || ($name = (string) $model->getName()) === '0'
+            ($name = (string) $model->getName()) === '' || $name === '0'
             || !str_starts_with(haystack: $name, needle: '$')
         ) {
             // There is no name, no need for a hint.

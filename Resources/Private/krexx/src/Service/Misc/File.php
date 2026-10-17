@@ -362,7 +362,7 @@ class File
     {
         $filename = 'test';
         set_error_handler(callback: $this->pool->retrieveErrorCallback());
-        $result = (bool)file_put_contents(filename: $path . $filename, data: 'x')
+        $result = file_put_contents(filename: $path . $filename, data: 'x')
             && unlink(filename: $path . $filename);
         restore_error_handler();
 

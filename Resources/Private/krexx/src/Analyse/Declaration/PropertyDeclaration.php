@@ -55,7 +55,7 @@ class PropertyDeclaration extends AbstractDeclaration
     {
         $messages = $this->pool->messages;
         // Early returns for simple cases.
-        if (property_exists($reflection, 'isUndeclared') && $reflection->isUndeclared !== null) {
+        if (property_exists($reflection, 'isUndeclared')) {
             return $messages->getHelp(key: 'metaUndeclared');
         }
 

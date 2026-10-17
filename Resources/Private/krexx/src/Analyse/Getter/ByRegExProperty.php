@@ -140,7 +140,7 @@ class ByRegExProperty extends ByMethodName
     ): ?ReflectionProperty {
         // Check if this is a property and return the first we find.
         $result = $this->retrievePropertyByName(propertyName: $propertyName, parentClass: $reflectionClass);
-        if ($result instanceof \ReflectionProperty) {
+        if ($result instanceof ReflectionProperty) {
             return $result;
         }
 

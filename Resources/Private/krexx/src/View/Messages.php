@@ -213,4 +213,20 @@ class Messages
 
         $this->helpArray = array_merge($helpArray['en'], $helpArray[$this->languageKey] ?? []);
     }
+
+    /**
+     * Returns the translations as a JSON string for use in JavaScript.
+     *
+     * @return string
+     */
+    public function getTsTranslations(): string
+    {
+        $translations = [];
+        foreach ($this->helpArray as $key => $value) {
+            $translations[$key] = $value;
+        }
+
+        return htmlspecialchars(json_encode($translations));
+
+    }
 }

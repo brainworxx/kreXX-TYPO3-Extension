@@ -31,20 +31,19 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-class Selectors
-{
-    public eventHandler:string;
-    public moveToBottom:string;
-    public close:string;
-    public toggle:string;
-    public setSetting:string;
-    public resetSetting:string;
-    public copyFrom:string;
-    public displaySearch:string;
-    public performSearch:string;
-    public collapse:string;
-    public generateCode:string;
-    public preventBubble:string;
-    public displayInfoBox:string;
-    public moveToViewport:string;
+class Selectors {
+  public eventHandler: string = '';
+  public moveToBottom: string = '';
+  public close: string = '';
+  public toggle: string = '';
+  public setSetting: string = '';
+  public resetSetting: string = '';
+  public copyFrom: string = '';
+  public displaySearch: string = '';
+  public performSearch: string = '';
+  public collapse: string = '';
+  public generateCode: string = '';
+  public preventBubble: string = '';
+  public displayInfoBox: string = '';
+  public moveToViewport: string = '';
 }

@@ -1,3 +1,4 @@
+"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -24,9 +25,162 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var CodeGen = (function () {
+    function CodeGen() {
+        var _this = this;
+        this.resultArray = [];
+        this.resultString = '';
+        this.sourcedata = '';
+        this.domid = '';
+        this.wrapperLeft = '';
+        this.wrapperRight = '';
+        this.generateCode = function (event, element) {
+            event.stop = true;
+            _this.reset();
+            var el = _this.kdt.getParents(element, 'li.kchild')[0];
+            while (el) {
+                if (!_this.processElement(el)) {
+                    break;
+                }
+                el = _this.kdt.getParents(el, 'li.kchild')[0];
+            }
+            _this.processResultArray();
+            _this.resultString = _this.wrapperLeft + _this.resultString + _this.wrapperRight;
+            _this.displayCode(element);
+        };
+        this.kdt = new Kdt();
+    }
+    CodeGen.prototype.processResultArray = function () {
+        this.resultArray.reverse();
+        for (var i = 0; i < this.resultArray.length; i++) {
+            if (this.resultArray[i] === '. . .') {
+                this.resultString = this.kdt.translations.translate('tsNoCodeGen');
+                break;
+            }
+            if (this.resultArray[i] === ';stop;') {
+                this.resultString = '';
+                this.resultArray[i] = '';
+            }
+            if (this.resultArray[i].indexOf(';firstMarker;') !== -1) {
+                this.resultString = this.resultArray[i].replace(';firstMarker;', this.resultString);
+            }
+            else {
+                this.resultString = this.resultString + this.resultArray[i];
+            }
+        }
+    };
+    CodeGen.prototype.processElement = function (el) {
+        var _a;
+        this.domid = this.kdt.getDataset(el, 'domid');
+        this.sourcedata = this.kdt.getDataset(el, 'source');
+        this.wrapperLeft = this.kdt.getDataset(el, 'codewrapperLeft');
+        this.wrapperRight = this.kdt.getDataset(el, 'codewrapperRight');
+        if (this.sourcedata === '. . .') {
+            if (this.domid !== '') {
+                var parentEl = (_a = document.querySelector('#' + this.domid)) === null || _a === void 0 ? void 0 : _a.parentNode;
+                if (!parentEl) {
+                    return false;
+                }
+                this.resultArray.push(this.kdt.getDataset(parentEl, 'source'));
+            }
+        }
+        if (this.sourcedata !== '') {
+            this.resultArray.push(this.sourcedata);
+        }
+        return true;
+    };
+    CodeGen.prototype.displayCode = function (element) {
+        var codedisplay = element.nextElementSibling;
+        codedisplay.innerHTML = '<div class="kcode-inner">' + this.resultString + '</div>';
+        if (codedisplay.style.display === 'none') {
+            codedisplay.style.display = '';
+            this.kdt.selectText(codedisplay);
+        }
+        else {
+            codedisplay.style.display = 'none';
+        }
+    };
+    CodeGen.prototype.reset = function () {
+        this.resultArray = [];
+        this.resultString = '';
+        this.sourcedata = '';
+        this.domid = '';
+        this.wrapperLeft = '';
+        this.wrapperRight = '';
+    };
+    return CodeGen;
+}());
+var CopyFrom = (function () {
+    function CopyFrom() {
+        var _this = this;
+        this.retrieveMainElements = function (element) {
+            var domid = _this.kdt.getDataset(element, 'domid');
+            if (domid === '' || element.parentNode === null) {
+                return false;
+            }
+            var orgNest = document.querySelector('#' + domid);
+            var orgEl = orgNest === null || orgNest === void 0 ? void 0 : orgNest.previousElementSibling;
+            var parentElement = element.parentNode;
+            if (orgNest && orgEl && parentElement) {
+                return { orgNest: orgNest, orgEl: orgEl, parentElement: parentElement, domid: domid };
+            }
+            return false;
+        };
+        this.prepareCopy = function (element, newEl) {
+            var _a, _b;
+            _this.kdt.findInDomlistByClass(newEl.children, 'kname').innerHTML =
+                _this.kdt.findInDomlistByClass(element.children, 'kname').innerHTML;
+            var allChildren = (_a = newEl.nextElementSibling) === null || _a === void 0 ? void 0 : _a.getElementsByTagName("*");
+            if (allChildren) {
+                for (var i = 0; i < allChildren.length; i++) {
+                    allChildren[i].removeAttribute('id');
+                }
+            }
+            (_b = newEl.nextElementSibling) === null || _b === void 0 ? void 0 : _b.removeAttribute('id');
+        };
+        this.prepareButtons = function (element, newEl) {
+            var _a, _b;
+            var newInfobox = newEl.querySelector('.khelp');
+            var newButton = newEl.querySelector('.kinfobutton');
+            var realInfobox = element.querySelector('.khelp');
+            var realButton = element.querySelector('.kinfobutton');
+            if (newInfobox !== null) {
+                (_a = newInfobox.parentNode) === null || _a === void 0 ? void 0 : _a.removeChild(newInfobox);
+            }
+            if (newButton !== null) {
+                (_b = newButton.parentNode) === null || _b === void 0 ? void 0 : _b.removeChild(newButton);
+            }
+            if (realInfobox === null) {
+                return;
+            }
+            if (realButton !== null) {
+                newEl.appendChild(realButton);
+            }
+            newEl.appendChild(realInfobox);
+        };
+        this.copyFrom = function (event, element) {
+            var mainElements = _this.retrieveMainElements(element);
+            if (!mainElements) {
+                return;
+            }
+            var orgNest = mainElements.orgNest, orgEl = mainElements.orgEl, parentElement = mainElements.parentElement, domid = mainElements.domid;
+            parentElement.insertBefore(orgNest.cloneNode(true), element.nextSibling);
+            var newEl = orgEl.cloneNode(true);
+            parentElement.insertBefore(newEl, element.nextSibling);
+            _this.kdt.setDataset(newEl.parentNode, 'domid', domid);
+            _this.prepareCopy(element, newEl);
+            _this.prepareButtons(element, newEl);
+            parentElement.removeChild(element);
+        };
+        this.kdt = new Kdt();
+    }
+    return CopyFrom;
+}());
 var Draxx = (function () {
     function Draxx(selector, handle, callbackUp, callbackDrag) {
         var _this = this;
+        this.offSetX = 0;
+        this.offSetY = 0;
         this.startDraxx = function (event) {
             var _a;
             var elContent = _this.kdt.getParents(event.target, _this.selector)[0];
@@ -34,7 +188,11 @@ var Draxx = (function () {
             _this.offSetY = offset.top + elContent.offsetHeight - event.pageY - elContent.offsetHeight;
             _this.offSetX = offset.left + _this.outerWidth(elContent) - event.pageX - _this.outerWidth(elContent);
             _this.elContentStyle = elContent.style;
-            var bodyStyle = getComputedStyle(document.querySelector('body'));
+            var body = document.querySelector('body');
+            if (body === null) {
+                return;
+            }
+            var bodyStyle = getComputedStyle(body);
             if (bodyStyle.position === 'relative') {
                 var relOffsetY = void 0;
                 var relOffsetX = void 0;
@@ -45,6 +203,9 @@ var Draxx = (function () {
                 else {
                     var prev = (_a = elContent.previousElementSibling) !== null && _a !== void 0 ? _a : elContent.parentElement;
                     do {
+                        if (prev === null) {
+                            break;
+                        }
                         relOffsetY = parseInt(getComputedStyle(prev).marginTop, 10);
                         prev = prev.previousElementSibling;
                     } while (prev && relOffsetY === 0);
@@ -67,6 +228,9 @@ var Draxx = (function () {
         this.drag = function (event) {
             event.preventDefault();
             event.stopPropagation();
+            if (!_this.elContentStyle) {
+                return;
+            }
             _this.elContentStyle.left = (event.pageX + _this.offSetX) + "px";
             _this.elContentStyle.top = (event.pageY + _this.offSetY) + "px";
             _this.callbackDrag();
@@ -112,27 +276,13 @@ var Draxx = (function () {
 var Eventhandler = (function () {
     function Eventhandler(selector) {
         var _this = this;
-        this.storage = [];
+        this.storage = {};
         this.handle = function (event) {
             event.stopPropagation();
             event.stop = false;
             var element = event.target;
-            var selector;
-            var i;
-            var callbackArray = [];
             do {
-                for (selector in _this.storage) {
-                    if (element.matches(selector) === false) {
-                        continue;
-                    }
-                    callbackArray = _this.storage[selector];
-                    for (i = 0; i < callbackArray.length; i++) {
-                        callbackArray[i](event, element);
-                        if (event.stop) {
-                            return;
-                        }
-                    }
-                }
+                _this.callEvents(event, element);
                 element = element.parentNode;
                 if (element === event.currentTarget) {
                     element = null;
@@ -141,19 +291,20 @@ var Eventhandler = (function () {
         };
         this.kdt = new Kdt();
         var elements = document.querySelectorAll(selector);
-        for (var i = 0; i < elements.length; i++) {
-            elements[i].addEventListener('click', this.handle);
-        }
+        this.registerEventsOnElements(elements, 'click', this.handle);
     }
+    Eventhandler.prototype.registerEventsOnElements = function (elements, eventName, callback) {
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].addEventListener(eventName, callback);
+        }
+    };
     Eventhandler.prototype.addEvent = function (selector, eventName, callBack) {
         if (eventName === 'click') {
             this.addToStorage(selector, callBack);
         }
         else {
             var elements = document.querySelectorAll(selector);
-            for (var i = 0; i < elements.length; i++) {
-                elements[i].addEventListener(eventName, callBack);
-            }
+            this.registerEventsOnElements(elements, eventName, callBack);
         }
     };
     Eventhandler.prototype.preventBubble = function (event) {
@@ -165,6 +316,21 @@ var Eventhandler = (function () {
         }
         this.storage[selector].push(callback);
     };
+    Eventhandler.prototype.callEvents = function (event, element) {
+        for (var selector in this.storage) {
+            if (!element.matches(selector)) {
+                continue;
+            }
+            var callbackArray = this.storage[selector];
+            for (var i = 0; i < callbackArray.length; i++) {
+                callbackArray[i](event, element);
+                if (event.stop) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    };
     Eventhandler.prototype.triggerEvent = function (el, eventName) {
         var event = new Event(eventName, { bubbles: true, cancelable: false });
         el.dispatchEvent(event);
@@ -174,29 +340,10 @@ var Eventhandler = (function () {
 var Kdt = (function () {
     function Kdt() {
         var _this = this;
+        this.jumpTo = function () {
+        };
         this.setJumpTo = function (jumpTo) {
             _this.jumpTo = jumpTo;
-        };
-        this.setSetting = function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-            var settings = _this.readSettings('KrexxDebugSettings');
-            var newValue = event.target.value.replace('"', '').replace("'", '');
-            var valueName = event.target.name.replace('"', '').replace("'", '');
-            settings[valueName] = newValue;
-            var date = new Date();
-            date.setTime(date.getTime() + (99 * 24 * 60 * 60 * 1000));
-            var expires = 'expires=' + date.toUTCString();
-            document.cookie = 'KrexxDebugSettings=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-            document.cookie = 'KrexxDebugSettings=' + JSON.stringify(settings) + '; ' + expires + '; path=/';
-            alert(valueName + ' --> ' + newValue + '\n\n' + _this.translations.translate('tsPleaseReload'));
-        };
-        this.resetSetting = function (event, element) {
-            var date = new Date();
-            date.setTime(date.getTime() + (99 * 24 * 60 * 60 * 1000));
-            var expires = 'expires=' + date.toUTCString();
-            document.cookie = 'KrexxDebugSettings={}; ' + expires + '; path=/';
-            alert(_this.translations.translate('tsConfigReset') + '\n\n' + _this.translations.translate('tsPleaseReload'));
         };
         this.collapse = function (event, element) {
             event.stop = true;
@@ -204,7 +351,7 @@ var Kdt = (function () {
             _this.removeClass(wrapper.querySelectorAll('.kfilterroot'), 'kfilterroot');
             _this.removeClass(wrapper.querySelectorAll('.krootline'), 'krootline');
             _this.removeClass(wrapper.querySelectorAll('.ktopline'), 'ktopline');
-            if (!_this.hasClass(element, 'kcollapsed')) {
+            if (!element.classList.contains('kcollapsed')) {
                 _this.addClass(_this.getParents(element, 'div.kbg-wrapper > ul'), 'kfilterroot');
                 _this.addClass(_this.getParents(element, 'ul.knode, li.kchild'), 'krootline');
                 _this.addClass([_this.getParents(element, '.krootline')[0]], 'ktopline');
@@ -218,42 +365,6 @@ var Kdt = (function () {
             setTimeout(function () {
                 jumpTo(element, true);
             }, 100);
-        };
-        this.copyFrom = function (event, element) {
-            var i;
-            var domid = _this.getDataset(element, 'domid');
-            if (domid === '') {
-                return;
-            }
-            var orgNest = document.querySelector('#' + domid);
-            if (orgNest) {
-                var orgEl = orgNest.previousElementSibling;
-                element.parentNode.insertBefore(orgNest.cloneNode(true), element.nextSibling);
-                var newEl = orgEl.cloneNode(true);
-                element.parentNode.insertBefore(newEl, element.nextSibling);
-                _this.findInDomlistByClass(newEl.children, 'kname').innerHTML = _this.findInDomlistByClass(element.children, 'kname').innerHTML;
-                var allChildren = newEl.nextElementSibling.getElementsByTagName("*");
-                for (i = 0; i < allChildren.length; i++) {
-                    allChildren[i].removeAttribute('id');
-                }
-                newEl.nextElementSibling.removeAttribute('id');
-                _this.setDataset(newEl.parentNode, 'domid', domid);
-                var newInfobox = newEl.querySelector('.khelp');
-                var newButton = newEl.querySelector('.kinfobutton');
-                var realInfobox = element.querySelector('.khelp');
-                var realButton = element.querySelector('.kinfobutton');
-                if (newInfobox !== null) {
-                    newInfobox.parentNode.removeChild(newInfobox);
-                }
-                if (newButton !== null) {
-                    newButton.parentNode.removeChild(newButton);
-                }
-                if (realInfobox !== null) {
-                    newEl.appendChild(realButton);
-                    newEl.appendChild(realInfobox);
-                }
-                element.parentNode.removeChild(element);
-            }
         };
         this.translations = new Translations('.krdata-structure.krtrans', this);
         this.addClass('.kwrapper .knoscript', 'khidden');
@@ -280,18 +391,9 @@ var Kdt = (function () {
         }
         return result;
     };
-    Kdt.prototype.hasClass = function (el, className) {
-        if (el.classList) {
-            return el.classList.contains(className);
-        }
-        else {
-            return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
-        }
-    };
     Kdt.prototype.findInDomlistByClass = function (elements, className) {
-        className = " " + className + " ";
         for (var i = 0; i < elements.length; i++) {
-            if ((" " + elements[i].className + " ").replace(/[\n\t]/g, " ").indexOf(className) > -1) {
+            if (elements[i].classList.contains(className.trim())) {
                 return elements[i];
             }
         }
@@ -306,7 +408,7 @@ var Kdt = (function () {
             elements = selector;
         }
         for (var i = 0; i < elements.length; i++) {
-            elements[i].className += ' ' + className;
+            elements[i].classList.add(className);
         }
     };
     Kdt.prototype.removeClass = function (selector, className) {
@@ -318,37 +420,22 @@ var Kdt = (function () {
             elements = selector;
         }
         for (var i = 0; i < elements.length; i++) {
-            elements[i].className = elements[i].className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
-        }
-    };
-    Kdt.prototype.toggleClass = function (el, className) {
-        if (el.classList) {
-            el.classList.toggle(className);
-        }
-        else {
-            var classes = el.className.split(' ');
-            var existingIndex = classes.indexOf(className);
-            if (existingIndex >= 0) {
-                classes.splice(existingIndex, 1);
-            }
-            else {
-                classes.push(className);
-            }
-            el.className = classes.join(' ');
+            elements[i].classList.remove(className);
         }
     };
     Kdt.prototype.getDataset = function (el, what, mustEscape) {
         if (mustEscape === void 0) { mustEscape = false; }
         var result;
-        if (typeof el === 'undefined' ||
-            typeof el.getAttribute !== 'function') {
+        if (el === null
+            || typeof el === 'undefined'
+            || typeof el.getAttribute !== 'function') {
             return '';
         }
         result = el.getAttribute('data-' + what);
         if (result === null) {
             return '';
         }
-        if (mustEscape === true) {
+        if (mustEscape) {
             return result.replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;")
@@ -367,11 +454,59 @@ var Kdt = (function () {
     Kdt.prototype.selectText = function (el) {
         var range = document.createRange();
         var selection = window.getSelection();
+        if (selection === null) {
+            return;
+        }
         range.selectNodeContents(el);
         selection.removeAllRanges();
         selection.addRange(range);
     };
-    Kdt.prototype.readSettings = function (cookieName) {
+    Kdt.prototype.parseJson = function (string) {
+        try {
+            return JSON.parse(string);
+        }
+        catch (error) {
+            return false;
+        }
+    };
+    Kdt.prototype.moveToBottom = function (selector) {
+        var _a, _b, _c;
+        var elements = document.querySelectorAll(selector);
+        for (var i = 0; i < elements.length; i++) {
+            if (((_b = (_a = elements[i]) === null || _a === void 0 ? void 0 : _a.parentNode) === null || _b === void 0 ? void 0 : _b.nodeName.toUpperCase()) !== 'BODY') {
+                (_c = document.querySelector('body')) === null || _c === void 0 ? void 0 : _c.appendChild(elements[i]);
+            }
+        }
+    };
+    return Kdt;
+}());
+var Settings = (function () {
+    function Settings() {
+        var _this = this;
+        this.set = function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            var settings = _this.read('KrexxDebugSettings');
+            var newValue = event.target.value.replace('"', '').replace("'", '');
+            var valueName = event.target.name.replace('"', '').replace("'", '');
+            settings[valueName] = newValue;
+            var date = new Date();
+            date.setTime(date.getTime() + (99 * 24 * 60 * 60 * 1000));
+            var expires = 'expires=' + date.toUTCString();
+            document.cookie = 'KrexxDebugSettings=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            document.cookie = 'KrexxDebugSettings=' + JSON.stringify(settings) + '; ' + expires + '; path=/';
+            alert(valueName + ' --> ' + newValue + '\n\n' + _this.kdt.translations.translate('tsPleaseReload'));
+        };
+        this.reset = function () {
+            var date = new Date();
+            date.setTime(date.getTime() + (99 * 24 * 60 * 60 * 1000));
+            var expires = 'expires=' + date.toUTCString();
+            document.cookie = 'KrexxDebugSettings={}; ' + expires + '; path=/';
+            alert(_this.kdt.translations.translate('tsConfigReset') + '\n\n' + _this.kdt.translations.translate('tsPleaseReload'));
+        };
+        this.kdt = new Kdt();
+    }
+    Settings.prototype.read = function (cookieName) {
         var match = document.cookie.match(new RegExp('(^| )' + cookieName + '=([^;]+)'));
         var result = {};
         if (match === null) {
@@ -384,23 +519,7 @@ var Kdt = (function () {
         }
         return result;
     };
-    Kdt.prototype.parseJson = function (string) {
-        try {
-            return JSON.parse(string);
-        }
-        catch (error) {
-            return false;
-        }
-    };
-    Kdt.prototype.moveToBottom = function (selector) {
-        var elements = document.querySelectorAll(selector);
-        for (var i = 0; i < elements.length; i++) {
-            if (elements[i].parentNode.nodeName.toUpperCase() !== 'BODY') {
-                document.querySelector('body').appendChild(elements[i]);
-            }
-        }
-    };
-    return Kdt;
+    return Settings;
 }());
 var Translations = (function () {
     function Translations(selector, kdt) {
@@ -427,69 +546,63 @@ var Translations = (function () {
 var Search = (function () {
     function Search(eventHandler, jumpTo) {
         var _this = this;
-        this.results = [];
-        this.clearSearch = function (event) {
-            _this.results[_this.kdt.getDataset(event.target, 'instance')] = [];
-        };
-        this.displaySearchOptions = function (event, element) {
-            _this.kdt.toggleClass(element.parentNode.nextElementSibling, 'khidden');
-        };
-        this.performSearch = function (event, element) {
-            _this.kdt.addClass([element.parentNode.nextElementSibling], 'khidden');
+        this.prepareConfig = function (element, instanceElement) {
             var config = new SearchConfig();
-            config.searchtext = element.parentNode.querySelector('.ksearchfield').value;
-            config.caseSensitive = element.parentNode.parentNode.querySelector('.ksearchcase').checked;
-            config.searchKeys = element.parentNode.parentNode.querySelector('.ksearchkeys').checked;
-            config.searchShort = element.parentNode.parentNode.querySelector('.ksearchshort').checked;
-            config.searchLong = element.parentNode.parentNode.querySelector('.ksearchlong').checked;
-            config.searchWhole = element.parentNode.parentNode.querySelector('.ksearchwhole').checked;
-            if (config.caseSensitive === false) {
+            config.node = element;
+            config.searchtext = element.querySelector('.ksearchfield').value;
+            config.caseSensitive = element.querySelector('.ksearchcase').checked;
+            config.searchKeys = element.querySelector('.ksearchkeys').checked;
+            config.searchShort = element.querySelector('.ksearchshort').checked;
+            config.searchLong = element.querySelector('.ksearchlong').checked;
+            config.searchWhole = element.querySelector('.ksearchwhole').checked;
+            config.instance = _this.kdt.getDataset(instanceElement, 'instance');
+            if (!config.caseSensitive) {
                 config.searchtext = config.searchtext.toLowerCase();
             }
-            if (config.searchtext.length === 0) {
-                element.parentNode.querySelector('.ksearch-state').textContent = _this.kdt.translations.translate('tsEnterText');
+            return config;
+        };
+        this.prepareNodes = function (element) {
+            var parentNode = element.parentNode;
+            if (parentNode === null) {
+                return null;
+            }
+            var grandParentNode = parentNode.parentNode;
+            if (grandParentNode === null) {
+                return null;
+            }
+            var parentSibling = parentNode.nextElementSibling;
+            if (parentSibling !== null) {
+                _this.kdt.addClass([parentSibling], 'khidden');
+            }
+            return grandParentNode;
+        };
+        this.performSearch = function (event, element) {
+            var root = _this.prepareNodes(element);
+            if (root === null) {
                 return;
             }
-            if (config.searchtext.length > 2 || config.searchWhole) {
-                config.instance = _this.kdt.getDataset(element, 'instance');
-                _this.retrievePayload(config);
-                var collapsed = config.payload.querySelectorAll('.kcollapsed');
+            var config = _this.prepareConfig(root, element);
+            if (!_this.navigation.isSearchable(config)) {
+                return;
+            }
+            _this.retrievePayload(config);
+            _this.expandCollapsedNodes(config);
+            _this.refreshResultlist(config);
+            _this.navigation.movePointer(config, element);
+            var result = _this.resultBucket.getResultBucket(config);
+            var current = result.data[result.pointer];
+            if (current) {
+                _this.jumpTo(current);
+            }
+            _this.navigation.updateSearchState(config);
+        };
+        this.expandCollapsedNodes = function (config) {
+            var _a;
+            var collapsed = (_a = config.payload) === null || _a === void 0 ? void 0 : _a.querySelectorAll('.kcollapsed');
+            if (collapsed !== undefined) {
                 for (var i = 0; i < collapsed.length; i++) {
                     _this.eventHandler.triggerEvent(collapsed[i], 'click');
                 }
-                if (typeof _this.results[config.instance] !== "undefined") {
-                    if (typeof _this.results[config.instance][config.searchtext] === "undefined") {
-                        _this.refreshResultlist(config);
-                    }
-                }
-                else {
-                    _this.refreshResultlist(config);
-                }
-                var pointer = _this.results[config.instance][config.searchtext]['pointer'];
-                var direction = _this.kdt.getDataset(element, 'direction');
-                if (direction === 'forward') {
-                    pointer++;
-                }
-                else {
-                    pointer--;
-                }
-                if (typeof _this.results[config.instance][config.searchtext]['data'][pointer] === "undefined") {
-                    if (direction === 'forward') {
-                        pointer = 0;
-                    }
-                    else {
-                        pointer = _this.results[config.instance][config.searchtext]['data'].length - 1;
-                    }
-                }
-                if (_this.results[config.instance][config.searchtext]['data'][pointer]) {
-                    _this.jumpTo(_this.results[config.instance][config.searchtext]['data'][pointer]);
-                }
-                element.parentNode.querySelector('.ksearch-state').textContent =
-                    (pointer + 1) + ' / ' + (_this.results[config.instance][config.searchtext]['data'].length);
-                _this.results[config.instance][config.searchtext]['pointer'] = pointer;
-            }
-            else {
-                element.parentNode.querySelector('.ksearch-state').textContent = _this.kdt.translations.translate('tsTooSmall');
             }
         };
         this.retrievePayload = function (config) {
@@ -501,63 +614,66 @@ var Search = (function () {
             config.payload = document.querySelector('#' + config.instance + ' .kbg-wrapper' + additionalClasses);
         };
         this.refreshResultlist = function (config) {
-            _this.kdt.removeClass('.ksearch-found-highlight', 'ksearch-found-highlight');
-            var selector = [];
-            if (config.searchKeys === true) {
-                selector.push('li.kchild span.kname');
-            }
-            if (config.searchShort === true) {
-                selector.push('li.kchild span.kshort');
-            }
-            if (config.searchLong === true) {
-                selector.push('li div.kpreview');
-            }
-            _this.results[config.instance] = [];
-            _this.results[config.instance][config.searchtext] = [];
-            _this.results[config.instance][config.searchtext]['data'] = [];
-            _this.results[config.instance][config.searchtext]['pointer'] = [];
-            if (selector.length > 0) {
-                var list = void 0;
-                list = config.payload.querySelectorAll(selector.join(', '));
-                var textContent = '';
-                for (var i = 0; i < list.length; ++i) {
-                    textContent = list[i].textContent;
-                    if (config.caseSensitive === false) {
-                        textContent = textContent.toLowerCase();
-                    }
-                    if ((config.searchWhole === true && textContent === config.searchtext) ||
-                        (config.searchWhole === false && textContent.indexOf(config.searchtext) > -1)) {
-                        _this.kdt.toggleClass(list[i], 'ksearch-found-highlight');
-                        _this.results[config.instance][config.searchtext]['data'].push(list[i]);
-                    }
-                }
-            }
-            _this.results[config.instance][config.searchtext]['pointer'] = -1;
-        };
-        this.searchfieldReturn = function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-            if (event.key !== 'Enter') {
+            var _a;
+            if (_this.resultBucket.hasSearchResults(config)) {
                 return;
             }
-            _this.eventHandler.triggerEvent(event.target.parentNode.querySelectorAll('.ksearchnow')[1], 'click');
+            _this.kdt.removeClass('.ksearch-found-highlight', 'ksearch-found-highlight');
+            var list = (_a = config.payload) === null || _a === void 0 ? void 0 : _a.querySelectorAll(_this.buildSelector(config));
+            if (list === undefined) {
+                return;
+            }
+            var result = _this.resultBucket.getResultBucket(config);
+            for (var i = 0; i < list.length; ++i) {
+                _this.updateResult(list[i], config, result);
+            }
+            result.pointer = -1;
         };
         this.kdt = new Kdt();
         this.eventHandler = eventHandler;
         this.jumpTo = jumpTo;
-        this.eventHandler.addEvent('.kwrapper .ksearchcase', 'change', this.clearSearch);
-        this.eventHandler.addEvent('.kwrapper .ksearchkeys', 'change', this.clearSearch);
-        this.eventHandler.addEvent('.kwrapper .ksearchshort', 'change', this.clearSearch);
-        this.eventHandler.addEvent('.kwrapper .ksearchlong', 'change', this.clearSearch);
-        this.eventHandler.addEvent('.kwrapper .ksearchwhole', 'change', this.clearSearch);
-        this.eventHandler.addEvent('.kwrapper .ktab', 'click', this.clearSearch);
-        this.eventHandler.addEvent('.kwrapper .koptions', 'click', this.displaySearchOptions);
-        this.eventHandler.addEvent('.kwrapper .ksearchfield', 'keyup', this.searchfieldReturn);
+        this.resultBucket = new SearchResultBucket();
+        this.navigation = new SearchNavigator(this.resultBucket);
+        new SearchEventBinder(eventHandler, this.resultBucket);
     }
+    Search.prototype.updateResult = function (node, config, result) {
+        var _a;
+        var textContent = (_a = node.textContent) !== null && _a !== void 0 ? _a : '';
+        if (!config.caseSensitive) {
+            textContent = textContent.toLowerCase();
+        }
+        if ((config.searchWhole && textContent === config.searchtext)
+            || (!config.searchWhole && textContent.indexOf(config.searchtext) > -1)) {
+            node.classList.toggle('ksearch-found-highlight');
+            result.data.push(node);
+        }
+    };
+    Search.prototype.buildSelector = function (config) {
+        var selector = [];
+        if (config.searchKeys) {
+            selector.push('li.kchild span.kname');
+        }
+        if (config.searchShort) {
+            selector.push('li.kchild span.kshort');
+        }
+        if (config.searchLong) {
+            selector.push('li div.kpreview');
+        }
+        return selector.join(', ');
+    };
     return Search;
 }());
 var SearchConfig = (function () {
     function SearchConfig() {
+        this.searchKeys = false;
+        this.searchShort = false;
+        this.searchLong = false;
+        this.caseSensitive = false;
+        this.searchWhole = false;
+        this.instance = '';
+        this.searchtext = '';
+        this.payload = null;
+        this.node = null;
     }
     return SearchConfig;
 }());
@@ -565,34 +681,57 @@ var Hans = (function () {
     function Hans() {
         var _this = this;
         this.jumpToInterval = 0;
+        this.initDraxx = function () {
+            _this.draxx = new Draxx('.kwrapper', '.kheadnote', function () {
+                var searchWrapper = document.querySelectorAll('.search-wrapper');
+                var viewportOffset;
+                for (var i = 0; i < searchWrapper.length; i++) {
+                    viewportOffset = searchWrapper[i].getBoundingClientRect();
+                    searchWrapper[i].style.position = 'fixed';
+                    searchWrapper[i].style.top = viewportOffset.top + 'px';
+                }
+            }, function () {
+                var searchWrapper = document.querySelectorAll('.search-wrapper');
+                for (var i = 0; i < searchWrapper.length; i++) {
+                    searchWrapper[i].style.position = 'absolute';
+                    searchWrapper[i].style.top = '';
+                }
+            });
+        };
         this.toggle = function (event, element) {
-            _this.kdt.toggleClass(element, 'kopened');
+            element.classList.toggle('kopened');
             var sibling = element.nextElementSibling;
+            if (sibling === null) {
+                return;
+            }
             do {
-                _this.kdt.toggleClass(sibling, 'khidden');
+                sibling.classList.toggle('khidden');
                 sibling = sibling.nextElementSibling;
             } while (sibling);
         };
         this.jumpTo = function (el, noHighlight) {
             _this.setHighlighting(el, noHighlight);
             var destination;
-            var container = document.querySelector('.kfatalwrapper-outer');
+            var container = document.querySelector('html');
             if (container === null) {
-                container = document.querySelector('html');
-                ++container.scrollTop;
-                if (container.scrollTop === 0 || container.scrollHeight <= container.clientHeight) {
-                    container = document.querySelector('body');
-                }
-                --container.scrollTop;
-                destination = el.getBoundingClientRect().top + container.scrollTop - 50;
-            }
-            else {
-                destination = el.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop - 50;
-            }
-            var diff = Math.abs(container.scrollTop - destination);
-            if (diff < 250) {
                 return;
             }
+            ++container.scrollTop;
+            if (container.scrollTop === 0 || container.scrollHeight <= container.clientHeight) {
+                container = document.querySelector('body');
+            }
+            if (container === null) {
+                return;
+            }
+            --container.scrollTop;
+            destination = el.getBoundingClientRect().top + container.scrollTop - 200;
+            var diff = Math.abs(container.scrollTop - destination);
+            if (diff < 150) {
+                return;
+            }
+            _this.scrollContainer(container, destination, diff);
+        };
+        this.scrollContainer = function (container, destination, diff) {
             var step;
             if (container.scrollTop < destination) {
                 step = Math.round(diff / 12);
@@ -618,75 +757,18 @@ var Hans = (function () {
             var interval = setInterval(function () {
                 if (opacity < 0) {
                     clearInterval(interval);
+                    if (elInstance === null || elInstance.parentNode === null) {
+                        return;
+                    }
                     elInstance.parentNode.removeChild(elInstance);
                     return;
                 }
                 opacity -= 0.1;
+                if (elInstance === null) {
+                    return;
+                }
                 elInstance.style.opacity = opacity.toString();
             }, 20);
-        };
-        this.generateCode = function (event, element) {
-            event.stop = true;
-            var codedisplay = element.nextElementSibling;
-            var resultArray = [];
-            var resultString = '';
-            var sourcedata;
-            var domid;
-            var wrapperLeft = '';
-            var wrapperRight = '';
-            var el = _this.kdt.getParents(element, 'li.kchild')[0];
-            while (el) {
-                domid = _this.kdt.getDataset(el, 'domid');
-                sourcedata = _this.kdt.getDataset(el, 'source');
-                wrapperLeft = _this.kdt.getDataset(el, 'codewrapperLeft');
-                wrapperRight = _this.kdt.getDataset(el, 'codewrapperRight');
-                if (sourcedata === '. . .') {
-                    if (domid !== '') {
-                        el = document.querySelector('#' + domid).parentNode;
-                        resultArray.push(_this.kdt.getDataset(el, 'source'));
-                    }
-                }
-                if (sourcedata !== '') {
-                    resultArray.push(sourcedata);
-                }
-                el = _this.kdt.getParents(el, 'li.kchild')[0];
-            }
-            resultArray.reverse();
-            for (var i = 0; i < resultArray.length; i++) {
-                if (resultArray[i] === '. . .') {
-                    resultString = '// Value is either protected or private.<br /> // Sorry . . ';
-                    break;
-                }
-                if (resultArray[i] === ';stop;') {
-                    resultString = '';
-                    resultArray[i] = '';
-                }
-                if (resultArray[i].indexOf(';firstMarker;') !== -1) {
-                    resultString = resultArray[i].replace(';firstMarker;', resultString);
-                }
-                else {
-                    resultString = resultString + resultArray[i];
-                }
-            }
-            resultString = wrapperLeft + resultString + wrapperRight;
-            codedisplay.innerHTML = '<div class="kcode-inner">' + resultString + '</div>';
-            if (codedisplay.style.display === 'none') {
-                codedisplay.style.display = '';
-                _this.kdt.selectText(codedisplay);
-            }
-            else {
-                codedisplay.style.display = 'none';
-            }
-        };
-        this.checkSearchInViewport = function () {
-            var search = document.querySelector('.kfatalwrapper-outer .search-wrapper');
-            search.style.position = '';
-            search.style.top = '';
-            var rect = search.getBoundingClientRect();
-            if (rect.top < 0) {
-                search.style.position = 'fixed';
-                search.style.top = '0px';
-            }
         };
         this.displayInfoBox = function (event, element) {
             event.stop = true;
@@ -701,9 +783,12 @@ var Hans = (function () {
         this.displaySearch = function (event, element) {
             var instance = _this.kdt.getDataset(element, 'instance');
             var search = document.querySelector('#search-' + instance);
+            if (search === null) {
+                return;
+            }
             var viewportOffset;
-            if (_this.kdt.hasClass(search, 'khidden')) {
-                _this.kdt.toggleClass(search, 'khidden');
+            if (search.classList.contains('khidden')) {
+                search.classList.remove('khidden');
                 search.querySelector('.ksearchfield').focus();
                 search.style.position = 'absolute';
                 search.style.top = '';
@@ -712,7 +797,7 @@ var Hans = (function () {
                 search.style.top = viewportOffset.top + 'px';
             }
             else {
-                _this.kdt.toggleClass(search, 'khidden');
+                search.classList.add('khidden');
                 _this.kdt.removeClass('.ksearch-found-highlight', 'ksearch-found-highlight');
                 search.style.position = 'absolute';
                 search.style.top = '';
@@ -733,26 +818,29 @@ var Hans = (function () {
         this.selectors.preventBubble = '.kodsp';
         this.selectors.displayInfoBox = '.kwrapper .kchild .kinfobutton';
         this.selectors.moveToViewport = '.kouterwrapper';
+        this.kdt = new Kdt();
+        this.CodeGen = new CodeGen();
+        this.settings = new Settings();
+        this.copyFrom = new CopyFrom();
     }
     Hans.prototype.run = function () {
-        this.kdt = new Kdt();
         if (this.kdt.beenHere()) {
             return;
         }
+        this.initDraxx();
         this.kdt.setJumpTo(this.jumpTo);
         this.eventHandler = new Eventhandler(this.selectors.eventHandler);
         this.search = new Search(this.eventHandler, this.jumpTo);
         this.kdt.moveToBottom(this.selectors.moveToBottom);
-        this.initDraxx();
         this.eventHandler.addEvent(this.selectors.close, 'click', this.close);
         this.eventHandler.addEvent(this.selectors.toggle, 'click', this.toggle);
-        this.eventHandler.addEvent(this.selectors.setSetting, 'change', this.kdt.setSetting);
-        this.eventHandler.addEvent(this.selectors.resetSetting, 'click', this.kdt.resetSetting);
-        this.eventHandler.addEvent(this.selectors.copyFrom, 'click', this.kdt.copyFrom);
+        this.eventHandler.addEvent(this.selectors.setSetting, 'change', this.settings.set);
+        this.eventHandler.addEvent(this.selectors.resetSetting, 'click', this.settings.reset);
+        this.eventHandler.addEvent(this.selectors.copyFrom, 'click', this.copyFrom.copyFrom);
         this.eventHandler.addEvent(this.selectors.displaySearch, 'click', this.displaySearch);
         this.eventHandler.addEvent(this.selectors.performSearch, 'click', this.search.performSearch);
         this.eventHandler.addEvent(this.selectors.collapse, 'click', this.kdt.collapse);
-        this.eventHandler.addEvent(this.selectors.generateCode, 'click', this.generateCode);
+        this.eventHandler.addEvent(this.selectors.generateCode, 'click', this.CodeGen.generateCode);
         this.eventHandler.addEvent(this.selectors.preventBubble, 'click', this.eventHandler.preventBubble);
         this.eventHandler.addEvent(this.selectors.displayInfoBox, 'click', this.displayInfoBox);
         if (window.location.protocol === 'file:') {
@@ -760,30 +848,17 @@ var Hans = (function () {
         }
         this.draxx.moveToViewport(this.selectors.moveToViewport);
     };
-    Hans.prototype.initDraxx = function () {
-        this.draxx = new Draxx('.kwrapper', '.kheadnote', function () {
-            var searchWrapper = document.querySelectorAll('.search-wrapper');
-            var viewportOffset;
-            for (var i = 0; i < searchWrapper.length; i++) {
-                viewportOffset = searchWrapper[i].getBoundingClientRect();
-                searchWrapper[i].style.position = 'fixed';
-                searchWrapper[i].style.top = viewportOffset.top + 'px';
-            }
-        }, function () {
-            var searchWrapper = document.querySelectorAll('.search-wrapper');
-            for (var i = 0; i < searchWrapper.length; i++) {
-                searchWrapper[i].style.position = 'absolute';
-                searchWrapper[i].style.top = '';
-            }
-        });
-    };
     Hans.prototype.setHighlighting = function (el, noHighlight) {
         var nests = this.kdt.getParents(el, '.knest');
         this.kdt.removeClass(nests, 'khidden');
         for (var i = 0; i < nests.length; i++) {
-            this.kdt.addClass([nests[i].previousElementSibling], 'kopened');
+            var prevSibling = nests[i].previousElementSibling;
+            if (prevSibling === null) {
+                continue;
+            }
+            this.kdt.addClass([prevSibling], 'kopened');
         }
-        if (noHighlight !== true) {
+        if (!noHighlight) {
             this.kdt.removeClass('.highlight-jumpto', 'highlight-jumpto');
             this.kdt.addClass([el], 'highlight-jumpto');
         }
@@ -798,6 +873,20 @@ var Hans = (function () {
 }());
 var Selectors = (function () {
     function Selectors() {
+        this.eventHandler = '';
+        this.moveToBottom = '';
+        this.close = '';
+        this.toggle = '';
+        this.setSetting = '';
+        this.resetSetting = '';
+        this.copyFrom = '';
+        this.displaySearch = '';
+        this.performSearch = '';
+        this.collapse = '';
+        this.generateCode = '';
+        this.preventBubble = '';
+        this.displayInfoBox = '';
+        this.moveToViewport = '';
     }
     return Selectors;
 }());
@@ -806,7 +895,9 @@ var SmokyGrey = (function (_super) {
     function SmokyGrey() {
         var _this = _super.call(this) || this;
         _this.initDraxx = function () {
-            _this.draxx = new Draxx('.kwrapper', '.khandle', function () { }, function () { });
+            _this.draxx = new Draxx('.kwrapper', '.khandle', function () {
+            }, function () {
+            });
         };
         _this.switchTab = function (event, element) {
             var instance = _this.kdt.getDataset(element.parentNode, 'instance');
@@ -825,11 +916,15 @@ var SmokyGrey = (function (_super) {
             var kdt = _this.kdt;
             var setPayloadMaxHeight = _this.setPayloadMaxHeight.bind(_this);
             setTimeout(function () {
+                var _a;
                 var wrapper = kdt.getParents(element, '.kwrapper')[0];
                 if (typeof wrapper === 'undefined') {
                     return;
                 }
                 var body = wrapper.querySelector('.kdatabody');
+                if (body === null) {
+                    return;
+                }
                 var html = '';
                 var counter = 0;
                 var regex = /\\u([\d\w]{4})/gi;
@@ -852,50 +947,36 @@ var SmokyGrey = (function (_super) {
                 }
                 html = '<table><caption class="kheadline">' + kdt.translations.translate('tsAdditionalData') +
                     '</caption><tbody class="kdatabody">' + html + '</tbody></table>';
-                body.parentNode.parentNode.innerHTML = html;
+                ((_a = body.parentNode) === null || _a === void 0 ? void 0 : _a.parentNode).innerHTML = html;
                 setPayloadMaxHeight();
             }, 100);
         };
         _this.displaySearch = function (event, element) {
+            if (element.parentNode === null) {
+                return;
+            }
             var instance = _this.kdt.getDataset(element.parentNode, 'instance');
             var search = document.querySelector('#search-' + instance);
             var searchtab = document.querySelector('#' + instance + ' .ksearchbutton');
-            if (_this.kdt.hasClass(search, 'khidden')) {
-                _this.kdt.toggleClass(search, 'khidden');
-                _this.kdt.toggleClass(searchtab, 'kactive');
+            if (search === null || searchtab === null) {
+                return;
+            }
+            searchtab.classList.toggle('kactive');
+            if (search.classList.contains('khidden')) {
+                search.classList.toggle('khidden');
                 search.querySelector('.ksearchfield').focus();
             }
             else {
-                _this.kdt.toggleClass(search, 'khidden');
-                _this.kdt.toggleClass(searchtab, 'kactive');
+                search.classList.toggle('khidden');
                 _this.kdt.removeClass('.ksearch-found-highlight', 'ksearch-found-highlight');
             }
         };
         _this.jumpTo = function (el, noHighlight) {
             _this.setHighlighting(el, noHighlight);
-            var container = _this.kdt.getParents(el, '.kpayload');
-            container.push(document.querySelector('.kfatalwrapper-outer'));
-            if (container.length > 0) {
-                var destination_1 = el.getBoundingClientRect().top - container[0].getBoundingClientRect().top + container[0].scrollTop - 50;
-                var diff = Math.abs(container[0].scrollTop - destination_1);
-                var step_1;
-                if (container[0].scrollTop < destination_1) {
-                    step_1 = Math.round(diff / 12);
-                }
-                else {
-                    step_1 = Math.round(diff / 12) * -1;
-                }
-                var lastValue_1 = container[0].scrollTop;
-                clearInterval(_this.jumpToInterval);
-                var interval_1 = _this.jumpToInterval = setInterval(function () {
-                    container[0].scrollTop += step_1;
-                    if (Math.abs(container[0].scrollTop - destination_1) <= Math.abs(step_1) || container[0].scrollTop === lastValue_1) {
-                        container[0].scrollTop = destination_1;
-                        clearInterval(interval_1);
-                    }
-                    lastValue_1 = container[0].scrollTop;
-                }, 1);
-            }
+            var container = _this.kdt.getParents(el, '.kpayload')[0];
+            var destination = el.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop - 50;
+            var diff = Math.abs(container.scrollTop - destination);
+            _this.scrollContainer(container, destination, diff);
         };
         _this.selectors.close = '.kwrapper .ktool-tabs .kclose, .kwrapper .kheadnote-wrapper .kclose';
         return _this;
@@ -930,3 +1011,127 @@ var SmokyGrey = (function (_super) {
     };
     return SmokyGrey;
 }(Hans));
+var SearchResultBucket = (function () {
+    function SearchResultBucket() {
+        this.results = {};
+    }
+    SearchResultBucket.prototype.getResultBucket = function (config) {
+        var _a, _b;
+        var _c, _d, _e, _f;
+        (_a = (_c = this.results)[_d = config.instance]) !== null && _a !== void 0 ? _a : (_c[_d] = {});
+        (_b = (_e = this.results[config.instance])[_f = config.searchtext]) !== null && _b !== void 0 ? _b : (_e[_f] = {
+            data: [],
+            pointer: -1,
+        });
+        return this.results[config.instance][config.searchtext];
+    };
+    SearchResultBucket.prototype.clearSearchResults = function (config) {
+        this.results[config.instance] = {};
+    };
+    SearchResultBucket.prototype.hasSearchResults = function (config) {
+        return (this.results[config.instance] !== undefined &&
+            this.results[config.instance][config.searchtext] !== undefined &&
+            this.results[config.instance][config.searchtext].data.length > 0);
+    };
+    return SearchResultBucket;
+}());
+var SearchEventBinder = (function () {
+    function SearchEventBinder(eventHandler, resultBucket) {
+        var _this = this;
+        this.clearSearch = function (event) {
+            var config = new SearchConfig();
+            config.instance = _this.kdt.getDataset(event.target, 'instance');
+            _this.resultBucket.clearSearchResults(config);
+        };
+        this.displaySearchOptions = function (event, element) {
+            if (element.parentNode === null) {
+                return;
+            }
+            var nextElementSibling = element.parentNode.nextElementSibling;
+            if (nextElementSibling === null) {
+                return;
+            }
+            nextElementSibling.classList.toggle('khidden');
+        };
+        this.searchfieldReturn = function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (event.key !== 'Enter') {
+                return;
+            }
+            if (event.target === null) {
+                return;
+            }
+            var parentNode = event.target.parentNode;
+            if (parentNode === null) {
+                return;
+            }
+            _this.eventHandler.triggerEvent(parentNode.querySelectorAll('.ksearchnow')[1], 'click');
+        };
+        this.resultBucket = resultBucket;
+        this.eventHandler = eventHandler;
+        this.kdt = new Kdt();
+        this.eventHandler.addEvent('.kwrapper .ksearchcase', 'change', this.clearSearch);
+        this.eventHandler.addEvent('.kwrapper .ksearchkeys', 'change', this.clearSearch);
+        this.eventHandler.addEvent('.kwrapper .ksearchshort', 'change', this.clearSearch);
+        this.eventHandler.addEvent('.kwrapper .ksearchlong', 'change', this.clearSearch);
+        this.eventHandler.addEvent('.kwrapper .ksearchwhole', 'change', this.clearSearch);
+        this.eventHandler.addEvent('.kwrapper .ktab', 'click', this.clearSearch);
+        this.eventHandler.addEvent('.kwrapper .koptions', 'click', this.displaySearchOptions);
+        this.eventHandler.addEvent('.kwrapper .ksearchfield', 'keyup', this.searchfieldReturn);
+    }
+    return SearchEventBinder;
+}());
+var SearchNavigator = (function () {
+    function SearchNavigator(resultBucket) {
+        var _this = this;
+        this.movePointer = function (config, element) {
+            var result = _this.resultBucket.getResultBucket(config);
+            var direction = _this.kdt.getDataset(element, 'direction');
+            if (direction === 'forward') {
+                result.pointer++;
+            }
+            else {
+                result.pointer--;
+            }
+            if (typeof result.data[result.pointer] === "undefined") {
+                if (direction === 'forward') {
+                    result.pointer = 0;
+                }
+                else {
+                    result.pointer = result.data.length - 1;
+                }
+            }
+        };
+        this.updateSearchState = function (config) {
+            var result = _this.resultBucket.getResultBucket(config);
+            var searchStateElement = _this.getSearchStateElement(config);
+            if (!searchStateElement) {
+                return;
+            }
+            searchStateElement.textContent = (result.pointer + 1) + ' / ' + (result.data.length);
+        };
+        this.isSearchable = function (config) {
+            var searchStateElement = _this.getSearchStateElement(config);
+            if (!searchStateElement) {
+                return false;
+            }
+            if (config.searchtext.length === 0) {
+                searchStateElement.textContent = _this.kdt.translations.translate('tsEnterText');
+                return false;
+            }
+            if (config.searchtext.length < 3 && !config.searchWhole) {
+                searchStateElement.textContent = _this.kdt.translations.translate('tsTooSmall');
+                return false;
+            }
+            return true;
+        };
+        this.resultBucket = resultBucket;
+        this.kdt = new Kdt();
+    }
+    SearchNavigator.prototype.getSearchStateElement = function (config) {
+        var _a, _b;
+        return (_b = (_a = config.node) === null || _a === void 0 ? void 0 : _a.querySelector('.ksearch-state')) !== null && _b !== void 0 ? _b : null;
+    };
+    return SearchNavigator;
+}());

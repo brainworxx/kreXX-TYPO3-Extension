@@ -130,7 +130,7 @@ class DumpControllerTest extends AbstractController
             ))->willReturnMap(
                 [
                     [Model::class, new Model(Krexx::$pool)],
-                    [ThroughConfig::class, new CallbackNothing()]
+                    [ThroughConfig::class, new CallbackNothing(Krexx::$pool)]
                 ]
             );
 

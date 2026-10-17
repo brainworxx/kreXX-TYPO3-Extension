@@ -51,6 +51,10 @@ class CallbackCounter extends AbstractCallback implements ProcessConstInterface,
 
     public static $staticParameters = [];
 
+    public function __construct(protected \Brainworxx\Krexx\Service\Factory\Pool $pool)
+    {
+    }
+
     public function callMe(): string
     {
         // Update the counter.

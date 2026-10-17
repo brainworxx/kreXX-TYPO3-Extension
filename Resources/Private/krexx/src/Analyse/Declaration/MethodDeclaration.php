@@ -82,7 +82,7 @@ class MethodDeclaration extends AbstractDeclaration
                 reflectionMethod: $reflection,
                 declaringClass: $reflectionClass
             );
-            if ($trait instanceof \ReflectionClass) {
+            if ($trait instanceof ReflectionClass) {
                 $traitName = $trait->getName();
             }
 
@@ -152,7 +152,7 @@ class MethodDeclaration extends AbstractDeclaration
         // No need to recheck the availability for traits. This is done above.
         foreach ($declaringClass->getTraits() as $trait) {
             $result = $this->retrieveDeclaringReflection(reflectionMethod:  $reflectionMethod, declaringClass: $trait);
-            if ($result instanceof \ReflectionClass) {
+            if ($result instanceof ReflectionClass) {
                 return $result;
             }
         }

@@ -31,48 +31,45 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-class Translations
-{
-    /**
-     * Data storage for the translations
-     */
-    protected translations:Object = {};
+class Translations {
+  /**
+   * Data storage for the translations
+   */
+  protected translations: Record<string, string> = {};
 
-    /**
-     * Set the translations
-     *
-     * @param {string} selector
-     * @param {Kdt} kdt
-     */
-    constructor(selector:string, kdt:Kdt)
-    {
-        let dataElements = document.querySelectorAll(selector);
-        let data:string;
-        let json:Object;
+  /**
+   * Set the translations
+   *
+   * @param {string} selector
+   * @param {Kdt} kdt
+   */
+  constructor(selector: string, kdt: Kdt) {
+    const dataElements = document.querySelectorAll(selector);
+    let data: string;
+    let json: Record<string, string> | false;
 
-        // Load the translations from the elements.
-        for (let i = 0; i < dataElements.length; i++) {
-            data = kdt.getDataset(dataElements[i], 'translations');
-            json = kdt.parseJson(data);
-            if (json !== false) {
-                this.translations = {...this.translations, ...json};
-            }
-        }
+    // Load the translations from the elements.
+    for (let i = 0; i < dataElements.length; i++) {
+      data = kdt.getDataset(dataElements[i], 'translations');
+      json = kdt.parseJson(data);
+      if (json !== false) {
+        this.translations = {...this.translations, ...json};
+      }
+    }
+  }
+
+  /**
+   * Translate the key.
+   *
+   * @param {string} key
+   */
+  public translate(key: string): string {
+    if (typeof this.translations[key] === 'undefined') {
+      // At least return the key.
+      return key;
     }
 
-    /**
-     * Translate the key.
-     *
-     * @param {string} key
-     */
-    public translate(key:string): string
-    {
-        if (typeof this.translations[key] === 'undefined') {
-            // At least return the key.
-            return key;
-        }
-
-        // Return the translation.
-        return this.translations[key];
-    }
+    // Return the translation.
+    return this.translations[key];
+  }
 }

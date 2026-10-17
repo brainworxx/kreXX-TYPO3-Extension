@@ -25,7 +25,7 @@ class Comment extends AbstractComment
      */
     public function getComment(Reflector $reflection, ?ReflectionClass $reflectionClass = null): string
     {
-        if (property_exists($reflection, 'isUndeclared') && $reflection->isUndeclared !== null) {
+        if (property_exists($reflection, 'isUndeclared')) {
             return '';
         }
 

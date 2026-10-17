@@ -115,7 +115,7 @@ class FormatSerialize
         $position = strpos(haystack: $this->string, needle: $stopSting, offset: $this->offset);
 
         if ($position === false) {
-            throw new Exception(6886257481, message: __FUNCTION__);
+            throw new Exception(message: __FUNCTION__, code: 6886257481);
         }
 
         return $this->read(length: $position - $this->offset);
@@ -137,7 +137,7 @@ class FormatSerialize
     protected function assert(string $string): string
     {
         if ($this->read(length: strlen(string: $string)) !== $string) {
-            throw new Exception(5130580481, message: __FUNCTION__);
+            throw new Exception(message: __FUNCTION__, code: 5130580481);
         }
 
         return $string;

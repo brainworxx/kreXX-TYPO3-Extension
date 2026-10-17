@@ -1,5 +1,6 @@
 7.0.0
 - Feature: Allow a second parameter as a headline for the debug output.
+- Feature: Better usability for the search in the Hans skin.
 - Change: Dropped support for PHP 7.4, 8.0 and 8.1.
 - Change: Removed deprecations.
 - Change: removed the following configuration settings:
@@ -12,6 +13,11 @@
 - Change: Throwaway messages are not removed any more when they are
   displayed in the shell.
 - Change: Updated the unit tests to UnitTest 13.0.
+- Change: Integers are not considered timestamps any more, when they
+  are +10 years in the future.
+- Change: We assign the complete translations to the skin renderers,
+  so they can use them as they see fit.
+- Major clean-up / refactoring of the TypeScript code.
 
 6.1.0
 - Feature: Display the headline in the debug output in the

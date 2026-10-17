@@ -45,16 +45,7 @@ trait CssJs
     /**
      * @var string[]
      */
-    private array $markerCssJs = [
-        '{css}',
-        '{js}',
-        '{tsEnterText}',
-        '{tsTooSmall}',
-        '{tsPleaseReload}',
-        '{tsConfigReset}',
-        '{tsNoDataAvailable}',
-        '{tsAdditionalData}',
-    ];
+    private array $markerCssJs = ['{css}', '{js}', '{translations}'];
 
     /**
      * {@inheritdoc}
@@ -62,17 +53,13 @@ trait CssJs
     public function renderCssJs(string $css, string $javascript): string
     {
         $messages = $this->pool->messages;
+
         return str_replace(
             search: $this->markerCssJs,
             replace: [
                 $css,
                 $javascript,
-                $messages->getHelp(key: 'tsEnterText'),
-                $messages->getHelp(key: 'tsTooSmall'),
-                $messages->getHelp(key: 'tsPleaseReload'),
-                $messages->getHelp(key: 'tsConfigReset'),
-                $messages->getHelp(key: 'tsNoDataAvailable'),
-                $messages->getHelp(key: 'tsAdditionalData')
+                $messages->getTsTranslations()
             ],
             subject: $this->fileCache[static::FILE_CSSJS]
         );

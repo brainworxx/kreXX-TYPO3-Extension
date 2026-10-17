@@ -45,6 +45,10 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
  */
 class CallbackNothing extends AbstractCallback
 {
+    public function __construct(protected \Brainworxx\Krexx\Service\Factory\Pool $pool)
+    {
+    }
+
     public function callMe(): string
     {
         return 'some string';

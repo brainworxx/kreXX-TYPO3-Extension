@@ -44,6 +44,10 @@ class ScalarNothing extends AbstractScalarAnalysis
     public static $canHandleList = [];
     public static $count = 0;
 
+    public function __construct(protected \Brainworxx\Krexx\Service\Factory\Pool $pool)
+    {
+    }
+
     public static function isActive(): bool
     {
         return true;

@@ -88,10 +88,10 @@ class ProcessInteger extends AbstractRouting implements ProcessInterface, Proces
     public function handle(): string
     {
         // Detect a timestamp. Everything bigger than 946681200
-        // is assumed to be a timestamp.
+        // (31.12.1999) and smaller than in 10 years is assumed to be a timestamp.
         try {
             $int = $this->model->getData();
-            if ($int > 946681200) {
+            if ($int > 946681200 && $int < (time() + 315529200)) {
                 $this->model->addToJson(
                     key: $this->pool->messages->getHelp(key: 'metaTimestamp'),
                     value: (new DateTime(datetime: '@' . $int))->format(format: 'd.M Y H:i:s')

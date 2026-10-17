@@ -73,7 +73,7 @@ class ByMethodName extends AbstractGetter
             reflectionClass: $reflectionClass,
             currentPrefix: $currentPrefix
         );
-        if (!$reflectionProperty instanceof \ReflectionProperty) {
+        if (!$reflectionProperty instanceof ReflectionProperty) {
             // Nothing was found.
             return null;
         }

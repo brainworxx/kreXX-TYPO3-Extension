@@ -121,9 +121,9 @@ class ReturnType extends AbstractComment
      */
     protected function retrieveReturnTypeFromComment(string $comment, ?ReflectionClass $reflectionClass = null): string
     {
-        $resultToken = strtok(token: ' ', string: $comment . ' ');
+        $resultToken = strtok(string: $comment . ' ', token: ' ');
         $result = '';
-        if (str_starts_with(haystack: $resultToken, needle: '$this') && $reflectionClass instanceof \ReflectionClass) {
+        if (str_starts_with(haystack: $resultToken, needle: '$this') && $reflectionClass instanceof ReflectionClass) {
             // @return $this
             // And we know what $this actually is.
             $result = $this->pool->encodingService->encodeString(data: '\\' . $reflectionClass->getName());

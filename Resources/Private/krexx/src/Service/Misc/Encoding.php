@@ -70,12 +70,12 @@ class Encoding
              *
              * @param string $string
              *   Will not get used.
-             * @param string $encodings
+             * @param null $encodings
              *   Will not get used.
              * @param bool $strict
              *   Will not get used.
              *
-             * @return string
+             * @return string|false
              *   Always 'polyfill'.
              */
             function mb_detect_encoding($string = '', $encodings = null, $strict = false): string|false
@@ -250,16 +250,11 @@ class Encoding
      *
      * @param string $string
      *   The string we want to analyse
-     * @param string $encodinglist
-     *   The ordered list of character encoding to check.
-     * @param bool $strict
-     *   Whether we want to use strict mode.
-     *
+     * @return string|bool
+     *   The result.
      * @codeCoverageIgnore
      *   We will not test simple wrappers
      *
-     * @return string|bool
-     *   The result.
      */
     public function mbDetectEncoding(string $string): bool|string
     {

@@ -52,6 +52,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(Messages::class, 'outputMessages')]
 #[CoversMethod(Messages::class, 'getMessages')]
 #[CoversMethod(Messages::class, 'addMessage')]
+#[CoversMethod(Messages::class, 'getTsTranslations')]
 class MessagesTest extends AbstractHelper
 {
     public const  KEY_VARIABLE_NAME = 'messages';
@@ -206,6 +207,23 @@ class MessagesTest extends AbstractHelper
             ['someKey' => 'a string'],
             $this->retrieveValueByReflection('helpArray', $this->messagesClass)
         );
+    }
+
+    /**
+     * We do not test every key in there, but we test if we gat an escaped json
+     * with a lot of entries.
+     *
+     * @return void
+     */
+    public function testGetTsTranslations()
+    {
+       $result = $this->messagesClass->getTsTranslations();
+       $this->assertStringStartsWith('{&quot;', $result, 'Escaped json.');
+       $this->assertStringEndsWith('&quot;}', $result, 'Escaped json.');
+
+       $unescaped = json_decode(html_entity_decode($result), true);
+       $this->assertIsArray($unescaped, 'Decoded json is an array.');
+       $this->assertTrue(count($unescaped) > 10, 'Decoded json has more than 10 entries.');
     }
 
     /**
