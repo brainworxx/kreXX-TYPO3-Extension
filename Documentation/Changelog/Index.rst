@@ -10,6 +10,7 @@ Changelog
 Changes:
     * [Feature] Allow a second parameter as a headline for the debug output.
     * [Feature] Better usability for the search in the Hans skin.
+    * [Feature] Added fallback for the traversable analysis, in case the native PHP method interator_to_array() fails.
     * [Change] Dropped support for PHP 7.4, 8.0 and 8.1.
     * [Change] Removed deprecations.
     * [Change] Removed the following configuration settings:

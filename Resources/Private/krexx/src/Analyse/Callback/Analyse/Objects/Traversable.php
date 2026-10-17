@@ -112,7 +112,9 @@ class Traversable extends AbstractObjectAnalysis implements ConfigConstInterface
             //Restore the previous error handler, and return an empty string.
             restore_error_handler();
             $this->pool->emergencyHandler->downOneNestingLevel();
-            return '';
+            return $this->pool->createClass(ManualIteration::class)
+                ->setParameters(parameters: $this->parameters)
+                ->callMe();
         }
 
         // Reactivate whatever error handling we had previously.

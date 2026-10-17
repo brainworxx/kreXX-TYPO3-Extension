@@ -1,6 +1,8 @@
 7.0.0
 - Feature: Allow a second parameter as a headline for the debug output.
 - Feature: Better usability for the search in the Hans skin.
+- Feature: Added fallback for the traversable analysis, in case the
+  native PHP method interator_to_array() fails.
 - Change: Dropped support for PHP 7.4, 8.0 and 8.1.
 - Change: Removed deprecations.
 - Change: removed the following configuration settings:
@@ -17,7 +19,7 @@
   are +10 years in the future.
 - Change: We assign the complete translations to the skin renderers,
   so they can use them as they see fit.
-- Major clean-up / refactoring of the TypeScript code.
+- Change: Major clean-up / refactoring of the TypeScript code.
 
 6.1.0
 - Feature: Display the headline in the debug output in the

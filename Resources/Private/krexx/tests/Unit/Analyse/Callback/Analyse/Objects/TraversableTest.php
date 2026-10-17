@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ManualIteration;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray;
@@ -46,6 +47,7 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 use ArrayObject;
+use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
@@ -170,6 +172,10 @@ class TraversableTest extends AbstractHelper
             'ref' => new ReflectionClass($data)
         ];
 
+        // Make sure that the ManualIteration fallback does not mess with
+        // the callback counter.
+        Krexx::$pool->rewrite = [ManualIteration::class => CallbackNothing::class];
+
         // Run the test.
         // The testing framework will also notice any thrown errors, warnings
         // or notices.
@@ -178,6 +184,8 @@ class TraversableTest extends AbstractHelper
             ->callMe();
 
         // Check if the callback counter was called, at all.
+        // The callback counter should not be called, because the ManualIteration
+        // should have taken over the analysis.
         $this->assertEquals(0, CallbackCounter::$counter);
     }
 

@@ -68,7 +68,7 @@ abstract class AbstractFactory
      */
     public function __construct()
     {
-        $this->errorCallback = 
+        $this->errorCallback =
             // Do nothing.
             (fn(int $errno, string $errstr, ?string $errfile = null, ?int $errline = null, ?array $errcontext = null): bool => true);
     }
@@ -76,10 +76,11 @@ abstract class AbstractFactory
     /**
      * Create objects and returns them. Singletons are handled by the pool.
      *
-     * @param string $classname
+     * @template T of object
+     * @param class-string<T> $classname
      *   Name of the class we want to create.
      *
-     * @return object
+     * @return T
      *   The requested object.
      */
     public function createClass(string $classname): object
