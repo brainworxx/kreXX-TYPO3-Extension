@@ -120,11 +120,13 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Declaration/MethodDeclaration.php';
         include_once KREXX_DIR . 'src/Analyse/Declaration/PropertyDeclaration.php';
 
+        include_once KREXX_DIR . 'src/Analyse/Getter/GetterInterface.php';
         include_once KREXX_DIR . 'src/Analyse/Getter/AbstractGetter.php';
         include_once KREXX_DIR . 'src/Analyse/Getter/ByMethodName.php';
         include_once KREXX_DIR . 'src/Analyse/Getter/ByRegExProperty.php';
         include_once KREXX_DIR . 'src/Analyse/Getter/ByRegExContainer.php';
         include_once KREXX_DIR . 'src/Analyse/Getter/ByRegExDelegate.php';
+        include_once KREXX_DIR . 'src/Analyse/Getter/GetterRouting.php';
 
         include_once KREXX_DIR . 'src/Analyse/Routing/AbstractRouting.php';
         include_once KREXX_DIR . 'src/Analyse/Routing/Routing.php';

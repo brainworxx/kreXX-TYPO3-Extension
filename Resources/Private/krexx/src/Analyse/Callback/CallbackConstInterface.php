@@ -170,6 +170,10 @@ interface CallbackConstInterface
      *
      * Reflection of the property we are analysing.
      *
+     * @deprecated
+     *   Since 7.0.0, will be removed. Nut suere why this was here in the
+     *   first place.
+     *
      * @var string
      */
     public const PARAM_REFLECTION_PROPERTY = 'refProperty';

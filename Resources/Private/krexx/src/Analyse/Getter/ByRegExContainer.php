@@ -69,6 +69,10 @@ class ByRegExContainer extends AbstractGetter
      */
     protected string $secondPattern = '[';
 
+    public function __construct(protected Pool $pool)
+    {
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -134,9 +138,5 @@ class ByRegExContainer extends AbstractGetter
 
         $this->foundSomething = true;
         return $container[$key];
-    }
-
-    public function __construct(protected Pool $pool)
-    {
     }
 }

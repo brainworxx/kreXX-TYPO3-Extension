@@ -37,13 +37,9 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
+use Brainworxx\Krexx\Analyse\Getter\GetterRouting;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration;
-use Brainworxx\Krexx\Analyse\Getter\AbstractGetter;
-use Brainworxx\Krexx\Analyse\Getter\ByMethodName;
-use Brainworxx\Krexx\Analyse\Getter\ByRegExContainer;
-use Brainworxx\Krexx\Analyse\Getter\ByRegExDelegate;
-use Brainworxx\Krexx\Analyse\Getter\ByRegExProperty;
 use Brainworxx\Krexx\Analyse\Model;
 use ReflectionMethod;
 use Brainworxx\Krexx\Analyse\Comment\Methods;
@@ -96,13 +92,6 @@ class ThroughGetter extends AbstractCallback implements
     protected int $deep = 0;
 
     /**
-     * These analysers will take a look at the getter.
-     *
-     * @var AbstractGetter[]
-     */
-    protected array $getterAnalyser;
-
-    /**
      * Class for the comment analysis.
      *
      * @var Methods
@@ -124,12 +113,6 @@ class ThroughGetter extends AbstractCallback implements
     public function __construct(protected Pool $pool)
     {
         $this->commentAnalysis = $this->pool->createClass(classname: Methods::class);
-        $this->getterAnalyser = [
-            $this->pool->createClass(classname: ByMethodName::class),
-            $this->pool->createClass(classname: ByRegExProperty::class),
-            $this->pool->createClass(classname: ByRegExContainer::class),
-            $this->pool->createClass(classname: ByRegExDelegate::class)
-        ];
         $this->methodDeclaration = $this->pool->createClass(classname: MethodDeclaration::class);
     }
 
@@ -242,17 +225,29 @@ class ThroughGetter extends AbstractCallback implements
         /** @var ReflectionClass $reflectionClass */
         $reflectionClass = $this->parameters[static::PARAM_REF];
         $currentPrefix = $this->parameters[static::CURRENT_PREFIX];
-        foreach ($this->getterAnalyser as $analyser) {
-            $value = $analyser->retrieveIt(
-                reflectionMethod: $reflectionMethod,
-                reflectionClass: $reflectionClass,
-                currentPrefix: $currentPrefix
+        $routing = $this->pool->createClass(classname: GetterRouting::class);
+        $routing->retrieveIt(
+            reflectionMethod: $reflectionMethod,
+            reflectionClass: $reflectionClass,
+            currentPrefix: $currentPrefix
+        );
+        if ($routing->hasResult()) {
+            $this->prepareParameters(
+                value: $routing->retrieveIt(
+                    reflectionMethod: $reflectionMethod,
+                    reflectionClass: $reflectionClass,
+                    currentPrefix: $currentPrefix
+                ),
+                reflectionMethod: $reflectionMethod
             );
-            if ($analyser->hasResult()) {
-                $this->prepareParameters(value: $value, analyser: $analyser, reflectionMethod: $reflectionMethod);
-                $this->prepareModel(model: $model, value: $value);
-                break;
-            }
+            $this->prepareModel(
+                model: $model,
+                value: $routing->retrieveIt(
+                    reflectionMethod: $reflectionMethod,
+                    reflectionClass: $reflectionClass,
+                    currentPrefix: $currentPrefix
+                )
+            );
         }
 
         $this->dispatchEventWithModel(name: __FUNCTION__ . '::resolving', model: $model);
@@ -296,20 +291,16 @@ class ThroughGetter extends AbstractCallback implements
     /**
      * @param mixed $value
      *   The possible value that we retrieved.
-     * @param AbstractGetter $analyser
-     *   The analyser that we used.
      * @param \ReflectionMethod $reflectionMethod
      *   Reflection of the method that we are analysing.
      */
     protected function prepareParameters(
         mixed $value,
-        AbstractGetter $analyser,
         ReflectionMethod $reflectionMethod
     ): void {
         $this->parameters[static::PARAM_ADDITIONAL] = [
             static::PARAM_NOTHING_FOUND => false,
             static::PARAM_VALUE => $value,
-            static::PARAM_REFLECTION_PROPERTY => $analyser->getReflectionProperty(),
             static::PARAM_REFLECTION_METHOD => $reflectionMethod
         ];
     }
@@ -329,7 +320,6 @@ class ThroughGetter extends AbstractCallback implements
         $this->parameters[static::PARAM_ADDITIONAL] = [
             static::PARAM_NOTHING_FOUND => true,
             static::PARAM_VALUE => null,
-            static::PARAM_REFLECTION_PROPERTY => null,
             static::PARAM_REFLECTION_METHOD => $reflectionMethod
         ];
     }

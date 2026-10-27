@@ -58,6 +58,10 @@ class ByMethodName extends AbstractGetter
      */
     protected ?ReflectionProperty $reflectionProperty = null;
 
+    public function __construct(protected Pool $pool)
+    {
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -218,9 +222,5 @@ class ByMethodName extends AbstractGetter
             replacement: '$1_$2',
             subject: $string
         ));
-    }
-
-    public function __construct(protected Pool $pool)
-    {
     }
 }

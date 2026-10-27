@@ -20,6 +20,7 @@
 - Change: We assign the complete translations to the skin renderers,
   so they can use them as they see fit.
 - Change: Major clean-up / refactoring of the TypeScript code.
+- Change: Clean-up / refactoring of the getter analysis.
 
 6.1.0
 - Feature: Display the headline in the debug output in the

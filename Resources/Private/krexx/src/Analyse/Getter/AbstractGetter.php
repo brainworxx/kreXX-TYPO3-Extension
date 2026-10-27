@@ -42,7 +42,7 @@ use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
 
-abstract class AbstractGetter
+abstract class AbstractGetter implements GetterInterface
 {
      /**
      * Have we found anything?
@@ -65,27 +65,9 @@ abstract class AbstractGetter
      */
     abstract public function __construct(Pool $pool);
 
-    /**
-     * We retrieve the possible return value of the gatter, without calling it.
-     *
-     * @param \ReflectionMethod $reflectionMethod
-     *   The reflection of the getter we are analysing.
-     * @param ReflectionClass $reflectionClass
-     *   The reflection of the class we are analysing.
-     *
-     * @return mixed
-     *   We retrieve the value.
-     */
-    abstract public function retrieveIt(
-        ReflectionMethod $reflectionMethod,
-        ReflectionClass $reflectionClass,
-        string $currentPrefix
-    ): mixed;
 
     /**
-     * What the method says. Have we found something?
-     *
-     * @return bool
+     * {@inheritDoc}
      */
     public function hasResult(): bool
     {

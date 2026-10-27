@@ -83,7 +83,6 @@ use Brainworxx\Krexx\View\Messages;
 #[CoversMethod(Model\ConnectorService::class, 'getReturnType')]
 #[CoversMethod(Connectors::class, 'getReturnType')]
 #[CoversMethod(Connectors::class, 'setReturnType')]
-
 class ModelTest extends AbstractHelper
 {
     public const  SOME_STRING_TO_PASS_THROUGH = 'some string to pass through';

@@ -24,6 +24,7 @@ Changes:
     * [Change] Integers are not considered timestamps any more, when they are +10 years in the future.
     * [Change] We assign the complete translations to the skin renderers, so they can use them as they see fit.
     * [Change] Major clean-up / refactoring of the TypeScript code.
+    * [Change] Clean-up / refactoring of the getter analysis.
     * [Change] Dropped support for TYPO3 10, 11 and 12.
     * [Change] Refactored / rewritten the rendering and the JS of the backend module and kicked out all the old compatibility workarounds.
     * [Change] Mitigated deprecations in TYPO3 14.

@@ -71,11 +71,6 @@ class ByRegExDelegate extends ByRegExContainer
     protected string $secondPattern = '->';
 
     /**
-     * @var AbstractGetter[]
-     */
-    protected array $getterAnalyser;
-
-    /**
      * The current prefix
      *
      * @var string
@@ -90,17 +85,12 @@ class ByRegExDelegate extends ByRegExContainer
     protected int $deep = 0;
 
     /**
-     * Inject the pool.
+     * The routing object, which is used to retrieve the other getter analysers.
      *
-     * @param Pool $pool
+     * @var \Brainworxx\Krexx\Analyse\Getter\GetterRouting
      */
-    public function __construct(protected Pool $pool)
-    {
-        $this->getterAnalyser[] = $this->pool->createClass(classname: ByMethodName::class);
-        $this->getterAnalyser[] = $this->pool->createClass(classname: ByRegExProperty::class);
-        $this->getterAnalyser[] = $this->pool->createClass(classname: ByRegExContainer::class);
-        $this->getterAnalyser[] = $this;
-    }
+    protected GetterRouting $routing;
+
 
     /**
      * {@inheritDoc}
@@ -116,6 +106,22 @@ class ByRegExDelegate extends ByRegExContainer
             reflectionClass: $reflectionClass,
             currentPrefix: $currentPrefix
         );
+    }
+
+    /**
+     * Set the routing object, which is used to retrieve the other getter analysers.
+     *
+     * @param GetterRouting $routing
+     *   The routing object.
+     *
+     * @return ByRegExDelegate
+     *   The current instance.
+     */
+    public function setRouting(GetterRouting $routing): ByRegExDelegate
+    {
+        $this->routing = $routing;
+
+        return $this;
     }
 
     /**
@@ -149,17 +155,15 @@ class ByRegExDelegate extends ByRegExContainer
 
             // Now, let's ask the others.
             $reflectionMethod = $delegateReflection->getMethod(name: $parts[1]);
-            foreach ($this->getterAnalyser as $analyser) {
-                $value = $analyser->retrieveIt(
-                    reflectionMethod: $reflectionMethod,
-                    reflectionClass: $delegateReflection,
-                    currentPrefix: $this->currentPrefix
-                );
-                if ($analyser->hasResult()) {
-                    $this->foundSomething = true;
-                    $this->deep = 0;
-                    return $value;
-                }
+            $value = $this->routing->retrieveIt(
+                reflectionMethod: $reflectionMethod,
+                reflectionClass: $delegateReflection,
+                currentPrefix: $this->currentPrefix
+            );
+            if ($this->routing->hasResult()) {
+                $this->foundSomething = true;
+                $this->deep = 0;
+                return $value;
             }
         } catch (ReflectionException) {
         }
