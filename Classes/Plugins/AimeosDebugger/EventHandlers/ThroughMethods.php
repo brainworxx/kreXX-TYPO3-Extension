@@ -44,6 +44,8 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 /**
  * In case we are using the factory method, we use this one as a method name.
  *
+ * @event Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::callMe::end
+ *
  * @uses string $factoryName
  *   If present, we will use this as a function name.
  */

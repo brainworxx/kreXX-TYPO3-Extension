@@ -49,6 +49,8 @@ use ReflectionMethod;
 
 /**
  * Resolving Aimeos magical decorator class methods.
+ *
+ * @event Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::callMe::start
  */
 class Decorators extends AbstractEventHandler implements CallbackConstInterface
 {
@@ -115,8 +117,8 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
                     ->setType(type: 'class internals decorator')
                     ->addParameter(name: static::PARAM_DATA, value: $methods)
                     ->setHelpid(helpId: 'aimeosDecoratorsInfo')
-                    ->injectCallback(object: $this->pool->createClass(
-                        classname: ThroughMethods::class)
+                    ->injectCallback(
+                        object: $this->pool->createClass(classname: ThroughMethods::class)
                     )
             );
         }
@@ -129,8 +131,8 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
                     ->setName(name: $this->pool->messages->getHelp('aimeosDecoratedObj'))
                     ->setType(type: 'class internals decorator')
                     ->addParameter(name: static::PARAM_DATA, value: $allReceivers)
-                    ->injectCallback(object: $this->pool->createClass(
-                        classname: ThroughClassList::class)
+                    ->injectCallback(
+                        object: $this->pool->createClass(classname: ThroughClassList::class)
                     )
             );
             $this->pool->codegenHandler->setCodegenAllowed(bool: true);

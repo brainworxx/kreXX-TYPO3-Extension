@@ -49,6 +49,9 @@ use ReflectionMethod;
 
 /**
  * Special DebugMethods
+ *
+ * @event Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::callMe::start
+ *
  */
 class DebugMethods extends AbstractEventHandler implements
     CallbackConstInterface,

@@ -38,8 +38,6 @@ declare(strict_types=1);
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
 use Aimeos\Base\View\Iface as BaseViewInterface;
-use Aimeos\MW\View\Helper\Base as HelperBase;
-use Aimeos\MW\View\Iface as ViewInterface;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughClassList;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughMethods;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
@@ -62,6 +60,8 @@ use ReflectionException;
  *
  * We need to analyse the already available helper classes, and give hints
  * about the other classes that can be called this way.
+ *
+ * @event Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::callMe::start
  *
  * @uses object $data
  *   The object we ara currently analysing.
@@ -104,11 +104,11 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
     {
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $callback->getParameters()[static::PARAM_REF];
-        /** @var ViewInterface|BaseViewInterface $data */
+        /** @var BaseViewInterface $data */
         $data = $ref->getData();
 
         // Test if we are facing an Aimeos view.
-        if (!($data instanceof ViewInterface) && !($data instanceof BaseViewInterface)) {
+        if (!($data instanceof BaseViewInterface)) {
             // This is not the view we are looking for.
             // Early return.
             return '';
@@ -129,7 +129,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
     /**
      * Retrieve the already instantiated helper classes from the view.
      *
-     * @param ViewInterface|BaseViewInterface $data
+     * @param BaseViewInterface $data
      *   The class we are analysing.
      * @param \ReflectionClass $ref
      *   The reflection of the class we are analysing.
@@ -137,7 +137,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
      * @return string
      *   The generated html.
      */
-    protected function retrieveHelpers(ViewInterface|BaseViewInterface $data, ReflectionClass $ref): string
+    protected function retrieveHelpers(BaseViewInterface $data, ReflectionClass $ref): string
     {
         $result = '';
         if ($ref->hasProperty(name:'helper')) {

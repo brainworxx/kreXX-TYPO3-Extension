@@ -47,7 +47,6 @@ use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use TYPO3\CMS\Core\Package\MetaData;
-use Aimeos\MW\DB\Statement\Base as StatementBase;
 use PHPUnit\Framework\Attributes\CoversMethod;
 
 #[CoversMethod(Configuration::class, 'exec')]
@@ -131,11 +130,7 @@ class ConfigurationTest extends AbstractHelper
         ];
         $this->assertEquals($expectedEvents, SettingsGetter::getEventList());
 
-        $expectedBlacklist = [
-            StatementBase::class => [
-                '__toString'
-            ]
-        ];
+        $expectedBlacklist = [];
         $this->assertEquals($expectedBlacklist, SettingsGetter::getBlacklistDebugMethods());
 
         $expectedHelpFiles = [

@@ -50,6 +50,8 @@ use ReflectionMethod;
  * Resolving the Aimeos getter:
  * $this->values[$this->prefix . 'somekey']
  *
+ * @event Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::retrievePropertyValue::resolving
+ *
  * @uses array normalGetter
  *   The list of all reflection methods we are analysing, hosting the
  *   get methods starting with 'get'
