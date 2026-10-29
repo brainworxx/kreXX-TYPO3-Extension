@@ -8,6 +8,7 @@ Changelog
 :Date: tbd
 
 Changes:
+    * [Feature] Added the version number to the composer.json file.
     * [Bugfix] Prevent special chars in the translations from breaking the additional data JSON.
 
 -----

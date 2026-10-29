@@ -80,11 +80,8 @@ class ConfigurationTest extends AbstractHelper
         $this->assertEquals($phpEmConstraint, $EM_CONF[$_EXTKEY]['constraints']['depends']['php']);
 
         // Test the composer stuff.
-        if (PHP_OS_FAMILY  === 'Windows') {
-            // We run this one locally, and not on a ci system.
-            $this->assertEquals($t3ComposerConstraint, $composer->require->{'typo3/cms-core'});
-            $this->assertEquals($phpComposerConstraint, $composer->require->php);
-        }
+        $this->assertEquals($phpComposerConstraint, $composer->require->php);
+        $this->assertEquals($versionNumber, $composer->version);
 
         // Test the changelog.
         $this->assertStringContainsString($versionNumber, $changelogContent);
