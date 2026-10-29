@@ -31,6 +31,14 @@ Changes:
 
 -----
 
+:Version: 6.1.10
+:Date: tbd
+
+Changes:
+    * [Bugfix] Prevent special chars in the translations from breaking the additional data JSON.
+
+-----
+
 :Version: 6.1.9
 :Date: tbd
 
