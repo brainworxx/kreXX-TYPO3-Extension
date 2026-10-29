@@ -8,6 +8,7 @@ Changelog
 :Date: tbd
 
 Changes:
+    * [Bugfix] Prevent special chars in the translations from breaking the additional data JSON.
 
 -----
 
