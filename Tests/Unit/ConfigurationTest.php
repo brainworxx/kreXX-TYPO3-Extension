@@ -71,7 +71,6 @@ class ConfigurationTest extends AbstractHelper
         $versionNumber = '7.0.0';
         $t3EmConstraint = '13.4.0-14.3.99';
         $phpEmConstraint = '8.2.0-8.5.99';
-        $t3ComposerConstraint = '^13 || ^14';
         $phpComposerConstraint = '^8.2 || ^8.3 || ^8.4 || ^8.5';
 
         // Test the EM configuration.
@@ -80,11 +79,8 @@ class ConfigurationTest extends AbstractHelper
         $this->assertEquals($phpEmConstraint, $EM_CONF[$_EXTKEY]['constraints']['depends']['php']);
 
         // Test the composer stuff.
-        if (PHP_OS_FAMILY  === 'Windows') {
-            // We run this one locally, and not on a ci system.
-            $this->assertEquals($t3ComposerConstraint, $composer->require->{'typo3/cms-core'});
-            $this->assertEquals($phpComposerConstraint, $composer->require->php);
-        }
+        $this->assertEquals($phpComposerConstraint, $composer->require->php);
+        $this->assertEquals($versionNumber, $composer->version);
 
         // Test the changelog.
         $this->assertStringContainsString($versionNumber, $changelogContent);
