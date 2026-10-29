@@ -301,7 +301,7 @@ class KrexxBackend {
    * @returns {string}
    */
   generateTableCell(meta, isLast) {
-    let html = this.generateIcon(meta.level) + '<div class="d-inline-block">' +
+    let html = this.generateIcon(meta.level) + '<div>' +
       '<b>' + meta.type + '</b><br />' + TYPO3.lang.in + ' ' + meta.filename + ', ' + TYPO3.lang.line + ' ' + meta.line + '</div>'
     if (!isLast) {
       html += '<hr>';
@@ -331,7 +331,7 @@ class KrexxBackend {
       default:
         icon = 'actions-file';
     }
-    return '<div class="d-none d-lg-inline-block iconwrapper me-2"><typo3-backend-icon identifier="' + icon + '" size="medium"></typo3-backend-icon></div>';
+    return '<div class="d-none d-lg-block iconwrapper me-2"><typo3-backend-icon identifier="' + icon + '" size="medium"></typo3-backend-icon></div>';
   }
 
   /**
