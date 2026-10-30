@@ -298,11 +298,13 @@ class KrexxBackend {
    * Generate a table cell for a log entry.
    *
    * @param {{}} meta
+   * @param {boolean} isLast
+   *
    * @returns {string}
    */
   generateTableCell(meta, isLast) {
-    let html = this.generateIcon(meta.level) + '<div>' +
-      '<b>' + meta.type + '</b><br />' + TYPO3.lang.in + ' ' + meta.filename + ', ' + TYPO3.lang.line + ' ' + meta.line + '</div>'
+    let html = '<div class="d-flex">' + this.generateIcon(meta.level) + '<div>' +
+      '<b>' + meta.type + '</b><br />' + TYPO3.lang.in + ' ' + meta.filename + ', ' + TYPO3.lang.line + ' ' + meta.line + '</div></div>';
     if (!isLast) {
       html += '<hr>';
     }
