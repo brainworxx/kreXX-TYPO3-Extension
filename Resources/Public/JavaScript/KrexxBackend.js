@@ -75,6 +75,12 @@ class KrexxBackend {
   cookieButton = {};
 
   /**
+   *
+   * @type {HTMLButtonElement}
+   */
+  saveButton = {};
+
+  /**
    * @type {NodeListOf<HTMLInputElement>}
    */
   factorySettingsElements = {};
@@ -130,6 +136,7 @@ class KrexxBackend {
     this.buttonCookie = document.querySelector('button.cookies');
     this.factorySettingsElements = document.querySelectorAll('[id^="factory."]');
     this.debugTableBody = document.querySelector('table.krexx-logs tbody');
+    this.saveButton = document.querySelector('button.btn-save');
   }
 
   /**
@@ -143,6 +150,7 @@ class KrexxBackend {
       new RegularEvent('change', this.toggleFactorySetting.bind(this)).bindTo(element);
     }
     new RegularEvent('click', this.deleteLogFile.bind(this)).bindTo(this.debugTableBody);
+    new RegularEvent('click', this.saveButtonClick.bind(this)).bindTo(this.saveButton);
   }
 
   /**
@@ -156,6 +164,18 @@ class KrexxBackend {
     }
     for (const element of this.factorySettingsElements) {
       this.toggleFactorySetting({ target: element });
+    }
+  }
+
+  /**
+   * Submit the form when the save button is clicked.
+   *
+   * @param event
+   */
+  saveButtonClick(event) {
+    let form = document.getElementById('save-form');
+    if (form) {
+      form.submit();
     }
   }
 

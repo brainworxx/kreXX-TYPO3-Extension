@@ -198,9 +198,9 @@ abstract class AbstractController extends ActionController implements ConstInter
         $saveButton = GeneralUtility::makeInstance(GenericButton::class);
         $saveTitle = static::translate('save');
         $saveButton->setLabel(label: $saveTitle)
+            ->setClasses(classes: 'btn-save')
             ->setTitle(title: $saveTitle)
             ->setShowLabelText(showLabelText: true)
-            ->setAttributes(attributes:['form' => 'save-form'])
             ->setIcon(icon: $this->iconFactory->getIcon(identifier: 'actions-save', size: IconSize::SMALL));
         $buttonBar->addButton(button: $saveButton);
 
