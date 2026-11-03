@@ -104,7 +104,6 @@ class PoolTest extends AbstractHelper
      */
     public function testCheckEnvironmentIsWritable(): void
     {
-        $filename = 'test';
         // Chunks folder is writable
         // Log folder is writable
         /** @var \PHPUnit\Framework\MockObject\MockObject $filePutContents */
@@ -112,7 +111,7 @@ class PoolTest extends AbstractHelper
         $filePutContents->expects($this->exactly(2))
             ->willReturn(true);
         $unlink = $this->getFunctionMock(static::MISC_NAMESPACE, 'unlink');
-        $unlink->expects($this->exactly(2))
+        $unlink->expects($this->exactly(4))
             ->willReturn(true);
 
         Krexx::$pool = null;
@@ -127,7 +126,7 @@ class PoolTest extends AbstractHelper
      */
     public function testCheckEnvironmentIsNotWritable(): void
     {
-        $filename = 'test';
+        $filename = 'test' . Krexx::$pool->recursionHandler->getMarker();
         // Chunks folder is not writable
         // Log folder is not writable
         $filePutContents = $this->getFunctionMock(static::MISC_NAMESPACE, 'file_put_contents');
@@ -138,7 +137,7 @@ class PoolTest extends AbstractHelper
             ]);
         $unlink = $this->getFunctionMock(static::MISC_NAMESPACE, 'unlink');
         // Ther was no file "created", hence there is no unlink'ing done.
-        $unlink->expects($this->never());
+        $unlink->expects($this->exactly(2));
 
         Krexx::$pool = null;
         Pool::createPool();

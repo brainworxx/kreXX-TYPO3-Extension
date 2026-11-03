@@ -37,6 +37,7 @@ Changes:
 Changes:
     * [Feature] Added the version number to the composer.json file.
     * [Bugfix] Prevent special chars in the translations from breaking the additional data JSON.
+    * [Bugfix] Prevent false negatives when testing if kreXX can write to the log and chunks folder.
 
 -----
 
