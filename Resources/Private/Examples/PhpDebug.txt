@@ -1,0 +1,9 @@
+<?php
+krexx($myObject);
+// Forced logging
+krexxlog($myObject);
+
+// Adding an optional title
+krexx($myObject, 'Some optional title');
+// Forced logging with optional title
+krexxlog($myObject, 'Some optional title');

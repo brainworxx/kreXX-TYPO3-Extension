@@ -42,6 +42,7 @@ use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -86,19 +87,27 @@ class IndexController extends AbstractController implements ConstInterface
         $jsonPath = $settings->prepareFileName(
             $this->pool->config->getPathToConfigFile()
         );
-        if (
-            is_writable(filename: dirname(path: $jsonPath))
-            && file_put_contents(filename: $jsonPath, data: $settings->generateContent())
-        ) {
+        if (is_writable(
+                filename: dirname(path: $jsonPath)
+            ) && file_put_contents(
+                filename: $jsonPath,
+                data: $settings->generateContent()
+            )) {
             // File was saved successfully.
             $this->addFlashMessage(
-                messageBody: static::translate(key: static::SAVE_SUCCESS_TEXT, arguments: [$jsonPath]),
+                messageBody: static::translate(
+                    key: static::SAVE_SUCCESS_TEXT,
+                    arguments: [$jsonPath]
+                ),
                 messageTitle: static::translate(static::SAVE_SUCCESS_TITLE)
             );
         } else {
             // Something went wrong here!
             $this->addFlashMessage(
-                messageBody: static::translate(key: static::FILE_NOT_WRITABLE, arguments: [$jsonPath]),
+                messageBody: static::translate(
+                    key: static::FILE_NOT_WRITABLE,
+                    arguments: [$jsonPath]
+                ),
                 messageTitle: static::translate(static::SAVE_FAIL_TITLE),
                 severity: ContextualFeedbackSeverity::ERROR
             );
@@ -121,9 +130,11 @@ class IndexController extends AbstractController implements ConstInterface
         // No directory traversal for you!
         // Get the filepath.
         $rawId = $serverRequest->getQueryParams()['tx_includekrexx_tools_includekrexxkrexxconfiguration']['id'];
-        $file = $this->pool->config->getLogDir() .
-            preg_replace(pattern: '/[^0-9]/', replacement: '', subject: (string)$rawId) .
-            '.Krexx.html';
+        $file = $this->pool->config->getLogDir() . preg_replace(
+                pattern: '/[^0-9]/',
+                replacement: '',
+                subject: (string)$rawId
+            ) . '.Krexx.html';
         // We open and then send the file.
         $this->dispatchFile(path: $file);
 

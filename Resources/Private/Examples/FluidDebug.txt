@@ -1,0 +1,6 @@
+<krexx:debug>{_all}</krexx:debug>
+<krexx:log>{_all}</krexx:log>
+
+<!-- Optional titles are supported, too: -->
+<krexx:debug title="Some optional title">{_all}</krexx:debug>
+<krexx:log title="Some optional title">{_all}</krexx:log>

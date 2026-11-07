@@ -1,0 +1,4 @@
+<?php
+\Krexx::timerEnd();
+// Forced logging
+\Krexx::logTimerEnd();

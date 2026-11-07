@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Controller;
 
+use Brainworxx\Includekrexx\Collectors\CodeExamples;
 use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
@@ -103,6 +104,7 @@ abstract class AbstractController extends ActionController implements ConstInter
     public function __construct(
         protected Configuration $configuration,
         protected FormConfiguration $formConfiguration,
+        protected CodeExamples $codeExamples,
         protected Settings $settingsModel,
         protected PageRenderer $pageRenderer,
         protected IconFactory $iconFactory,
@@ -240,6 +242,9 @@ abstract class AbstractController extends ActionController implements ConstInter
      */
     protected function moduleTemplateRender(): ResponseInterface
     {
+        $this->pageRenderer->loadJavaScriptModule(
+            specifier: '@typo3/backend/code-editor/element/code-mirror-element.js'
+        );
         $this->pageRenderer->addInlineLanguageLabelArray(array: [
             'deletefile' => static::translate(key: 'ajax.delete.file'),
             'in' => static::translate(key: 'ajax.in'),
@@ -256,6 +261,7 @@ abstract class AbstractController extends ActionController implements ConstInter
 
         $this->configuration->assignData(view: $this->moduleTemplate);
         $this->formConfiguration->assignData(view: $this->moduleTemplate);
+        $this->codeExamples->assignData(view: $this->moduleTemplate);
         return $this->moduleTemplate->renderResponse(templateFileName: 'Index/Index');
     }
 }

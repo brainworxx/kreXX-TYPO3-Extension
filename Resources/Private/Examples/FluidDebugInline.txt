@@ -1,0 +1,6 @@
+<krexx:debug value="{my: 'value', to: 'analyse'}" />
+<krexx:log value="{my: 'value', to: 'analyse'}" />
+
+<!-- Again with optional titles: -->
+<krexx:debug title="Some optional title" value="{my: 'value', to: 'analyse'}" />
+<krexx:log title="Some optional title" value="{my: 'value', to: 'analyse'}" />

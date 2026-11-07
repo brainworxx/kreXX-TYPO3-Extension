@@ -5,51 +5,32 @@
  *
  * The things you do to make fluid do what you want . . .
  *
- * @var array {_all}
- *   Complete access to all variables.
+ * @var array {codeExamples}
+ *   Configurations for the code mirror, to display the code examples.
+ * @var \Brainworxx\Includekrexx\Domain\Model\Settings {settings}
+ *   The settings for the extension.
  */
 <f:section name="main"><f:spaceless>
 
     <h2><f:translate key="usage.headline.fluid" /></h2>
 
-    <f:render section="codeblock-start" arguments="{name: 'fluidnormal'}" />&lt;krexx:debug&gt;&#123;_all&#125;&lt;/krexx:debug&gt;
-&lt;krexx:log&gt;&#123;_all&#125;&lt;/krexx:log&gt;
-
-&lt;!-- <f:translate key="usage.code.debug.1" /> -->
-&lt;krexx:debug title=&quot;Some optional title&quot;&gt;&#123;_all&#125;&lt;/krexx:debug&gt;
-&lt;krexx:log title=&quot;Some optional title&quot;&gt;&#123;_all&#125;&lt;/krexx:log&gt;<f:render section="codeblock-end"/>
-    <hr />
-
-    <f:render section="codeblock-start" arguments="{name: 'fluidvalue'}" />&lt;krexx:debug value=&quot;&#123;my: &#x27;value&#x27;, to: &#x27;analyse&#x27;&#125;&quot; /&gt;
-&lt;krexx:log value=&quot;&#123;my: &#x27;value&#x27;, to: &#x27;analyse&#x27;&#125;&quot; /&gt;
-
-&lt;!-- <f:translate key="usage.code.debug.2" /> -->
-&lt;krexx:debug title=&quot;Some optional title&quot; value=&quot;&#123;my: &#x27;value&#x27;, to: &#x27;analyse&#x27;&#125;&quot; /&gt;
-&lt;krexx:log title=&quot;Some optional title&quot; value=&quot;&#123;my: &#x27;value&#x27;, to: &#x27;analyse&#x27;&#125;&quot; /&gt;<f:render section="codeblock-end"/>
+    <f:render section="codemirror" arguments="{label: 'usage.label.fluidnormal', config: codeExamples.FluidDebug}" />
 
     <hr />
 
-    <f:render section="codeblock-start" arguments="{name: 'fluidmoment'}" />&lt;!-- <f:translate key="usage.code.fluidmoment" /> --&gt;
-&lt;krexx:timer.moment value=&quot;<f:translate key="usage.code.fluidmoment.1" />&quot;/&gt;
-&lt;!-- <f:translate key="usage.code.fluidmoment.2" /> --&gt;
-. . . .
-&lt;!-- <f:translate key="usage.code.fluidmoment.3" /> --&gt;
-&lt;krexx:timer.moment value=&quot;<f:translate key="usage.code.fluidmoment.4" />&quot;/&gt;
-&lt;!-- <f:translate key="usage.code.fluidmoment.5" /> --&gt;
-. . . .
-&lt;!-- <f:translate key="usage.code.fluidmoment.6" /> --&gt;
-&lt;krexx:timer.end/&gt;<f:render section="codeblock-end"/>
+    <f:render section="codemirror" arguments="{label: 'usage.label.fluidvalue', config: codeExamples.FluidDebugInline}" />
+
+    <hr />
+
+    <f:render section="codemirror" arguments="{label: 'usage.label.fluidmoment', config: codeExamples.FluidTimer}" />
+
     <br />
 
     <h2><f:translate key="usage.headline" /></h2>
-    <f:render section="codeblock-start" arguments="{name: 'calling'}" />krexx($myObject);
-<f:translate key="usage.code.php.1" />
-krexxlog($myObject);
 
-<f:translate key="usage.code.php.2" />
-krexx($myObject, 'Some optional title');
-<f:translate key="usage.code.php.3" />
-krexxlog($myObject, 'Some optional title');<f:render section="codeblock-end"/>
+    <f:render section="codemirror" arguments="{label: 'usage.label.calling', config: codeExamples.PhpDebug}" />
+
+    <br>
 
     <f:translate key="usage.features" />
     <ul>
@@ -62,16 +43,17 @@ krexxlog($myObject, 'Some optional title');<f:render section="codeblock-end"/>
     <f:translate key="usage.features.simple" />
 
     <hr />
-    <f:render section="codeblock-start" arguments="{name: 'moment'}"/>\Krexx::timerMoment($string);<f:render section="codeblock-end"/>
-    <hr />
-    <f:render section="codeblock-start" arguments="{name: 'timerEnd'}"/>\Krexx::timerEnd()
-<f:translate key="usage.code.php.1" />
-\Krexx::logTimerEnd();<f:render section="codeblock-end"/>
+
+    <f:render section="codemirror" arguments="{label: 'usage.label.moment', config: codeExamples.PhpTimerMoment}" />
 
     <hr />
-    <f:render section="codeblock-start" arguments="{name: 'backtrace'}" />\Krexx::backtrace();
-<f:translate key="usage.code.php.1" />
-\Krexx::logBacktrace();<f:render section="codeblock-end"/>
+
+    <f:render section="codemirror" arguments="{label: 'usage.label.timerEnd', config: codeExamples.PhpTimerEnd}" />
+
+    <hr />
+
+    <f:render section="codemirror" arguments="{label: 'usage.label.backtrace', config: codeExamples.PhpBacktrace}" />
+
     <br />
 
     <h2><f:translate key="usage.links.headline" /></h2>
@@ -81,16 +63,20 @@ krexxlog($myObject, 'Some optional title');<f:render section="codeblock-end"/>
 </f:spaceless></f:section>
 
 /**
- * Renders the start of a code block.
- *
- * @var string {name}
- *   The name of the code block, used for the translation label.
- */
-<f:section name="codeblock-start"><f:translate key="usage.label.{name}" /><div class="border"><pre class="m-2"><code></f:section>
-
-/**
- * Renders the end of a codeblock
- */
-<f:section name="codeblock-end"></code></pre></div></f:section>
+  * Renders the configuration help text.
+  *
+  * The things you do to make fluid do what you want . . .
+  *
+  * @var string {label}
+  *   The label for the code mirror.
+  * @var array {config}
+  *   The configuration for the code mirror.
+  */
+<f:section name="codemirror"><f:spaceless>
+    <f:translate key="{label}" />
+    <typo3-t3editor-codemirror mode="{config.modeInstruction}" linewrapping readonly>
+        <textarea name="content" rows="{config.rows}" class="form-control">{config.content}</textarea>
+    </typo3-t3editor-codemirror>
+</f:spaceless></f:section>
 
 </html>

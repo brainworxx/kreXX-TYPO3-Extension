@@ -1,0 +1,10 @@
+<!-- Take a moment -->
+<krexx:timer.moment value="Start rendering"/>
+<!-- A lot more template code -->
+. . . .
+<!-- Take another moment -->
+<krexx:timer.moment value="Start menu rendering"/>
+<!-- Even more template code -->
+. . . .
+<!-- Output the benchmark -->
+<krexx:timer.end/>
