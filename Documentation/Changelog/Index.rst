@@ -8,6 +8,7 @@ Changelog
 :Date: tbd
 
 Changes:
+    * [Bugfix] Prevent false negatives when testing if kreXX can write to the log and chunks folder.
     * [Bugfix] Prevent special chars in the translations from breaking the additional data JSON.
 
 -----

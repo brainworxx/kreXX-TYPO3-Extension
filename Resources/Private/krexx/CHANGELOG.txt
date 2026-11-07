@@ -1,3 +1,7 @@
+6.1.1
+- Bugfix: Prevent false negatives when testing if kreXX can write to
+  the log and chunks folder.
+
 6.1.0
 - Feature: Display the headline in the debug output in the
   debug window.
