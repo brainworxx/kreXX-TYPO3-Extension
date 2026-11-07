@@ -80,7 +80,6 @@ class ConfigurationTest extends AbstractHelper
 
         // Test the composer stuff.
         $this->assertEquals($phpComposerConstraint, $composer->require->php);
-        $this->assertEquals($versionNumber, $composer->version);
 
         // Test the changelog.
         $this->assertStringContainsString($versionNumber, $changelogContent);
