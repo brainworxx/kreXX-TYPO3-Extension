@@ -51,7 +51,7 @@ class CleanUpVarNameTest extends AbstractHelper
     {
         $testCourt = [
             // A simple variable name
-            '$variable' => '$variable',
+            'data: $variable' => '$variable',
             // Just a string.
             '\'stuff\'' => '\'stuff\'',
             // A inline call

@@ -115,11 +115,15 @@ class Eventhandler {
   /**
    * Calls the events for a given event and element.
    *
-   * @param event
-   * @param element
+   * @param {StoppableEvent} event
+   * @param {Node} element
    * @protected
    */
-  protected callEvents(event: Event, element: Node): boolean {
+  protected callEvents(event: StoppableEvent, element: Node): boolean {
+    if (event.stop) {
+      return false;
+    }
+
     for (let selector in this.storage) {
       if (!(element as Element).matches(selector)) {
         continue;
@@ -128,7 +132,7 @@ class Eventhandler {
       // Got to call them all.
       for (let i = 0; i < callbackArray.length; i++) {
         callbackArray[i](event, element);
-        if ((event as StoppableEvent).stop) {
+        if (event.stop) {
           // Our "implementation" of stopPropagation().
           return false;
         }

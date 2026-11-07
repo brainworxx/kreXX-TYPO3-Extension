@@ -93,11 +93,16 @@ class CleanUpVarName
      */
     public function cleanup(string $name): string
     {
+        if (str_starts_with($name, 'data:')) {
+            $name = substr(string: $name, offset: 5);
+        }
+        $name = trim(string: $name);
         // Counting all real round brackets, while ignoring the ones inside strings.
         foreach (str_split(string: $name) as $count => $char) {
             if ($this->isReady(char: $char)) {
-                return substr(string: $name, offset: 0, length: $count);
+                return rtrim(string: substr(string: $name, offset: 0, length: $count));
             }
+
             $this->adjustActiveQuotes(char: $char);
         }
 
@@ -105,25 +110,31 @@ class CleanUpVarName
     }
 
     /**
-     * Are we ready?
+     * Stop at the headline separator or the closing bracket of the krexx call.
      *
      * @param string $char
      *   The current char we are working on.
      *
      * @return bool
-     *   Well? Are we?
+     *   Whether the first argument has ended.
      */
     protected function isReady(string $char): bool
     {
-        $quotesAreInactive = $this->singleQuoteInactive && $this->doubleQuoteInactive;
+        if (!$this->singleQuoteInactive || !$this->doubleQuoteInactive) {
+            return false;
+        }
 
-        if ($char === '(' && $quotesAreInactive) {
+        if ($char === ',' && $this->level === -1) {
+            return true;
+        }
+
+        if (in_array(needle: $char, haystack: ['(', '[', '{'], strict: true)) {
             --$this->level;
-        } elseif ($char === ')' && $quotesAreInactive) {
+        } elseif (in_array(needle: $char, haystack: [')', ']', '}'], strict: true)) {
             ++$this->level;
         }
 
-        return $quotesAreInactive && $this->level === 0;
+        return $this->level === 0;
     }
 
     /**

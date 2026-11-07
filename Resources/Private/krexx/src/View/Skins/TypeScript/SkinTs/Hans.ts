@@ -48,6 +48,11 @@ class Hans {
    */
   protected draxx!: Draxx;
 
+  /**
+   * CopyFrom lib.
+   *
+   * @var {CopyFrom}
+   */
   protected copyFrom: CopyFrom;
 
   /**

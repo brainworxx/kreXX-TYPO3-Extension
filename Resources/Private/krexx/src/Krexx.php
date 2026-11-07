@@ -132,7 +132,7 @@ class Krexx
      * @return mixed
      *   Return the original analysis value.
      */
-    public static function open(mixed $data = null, ?string $title = null): mixed
+    public static function open(mixed $data = null, null|string|int|float $title = null): mixed
     {
         Pool::createPool();
 

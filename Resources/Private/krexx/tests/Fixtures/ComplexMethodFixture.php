@@ -72,7 +72,7 @@ class ComplexMethodFixture extends MethodsFixture implements InterfaceFixture
     public function parameterizedMethod($parameter)
     {
         // Stuff for the CallerFinder.
-        krexx($parameter, 'foo');
+        krexx(data: $parameter);
         $this->privateMethod();
     }
 
@@ -90,5 +90,6 @@ class ComplexMethodFixture extends MethodsFixture implements InterfaceFixture
      */
     public function traitComment()
     {
+        krexx($parameter, "foo");
     }
 }

@@ -286,7 +286,7 @@ call_user_func(function () {
      * @return mixed
      *   Return the original analysis value.
      */
-    function krexx(mixed $data = null, ?string $title = null): mixed
+    function krexx(mixed $data = null, null|string|int|float $title = null): mixed
     {
         return \Brainworxx\Krexx\Krexx::open(data: $data, title: $title);
     }

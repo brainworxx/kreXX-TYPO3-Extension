@@ -59,7 +59,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 class CallerFinderTest extends AbstractHelper
 {
     public const  FUNCTION_TO_TRACE = 'krexx';
-    public const  HEADLINE_STRING = 'A headline';
+    public const  HEADLINE_STRING = 'foo';
 
     /**
      * @var CallerFinder
@@ -217,17 +217,19 @@ class CallerFinderTest extends AbstractHelper
     #[AllowMockObjectsWithoutExpectations]
     public function testFindCallerHeadline(): void
     {
-
         $this->mockDebugBacktrace()
             ->expects($this->once())
-            ->willReturn($this->createFixture(75));
+            ->willReturn($this->createFixture(93));
 
         // Run the test
-        $result = $this->callerFinder->findCaller(static::HEADLINE_STRING, $this->subjectVar);
+        $result = $this->callerFinder->findCaller(
+            \Krexx::$pool->encodingService->encodeString("foo"),
+            $this->subjectVar
+        );
 
         // Check the result
         $this->assertStringEndsWith($this->pathToFixture, $result[BacktraceConstInterface::TRACE_FILE]);
-        $this->assertEquals(75, $result[BacktraceConstInterface::TRACE_LINE]);
+        $this->assertEquals(93, $result[BacktraceConstInterface::TRACE_LINE]);
         $this->assertEquals('$parameter', $result[BacktraceConstInterface::TRACE_VARNAME]);
         $this->assertEquals(static::HEADLINE_STRING, $result[BacktraceConstInterface::TRACE_TYPE]);
         $this->assertArrayHasKey(BacktraceConstInterface::TRACE_DATE, $result);
