@@ -147,7 +147,7 @@ class LllString extends AbstractScalarAnalysis
         try {
             // Add the string directly to the model
             $trans = $this->pool->encodingService->encodeString(
-                $this->localisationUtility::translate(key: $string)
+                $this->localisationUtility::translate($string)
             );
             if (!empty($trans)) {
                 $model->addToJson($this->pool->messages->getHelp('TYPO3Trans'), $trans);
