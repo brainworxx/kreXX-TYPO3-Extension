@@ -13,12 +13,19 @@
     <h2><f:translate key="usage.headline.fluid" /></h2>
 
     <f:render section="codeblock-start" arguments="{name: 'fluidnormal'}" />&lt;krexx:debug&gt;&#123;_all&#125;&lt;/krexx:debug&gt;
-&lt;krexx:log&gt;&#123;_all&#125;&lt;/krexx:log&gt;<f:render section="codeblock-end"/>
+&lt;krexx:log&gt;&#123;_all&#125;&lt;/krexx:log&gt;
 
+&lt;!-- <f:translate key="usage.code.debug.1" /> -->
+&lt;krexx:debug title=&quot;Some optional title&quot;&gt;&#123;_all&#125;&lt;/krexx:debug&gt;
+&lt;krexx:log title=&quot;Some optional title&quot;&gt;&#123;_all&#125;&lt;/krexx:log&gt;<f:render section="codeblock-end"/>
     <hr />
 
     <f:render section="codeblock-start" arguments="{name: 'fluidvalue'}" />&lt;krexx:debug value=&quot;&#123;my: &#x27;value&#x27;, to: &#x27;analyse&#x27;&#125;&quot; /&gt;
-&lt;krexx:log value=&quot;&#123;my: &#x27;value&#x27;, to: &#x27;analyse&#x27;&#125;&quot; /&gt;<f:render section="codeblock-end"/>
+&lt;krexx:log value=&quot;&#123;my: &#x27;value&#x27;, to: &#x27;analyse&#x27;&#125;&quot; /&gt;
+
+&lt;!-- <f:translate key="usage.code.debug.2" /> -->
+&lt;krexx:debug title=&quot;Some optional title&quot; value=&quot;&#123;my: &#x27;value&#x27;, to: &#x27;analyse&#x27;&#125;&quot; /&gt;
+&lt;krexx:log title=&quot;Some optional title&quot; value=&quot;&#123;my: &#x27;value&#x27;, to: &#x27;analyse&#x27;&#125;&quot; /&gt;<f:render section="codeblock-end"/>
 
     <hr />
 
@@ -34,12 +41,15 @@
 &lt;krexx:timer.end/&gt;<f:render section="codeblock-end"/>
     <br />
 
-
-
     <h2><f:translate key="usage.headline" /></h2>
     <f:render section="codeblock-start" arguments="{name: 'calling'}" />krexx($myObject);
-// forced logging
-krexxlog($myObject);<f:render section="codeblock-end"/>
+<f:translate key="usage.code.php.1" />
+krexxlog($myObject);
+
+<f:translate key="usage.code.php.2" />
+krexx($myObject, 'Some optional title');
+<f:translate key="usage.code.php.3" />
+krexxlog($myObject, 'Some optional title');<f:render section="codeblock-end"/>
 
     <f:translate key="usage.features" />
     <ul>
@@ -55,12 +65,12 @@ krexxlog($myObject);<f:render section="codeblock-end"/>
     <f:render section="codeblock-start" arguments="{name: 'moment'}"/>\Krexx::timerMoment($string);<f:render section="codeblock-end"/>
     <hr />
     <f:render section="codeblock-start" arguments="{name: 'timerEnd'}"/>\Krexx::timerEnd()
-// forced logging
+<f:translate key="usage.code.php.1" />
 \Krexx::logTimerEnd();<f:render section="codeblock-end"/>
 
     <hr />
     <f:render section="codeblock-start" arguments="{name: 'backtrace'}" />\Krexx::backtrace();
-// forced logging
+<f:translate key="usage.code.php.1" />
 \Krexx::logBacktrace();<f:render section="codeblock-end"/>
     <br />
 
