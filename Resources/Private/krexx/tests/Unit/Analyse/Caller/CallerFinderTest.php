@@ -55,7 +55,6 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(CallerFinder::class, 'identifyCaller')]
 #[CoversMethod(CallerFinder::class, 'removeKrexxPartFromCommand')]
 #[CoversMethod(AbstractCaller::class, 'getCurrentUrl')]
-#[CoversMethod(CallerFinder::class, 'cleanupVarName')]
 class CallerFinderTest extends AbstractHelper
 {
     public const  FUNCTION_TO_TRACE = 'krexx';
