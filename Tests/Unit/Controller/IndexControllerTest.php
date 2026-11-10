@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\Controller;
 
+use Brainworxx\Includekrexx\Collectors\CodeExamples;
 use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
 use Brainworxx\Includekrexx\Controller\AbstractController;
@@ -84,8 +85,9 @@ class IndexControllerTest extends AbstractHelper
         $settings = $this->createMock(Settings::class);
         $pageRenderer = $this->createMock(PageRenderer::class);
         $iconFactory = $this->createMock(IconFactory::class);
+        $codeExamples = $this->createMock(CodeExamples::class);
 
-        $this->indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer, $iconFactory);
+        $this->indexController = new IndexController($configMock, $formConfigMock, $codeExamples, $settings, $pageRenderer, $iconFactory);
     }
 
     /**
@@ -135,10 +137,14 @@ class IndexControllerTest extends AbstractHelper
             ->method('assignData')
             ->with($moduleTemplateMock);
         $pageRenderer = $this->createMock(PageRenderer::class);
+        $codeExamples = $this->createMock(CodeExamples::class);
+        $codeExamples->expects($this->once())
+            ->method('assignData')
+            ->with($moduleTemplateMock);
 
         // Inject it, like there is no tomorrow.
         $iconFactory = $this->createMock(IconFactory::class);
-        $this->indexController = new IndexController($configurationMock, $configFeMock, $settingsModel, $pageRenderer, $iconFactory);
+        $this->indexController = new IndexController($configurationMock, $configFeMock, $codeExamples, $settingsModel, $pageRenderer, $iconFactory);
         $this->setValueByReflection('moduleTemplate', $moduleTemplateMock, $this->indexController);
         $this->indexController->injectResponseFactory(new ResponseFactory());
 

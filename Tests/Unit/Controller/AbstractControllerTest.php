@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\Controller;
 
+use Brainworxx\Includekrexx\Collectors\CodeExamples;
 use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
 use Brainworxx\Includekrexx\Controller\AbstractController;
@@ -69,8 +70,9 @@ class AbstractControllerTest extends AbstractHelper
         $settings = $this->createMock(Settings::class);
         $pageRenderer = $this->createMock(PageRenderer::class);
         $iconFactory = $this->createMock(IconFactory::class);
+        $codeExamples = $this->createMock(CodeExamples::class);
 
-        $indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer, $iconFactory);
+        $indexController = new IndexController($configMock, $formConfigMock, $codeExamples, $settings, $pageRenderer, $iconFactory);
 
         $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $indexController));
         $this->assertSame($configMock, $this->retrieveValueByReflection('configuration', $indexController));
@@ -91,8 +93,9 @@ class AbstractControllerTest extends AbstractHelper
         $settings = $this->createMock(Settings::class);
         $pageRenderer = $this->createMock(PageRenderer::class);
         $iconFactory = $this->createMock(IconFactory::class);
+        $codeExamples = $this->createMock(CodeExamples::class);
 
-        $indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer, $iconFactory);
+        $indexController = new IndexController($configMock, $formConfigMock, $codeExamples, $settings, $pageRenderer, $iconFactory);
         $mtMock = $this->createMock(ModuleTemplateUnit14::class);
 
         // We are using the ModuleTemplateFactory.
