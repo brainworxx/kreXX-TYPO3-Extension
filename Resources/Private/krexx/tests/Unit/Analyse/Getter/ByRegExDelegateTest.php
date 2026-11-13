@@ -79,7 +79,7 @@ class ByRegExDelegateTest extends AbstractGetter
     public function testRetrieveItTooDeep(): void
     {
         $instance = new EndlessLoop();
-        $classReflection = new ReflectionClass($instance);
+        $classReflection = Krexx::$pool->createReflection($instance);
         $result = $this->testSubject->retrieveIt(
             $classReflection->getMethod('getEndlessLoop'),
             $classReflection,
@@ -99,7 +99,7 @@ class ByRegExDelegateTest extends AbstractGetter
     public function testRetrieveIt(): void
     {
         $instance = new DelegateGetterFixture();
-        $classReflection = new ReflectionClass($instance);
+        $classReflection = Krexx::$pool->createReflection($instance);
         $fixture = [
             [
                 'reflection' => $classReflection->getMethod('getMyPropertyOne'),

@@ -70,7 +70,7 @@ class ByRegExContainerTest extends AbstractGetter
     public function testRetrieveItSimple(): void
     {
         $instance = new GetterFixture();
-        $classReflection = new ReflectionClass($instance);
+        $classReflection = Krexx::$pool->createReflection($instance);
         $fixture = [
             [
                 'reflection' => $classReflection->getMethod('getSomething'),
@@ -113,7 +113,7 @@ class ByRegExContainerTest extends AbstractGetter
     public function testRetrieveItInternal(): void
     {
         $instance = new Exception();
-        $classReflection = new ReflectionClass($instance);
+        $classReflection = Krexx::$pool->createReflection($instance);
         $fixture = [
             [
                 'reflection' => $classReflection->getMethod('getCode'),
@@ -133,7 +133,7 @@ class ByRegExContainerTest extends AbstractGetter
     public function testRetrieveItContainer(): void
     {
         $instance = new ContainerFixture();
-        $classReflection = new ReflectionClass($instance);
+        $classReflection = Krexx::$pool->createReflection($instance);
         $fixture = [
             [
                 'reflection' => $classReflection->getMethod('getValue'),

@@ -112,7 +112,7 @@ class GetterTest extends AbstractHelper
         $fixture = [
             'data' => $getterFixture,
             'name' => static::TEST_STRING,
-            'ref' => new ReflectionClass($getterFixture)
+            'ref' => Krexx::$pool->createReflection($getterFixture)
         ];
 
         // Test for empty result.
@@ -143,7 +143,7 @@ class GetterTest extends AbstractHelper
         $fixture = [
             'data' => $getterFixture,
             'name' => static::TEST_STRING,
-            'ref' => new ReflectionClass($getterFixture)
+            'ref' => Krexx::$pool->createReflection($getterFixture)
         ];
 
         // Test for empty result.
@@ -172,7 +172,7 @@ class GetterTest extends AbstractHelper
         $fixture = [
             'data' => $getterFixture,
             'name' => static::TEST_STRING,
-            'ref' => new ReflectionClass($getterFixture)
+            'ref' => Krexx::$pool->createReflection($getterFixture)
         ];
 
         // Set the scope!
@@ -216,7 +216,7 @@ class GetterTest extends AbstractHelper
         $fixture = [
             'data' => $getterFixture,
             'name' => static::TEST_STRING,
-            'ref' => new ReflectionClass($getterFixture)
+            'ref' => Krexx::$pool->createReflection($getterFixture)
         ];
 
         // Run the test

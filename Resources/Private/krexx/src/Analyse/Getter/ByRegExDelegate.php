@@ -204,7 +204,7 @@ class ByRegExDelegate extends ByRegExContainer
             return null;
         }
 
-        $delegateReflection = new ReflectionClass(data: $object);
+        $delegateReflection = $this->pool->createReflection(data: $object);
         if (!$delegateReflection->hasMethod(name: $parts[1])) {
             return null;
         }

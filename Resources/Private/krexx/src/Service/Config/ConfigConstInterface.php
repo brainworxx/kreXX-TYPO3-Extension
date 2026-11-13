@@ -262,6 +262,13 @@ interface ConfigConstInterface
     public const SETTING_ANALYSE_PROTECTED = 'analyseProtected';
 
     /**
+     * Array key. Holds the value of triggerLazy.
+     *
+     * @var string
+     */
+    public const SETTING_TRIGGER_LAZY = 'triggerLazy';
+
+    /**
      * Array key. Holds the value of analysePrivate.
      *
      * @var string

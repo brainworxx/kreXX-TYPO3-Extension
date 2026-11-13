@@ -177,7 +177,7 @@ class ThroughPropertiesTest extends AbstractHelper
         $undeclaredProp = 'special butterfly';
         $subject->$undeclaredProp = null;
         $fixture = [
-            $this->throughProperties::PARAM_REF => new ReflectionClass($subject),
+            $this->throughProperties::PARAM_REF => Krexx::$pool->createReflection($subject),
             $this->throughProperties::PARAM_DATA => [
                 new ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_STRING_PROPERTY),
                 new ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_INT_PROPERTY),
@@ -190,7 +190,7 @@ class ThroughPropertiesTest extends AbstractHelper
                 new ReflectionProperty(ComplexPropertiesInheritanceFixture::class, static::INHERITED_PUBLIC),
                 new ReflectionProperty(ComplexPropertiesInheritanceFixture::class, static::INHERITED_NULL),
                 new ReflectionProperty(ComplexPropertiesFixture::class, static::TRAIT_PROPERTY),
-                new UndeclaredProperty(new ReflectionClass($subject), $undeclaredProp),
+                new UndeclaredProperty(Krexx::$pool->createReflection($subject), $undeclaredProp),
                 new ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_ARRAY_DEFAULT),
                 new ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_FLOAT_PROPERTY),
                 new ReflectionProperty(ComplexPropertiesFixture::class, static::BOOLEAN),
@@ -468,7 +468,7 @@ class ThroughPropertiesTest extends AbstractHelper
 
         $subject = new ComplexPropertiesFixture();
         $fixture = [
-            $this->throughProperties::PARAM_REF => new ReflectionClass($subject),
+            $this->throughProperties::PARAM_REF => Krexx::$pool->createReflection($subject),
             $this->throughProperties::PARAM_DATA => [$refPropertyMock]
         ];
 
@@ -501,7 +501,7 @@ class ThroughPropertiesTest extends AbstractHelper
 
         $subject = new ReadOnlyFixture();
         $fixture = [
-            $this->throughProperties::PARAM_REF => new ReflectionClass($subject),
+            $this->throughProperties::PARAM_REF => Krexx::$pool->createReflection($subject),
             $this->throughProperties::PARAM_DATA => [
                 new ReflectionProperty(ReadOnlyFixture::class, static::READ_ONLY_STRING),
             ]
@@ -547,7 +547,7 @@ class ThroughPropertiesTest extends AbstractHelper
 
         $subject = new EnumFixture();
         $fixture = [
-            $this->throughProperties::PARAM_REF => new ReflectionClass($subject),
+            $this->throughProperties::PARAM_REF => Krexx::$pool->createReflection($subject),
             $this->throughProperties::PARAM_DATA => [
                 new ReflectionProperty(EnumFixture::class, static::ENUM_VALUE),
             ]
@@ -589,7 +589,7 @@ class ThroughPropertiesTest extends AbstractHelper
 
         $subject = new AttributeFixture();
         $fixture = [
-            $this->throughProperties::PARAM_REF => new ReflectionClass($subject),
+            $this->throughProperties::PARAM_REF => Krexx::$pool->createReflection($subject),
             $this->throughProperties::PARAM_DATA => [
                 new ReflectionProperty(AttributeFixture::class, 'foo'),
             ]

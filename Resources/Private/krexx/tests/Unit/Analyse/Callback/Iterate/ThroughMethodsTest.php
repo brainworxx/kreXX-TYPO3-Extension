@@ -111,7 +111,7 @@ class ThroughMethodsTest extends AbstractHelper
 
         // Create an empty fixture
         $fixture = [
-            $this->throughMethods::PARAM_REF => new ReflectionClass(ComplexMethodFixture::class),
+            $this->throughMethods::PARAM_REF => Krexx::$pool->createReflection(ComplexMethodFixture::class),
             $this->throughMethods::PARAM_DATA => []
         ];
 
@@ -141,7 +141,7 @@ class ThroughMethodsTest extends AbstractHelper
 
         // Create the empty fixture
         $fixture = [
-            $this->throughMethods::PARAM_REF => new ReflectionClass(ComplexMethodFixture::class),
+            $this->throughMethods::PARAM_REF => Krexx::$pool->createReflection(ComplexMethodFixture::class),
             $this->throughMethods::PARAM_DATA => [
                 new ReflectionMethod(ComplexMethodFixture::class, 'publicMethod'),
                 new ReflectionMethod(ComplexMethodFixture::class, 'protectedMethod'),
@@ -292,7 +292,7 @@ class ThroughMethodsTest extends AbstractHelper
         );
 
         $fixture = [
-            $this->throughMethods::PARAM_REF => new ReflectionClass(AttributeFixture::class),
+            $this->throughMethods::PARAM_REF => Krexx::$pool->createReflection(AttributeFixture::class),
             $this->throughMethods::PARAM_DATA => [
                 new ReflectionMethod(AttributeFixture::class, 'getFoo'),
             ]

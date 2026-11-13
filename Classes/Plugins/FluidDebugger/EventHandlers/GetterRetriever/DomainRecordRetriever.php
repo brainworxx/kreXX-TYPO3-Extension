@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterRetriever;
 
+use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Throwable;
 use TYPO3\CMS\Core\Domain\Record;
@@ -46,6 +47,12 @@ use TYPO3\CMS\Core\Domain\Record;
  */
 class DomainRecordRetriever extends RawRecordRetriever
 {
+    /**
+     * DomainRecordRetriever constructor.
+     */
+    public function __construct(protected Pool $pool)
+    {
+    }
     /**
      * {@inheritDoc}
      */
@@ -71,7 +78,7 @@ class DomainRecordRetriever extends RawRecordRetriever
         $rawRecordPropertyRef = $ref->getProperty(name: 'rawRecord');
         /** @var \TYPO3\CMS\Core\Domain\RawRecord $rawRecord */
         $rawRecord = $ref->retrieveValue(refProperty: $rawRecordPropertyRef);
-        $rawRecordRef = new ReflectionClass(data: $rawRecord);
+        $rawRecordRef = $this->pool->createReflection(data: $rawRecord);
         if (!method_exists(object_or_class: $rawRecord, method: 'getFullType')) {
             // Huh, not what I expected.
             return $result;

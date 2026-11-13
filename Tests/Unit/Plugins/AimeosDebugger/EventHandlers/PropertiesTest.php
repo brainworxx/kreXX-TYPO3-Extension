@@ -97,7 +97,7 @@ class PropertiesTest extends AbstractHelper
         $item->$dynamicValue = $dynamicValue;
         $fixture = [
             CallbackConstInterface::PARAM_DATA => $item,
-            CallbackConstInterface::PARAM_REF => new ReflectionClass($item)
+            CallbackConstInterface::PARAM_REF => \Krexx::$pool->createReflection($item)
         ];
 
         // Prevent the further routing.
@@ -157,7 +157,7 @@ class PropertiesTest extends AbstractHelper
         $view->$dynamicValue = $dynamicValue;
         $fixture = [
             CallbackConstInterface::PARAM_DATA => $view,
-            CallbackConstInterface::PARAM_REF => new ReflectionClass($view)
+            CallbackConstInterface::PARAM_REF => \Krexx::$pool->createReflection($view)
         ];
 
         // Prevent the further routing.

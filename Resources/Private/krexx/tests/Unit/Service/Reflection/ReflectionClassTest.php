@@ -35,12 +35,14 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Service\Reflection;
 
+use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Reflection\HiddenProperty;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\InheritDocFixture;
 use Brainworxx\Krexx\Tests\Fixtures\InterfaceFixture;
+use Brainworxx\Krexx\Tests\Fixtures\LazyFixture;
 use Brainworxx\Krexx\Tests\Fixtures\MagicMethods;
 use Brainworxx\Krexx\Tests\Fixtures\PublicFixture;
 use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
@@ -58,6 +60,8 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(ReflectionClass::class, 'getData')]
 #[CoversMethod(ReflectionClass::class, '__construct')]
 #[CoversMethod(ReflectionClass::class, 'getObjectVars')]
+#[CoversMethod(ReflectionClass::class, 'triggerLazyLoading')]
+#[CoversMethod(ReflectionClass::class, 'getLazyCallback')]
 class ReflectionClassTest extends AbstractHelper
 {
     /**
@@ -75,10 +79,29 @@ class ReflectionClassTest extends AbstractHelper
             'valueTwo' => 'asdf',
         ];
 
-        $reflection = new ReflectionClass($fixture);
+        $reflection = Krexx::$pool->createReflection($fixture);
         $this->assertEquals($expectation, $this->retrieveValueByReflection('objectArray', $reflection));
         $this->assertInstanceOf(OriginalReflectionClass::class, $reflection);
         $this->assertSame($fixture, $reflection->getData());
+    }
+
+    public function testConstuctWithLazyGhost()
+    {
+        if (!method_exists(OriginalReflectionClass::class, 'newLazyGhost')) {
+            $this->markTestSkipped('This test requires PHP 8.4 or higher.');
+        }
+
+        $vanillaReflection = new OriginalReflectionClass(LazyFixture::class);
+        $fixture = $vanillaReflection->newLazyGhost(function (LazyFixture $object) {
+            $object->__construct(42);
+        });
+
+        $reflection = Krexx::$pool->createReflection($fixture);
+        $this->assertInstanceOf(OriginalReflectionClass::class, $reflection);
+
+        $reflectionProperty = $reflection->getProperty('value');
+        $this->assertEquals(42, $reflection->retrieveValue($reflectionProperty));
+        $this->assertIsCallable($reflection->getLazyCallback());
     }
 
     /**
@@ -92,7 +115,7 @@ class ReflectionClassTest extends AbstractHelper
         // This is actually deprecated as of PHP 8.2, hence the error handler.
         $fixture->someProperty = 'someValue';
         restore_error_handler();
-        $reflection = new ReflectionClass($fixture);
+        $reflection = Krexx::$pool->createReflection($fixture);
         $this->assertEquals(
             ['someProperty' => 'someValue'],
             $this->retrieveValueByReflection('objectArray', $reflection),
@@ -108,7 +131,7 @@ class ReflectionClassTest extends AbstractHelper
     public function testGetData(): void
     {
         $fixture = new stdClass();
-        $reflection = new ReflectionClass($fixture);
+        $reflection = Krexx::$pool->createReflection($fixture);
 
         $this->assertSame($fixture, $reflection->getData());
     }
@@ -127,7 +150,7 @@ class ReflectionClassTest extends AbstractHelper
         $notSoSpecial = 'notSoSpecial';
         $verySpecial = 'verySpecial';
 
-        $reflection = new ReflectionClass($fixture);
+        $reflection = Krexx::$pool->createReflection($fixture);
         $expectations = [
             'value1' => 'overwritten Value',
             'someValue' => 'whatever',
@@ -178,7 +201,7 @@ class ReflectionClassTest extends AbstractHelper
         $reflectionMock->expects($this->once())
             ->method('isStatic')
             ->willThrowException(new \Exception());
-        $reflection = new ReflectionClass(new \stdClass());
+        $reflection = Krexx::$pool->createReflection(new \stdClass());
 
         $this->assertNull(
             $reflection->retrieveValue($reflectionMock),
@@ -198,7 +221,7 @@ class ReflectionClassTest extends AbstractHelper
             ->method('__get')
             ->willThrowException(new \Exception());
 
-        $reflection = new ReflectionClass($fixture);
+        $reflection = Krexx::$pool->createReflection($fixture);
         $this->assertNull(
             $reflection->retrieveValue($reflectionMock),
             'There never was a value in the first place.'
@@ -211,15 +234,15 @@ class ReflectionClassTest extends AbstractHelper
     public function testGetInterfaces(): void
     {
         $fixture = new PublicFixture();
-        $reflection = new ReflectionClass($fixture);
+        $reflection = Krexx::$pool->createReflection($fixture);
         $this->assertEmpty($reflection->getInterfaces(), 'There are no interfaces in there.');
 
         $fixture = new InheritDocFixture();
-        $reflection = new ReflectionClass($fixture);
+        $reflection = Krexx::$pool->createReflection($fixture);
         $this->assertEmpty($reflection->getInterfaces(), 'There are only some underlying interfaces.');
 
         $fixture = new ComplexMethodFixture();
-        $reflection = new ReflectionClass($fixture);
+        $reflection = Krexx::$pool->createReflection($fixture);
         $interfaces = $reflection->getInterfaces();
         $this->assertCount(1, $interfaces, 'There is only one direct interface in here.');
         $this->assertArrayHasKey(InterfaceFixture::class, $interfaces);
@@ -231,13 +254,13 @@ class ReflectionClassTest extends AbstractHelper
     public function testGetTraits(): void
     {
         $fixture = new ComplexMethodFixture();
-        $reflection = new ReflectionClass($fixture);
+        $reflection = Krexx::$pool->createReflection($fixture);
         $result = $reflection->getTraits();
         $this->assertCount(1, $result);
         $this->assertInstanceOf(ReflectionClass::class, array_shift($result));
 
         $fixture = new SimpleFixture();
-        $reflection = new ReflectionClass($fixture);
+        $reflection = Krexx::$pool->createReflection($fixture);
         $this->assertEmpty($reflection->getTraits());
     }
 
@@ -247,11 +270,11 @@ class ReflectionClassTest extends AbstractHelper
     public function testGetParentClass(): void
     {
         $fixture = new SimpleFixture();
-        $reflection = new ReflectionClass($fixture);
+        $reflection = Krexx::$pool->createReflection($fixture);
         $this->assertFalse($reflection->getParentClass());
 
         $fixture = new ComplexMethodFixture();
-        $reflection = new ReflectionClass($fixture);
+        $reflection = Krexx::$pool->createReflection($fixture);
         $result = $reflection->getParentClass();
         $this->assertInstanceOf(ReflectionClass::class, $result);
     }
@@ -262,7 +285,7 @@ class ReflectionClassTest extends AbstractHelper
     public function testGetObjectVars(): void
     {
         $simple = new SimpleFixture();
-        $reflection = new ReflectionClass($simple);
+        $reflection = Krexx::$pool->createReflection($simple);
         $vars = $reflection->getObjectVars();
         $this->assertCount(2, $vars);
         $this->assertArrayHasKey('value1', $vars);
@@ -271,7 +294,7 @@ class ReflectionClassTest extends AbstractHelper
         $public = new PublicFixture();
         $public->notSoSpecial = 'normal';
 
-        $reflection = new ReflectionClass($public);
+        $reflection = Krexx::$pool->createReflection($public);
         $vars = $reflection->getObjectVars();
         $this->assertCount(4, $vars);
         $this->assertArrayHasKey('value1', $vars);

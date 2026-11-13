@@ -116,7 +116,7 @@ class TraversableTest extends AbstractHelper
         $fixture = [
             'data' => $data,
             'name' => 'some name',
-            'ref' => new ReflectionClass($data)
+            'ref' => Krexx::$pool->createReflection($data)
         ];
 
         // Run the test.
@@ -169,7 +169,7 @@ class TraversableTest extends AbstractHelper
         $fixture = [
             'data' => $data,
             'name' => 'blargh',
-            'ref' => new ReflectionClass($data)
+            'ref' => Krexx::$pool->createReflection($data)
         ];
 
         // Make sure that the ManualIteration fallback does not mess with
@@ -218,7 +218,7 @@ class TraversableTest extends AbstractHelper
         $fixture = [
             'data' => $data,
             'name' => 'whoopie',
-            'ref' => new ReflectionClass($data)
+            'ref' => Krexx::$pool->createReflection($data)
         ];
 
         // Inject the callback counter
@@ -263,7 +263,7 @@ class TraversableTest extends AbstractHelper
         $fixture = [
             'data' => $data,
             'name' => 'tipsy',
-            'ref' => new ReflectionClass($data)
+            'ref' => Krexx::$pool->createReflection($data)
         ];
 
         // Inject the callback counter

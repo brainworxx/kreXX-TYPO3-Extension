@@ -87,7 +87,7 @@ class ThroughMethodsTest extends AbstractHelper
 
         // The fixtures.
         $fixture = [
-            IterateThroughMethods::PARAM_REF => new ReflectionClass(ComplexMethodFixture::class),
+            IterateThroughMethods::PARAM_REF => \Krexx::$pool->createReflection(ComplexMethodFixture::class),
             IterateThroughMethods::PARAM_DATA => [
                 new ReflectionMethod(ComplexMethodFixture::class, 'publicMethod'),
                 new ReflectionMethod(ComplexMethodFixture::class, 'protectedMethod'),

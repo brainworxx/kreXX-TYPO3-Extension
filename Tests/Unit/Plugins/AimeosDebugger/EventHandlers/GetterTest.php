@@ -108,7 +108,7 @@ class GetterTest extends AbstractHelper
         // Test with an empty item.
         // Create a simple log item.
         $item = new \Aimeos\MAdmin\Log\Item\Standard([]);
-        $ref = new ReflectionClass($item);
+        $ref = \Krexx::$pool->createReflection($item);
         $params[Getter::PARAM_ADDITIONAL][Getter::PARAM_NOTHING_FOUND] = true;
         $params[ThroughGetter::CURRENT_PREFIX] = 'get';
         $params[Getter::PARAM_REF] = $ref;
@@ -148,7 +148,7 @@ class GetterTest extends AbstractHelper
 
         // Create a simple log item.
         $item = new \Aimeos\MAdmin\Log\Item\Standard($values);
-        $ref = new ReflectionClass($item);
+        $ref = \Krexx::$pool->createReflection($item);
 
         // Create the fixture.
         $fixture = [

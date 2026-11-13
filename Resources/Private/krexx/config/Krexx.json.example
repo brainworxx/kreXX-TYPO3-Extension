@@ -17,6 +17,7 @@
     "properties": {
         "analyseProtected": false,
         "analysePrivate": false,
+        "triggerLazy": true,
         "analyseTraversable": true
     },
     "methods": {

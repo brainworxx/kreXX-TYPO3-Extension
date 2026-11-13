@@ -104,6 +104,32 @@ class EmergencyTest extends AbstractHelper
         Krexx::$pool->config = $configMock;
     }
 
+    public function testConstructWithKb()
+    {
+        $this->setConfigMock();
+
+        // No limit
+        $iniGet = $this->getFunctionMock(static::FLOW_NAMESPACE, static::INI_GET);
+        $iniGet->expects($this->once())
+            ->willReturn('120K');
+
+        $this->emergency = new Emergency(Krexx::$pool);
+        $this->assertEquals(120 * 1024, $this->retrieveValueByReflection(static::SERVER_MEMORY_LIMIT, $this->emergency));
+    }
+
+    public function testConstructWithMb()
+    {
+        $this->setConfigMock();
+
+        // No limit
+        $iniGet = $this->getFunctionMock(static::FLOW_NAMESPACE, static::INI_GET);
+        $iniGet->expects($this->once())
+            ->willReturn('120M');
+
+        $this->emergency = new Emergency(Krexx::$pool);
+        $this->assertEquals(120  * 1024 * 1024, $this->retrieveValueByReflection(static::SERVER_MEMORY_LIMIT, $this->emergency));
+    }
+
     /**
      * Test the caching of several settings, as well as retreating the memory
      * limit.

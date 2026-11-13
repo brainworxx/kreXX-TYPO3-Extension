@@ -49,192 +49,12 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 class Settings implements ControllerConstInterface, ConfigConstInterface
 {
     /**
-     * @var null|string
-     */
-    protected ?string $analyseGetter = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $formanalyseGetter = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $analysePrivate = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $formanalysePrivate = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $analysePrivateMethods = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $formanalysePrivateMethods = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $analyseProtected = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $formanalyseProtected = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $analyseProtectedMethods = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $formanalyseProtectedMethods = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $analyseTraversable = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $formanalyseTraversable = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $arrayCountLimit = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $formarrayCountLimit = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $debugMethods = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $formdebugMethods = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $destination = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $formdestination = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $disabled = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $formdisabled = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $iprange = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $formiprange = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $languageKey = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $formlanguageKey = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $level = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $formlevel = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $activateT3FileWriter = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $loglevelT3FileWriter = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $maxCall = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $formmaxCall = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $maxfiles = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $formmaxfiles = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $maxStepNumber = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $formmaxStepNumber = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $skin = null;
-
-    /**
-     * @var null|string
-     */
-    protected ?string $formskin = null;
-
-    /**
      * @var string
      */
     protected string $factory;
 
     /**
-     * I really would like to drop PHP 7.4 support now. Pretty please?
+     * Setting the values on construction.
      *
      * @param string|null $analyseGetter
      * @param string|null $formanalyseGetter
@@ -246,6 +66,8 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
      * @param string|null $formanalyseProtected
      * @param string|null $analyseProtectedMethods
      * @param string|null $formanalyseProtectedMethods
+     * @param string|null $triggerLazy
+     * @param string|null $formtriggerLazy
      * @param string|null $analyseTraversable
      * @param string|null $formanalyseTraversable
      * @param string|null $arrayCountLimit
@@ -274,79 +96,45 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
      * @param string|null $formskin
      */
     public function __construct(
-        ?string $analyseGetter = null,
-        ?string $formanalyseGetter = null,
-        ?string $analysePrivate = null,
-        ?string $formanalysePrivate = null,
-        ?string $analysePrivateMethods = null,
-        ?string $formanalysePrivateMethods = null,
-        ?string $analyseProtected = null,
-        ?string $formanalyseProtected = null,
-        ?string $analyseProtectedMethods = null,
-        ?string $formanalyseProtectedMethods = null,
-        ?string $analyseTraversable = null,
-        ?string $formanalyseTraversable = null,
-        ?string $arrayCountLimit = null,
-        ?string $formarrayCountLimit = null,
-        ?string $debugMethods = null,
-        ?string $formdebugMethods = null,
-        ?string $destination = null,
-        ?string $formdestination = null,
-        ?string $disabled = null,
-        ?string $formdisabled = null,
-        ?string $iprange = null,
-        ?string $formiprange = null,
-        ?string $languageKey = null,
-        ?string $formlanguageKey = null,
-        ?string $level = null,
-        ?string $formlevel = null,
-        ?string $activateT3FileWriter = null,
-        ?string $loglevelT3FileWriter = null,
-        ?string $maxCall = null,
-        ?string $formmaxCall = null,
-        ?string $maxfiles = null,
-        ?string $formmaxfiles = null,
-        ?string $maxStepNumber = null,
-        ?string $formmaxStepNumber = null,
-        ?string $skin = null,
-        ?string $formskin = null
+        protected ?string $analyseGetter = null,
+        protected ?string $formanalyseGetter = null,
+        protected ?string $analysePrivate = null,
+        protected ?string $formanalysePrivate = null,
+        protected ?string $analysePrivateMethods = null,
+        protected ?string $formanalysePrivateMethods = null,
+        protected ?string $analyseProtected = null,
+        protected ?string $formanalyseProtected = null,
+        protected ?string $analyseProtectedMethods = null,
+        protected ?string $formanalyseProtectedMethods = null,
+        protected ?string $triggerLazy = null,
+        protected ?string $formtriggerLazy = null,
+        protected ?string $analyseTraversable = null,
+        protected ?string $formanalyseTraversable = null,
+        protected ?string $arrayCountLimit = null,
+        protected ?string $formarrayCountLimit = null,
+        protected ?string $debugMethods = null,
+        protected ?string $formdebugMethods = null,
+        protected ?string $destination = null,
+        protected ?string $formdestination = null,
+        protected ?string $disabled = null,
+        protected ?string $formdisabled = null,
+        protected ?string $iprange = null,
+        protected ?string $formiprange = null,
+        protected ?string $languageKey = null,
+        protected ?string $formlanguageKey = null,
+        protected ?string $level = null,
+        protected ?string $formlevel = null,
+        protected ?string $activateT3FileWriter = null,
+        protected ?string $loglevelT3FileWriter = null,
+        protected ?string $maxCall = null,
+        protected ?string $formmaxCall = null,
+        protected ?string $maxfiles = null,
+        protected ?string $formmaxfiles = null,
+        protected ?string $maxStepNumber = null,
+        protected ?string $formmaxStepNumber = null,
+        protected ?string $skin = null,
+        protected ?string $formskin = null
     ) {
-        $this->analyseGetter = $analyseGetter;
-        $this->formanalyseGetter = $formanalyseGetter;
-        $this->analysePrivate = $analysePrivate;
-        $this->formanalysePrivate = $formanalysePrivate;
-        $this->analysePrivateMethods = $analysePrivateMethods;
-        $this->formanalysePrivateMethods = $formanalysePrivateMethods;
-        $this->analyseProtected = $analyseProtected;
-        $this->formanalyseProtected = $formanalyseProtected;
-        $this->analyseProtectedMethods = $analyseProtectedMethods;
-        $this->formanalyseProtectedMethods = $formanalyseProtectedMethods;
-        $this->analyseTraversable = $analyseTraversable;
-        $this->formanalyseTraversable = $formanalyseTraversable;
-        $this->arrayCountLimit = $arrayCountLimit;
-        $this->formarrayCountLimit = $formarrayCountLimit;
-        $this->debugMethods = $debugMethods;
-        $this->formdebugMethods = $formdebugMethods;
-        $this->destination = $destination;
-        $this->formdestination = $formdestination;
-        $this->disabled = $disabled;
-        $this->formdisabled = $formdisabled;
-        $this->iprange = $iprange;
-        $this->formiprange = $formiprange;
-        $this->languageKey = $languageKey;
-        $this->formlanguageKey = $formlanguageKey;
-        $this->level = $level;
-        $this->formlevel = $formlevel;
-        $this->activateT3FileWriter = $activateT3FileWriter;
-        $this->loglevelT3FileWriter = $loglevelT3FileWriter;
-        $this->maxCall = $maxCall;
-        $this->formmaxCall = $formmaxCall;
-        $this->maxfiles = $maxfiles;
-        $this->formmaxfiles = $formmaxfiles;
-        $this->maxStepNumber = $maxStepNumber;
-        $this->formmaxStepNumber = $formmaxStepNumber;
-        $this->skin = $skin;
-        $this->formskin = $formskin;
     }
 
     /**

@@ -117,7 +117,7 @@ class MethodsTest extends AbstractHelper
         $this->fixture = [
             'data' => $testClass,
             'name' => 'some name nobody cares about',
-            'ref' => new ReflectionClass($testClass)
+            'ref' => Krexx::$pool->createReflection($testClass)
         ];
 
         $this->methods->setParameters($this->fixture);
@@ -307,7 +307,7 @@ class MethodsTest extends AbstractHelper
         $this->fixture = [
             'data' => $testClass,
             'name' => 'The "sdt" means "standard", and not what you think it does.',
-            'ref' => new ReflectionClass($testClass)
+            'ref' => Krexx::$pool->createReflection($testClass)
         ];
         $this->methods->setParameters($this->fixture);
         $this->md5Hash = '09a15e9660c1ebc6f429d818825ce0c6';

@@ -106,7 +106,7 @@ class ViewFactoryTest extends AbstractHelper
         $fixture = [
             CallbackConstInterface::PARAM_DATA => $aimeosView,
             CallbackConstInterface::PARAM_NAME => 'viewFactory',
-            CallbackConstInterface::PARAM_REF => new ReflectionClass($aimeosView)
+            CallbackConstInterface::PARAM_REF => \Krexx::$pool->createReflection($aimeosView)
         ];
 
         $analyseMethods = new AnalyseMethods(Krexx::$pool);
@@ -147,7 +147,7 @@ class ViewFactoryTest extends AbstractHelper
         $fixture = [
             CallbackConstInterface::PARAM_DATA => $data,
             CallbackConstInterface::PARAM_NAME => 'viewFactory',
-            CallbackConstInterface::PARAM_REF => new ReflectionClass($data)
+            CallbackConstInterface::PARAM_REF => \Krexx::$pool->createReflection($data)
         ];
 
         $viewFactory = new ViewFactory(Krexx::$pool);

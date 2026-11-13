@@ -70,6 +70,10 @@ analyseProtected = "false"
 ; analysePrivate = "true"
 analysePrivate = "false"
 
+; Shall kreXX trigger the loading of lazy loaded properties?
+triggerLazy = "true"
+; triggerLazy = "false"
+
 ; Shall kreXX try to traverse through the object?
 analyseTraversable = "true"
 ; analyseTraversable = "false"

@@ -125,7 +125,7 @@ class ThroughMetaTest extends AbstractHelper
     public function testCallMeClassName()
     {
         \Krexx::$pool->rewrite[Meta::class] = CallbackCounter::class;
-        $ref = new ReflectionClass(static::class);
+        $ref = Krexx::$pool->createReflection(static::class);
         $fixture = [
             $this->throughMeta::PARAM_DATA => [
                 'Reflection' => $ref
@@ -283,7 +283,7 @@ class ThroughMetaTest extends AbstractHelper
 
         // Actually, we just pass thei one furhter down the rabbit hole, so we
         // might as well use a StdClass. But we don't.
-        $payload = new ReflectionClass($this);
+        $payload = Krexx::$pool->createReflection($this);
         $fixture = [
             $this->throughMeta::PARAM_DATA => [
                 $key => $payload

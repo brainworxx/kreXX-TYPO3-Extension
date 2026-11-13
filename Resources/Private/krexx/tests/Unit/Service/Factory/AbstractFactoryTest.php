@@ -40,6 +40,7 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\AbstractFactory;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\Registration;
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use stdClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -50,6 +51,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 #[CoversMethod(AbstractFactory::class, 'getServer')]
 #[CoversMethod(AbstractFactory::class, 'getGlobals')]
 #[CoversMethod(AbstractFactory::class, 'createClass')]
+#[CoversMethod(AbstractFactory::class, 'createReflection')]
 class AbstractFactoryTest extends AbstractHelper
 {
     /**
@@ -63,6 +65,23 @@ class AbstractFactoryTest extends AbstractHelper
         Pool::createPool();
 
         parent::tearDown();
+    }
+
+    /**
+     * Test the creation of a reflection class.
+     */
+    public function testCreateReflection(): void
+    {
+        $reflection = Krexx::$pool->createReflection(stdClass::class);
+        $this->assertInstanceOf(ReflectionClass::class, $reflection);
+        $this->assertSame(stdClass::class, $reflection->getName());
+
+        // Test the creation of a reflection class with a rewrite.
+        // This is an eval'd class, I am too lazy to create a real one, so we will just mock it.
+        $reflectionMock = $this->createMock(ReflectionClass::class);
+        Krexx::$pool->rewrite[ReflectionClass::class] = $reflectionMock::class;
+        $reflection = Krexx::$pool->createReflection(stdClass::class);
+        $this->assertInstanceOf($reflectionMock::class, $reflection);
     }
 
     /**

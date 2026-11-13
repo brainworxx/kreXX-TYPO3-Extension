@@ -38,6 +38,8 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Service\Reflection;
 
 use ArrayObject;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionException;
 use ReflectionProperty;
 use Throwable;
@@ -71,6 +73,11 @@ class ReflectionClass extends \ReflectionClass
     protected SplObjectStorage $unsetPropertyStorage;
 
     /**
+     * @var ?callable
+     */
+    protected $lazyCallback = null;
+
+    /**
      * ReflectionClass constructor.
      *
      * @param object|string $data
@@ -78,8 +85,9 @@ class ReflectionClass extends \ReflectionClass
      *
      * @throws \ReflectionException
      */
-    public function __construct(object|string $data)
+    public function __construct(object|string $data, protected Pool $pool)
     {
+        parent::__construct(objectOrClass: $data);
         // Retrieve the class variables.
         if ($data instanceof ArrayObject) {
             try {
@@ -91,6 +99,7 @@ class ReflectionClass extends \ReflectionClass
                 // Do nothing.
             }
         } else {
+            $this->triggerLazyLoading(data: $data);
             $this->objectArray = (array) $data;
         }
 
@@ -98,8 +107,40 @@ class ReflectionClass extends \ReflectionClass
         $this->data = $data;
         // Init our unset object storage;
         $this->unsetPropertyStorage = new SplObjectStorage();
+    }
 
-        parent::__construct(objectOrClass: $data);
+    /**
+     * Trigger the lazy loading of a lazy object.
+     *
+     * @param object|string $data
+     *   The data we are analysing.
+     */
+    protected function triggerLazyLoading(object|string $data): void
+    {
+        if (
+            !is_object(value: $data)
+            || !method_exists(object_or_class: $this, method: 'isUninitializedLazyObject')
+            || !$this->pool->config->getSetting(ConfigConstInterface::SETTING_TRIGGER_LAZY)
+            || !$this->isUninitializedLazyObject(object: $data)
+        ) {
+            return;
+        }
+
+        // We trigger the lazy loading, so we can get the properties.
+        set_error_handler(callback: $this->pool->retrieveErrorCallback());
+        try {
+            $this->lazyCallback = $this->getLazyInitializer(object: $data);
+            get_object_vars($data);
+        } catch (Throwable) {
+            // Do nothing.
+            // Lazy loading just fizzled out. We ignore this one.
+        }
+        restore_error_handler();
+    }
+
+    public function getLazyCallback(): ?callable
+    {
+        return $this->lazyCallback;
     }
 
     /**
@@ -246,7 +287,7 @@ class ReflectionClass extends \ReflectionClass
         $result = [];
         foreach ($interfaceNames as $interfaceName) {
             try {
-                $result[$interfaceName] = new ReflectionClass(data: $interfaceName);
+                $result[$interfaceName] = $this->pool->createReflection(data: $interfaceName);
             } catch (ReflectionException) {
                 // Do nothing. We skip this one.
                 // Not sure how this could happen.
@@ -271,7 +312,7 @@ class ReflectionClass extends \ReflectionClass
         $result = [];
         foreach ($traits as $trait) {
             try {
-                $result[$trait] = new ReflectionClass(data: $trait);
+                $result[$trait] = $this->pool->createReflection(data: $trait);
             } catch (ReflectionException) {
                 // We skip this one.
             }
@@ -291,7 +332,7 @@ class ReflectionClass extends \ReflectionClass
         $parent = parent::getParentClass();
         if (!empty($parent)) {
             try {
-                $result = new ReflectionClass($parent->name);
+                $result = $this->pool->createReflection($parent->name);
             } catch (ReflectionException) {
                 // Do nothing.
             }

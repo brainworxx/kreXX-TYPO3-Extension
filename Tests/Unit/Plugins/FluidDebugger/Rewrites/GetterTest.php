@@ -56,7 +56,7 @@ class GetterTest extends AbstractHelper implements CallbackConstInterface
     public function testCallMeEmpty()
     {
         $getter = new Getter(\Krexx::$pool);
-        $fixture = [static::PARAM_REF => new ReflectionClass(ConstantsFixture71::class)];
+        $fixture = [static::PARAM_REF => \Krexx::$pool->createReflection(ConstantsFixture71::class)];
         $getter->setParameters($fixture);
 
         $this->assertSame('', $getter->callMe(), 'We expect no getter, hence no output, hence empty string.');
@@ -68,7 +68,7 @@ class GetterTest extends AbstractHelper implements CallbackConstInterface
     public function testCallMe()
     {
         $getter = new Getter(\Krexx::$pool);
-        $ref = new ReflectionClass(GetterFixture::class);
+        $ref = \Krexx::$pool->createReflection(GetterFixture::class);
         $fixture = [static::PARAM_REF => $ref];
         $getter->setParameters($fixture);
         \Krexx::$pool->rewrite[ThroughGetter::class] = CallbackCounter::class;

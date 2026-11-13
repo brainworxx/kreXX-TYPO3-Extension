@@ -172,14 +172,14 @@ class CallerFinderTest extends AbstractHelper
     {
         $this->mockDebugBacktrace()
             ->expects($this->once())
-            ->willReturn($this->createFixture(75));
+            ->willReturn($this->createFixture(76));
 
         // Run the test
         $result = $this->callerFinder->findCaller('', $this->subjectVar);
 
         // Check the result
         $this->assertStringEndsWith($this->pathToFixture, $result[BacktraceConstInterface::TRACE_FILE]);
-        $this->assertEquals(75, $result[BacktraceConstInterface::TRACE_LINE]);
+        $this->assertEquals(76, $result[BacktraceConstInterface::TRACE_LINE]);
         $this->assertEquals('$parameter', $result[BacktraceConstInterface::TRACE_VARNAME]);
         $this->assertEquals('Analysis of $parameter, string', $result[BacktraceConstInterface::TRACE_TYPE]);
         $this->assertArrayHasKey(BacktraceConstInterface::TRACE_DATE, $result);
@@ -194,7 +194,7 @@ class CallerFinderTest extends AbstractHelper
     {
         $this->mockDebugBacktrace()
             ->expects($this->once())
-            ->willReturn($this->createFixture(85));
+            ->willReturn($this->createFixture(86));
 
         // Run the test
         $result = $this->callerFinder->findCaller('', 1.2345);
@@ -218,7 +218,7 @@ class CallerFinderTest extends AbstractHelper
     {
         $this->mockDebugBacktrace()
             ->expects($this->once())
-            ->willReturn($this->createFixture(93));
+            ->willReturn($this->createFixture(94));
 
         // Run the test
         $result = $this->callerFinder->findCaller(
@@ -228,7 +228,7 @@ class CallerFinderTest extends AbstractHelper
 
         // Check the result
         $this->assertStringEndsWith($this->pathToFixture, $result[BacktraceConstInterface::TRACE_FILE]);
-        $this->assertEquals(93, $result[BacktraceConstInterface::TRACE_LINE]);
+        $this->assertEquals(94, $result[BacktraceConstInterface::TRACE_LINE]);
         $this->assertEquals('$parameter', $result[BacktraceConstInterface::TRACE_VARNAME]);
         $this->assertEquals(static::HEADLINE_STRING, $result[BacktraceConstInterface::TRACE_TYPE]);
         $this->assertArrayHasKey(BacktraceConstInterface::TRACE_DATE, $result);

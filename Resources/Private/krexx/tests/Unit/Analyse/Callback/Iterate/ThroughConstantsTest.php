@@ -79,7 +79,7 @@ class ThroughConstantsTest extends AbstractHelper
         Krexx::$pool->routing = new RoutingNothing(Krexx::$pool);
 
         // Create a fixture
-        $ref = new ReflectionClass($className);
+        $ref = Krexx::$pool->createReflection($className);
         $fixture = [
             ThroughConstants::PARAM_DATA => $ref->getConstants(),
             ThroughConstants::PARAM_CLASSNAME => $className,

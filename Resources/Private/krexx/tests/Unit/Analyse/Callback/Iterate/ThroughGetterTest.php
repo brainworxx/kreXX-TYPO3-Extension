@@ -165,7 +165,7 @@ class ThroughGetterTest extends AbstractHelper
 
         // Create a fixture.
         $data = new DeepGetterFixture();
-        $ref = new ReflectionClass($data);
+        $ref = Krexx::$pool->createReflection($data);
         $fixture = [
             'normalGetter' => [
                 new ReflectionMethod($data, 'getMyPropertyOne'),
@@ -304,7 +304,7 @@ class ThroughGetterTest extends AbstractHelper
 
         // Create a fixture.
         $data = new ContainerFixture();
-        $ref = new ReflectionClass($data);
+        $ref = Krexx::$pool->createReflection($data);
         $fixture = [
             'normalGetter' => [
                 new ReflectionMethod($data, 'getValue'),
@@ -432,7 +432,7 @@ class ThroughGetterTest extends AbstractHelper
 
         // Create a fixture.
         $data = new DelegateGetterFixture();
-        $ref = new ReflectionClass($data);
+        $ref = Krexx::$pool->createReflection($data);
         $fixture = [
             'normalGetter' => [
                 new ReflectionMethod($data, 'getMyPropertyOne'),

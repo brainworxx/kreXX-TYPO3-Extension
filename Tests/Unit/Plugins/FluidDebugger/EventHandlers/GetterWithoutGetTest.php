@@ -70,7 +70,7 @@ class GetterWithoutGetTest extends AbstractHelper implements CallbackConstInterf
         $this->mockEmergencyHandler();
 
         $getterFixture = new GetterFixture();
-        $ref = new ReflectionClass($getterFixture);
+        $ref = \Krexx::$pool->createReflection($getterFixture);
         $fixture = [
             static::PARAM_DATA => $getterFixture,
             static::PARAM_REF => $ref,

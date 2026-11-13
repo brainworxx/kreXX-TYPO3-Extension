@@ -155,13 +155,24 @@ class Meta extends AbstractObjectAnalysis
             $messages->getHelp(key: 'metaClassName') => $this->generateName(ref: $ref),
             $messages->getHelp(key: 'metaComment') => $this->pool
                 ->createClass(classname: Comment::class)->getComment(reflection: $ref),
-            $messages->getHelp(key: 'metaAttributes') => $this->pool
-                ->createClass(classname: Attributes::class)->getAttributes(reflection: $ref),
             $messages->getHelp(key: 'metaDeclaredIn') => $ref->isInternal() ?
                 $messages->getHelp(key: 'metaPredeclared') :
                 $ref->getFileName() . ' ' .
                 $messages->getHelp(key: 'metaInLine') . $ref->getStartLine(),
         ];
+
+        // Add attributes only if they are present.
+        $attributes = $this->pool
+            ->createClass(classname: Attributes::class)
+            ->getAttributes(reflection: $ref);
+        if (!empty($attributes)) {
+            $data[$messages->getHelp(key: 'metaAttributes')] = $attributes;
+        }
+
+        // Take care of lazy objects.
+        if ($callback = $ref->getLazyCallback()) {
+            $data[$messages->getHelp(key: 'metaLazyInitializer')] = $callback;
+        }
 
         // Now to collect the inheritance stuff.
         // Each of them will get analysed by the ThroughMeta callback.

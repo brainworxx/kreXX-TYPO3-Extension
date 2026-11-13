@@ -107,7 +107,7 @@ class DebugMethodsTest extends AbstractHelper implements CallbackConstInterface
         $fixture = [
             static::PARAM_DATA => new DebugMethodFixture(),
             static::PARAM_NAME => 'noOutputHere',
-            static::PARAM_REF => new ReflectionClass($object)
+            static::PARAM_REF => \Krexx::$pool->createReflection($object)
         ];
         $analyseDebugMethods->setParameters($fixture);
 
@@ -133,7 +133,7 @@ class DebugMethodsTest extends AbstractHelper implements CallbackConstInterface
 
         // Create the calling class in a fixture.
         $analyseDebugMethods = new AnalyseDebugMethods(\Krexx::$pool);
-        $itemReflection = new ReflectionClass(StandardProduct::class);
+        $itemReflection = \Krexx::$pool->createReflection(StandardProduct::class);
         $parameters = $itemReflection->getMethod('__construct')->getParameters();
         if (count($parameters) === 2) {
             $object = new Aimeos24Item();
@@ -146,7 +146,7 @@ class DebugMethodsTest extends AbstractHelper implements CallbackConstInterface
         $fixture = [
             static::PARAM_DATA => new DebugMethodFixture(),
             static::PARAM_NAME => 'noOutputHere',
-            static::PARAM_REF => new ReflectionClass($object)
+            static::PARAM_REF => \Krexx::$pool->createReflection($object)
         ];
         $analyseDebugMethods->setParameters($fixture);
 

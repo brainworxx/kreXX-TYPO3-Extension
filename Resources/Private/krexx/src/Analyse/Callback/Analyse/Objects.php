@@ -125,7 +125,7 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
     protected function generateDumperList(): array
     {
         $data = $this->parameters[static::PARAM_DATA];
-        $ref = $this->parameters[static::PARAM_REF] = new ReflectionClass(data: $data);
+        $ref = $this->parameters[static::PARAM_REF] = $this->pool->createReflection(data: $data);
         $config = $this->pool->config;
         $stuffToDump = [PublicProperties::class];
         $hayStack = [stdClass::class, __PHP_Incomplete_Class::class];

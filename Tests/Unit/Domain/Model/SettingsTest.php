@@ -126,7 +126,7 @@ class SettingsTest extends AbstractHelper implements ConstInterface
         Pool::createPool();
 
         $validationMock = $this->createMock(Validation::class);
-        $validationMock->expects($this->exactly(19))
+        $validationMock->expects($this->exactly(20))
             ->method('evaluateSetting')
             ->willReturn(true);
         Krexx::$pool->config->validation = $validationMock;
@@ -145,6 +145,8 @@ class SettingsTest extends AbstractHelper implements ConstInterface
             formanalyseProtected: Fallback::RENDER_TYPE_CONFIG_FULL,
             analyseProtectedMethods: Fallback::SETTING_ANALYSE_PROTECTED_METHODS,
             formanalyseProtectedMethods: Fallback::RENDER_TYPE_CONFIG_FULL,
+            triggerLazy: Fallback::SETTING_TRIGGER_LAZY,
+            formtriggerLazy: Fallback::RENDER_TYPE_CONFIG_FULL,
             analyseTraversable: Fallback::SETTING_ANALYSE_TRAVERSABLE,
             formanalyseTraversable: Fallback::RENDER_TYPE_CONFIG_FULL,
             arrayCountLimit: Fallback::SETTING_ARRAY_COUNT_LIMIT,
@@ -193,6 +195,7 @@ class SettingsTest extends AbstractHelper implements ConstInterface
             Fallback::SECTION_PROPERTIES => [
                 Fallback::SETTING_ANALYSE_PROTECTED => Fallback::SETTING_ANALYSE_PROTECTED,
                 Fallback::SETTING_ANALYSE_PRIVATE => Fallback::SETTING_ANALYSE_PRIVATE,
+                Fallback::SETTING_TRIGGER_LAZY => Fallback::SETTING_TRIGGER_LAZY,
                 Fallback::SETTING_ANALYSE_TRAVERSABLE => Fallback::SETTING_ANALYSE_TRAVERSABLE,
             ],
             Fallback::SECTION_METHODS => [
@@ -224,6 +227,7 @@ class SettingsTest extends AbstractHelper implements ConstInterface
                 Fallback::SETTING_DEBUG_METHODS => Fallback::RENDER_TYPE_CONFIG_FULL,
                 Fallback::SETTING_DESTINATION => Fallback::RENDER_TYPE_CONFIG_FULL,
                 Fallback::SETTING_MAX_FILES => Fallback::RENDER_TYPE_CONFIG_FULL,
+                Fallback::SETTING_TRIGGER_LAZY => Fallback::RENDER_TYPE_CONFIG_FULL,
             ],
         ];
 

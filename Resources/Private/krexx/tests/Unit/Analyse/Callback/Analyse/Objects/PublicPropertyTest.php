@@ -117,7 +117,7 @@ class PublicPropertyTest extends AbstractHelper
         $fixture = [
             'data' => $data,
             'name' => 'some name',
-            'ref' => new ReflectionClass($data)
+            'ref' => Krexx::$pool->createReflection($data)
         ];
 
         // Run the test.
@@ -146,7 +146,7 @@ class PublicPropertyTest extends AbstractHelper
         $fixture = [
             'data' => $data,
             'name' => 'some name',
-            'ref' => new ReflectionClass($data)
+            'ref' => Krexx::$pool->createReflection($data)
         ];
 
          // Run the test.
@@ -187,7 +187,7 @@ class PublicPropertyTest extends AbstractHelper
         $fixture = [
             'data' => $data,
             'name' => 'date time',
-            'ref' => new ReflectionClass($data)
+            'ref' => Krexx::$pool->createReflection($data)
         ];
 
         // Run the test.

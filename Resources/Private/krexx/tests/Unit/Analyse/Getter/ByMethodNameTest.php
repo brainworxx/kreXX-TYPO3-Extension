@@ -74,7 +74,7 @@ class ByMethodNameTest extends AbstractGetter
     public function testRetrieveItSimple(): void
     {
         $instance = new GetterFixture();
-        $classReflection = new ReflectionClass($instance);
+        $classReflection = Krexx::$pool->createReflection($instance);
         $fixture = [
             [
                 'reflection' => $classReflection->getMethod('getSomething'),
@@ -117,7 +117,7 @@ class ByMethodNameTest extends AbstractGetter
     public function testRetrieveItDeep(): void
     {
         $instance = new DeepGetterFixture();
-        $classReflection = new ReflectionClass($instance);
+        $classReflection = Krexx::$pool->createReflection($instance);
         $fixture = [
             [
                 'reflection' => $classReflection->getMethod('getMyPropertyOne'),

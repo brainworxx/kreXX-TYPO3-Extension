@@ -56,7 +56,7 @@ class ReturnTypesTest extends AbstractHelper
     {
         $fixture = new ReturnTypeFixture();
         $returnType = new ReturnType(Krexx::$pool);
-        $refClass = new ReflectionClass($fixture);
+        $refClass = Krexx::$pool->createReflection($fixture);
 
         $refMethod = $refClass->getMethod('returnSelf');
         $this->assertEquals('\\' . ReturnTypeFixture::class, $returnType->getComment($refMethod, $refClass));

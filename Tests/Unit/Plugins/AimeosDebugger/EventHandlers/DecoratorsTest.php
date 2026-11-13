@@ -93,7 +93,7 @@ class DecoratorsTest extends AbstractHelper
         $fixture = [
             Methods::PARAM_DATA => $wrongClass,
             Methods::PARAM_NAME => 'decorator fixture',
-            Methods::PARAM_REF => new ReflectionClass($wrongClass)
+            Methods::PARAM_REF => \Krexx::$pool->createReflection($wrongClass)
         ];
 
         $decorators = new Decorators(\Krexx::$pool);
@@ -131,7 +131,7 @@ class DecoratorsTest extends AbstractHelper
         $fixture = [
             Methods::PARAM_DATA => $decorator,
             Methods::PARAM_NAME => 'decorator fixture',
-            Methods::PARAM_REF => new ReflectionClass($decorator)
+            Methods::PARAM_REF => \Krexx::$pool->createReflection($decorator)
         ];
 
         // Subscribing.

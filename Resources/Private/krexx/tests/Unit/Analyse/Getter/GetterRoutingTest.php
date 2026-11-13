@@ -37,6 +37,7 @@ namespace Unit\Analyse\Getter;
 
 use Brainworxx\Krexx\Analyse\Getter\ByMethodName;
 use Brainworxx\Krexx\Analyse\Getter\GetterRouting;
+use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\GetterFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
@@ -89,7 +90,7 @@ class GetterRoutingTest extends AbstractHelper
         $this->setValueByReflection('getterAnalyser', $analyser, $routing);
 
         $class = new GetterFixture();
-        $reflectionClass = new ReflectionClass($class);
+        $reflectionClass = Krexx::$pool->createReflection($class);
         $reflectionMethod = $reflectionClass->getMethod('getSomething');
         $prefix = 'get';
 

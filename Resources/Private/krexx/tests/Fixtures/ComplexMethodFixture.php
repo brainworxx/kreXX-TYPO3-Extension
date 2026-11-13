@@ -38,6 +38,7 @@ namespace Brainworxx\Krexx\Tests\Fixtures;
 /**
  * Just another meaningless class comment.
  */
+#[\Attribute]
 class ComplexMethodFixture extends MethodsFixture implements InterfaceFixture
 {
     use MultitraitFixture;

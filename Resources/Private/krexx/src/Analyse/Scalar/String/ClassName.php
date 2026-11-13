@@ -112,7 +112,8 @@ class ClassName extends AbstractScalarAnalysis
         $messages = $this->pool->messages;
         $meta = [];
         try {
-            $meta = [$messages->getHelp(key: 'metaReflection') => new ReflectionClass(data: $this->handledValue)];
+            $meta = [$messages->getHelp(key: 'metaReflection') => $this->pool
+                ->createReflection(data: $this->handledValue)];
         } catch (ReflectionException) {
         }
 

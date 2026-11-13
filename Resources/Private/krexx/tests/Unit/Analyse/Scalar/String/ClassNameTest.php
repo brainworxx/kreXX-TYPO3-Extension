@@ -132,7 +132,7 @@ class ClassNameTest extends AbstractHelper
         $model->setHasExtra(true)
             ->setData($string);
 
-        $expectation = new ReflectionClass($string);
+        $expectation = Krexx::$pool->createReflection($string);
         $className->canHandle($string, $model);
         $className->callMe();
 

@@ -68,7 +68,7 @@ class VhsMethodsTest extends AbstractHelper implements CallbackConstInterface
     public function testHandle()
     {
         $methodFixture = new ComplexMethodFixture();
-        $reflection = new ReflectionClass($methodFixture);
+        $reflection = \Krexx::$pool->createReflection($methodFixture);
         $fixture = [
             static::PARAM_REF => $reflection,
             static::PARAM_DATA => [

@@ -39,6 +39,7 @@ namespace Brainworxx\Krexx\Service\Factory;
 
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Closure;
 
 /**
@@ -86,9 +87,7 @@ abstract class AbstractFactory
     public function createClass(string $classname): object
     {
         // Check for possible overwrite.
-        if (isset($this->rewrite[$classname])) {
-            $classname = $this->rewrite[$classname];
-        }
+        $classname = $this->rewrite[$classname] ?? $classname;
 
         if (method_exists($classname, '__construct')) {
             // Inject the pool.
@@ -96,6 +95,12 @@ abstract class AbstractFactory
         }
 
         return new $classname();
+    }
+
+    public function createReflection(string|object $data): ReflectionClass
+    {
+        $classname = $this->rewrite[ReflectionClass::class] ?? ReflectionClass::class;
+        return new $classname($data, $this);
     }
 
     /**

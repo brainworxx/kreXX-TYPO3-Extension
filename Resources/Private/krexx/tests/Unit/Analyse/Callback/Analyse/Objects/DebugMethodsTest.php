@@ -82,7 +82,7 @@ class DebugMethodsTest extends AbstractHelper
         $fixture = [
             'data' => $fixtureClass,
             'name' => 'some name,',
-            'ref' => new ReflectionClass($fixtureClass)
+            'ref' => Krexx::$pool->createReflection($fixtureClass)
         ];
 
         // Setup the class to test.

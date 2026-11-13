@@ -152,24 +152,24 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
 
         $testSubjects = [
             // The computed properties are not handled at all.
-            new ReflectionClass($computedProperties),
+            \Krexx::$pool->createReflection($computedProperties),
             // The raw record is handled by the RawRecordRetriever.
-            new ReflectionClass($rawRecord),
+            \Krexx::$pool->createReflection($rawRecord),
             // The record is handled by the DomainRecordRetriever.
-            new ReflectionClass($record),
+            \Krexx::$pool->createReflection($record),
             // The content block data is handled by the ContentBlocksRetriever.
-            new ReflectionClass($contentBlockData),
+            \Krexx::$pool->createReflection($contentBlockData),
             // The settings are handled by the SettingsRetriever.
-            new ReflectionClass($settings),
+            \Krexx::$pool->createReflection($settings),
             // The trouble record does exactly this, causes trouble.
-            new ReflectionClass($troubleRecord),
+            \Krexx::$pool->createReflection($troubleRecord),
             // The grid data is handled by the GridDataRetriever.
-            new ReflectionClass(new ContentBlockGridData($gridPayload)),
+            \Krexx::$pool->createReflection(new ContentBlockGridData($gridPayload)),
         ];
 
         // The page record is handled by the DomainPageRetriever in TYPO3 14.0 and higher.
         $page = new Page(['uid' => 1, 'pid' => 2, 'title' => 'Test Page']);
-        $testSubjects[] = new ReflectionClass($page);
+        $testSubjects[] = \Krexx::$pool->createReflection($page);
 
         if (class_exists(ContentAreaCollection::class)) {
             $contentPayload = [
@@ -179,13 +179,13 @@ class DynamicGetterTest extends AbstractHelper implements CallbackConstInterface
             // an array. We do not test the internal workings of the ContentAreaCollection,
             // we only test if we can get the array out of it.
             $contentAreaCollection = new ContentAreaCollection($contentPayload);
-            $testSubjects[] = new ReflectionClass($contentAreaCollection);
+            $testSubjects[] = \Krexx::$pool->createReflection($contentAreaCollection);
         }
 
         // We do not add the flexform retriever to the list in TYPO3 14.0 and higher,
         // because there was a getter added directly to the FlexFormFieldValues class.
         if (!method_exists($flexForm, 'getSheets')) {
-            $testSubjects[] = new ReflectionClass($flexForm);
+            $testSubjects[] = \Krexx::$pool->createReflection($flexForm);
         }
 
         $getter = new DynamicGetter(Krexx::$pool);

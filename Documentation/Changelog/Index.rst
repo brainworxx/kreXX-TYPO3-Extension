@@ -11,6 +11,9 @@ Changes:
     * [Feature] Allow a second parameter as a headline for the debug output.
     * [Feature] Better usability for the search in the Hans skin.
     * [Feature] Added fallback for the traversable analysis, in case the native PHP method interator_to_array() fails.
+    * [Feature] Added support for lazy loading proxies and ghost objects.
+    * [Feature] Added the possibility to overwrite the ReflectionClass service with a custom implementation.
+    * [Feature] Analyse the Lazy Initializer of a Lazy Loading Proxy or Ghost Object in the meta analysis.
     * [Change] Dropped support for PHP 7.4, 8.0 and 8.1.
     * [Change] Removed deprecations.
     * [Change] Removed the following configuration settings:
@@ -25,6 +28,7 @@ Changes:
     * [Change] We assign the complete translations to the skin renderers, so they can use them as they see fit.
     * [Change] Major clean-up / refactoring of the TypeScript code.
     * [Change] Clean-up / refactoring of the getter analysis.
+    * [Change] Display class attributes only when they are not empty.
     * [Change] Dropped support for TYPO3 10, 11 and 12.
     * [Change] Refactored / rewritten the rendering and the JS of the backend module and kicked out all the old compatibility workarounds.
     * [Change] Mitigated deprecations in TYPO3 14.

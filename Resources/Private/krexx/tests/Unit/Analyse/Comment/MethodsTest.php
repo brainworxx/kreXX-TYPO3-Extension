@@ -80,7 +80,7 @@ class MethodsTest extends AbstractHelper
      */
     protected function returnTestResult($className, $methodName)
     {
-        $reflectionClass = new ReflectionClass($className);
+        $reflectionClass = Krexx::$pool->createReflection($className);
         return $this->methodComment->getComment($reflectionClass->getMethod($methodName), $reflectionClass);
     }
 

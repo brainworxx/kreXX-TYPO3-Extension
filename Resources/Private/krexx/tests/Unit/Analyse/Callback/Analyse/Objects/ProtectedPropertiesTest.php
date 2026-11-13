@@ -111,7 +111,7 @@ class ProtectedPropertiesTest extends AbstractHelper
         $fixture = [
             'data' => $data,
             'name' => 'some name',
-            'ref' => new ReflectionClass($data)
+            'ref' => Krexx::$pool->createReflection($data)
         ];
 
         // Run the test.
@@ -147,7 +147,7 @@ class ProtectedPropertiesTest extends AbstractHelper
         $fixture = [
             'data' => $data,
             'name' => 'some name',
-            'ref' => new ReflectionClass($data)
+            'ref' => Krexx::$pool->createReflection($data)
         ];
 
          // Run the test.
