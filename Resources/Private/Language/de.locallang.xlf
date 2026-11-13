@@ -113,6 +113,10 @@
 				<source>Shall kreXX do a deep analysis for scalar types? We are handling XML, JSON, callbacks and filepath.</source>
 				<target state="final">Soll kreXX eine fortgeschrittene Analyse von Skalaren Variablen machen? Unterstützt wird XML, JSON, Callbacks und Dateipfade.</target>
 			</trans-unit>
+			<trans-unit id="triggerLazy" approved="yes">
+				<source>Shall kreXX trigger lazy loading of properties? Disableing this will display the lazy loaded properties with their initial default value. This may lead to false results, but it will not trigger any side effects.</source>
+				<target state="final">Soll kreXX das Lazy Loading von Properties triggern? Wenn dies deaktiviert wird, werden die lazy geladenen Properties mit ihrem initialen Defaultwert angezeigt. Dies kann zu falschen Ergebnissen führen, aber es werden keine Nebeneffekte ausgelöst.</target>
+			</trans-unit>
 			<trans-unit id="analyseTraversable" approved="yes">
 				<source>Shall kreXX try to analyse possible traversable data?</source>
 				<target state="final">Soll kreXX versuchen iterierbare Klassendaten zu analysieren?</target>
@@ -435,6 +439,10 @@
 				<source>Deep analysis for scalar types:</source>
 				<target state="final">Fortgeschrittene analyse für skalare Variablen:</target>
 			</trans-unit>
+			<trans-unit id="label.triggerLazy" approved="yes">
+				<source>Trigger lazy loading of properties:</source>
+				<target state="final">Lazy Loading von Properties triggern:</target>
+			</trans-unit>
 			<trans-unit id="label.analyseTraversable" approved="yes">
 				<source>Analyse traversable data:</source>
 				<target state="final">Analyse von iterierbaren Klassendaten</target>
@@ -496,7 +504,7 @@
 				<target state="final">Aus</target>
 			</trans-unit>
 
-			<!-- Content stuff  Edit Frontend Settings -->
+			<!-- Content stuff	Edit Frontend Settings -->
 			<trans-unit id="editfeconfig.help.headline" approved="yes">
 				<source>Here you can edit the frontend configuration form.</source>
 				<target state="final">Hier kann die Frontend Konfiguration editiert werden.</target>

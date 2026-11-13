@@ -88,6 +88,9 @@
 			<trans-unit id="analyseScalar">
 				<source>Shall kreXX do a deep analysis for scalar types? We are handling XML, JSON, callbacks and filepath.</source>
 			</trans-unit>
+			<trans-unit id="triggerLazy">
+				<source>Shall kreXX trigger lazy loading of properties? Disableing this will display the lazy loaded properties with their initial default value. This may lead to false results, but it will not trigger any side effects.</source>
+			</trans-unit>
 			<trans-unit id="analyseTraversable">
 				<source>Shall kreXX try to analyse possible traversable data?</source>
 			</trans-unit>
@@ -333,6 +336,9 @@
 			<trans-unit id="label.analyseScalar">
 				<source>Deep analysis for scalar types:</source>
 			</trans-unit>
+			<trans-unit id="label.triggerLazy">
+				<source>Trigger lazy loading of properties:</source>
+			</trans-unit>
 			<trans-unit id="label.analyseTraversable">
 				<source>Analyse traversable data:</source>
 			</trans-unit>
@@ -379,7 +385,7 @@
 				<source>Off</source>
 			</trans-unit>
 
-			<!-- Content stuff  Edit Frontend Settings -->
+			<!-- Content stuff Edit Frontend Settings -->
 			<trans-unit id="editfeconfig.help.headline">
 				<source>Here you can edit the frontend configuration form.</source>
 			</trans-unit>
