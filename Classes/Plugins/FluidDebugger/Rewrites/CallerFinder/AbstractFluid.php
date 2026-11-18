@@ -139,10 +139,10 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
         ['<krexx:debug value="{', '}"\/>'],
         ['<krexx:debug value="{', '}" ><\/krexx:debug>'],
         ['<krexx:debug value="{', '}"><\/krexx:debug>'],
-        ['<krexx:log value="', '" \/>'],
-        ['<krexx:log value="', '"\/>'],
-        ['<krexx:log value="', '" ><\/krexx:log>'],
-        ['<krexx:log value="', '"><\/krexx:log>'],
+        ['<krexx:log value="{', '}" \/>'],
+        ['<krexx:log value="{', '}"\/>'],
+        ['<krexx:log value="{', '}" ><\/krexx:log>'],
+        ['<krexx:log value="{', '}"><\/krexx:log>'],
     ];
 
     /**
