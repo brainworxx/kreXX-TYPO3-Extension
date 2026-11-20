@@ -42,6 +42,7 @@ Changes:
     * [Bugfix] Prevent special chars in the translations from breaking the additional data JSON.
     * [Bugfix] Prevent false negatives when testing if kreXX can write to the log and chunks folder.
     * [Bugfix] Added missing call patterns to the Fluid CallerFinder for the kreXX:debug and kreXX:log ViewHelpers.
+    * [Bugfix] Corrected the call patterns for krexx:log.
 
 -----
 
