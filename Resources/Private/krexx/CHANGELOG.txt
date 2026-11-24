@@ -28,6 +28,9 @@
 - Change: Clean-up / refactoring of the getter analysis.
 - Change: Display class attributes only when they are not empty.
 
+6.1.2
+- Updated to PHP 8.6.
+
 6.1.1
 - Bugfix: Prevent false negatives when testing if kreXX can write to
   the log and chunks folder.
