@@ -40,7 +40,7 @@ namespace Brainworxx\Krexx\Analyse\Scalar\String;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use finfo;
-use TypeError;
+use Throwable;
 
 /**
  * Identifying a string as a file path.
@@ -142,7 +142,7 @@ class FilePath extends AbstractScalarAnalysis
         set_error_handler($this->pool->retrieveErrorCallback());
         try {
             $isFile = is_file($string);
-        } catch (TypeError $exception) {
+        } catch (Throwable $exception) {
             $isFile = false;
         }
         restore_error_handler();

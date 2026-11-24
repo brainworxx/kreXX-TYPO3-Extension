@@ -116,7 +116,7 @@ class AbstractProcessNoneScalarTest extends AbstractHelper
 
         $this->assertEquals('\\' . stdClass::class, $model->getNormal());
         $this->assertEquals(
-            'k' . Krexx::$pool->emergencyHandler->getKrexxCount() . '_' . spl_object_hash($fixture),
+            'k' . Krexx::$pool->emergencyHandler->getKrexxCount() . '_' . spl_object_id($fixture),
             $model->getDomid()
         );
     }
