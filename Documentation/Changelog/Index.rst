@@ -5,7 +5,7 @@ Changelog
 =============================================================
 
 :Version: 6.1.10
-:Date: tbd
+:Date: 2026.11.25
 
 Changes:
     * [Feature] Updated to PHP 8.6.
