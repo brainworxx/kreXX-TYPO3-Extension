@@ -1,7 +1,5 @@
-6.1.2
-- Updated to PHP 8.6.
-
 6.1.1
+- Updated to PHP 8.6.
 - Bugfix: Prevent false negatives when testing if kreXX can write to
   the log and chunks folder.
 
